@@ -77,9 +77,11 @@ Eine Idee ist, das ganze am Beispiel einer Reisebuchung durchzuführen (Hotel, F
   - Wann ist dies notwendig? Eigentlich immer?
 - Circuit Breaker
 - API-Gateway
-- Service Discovery
+- Service Discovery / Service Registry
 - Saga Pattern
-- Eventsourcing
+- Bulkhead Pattern
+- Backends for Frontends (BFF)
+- Eventsourcing / Event-Driven Architecture
 - CQRS
 - Downtimeless Deployment
 - API First Ansatz?
