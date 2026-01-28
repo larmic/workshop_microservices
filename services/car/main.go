@@ -19,9 +19,9 @@ type Car struct {
 }
 
 var cars = []Car{
-	{ID: "C1", Model: "VW Golf", Price: 45, Currency: "EUR", Unit: "day"},
-	{ID: "C2", Model: "BMW 3er", Price: 85, Currency: "EUR", Unit: "day"},
-	{ID: "C3", Model: "Mercedes E-Klasse", Price: 120, Currency: "EUR", Unit: "day"},
+	{ID: "C1", Model: "Ford Mustang (New York)", Price: 95, Currency: "USD", Unit: "day"},
+	{ID: "C2", Model: "Mini Cooper (London)", Price: 65, Currency: "GBP", Unit: "day"},
+	{ID: "C3", Model: "Renault Clio (Paris)", Price: 55, Currency: "EUR", Unit: "day"},
 }
 
 func main() {

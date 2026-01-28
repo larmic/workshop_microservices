@@ -19,9 +19,9 @@ type Hotel struct {
 }
 
 var hotels = []Hotel{
-	{ID: "H1", Name: "Grand Hotel Berlin", Price: 150, Currency: "EUR", Unit: "night"},
-	{ID: "H2", Name: "Seaside Resort Hamburg", Price: 200, Currency: "EUR", Unit: "night"},
-	{ID: "H3", Name: "City Lodge München", Price: 95, Currency: "EUR", Unit: "night"},
+	{ID: "H1", Name: "Manhattan Plaza Hotel", Price: 250, Currency: "USD", Unit: "night"},
+	{ID: "H2", Name: "London Bridge Inn", Price: 180, Currency: "GBP", Unit: "night"},
+	{ID: "H3", Name: "Paris Étoile Hotel", Price: 195, Currency: "EUR", Unit: "night"},
 }
 
 func main() {
