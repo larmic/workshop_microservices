@@ -23,30 +23,38 @@ Diese User Stories bilden den praktischen Teil des Microservices-Workshops. Alle
 
 ---
 
-## Story 1: Der erste Booking-Service
+## Story 1: Der erste cloud-native Booking-Service
 
-**Thema:** Twelve-Factor-App, Health-Checks
-**Zeitrahmen:** ca. 60 Minuten
+**Thema:** Twelve-Factor-App, Health-Checks, Externe Konfiguration
+**Zeitrahmen:** ca. 90 Minuten
 
 ### Kontext
 
-Unsere Reisebuchungsplattform braucht einen zentralen Service, der Buchungsanfragen entgegennimmt und an die spezialisierten Backend-Services weiterleitet. Bevor wir mit der eigentlichen Geschäftslogik beginnen, muss der Service die Grundlagen einer Cloud-nativen Anwendung erfüllen.
+Unsere Reisebuchungsplattform braucht einen zentralen Service, der Buchungsanfragen entgegennimmt und an die spezialisierten Backend-Services weiterleitet. Bevor wir mit der eigentlichen Geschäftslogik beginnen, muss der Service die Grundlagen einer Cloud-nativen Anwendung erfüllen: Er muss überwachbar sein, in verschiedenen Umgebungen laufen können und die Prinzipien der Twelve-Factor-App befolgen.
 
 ### User Story
 
-Als **Betriebsteam**
-möchte ich **den Gesundheitszustand des Booking-Service jederzeit abfragen können**,
-damit **ich sicherstellen kann, dass der Service einsatzbereit ist und bei Problemen automatisch neu gestartet werden kann**.
+Als **Entwicklungs- und Betriebsteam**
+möchte ich **einen cloud-nativen Booking-Service mit Health-Checks und externalisierbarer Konfiguration**,
+damit **der Service überwacht werden kann, bei Problemen automatisch neu gestartet wird und derselbe Build ohne Code-Änderungen in verschiedenen Umgebungen läuft**.
 
 ### Akzeptanzkriterien
 
+**Grundsetup & Health-Checks:**
 - [ ] Ein neues Projekt für den `BookingService` ist angelegt
 - [ ] Der Service startet auf einem konfigurierbaren Port
 - [ ] Ein Health-Endpoint unter `/health` oder `/actuator/health` ist verfügbar
 - [ ] Der Health-Endpoint gibt HTTP 200 zurück, wenn der Service gesund ist
 - [ ] Der Health-Endpoint prüft die Erreichbarkeit mindestens eines Backend-Services (z.B. FlightService)
 - [ ] Der Service loggt auf stdout (nicht in Dateien)
-- [ ] Konfiguration erfolgt über Umgebungsvariablen oder externe Config-Dateien (nicht hardcoded)
+
+**Externe Konfiguration:**
+- [ ] Die URLs der Backend-Services (Flight, Hotel, Car) sind konfigurierbar
+- [ ] Timeouts für HTTP-Aufrufe sind konfigurierbar
+- [ ] Es existieren Profile für mindestens zwei Umgebungen (z.B. `dev` und `prod`)
+- [ ] Konfiguration kann über Umgebungsvariablen überschrieben werden
+- [ ] Sensible Daten (falls vorhanden) sind nicht im Code-Repository
+- [ ] Die aktuelle Konfiguration ist über einen Info-Endpoint einsehbar (ohne sensible Daten)
 
 ### Technische Hinweise
 
@@ -59,45 +67,11 @@ damit **ich sicherstellen kann, dass der Service einsatzbereit ist und bei Probl
   - Spring Boot: `spring-boot-starter-actuator`
   - Quarkus: `quarkus-smallrye-health`
   - Micronaut: `micronaut-management`
-
-### Bonus (optional)
-
-- Implementiere separate Endpoints für Liveness (`/health/live`) und Readiness (`/health/ready`)
-- Füge Build-Informationen zum Health-Endpoint hinzu (Version, Build-Zeit)
-
----
-
-## Story 2: Konfiguration externalisieren
-
-**Thema:** External Configuration
-**Zeitrahmen:** ca. 60 Minuten
-
-### Kontext
-
-Der Booking-Service soll in verschiedenen Umgebungen (Entwicklung, Test, Produktion) laufen. Die URLs der Backend-Services, Timeouts und andere Parameter unterscheiden sich je nach Umgebung. Hardcodierte Werte sind keine Option.
-
-### User Story
-
-Als **Entwickler**
-möchte ich **alle Konfigurationsparameter des Booking-Service externalisieren können**,
-damit **der gleiche Build in verschiedenen Umgebungen ohne Code-Änderungen deployed werden kann**.
-
-### Akzeptanzkriterien
-
-- [ ] Die URLs der Backend-Services (Flight, Hotel, Car) sind konfigurierbar
-- [ ] Timeouts für HTTP-Aufrufe sind konfigurierbar
-- [ ] Es existieren Profile für mindestens zwei Umgebungen (z.B. `dev` und `prod`)
-- [ ] Konfiguration kann über Umgebungsvariablen überschrieben werden
-- [ ] Sensible Daten (falls vorhanden) sind nicht im Code-Repository
-- [ ] Die aktuelle Konfiguration ist über einen Info-Endpoint einsehbar (ohne sensible Daten)
-
-### Technische Hinweise
-
 - **Konfigurationshierarchie (typisch):**
   1. Default-Werte im Code
   2. Externe Konfigurationsdateien
   3. Umgebungsvariablen (höchste Priorität)
-- **Empfohlene Struktur:**
+- **Empfohlene Konfigurationsstruktur:**
   ```yaml
   booking:
     services:
@@ -111,16 +85,17 @@ damit **der gleiche Build in verschiedenen Umgebungen ohne Code-Änderungen depl
         url: http://localhost:8083
         timeout: 5000
   ```
-- **Twelve-Factor Aspekt:** III. Config - "Store config in the environment"
 
 ### Bonus (optional)
 
+- Implementiere separate Endpoints für Liveness (`/health/live`) und Readiness (`/health/ready`)
+- Füge Build-Informationen zum Health-Endpoint hinzu (Version, Build-Zeit)
 - Implementiere Hot-Reload der Konfiguration ohne Neustart
 - Nutze einen zentralen Config-Server (z.B. Spring Cloud Config)
 
 ---
 
-## Story 3: Services dynamisch finden
+## Story 2: Services dynamisch finden
 
 **Thema:** Service Discovery / Service Registry
 **Zeitrahmen:** ca. 60 Minuten
@@ -139,7 +114,7 @@ damit **ich nicht von statischen IP-Adressen oder Ports abhängig bin und Servic
 
 - [ ] Der Booking-Service registriert sich bei Consul
 - [ ] Der Booking-Service findet FlightService, HotelService und CarService über Consul
-- [ ] Die statischen URLs aus Story 2 werden durch Service-Namen ersetzt
+- [ ] Die statischen URLs aus **Story 1** werden durch Service-Namen ersetzt
 - [ ] Der Health-Check wird bei Consul registriert
 - [ ] Bei Ausfall eines Service-Instanz wird automatisch eine andere verwendet (falls verfügbar)
 - [ ] Der Service deregistriert sich beim Herunterfahren
@@ -164,7 +139,7 @@ damit **ich nicht von statischen IP-Adressen oder Ports abhängig bin und Servic
 
 ---
 
-## Story 4: Ein Gateway für alle
+## Story 3: Ein Gateway für alle
 
 **Thema:** API-Gateway
 **Zeitrahmen:** ca. 60 Minuten
@@ -220,7 +195,7 @@ damit **ich mich nicht um die interne Service-Topologie kümmern muss und zentra
 
 ---
 
-## Story 5: Wenn der Flug ausfällt
+## Story 4: Wenn der Flug ausfällt
 
 **Thema:** Circuit Breaker
 **Zeitrahmen:** ca. 60 Minuten
@@ -273,7 +248,7 @@ damit **meine Reiseplanung nicht komplett blockiert wird**.
 
 ---
 
-## Story 6: Isolation ist Stärke
+## Story 5: Isolation ist Stärke
 
 **Thema:** Bulkhead Pattern
 **Zeitrahmen:** ca. 60 Minuten
@@ -323,7 +298,7 @@ damit **ein langsamer oder fehlerhafter Service nicht das gesamte System blockie
 
 ---
 
-## Story 7: Alles oder nichts - aber richtig
+## Story 6: Alles oder nichts - aber richtig
 
 **Thema:** Saga Pattern
 **Zeitrahmen:** ca. 60 Minuten
@@ -370,7 +345,7 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 
 ---
 
-## Story 8: Events erzählen Geschichten
+## Story 7: Events erzählen Geschichten
 
 **Thema:** Event-Driven Architecture, CQRS
 **Zeitrahmen:** ca. 60 Minuten
@@ -430,7 +405,7 @@ damit **die Buchung schnell abgeschlossen wird und nachgelagerte Prozesse asynch
 
 ---
 
-## Story 9: Mobile First
+## Story 8: Mobile First
 
 **Thema:** Backends for Frontends (BFF)
 **Zeitrahmen:** ca. 60 Minuten
@@ -474,7 +449,7 @@ damit **ich keine überflüssigen Daten übertragen muss und die App auch bei sc
 
 ---
 
-## Story 10: Ohne Unterbrechung
+## Story 9: Ohne Unterbrechung
 
 **Thema:** Downtimeless Deployment
 **Zeitrahmen:** ca. 60 Minuten
@@ -561,25 +536,23 @@ damit **Kunden jederzeit buchen können und wir häufiger deployen können**.
 ## Story-Abhängigkeiten
 
 ```
-Story 1 (Grundsetup)
+Story 1 (Grundsetup + Konfiguration)
     │
-    ├── Story 2 (Configuration)
+    ├── Story 2 (Service Discovery)
     │       │
-    │       └── Story 3 (Service Discovery)
-    │               │
-    │               └── Story 4 (API Gateway)
+    │       └── Story 3 (API Gateway)
     │
-    └── Story 5 (Circuit Breaker)
+    └── Story 4 (Circuit Breaker)
             │
-            ├── Story 6 (Bulkhead)
+            ├── Story 5 (Bulkhead)
             │
-            └── Story 7 (Saga)
+            └── Story 6 (Saga)
                     │
-                    └── Story 8 (Events/CQRS)
+                    └── Story 7 (Events/CQRS)
 
 Optional:
-    Story 4 → Story 9 (BFF)
-    Story 1 + Story 3 → Story 10 (Downtimeless)
+    Story 3 → Story 8 (BFF)
+    Story 1 + Story 2 → Story 9 (Downtimeless)
 ```
 
 ## Glossar
