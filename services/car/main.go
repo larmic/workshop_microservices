@@ -31,8 +31,8 @@ func main() {
 	mux.HandleFunc("GET /cars", carsHandler)
 	mux.HandleFunc("GET /openapi", openapiHandler)
 
-	log.Println("CarService starting on port 8083...")
-	if err := http.ListenAndServe(":8083", mux); err != nil {
+	log.Println("CarService starting on port 8080...")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatal(err)
 	}
 }

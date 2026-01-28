@@ -31,8 +31,8 @@ func main() {
 	mux.HandleFunc("GET /hotels", hotelsHandler)
 	mux.HandleFunc("GET /openapi", openapiHandler)
 
-	log.Println("HotelService starting on port 8082...")
-	if err := http.ListenAndServe(":8082", mux); err != nil {
+	log.Println("HotelService starting on port 8080...")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatal(err)
 	}
 }

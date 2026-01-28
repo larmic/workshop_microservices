@@ -31,8 +31,8 @@ func main() {
 	mux.HandleFunc("GET /flights", flightsHandler)
 	mux.HandleFunc("GET /openapi", openapiHandler)
 
-	log.Println("FlightService starting on port 8081...")
-	if err := http.ListenAndServe(":8081", mux); err != nil {
+	log.Println("FlightService starting on port 8080...")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatal(err)
 	}
 }
