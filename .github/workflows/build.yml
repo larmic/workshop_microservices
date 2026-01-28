@@ -26,7 +26,7 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v ./flight
+        run: go build -v -o bin/flight ./flight
 
   build-hotel:
     name: Build HotelService
@@ -43,7 +43,7 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v ./hotel
+        run: go build -v -o bin/hotel ./hotel
 
   build-car:
     name: Build CarService
@@ -60,4 +60,4 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v ./car
+        run: go build -v -o bin/car ./car
