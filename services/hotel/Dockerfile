@@ -32,6 +32,9 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
     fi
 
 FROM scratch
+LABEL org.opencontainers.image.source="https://github.com/larmic/workshop-microservices"
+LABEL org.opencontainers.image.description="Workshop Microservices - Hotel Service"
+LABEL org.opencontainers.image.licenses="MIT"
 WORKDIR /root/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/src/app/main .
