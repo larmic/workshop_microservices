@@ -45,7 +45,6 @@ damit **der Service überwacht werden kann, bei Problemen automatisch neu gestar
 - [ ] Der Service startet auf einem konfigurierbaren Port
 - [ ] Ein Health-Endpoint unter `/health` oder `/actuator/health` ist verfügbar
 - [ ] Der Health-Endpoint gibt HTTP 200 zurück, wenn der Service gesund ist
-- [ ] Der Health-Endpoint prüft die Erreichbarkeit mindestens eines Backend-Services (z.B. FlightService)
 - [ ] Der Service loggt auf stdout (nicht in Dateien)
 
 **Externe Konfiguration:**
@@ -89,6 +88,8 @@ damit **der Service überwacht werden kann, bei Problemen automatisch neu gestar
 ### Bonus (optional)
 
 - Implementiere separate Endpoints für Liveness (`/health/live`) und Readiness (`/health/ready`)
+  - Liveness: "Läuft mein Prozess?"                                                                      
+  - Readiness: "Kann ich Traffic verarbeiten?"
 - Füge Build-Informationen zum Health-Endpoint hinzu (Version, Build-Zeit)
 - Implementiere Hot-Reload der Konfiguration ohne Neustart
 - Nutze einen zentralen Config-Server (z.B. Spring Cloud Config)
