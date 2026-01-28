@@ -57,7 +57,14 @@ Die vollständige Themenübersicht findet sich in [docs/themen.md](docs/themen.m
 ## Projektstruktur
 
 ```
-├── docs/         # Themensammlung
-├── docs/         # Workshop-Folien und Ideen
+├── docs/             # Workshop-Dokumentation
+│   ├── idea.md       # Workshop-Konzept
+│   ├── stories.md    # User Stories
+│   └── themen.md     # Themenübersicht
+├── services/         # Backend-Services (Go)
+│   ├── go.mod        # Go-Modul
+│   ├── flight/       # FlightService (Port 8081)
+│   ├── hotel/        # HotelService (Port 8082)
+│   └── car/          # CarService (Port 8083)
 └── README.md
 ```

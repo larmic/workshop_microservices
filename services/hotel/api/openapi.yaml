@@ -1,0 +1,193 @@
+openapi: 3.0.3
+info:
+  title: HotelService API
+  description: Service zur Verwaltung von Hotelbuchungen
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8082
+    description: Lokaler Entwicklungsserver
+
+paths:
+  /health:
+    get:
+      summary: Health-Check
+      description: Gibt den Gesundheitsstatus des Services zurück
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service ist gesund
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /hotels:
+    get:
+      summary: Liste verfügbarer Hotels
+      description: Gibt eine Liste aller verfügbaren Hotels zurück
+      operationId: getHotels
+      responses:
+        '200':
+          description: Liste der Hotels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hotel'
+
+  /hotels/{id}:
+    get:
+      summary: Hoteldetails
+      description: Gibt die Details eines bestimmten Hotels zurück
+      operationId: getHotelById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Hoteldetails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+        '404':
+          description: Hotel nicht gefunden
+
+  /bookings:
+    post:
+      summary: Hotel buchen
+      description: Erstellt eine neue Hotelbuchung
+      operationId: createBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Buchung erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Ungültige Anfrage
+
+  /bookings/{id}:
+    get:
+      summary: Buchungsdetails
+      description: Gibt die Details einer bestimmten Buchung zurück
+      operationId: getBookingById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Buchungsdetails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          description: Buchung nicht gefunden
+    delete:
+      summary: Buchung stornieren
+      description: Storniert eine bestehende Buchung
+      operationId: cancelBooking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Buchung erfolgreich storniert
+        '404':
+          description: Buchung nicht gefunden
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+
+    Hotel:
+      type: object
+      properties:
+        id:
+          type: string
+          example: H1
+        name:
+          type: string
+          example: Grand Hotel Berlin
+        price:
+          type: number
+          format: float
+          example: 150
+        currency:
+          type: string
+          example: EUR
+        unit:
+          type: string
+          example: night
+
+    BookingRequest:
+      type: object
+      required:
+        - hotelId
+        - guestName
+        - checkIn
+        - checkOut
+      properties:
+        hotelId:
+          type: string
+          example: H1
+        guestName:
+          type: string
+          example: Max Mustermann
+        checkIn:
+          type: string
+          format: date
+          example: "2024-06-01"
+        checkOut:
+          type: string
+          format: date
+          example: "2024-06-05"
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          example: B001
+        hotelId:
+          type: string
+          example: H1
+        guestName:
+          type: string
+          example: Max Mustermann
+        checkIn:
+          type: string
+          format: date
+          example: "2024-06-01"
+        checkOut:
+          type: string
+          format: date
+          example: "2024-06-05"
+        status:
+          type: string
+          enum: [CONFIRMED, CANCELLED]
+          example: CONFIRMED

@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: FlightService API
+  description: Service zur Verwaltung von Flugbuchungen
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8081
+    description: Lokaler Entwicklungsserver
+
+paths:
+  /health:
+    get:
+      summary: Health-Check
+      description: Gibt den Gesundheitsstatus des Services zurück
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service ist gesund
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /flights:
+    get:
+      summary: Liste verfügbarer Flüge
+      description: Gibt eine Liste aller verfügbaren Flüge zurück
+      operationId: getFlights
+      responses:
+        '200':
+          description: Liste der Flüge
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Flight'
+
+  /flights/{id}:
+    get:
+      summary: Flugdetails
+      description: Gibt die Details eines bestimmten Fluges zurück
+      operationId: getFlightById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Flugdetails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flight'
+        '404':
+          description: Flug nicht gefunden
+
+  /bookings:
+    post:
+      summary: Flug buchen
+      description: Erstellt eine neue Flugbuchung
+      operationId: createBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Buchung erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Ungültige Anfrage
+
+  /bookings/{id}:
+    get:
+      summary: Buchungsdetails
+      description: Gibt die Details einer bestimmten Buchung zurück
+      operationId: getBookingById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Buchungsdetails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          description: Buchung nicht gefunden
+    delete:
+      summary: Buchung stornieren
+      description: Storniert eine bestehende Buchung
+      operationId: cancelBooking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Buchung erfolgreich storniert
+        '404':
+          description: Buchung nicht gefunden
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+
+    Flight:
+      type: object
+      properties:
+        id:
+          type: string
+          example: LH123
+        origin:
+          type: string
+          example: Frankfurt
+        destination:
+          type: string
+          example: New York
+        price:
+          type: number
+          format: float
+          example: 450
+        currency:
+          type: string
+          example: EUR
+
+    BookingRequest:
+      type: object
+      required:
+        - flightId
+        - passengerName
+      properties:
+        flightId:
+          type: string
+          example: LH123
+        passengerName:
+          type: string
+          example: Max Mustermann
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          example: B001
+        flightId:
+          type: string
+          example: LH123
+        passengerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED, CANCELLED]
+          example: CONFIRMED

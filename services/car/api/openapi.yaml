@@ -1,0 +1,193 @@
+openapi: 3.0.3
+info:
+  title: CarService API
+  description: Service zur Verwaltung von Mietwagenbuchungen
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8083
+    description: Lokaler Entwicklungsserver
+
+paths:
+  /health:
+    get:
+      summary: Health-Check
+      description: Gibt den Gesundheitsstatus des Services zurück
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service ist gesund
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /cars:
+    get:
+      summary: Liste verfügbarer Mietwagen
+      description: Gibt eine Liste aller verfügbaren Mietwagen zurück
+      operationId: getCars
+      responses:
+        '200':
+          description: Liste der Mietwagen
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+
+  /cars/{id}:
+    get:
+      summary: Mietwagendetails
+      description: Gibt die Details eines bestimmten Mietwagens zurück
+      operationId: getCarById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Mietwagendetails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        '404':
+          description: Mietwagen nicht gefunden
+
+  /bookings:
+    post:
+      summary: Mietwagen buchen
+      description: Erstellt eine neue Mietwagenbuchung
+      operationId: createBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Buchung erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Ungültige Anfrage
+
+  /bookings/{id}:
+    get:
+      summary: Buchungsdetails
+      description: Gibt die Details einer bestimmten Buchung zurück
+      operationId: getBookingById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Buchungsdetails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          description: Buchung nicht gefunden
+    delete:
+      summary: Buchung stornieren
+      description: Storniert eine bestehende Buchung
+      operationId: cancelBooking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Buchung erfolgreich storniert
+        '404':
+          description: Buchung nicht gefunden
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+
+    Car:
+      type: object
+      properties:
+        id:
+          type: string
+          example: C1
+        model:
+          type: string
+          example: VW Golf
+        price:
+          type: number
+          format: float
+          example: 45
+        currency:
+          type: string
+          example: EUR
+        unit:
+          type: string
+          example: day
+
+    BookingRequest:
+      type: object
+      required:
+        - carId
+        - driverName
+        - pickUp
+        - dropOff
+      properties:
+        carId:
+          type: string
+          example: C1
+        driverName:
+          type: string
+          example: Max Mustermann
+        pickUp:
+          type: string
+          format: date
+          example: "2024-06-01"
+        dropOff:
+          type: string
+          format: date
+          example: "2024-06-05"
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          example: B001
+        carId:
+          type: string
+          example: C1
+        driverName:
+          type: string
+          example: Max Mustermann
+        pickUp:
+          type: string
+          format: date
+          example: "2024-06-01"
+        dropOff:
+          type: string
+          format: date
+          example: "2024-06-05"
+        status:
+          type: string
+          enum: [CONFIRMED, CANCELLED]
+          example: CONFIRMED
