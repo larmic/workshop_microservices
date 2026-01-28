@@ -1,4 +1,4 @@
-.PHONY: all build clean run-flight run-hotel run-car run-all test
+.PHONY: all build clean run-flight run-hotel run-car run-all test docker-build docker-build-flight docker-build-hotel docker-build-car
 
 all: build
 
@@ -33,3 +33,14 @@ test:
 	@echo "\nTesting CarService..."
 	@curl -s http://localhost:8083/health && echo ""
 	@curl -s http://localhost:8083/openapi | head -5
+
+docker-build: docker-build-flight docker-build-hotel docker-build-car
+
+docker-build-flight:
+	docker build -f flight/Dockerfile -t workshop-microservices-flight:latest .
+
+docker-build-hotel:
+	docker build -f hotel/Dockerfile -t workshop-microservices-hotel:latest .
+
+docker-build-car:
+	docker build -f car/Dockerfile -t workshop-microservices-car:latest .

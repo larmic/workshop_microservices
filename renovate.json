@@ -6,10 +6,21 @@
   "gomod": {
     "fileMatch": ["services/go.mod"]
   },
+  "dockerfile": {
+    "fileMatch": ["services/.*/Dockerfile"]
+  },
   "packageRules": [
     {
       "matchManagers": ["gomod"],
       "groupName": "Go dependencies"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "groupName": "Docker base images"
     }
   ]
 }
