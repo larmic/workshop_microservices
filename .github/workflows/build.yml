@@ -1,0 +1,63 @@
+name: Build Services
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'services/**'
+
+jobs:
+  build-flight:
+    name: Build FlightService
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: services/go.mod
+
+      - name: Build
+        run: go build -v ./flight
+
+  build-hotel:
+    name: Build HotelService
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: services/go.mod
+
+      - name: Build
+        run: go build -v ./hotel
+
+  build-car:
+    name: Build CarService
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: services/go.mod
+
+      - name: Build
+        run: go build -v ./car
