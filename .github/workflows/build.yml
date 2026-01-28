@@ -1,4 +1,4 @@
-name: Build Services
+name: Build Go-Services
 
 on:
   push:
