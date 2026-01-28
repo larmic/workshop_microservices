@@ -24,6 +24,21 @@ var flights = []Flight{
 	{ID: "BA789", Origin: "Berlin", Destination: "Paris", Price: 120, Currency: "EUR"},
 }
 
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	mux := http.NewServeMux()
 
@@ -32,7 +47,7 @@ func main() {
 	mux.HandleFunc("GET /openapi", openapiHandler)
 
 	log.Println("FlightService starting on port 8080...")
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	if err := http.ListenAndServe(":8080", corsMiddleware(mux)); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -49,6 +64,5 @@ func flightsHandler(w http.ResponseWriter, r *http.Request) {
 
 func openapiHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/yaml")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Write(openapiSpec)
 }
