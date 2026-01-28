@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: flight/Dockerfile
-    image: workshop-microservices-flight:latest
+    image: larmic/workshop-microservices-flight:latest
     ports:
       - "8081:8081"
 
@@ -11,7 +11,7 @@ services:
     build:
       context: .
       dockerfile: hotel/Dockerfile
-    image: workshop-microservices-hotel:latest
+    image: larmic/workshop-microservices-hotel:latest
     ports:
       - "8082:8082"
 
@@ -19,6 +19,6 @@ services:
     build:
       context: .
       dockerfile: car/Dockerfile
-    image: workshop-microservices-car:latest
+    image: larmic/workshop-microservices-car:latest
     ports:
       - "8083:8083"

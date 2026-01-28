@@ -1,4 +1,4 @@
-.PHONY: all build clean run-flight run-hotel run-car run-all test docker-build docker-build-flight docker-build-hotel docker-build-car
+.PHONY: all build clean run-flight run-hotel run-car run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-up docker-up-hub docker-down
 
 all: build
 
@@ -44,3 +44,16 @@ docker-build-hotel:
 
 docker-build-car:
 	docker build -f car/Dockerfile -t workshop-microservices-car:latest .
+
+# Lokale Entwicklung: Baut und startet (CTRL+C stoppt und räumt auf)
+docker-up:
+	docker compose up --build
+
+# Docker Hub: Zieht Images und startet (CTRL+C stoppt und räumt auf)
+docker-up-hub:
+	docker compose pull
+	docker compose up
+
+# Services stoppen und Container entfernen
+docker-down:
+	docker compose down
