@@ -6,6 +6,10 @@ on:
     paths:
       - 'services/**'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -45,6 +49,7 @@ jobs:
           context: services
           file: services/flight/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-flight:latest
 
   build-hotel:
@@ -63,6 +68,7 @@ jobs:
           context: services
           file: services/hotel/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-hotel:latest
 
   build-car:
@@ -81,4 +87,5 @@ jobs:
           context: services
           file: services/car/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-car:latest
