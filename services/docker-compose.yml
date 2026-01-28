@@ -22,3 +22,19 @@ services:
     image: larmic/workshop-microservices-car:latest
     ports:
       - "8083:8083"
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui:latest
+    ports:
+      - "8080:8080"
+    environment:
+      URLS: >-
+        [
+          { "url": "http://localhost:8081/openapi", "name": "Flight Service" },
+          { "url": "http://localhost:8082/openapi", "name": "Hotel Service" },
+          { "url": "http://localhost:8083/openapi", "name": "Car Service" }
+        ]
+    depends_on:
+      - flight
+      - hotel
+      - car
