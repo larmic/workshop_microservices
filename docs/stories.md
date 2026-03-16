@@ -13,7 +13,7 @@ Diese User Stories bilden den praktischen Teil des Microservices-Workshops. Alle
 - Die Buchungs-/Bestellstrecke (Orchestrierung der Backend-Services)
 
 **Technische Rahmenbedingungen:**
-- Framework: Frei wählbar (Spring Boot, Quarkus, Micronaut, o.ä.)
+- Framework: Frei wählbar
 - Service Discovery: Consul (Docker-Container wird bereitgestellt)
 - Messaging: REST-Webhooks (kein separater Message-Broker erforderlich)
 
@@ -43,7 +43,7 @@ damit **der Service überwacht werden kann, bei Problemen automatisch neu gestar
 **Grundsetup & Health-Checks:**
 - [ ] Ein neues Projekt für den `BookingService` ist angelegt
 - [ ] Der Service startet auf einem konfigurierbaren Port
-- [ ] Ein Health-Endpoint unter `/health` oder `/actuator/health` ist verfügbar
+- [ ] Ein Health-Endpoint unter `/health` ist verfügbar
 - [ ] Der Health-Endpoint gibt HTTP 200 zurück, wenn der Service gesund ist
 - [ ] Der Service loggt auf stdout (nicht in Dateien)
 
@@ -62,10 +62,6 @@ damit **der Service überwacht werden kann, bei Problemen automatisch neu gestar
   - III. Config - Konfiguration in Umgebungsvariablen
   - XI. Logs - Logs als Event-Streams behandeln
   - XII. Admin processes - Health-Check als Admin-Prozess
-- **Empfohlene Libraries:**
-  - Spring Boot: `spring-boot-starter-actuator`
-  - Quarkus: `quarkus-smallrye-health`
-  - Micronaut: `micronaut-management`
 - **Konfigurationshierarchie (typisch):**
   1. Default-Werte im Code
   2. Externe Konfigurationsdateien
