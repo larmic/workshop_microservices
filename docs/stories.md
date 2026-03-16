@@ -55,13 +55,24 @@ damit **der Service überwacht werden kann, bei Problemen automatisch neu gestar
 - [ ] Sensible Daten (falls vorhanden) sind nicht im Code-Repository
 - [ ] Die aktuelle Konfiguration ist über einen Info-Endpoint einsehbar (ohne sensible Daten)
 
+**Erste Orchestrierung:**
+- [ ] `GET /booking/offers` ruft FlightService (`GET /flights`), HotelService (`GET /hotels`) und CarService (`GET /cars`) auf
+- [ ] Die kombinierten Ergebnisse (verfügbare Flüge, Hotels, Mietwagen) werden als JSON zurückgegeben
+- [ ] Die konfigurierbaren URLs und Timeouts aus dem Config-Block werden für die Aufrufe genutzt
+- [ ] Kein Error-Handling nötig — wenn ein Service nicht erreichbar ist, darf der Aufruf fehlschlagen
+
 ### Technische Hinweise
 
 - **Bereitgestellte Services:** FlightService (läuft unter `http://localhost:8081`)
 - **Twelve-Factor relevante Aspekte:**
-  - III. Config - Konfiguration in Umgebungsvariablen
-  - XI. Logs - Logs als Event-Streams behandeln
-  - XII. Admin processes - Health-Check als Admin-Prozess
+  - II. Dependencies — Abhängigkeiten explizit deklarieren (`pom.xml`, `build.gradle` oder `go.mod`), keine impliziten System-Dependencies
+  - III. Config — Konfiguration in Umgebungsvariablen, nicht im Code
+  - V. Build, release, run — Strikte Trennung von Build und Run (das Dockerfile ist ein gutes Beispiel)
+  - VI. Processes — Der Service ist stateless, kein lokaler State zwischen Requests
+  - VII. Port binding — Der Service exportiert HTTP über Port-Binding, kein externer App-Server nötig
+  - IX. Disposability — Schnelles Starten und Graceful Shutdown ermöglichen elastisches Skalieren
+  - XI. Logs — Logs als Event-Streams auf stdout behandeln
+  - XII. Admin processes — Health-Check als Admin-Prozess
 - **Konfigurationshierarchie (typisch):**
   1. Default-Werte im Code
   2. Externe Konfigurationsdateien
