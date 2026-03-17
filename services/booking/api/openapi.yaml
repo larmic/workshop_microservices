@@ -36,20 +36,39 @@ servers:
     description: Lokaler Entwicklungsserver
 
 paths:
-  /health:
+  /health/live:
     get:
-      summary: Health-Check
-      description: Gibt den Gesundheitsstatus des Services zurück
-      operationId: getHealth
+      summary: Liveness-Check
+      description: |
+        Gibt den Liveness-Status des Services zurück.
+        Prüft nur, ob der Service-Prozess selbst läuft, nicht die Erreichbarkeit abhängiger Services.
+      operationId: getLiveness
       tags:
         - System
       responses:
         '200':
-          description: Service ist gesund
+          description: Service-Prozess läuft
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthResponse'
+                $ref: '#/components/schemas/LivenessResponse'
+
+  /health/ready:
+    get:
+      summary: Readiness-Check
+      description: |
+        Gibt den Readiness-Status des Services zurück.
+        Prüft die Erreichbarkeit aller abhängigen Services (Flight, Hotel, Car).
+      operationId: getReadiness
+      tags:
+        - System
+      responses:
+        '200':
+          description: Readiness-Status mit Details zu abhängigen Services
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
 
   /openapi:
     get:
@@ -312,11 +331,27 @@ paths:
 
 components:
   schemas:
-    HealthResponse:
+    LivenessResponse:
       type: object
       properties:
         status:
           type: string
+          example: UP
+
+    ReadinessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - UP
+            - DEGRADED
+            - DOWN
+          description: |
+            Gesamtstatus des Services:
+            - `UP`: Alle abhängigen Services erreichbar
+            - `DEGRADED`: Mindestens ein Service erreichbar, aber nicht alle
+            - `DOWN`: Kein abhängiger Service erreichbar
           example: UP
         services:
           type: object
@@ -324,12 +359,15 @@ components:
           properties:
             flight:
               type: string
+              enum: [UP, DOWN]
               example: UP
             hotel:
               type: string
+              enum: [UP, DOWN]
               example: UP
             car:
               type: string
+              enum: [UP, DOWN]
               example: UP
 
     OffersResponse:
