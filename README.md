@@ -59,12 +59,18 @@ Die vollständige Themenübersicht findet sich in [docs/themen.md](docs/themen.m
 - "You build it, you run it"
 - Cloud Native
 
+## Einstieg
+
+Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitung.md](docs/vorbereitung.md).
+
 ## Projektstruktur
 
 ```
 ├── docs/             # Workshop-Dokumentation
+│   ├── vorbereitung.md # Arbeitsplatz einrichten
+│   ├── stories.md    # User Stories (Index)
+│   ├── stories/      # Einzelne Story-Dateien
 │   ├── idea.md       # Workshop-Konzept
-│   ├── stories.md    # User Stories
 │   └── themen.md     # Themenübersicht
 ├── services/         # Backend-Services (Go)
 │   ├── go.mod        # Go-Modul

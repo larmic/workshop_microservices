@@ -44,6 +44,8 @@ In diesem Workshop bauen die Teilnehmer Schritt für Schritt eine Reisebuchungsp
 - Service Discovery: Consul (Docker-Container wird bereitgestellt)
 - Messaging: REST-Webhooks (kein separater Message-Broker erforderlich)
 
+Die Schritt-für-Schritt-Anleitung zur Einrichtung des Arbeitsplatzes findet sich in der [Vorbereitung](vorbereitung.md).
+
 ---
 
 ## Story-Index
