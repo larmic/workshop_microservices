@@ -2,7 +2,7 @@
 
 ## Worum geht es?
 
-In diesem Workshop bauen die Teilnehmer Schritt für Schritt eine Reisebuchungsplattform auf Basis von Microservices. Kunden können Flüge, Hotels und Mietwagen buchen — der zentrale **BookingService** orchestriert dabei die spezialisierten Backend-Services. Entlang von 9 User Stories werden die wichtigsten Microservice-Patterns praktisch erarbeitet: von Health-Checks über Circuit Breaker bis hin zu Event-Driven Architecture.
+In diesem Workshop bauen die Teilnehmer Schritt für Schritt eine Reisebuchungsplattform auf Basis von Microservices. Kunden können Flüge, Hotels und Mietwagen buchen — der zentrale **BookingService** orchestriert dabei die spezialisierten Backend-Services. Entlang von User Stories werden die wichtigsten Microservice-Patterns praktisch erarbeitet: von Health-Checks über Circuit Breaker bis hin zu Event-Driven Architecture.
 
 ## Systemlandschaft
 
