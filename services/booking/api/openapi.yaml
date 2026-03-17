@@ -7,9 +7,15 @@ info:
     Dieser Service koordiniert Buchungen über die drei Teilservices (Flight, Hotel, Car)
     und bietet eine einheitliche API für kombinierte Reisebuchungen.
 
-    ## Buchungsablauf
+    ## Angebote abfragen (Story 1)
 
-    1. Kunde sucht verfügbare Optionen über die einzelnen Services
+    Über `GET /booking/offers` können verfügbare Reiseoptionen abgefragt werden.
+    Der BookingService ruft dabei FlightService, HotelService und CarService parallel ab
+    und kombiniert die Ergebnisse zu einer einheitlichen Antwort.
+
+    ## Buchungsablauf (Stories 4-6)
+
+    1. Kunde sucht verfügbare Optionen über GET /booking/offers
     2. Kunde erstellt eine kombinierte Buchung über POST /bookings
     3. Der Booking Service orchestriert die Teilbuchungen mittels SAGA-Pattern
     4. Kunde erhält eine Gesamtbuchung mit allen Teilbuchungen
@@ -59,6 +65,57 @@ paths:
             application/x-yaml:
               schema:
                 type: string
+
+  /booking/offers:
+    get:
+      summary: Verfügbare Reiseoptionen abfragen
+      description: |
+        Ruft FlightService, HotelService und CarService parallel ab und kombiniert
+        die Ergebnisse zu einer einheitlichen Antwort mit allen verfügbaren Optionen.
+      operationId: getOffers
+      tags:
+        - Offers
+      responses:
+        '200':
+          description: Verfügbare Reiseoptionen
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OffersResponse'
+              example:
+                flights:
+                  - id: LH123
+                    origin: Frankfurt
+                    destination: New York
+                    price: 450
+                    currency: EUR
+                  - id: LH456
+                    origin: München
+                    destination: London
+                    price: 180
+                    currency: EUR
+                hotels:
+                  - id: H1
+                    name: Manhattan Plaza Hotel
+                    price: 250
+                    currency: USD
+                    unit: night
+                  - id: H2
+                    name: London City Inn
+                    price: 150
+                    currency: GBP
+                    unit: night
+                cars:
+                  - id: C1
+                    model: Ford Mustang
+                    price: 95
+                    currency: USD
+                    unit: day
+                  - id: C2
+                    model: BMW 3er
+                    price: 75
+                    currency: EUR
+                    unit: day
 
   /bookings:
     post:
@@ -274,6 +331,79 @@ components:
             car:
               type: string
               example: UP
+
+    OffersResponse:
+      type: object
+      description: Kombinierte Antwort mit verfügbaren Reiseoptionen aller Services
+      properties:
+        flights:
+          type: array
+          description: Verfügbare Flüge vom FlightService
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: LH123
+              origin:
+                type: string
+                example: Frankfurt
+              destination:
+                type: string
+                example: New York
+              price:
+                type: number
+                format: float
+                example: 450
+              currency:
+                type: string
+                example: EUR
+        hotels:
+          type: array
+          description: Verfügbare Hotels vom HotelService
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: H1
+              name:
+                type: string
+                example: Manhattan Plaza Hotel
+              price:
+                type: number
+                format: float
+                example: 250
+              currency:
+                type: string
+                example: USD
+              unit:
+                type: string
+                description: Preiseinheit (z.B. night)
+                example: night
+        cars:
+          type: array
+          description: Verfügbare Mietwagen vom CarService
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: C1
+              model:
+                type: string
+                example: Ford Mustang
+              price:
+                type: number
+                format: float
+                example: 95
+              currency:
+                type: string
+                example: USD
+              unit:
+                type: string
+                description: Preiseinheit (z.B. day)
+                example: day
 
     BookingRequest:
       type: object
