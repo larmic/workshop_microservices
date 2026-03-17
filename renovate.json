@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "dependencyDashboard": true,
   "gomod": {
     "fileMatch": ["services/go.mod"]
   },
