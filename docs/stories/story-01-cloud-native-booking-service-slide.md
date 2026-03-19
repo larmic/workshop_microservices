@@ -1,5 +1,7 @@
 # Story 1: Der erste cloud-native Booking-Service
 
+**Zeitrahmen:** ca. 90 Minuten
+
 ## Thema
 
 - **Twelve-Factor-App** → Methodologie für moderne, cloud-native Anwendungen
