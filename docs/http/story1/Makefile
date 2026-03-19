@@ -12,6 +12,6 @@ test: ## Führt alle HTTP-Tests im docker-Environment aus
 	docker run --rm \
 	  -v $(CURDIR):/workdir \
 	  jetbrains/intellij-http-client \
-	  --env docker \
+	  --env using-jetbrains-docker-http-client \
 	  --env-file http-client.env.json \
 	  requests.http
