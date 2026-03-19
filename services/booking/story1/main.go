@@ -80,16 +80,20 @@ func main() {
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "UP"})
 }
 
 func infoHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(config)
 }
 
 func bookingOffersHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+
 	flights, err := fetchJSON(fmt.Sprintf("%s/flights", config.FlightServiceURL))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("failed to fetch flights: %v", err), http.StatusInternalServerError)
@@ -132,6 +136,7 @@ func fetchJSON(url string) (json.RawMessage, error) {
 }
 
 func openapiHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/yaml")
 	w.Write(openapiSpec)
 }

@@ -53,16 +53,19 @@ func main() {
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "UP"})
 }
 
 func carsHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(cars)
 }
 
 func openapiHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/yaml")
 	w.Write(openapiSpec)
 }
