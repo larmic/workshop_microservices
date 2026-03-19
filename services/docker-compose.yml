@@ -23,6 +23,22 @@ services:
     ports:
       - "8083:8080"
 
+  booking-story1:
+    build:
+      context: .
+      dockerfile: booking/story1/Dockerfile
+    image: larmic/workshop-microservices-booking-story1:latest
+    ports:
+      - "8085:8080"
+    environment:
+      FLIGHT_SERVICE_URL: http://flight:8080
+      HOTEL_SERVICE_URL: http://hotel:8080
+      CAR_SERVICE_URL: http://car:8080
+    depends_on:
+      - flight
+      - hotel
+      - car
+
   swagger-ui:
     image: swaggerapi/swagger-ui:latest
     ports:
@@ -32,9 +48,11 @@ services:
         [
           { "url": "http://localhost:8081/openapi", "name": "Flight Service" },
           { "url": "http://localhost:8082/openapi", "name": "Hotel Service" },
-          { "url": "http://localhost:8083/openapi", "name": "Car Service" }
+          { "url": "http://localhost:8083/openapi", "name": "Car Service" },
+          { "url": "http://localhost:8085/openapi", "name": "Booking Service (Story 1)" }
         ]
     depends_on:
       - flight
       - hotel
       - car
+      - booking-story1
