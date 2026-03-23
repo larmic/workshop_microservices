@@ -17,12 +17,6 @@
       "address": "car",
       "port": 8080,
       "checks": [{"http": "http://car:8080/health", "interval": "10s"}]
-    },
-    {
-      "name": "booking-story1-service",
-      "address": "booking-story1",
-      "port": 8080,
-      "checks": [{"http": "http://booking-story1:8080/health", "interval": "10s"}]
     }
   ]
 }

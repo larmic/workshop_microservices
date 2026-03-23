@@ -6,10 +6,6 @@ services:
       - "8500:8500"
     volumes:
       - ./consul-config:/consul/config
-    depends_on:
-      - flight
-      - hotel
-      - car
 
   swagger-ui:
     image: swaggerapi/swagger-ui:latest
@@ -20,12 +16,5 @@ services:
         [
           { "url": "http://localhost:8081/openapi", "name": "Flight Service" },
           { "url": "http://localhost:8082/openapi", "name": "Hotel Service" },
-          { "url": "http://localhost:8083/openapi", "name": "Car Service" },
-          { "url": "http://localhost:8085/openapi", "name": "Booking Service (Story 1)" },
-          { "url": "http://localhost:8086/openapi", "name": "Booking Service (Story 2)" }
+          { "url": "http://localhost:8083/openapi", "name": "Car Service" }
         ]
-    depends_on:
-      - flight
-      - hotel
-      - car
-      - booking-story1

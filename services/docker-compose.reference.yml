@@ -1,0 +1,24 @@
+services:
+  booking-story1:
+    build:
+      context: .
+      dockerfile: booking/story1/Dockerfile
+    image: larmic/workshop-microservices-booking-story1:latest
+    ports:
+      - "8085:8080"
+    environment:
+      FLIGHT_SERVICE_URL: http://flight:8080
+      HOTEL_SERVICE_URL: http://hotel:8080
+      CAR_SERVICE_URL: http://car:8080
+
+  booking-story2:
+    build:
+      context: .
+      dockerfile: booking/story2/Dockerfile
+    image: larmic/workshop-microservices-booking-story2:latest
+    ports:
+      - "8086:8080"
+    environment:
+      FLIGHT_SERVICE_URL: http://flight:8080
+      HOTEL_SERVICE_URL: http://hotel:8080
+      CAR_SERVICE_URL: http://car:8080
