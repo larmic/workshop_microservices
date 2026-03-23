@@ -18,9 +18,11 @@ cd services && make docker-up
 make test
 ```
 
+Auf Linux wird automatisch `--add-host host.docker.internal:host-gateway` gesetzt.
+
 **In IntelliJ / WebStorm:**
 
-`requests.http` direkt öffnen und einzelne Requests ausführen.
+`requests.http` direkt öffnen und mit dem Environment `local` ausführen.
 
 ## Referenz
 
