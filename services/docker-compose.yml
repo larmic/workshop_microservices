@@ -1,4 +1,17 @@
 services:
+  consul:
+    image: hashicorp/consul:1.22
+    command: agent -dev -ui -client=0.0.0.0 -config-dir=/consul/config
+    ports:
+      - "8500:8500"
+    volumes:
+      - ./consul-config:/consul/config
+    depends_on:
+      - flight
+      - hotel
+      - car
+      - booking-story1
+
   flight:
     build:
       context: .

@@ -1,0 +1,28 @@
+{
+  "services": [
+    {
+      "name": "flight-service",
+      "address": "flight",
+      "port": 8080,
+      "checks": [{"http": "http://flight:8080/health", "interval": "10s"}]
+    },
+    {
+      "name": "hotel-service",
+      "address": "hotel",
+      "port": 8080,
+      "checks": [{"http": "http://hotel:8080/health", "interval": "10s"}]
+    },
+    {
+      "name": "car-service",
+      "address": "car",
+      "port": 8080,
+      "checks": [{"http": "http://car:8080/health", "interval": "10s"}]
+    },
+    {
+      "name": "booking-story1-service",
+      "address": "booking-story1",
+      "port": 8080,
+      "checks": [{"http": "http://booking-story1:8080/health", "interval": "10s"}]
+    }
+  ]
+}
