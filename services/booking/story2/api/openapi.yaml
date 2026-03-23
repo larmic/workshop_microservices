@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: BookingService API
+  description: |
+    REST API for the BookingService that orchestrates Flight, Hotel and Car
+    backend services and exposes health and configuration endpoints.
+  version: 2.0.0
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Returns HTTP 200 when the service is healthy.
+      operationId: getHealth
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /info:
+    get:
+      summary: Service configuration info
+      description: Returns the current service configuration without sensitive data.
+      operationId: getInfo
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: Current configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InfoResponse"
+
+  /booking/offers:
+    get:
+      summary: Combined booking offers
+      description: |
+        Calls the Flight, Hotel and Car backend services and returns their
+        combined results. No error handling — the request may fail if a
+        backend service is unavailable.
+      operationId: getBookingOffers
+      tags:
+        - booking
+      responses:
+        "200":
+          description: Combined offers from all backend services
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingOffers"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+      required:
+        - status
+
+    InfoResponse:
+      type: object
+      properties:
+        flightServiceUrl:
+          type: string
+          example: http://localhost:8081
+        hotelServiceUrl:
+          type: string
+          example: http://localhost:8082
+        carServiceUrl:
+          type: string
+          example: http://localhost:8083
+        timeout:
+          type: integer
+          description: Request timeout in milliseconds
+          example: 5000
+        activeProfile:
+          type: string
+          example: dev
+      required:
+        - flightServiceUrl
+        - hotelServiceUrl
+        - carServiceUrl
+
+    BookingOffers:
+      type: object
+      properties:
+        flights:
+          type: array
+          items:
+            $ref: "#/components/schemas/Flight"
+        hotels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Hotel"
+        cars:
+          type: array
+          items:
+            $ref: "#/components/schemas/Car"
+      required:
+        - flights
+        - hotels
+        - cars
+
+    Flight:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        airline:
+          type: string
+          example: Lufthansa
+        origin:
+          type: string
+          example: BER
+        destination:
+          type: string
+          example: MUC
+        price:
+          type: number
+          format: double
+          example: 129.99
+
+    Hotel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Grand Hotel
+        city:
+          type: string
+          example: Munich
+        pricePerNight:
+          type: number
+          format: double
+          example: 89.50
+
+    Car:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        provider:
+          type: string
+          example: Sixt
+        model:
+          type: string
+          example: VW Golf
+        pricePerDay:
+          type: number
+          format: double
+          example: 45.00
