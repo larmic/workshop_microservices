@@ -14,42 +14,7 @@ Dokumentation der Microservices für das Travel-Booking-System.
 
 ## API-Endpoints
 
-### Basis-Services (Flight, Hotel, Car)
-
-Alle Basis-Services haben eine identische Endpoint-Struktur:
-
-| Endpoint            | Beschreibung                          |
-|---------------------|---------------------------------------|
-| `GET /health`       | Health Check                          |
-| `GET /flights`      | Liste aller Flüge                     |
-| `GET /hotels`       | Liste aller Hotels                    |
-| `GET /cars`         | Liste aller Mietwagen                 |
-| `GET /openapi`      | OpenAPI-Spezifikation                 |
-| `POST /bookings`    | Buchung erstellen                     |
-| `DELETE /bookings/{id}` | Buchung stornieren (Compensating Transaction) |
-
-### Booking Service (Orchestrator)
-
-Der Booking Service koordiniert Buchungen über alle drei Basis-Services:
-
-| Methode  | Endpoint           | Beschreibung                |
-|----------|--------------------|-----------------------------|
-| `POST`   | `/bookings`        | Neue Buchung erstellen      |
-| `GET`    | `/bookings`        | Alle Buchungen auflisten    |
-| `GET`    | `/bookings/{id}`   | Einzelne Buchung abrufen    |
-| `DELETE` | `/bookings/{id}`   | Buchung stornieren          |
-| `GET`    | `/health`          | Health Check                |
-| `GET`    | `/openapi`         | OpenAPI-Spezifikation       |
-
-## Testdaten
-
-Die Services liefern konsistente Testdaten für drei Reiseziele:
-
-| Flug | Hotel | Mietwagen |
-|------|-------|-----------|
-| LH123: Frankfurt → New York (450 EUR) | Manhattan Plaza Hotel (250 USD/night) | Ford Mustang (95 USD/day) |
-| LH456: München → London (180 EUR) | London Bridge Inn (180 GBP/night) | Mini Cooper (65 GBP/day) |
-| BA789: Berlin → Paris (120 EUR) | Paris Étoile Hotel (195 EUR/night) | Renault Clio (55 EUR/day) |
+Die API-Endpoints der jeweiligen Apps finden sich jeweils pro service unter /api.
 
 ## Quickstart
 
@@ -58,9 +23,6 @@ Die Services liefern konsistente Testdaten für drei Reiseziele:
 ```bash
 # Alle Services mit Docker Compose starten
 docker compose up -d
-
-# Oder einzelne Services
-docker compose up -d flight hotel car
 ```
 
 ### Services testen
