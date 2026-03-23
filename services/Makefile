@@ -64,11 +64,11 @@ docker-build-booking-story1: ## Baut das BookingService Story1 Docker-Image
 	docker build -f booking/story1/Dockerfile -t workshop-microservices-booking-story1:latest .
 
 docker-up: ## Baut und startet alle Services mit Docker Compose
-	docker compose up --build
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml up --build
 
 docker-up-hub: ## Zieht Images von Docker Hub und startet
-	docker compose pull
-	docker compose up
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml pull
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml up
 
 docker-down: ## Stoppt und entfernt alle Container
 	docker compose down
