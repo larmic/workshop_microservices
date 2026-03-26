@@ -20,15 +20,21 @@ import (
 var openapiSpec []byte
 
 func main() {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
-	mux.HandleFunc("GET /cars", handler.CarsHandler)
-	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
-
 	consulURL := os.Getenv("CONSUL_URL")
 	serviceName := os.Getenv("SERVICE_NAME")
 	serviceAddress := os.Getenv("SERVICE_ADDRESS")
+
+	info := map[string]string{
+		"serviceName":    serviceName,
+		"serviceAddress": serviceAddress,
+	}
+
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
+	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(info))
+	mux.HandleFunc("GET /cars", handler.CarsHandler)
+	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 
 	if consulURL != "" {
 		cfg := consul.ServiceConfig{Name: serviceName, Address: serviceAddress, Port: 8080}

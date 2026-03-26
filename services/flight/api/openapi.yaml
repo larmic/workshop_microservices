@@ -22,6 +22,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/HealthResponse'
 
+  /info:
+    get:
+      summary: Service-Konfiguration
+      description: Gibt die aktuelle Service-Konfiguration zurück
+      operationId: getInfo
+      responses:
+        '200':
+          description: Aktuelle Konfiguration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoResponse'
+
   /flights:
     get:
       summary: Liste verfügbarer Flüge
@@ -123,6 +136,16 @@ components:
         status:
           type: string
           example: UP
+
+    InfoResponse:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          example: flight-service
+        serviceAddress:
+          type: string
+          example: flight-service
 
     Flight:
       type: object

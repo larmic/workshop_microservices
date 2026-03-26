@@ -31,7 +31,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
-	mux.HandleFunc("GET /info", handler.InfoHandler(config))
+	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(config))
 	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(config, httpClient))
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 
