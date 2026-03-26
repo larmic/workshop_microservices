@@ -36,6 +36,9 @@ jobs:
             booking-story1:
               - 'services/booking/story1/**'
               - 'services/go.mod'
+            booking-story2:
+              - 'services/booking/story2/**'
+              - 'services/go.mod'
 
   build-flight:
     needs: changes
