@@ -36,9 +36,12 @@ func main() {
 	mux.HandleFunc("GET /flights", handler.FlightsHandler)
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 
+	var serviceID string
 	if consulURL != "" {
 		cfg := consul.ServiceConfig{Name: serviceName, Address: serviceAddress, Port: 8080}
-		if err := consul.Register(consulURL, cfg); err != nil {
+		var err error
+		serviceID, err = consul.Register(consulURL, cfg)
+		if err != nil {
 			log.Printf("WARNING: Consul registration failed: %v", err)
 		}
 	}
@@ -58,8 +61,8 @@ func main() {
 	<-ctx.Done()
 	log.Println("Shutting down FlightService...")
 
-	if consulURL != "" {
-		consul.Deregister(consulURL, serviceName)
+	if serviceID != "" {
+		consul.Deregister(consulURL, serviceID)
 	}
 
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

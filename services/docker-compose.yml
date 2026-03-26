@@ -6,8 +6,6 @@ services:
       args:
         SERVICE_PATH: flight
     image: larmic/workshop-microservices-flight:latest
-    ports:
-      - "8081:8080"
     environment:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: flight-service
@@ -22,8 +20,6 @@ services:
       args:
         SERVICE_PATH: hotel
     image: larmic/workshop-microservices-hotel:latest
-    ports:
-      - "8082:8080"
     environment:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: hotel-service
@@ -38,8 +34,6 @@ services:
       args:
         SERVICE_PATH: car
     image: larmic/workshop-microservices-car:latest
-    ports:
-      - "8083:8080"
     environment:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: car-service

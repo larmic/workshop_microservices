@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 type ServiceConfig struct {
@@ -27,42 +28,49 @@ type healthCheck struct {
 	Interval string `json:"Interval"`
 }
 
-func Register(consulURL string, cfg ServiceConfig) error {
+func Register(consulURL string, cfg ServiceConfig) (string, error) {
+	hostname, err := os.Hostname()
+	if err != nil {
+		hostname = cfg.Address
+	}
+
+	serviceID := fmt.Sprintf("%s-%s", cfg.Name, hostname)
+
 	payload := registrationPayload{
 		Name:    cfg.Name,
-		ID:      cfg.Name,
-		Address: cfg.Address,
+		ID:      serviceID,
+		Address: hostname,
 		Port:    cfg.Port,
 		Check: healthCheck{
-			HTTP:     fmt.Sprintf("http://%s:%d/health", cfg.Address, cfg.Port),
+			HTTP:     fmt.Sprintf("http://%s:%d/health", hostname, cfg.Port),
 			Interval: "10s",
 		},
 	}
 
 	body, err := json.Marshal(payload)
 	if err != nil {
-		return fmt.Errorf("failed to marshal registration payload: %w", err)
+		return "", fmt.Errorf("failed to marshal registration payload: %w", err)
 	}
 
 	url := fmt.Sprintf("%s/v1/agent/service/register", consulURL)
 	req, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(body))
 	if err != nil {
-		return fmt.Errorf("failed to create registration request: %w", err)
+		return "", fmt.Errorf("failed to create registration request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return fmt.Errorf("consul registration request failed: %w", err)
+		return "", fmt.Errorf("consul registration request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("consul registration returned status %d", resp.StatusCode)
+		return "", fmt.Errorf("consul registration returned status %d", resp.StatusCode)
 	}
 
-	log.Printf("Registered service %q at %s:%d with Consul", cfg.Name, cfg.Address, cfg.Port)
-	return nil
+	log.Printf("Registered service %q (id=%s) at %s:%d with Consul", cfg.Name, serviceID, hostname, cfg.Port)
+	return serviceID, nil
 }
 
 func Deregister(consulURL string, serviceID string) {

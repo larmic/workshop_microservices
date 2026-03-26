@@ -1,0 +1,105 @@
+http:
+  routers:
+    flight:
+      rule: "PathPrefix(`/api/flight`)"
+      entryPoints:
+        - web
+      middlewares:
+        - flight-stripprefix
+      service: flight
+
+    hotel:
+      rule: "PathPrefix(`/api/hotel`)"
+      entryPoints:
+        - web
+      middlewares:
+        - hotel-stripprefix
+      service: hotel
+
+    car:
+      rule: "PathPrefix(`/api/car`)"
+      entryPoints:
+        - web
+      middlewares:
+        - car-stripprefix
+      service: car
+
+    booking-story1:
+      rule: "PathPrefix(`/api/booking-story1`)"
+      entryPoints:
+        - web
+      middlewares:
+        - booking-story1-stripprefix
+      service: booking-story1
+
+    booking-story2:
+      rule: "PathPrefix(`/api/booking-story2`)"
+      entryPoints:
+        - web
+      middlewares:
+        - booking-story2-stripprefix
+      service: booking-story2
+
+    swagger-ui:
+      rule: "PathPrefix(`/`)"
+      entryPoints:
+        - web
+      service: swagger-ui
+      priority: 1
+
+  middlewares:
+    flight-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/flight"
+
+    hotel-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/hotel"
+
+    car-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/car"
+
+    booking-story1-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/booking-story1"
+
+    booking-story2-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/booking-story2"
+
+  services:
+    flight:
+      loadBalancer:
+        servers:
+          - url: "http://flight:8080"
+
+    hotel:
+      loadBalancer:
+        servers:
+          - url: "http://hotel:8080"
+
+    car:
+      loadBalancer:
+        servers:
+          - url: "http://car:8080"
+
+    booking-story1:
+      loadBalancer:
+        servers:
+          - url: "http://booking-story1:8080"
+
+    booking-story2:
+      loadBalancer:
+        servers:
+          - url: "http://booking-story2:8080"
+
+    swagger-ui:
+      loadBalancer:
+        servers:
+          - url: "http://swagger-ui:8080"

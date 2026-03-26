@@ -1,4 +1,13 @@
 services:
+  traefik:
+    image: traefik:v3.4
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+
   consul:
     image: hashicorp/consul:1.22
     command: agent -dev -ui -client=0.0.0.0 -log-level=info
@@ -12,9 +21,9 @@ services:
     environment:
       URLS: >-
         [
-          { "url": "http://localhost:8081/openapi", "name": "Flight Service" },
-          { "url": "http://localhost:8082/openapi", "name": "Hotel Service" },
-          { "url": "http://localhost:8083/openapi", "name": "Car Service" },
-          { "url": "http://localhost:8085/openapi", "name": "Booking Service (Story 1)" },
-          { "url": "http://localhost:8086/openapi", "name": "Booking Service (Story 2)" }
+          { "url": "http://localhost/api/flight/openapi", "name": "Flight Service" },
+          { "url": "http://localhost/api/hotel/openapi", "name": "Hotel Service" },
+          { "url": "http://localhost/api/car/openapi", "name": "Car Service" },
+          { "url": "http://localhost/api/booking-story1/openapi", "name": "Booking Service (Story 1)" },
+          { "url": "http://localhost/api/booking-story2/openapi", "name": "Booking Service (Story 2)" }
         ]

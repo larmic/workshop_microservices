@@ -5,8 +5,8 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8082
-    description: Lokaler Entwicklungsserver
+  - url: http://localhost/api/hotel
+    description: API-Gateway (Traefik)
 
 paths:
   /health:

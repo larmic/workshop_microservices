@@ -6,6 +6,10 @@ info:
     backend services and exposes health and configuration endpoints.
   version: 2.0.0
 
+servers:
+  - url: http://localhost/api/booking-story2
+    description: API-Gateway (Traefik)
+
 paths:
   /health:
     get:

@@ -5,8 +5,8 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8083
-    description: Lokaler Entwicklungsserver
+  - url: http://localhost/api/car
+    description: API-Gateway (Traefik)
 
 paths:
   /health:
