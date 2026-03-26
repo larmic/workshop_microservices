@@ -6,6 +6,8 @@ services:
       args:
         SERVICE_PATH: flight
     image: larmic/workshop-microservices-flight:latest
+    deploy:
+      replicas: 1
     environment:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: flight-service
@@ -20,6 +22,8 @@ services:
       args:
         SERVICE_PATH: hotel
     image: larmic/workshop-microservices-hotel:latest
+    deploy:
+      replicas: 1
     environment:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: hotel-service
@@ -34,6 +38,8 @@ services:
       args:
         SERVICE_PATH: car
     image: larmic/workshop-microservices-car:latest
+    deploy:
+      replicas: 1
     environment:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: car-service
