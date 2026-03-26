@@ -110,7 +110,14 @@ Lese jeweils die Datei aus `services/booking/story1/` als Template und erstelle 
                tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking-storyN:latest
      ```
 
-10. **`services/docker-compose.reference.yml`**
+10. **`services/docker-compose.infra.yml`**
+    - Fuege in der Swagger-UI `URLS`-Liste einen neuen Eintrag hinzu:
+      ```
+      { "url": "http://localhost:PORT/openapi", "name": "Booking Service (Story N)" }
+      ```
+    (PORT = 8084 + N)
+
+11. **`services/docker-compose.reference.yml`**
     - Fuege einen neuen Service am Ende hinzu:
       ```yaml
         booking-storyN:
