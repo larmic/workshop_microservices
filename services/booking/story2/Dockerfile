@@ -5,8 +5,8 @@ RUN apk add --no-cache ca-certificates
 
 WORKDIR /go/src/app/
 COPY go.mod /go/src/app/
-COPY booking/story1/main.go /go/src/app/
-COPY booking/story1/api /go/src/app/api
+COPY booking/story2/main.go /go/src/app/
+COPY booking/story2/api /go/src/app/api
 
 RUN go mod download
 RUN go test -v ./...
@@ -33,7 +33,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
 
 FROM scratch
 LABEL org.opencontainers.image.source="https://github.com/larmic/workshop-microservices"
-LABEL org.opencontainers.image.description="Workshop Microservices - Booking Service (Story 1)"
+LABEL org.opencontainers.image.description="Workshop Microservices - Booking Service (Story 2)"
 LABEL org.opencontainers.image.licenses="MIT"
 WORKDIR /root/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
