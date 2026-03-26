@@ -1,41 +1,39 @@
 # Story 2: Services dynamisch finden
 
-**Thema:** Service Discovery / Service Registry
 **Zeitrahmen:** ca. 60 Minuten
 
-## Kontext
+## Thema
 
-In einer dynamischen Container-Umgebung ändern sich IP-Adressen und Ports der Services ständig. Der Booking-Service soll die Backend-Services nicht mehr über statische URLs ansprechen, sondern über eine Service Registry dynamisch finden.
+- **Service Discovery** → Dynamisches Auffinden von Services in Container-Umgebungen
+- **Service Registry** → Zentrale Registrierung und Verwaltung von Service-Instanzen (Consul)
+- **Client-Side Load Balancing** → Automatische Verteilung auf verfügbare Instanzen
 
-## User Story
+---
 
-Als **Booking-Service**
-möchte ich **die Backend-Services über ihren logischen Namen finden können**,
-damit **ich nicht von statischen IP-Adressen oder Ports abhängig bin und Services elastisch skaliert werden können**.
+## Ziel
 
-## Akzeptanzkriterien
+Ein Booking-Service, der:
+- Backend-Services (Flight, Hotel, Car) über logische Namen statt statischer URLs findet
+- sich bei Consul registriert und seinen Health-Check bereitstellt
+- bei Ausfall einer Service-Instanz automatisch eine andere verwendet
+- sich beim Herunterfahren sauber deregistriert
 
-- [ ] Der Booking-Service registriert sich bei Consul
-- [ ] Der Booking-Service findet FlightService, HotelService und CarService über Consul
-- [ ] Die statischen URLs aus **[Story 1](story-01-cloud-native-booking-service.md)** werden durch Service-Namen ersetzt
-- [ ] Der Health-Check wird bei Consul registriert
-- [ ] Bei Ausfall eines Service-Instanz wird automatisch eine andere verwendet (falls verfügbar)
-- [ ] Der Service deregistriert sich beim Herunterfahren
+---
 
-## Technische Hinweise
+## Aufgaben
 
-- **Consul UI:** `http://localhost:8500` (wird vom Trainer bereitgestellt)
-- **Service-Namen:**
+### 1. Service-Registrierung bei Consul
+- Booking-Service registriert sich bei Consul (`http://localhost:8500`)
+- Health-Check wird bei Consul registriert (HTTP, TCP oder TTL)
+- Service deregistriert sich beim Herunterfahren
+
+### 2. Service Discovery statt statischer URLs
+- Statische URLs aus [Story 1](story-01-cloud-native-booking-service.md) durch Service-Namen ersetzen
   - `flight-service`
   - `hotel-service`
   - `car-service`
-- **Empfohlene Libraries:**
-  - Spring Boot: `spring-cloud-starter-consul-discovery`
-  - Quarkus: `quarkus-consul-config`
-  - Alternativ: Direkte Consul HTTP API
-- **Consul Health-Check-Typen:** HTTP, TCP, TTL
+- Backend-Services über Consul dynamisch auflösen
 
-## Bonus (optional)
-
-- Implementiere Client-Side Load Balancing bei mehreren Instanzen
-- Nutze Consul Key-Value Store für zusätzliche Konfiguration
+### 3. Ausfallsicherheit (optional)
+- Client-Side Load Balancing bei mehreren Instanzen
+- Consul Key-Value Store für zusätzliche Konfiguration
