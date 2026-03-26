@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/team-neusta-skills/workshop_microservices/booking/story2/consul"
+	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 )
 
 type Config struct {

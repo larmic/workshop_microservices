@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/team-neusta-skills/workshop_microservices/booking/story2/consul"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story2/handler"
+	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 	"github.com/team-neusta-skills/workshop_microservices/shared/env"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
