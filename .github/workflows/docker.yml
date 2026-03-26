@@ -55,9 +55,13 @@ jobs:
       - uses: docker/build-push-action@v7
         with:
           context: services
-          file: services/flight/Dockerfile
+          file: services/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVICE_PATH=flight
+            SERVICE_DESC=Workshop Microservices - Flight Service
+            SERVICE_PORT=8081
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-flight:latest
 
   build-hotel:
@@ -74,9 +78,13 @@ jobs:
       - uses: docker/build-push-action@v7
         with:
           context: services
-          file: services/hotel/Dockerfile
+          file: services/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVICE_PATH=hotel
+            SERVICE_DESC=Workshop Microservices - Hotel Service
+            SERVICE_PORT=8082
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-hotel:latest
 
   build-car:
@@ -93,9 +101,13 @@ jobs:
       - uses: docker/build-push-action@v7
         with:
           context: services
-          file: services/car/Dockerfile
+          file: services/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVICE_PATH=car
+            SERVICE_DESC=Workshop Microservices - Car Service
+            SERVICE_PORT=8083
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-car:latest
 
   build-booking-story1:
@@ -112,9 +124,13 @@ jobs:
       - uses: docker/build-push-action@v7
         with:
           context: services
-          file: services/booking/story1/Dockerfile
+          file: services/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVICE_PATH=booking/story1
+            SERVICE_DESC=Workshop Microservices - Booking Service (Story 1)
+            SERVICE_PORT=8080
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking-story1:latest
 
   build-booking-story2:
@@ -131,7 +147,11 @@ jobs:
       - uses: docker/build-push-action@v7
         with:
           context: services
-          file: services/booking/story2/Dockerfile
+          file: services/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVICE_PATH=booking/story2
+            SERVICE_DESC=Workshop Microservices - Booking Service (Story 2)
+            SERVICE_PORT=8080
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking-story2:latest

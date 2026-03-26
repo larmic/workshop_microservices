@@ -11,19 +11,19 @@ help: ## Zeigt diese Hilfe an
 docker-build: docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 ## Baut alle Docker-Images
 
 docker-build-flight: ## Baut das Flight-Service Docker-Image
-	docker build -f flight/Dockerfile -t workshop-microservices-flight:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=flight --build-arg SERVICE_DESC="Workshop Microservices - Flight Service" --build-arg SERVICE_PORT=8081 -t workshop-microservices-flight:latest .
 
 docker-build-hotel: ## Baut das Hotel-Service Docker-Image
-	docker build -f hotel/Dockerfile -t workshop-microservices-hotel:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=hotel --build-arg SERVICE_DESC="Workshop Microservices - Hotel Service" --build-arg SERVICE_PORT=8082 -t workshop-microservices-hotel:latest .
 
 docker-build-car: ## Baut das Car-Service Docker-Image
-	docker build -f car/Dockerfile -t workshop-microservices-car:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=car --build-arg SERVICE_DESC="Workshop Microservices - Car Service" --build-arg SERVICE_PORT=8083 -t workshop-microservices-car:latest .
 
 docker-build-booking-story1: ## Baut das BookingService Story1 Docker-Image
-	docker build -f booking/story1/Dockerfile -t workshop-microservices-booking-story1:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story1 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 1)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story1:latest .
 
 docker-build-booking-story2: ## Baut das BookingService Story2 Docker-Image
-	docker build -f booking/story2/Dockerfile -t workshop-microservices-booking-story2:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story2 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 2)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story2:latest .
 
 docker-up: ## Baut und startet alle Services mit Docker Compose
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up --build

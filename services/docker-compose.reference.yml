@@ -2,7 +2,9 @@ services:
   booking-story1:
     build:
       context: .
-      dockerfile: booking/story1/Dockerfile
+      dockerfile: Dockerfile
+      args:
+        SERVICE_PATH: booking/story1
     image: larmic/workshop-microservices-booking-story1:latest
     ports:
       - "8085:8080"
@@ -14,7 +16,9 @@ services:
   booking-story2:
     build:
       context: .
-      dockerfile: booking/story2/Dockerfile
+      dockerfile: Dockerfile
+      args:
+        SERVICE_PATH: booking/story2
     image: larmic/workshop-microservices-booking-story2:latest
     ports:
       - "8086:8080"
