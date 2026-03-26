@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"time"
@@ -15,17 +16,22 @@ import (
 var openapiSpec []byte
 
 type Config struct {
-	FlightServiceURL string `json:"flightServiceUrl"`
-	HotelServiceURL  string `json:"hotelServiceUrl"`
-	CarServiceURL    string `json:"carServiceUrl"`
-	Timeout          int    `json:"timeout"`
-	ActiveProfile    string `json:"activeProfile"`
+	ConsulURL     string `json:"consulUrl"`
+	Timeout       int    `json:"timeout"`
+	ActiveProfile string `json:"activeProfile"`
 }
 
 type BookingOffers struct {
 	Flights json.RawMessage `json:"flights"`
 	Hotels  json.RawMessage `json:"hotels"`
 	Cars    json.RawMessage `json:"cars"`
+}
+
+type consulServiceEntry struct {
+	Service struct {
+		Address string `json:"Address"`
+		Port    int    `json:"Port"`
+	} `json:"Service"`
 }
 
 var config Config
@@ -36,6 +42,27 @@ func getEnv(key, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+func resolveServiceURL(serviceName string) (string, error) {
+	url := fmt.Sprintf("%s/v1/health/service/%s?passing=true", config.ConsulURL, serviceName)
+	resp, err := httpClient.Get(url)
+	if err != nil {
+		return "", fmt.Errorf("consul request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var entries []consulServiceEntry
+	if err := json.NewDecoder(resp.Body).Decode(&entries); err != nil {
+		return "", fmt.Errorf("consul response parse failed: %w", err)
+	}
+
+	if len(entries) == 0 {
+		return "", fmt.Errorf("no healthy instances found for %s", serviceName)
+	}
+
+	entry := entries[rand.Intn(len(entries))]
+	return fmt.Sprintf("http://%s:%d", entry.Service.Address, entry.Service.Port), nil
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
@@ -55,11 +82,9 @@ func corsMiddleware(next http.Handler) http.Handler {
 
 func main() {
 	config = Config{
-		FlightServiceURL: getEnv("FLIGHT_SERVICE_URL", "http://localhost:8081"),
-		HotelServiceURL:  getEnv("HOTEL_SERVICE_URL", "http://localhost:8082"),
-		CarServiceURL:    getEnv("CAR_SERVICE_URL", "http://localhost:8083"),
-		Timeout:          5000,
-		ActiveProfile:    getEnv("ACTIVE_PROFILE", "dev"),
+		ConsulURL:     getEnv("CONSUL_URL", "http://localhost:8500"),
+		Timeout:       5000,
+		ActiveProfile: getEnv("ACTIVE_PROFILE", "dev"),
 	}
 
 	httpClient = &http.Client{
@@ -94,19 +119,37 @@ func infoHandler(w http.ResponseWriter, r *http.Request) {
 func bookingOffersHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 
-	flights, err := fetchJSON(fmt.Sprintf("%s/flights", config.FlightServiceURL))
+	flightURL, err := resolveServiceURL("flight-service")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to resolve flight-service: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	hotelURL, err := resolveServiceURL("hotel-service")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to resolve hotel-service: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	carURL, err := resolveServiceURL("car-service")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to resolve car-service: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	flights, err := fetchJSON(fmt.Sprintf("%s/flights", flightURL))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("failed to fetch flights: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	hotels, err := fetchJSON(fmt.Sprintf("%s/hotels", config.HotelServiceURL))
+	hotels, err := fetchJSON(fmt.Sprintf("%s/hotels", hotelURL))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("failed to fetch hotels: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	cars, err := fetchJSON(fmt.Sprintf("%s/cars", config.CarServiceURL))
+	cars, err := fetchJSON(fmt.Sprintf("%s/cars", carURL))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("failed to fetch cars: %v", err), http.StatusInternalServerError)
 		return
