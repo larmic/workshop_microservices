@@ -17,34 +17,38 @@ Das erste Argument ist die Story-Nummer (z.B. `3` fuer Story 3). Wenn keine Numm
 ### Vorbedingungen pruefen
 
 1. Lese die Story-Nummer N aus den Argumenten
-2. Pruefe ob `services/booking/storyN/` bereits existiert. Falls ja: Abbruch mit Fehlermeldung.
-3. Berechne den externen Port: `8084 + N` (Story1=8085, Story2=8086, Story3=8087, usw.)
+2. Berechne die vorherige Story-Nummer: P = N - 1
+3. Pruefe ob `services/booking/storyN/` bereits existiert. Falls ja: Abbruch mit Fehlermeldung.
+4. Pruefe ob `services/booking/storyP/` existiert. Falls nein: Abbruch mit Fehlermeldung ("Story P existiert nicht, kann nicht als Vorlage verwendet werden").
+5. Berechne den externen Port: `8084 + N` (Story1=8085, Story2=8086, Story3=8087, usw.)
 
 ### Neue Dateien erstellen
 
-Lese jeweils die Datei aus `services/booking/story1/` als Template und erstelle die angepasste Version unter `services/booking/storyN/`:
+Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als Template und erstelle die angepasste Version unter `services/booking/storyN/`:
 
 1. **`services/booking/storyN/main.go`**
-   - Kopiere 1:1 von story1/main.go (keine Aenderungen noetig)
+   - Kopiere 1:1 von storyP/main.go (keine Aenderungen noetig)
 
 2. **`services/booking/storyN/api/openapi.yaml`**
-   - Kopiere von story1/api/openapi.yaml
-   - Aendere `version: 1.0.0` zu `version: N.0.0`
+   - Kopiere von storyP/api/openapi.yaml
+   - Aendere `version: P.0.0` zu `version: N.0.0`
 
 3. **`services/booking/storyN/http/requests.http`**
-   - Kopiere von story1/http/requests.http
-   - Aendere den Header-Kommentar von "Story 1" zu "Story N"
+   - Kopiere von storyP/http/requests.http
+   - Aendere den Header-Kommentar von "Story P" zu "Story N"
 
 4. **`services/booking/storyN/http/http-client.env.json`**
-   - Kopiere von story1/http/http-client.env.json
+   - Kopiere von storyP/http/http-client.env.json
    - Aendere `bookingPort` in beiden Environments (local und docker) auf den berechneten Port (8084+N)
 
 5. **`services/booking/storyN/http/Makefile`**
-   - Kopiere 1:1 von story1/http/Makefile (keine Aenderungen noetig)
+   - Kopiere 1:1 von storyP/http/Makefile (keine Aenderungen noetig)
 
 6. **`services/booking/storyN/http/README.md`**
-   - Kopiere von story1/http/README.md
-   - Aendere "Story 1" zu "Story N" im Titel und Text
+   - Kopiere von storyP/http/README.md
+   - Aendere "Story P" zu "Story N" im Titel und Text
+
+**Wichtig:** Kopiere auch alle weiteren Dateien und Unterverzeichnisse, die in `storyP/` existieren aber oben nicht explizit aufgefuehrt sind (z.B. zusaetzliche Handler-Dateien, Packages, etc.). Diese werden 1:1 kopiert, wobei Referenzen auf "storyP" durch "storyN" ersetzt werden.
 
 ### Bestehende Dateien erweitern
 
