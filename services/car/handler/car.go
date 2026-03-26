@@ -20,22 +20,8 @@ var cars = []Car{
 	{ID: "C3", Model: "Renault Clio (Paris)", Price: 55, Currency: "EUR", Unit: "day"},
 }
 
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"status": "UP"})
-}
-
 func CarsHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(cars)
-}
-
-func OpenapiHandler(spec []byte) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-		w.Header().Set("Content-Type", "application/yaml")
-		w.Write(spec)
-	}
 }

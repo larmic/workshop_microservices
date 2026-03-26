@@ -22,20 +22,6 @@ type BookingOffers struct {
 	Cars    json.RawMessage `json:"cars"`
 }
 
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"status": "UP"})
-}
-
-func InfoHandler(config Config) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(config)
-	}
-}
-
 func BookingOffersHandler(resolver *consul.Resolver, client *http.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
@@ -82,14 +68,6 @@ func BookingOffersHandler(resolver *consul.Resolver, client *http.Client) http.H
 			Hotels:  hotels,
 			Cars:    cars,
 		})
-	}
-}
-
-func OpenapiHandler(spec []byte) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-		w.Header().Set("Content-Type", "application/yaml")
-		w.Write(spec)
 	}
 }
 
