@@ -10,34 +10,21 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/team-neusta-skills/workshop_microservices/consul"
 	"github.com/team-neusta-skills/workshop_microservices/hotel/handler"
+	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
+	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
+	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
 )
 
 //go:embed api/openapi.yaml
 var openapiSpec []byte
 
-func corsMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-		if r.Method == "OPTIONS" {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-
-		next.ServeHTTP(w, r)
-	})
-}
-
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /health", handler.HealthHandler)
+	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /hotels", handler.HotelsHandler)
-	mux.HandleFunc("GET /openapi", handler.OpenapiHandler(openapiSpec))
+	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 
 	consulURL := os.Getenv("CONSUL_URL")
 	serviceName := os.Getenv("SERVICE_NAME")
@@ -50,7 +37,7 @@ func main() {
 		}
 	}
 
-	srv := &http.Server{Addr: ":8080", Handler: corsMiddleware(mux)}
+	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
