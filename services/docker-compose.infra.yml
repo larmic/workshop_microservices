@@ -1,11 +1,9 @@
 services:
   consul:
     image: hashicorp/consul:1.22
-    command: agent -dev -ui -client=0.0.0.0 -config-dir=/consul/config
+    command: agent -dev -ui -client=0.0.0.0
     ports:
       - "8500:8500"
-    volumes:
-      - ./consul-config:/consul/config
 
   swagger-ui:
     image: swaggerapi/swagger-ui:latest
