@@ -3,15 +3,13 @@ FROM golang:1.26.1-alpine AS builder
 RUN apk add --no-cache ca-certificates
 
 WORKDIR /go/src/app/
-COPY go.mod /go/src/app/
+COPY . /go/src/app/
 
 ARG SERVICE_PATH
-COPY ${SERVICE_PATH}/main.go /go/src/app/
-COPY ${SERVICE_PATH}/api /go/src/app/api
 
 RUN go mod download
-RUN go test -v ./...
-RUN CGO_ENABLED=0 go build -a -o main .
+RUN go test -v ./${SERVICE_PATH}/...
+RUN CGO_ENABLED=0 go build -a -o main ./${SERVICE_PATH}
 
 FROM scratch
 

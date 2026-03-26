@@ -14,26 +14,26 @@
 
 Ein Booking-Service, der:
 - Backend-Services (Flight, Hotel, Car) über logische Namen statt statischer URLs findet
-- sich bei Consul registriert und seinen Health-Check bereitstellt
+- die Consul HTTP API nutzt, um gesunde Service-Instanzen zu ermitteln
 - bei Ausfall einer Service-Instanz automatisch eine andere verwendet
-- sich beim Herunterfahren sauber deregistriert
 
 ---
 
 ## Aufgaben
 
-### 1. Service-Registrierung bei Consul
-- Booking-Service registriert sich bei Consul (`http://localhost:8500`)
-- Health-Check wird bei Consul registriert (HTTP, TCP oder TTL)
-- Service deregistriert sich beim Herunterfahren
+### 1. Consul Resolver implementieren
+- Eigenes `consul`-Package mit einem `Resolver` erstellen
+- Consul HTTP API (`/v1/health/service/{name}?passing=true`) abfragen
+- Service-URL aus der Antwort (Address + Port) zusammenbauen
 
 ### 2. Service Discovery statt statischer URLs
 - Statische URLs aus [Story 1](story-01-cloud-native-booking-service.md) durch Service-Namen ersetzen
   - `flight-service`
   - `hotel-service`
   - `car-service`
-- Backend-Services über Consul dynamisch auflösen
+- Backend-Services über den Consul Resolver dynamisch auflösen
+- Handler in eigenes `handler`-Package extrahieren
 
 ### 3. Ausfallsicherheit (optional)
-- Client-Side Load Balancing bei mehreren Instanzen
+- Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)
 - Consul Key-Value Store für zusätzliche Konfiguration
