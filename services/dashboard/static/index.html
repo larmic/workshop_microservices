@@ -46,6 +46,43 @@
         }
         .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
         .card.loading { opacity: 0.6; pointer-events: none; }
+        .links-section {
+            max-width: 900px;
+            margin: 2rem auto 0;
+            padding: 0 1rem;
+        }
+        .links-section h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 0.75rem;
+        }
+        .links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .link-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            text-decoration: none;
+            color: #2d6cdf;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: box-shadow 0.15s, background 0.15s;
+        }
+        .link-chip:hover {
+            background: #2d6cdf;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(45,108,223,0.3);
+        }
+        .link-chip span { font-size: 1rem; }
         .card-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
         .card-name {
             font-size: 1.1rem;
@@ -108,6 +145,24 @@
         <p>Microservices verwalten</p>
     </header>
     <div class="error-banner" id="error"></div>
+
+    <div class="links-section">
+        <h2>Tools</h2>
+        <div class="links-grid">
+            <a class="link-chip" href="/api" target="_blank"><span>&#128196;</span> Swagger API</a>
+            <a class="link-chip" href="/consul" target="_blank"><span>&#128270;</span> Consul</a>
+            <a class="link-chip" href="http://localhost:8080" target="_blank"><span>&#9881;</span> Traefik</a>
+        </div>
+        <h2>Service APIs</h2>
+        <div class="links-grid">
+            <a class="link-chip" href="/api/flight" target="_blank"><span>&#9992;</span> Flight</a>
+            <a class="link-chip" href="/api/hotel" target="_blank"><span>&#127976;</span> Hotel</a>
+            <a class="link-chip" href="/api/car" target="_blank"><span>&#128663;</span> Car</a>
+            <a class="link-chip" href="/api/booking-story1" target="_blank"><span>&#128214;</span> Booking Story 1</a>
+            <a class="link-chip" href="/api/booking-story2" target="_blank"><span>&#128214;</span> Booking Story 2</a>
+        </div>
+    </div>
+
     <div class="container" id="services"></div>
 
     <script>

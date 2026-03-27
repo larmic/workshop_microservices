@@ -49,11 +49,22 @@ http:
       service: dashboard
 
     swagger-ui:
-      rule: "PathPrefix(`/`)"
+      rule: "PathPrefix(`/api`)"
       entryPoints:
         - web
       service: swagger-ui
-      priority: 1
+
+    consul:
+      rule: "PathPrefix(`/consul`)"
+      entryPoints:
+        - web
+      service: consul
+
+    consul-api:
+      rule: "PathPrefix(`/v1`)"
+      entryPoints:
+        - web
+      service: consul
 
   middlewares:
     flight-stripprefix:
@@ -121,3 +132,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://swagger-ui:8080"
+
+    consul:
+      loadBalancer:
+        servers:
+          - url: "http://consul:8500"

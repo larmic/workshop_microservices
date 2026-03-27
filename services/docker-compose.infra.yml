@@ -10,15 +10,22 @@ services:
 
   consul:
     image: hashicorp/consul:1.22
-    command: agent -dev -ui -client=0.0.0.0 -log-level=info
+    command: agent -dev -ui -client=0.0.0.0 -log-level=info -ui-content-path=/consul/
     ports:
       - "8500:8500"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
 
   swagger-ui:
     image: swaggerapi/swagger-ui:latest
     ports:
       - "8084:8080"
     environment:
+      BASE_URL: /api
       URLS: >-
         [
           { "url": "http://localhost/api/flight/openapi", "name": "Flight Service" },
