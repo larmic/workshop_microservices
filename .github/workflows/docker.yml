@@ -28,22 +28,39 @@ jobs:
           filters: |
             flight:
               - 'services/flight/**'
+              - 'services/shared/**'
               - 'services/go.mod'
+              - 'services/go.sum'
+              - 'services/Dockerfile'
             hotel:
               - 'services/hotel/**'
+              - 'services/shared/**'
               - 'services/go.mod'
+              - 'services/go.sum'
+              - 'services/Dockerfile'
             car:
               - 'services/car/**'
+              - 'services/shared/**'
               - 'services/go.mod'
+              - 'services/go.sum'
+              - 'services/Dockerfile'
             booking-story1:
               - 'services/booking/story1/**'
+              - 'services/shared/**'
               - 'services/go.mod'
+              - 'services/go.sum'
+              - 'services/Dockerfile'
             booking-story2:
               - 'services/booking/story2/**'
+              - 'services/shared/**'
               - 'services/go.mod'
+              - 'services/go.sum'
+              - 'services/Dockerfile'
             dashboard:
               - 'services/dashboard/**'
+              - 'services/shared/**'
               - 'services/go.mod'
+              - 'services/go.sum'
 
   build-flight:
     needs: changes
