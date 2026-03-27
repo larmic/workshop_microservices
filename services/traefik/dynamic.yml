@@ -40,13 +40,13 @@ http:
         - booking-story2-stripprefix
       service: booking-story2
 
-    scaling-ui:
-      rule: "PathPrefix(`/scaling`)"
+    dashboard:
+      rule: "PathPrefix(`/dashboard`)"
       entryPoints:
         - web
       middlewares:
-        - scaling-ui-stripprefix
-      service: scaling-ui
+        - dashboard-stripprefix
+      service: dashboard
 
     swagger-ui:
       rule: "PathPrefix(`/`)"
@@ -81,10 +81,10 @@ http:
         prefixes:
           - "/api/booking-story2"
 
-    scaling-ui-stripprefix:
+    dashboard-stripprefix:
       stripPrefix:
         prefixes:
-          - "/scaling"
+          - "/dashboard"
 
   services:
     flight:
@@ -112,10 +112,10 @@ http:
         servers:
           - url: "http://booking-story2:8080"
 
-    scaling-ui:
+    dashboard:
       loadBalancer:
         servers:
-          - url: "http://scaling-ui:8080"
+          - url: "http://dashboard:8080"
 
     swagger-ui:
       loadBalancer:

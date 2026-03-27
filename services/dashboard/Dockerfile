@@ -6,13 +6,13 @@ WORKDIR /go/src/app/
 COPY . /go/src/app/
 
 RUN go mod download
-RUN go test -v ./scaling-ui/...
-RUN CGO_ENABLED=0 go build -a -o main ./scaling-ui
+RUN go test -v ./dashboard/...
+RUN CGO_ENABLED=0 go build -a -o main ./dashboard
 
 FROM docker:28-cli
 
 LABEL org.opencontainers.image.source="https://github.com/larmic/workshop-microservices"
-LABEL org.opencontainers.image.description="Workshop Microservices - Scaling UI"
+LABEL org.opencontainers.image.description="Workshop Microservices - Dashboard"
 LABEL org.opencontainers.image.licenses="MIT"
 
 WORKDIR /root/

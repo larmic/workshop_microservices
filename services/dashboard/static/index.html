@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scaling Dashboard</title>
+    <title>Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -104,8 +104,8 @@
 </head>
 <body>
     <header>
-        <h1>Scaling Dashboard</h1>
-        <p>Microservices skalieren</p>
+        <h1>Workshop Dashboard</h1>
+        <p>Microservices verwalten</p>
     </header>
     <div class="error-banner" id="error"></div>
     <div class="container" id="services"></div>
@@ -116,7 +116,7 @@
 
         async function fetchServices() {
             try {
-                const res = await fetch("/scaling/api/services");
+                const res = await fetch("/dashboard/api/services");
                 if (!res.ok) throw new Error(await res.text());
                 services = await res.json();
                 render();
@@ -130,7 +130,7 @@
             const card = document.getElementById("card-" + name);
             card.classList.add("loading");
             try {
-                const res = await fetch("/scaling/api/services/" + name + "/scale", {
+                const res = await fetch("/dashboard/api/services/" + name + "/scale", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ replicas })

@@ -28,10 +28,11 @@ services:
           { "url": "http://localhost/api/booking-story2/openapi", "name": "Booking Service (Story 2)" }
         ]
 
-  scaling-ui:
+  dashboard:
     build:
       context: .
-      dockerfile: scaling-ui/Dockerfile
+      dockerfile: dashboard/Dockerfile
+    image: larmic/workshop-microservices-dashboard:latest
     environment:
       COMPOSE_PROJECT_NAME: services
       COMPOSE_FILES: "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml"

@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/team-neusta-skills/workshop_microservices/scaling-ui/handler"
+	"github.com/team-neusta-skills/workshop_microservices/dashboard/handler"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
 )
@@ -46,14 +46,14 @@ func main() {
 	defer stop()
 
 	go func() {
-		log.Println("Scaling UI starting on port 8080...")
+		log.Println("Dashboard starting on port 8080...")
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)
 		}
 	}()
 
 	<-ctx.Done()
-	log.Println("Shutting down Scaling UI...")
+	log.Println("Shutting down Dashboard...")
 
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
