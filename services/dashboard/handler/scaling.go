@@ -27,7 +27,7 @@ type composeContainer struct {
 
 func ListServicesHandler(composeArgs []string, allowedServices []string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+		//log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 
 		services := make([]ServiceInfo, 0, len(allowedServices))
 		for _, name := range allowedServices {
