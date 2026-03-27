@@ -1,4 +1,4 @@
-.PHONY: help all build clean run-flight run-hotel run-car run-booking-story1 run-booking-story2 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 docker-up docker-up-base docker-up-hub docker-down
+.PHONY: help all build clean run-flight run-hotel run-car run-booking-story1 run-booking-story2 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 docker-build-scaling-ui docker-up docker-up-base docker-up-hub docker-down
 
 .DEFAULT_GOAL := help
 
@@ -8,7 +8,7 @@ help: ## Zeigt diese Hilfe an
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
-docker-build: docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 ## Baut alle Docker-Images
+docker-build: docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 docker-build-scaling-ui ## Baut alle Docker-Images
 
 docker-build-flight: ## Baut das Flight-Service Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=flight --build-arg SERVICE_DESC="Workshop Microservices - Flight Service" --build-arg SERVICE_PORT=8081 -t workshop-microservices-flight:latest .
@@ -24,6 +24,9 @@ docker-build-booking-story1: ## Baut das BookingService Story1 Docker-Image
 
 docker-build-booking-story2: ## Baut das BookingService Story2 Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story2 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 2)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story2:latest .
+
+docker-build-scaling-ui: ## Baut das Scaling-UI Docker-Image
+	docker build -f scaling-ui/Dockerfile -t workshop-microservices-scaling-ui:latest .
 
 docker-up: ## Baut und startet alle Services mit Docker Compose
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up --build

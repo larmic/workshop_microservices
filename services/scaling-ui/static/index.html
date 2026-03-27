@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scaling Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            min-height: 100vh;
+        }
+        header {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+        header h1 { font-size: 1.5rem; font-weight: 600; }
+        header p { font-size: 0.875rem; color: #aaa; margin-top: 0.25rem; }
+        .error-banner {
+            background: #fee;
+            color: #c00;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            display: none;
+            border-bottom: 2px solid #fcc;
+        }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: box-shadow 0.2s;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .card.loading { opacity: 0.6; pointer-events: none; }
+        .card-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .card-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-bottom: 1rem;
+            color: #1a1a2e;
+        }
+        .replica-count {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2d6cdf;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+        .btn {
+            width: 48px;
+            height: 48px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            background: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn:hover:not(:disabled) {
+            background: #2d6cdf;
+            color: #fff;
+            border-color: #2d6cdf;
+        }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ddd;
+            border-top-color: #2d6cdf;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0.5rem auto 0;
+        }
+        .card.loading .spinner { display: block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Scaling Dashboard</h1>
+        <p>Microservices skalieren</p>
+    </header>
+    <div class="error-banner" id="error"></div>
+    <div class="container" id="services"></div>
+
+    <script>
+        const icons = { flight: "&#9992;", hotel: "&#127976;", car: "&#128663;" };
+        let services = [];
+
+        async function fetchServices() {
+            try {
+                const res = await fetch("/scaling/api/services");
+                if (!res.ok) throw new Error(await res.text());
+                services = await res.json();
+                render();
+                hideError();
+            } catch (e) {
+                showError("Fehler beim Laden: " + e.message);
+            }
+        }
+
+        async function scale(name, replicas) {
+            const card = document.getElementById("card-" + name);
+            card.classList.add("loading");
+            try {
+                const res = await fetch("/scaling/api/services/" + name + "/scale", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ replicas })
+                });
+                if (!res.ok) throw new Error(await res.text());
+                const updated = await res.json();
+                const idx = services.findIndex(s => s.name === name);
+                if (idx >= 0) services[idx] = updated;
+                render();
+                hideError();
+            } catch (e) {
+                showError("Scaling fehlgeschlagen: " + e.message);
+            } finally {
+                card.classList.remove("loading");
+            }
+        }
+
+        function render() {
+            const container = document.getElementById("services");
+            container.innerHTML = services.map(s => `
+                <div class="card" id="card-${s.name}">
+                    <div class="card-icon">${icons[s.name] || "&#9881;"}</div>
+                    <div class="card-name">${s.name}</div>
+                    <div class="replica-count">${s.replicas}</div>
+                    <div class="controls">
+                        <button class="btn" onclick="scale('${s.name}', ${s.replicas - 1})"
+                            ${s.replicas <= 0 ? "disabled" : ""}>&#8722;</button>
+                        <button class="btn" onclick="scale('${s.name}', ${s.replicas + 1})"
+                            ${s.replicas >= 10 ? "disabled" : ""}>&#43;</button>
+                    </div>
+                    <div class="spinner"></div>
+                </div>
+            `).join("");
+        }
+
+        function showError(msg) {
+            const el = document.getElementById("error");
+            el.textContent = msg;
+            el.style.display = "block";
+        }
+
+        function hideError() {
+            document.getElementById("error").style.display = "none";
+        }
+
+        fetchServices();
+        setInterval(fetchServices, 5000);
+    </script>
+</body>
+</html>
