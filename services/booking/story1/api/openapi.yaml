@@ -96,13 +96,6 @@ components:
         carServiceUrl:
           type: string
           example: http://localhost:8083
-        timeout:
-          type: integer
-          description: Request timeout in milliseconds
-          example: 5000
-        activeProfile:
-          type: string
-          example: dev
       required:
         - flightServiceUrl
         - hotelServiceUrl

@@ -88,26 +88,14 @@ components:
     InfoResponse:
       type: object
       properties:
-        flightServiceUrl:
+        consulUrl:
           type: string
-          example: http://localhost:8081
-        hotelServiceUrl:
-          type: string
-          example: http://localhost:8082
-        carServiceUrl:
-          type: string
-          example: http://localhost:8083
-        timeout:
-          type: integer
-          description: Request timeout in milliseconds
-          example: 5000
-        activeProfile:
-          type: string
-          example: dev
+          description: URL of the Consul service registry
+          example: "http://consul:8500"
       required:
-        - flightServiceUrl
-        - hotelServiceUrl
-        - carServiceUrl
+        - consulUrl
+        - timeout
+        - activeProfile
 
     BookingOffers:
       type: object
