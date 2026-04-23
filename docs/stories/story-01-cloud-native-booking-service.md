@@ -1,5 +1,9 @@
 # Story 1: Der erste cloud-native Booking-Service
 
+> Wir brauchen einen Booking-Service, der Flüge, Hotels und Mietwagen bündelt. Wo der am Ende läuft – auf einem Server im Keller, in der Cloud oder auf dem Raspberry Pi meiner Nichte – wissen wir noch nicht. Erstmal soll er auf dem Entwicklerrechner laufen, ohne dass wir dafür Spezialwerkzeug brauchen.
+>
+> Ach ja, und bitte mit einem Health-Check. Wir hatten schon zu oft die Situation, dass alle dachten, der Service läuft einwandfrei – bis ein Kunde anrief und fragte, warum seit drei Stunden nichts mehr geht. Wir möchten den Service später automatisch überwachen lassen, egal auf welcher Plattform er landet. Denn: Vertrauen ist gut, ein Health-Endpoint ist besser.
+
 **Zeitrahmen:** ca. 90 Minuten
 
 ## Thema
