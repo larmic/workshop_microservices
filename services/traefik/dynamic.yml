@@ -40,6 +40,12 @@ http:
         - booking-story2-stripprefix
       service: booking-story2
 
+    root:
+      rule: "Path(`/`)"
+      entryPoints:
+        - web
+      service: dashboard
+
     dashboard:
       rule: "PathPrefix(`/dashboard`)"
       entryPoints:

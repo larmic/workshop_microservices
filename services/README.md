@@ -26,7 +26,7 @@ curl http://localhost/api/booking-story2/booking/offers
 
 | Service           | URL                          | Beschreibung                      |
 |-------------------|------------------------------|-----------------------------------|
-| Dashboard         | http://localhost/dashboard    | Workshop Dashboard                |
+| Dashboard         | http://localhost              | Workshop Dashboard                |
 | Traefik Dashboard | http://localhost:8080         | Traefik Monitoring Dashboard      |
 | Consul            | http://localhost/consul       | Service Discovery & Health Checks |
 | Swagger UI        | http://localhost/api          | API-Dokumentation (via Traefik)   |
