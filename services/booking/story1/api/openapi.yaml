@@ -40,6 +40,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/InfoResponse"
 
+  /openapi:
+    get:
+      summary: OpenAPI specification
+      description: Returns the OpenAPI specification of this service
+      operationId: getOpenApi
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: OpenAPI specification
+          content:
+            text/yaml:
+              schema:
+                type: string
+
   /booking/offers:
     get:
       summary: Combined booking offers
