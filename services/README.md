@@ -24,12 +24,12 @@ curl http://localhost/api/booking-story2/booking/offers
 
 ## Infrastruktur
 
-| Service           | Port | Beschreibung                      |
-|-------------------|------|-----------------------------------|
-| Traefik           | 80   | API-Gateway / Reverse Proxy       |
-| Traefik Dashboard | 8080 | Traefik Monitoring Dashboard      |
-| Consul            | 8500 | Service Discovery & Health Checks |
-| Swagger UI        | 80   | API-Dokumentation (via Traefik)   |
+| Service           | URL                          | Beschreibung                      |
+|-------------------|------------------------------|-----------------------------------|
+| Dashboard         | http://localhost/dashboard    | Workshop Dashboard                |
+| Traefik Dashboard | http://localhost:8080         | Traefik Monitoring Dashboard      |
+| Consul            | http://localhost/consul       | Service Discovery & Health Checks |
+| Swagger UI        | http://localhost/api          | API-Dokumentation (via Traefik)   |
 
 ## Docker Compose Aufteilung
 
