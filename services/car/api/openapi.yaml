@@ -87,7 +87,9 @@ paths:
   /bookings:
     post:
       summary: Mietwagen buchen
-      description: Erstellt eine neue Mietwagenbuchung
+      description: |
+        Bestätigt eine Mietwagenbuchung und loggt sie auf stdout. Es findet
+        keine Persistenz statt — die Buchung existiert nur in den Logs.
       operationId: createBooking
       requestBody:
         required: true
@@ -97,49 +99,13 @@ paths:
               $ref: '#/components/schemas/BookingRequest'
       responses:
         '201':
-          description: Buchung erfolgreich erstellt
+          description: Buchung erfolgreich bestätigt
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Booking'
         '400':
           description: Ungültige Anfrage
-
-  /bookings/{id}:
-    get:
-      summary: Buchungsdetails
-      description: Gibt die Details einer bestimmten Buchung zurück
-      operationId: getBookingById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Buchungsdetails
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-        '404':
-          description: Buchung nicht gefunden
-    delete:
-      summary: Buchung stornieren
-      description: Storniert eine bestehende Buchung
-      operationId: cancelBooking
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Buchung erfolgreich storniert
-        '404':
-          description: Buchung nicht gefunden
 
 components:
   schemas:
@@ -184,46 +150,28 @@ components:
       type: object
       required:
         - carId
-        - driverName
-        - pickUp
-        - dropOff
+        - customerName
       properties:
         carId:
           type: string
           example: C1
-        driverName:
+        customerName:
           type: string
           example: Max Mustermann
-        pickUp:
-          type: string
-          format: date
-          example: "2024-06-01"
-        dropOff:
-          type: string
-          format: date
-          example: "2024-06-05"
 
     Booking:
       type: object
       properties:
-        id:
+        bookingId:
           type: string
-          example: B001
+          example: C-9f4e80
         carId:
           type: string
           example: C1
-        driverName:
+        customerName:
           type: string
           example: Max Mustermann
-        pickUp:
-          type: string
-          format: date
-          example: "2024-06-01"
-        dropOff:
-          type: string
-          format: date
-          example: "2024-06-05"
         status:
           type: string
-          enum: [CONFIRMED, CANCELLED]
+          enum: [CONFIRMED]
           example: CONFIRMED

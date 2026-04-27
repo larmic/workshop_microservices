@@ -87,7 +87,9 @@ paths:
   /bookings:
     post:
       summary: Flug buchen
-      description: Erstellt eine neue Flugbuchung
+      description: |
+        Bestätigt eine Flugbuchung und loggt sie auf stdout. Es findet keine
+        Persistenz statt — die Buchung existiert nur in den Logs.
       operationId: createBooking
       requestBody:
         required: true
@@ -97,49 +99,13 @@ paths:
               $ref: '#/components/schemas/BookingRequest'
       responses:
         '201':
-          description: Buchung erfolgreich erstellt
+          description: Buchung erfolgreich bestätigt
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Booking'
         '400':
           description: Ungültige Anfrage
-
-  /bookings/{id}:
-    get:
-      summary: Buchungsdetails
-      description: Gibt die Details einer bestimmten Buchung zurück
-      operationId: getBookingById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Buchungsdetails
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-        '404':
-          description: Buchung nicht gefunden
-    delete:
-      summary: Buchung stornieren
-      description: Storniert eine bestehende Buchung
-      operationId: cancelBooking
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Buchung erfolgreich storniert
-        '404':
-          description: Buchung nicht gefunden
 
 components:
   schemas:
@@ -184,28 +150,28 @@ components:
       type: object
       required:
         - flightId
-        - passengerName
+        - customerName
       properties:
         flightId:
           type: string
           example: LH123
-        passengerName:
+        customerName:
           type: string
           example: Max Mustermann
 
     Booking:
       type: object
       properties:
-        id:
+        bookingId:
           type: string
-          example: B001
+          example: F-7c1a9f
         flightId:
           type: string
           example: LH123
-        passengerName:
+        customerName:
           type: string
           example: Max Mustermann
         status:
           type: string
-          enum: [CONFIRMED, CANCELLED]
+          enum: [CONFIRMED]
           example: CONFIRMED

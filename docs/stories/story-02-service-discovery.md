@@ -38,6 +38,17 @@ Ein Booking-Service, der:
 - Backend-Services über den Consul Resolver dynamisch auflösen
 - Handler in eigenes `handler`-Package extrahieren
 
-### 3. Ausfallsicherheit (optional)
+### 3. Buchung durchführen
+- `POST /booking/bookings` im Booking-Service
+  - Request: `{ flightId, hotelId, carId, customerName }`
+  - Ruft die drei Backend-Services über den Consul Resolver auf:
+    - `POST /bookings` am Flight-Service
+    - `POST /bookings` am Hotel-Service
+    - `POST /bookings` am Car-Service
+  - Antwortet mit aggregierter Buchung: `{ bookingId, customerName, flight, hotel, car }`
+  - Kein Error-Handling (darf fehlschlagen)
+- Backend-Services bestätigen die Buchung mit eigener Booking-ID und loggen sie auf stdout (keine Persistenz)
+
+### 4. Ausfallsicherheit (optional)
 - Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)
 - Consul Key-Value Store für zusätzliche Konfiguration

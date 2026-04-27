@@ -34,6 +34,7 @@ func main() {
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(info))
 	mux.HandleFunc("GET /hotels", handler.HotelsHandler)
+	mux.HandleFunc("POST /bookings", handler.CreateBookingHandler)
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 
 	var serviceID string

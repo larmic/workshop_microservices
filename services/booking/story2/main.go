@@ -34,6 +34,7 @@ func main() {
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(config))
 	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient))
+	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient))
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 
 	log.Println("BookingService starting on port 8080...")

@@ -74,6 +74,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/BookingOffers"
 
+  /booking/bookings:
+    post:
+      summary: Create combined booking
+      description: |
+        Books a flight, a hotel and a car in one go by calling POST /bookings
+        on the Flight, Hotel and Car backend services (resolved via Consul).
+        Returns an aggregated booking with the three confirmations.
+        No error handling — the request fails if any backend service is
+        unavailable.
+      operationId: createBooking
+      tags:
+        - booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingRequest"
+      responses:
+        "201":
+          description: Combined booking confirmed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "400":
+          description: Invalid request body
+
 components:
   schemas:
     HealthResponse:
@@ -170,3 +198,97 @@ components:
           type: number
           format: double
           example: 45.00
+
+    BookingRequest:
+      type: object
+      required:
+        - flightId
+        - hotelId
+        - carId
+        - customerName
+      properties:
+        flightId:
+          type: string
+          example: LH123
+        hotelId:
+          type: string
+          example: H1
+        carId:
+          type: string
+          example: C1
+        customerName:
+          type: string
+          example: Max Mustermann
+
+    Booking:
+      type: object
+      required:
+        - bookingId
+        - customerName
+        - flight
+        - hotel
+        - car
+      properties:
+        bookingId:
+          type: string
+          example: B-7c1a9f12
+        customerName:
+          type: string
+          example: Max Mustermann
+        flight:
+          $ref: "#/components/schemas/FlightBooking"
+        hotel:
+          $ref: "#/components/schemas/HotelBooking"
+        car:
+          $ref: "#/components/schemas/CarBooking"
+
+    FlightBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: F-7c1a9f
+        flightId:
+          type: string
+          example: LH123
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    HotelBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: H-3b5d22
+        hotelId:
+          type: string
+          example: H1
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    CarBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: C-9f4e80
+        carId:
+          type: string
+          example: C1
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED

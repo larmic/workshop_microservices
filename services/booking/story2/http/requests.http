@@ -49,6 +49,37 @@ GET http://{{host}}:{{bookingPort}}/booking/offers
     });
 %}
 
+### Booking Service - Create Combined Booking
+POST http://{{host}}:{{bookingPort}}/booking/bookings
+Content-Type: application/json
+
+{
+  "flightId": "LH123",
+  "hotelId": "H1",
+  "carId": "C1",
+  "customerName": "Max Mustermann"
+}
+
+> {%
+    client.test("Booking status is 201", function () {
+        client.assert(response.status === 201, "Expected 201");
+    });
+    client.test("Response contains bookingId and customerName", function () {
+        client.assert(response.body.bookingId !== undefined, "Expected bookingId");
+        client.assert(response.body.customerName === "Max Mustermann", "Expected customerName Max Mustermann");
+    });
+    client.test("Response contains flight, hotel, car confirmations", function () {
+        client.assert(response.body.flight !== undefined, "Expected flight");
+        client.assert(response.body.hotel !== undefined, "Expected hotel");
+        client.assert(response.body.car !== undefined, "Expected car");
+    });
+    client.test("All sub-bookings are CONFIRMED", function () {
+        client.assert(response.body.flight.status === "CONFIRMED", "Expected flight CONFIRMED");
+        client.assert(response.body.hotel.status === "CONFIRMED", "Expected hotel CONFIRMED");
+        client.assert(response.body.car.status === "CONFIRMED", "Expected car CONFIRMED");
+    });
+%}
+
 ### Booking Service - OpenAPI Specification
 GET http://{{host}}:{{bookingPort}}/openapi
 
