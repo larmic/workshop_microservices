@@ -1,5 +1,9 @@
 # Story 2: Services dynamisch finden
 
+> Der Booking-Service aus Story 1 läuft – aber die Backend-URLs in der Konfiguration werden zum Problem. Jedes Mal, wenn der Hotel-Service neu deployed wird, ändert sich der Port. Und wenn wir zwei Instanzen vom Flight-Service hochfahren wollen, weiß unser Booking-Service davon erstmal nichts.
+>
+> Wir hätten gerne, dass sich die Backend-Services selbst registrieren und vom Booking-Service über einen logischen Namen gefunden werden. Fällt eine Instanz aus, soll automatisch eine andere übernehmen – ohne dass jemand nachts um drei eine Konfigurationsdatei anfasst. Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb.
+
 **Zeitrahmen:** ca. 60 Minuten
 
 ## Thema

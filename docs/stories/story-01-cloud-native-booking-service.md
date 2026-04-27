@@ -4,7 +4,7 @@
 >
 > Ach ja, und bitte mit einem Health-Check. Wir hatten schon zu oft die Situation, dass alle dachten, der Service läuft einwandfrei – bis ein Kunde anrief und fragte, warum seit drei Stunden nichts mehr geht. Wir möchten den Service später automatisch überwachen lassen, egal auf welcher Plattform er landet. Denn: Vertrauen ist gut, ein Health-Endpoint ist besser.
 
-**Zeitrahmen:** ca. 90 Minuten
+**Zeitrahmen:** ca. 90 Minuten (inkl. Vorbereitung)
 
 ## Thema
 
