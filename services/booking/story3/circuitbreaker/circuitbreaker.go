@@ -107,15 +107,12 @@ func (cb *CircuitBreaker) allowRequest() bool {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
 
+	cb.maybePromoteFromOpenLocked()
+
 	if cb.state == Open {
-		if time.Now().After(cb.openUntil) {
-			log.Printf("CB[%s] OPEN-Timeout abgelaufen → Übergang zu HALF_OPEN (lazy beim Call)", cb.cfg.Name)
-			cb.transitionLocked(HalfOpen, "open timeout elapsed")
-		} else {
-			remaining := time.Until(cb.openUntil).Round(time.Second)
-			log.Printf("CB[%s] state=OPEN — Call SHORT-CIRCUIT (noch %s bis HALF_OPEN)", cb.cfg.Name, remaining)
-			return false
-		}
+		remaining := time.Until(cb.openUntil).Round(time.Second)
+		log.Printf("CB[%s] state=OPEN — Call SHORT-CIRCUIT (noch %s bis HALF_OPEN)", cb.cfg.Name, remaining)
+		return false
 	}
 
 	if cb.state == HalfOpen {
@@ -129,6 +126,17 @@ func (cb *CircuitBreaker) allowRequest() bool {
 
 	// CLOSED — keine Logzeile, sonst zu laut
 	return true
+}
+
+// maybePromoteFromOpenLocked übernimmt die lazy Transition OPEN → HALF_OPEN, wenn
+// das Timeout abgelaufen ist. Wird sowohl von allowRequest als auch von Snapshot
+// aufgerufen, damit das Dashboard den State-Wechsel sieht, auch wenn keine Calls
+// reinkommen.
+func (cb *CircuitBreaker) maybePromoteFromOpenLocked() {
+	if cb.state == Open && time.Now().After(cb.openUntil) {
+		log.Printf("CB[%s] OPEN-Timeout abgelaufen → Übergang zu HALF_OPEN", cb.cfg.Name)
+		cb.transitionLocked(HalfOpen, "open timeout elapsed")
+	}
 }
 
 func (cb *CircuitBreaker) recordResult(err error) {
@@ -200,6 +208,8 @@ func (cb *CircuitBreaker) transitionLocked(to State, reason string) {
 func (cb *CircuitBreaker) Snapshot() Snapshot {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
+
+	cb.maybePromoteFromOpenLocked()
 
 	s := Snapshot{
 		Name:               cb.cfg.Name,
