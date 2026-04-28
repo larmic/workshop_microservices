@@ -117,12 +117,11 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
 10. **`services/docker-compose.infra.yml`**
     - Fuege in der Swagger-UI `URLS`-Liste einen neuen Eintrag hinzu:
       ```
-      { "url": "http://localhost:PORT/openapi", "name": "Booking Service (Story N)" }
+      { "url": "http://localhost/api/booking-storyN/openapi", "name": "Booking Service (Story N)" }
       ```
-    (PORT = 8084 + N)
 
 11. **`services/docker-compose.reference.yml`**
-    - Fuege einen neuen Service am Ende hinzu:
+    - Fuege einen neuen Service am Ende hinzu (Environment uebernimmst du analog zur `storyP`-Konfiguration, also z.B. `CONSUL_URL` und `depends_on` falls die Vorlage Consul nutzt):
       ```yaml
         booking-storyN:
           build:
@@ -139,6 +138,32 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
             CAR_SERVICE_URL: http://car:8080
       ```
     (PORT = 8084 + N)
+
+12. **`services/traefik/dynamic.yml`**
+    - Fuege im `http.routers`-Block einen neuen Router nach `booking-story{P}` hinzu:
+      ```yaml
+          booking-storyN:
+            rule: "PathPrefix(`/api/booking-storyN`)"
+            entryPoints:
+              - web
+            middlewares:
+              - booking-storyN-stripprefix
+            service: booking-storyN
+      ```
+    - Fuege im `http.middlewares`-Block eine neue Middleware nach `booking-story{P}-stripprefix` hinzu:
+      ```yaml
+          booking-storyN-stripprefix:
+            stripPrefix:
+              prefixes:
+                - "/api/booking-storyN"
+      ```
+    - Fuege im `http.services`-Block einen neuen Service nach `booking-story{P}` hinzu:
+      ```yaml
+          booking-storyN:
+            loadBalancer:
+              servers:
+                - url: "http://booking-storyN:8080"
+      ```
 
 ### Abschluss
 
