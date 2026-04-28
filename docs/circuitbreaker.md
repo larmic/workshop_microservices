@@ -1,7 +1,8 @@
 TODO
 
 CB Folieninhalte 
-* CB status erklären
+* CB status genau erklären
+* CB was muss konfiguriert werden? (Wann öffnet der CB, wann geht er auf Halb-offen, wann auf geschlossen, ...)
 * CB als Pseudocode?
 
 Zur Implementierung
