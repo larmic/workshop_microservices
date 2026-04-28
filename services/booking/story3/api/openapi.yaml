@@ -76,13 +76,18 @@ paths:
 
   /booking/bookings:
     post:
-      summary: Create combined booking
+      summary: Create combined booking (fail-fast, no partial booking)
       description: |
-        Books a flight, a hotel and a car in one go by calling POST /bookings
-        on the Flight, Hotel and Car backend services (resolved via Consul).
-        Returns an aggregated booking with the three confirmations.
-        No error handling — the request fails if any backend service is
-        unavailable.
+        Books a flight, a hotel and a car by calling POST /bookings on each
+        backend service (resolved via Consul). Each call is wrapped in its own
+        circuit breaker.
+
+        Fail-fast semantics: if any circuit breaker is OPEN at the start, or
+        any backend call fails during the booking, the request aborts with
+        503 and reports which service failed. Already booked sub-bookings
+        (e.g. flight succeeded, hotel failed) are NOT rolled back — true
+        atomicity over multiple services requires the Saga pattern (see
+        Story 5).
       operationId: createBooking
       tags:
         - booking
@@ -101,6 +106,14 @@ paths:
                 $ref: "#/components/schemas/Booking"
         "400":
           description: Invalid request body
+        "503":
+          description: |
+            Booking aborted — at least one backend service is currently
+            failing or its circuit breaker is OPEN.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingFailure"
 
 components:
   schemas:
@@ -292,3 +305,34 @@ components:
           type: string
           enum: [CONFIRMED]
           example: CONFIRMED
+
+    BookingFailure:
+      type: object
+      required:
+        - error
+        - failedService
+        - reason
+        - hint
+      properties:
+        error:
+          type: string
+          example: "booking aborted (fail-fast, no partial booking)"
+        failedService:
+          type: string
+          enum: [flight, hotel, car]
+          example: hotel
+        reason:
+          type: string
+          example: "circuit breaker is open"
+        previouslyBooked:
+          type: array
+          items:
+            type: string
+            enum: [flight, hotel, car]
+          description: |
+            Sub-bookings that succeeded before the failure occurred. These are
+            NOT rolled back automatically — see Story 5 (Saga pattern).
+          example: ["flight"]
+        hint:
+          type: string
+          example: "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 5)."
