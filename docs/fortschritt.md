@@ -6,14 +6,14 @@
 
 ---
 
-### Tag 1: Grundlagen & Kommunikation
+### Grundlagen & Kommunikation
 
 | # | Story | Doku | Service | Folien | Notiz |
 |---|-------|------|---------|--------|-------|
 | 1 | [Cloud-Native Booking Service](stories/story-01-cloud-native-booking-service.md) | ✅ | ✅ | ✅ | |
-| 2 | [Services dynamisch finden](stories/story-02-service-discovery.md) | ❌ | ❌ | ❌ | |
+| 2 | [Services dynamisch finden](stories/story-02-service-discovery.md) | ✅ | ✅ | ❌ | |
 
-### Tag 2: Resilience & Events
+### Resilience & Events
 
 | # | Story | Doku | Service | Folien | Notiz |
 |---|-------|------|---------|--------|-------|
