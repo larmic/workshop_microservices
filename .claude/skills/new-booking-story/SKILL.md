@@ -121,7 +121,7 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
       ```
 
 11. **`services/docker-compose.reference.yml`**
-    - Fuege einen neuen Service am Ende hinzu (Environment uebernimmst du analog zur `storyP`-Konfiguration, also z.B. `CONSUL_URL` und `depends_on` falls die Vorlage Consul nutzt):
+    - Fuege einen neuen Service am Ende hinzu. **Wichtig:** Uebernimm den `environment`- und `depends_on`-Block 1:1 vom `booking-story{P}`-Service (ab Story 2 wird Consul verwendet, aeltere Stories nutzten statische `*_SERVICE_URL`-Variablen):
       ```yaml
         booking-storyN:
           build:
@@ -133,9 +133,10 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
           ports:
             - "PORT:8080"
           environment:
-            FLIGHT_SERVICE_URL: http://flight:8080
-            HOTEL_SERVICE_URL: http://hotel:8080
-            CAR_SERVICE_URL: http://car:8080
+            CONSUL_URL: http://consul:8500
+          depends_on:
+            consul:
+              condition: service_healthy
       ```
     (PORT = 8084 + N)
 
