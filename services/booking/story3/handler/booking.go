@@ -75,9 +75,22 @@ func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, breake
 	}
 }
 
+// CreateBookingHandler bucht alles oder nichts (Best-Effort) — bei einer
+// Teilbuchung sähe der Kunde sonst eine inkonsistente Bestätigung. Echte
+// atomare Buchung über mehrere Services wäre Saga (Story 5).
 func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breakers Breakers) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+
+		// Pre-Check: wenn ein CB OPEN ist, gar nicht erst anfangen zu buchen.
+		// HALF_OPEN ist OK — das ist der Probe-Versuch, der zur Recovery führt.
+		for _, cb := range breakers.All() {
+			snap := cb.Snapshot()
+			if snap.State == "OPEN" {
+				writeBookingFailure(w, snap.Name, errCircuitOpenForBooking, nil)
+				return
+			}
+		}
 
 		var req BookingRequest
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -85,15 +98,33 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breake
 			return
 		}
 
-		flight := bookWithCB(r.Context(), w, breakers.Flight, "flight",
+		var booked []string
+
+		flight, err := bookSingle(r.Context(), breakers.Flight,
 			resolver, client, "flight-service",
 			map[string]string{"flightId": req.FlightID, "customerName": req.CustomerName})
-		hotel := bookWithCB(r.Context(), w, breakers.Hotel, "hotel",
+		if err != nil {
+			writeBookingFailure(w, "flight", err, booked)
+			return
+		}
+		booked = append(booked, "flight")
+
+		hotel, err := bookSingle(r.Context(), breakers.Hotel,
 			resolver, client, "hotel-service",
 			map[string]string{"hotelId": req.HotelID, "customerName": req.CustomerName})
-		car := bookWithCB(r.Context(), w, breakers.Car, "car",
+		if err != nil {
+			writeBookingFailure(w, "hotel", err, booked)
+			return
+		}
+		booked = append(booked, "hotel")
+
+		car, err := bookSingle(r.Context(), breakers.Car,
 			resolver, client, "car-service",
 			map[string]string{"carId": req.CarID, "customerName": req.CustomerName})
+		if err != nil {
+			writeBookingFailure(w, "car", err, booked)
+			return
+		}
 
 		booking := Booking{
 			BookingID:    newBookingID(),
@@ -103,14 +134,66 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breake
 			Car:          car,
 		}
 
-		log.Printf("Aggregated booking confirmed: bookingId=%s customer=%q flight=%t hotel=%t car=%t",
-			booking.BookingID, booking.CustomerName,
-			flight != nil, hotel != nil, car != nil)
+		log.Printf("Aggregated booking confirmed: bookingId=%s customer=%q",
+			booking.BookingID, booking.CustomerName)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		_ = json.NewEncoder(w).Encode(booking)
 	}
+}
+
+var errCircuitOpenForBooking = errors.New("circuit breaker is open")
+
+type BookingFailure struct {
+	Error            string   `json:"error"`
+	FailedService    string   `json:"failedService"`
+	Reason           string   `json:"reason"`
+	PreviouslyBooked []string `json:"previouslyBooked,omitempty"`
+	Hint             string   `json:"hint"`
+}
+
+func writeBookingFailure(w http.ResponseWriter, service string, err error, previouslyBooked []string) {
+	failure := BookingFailure{
+		Error:            "booking aborted (fail-fast, no partial booking)",
+		FailedService:    service,
+		Reason:           err.Error(),
+		PreviouslyBooked: previouslyBooked,
+		Hint:             "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 5).",
+	}
+	if len(previouslyBooked) > 0 {
+		log.Printf("Booking ABORTED at %s (err=%v) — bereits gebucht und NICHT zurückgerollt: %v (Saga in Story 5)",
+			service, err, previouslyBooked)
+	} else {
+		log.Printf("Booking ABORTED at %s (err=%v) — keine Buchung durchgeführt", service, err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusServiceUnavailable)
+	_ = json.NewEncoder(w).Encode(failure)
+}
+
+func bookSingle(
+	ctx context.Context,
+	cb *circuitbreaker.CircuitBreaker,
+	resolver *consul.Resolver,
+	client *http.Client,
+	consulName string,
+	payload map[string]string,
+) (json.RawMessage, error) {
+	var data json.RawMessage
+	err := cb.Execute(ctx, func(ctx context.Context) error {
+		url, resolveErr := resolver.ResolveServiceURL(consulName)
+		if resolveErr != nil {
+			return resolveErr
+		}
+		raw, postErr := postJSON(ctx, client, url+"/bookings", payload)
+		if postErr != nil {
+			return postErr
+		}
+		data = raw
+		return nil
+	})
+	return data, err
 }
 
 func fetchOffersWithCB(
@@ -139,36 +222,6 @@ func fetchOffersWithCB(
 	if err != nil {
 		markFallback(w, serviceLabel, err)
 		return emptyJSONArray
-	}
-	return data
-}
-
-func bookWithCB(
-	ctx context.Context,
-	w http.ResponseWriter,
-	cb *circuitbreaker.CircuitBreaker,
-	serviceLabel string,
-	resolver *consul.Resolver,
-	client *http.Client,
-	consulName string,
-	payload map[string]string,
-) json.RawMessage {
-	var data json.RawMessage
-	err := cb.Execute(ctx, func(ctx context.Context) error {
-		url, resolveErr := resolver.ResolveServiceURL(consulName)
-		if resolveErr != nil {
-			return resolveErr
-		}
-		raw, postErr := postJSON(ctx, client, url+"/bookings", payload)
-		if postErr != nil {
-			return postErr
-		}
-		data = raw
-		return nil
-	})
-	if err != nil {
-		markFallback(w, serviceLabel, err)
-		return nil
 	}
 	return data
 }
