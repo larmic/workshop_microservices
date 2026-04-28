@@ -1,5 +1,6 @@
 services:
   booking-story1:
+    container_name: booking-story1
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,6 +15,7 @@ services:
       CAR_SERVICE_URL: http://car:8080
 
   booking-story2:
+    container_name: booking-story2
     build:
       context: .
       dockerfile: Dockerfile
@@ -29,6 +31,7 @@ services:
         condition: service_healthy
 
   booking-story3:
+    container_name: booking-story3
     build:
       context: .
       dockerfile: Dockerfile
