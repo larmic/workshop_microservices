@@ -1,4 +1,4 @@
-# Story 5: Isolation ist Stärke
+# Story 4: Isolation ist Stärke
 
 **Thema:** Bulkhead Pattern
 **Zeitrahmen:** ca. 60 Minuten

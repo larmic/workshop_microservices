@@ -1,4 +1,4 @@
-# Story 9: Ohne Unterbrechung
+# Story 8: Ohne Unterbrechung
 
 **Thema:** Downtimeless Deployment
 **Zeitrahmen:** ca. 60 Minuten

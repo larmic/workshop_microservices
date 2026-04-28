@@ -1,4 +1,4 @@
-# Story 7: Events erzählen Geschichten
+# Story 6: Events erzählen Geschichten
 
 **Thema:** Event-Driven Architecture, CQRS
 **Zeitrahmen:** ca. 60 Minuten

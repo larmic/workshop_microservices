@@ -56,23 +56,22 @@ Die Schritt-für-Schritt-Anleitung zur Einrichtung des Arbeitsplatzes findet sic
 |---|-------|-------|------------|
 | 1 | [Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md) | Twelve-Factor-App, Health-Checks, Externe Konfiguration — der BookingService wird aufgesetzt und ruft erstmals die Backend-Services auf. | ca. 90 Min. |
 | 2 | [Services dynamisch finden](stories/story-02-service-discovery.md) | Service Discovery mit Consul — statische URLs werden durch dynamische Service-Registrierung ersetzt. | ca. 60 Min. |
-| 3 | [Ein Gateway für alle](stories/story-03-api-gateway.md) | API-Gateway als zentraler Einstiegspunkt mit Routing, CORS und Rate-Limiting. | ca. 60 Min. |
 
 ### Tag 2: Resilience & Events
 
 | # | Story | Thema | Zeitrahmen |
 |---|-------|-------|------------|
-| 4 | [Wenn der Flug ausfällt](stories/story-04-circuit-breaker.md) | Circuit Breaker — graceful Degradation bei Ausfall des FlightService. | ca. 60 Min. |
-| 5 | [Isolation ist Stärke](stories/story-05-bulkhead.md) | Bulkhead Pattern — Ressourcen-Isolation verhindert Kaskadenausfälle. | ca. 60 Min. |
-| 6 | [Alles oder nichts - aber richtig](stories/story-06-saga.md) | Saga Pattern — verteilte Transaktionen mit Kompensationslogik für Komplettbuchungen. | ca. 60 Min. |
-| 7 | [Events erzählen Geschichten](stories/story-07-events-cqrs.md) | Event-Driven Architecture & CQRS — asynchrone Verarbeitung und optimierte Lesemodelle. | ca. 60 Min. |
+| 3 | [Wenn der Flug ausfällt](stories/story-03-circuit-breaker.md) | Circuit Breaker — graceful Degradation bei Ausfall des FlightService. | ca. 60 Min. |
+| 4 | [Isolation ist Stärke](stories/story-04-bulkhead.md) | Bulkhead Pattern — Ressourcen-Isolation verhindert Kaskadenausfälle. | ca. 60 Min. |
+| 5 | [Alles oder nichts - aber richtig](stories/story-05-saga.md) | Saga Pattern — verteilte Transaktionen mit Kompensationslogik für Komplettbuchungen. | ca. 60 Min. |
+| 6 | [Events erzählen Geschichten](stories/story-06-events-cqrs.md) | Event-Driven Architecture & CQRS — asynchrone Verarbeitung und optimierte Lesemodelle. | ca. 60 Min. |
 
 ### Optional (bei Zeit)
 
 | # | Story | Thema | Zeitrahmen |
 |---|-------|-------|------------|
-| 8 | [Mobile First](stories/story-08-bff.md) | Backends for Frontends — ein spezialisiertes Backend für die mobile App. | ca. 60 Min. |
-| 9 | [Ohne Unterbrechung](stories/story-09-downtimeless-deployment.md) | Downtimeless Deployment — Rolling Updates ohne Ausfallzeit. | ca. 60 Min. |
+| 7 | [Mobile First](stories/story-07-bff.md) | Backends for Frontends — ein spezialisiertes Backend für die mobile App. | ca. 60 Min. |
+| 8 | [Ohne Unterbrechung](stories/story-08-downtimeless-deployment.md) | Downtimeless Deployment — Rolling Updates ohne Ausfallzeit. | ca. 60 Min. |
 
 ---
 
@@ -119,20 +118,18 @@ Die Schritt-für-Schritt-Anleitung zur Einrichtung des Arbeitsplatzes findet sic
 Story 1 (Grundsetup + Konfiguration)
     │
     ├── Story 2 (Service Discovery)
-    │       │
-    │       └── Story 3 (API Gateway)
     │
-    └── Story 4 (Circuit Breaker)
+    └── Story 3 (Circuit Breaker)
             │
-            ├── Story 5 (Bulkhead)
+            ├── Story 4 (Bulkhead)
             │
-            └── Story 6 (Saga)
+            └── Story 5 (Saga)
                     │
-                    └── Story 7 (Events/CQRS)
+                    └── Story 6 (Events/CQRS)
 
 Optional:
-    Story 3 → Story 8 (BFF)
-    Story 1 + Story 2 → Story 9 (Downtimeless)
+    Story 1 + Story 2 → Story 7 (BFF)
+    Story 1 + Story 2 → Story 8 (Downtimeless)
 ```
 
 ### Glossar

@@ -1,4 +1,4 @@
-# Story 4: Wenn der Flug ausfällt
+# Story 3: Wenn der Flug ausfällt
 
 **Thema:** Circuit Breaker
 **Zeitrahmen:** ca. 60 Minuten
