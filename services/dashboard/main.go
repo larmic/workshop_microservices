@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/team-neusta-skills/workshop_microservices/dashboard/handler"
+	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
 )
@@ -23,6 +24,8 @@ var staticFS embed.FS
 func main() {
 	projectName := getEnv("COMPOSE_PROJECT_NAME", "services")
 	composeFilesRaw := getEnv("COMPOSE_FILES", "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml")
+	consulURL := getEnv("CONSUL_URL", "http://consul:8500")
+	bookingStory3URL := getEnv("BOOKING_STORY3_URL", "http://booking-story3:8080")
 
 	var composeArgs []string
 	for _, f := range strings.Split(composeFilesRaw, ",") {
@@ -34,10 +37,15 @@ func main() {
 
 	staticContent, _ := fs.Sub(staticFS, "static")
 
+	resolver := consul.NewResolver(consulURL, &http.Client{Timeout: 2 * time.Second})
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /api/services", handler.ListServicesHandler(composeArgs, allowedServices))
 	mux.HandleFunc("POST /api/services/{name}/scale", handler.ScaleServiceHandler(composeArgs, allowedServices))
+	mux.HandleFunc("GET /api/services/{name}/instances", handler.ListInstancesHandler(resolver, allowedServices))
+	mux.HandleFunc("POST /api/services/{name}/chaos", handler.SetChaosHandler(resolver, allowedServices))
+	mux.HandleFunc("GET /api/circuit-state", handler.CircuitStateHandler(bookingStory3URL))
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 
 	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}

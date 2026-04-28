@@ -43,8 +43,3 @@ damit **meine Reiseplanung nicht komplett blockiert wird**.
           waitDurationInOpenState: 30000
           slidingWindowSize: 10
   ```
-
-## Bonus (optional)
-
-- Implementiere Circuit Breaker für alle Backend-Services
-- Visualisiere die Circuit-States in einem Dashboard

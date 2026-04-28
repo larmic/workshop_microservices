@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/team-neusta-skills/workshop_microservices/flight/handler"
+	"github.com/team-neusta-skills/workshop_microservices/shared/chaos"
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
@@ -29,6 +30,8 @@ func main() {
 		"serviceAddress": serviceAddress,
 	}
 
+	chaosState := chaos.New()
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
@@ -36,6 +39,8 @@ func main() {
 	mux.HandleFunc("GET /flights", handler.FlightsHandler)
 	mux.HandleFunc("POST /bookings", handler.CreateBookingHandler)
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
+	mux.HandleFunc("GET /admin/chaos", chaosState.GetHandler)
+	mux.HandleFunc("POST /admin/chaos", chaosState.SetHandler)
 
 	var serviceID string
 	if consulURL != "" {
@@ -47,7 +52,7 @@ func main() {
 		}
 	}
 
-	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}
+	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(chaosState.Middleware(mux))}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

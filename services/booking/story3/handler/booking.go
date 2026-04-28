@@ -2,14 +2,17 @@ package handler
 
 import (
 	"bytes"
+	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 
+	"github.com/team-neusta-skills/workshop_microservices/booking/story3/circuitbreaker"
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 )
 
@@ -40,15 +43,11 @@ type Booking struct {
 	Car          json.RawMessage `json:"car"`
 }
 
-func BookingOffersHandler(resolver *consul.Resolver, client *http.Client) http.HandlerFunc {
+var emptyJSONArray = json.RawMessage("[]")
+
+func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, cb *circuitbreaker.CircuitBreaker) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-
-		flightURL, err := resolver.ResolveServiceURL("flight-service")
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to resolve flight-service: %v", err), http.StatusInternalServerError)
-			return
-		}
 
 		hotelURL, err := resolver.ResolveServiceURL("hotel-service")
 		if err != nil {
@@ -62,26 +61,38 @@ func BookingOffersHandler(resolver *consul.Resolver, client *http.Client) http.H
 			return
 		}
 
-		flights, err := fetchJSON(client, fmt.Sprintf("%s/flights", flightURL))
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to fetch flights: %v", err), http.StatusInternalServerError)
-			return
+		var flights json.RawMessage
+		flightErr := cb.Execute(r.Context(), func(ctx context.Context) error {
+			flightURL, resolveErr := resolver.ResolveServiceURL("flight-service")
+			if resolveErr != nil {
+				return resolveErr
+			}
+			data, fetchErr := fetchJSON(ctx, client, fmt.Sprintf("%s/flights", flightURL))
+			if fetchErr != nil {
+				return fetchErr
+			}
+			flights = data
+			return nil
+		})
+		if flightErr != nil {
+			flights = emptyJSONArray
+			markFallback(w, flightErr)
 		}
 
-		hotels, err := fetchJSON(client, fmt.Sprintf("%s/hotels", hotelURL))
+		hotels, err := fetchJSON(r.Context(), client, fmt.Sprintf("%s/hotels", hotelURL))
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to fetch hotels: %v", err), http.StatusInternalServerError)
 			return
 		}
 
-		cars, err := fetchJSON(client, fmt.Sprintf("%s/cars", carURL))
+		cars, err := fetchJSON(r.Context(), client, fmt.Sprintf("%s/cars", carURL))
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to fetch cars: %v", err), http.StatusInternalServerError)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(BookingOffers{
+		_ = json.NewEncoder(w).Encode(BookingOffers{
 			Flights: flights,
 			Hotels:  hotels,
 			Cars:    cars,
@@ -89,22 +100,7 @@ func BookingOffersHandler(resolver *consul.Resolver, client *http.Client) http.H
 	}
 }
 
-func fetchJSON(client *http.Client, url string) (json.RawMessage, error) {
-	resp, err := client.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return json.RawMessage(body), nil
-}
-
-func CreateBookingHandler(resolver *consul.Resolver, client *http.Client) http.HandlerFunc {
+func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, cb *circuitbreaker.CircuitBreaker) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 
@@ -114,12 +110,6 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client) http.H
 			return
 		}
 
-		flightURL, err := resolver.ResolveServiceURL("flight-service")
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to resolve flight-service: %v", err), http.StatusInternalServerError)
-			return
-		}
-
 		hotelURL, err := resolver.ResolveServiceURL("hotel-service")
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to resolve hotel-service: %v", err), http.StatusInternalServerError)
@@ -132,21 +122,33 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client) http.H
 			return
 		}
 
-		flight, err := postJSON(client, fmt.Sprintf("%s/bookings", flightURL),
-			map[string]string{"flightId": req.FlightID, "customerName": req.CustomerName})
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to book flight: %v", err), http.StatusInternalServerError)
-			return
+		var flight json.RawMessage
+		flightErr := cb.Execute(r.Context(), func(ctx context.Context) error {
+			flightURL, resolveErr := resolver.ResolveServiceURL("flight-service")
+			if resolveErr != nil {
+				return resolveErr
+			}
+			data, postErr := postJSON(ctx, client, fmt.Sprintf("%s/bookings", flightURL),
+				map[string]string{"flightId": req.FlightID, "customerName": req.CustomerName})
+			if postErr != nil {
+				return postErr
+			}
+			flight = data
+			return nil
+		})
+		if flightErr != nil {
+			flight = nil
+			markFallback(w, flightErr)
 		}
 
-		hotel, err := postJSON(client, fmt.Sprintf("%s/bookings", hotelURL),
+		hotel, err := postJSON(r.Context(), client, fmt.Sprintf("%s/bookings", hotelURL),
 			map[string]string{"hotelId": req.HotelID, "customerName": req.CustomerName})
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to book hotel: %v", err), http.StatusInternalServerError)
 			return
 		}
 
-		car, err := postJSON(client, fmt.Sprintf("%s/bookings", carURL),
+		car, err := postJSON(r.Context(), client, fmt.Sprintf("%s/bookings", carURL),
 			map[string]string{"carId": req.CarID, "customerName": req.CustomerName})
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to book car: %v", err), http.StatusInternalServerError)
@@ -161,22 +163,61 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client) http.H
 			Car:          car,
 		}
 
-		log.Printf("Aggregated booking confirmed: bookingId=%s customer=%q",
-			booking.BookingID, booking.CustomerName)
+		log.Printf("Aggregated booking confirmed: bookingId=%s customer=%q flightIncluded=%t",
+			booking.BookingID, booking.CustomerName, flight != nil)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(booking)
+		_ = json.NewEncoder(w).Encode(booking)
 	}
 }
 
-func postJSON(client *http.Client, url string, payload any) (json.RawMessage, error) {
+func markFallback(w http.ResponseWriter, err error) {
+	w.Header().Set("X-Flight-Fallback", "true")
+	if errors.Is(err, circuitbreaker.ErrCircuitOpen) {
+		w.Header().Set("X-Circuit-Open", "flight")
+		log.Printf("flight call short-circuited (CB OPEN)")
+	} else {
+		log.Printf("flight call failed, applying fallback: %v", err)
+	}
+}
+
+func fetchJSON(ctx context.Context, client *http.Client, url string) (json.RawMessage, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("backend returned %d: %s", resp.StatusCode, string(body))
+	}
+
+	return json.RawMessage(body), nil
+}
+
+func postJSON(ctx context.Context, client *http.Client, url string, payload any) (json.RawMessage, error) {
 	body, err := json.Marshal(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := client.Post(url, "application/json", bytes.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -196,6 +237,6 @@ func postJSON(client *http.Client, url string, payload any) (json.RawMessage, er
 
 func newBookingID() string {
 	b := make([]byte, 4)
-	rand.Read(b)
+	_, _ = rand.Read(b)
 	return "B-" + hex.EncodeToString(b)
 }
