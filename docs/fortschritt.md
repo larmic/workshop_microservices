@@ -16,8 +16,8 @@
 ### Resilience & Events
 
 | # | Story | Doku | Service | Folien | Notiz |
-|---|-------|------|---------|--------|-------|
-| 3 | [Wenn der Flug ausfällt](stories/story-03-circuit-breaker.md) | ❌ | ❌ | ❌ | |
+|---|-------|-----|---------|--------|-------|
+| 3 | [Wenn der Flug ausfällt](stories/story-03-circuit-breaker.md) | ✅ | ✅ | ❌ | |
 | 4 | [Isolation ist Stärke](stories/story-04-bulkhead.md) | ❌ | ❌ | ❌ | |
 | 5 | [Alles oder nichts - aber richtig](stories/story-05-saga.md) | ❌ | ❌ | ❌ | |
 | 6 | [Events erzählen Geschichten](stories/story-06-events-cqrs.md) | ❌ | ❌ | ❌ | |
