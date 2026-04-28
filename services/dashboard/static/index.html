@@ -78,39 +78,64 @@
             padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
         }
-        .cb-section h2 { font-size: 1rem; font-weight: 600; color: #1a1a2e; }
+        .cb-section h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 1rem;
+        }
+        .cb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        .cb-card {
+            background: #f9f9fb;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .cb-card-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-transform: capitalize;
+            margin-bottom: 0.5rem;
+        }
         .cb-badge {
             display: inline-block;
-            padding: 0.5rem 1rem;
+            padding: 0.35rem 0.75rem;
             border-radius: 999px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             letter-spacing: 0.5px;
             background: #ddd;
             color: #555;
-            min-width: 110px;
-            text-align: center;
+            margin-bottom: 0.75rem;
         }
         .cb-badge.closed   { background: #d4f4dd; color: #1d7a3a; }
         .cb-badge.open     { background: #fde0e0; color: #b3261e; }
         .cb-badge.halfopen { background: #fff3cd; color: #8a6d00; }
-        .cb-details {
-            display: flex;
-            gap: 1.5rem;
-            font-size: 0.875rem;
+        .cb-card-details {
+            font-size: 0.8rem;
             color: #555;
-            flex-wrap: wrap;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
-        .cb-details strong { color: #1a1a2e; }
+        .cb-card-details strong { color: #1a1a2e; font-variant-numeric: tabular-nums; }
         .cb-countdown {
             font-variant-numeric: tabular-nums;
             font-weight: 700;
             color: #b3261e;
+        }
+        .cb-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #888;
+            font-size: 0.875rem;
+            padding: 1rem;
         }
 
         /* Services grid */
@@ -210,18 +235,19 @@
         .chaos-btn.active.fail     { background: #b3261e; color: #fff; border-color: #b3261e; }
         .chaos-btn.mixed { background: #ddd; color: #444; border-color: #aaa; }
 
-        details.instances {
+        .instances-block {
             margin-top: 0.5rem;
             font-size: 0.8rem;
         }
-        details.instances summary {
-            cursor: pointer;
-            color: #555;
-            padding: 0.25rem 0;
-            user-select: none;
+        .instances-heading {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
         }
-        details.instances summary:hover { color: #2d6cdf; }
-        .instance-list { list-style: none; margin-top: 0.5rem; }
+        .instance-list { list-style: none; }
         .instance-row {
             display: flex;
             align-items: center;
@@ -303,10 +329,9 @@
     </div>
 
     <div class="container">
-        <div class="cb-section" id="cb-section">
-            <h2>Circuit Breaker (Booking Story 3 &rarr; Flight)</h2>
-            <div class="cb-badge" id="cb-badge">--</div>
-            <div class="cb-details" id="cb-details"></div>
+        <div class="cb-section">
+            <h2>Circuit Breaker (Booking Story 3)</h2>
+            <div class="cb-grid" id="cb-grid"></div>
         </div>
 
         <div class="services-grid" id="services"></div>
@@ -344,8 +369,8 @@
             try {
                 const res = await fetch("/dashboard/api/circuit-state");
                 if (!res.ok) throw new Error(await res.text());
-                const cb = await res.json();
-                renderCircuit(cb);
+                const cbs = await res.json();
+                renderCircuit(cbs);
             } catch (e) {
                 renderCircuit(null);
             }
@@ -435,12 +460,12 @@
                 const instances = instancesByService[s.name] || [];
                 const aggMode = aggregateMode(instances);
                 const instanceList = instances.length > 0
-                    ? `<details class="instances">
-                         <summary>${instances.length} Instanz${instances.length === 1 ? '' : 'en'} anzeigen</summary>
+                    ? `<div class="instances-block">
+                         <div class="instances-heading">Instanzen (${instances.length})</div>
                          <ul class="instance-list">
                            ${instances.map(i => renderInstance(s.name, i)).join("")}
                          </ul>
-                       </details>`
+                       </div>`
                     : "";
 
                 return `
@@ -471,34 +496,35 @@
             }).join("");
         }
 
-        function renderCircuit(cb) {
-            const badge = document.getElementById("cb-badge");
-            const details = document.getElementById("cb-details");
-            if (!cb) {
-                badge.className = "cb-badge";
-                badge.textContent = "??";
-                details.innerHTML = '<span>Booking Story 3 nicht erreichbar</span>';
+        function renderCircuit(cbs) {
+            const grid = document.getElementById("cb-grid");
+            if (!cbs || !Array.isArray(cbs) || cbs.length === 0) {
+                grid.innerHTML = '<div class="cb-empty">Booking Story 3 nicht erreichbar</div>';
                 return;
             }
-            const stateClass = cb.state === "CLOSED" ? "closed"
-                : cb.state === "OPEN" ? "open"
-                : "halfopen";
-            badge.className = "cb-badge " + stateClass;
-            badge.textContent = cb.state;
-
-            let countdown = "";
-            if (cb.state === "OPEN" && cb.openUntil) {
-                const remaining = Math.max(0, Math.ceil((new Date(cb.openUntil) - new Date()) / 1000));
-                countdown = `<span class="cb-countdown">HALF_OPEN in ${remaining}s</span>`;
-            }
-
-            details.innerHTML = `
-                <span>failures: <strong>${cb.failureCount}/${cb.failureThreshold}</strong></span>
-                <span>calls: <strong>${cb.totalCalls}</strong></span>
-                <span>fallbacks: <strong>${cb.totalShortCircuits}</strong></span>
-                <span>total errors: <strong>${cb.totalFailures}</strong></span>
-                ${countdown}
-            `;
+            grid.innerHTML = cbs.map(cb => {
+                const stateClass = cb.state === "CLOSED" ? "closed"
+                    : cb.state === "OPEN" ? "open"
+                    : "halfopen";
+                let countdown = "";
+                if (cb.state === "OPEN" && cb.openUntil) {
+                    const remaining = Math.max(0, Math.ceil((new Date(cb.openUntil) - new Date()) / 1000));
+                    countdown = `<div class="cb-countdown">HALF_OPEN in ${remaining}s</div>`;
+                }
+                return `
+                    <div class="cb-card">
+                        <div class="cb-card-name">${cb.name}</div>
+                        <div class="cb-badge ${stateClass}">${cb.state}</div>
+                        <div class="cb-card-details">
+                            <span>failures: <strong>${cb.failureCount}/${cb.failureThreshold}</strong></span>
+                            <span>calls: <strong>${cb.totalCalls}</strong></span>
+                            <span>fallbacks: <strong>${cb.totalShortCircuits}</strong></span>
+                            <span>errors: <strong>${cb.totalFailures}</strong></span>
+                            ${countdown}
+                        </div>
+                    </div>
+                `;
+            }).join("");
         }
 
         function showError(msg) {

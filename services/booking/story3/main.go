@@ -30,21 +30,28 @@ func main() {
 
 	resolver := consul.NewResolver(config.ConsulURL, httpClient)
 
-	cb := circuitbreaker.New(circuitbreaker.Config{
-		Name:             "flight-service",
-		FailureThreshold: 5,
-		OpenTimeout:      30 * time.Second,
-	})
+	cbConfig := func(name string) circuitbreaker.Config {
+		return circuitbreaker.Config{
+			Name:             name,
+			FailureThreshold: 5,
+			OpenTimeout:      30 * time.Second,
+		}
+	}
+	breakers := handler.Breakers{
+		Flight: circuitbreaker.New(cbConfig("flight")),
+		Hotel:  circuitbreaker.New(cbConfig("hotel")),
+		Car:    circuitbreaker.New(cbConfig("car")),
+	}
 
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(config))
-	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient, cb))
-	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, cb))
+	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient, breakers))
+	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, breakers))
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
-	mux.HandleFunc("GET /admin/circuit-state", handler.CircuitStateHandler(cb))
-	mux.HandleFunc("GET /admin/circuit-events", handler.CircuitEventsHandler(cb))
+	mux.HandleFunc("GET /admin/circuit-state", handler.CircuitStateHandler(breakers))
+	mux.HandleFunc("GET /admin/circuit-events", handler.CircuitEventsHandler(breakers))
 
 	log.Println("BookingService starting on port 8080...")
 	if err := http.ListenAndServe(":8080", middleware.CORSMiddleware(mux)); err != nil {
