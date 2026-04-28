@@ -40,6 +40,14 @@ http:
         - booking-story2-stripprefix
       service: booking-story2
 
+    booking-story3:
+      rule: "PathPrefix(`/api/booking-story3`)"
+      entryPoints:
+        - web
+      middlewares:
+        - booking-story3-stripprefix
+      service: booking-story3
+
     root:
       rule: "Path(`/`)"
       entryPoints:
@@ -98,6 +106,11 @@ http:
         prefixes:
           - "/api/booking-story2"
 
+    booking-story3-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/booking-story3"
+
     dashboard-stripprefix:
       stripPrefix:
         prefixes:
@@ -128,6 +141,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://booking-story2:8080"
+
+    booking-story3:
+      loadBalancer:
+        servers:
+          - url: "http://booking-story3:8080"
 
     dashboard:
       loadBalancer:
