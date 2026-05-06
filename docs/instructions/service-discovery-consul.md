@@ -89,55 +89,74 @@ Wenn zwei Instanzen sich mit derselben ID registrieren, **überschreibt** die zw
 
 ---
 
-## 4. Die drei Abläufe in Regeln
+## 4. Pseudocode
 
 Drei Lifecycle-Schritte: **Registrieren** beim Start, **Deregistrieren** beim Shutdown, **Auflösen** bei jedem Outbound-Call.
 
 ### A) Registrieren beim Start
 
-1. Registrierungs-Daten zusammenstellen:
-   - **Name** — logischer Service-Name (z.B. `flight-service`).
-   - **ID** — eindeutig pro Instanz, im Workshop `{Name}-{Hostname}`.
-   - **Address** und **Port** — wie der Service erreichbar ist (im Compose-Netz: Container-Hostname + interner Port).
-   - **Health-Check** — URL (`http://{Address}:{Port}/health`) und Intervall (`10s`).
-2. Daten als JSON per `PUT` an `{consulURL}/v1/agent/service/register` schicken.
-3. Bei Fehlschlag: erneut versuchen, mit wachsender Wartezeit:
-   - 1. Versuch sofort, dann Wartezeit beginnt bei 1 Sekunde.
-   - Nach jedem fehlgeschlagenen Versuch die Wartezeit verdoppeln (1s → 2s → 4s → 8s → 16s).
-   - Nach maximal 5 Versuchen aufgeben und mit Fehler abbrechen.
-4. Bei Erfolg: die vergebene Service-ID merken — sie wird beim Shutdown wieder gebraucht.
+```kotlin
+fun register(consulUrl, service): String {
+    val payload = mapOf(
+        "Name"    to service.name,                              // "flight-service"
+        "ID"      to "${service.name}-${hostname()}",           // eindeutig pro Instanz
+        "Address" to hostname(),
+        "Port"    to service.port,
+        "Check"   to mapOf(
+            "HTTP"     to "http://${hostname()}:${service.port}/health",
+            "Interval" to "10s",
+        ),
+    )
 
-> 💡 **Warum Retry?** Bei `docker compose up` startet alles parallel. Es kann sein, dass der Service schneller hochfährt als Consul. Ohne Retry wäre die Race ein flaky Workshop-Setup. Echte Workshop-Frage: „Was wäre die Alternative?" — Antworten: `depends_on` mit Healthcheck, Init-Container, Sidecar.
+    var backoff = 1.seconds
+    repeat(5) {
+        if (httpPut("$consulUrl/v1/agent/service/register", payload)) {
+            return payload["ID"]
+        }
+        sleep(backoff)
+        backoff *= 2
+    }
+    throw RegistrationFailed
+}
+```
+
+> 💡 **Warum Retry?** Bei `docker compose up` startet alles parallel — der Service kann schneller hochfahren als Consul. Ohne Retry wäre das Workshop-Setup flaky. Diskussionsfrage: „Was wäre die Alternative?" → `depends_on` mit Healthcheck, Init-Container, Sidecar.
 
 ### B) Deregistrieren beim Shutdown
 
-Beim Empfang von `SIGINT` / `SIGTERM` (z.B. `docker stop`):
+```kotlin
+fun shutdown() {
+    deregister(consulUrl, serviceId)            // 1. erst aus der Registry
+    server.shutdown(timeout = 5.seconds)        // 2. dann den HTTP-Server
+}
 
-1. **Zuerst** aus der Registry austragen — `PUT` an `{consulURL}/v1/agent/service/deregister/{serviceID}`.
-2. **Erst danach** den HTTP-Server graceful herunterfahren (im Workshop mit 5s Timeout für laufende Requests).
+fun deregister(consulUrl, serviceId) {
+    httpPut("$consulUrl/v1/agent/service/deregister/$serviceId")
+}
+```
 
-> ⚠️ **Reihenfolge ist entscheidend.** Erst aus Consul raus, *dann* den Server schließen. Sonst:
-> - Caller A fragt Consul: „Wer ist gesund?" → bekommt die sterbende Instanz, weil sie noch registriert ist.
-> - Server ist aber schon mitten im Shutdown.
-> - Caller A bekommt Connection Refused.
->
-> 🎯 *Folie:* Den Sequenz-Diagramm-Vergleich zeigen — „falsche Reihenfolge" vs. „richtige Reihenfolge".
+> ⚠️ **Reihenfolge ist entscheidend.** Erst aus Consul raus, *dann* den Server schließen. Sonst fragt ein Caller bei Consul nach, bekommt die sterbende Instanz zurück und läuft in Connection Refused.
 
-> 💡 **Was bei `kill -9`?** Dann läuft Schritt 1 nicht. Der Eintrag bleibt in Consul, bis der nächste Health-Check fehlschlägt — also bis zu `Check.Interval` lang sieht jemand eine tote Instanz als „gesund". Lösung: `DeregisterCriticalServiceAfter` setzen, damit Consul selbst aufräumt.
+> 💡 **Was bei `kill -9`?** Dann läuft `deregister` nicht. Der Eintrag bleibt bis zum nächsten Health-Check (im Workshop bis zu 10s). Lösung: `DeregisterCriticalServiceAfter` mit setzen — Consul räumt selbst auf.
 
 ### C) Auflösen mit Client-Side Load Balancing
 
-Bei jedem Outbound-Call zu einem Backend-Service:
+```kotlin
+fun resolve(consulUrl, name): String {
+    val instances = httpGet("$consulUrl/v1/health/service/$name?passing=true")
 
-1. `GET` an `{consulURL}/v1/health/service/{name}?passing=true`.
-2. Antwort enthält eine Liste gesunder Instanzen — jede mit `Address` und `Port`.
-3. Liste leer? → Fehler werfen, der Aufrufer entscheidet (Fallback / Circuit Breaker — siehe Story 3).
-4. Liste nicht leer? → eine Instanz auswählen (im Workshop: zufällig aus der Liste) und URL `http://{Address}:{Port}` zurückgeben.
-5. HTTP-Call direkt an die gewählte URL — **nicht** über Consul.
+    if (instances.isEmpty()) {
+        throw NoHealthyInstance(name)
+    }
 
-> 💡 **Warum `?passing=true`?** Ohne den Filter bekommt der Caller auch `warning`/`critical`-Instanzen — und routet potentiell auf eine kaputte. Mit dem Filter macht Consul die Vorauswahl.
+    val pick = instances.random()
+    return "http://${pick.address}:${pick.port}"
+}
+```
 
-> 🎯 *Folie:* Diese Regelliste zeigen, dann auf den echten Code in `services/shared/consul/register.go` und `services/shared/consul/resolver.go` verweisen — exakt diese Logik in ~80 Zeilen Go.
+> 💡 **`?passing=true`** filtert bereits in Consul auf gesunde Instanzen. Ohne den Filter bekäme der Caller auch `warning`/`critical`-Instanzen mit zurück.
+
+> 🎯 *Folie:* Pseudocode kurz zeigen, dann auf den echten Code in `services/shared/consul/register.go` und `services/shared/consul/resolver.go` verweisen — exakt diese Logik in ~80 Zeilen Go.
 
 ---
 

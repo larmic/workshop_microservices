@@ -99,44 +99,56 @@ Wichtige Diskussion, oft unterschätzt:
 
 ---
 
-## 4. Der Ablauf in Regeln
+## 4. Pseudocode
 
-Der CB ist eine kleine Zustandsmaschine. Pro Aufruf laufen drei Phasen ab — Vorprüfung, Aufruf, Nachbearbeitung.
+```kotlin
+fun call(fn) {
+    // OPEN → HALF_OPEN, sobald die Wartezeit abgelaufen ist
+    if (state == OPEN && now() - openedAt > openTimeout) {
+        state = HALF_OPEN
+    }
 
-### Phase 1 — Vorprüfung: darf der Aufruf überhaupt raus?
+    when (state) {
+        OPEN      -> throw CircuitOpenError
+        HALF_OPEN -> if (probeInFlight) throw CircuitOpenError
+                     else probeInFlight = true     // atomar setzen!
+        CLOSED    -> {}                            // einfach durchwinken
+    }
 
-Je nach aktuellem Zustand:
+    try {
+        val result = fn()
+        onSuccess()
+        return result
+    } catch (e) {
+        onFailure()
+        throw e
+    }
+}
 
-- **CLOSED** → durchwinken, weiter zu Phase 2.
-- **OPEN** →
-  - Wenn die Wartezeit (`openTimeout` ab `openedAt`) abgelaufen ist: Zustand auf **HALF_OPEN** setzen und unten mit der HALF_OPEN-Regel weitermachen.
-  - Sonst: Aufruf nicht durchführen, sofort `CircuitOpenError` zurückgeben.
-- **HALF_OPEN** →
-  - Wenn bereits ein anderer Probe-Aufruf läuft: `CircuitOpenError` zurückgeben.
-  - Sonst: den eigenen Aufruf **atomar** als „Probe in flight" markieren und weiter zu Phase 2.
+fun onFailure() {
+    failures++
+    when {
+        state == HALF_OPEN                         -> open()
+        state == CLOSED && failures >= threshold   -> open()
+    }
+}
 
-### Phase 2 — Den Aufruf ausführen
+fun onSuccess() {
+    if (state == HALF_OPEN) state = CLOSED
+    probeInFlight = false
+    failures = 0
+}
 
-Den eigentlichen Backend-Call durchführen. Je nach Ergebnis weiter mit Phase 3a oder 3b.
+fun open() {
+    state = OPEN
+    openedAt = now()
+    probeInFlight = false
+}
+```
 
-### Phase 3a — Bei Fehler
+> ⚠️ Der `probeInFlight`-Flip muss **atomar** passieren (Compare-and-Set / Mutex). Sonst rutschen unter Last mehrere Aufrufe gleichzeitig als „Probe" durch — der Probe-Storm ist genau das, was HALF_OPEN verhindern soll.
 
-1. Fehler-Zähler um 1 erhöhen.
-2. Zustand neu bestimmen:
-   - War der Zustand **HALF_OPEN** → zurück auf **OPEN**, `openedAt = jetzt`, Probe-Marke freigeben.
-   - War der Zustand **CLOSED** und der Fehler-Zähler erreicht jetzt `failureThreshold` → auf **OPEN**, `openedAt = jetzt`.
-   - Sonst → Zustand bleibt **CLOSED**, Zähler steht.
-3. Fehler an den Aufrufer durchreichen.
-
-### Phase 3b — Bei Erfolg
-
-1. War der Zustand **HALF_OPEN** → auf **CLOSED**, Probe-Marke freigeben.
-2. Fehler-Zähler auf 0.
-3. Ergebnis an den Aufrufer durchreichen.
-
-> ⚠️ **Atomarität ist Pflicht**, sobald mehrere Threads/Worker parallel durch den CB gehen. Die „nur ein Probe gleichzeitig"-Regel funktioniert nur, wenn das Setzen und Lesen der Probe-Marke wirklich atomar passieren — sonst rutschen mehrere gleichzeitig durch und der Probe-Storm ist da.
-
-> 🎯 *Folie:* Diese Regelliste zeigen, dann auf den echten Code in `services/booking/story3/circuitbreaker/circuitbreaker.go` verweisen — exakt diese Logik in ~80 Zeilen Go.
+> 🎯 *Folie:* Pseudocode kurz zeigen, dann auf den echten Code in `services/booking/story3/circuitbreaker/circuitbreaker.go` verweisen — exakt diese Logik in ~80 Zeilen Go.
 
 ---
 
