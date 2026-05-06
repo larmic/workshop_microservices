@@ -89,83 +89,55 @@ Wenn zwei Instanzen sich mit derselben ID registrieren, **überschreibt** die zw
 
 ---
 
-## 4. Pseudocode
+## 4. Die drei Abläufe in Regeln
 
-### A) Register beim Start
+Drei Lifecycle-Schritte: **Registrieren** beim Start, **Deregistrieren** beim Shutdown, **Auflösen** bei jedem Outbound-Call.
 
-```
-function register(consulURL, serviceConfig):
-    payload = {
-        Name:    serviceConfig.Name,
-        ID:      serviceConfig.Name + "-" + hostname(),
-        Address: hostname(),
-        Port:    serviceConfig.Port,
-        Check: {
-            HTTP:     "http://" + hostname() + ":" + Port + "/health",
-            Interval: "10s",
-        },
-    }
+### A) Registrieren beim Start
 
-    backoff = 1s
-    for attempt in 1..5:
-        ok = httpPUT(consulURL + "/v1/agent/service/register", payload)
-        if ok:
-            return payload.ID
-        log("retry in " + backoff)
-        sleep(backoff)
-        backoff *= 2
+1. Registrierungs-Daten zusammenstellen:
+   - **Name** — logischer Service-Name (z.B. `flight-service`).
+   - **ID** — eindeutig pro Instanz, im Workshop `{Name}-{Hostname}`.
+   - **Address** und **Port** — wie der Service erreichbar ist (im Compose-Netz: Container-Hostname + interner Port).
+   - **Health-Check** — URL (`http://{Address}:{Port}/health`) und Intervall (`10s`).
+2. Daten als JSON per `PUT` an `{consulURL}/v1/agent/service/register` schicken.
+3. Bei Fehlschlag: erneut versuchen, mit wachsender Wartezeit:
+   - 1. Versuch sofort, dann Wartezeit beginnt bei 1 Sekunde.
+   - Nach jedem fehlgeschlagenen Versuch die Wartezeit verdoppeln (1s → 2s → 4s → 8s → 16s).
+   - Nach maximal 5 Versuchen aufgeben und mit Fehler abbrechen.
+4. Bei Erfolg: die vergebene Service-ID merken — sie wird beim Shutdown wieder gebraucht.
 
-    fail("could not register after 5 attempts")
-```
+> 💡 **Warum Retry?** Bei `docker compose up` startet alles parallel. Es kann sein, dass der Service schneller hochfährt als Consul. Ohne Retry wäre die Race ein flaky Workshop-Setup. Echte Workshop-Frage: „Was wäre die Alternative?" — Antworten: `depends_on` mit Healthcheck, Init-Container, Sidecar.
 
-> 💡 **Warum Retry?** Bei `docker compose up` startet alles parallel. Es kann sein, dass der Service schneller hochfährt als Consul. Ohne Retry wäre die Race ein flaky Workshop-Setup. Echte Workshop-Frage: „Was wäre die Alternative?" — Antworten: depends_on mit healthcheck, Init-Container, Sidecar.
+### B) Deregistrieren beim Shutdown
 
-### B) Deregister beim Shutdown
+Beim Empfang von `SIGINT` / `SIGTERM` (z.B. `docker stop`):
 
-```
-function main():
-    serviceID = register(consulURL, cfg)
-
-    server = startHTTPServer(:8080)
-
-    # auf SIGINT / SIGTERM warten
-    waitForShutdownSignal()
-
-    # WICHTIG: Reihenfolge!
-    deregister(consulURL, serviceID)        # 1. aus Registry raus
-    server.shutdownGracefully(timeout=5s)   # 2. dann Server runterfahren
-
-
-function deregister(consulURL, serviceID):
-    httpPUT(consulURL + "/v1/agent/service/deregister/" + serviceID)
-```
+1. **Zuerst** aus der Registry austragen — `PUT` an `{consulURL}/v1/agent/service/deregister/{serviceID}`.
+2. **Erst danach** den HTTP-Server graceful herunterfahren (im Workshop mit 5s Timeout für laufende Requests).
 
 > ⚠️ **Reihenfolge ist entscheidend.** Erst aus Consul raus, *dann* den Server schließen. Sonst:
-> - Caller A fragt Consul: „Wer ist gesund?" → bekommt Instanz mit zurück, weil sie noch nicht deregistriert ist.
+> - Caller A fragt Consul: „Wer ist gesund?" → bekommt die sterbende Instanz, weil sie noch registriert ist.
 > - Server ist aber schon mitten im Shutdown.
 > - Caller A bekommt Connection Refused.
 >
 > 🎯 *Folie:* Den Sequenz-Diagramm-Vergleich zeigen — „falsche Reihenfolge" vs. „richtige Reihenfolge".
 
-> 💡 **Was bei `kill -9`?** Dann läuft der Deregister-Code nicht. Der Eintrag bleibt in Consul, bis der Health-Check fehlschlägt — also bis zu `Check.Interval` lang sieht jemand eine tote Instanz als „gesund". Lösung: `DeregisterCriticalServiceAfter` setzen.
+> 💡 **Was bei `kill -9`?** Dann läuft Schritt 1 nicht. Der Eintrag bleibt in Consul, bis der nächste Health-Check fehlschlägt — also bis zu `Check.Interval` lang sieht jemand eine tote Instanz als „gesund". Lösung: `DeregisterCriticalServiceAfter` setzen, damit Consul selbst aufräumt.
 
-### C) Resolve mit Client-Side Load Balancing
+### C) Auflösen mit Client-Side Load Balancing
 
-```
-function resolveServiceURL(consulURL, name):
-    resp = httpGET(consulURL + "/v1/health/service/" + name + "?passing=true")
-    instances = parseJSON(resp)
+Bei jedem Outbound-Call zu einem Backend-Service:
 
-    if instances is empty:
-        throw "no healthy instances for " + name
-
-    pick = instances[ random(0, len(instances)) ]
-    return "http://" + pick.Address + ":" + pick.Port
-```
+1. `GET` an `{consulURL}/v1/health/service/{name}?passing=true`.
+2. Antwort enthält eine Liste gesunder Instanzen — jede mit `Address` und `Port`.
+3. Liste leer? → Fehler werfen, der Aufrufer entscheidet (Fallback / Circuit Breaker — siehe Story 3).
+4. Liste nicht leer? → eine Instanz auswählen (im Workshop: zufällig aus der Liste) und URL `http://{Address}:{Port}` zurückgeben.
+5. HTTP-Call direkt an die gewählte URL — **nicht** über Consul.
 
 > 💡 **Warum `?passing=true`?** Ohne den Filter bekommt der Caller auch `warning`/`critical`-Instanzen — und routet potentiell auf eine kaputte. Mit dem Filter macht Consul die Vorauswahl.
 
-> 🎯 *Folie:* Pseudocode kurz zeigen, dann auf den echten Code in `services/shared/consul/register.go` und `services/shared/consul/resolver.go` verweisen — selbe Struktur, ~80 Zeilen Go.
+> 🎯 *Folie:* Diese Regelliste zeigen, dann auf den echten Code in `services/shared/consul/register.go` und `services/shared/consul/resolver.go` verweisen — exakt diese Logik in ~80 Zeilen Go.
 
 ---
 
