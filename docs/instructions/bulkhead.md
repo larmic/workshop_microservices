@@ -96,7 +96,81 @@ L = λ × W
 
 ---
 
-## 7. Zusammenspiel mit anderen Patterns
+## 7. Pseudocode
+
+Semaphore-basierte Variante — minimaler Kern, illustriert das Pattern:
+
+```kotlin
+class Bulkhead(val maxConcurrent: Int) {
+    private var inFlight = 0   // atomar / unter Mutex!
+
+    fun call(fn) {
+        // Slot reservieren — Fail-Fast wenn voll
+        acquireOrThrow()
+        try {
+            return fn()
+        } finally {
+            release()           // Slot **immer** freigeben (auch bei Exception)
+        }
+    }
+
+    fun acquireOrThrow() {
+        synchronized(this) {
+            if (inFlight >= maxConcurrent) {
+                throw BulkheadFullError    // sofort ablehnen
+            }
+            inFlight++
+        }
+    }
+
+    fun release() {
+        synchronized(this) { inFlight-- }
+    }
+}
+```
+
+> ⚠️ Inkrement und Check müssen **atomar** zusammen passieren (Compare-and-Set, Mutex, Semaphore-Primitive). Sonst rutschen unter Last mehr Aufrufe gleichzeitig durch als erlaubt — die Isolation ist dahin.
+
+> ⚠️ Das `release()` **muss** im `finally` stehen. Vergessen → Slot-Lecks → Pool füllt sich über die Zeit, Bulkhead öffnet nie wieder.
+
+### Ein Bulkhead pro Downstream
+
+```kotlin
+val flightBulkhead = Bulkhead(maxConcurrent = 10)
+val hotelBulkhead  = Bulkhead(maxConcurrent = 10)
+val carBulkhead    = Bulkhead(maxConcurrent = 25)   // langsamer → mehr Slots
+
+fun getOffers(req): Offers {
+    val flights = flightBulkhead.call { flightClient.search(req) }
+    val hotels  = hotelBulkhead.call  { hotelClient.search(req)  }
+    val cars    = carBulkhead.call    { carClient.search(req)    }
+    return Offers(flights, hotels, cars)
+}
+```
+
+> 💡 **Wichtig:** Ein **separater** Bulkhead pro Downstream. Ein gemeinsamer Pool für alle Calls würde das ganze Pattern ad absurdum führen — Flight könnte alle Slots belegen und Hotel/Car aushungern.
+
+### Variante mit Wait + Timeout
+
+```kotlin
+fun acquireOrThrow(maxWait: Duration) {
+    val deadline = now() + maxWait
+    synchronized(this) {
+        while (inFlight >= maxConcurrent) {
+            val remaining = deadline - now()
+            if (remaining <= 0) throw BulkheadFullError
+            wait(remaining)        // condition variable
+        }
+        inFlight++
+    }
+}
+```
+
+Nur sinnvoll, wenn kurze Spitzen geglättet werden sollen — bei dauerhafter Überlast bringt das Warten nichts und kostet Latenz.
+
+---
+
+## 8. Zusammenspiel mit anderen Patterns
 
 Reihenfolge auf dem Aufrufpfad:
 
@@ -111,7 +185,7 @@ Request ─▶ Bulkhead ─▶ Timeout ─▶ Circuit Breaker ─▶ Retry ─�
 
 ---
 
-## 8. Diskussionsfragen
+## 9. Diskussionsfragen
 
 1. Wie groß dimensioniert ihr eure Pools? Habt ihr eine Heuristik oder messt ihr?
 2. Fail-Fast vs. Queue — wo zieht ihr die Grenze?
