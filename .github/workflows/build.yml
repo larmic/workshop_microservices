@@ -130,6 +130,23 @@ jobs:
       - name: Build
         run: go build -v -o bin/booking-story4 ./booking/story4
 
+  build-booking-story5:
+    name: Build BookingService Story5
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: services/go.mod
+
+      - name: Build
+        run: go build -v -o bin/booking-story5 ./booking/story5
+
   build-dashboard:
     name: Build Scaling UI
     runs-on: ubuntu-latest
