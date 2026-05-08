@@ -87,6 +87,10 @@ components:
     InfoResponse:
       type: object
       properties:
+        service:
+          type: string
+          description: Identifier of the booking story service
+          example: booking-1
         flightServiceUrl:
           type: string
           example: http://localhost:8081
@@ -96,10 +100,15 @@ components:
         carServiceUrl:
           type: string
           example: http://localhost:8083
+        timeout:
+          type: integer
+          example: 5000
       required:
+        - service
         - flightServiceUrl
         - hotelServiceUrl
         - carServiceUrl
+        - timeout
 
     BookingOffers:
       type: object

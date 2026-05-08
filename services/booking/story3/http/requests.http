@@ -21,12 +21,14 @@ GET http://{{host}}:{{bookingPort}}/info
     client.test("Info status is 200", function () {
         client.assert(response.status === 200, "Expected 200");
     });
+    client.test("Info contains service identifier", function () {
+        client.assert(response.body.service === "booking-3", "Expected service booking-3");
+    });
     client.test("Info contains service URLs", function () {
         client.assert(response.body.consulUrl !== undefined, "Expected consulUrl");
     });
-    client.test("Info contains timeout and profile", function () {
+    client.test("Info contains timeout", function () {
         client.assert(response.body.timeout !== undefined, "Expected timeout");
-        client.assert(response.body.activeProfile !== undefined, "Expected activeProfile");
     });
 %}
 

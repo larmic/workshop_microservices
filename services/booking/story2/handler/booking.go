@@ -14,9 +14,9 @@ import (
 )
 
 type Config struct {
-	ConsulURL     string `json:"consulUrl"`
-	Timeout       int    `json:"timeout"`
-	ActiveProfile string `json:"activeProfile"`
+	Service   string `json:"service"`
+	ConsulURL string `json:"consulUrl"`
+	Timeout   int    `json:"timeout"`
 }
 
 type BookingOffers struct {

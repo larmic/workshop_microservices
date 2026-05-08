@@ -9,11 +9,11 @@ import (
 )
 
 type Config struct {
+	Service          string `json:"service"`
 	FlightServiceURL string `json:"flightServiceUrl"`
 	HotelServiceURL  string `json:"hotelServiceUrl"`
 	CarServiceURL    string `json:"carServiceUrl"`
 	Timeout          int    `json:"timeout"`
-	ActiveProfile    string `json:"activeProfile"`
 }
 
 type BookingOffers struct {

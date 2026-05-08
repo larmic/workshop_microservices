@@ -116,14 +116,21 @@ components:
     InfoResponse:
       type: object
       properties:
+        service:
+          type: string
+          description: Identifier of the booking story service
+          example: booking-2
         consulUrl:
           type: string
           description: URL of the Consul service registry
           example: "http://consul:8500"
+        timeout:
+          type: integer
+          example: 5000
       required:
+        - service
         - consulUrl
         - timeout
-        - activeProfile
 
     BookingOffers:
       type: object

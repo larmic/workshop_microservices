@@ -19,9 +19,9 @@ var openapiSpec []byte
 
 func main() {
 	config := handler.Config{
-		ConsulURL:     env.GetEnv("CONSUL_URL", "http://localhost:8500"),
-		Timeout:       3000,
-		ActiveProfile: env.GetEnv("ACTIVE_PROFILE", "dev"),
+		Service:   "booking-3",
+		ConsulURL: env.GetEnv("CONSUL_URL", "http://localhost:8500"),
+		Timeout:   3000,
 	}
 
 	httpClient := &http.Client{
