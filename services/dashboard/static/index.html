@@ -414,6 +414,7 @@
             <div class="bh-actions">
                 <button class="bh-btn" id="bh-normal-btn" onclick="callOffersNormal()">Normaler Aufruf</button>
                 <button class="bh-btn burst" id="bh-burst-btn" onclick="callOffersBurst()">Burst (20 parallel)</button>
+                <button class="bh-btn" id="bh-reset-btn" onclick="resetBulkheadStats()">Reset</button>
                 <span class="bh-result" id="bh-result"></span>
             </div>
             <div class="cb-grid" id="bh-grid"></div>
@@ -651,6 +652,21 @@
                 showBurstResult(`Normal: ${res.status} in ${ms} ms`);
             } catch (e) {
                 showBurstResult("Normal: Fehler — " + e.message);
+            } finally {
+                btn.disabled = false;
+                fetchBulkheadState();
+            }
+        }
+
+        async function resetBulkheadStats() {
+            const btn = document.getElementById("bh-reset-btn");
+            btn.disabled = true;
+            try {
+                const res = await fetch("/dashboard/api/bulkhead-reset", { method: "POST" });
+                if (!res.ok) throw new Error(await res.text());
+                showBurstResult("Counters zurückgesetzt");
+            } catch (e) {
+                showBurstResult("Reset: Fehler — " + e.message);
             } finally {
                 btn.disabled = false;
                 fetchBulkheadState();

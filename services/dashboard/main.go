@@ -48,6 +48,7 @@ func main() {
 	mux.HandleFunc("POST /api/services/{name}/chaos", handler.SetChaosHandler(resolver, allowedServices))
 	mux.HandleFunc("GET /api/circuit-state", handler.CircuitStateHandler(bookingStory3URL))
 	mux.HandleFunc("GET /api/bulkhead-state", handler.BulkheadStateHandler(bookingStory4URL))
+	mux.HandleFunc("POST /api/bulkhead-reset", handler.BulkheadResetHandler(bookingStory4URL))
 	mux.HandleFunc("GET /api/booking-story4/offers", handler.BookingOffersProxyHandler(bookingStory4URL))
 	mux.HandleFunc("POST /api/booking-story4/burst", handler.BurstHandler(bookingStory4URL, 20))
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))

@@ -66,6 +66,7 @@ func main() {
 	mux.HandleFunc("GET /admin/circuit-state", handler.CircuitStateHandler(breakers))
 	mux.HandleFunc("GET /admin/circuit-events", handler.CircuitEventsHandler(breakers))
 	mux.HandleFunc("GET /admin/bulkhead-state", handler.BulkheadStateHandler(bulkheads))
+	mux.HandleFunc("POST /admin/bulkhead-reset", handler.BulkheadResetHandler(bulkheads))
 
 	log.Println("BookingService starting on port 8080...")
 	if err := http.ListenAndServe(":8080", middleware.CORSMiddleware(mux)); err != nil {

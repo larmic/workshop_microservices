@@ -20,6 +20,15 @@ func CircuitStateHandler(breakers Breakers) http.HandlerFunc {
 	}
 }
 
+func BulkheadResetHandler(bulkheads Bulkheads) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		for _, bh := range bulkheads.All() {
+			bh.Reset()
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
 func BulkheadStateHandler(bulkheads Bulkheads) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		all := bulkheads.All()

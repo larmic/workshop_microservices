@@ -26,6 +26,24 @@ func BulkheadStateHandler(bookingURL string) http.HandlerFunc {
 	}
 }
 
+func BulkheadResetHandler(bookingURL string) http.HandlerFunc {
+	client := &http.Client{Timeout: 2 * time.Second}
+	return func(w http.ResponseWriter, r *http.Request) {
+		req, err := http.NewRequestWithContext(r.Context(), http.MethodPost, bookingURL+"/admin/bulkhead-reset", nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		resp, err := client.Do(req)
+		if err != nil {
+			http.Error(w, "booking-story4 unreachable: "+err.Error(), http.StatusBadGateway)
+			return
+		}
+		defer resp.Body.Close()
+		w.WriteHeader(resp.StatusCode)
+	}
+}
+
 func BookingOffersProxyHandler(bookingURL string) http.HandlerFunc {
 	client := &http.Client{Timeout: 10 * time.Second}
 	return func(w http.ResponseWriter, r *http.Request) {

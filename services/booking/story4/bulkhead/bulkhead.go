@@ -48,7 +48,13 @@ func New(cfg Config) *Bulkhead {
 // wird der Aufruf SOFORT abgewiesen (kein Queueing) — genau das ist der Sinn
 // des Bulkheads: ein langsames Backend darf nicht beliebig viele Aufrufe
 // stauen, weil sonst der gesamte Booking-Service blockiert.
+//
+// totalCalls zählt JEDEN Versuch (durchgelassen + abgewiesen). totalRejected
+// ist die Teilmenge, die keinen Slot bekommen hat — so kann das Dashboard die
+// Quote als rejected/calls direkt ausrechnen.
 func (b *Bulkhead) Execute(ctx context.Context, fn func(context.Context) error) error {
+	b.totalCalls.Add(1)
+
 	select {
 	case b.sem <- struct{}{}:
 	default:
@@ -58,7 +64,6 @@ func (b *Bulkhead) Execute(ctx context.Context, fn func(context.Context) error) 
 		return ErrBulkheadFull
 	}
 
-	b.totalCalls.Add(1)
 	b.inFlight.Add(1)
 	defer func() {
 		b.inFlight.Add(-1)
@@ -66,6 +71,15 @@ func (b *Bulkhead) Execute(ctx context.Context, fn func(context.Context) error) 
 	}()
 
 	return fn(ctx)
+}
+
+// Reset setzt die kumulierten Counter auf 0. inFlight bleibt absichtlich
+// unangetastet, weil dort echte laufende Calls stecken — die zu fälschen würde
+// das Snapshot-Bild verfälschen, sobald sie zurückkommen.
+func (b *Bulkhead) Reset() {
+	b.totalCalls.Store(0)
+	b.totalRejected.Store(0)
+	log.Printf("BH[%s] counters reset", b.cfg.Name)
 }
 
 func (b *Bulkhead) Snapshot() Snapshot {

@@ -115,6 +115,44 @@ paths:
               schema:
                 $ref: "#/components/schemas/BookingFailure"
 
+  /admin/circuit-state:
+    get:
+      summary: Circuit breaker snapshots
+      description: |
+        Returns the current state of all circuit breakers (flight, hotel, car).
+        Used by the dashboard to visualize circuit breaker behavior.
+      operationId: getCircuitState
+      tags:
+        - admin
+      responses:
+        "200":
+          description: Snapshot per backend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CircuitSnapshot"
+
+  /admin/circuit-events:
+    get:
+      summary: Recent circuit breaker state transitions
+      description: |
+        Returns the recent state transition events per circuit breaker
+        (capacity 20 events per breaker).
+      operationId: getCircuitEvents
+      tags:
+        - admin
+      responses:
+        "200":
+          description: Event log per backend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CircuitEventGroup"
+
 components:
   schemas:
     HealthResponse:
@@ -343,3 +381,88 @@ components:
         hint:
           type: string
           example: "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 5)."
+
+    CircuitSnapshot:
+      type: object
+      required:
+        - name
+        - state
+        - failureCount
+        - failureThreshold
+        - lastStateChangeAt
+        - openTimeoutSeconds
+        - totalCalls
+        - totalFailures
+        - totalShortCircuits
+      properties:
+        name:
+          type: string
+          enum: [flight, hotel, car]
+          example: hotel
+        state:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+          example: CLOSED
+        failureCount:
+          type: integer
+          example: 0
+        failureThreshold:
+          type: integer
+          example: 5
+        lastStateChangeAt:
+          type: string
+          format: date-time
+        openUntil:
+          type: string
+          format: date-time
+          description: Only present when state is OPEN
+        openTimeoutSeconds:
+          type: integer
+          example: 30
+        totalCalls:
+          type: integer
+          format: int64
+          example: 42
+        totalFailures:
+          type: integer
+          format: int64
+          example: 3
+        totalShortCircuits:
+          type: integer
+          format: int64
+          example: 0
+
+    CircuitEvent:
+      type: object
+      required:
+        - timestamp
+        - from
+        - to
+        - reason
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        from:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+        to:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+        reason:
+          type: string
+          example: failure threshold reached
+
+    CircuitEventGroup:
+      type: object
+      required:
+        - name
+        - events
+      properties:
+        name:
+          type: string
+          enum: [flight, hotel, car]
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/CircuitEvent"
