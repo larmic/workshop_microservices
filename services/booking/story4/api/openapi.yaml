@@ -520,9 +520,12 @@ components:
         totalCalls:
           type: integer
           format: int64
-          example: 100
+          description: |
+            Total number of attempts (passed + rejected). The number of
+            successfully passed calls is totalCalls - totalRejected.
+          example: 20
         totalRejected:
           type: integer
           format: int64
-          description: Number of calls rejected because the pool was full (HTTP 503-equivalent)
-          example: 12
+          description: Subset of totalCalls that did NOT get a pool slot.
+          example: 10
