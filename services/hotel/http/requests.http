@@ -1,0 +1,49 @@
+### ===========================
+### HotelService
+### ===========================
+
+### Hotel Service - Buchung erstellen
+POST http://{{host}}:{{hotelPort}}/bookings
+Content-Type: application/json
+
+{
+  "hotelId": "H1",
+  "customerName": "Max Mustermann"
+}
+
+> {%
+    client.test("Booking status is 201", function () {
+        client.assert(response.status === 201, "Expected 201");
+    });
+    client.test("Booking has bookingId", function () {
+        client.assert(response.body.bookingId !== undefined, "Expected bookingId");
+    });
+    client.global.set("bookingId", response.body.bookingId);
+%}
+
+### Hotel Service - Buchung stornieren (Kompensation)
+DELETE http://{{host}}:{{hotelPort}}/bookings/{{bookingId}}
+
+> {%
+    client.test("Cancel status is 204", function () {
+        client.assert(response.status === 204, "Expected 204");
+    });
+%}
+
+### Hotel Service - Stornierung wiederholen (idempotent)
+DELETE http://{{host}}:{{hotelPort}}/bookings/{{bookingId}}
+
+> {%
+    client.test("Repeated cancel still 204", function () {
+        client.assert(response.status === 204, "Expected 204");
+    });
+%}
+
+### Hotel Service - Stornierung mit unbekannter ID (idempotent)
+DELETE http://{{host}}:{{hotelPort}}/bookings/H-deadbe
+
+> {%
+    client.test("Unknown id cancel still 204", function () {
+        client.assert(response.status === 204, "Expected 204");
+    });
+%}

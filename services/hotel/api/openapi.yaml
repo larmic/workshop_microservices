@@ -107,6 +107,27 @@ paths:
         '400':
           description: Ungültige Anfrage
 
+  /bookings/{id}:
+    delete:
+      summary: Hotelbuchung stornieren
+      description: |
+        Storniert (kompensiert) eine zuvor erstellte Hotelbuchung. Es findet
+        keine Persistenz statt — die Stornierung wird ausschließlich geloggt.
+        Der Endpoint ist idempotent: auch unbekannte oder bereits stornierte
+        IDs liefern 204 No Content. Damit eignet er sich als Kompensations-
+        Schritt in einer Saga (siehe Story 5).
+      operationId: cancelBooking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: H-3b5d22
+      responses:
+        '204':
+          description: Buchung storniert (oder war nie vorhanden) — Endpoint ist idempotent
+
 components:
   schemas:
     HealthResponse:

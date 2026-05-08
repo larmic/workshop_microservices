@@ -67,6 +67,16 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(booking)
 }
 
+func CancelBookingHandler(w http.ResponseWriter, r *http.Request) {
+	hostname, _ := os.Hostname()
+	log.Printf("[%s] %s %s from %s", hostname, r.Method, r.URL.Path, r.RemoteAddr)
+
+	id := r.PathValue("id")
+	log.Printf("[%s] Car booking cancelled: bookingId=%s", hostname, id)
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func newBookingID(prefix string) string {
 	b := make([]byte, 3)
 	rand.Read(b)

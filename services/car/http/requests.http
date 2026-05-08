@@ -1,0 +1,49 @@
+### ===========================
+### CarService
+### ===========================
+
+### Car Service - Buchung erstellen
+POST http://{{host}}:{{carPort}}/bookings
+Content-Type: application/json
+
+{
+  "carId": "C1",
+  "customerName": "Max Mustermann"
+}
+
+> {%
+    client.test("Booking status is 201", function () {
+        client.assert(response.status === 201, "Expected 201");
+    });
+    client.test("Booking has bookingId", function () {
+        client.assert(response.body.bookingId !== undefined, "Expected bookingId");
+    });
+    client.global.set("bookingId", response.body.bookingId);
+%}
+
+### Car Service - Buchung stornieren (Kompensation)
+DELETE http://{{host}}:{{carPort}}/bookings/{{bookingId}}
+
+> {%
+    client.test("Cancel status is 204", function () {
+        client.assert(response.status === 204, "Expected 204");
+    });
+%}
+
+### Car Service - Stornierung wiederholen (idempotent)
+DELETE http://{{host}}:{{carPort}}/bookings/{{bookingId}}
+
+> {%
+    client.test("Repeated cancel still 204", function () {
+        client.assert(response.status === 204, "Expected 204");
+    });
+%}
+
+### Car Service - Stornierung mit unbekannter ID (idempotent)
+DELETE http://{{host}}:{{carPort}}/bookings/C-deadbe
+
+> {%
+    client.test("Unknown id cancel still 204", function () {
+        client.assert(response.status === 204, "Expected 204");
+    });
+%}

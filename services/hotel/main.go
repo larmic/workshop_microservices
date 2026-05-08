@@ -38,6 +38,7 @@ func main() {
 	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(info))
 	mux.HandleFunc("GET /hotels", handler.HotelsHandler)
 	mux.HandleFunc("POST /bookings", handler.CreateBookingHandler)
+	mux.HandleFunc("DELETE /bookings/{id}", handler.CancelBookingHandler)
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 	mux.HandleFunc("GET /admin/chaos", chaosState.GetHandler)
 	mux.HandleFunc("POST /admin/chaos", chaosState.SetHandler)
