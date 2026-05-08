@@ -243,6 +243,104 @@ führt zu „verteilter Monolith" — der schlimmsten beider Welten.
 
 ---
 
+## Frage 7 — Braucht eine Saga zwingend eine Datenbank?
+
+**Frage:** Wir halten den Saga-Status in unserem Workshop in-memory. In
+Produktion wäre das nicht akzeptabel. Heißt das, jede Saga braucht eine
+„echte" Datenbank? Und wenn ja: welche Art?
+
+**Antwort:** Hier zuerst die wichtigste Klarstellung: **Persistenz ist
+kein Saga-spezifisches Thema.** Jeder Service, der einen mehrstufigen
+Prozess steuert, kann mitten im Ablauf abstürzen und seinen
+In-Memory-State verlieren. Saga macht das Problem nur **sichtbarer**,
+weil die einzelnen Schritte externe Seiteneffekte (gebuchte Flüge,
+gestartete Zahlungen) hinterlassen. Aber der **Mechanismus** dahinter
+— „mein Prozess kann mitten drin sterben, ich brauche durable State,
+um aufzuräumen" — gilt auch für Batch-Jobs, Workflows, Long-Running
+HTTP-Handler oder Importer.
+
+Was die Saga **wirklich** braucht, ist also nicht „eine Datenbank" im
+engen Sinne, sondern eine **durable, transaktional konsistente Ablage
+ihres Fortschritts** — derselbe Anspruch, den jedes mehrstufige System
+hat. Einziger zwingender Grund: **Crash-Recovery des Orchestrators.**
+
+```
+   Ohne Persistenz                          Mit Persistenz
+   ─────────────────                        ─────────────────
+   Saga läuft im RAM                        Saga liegt in DB
+        │                                        │
+   Flug gebucht ✓                           Flug gebucht ✓
+                                            → Saga-State persistiert
+        │                                        │
+   Orchestrator stürzt 💥                    Orchestrator stürzt 💥
+        │                                        │
+   Niemand weiß mehr, dass der              Neuer Orchestrator startet,
+   Flug gebucht ist                         liest offene Sagas, kompensiert
+        ↓                                        ↓
+   Orphan booking, kein Aufräumen           Aufräumen funktioniert
+```
+
+Ohne Persistenz ist die Saga damit zwar **keine vollständige Saga**,
+sondern ein optimistisches Skript — aber das wäre **jeder andere
+mehrstufige Prozess** ohne State-Persistenz auch.
+
+**Spektrum der „Datenbank" — von leichtgewichtig zu vollausgestattet:**
+
+| Variante | Beispiele | Wann sinnvoll |
+|---|---|---|
+| Relationale DB | Postgres, MySQL — Saga-Tabelle + Steps-Tabelle | Standard, wenn die App ohnehin eine DB hat |
+| Document Store | MongoDB, DynamoDB — Saga als JSON-Dokument | wenn der Saga-Ablauf variabel ist |
+| Event Log | Kafka Compacted Topics, Event Sourcing | Saga-State ist abgeleitet aus Events |
+| Embedded Store | SQLite, BoltDB | Single-Node-Deployments, Edge-Services |
+| KV-Store | Redis (AOF), etcd, **Consul KV** | leichtgewichtig, aber schwächere Transaktionalität |
+| Workflow Engine | Temporal, Cadence, Camunda, Axon Framework | „Saga as Code" — Engine löst Recovery für dich |
+
+**Der elegante Ausweg in modernen Stacks:** Workflow Engines drehen
+das Modell um. Statt selbst State, Retry und Recovery zu coden, schreibt
+man die Geschäftslogik als Workflow, die Engine kümmert sich um den Rest:
+
+```
+   Manuell (was wir gerade gebaut haben)
+   ─────────────────────────────────────
+   Code:   forward; if err { state=COMPENSATING; compensate }
+   Du:     bist verantwortlich für State, Persistenz, Retry, Recovery
+
+   Mit Temporal / Camunda / ...
+   ─────────────────────────────────────
+   Code:   workflow.Execute(BookFlight)
+           workflow.Execute(BookHotel)
+           workflow.Execute(BookCar)
+   Engine: persistiert jeden Schritt, retryt, startet nach Crash neu,
+           garantiert exactly-once-Semantik
+```
+
+**Bezug zum Workshop:** Unser Booking-Service hat **gar keine
+DB-Schicht** — auch Story 1–4 nicht. Wenn wir Persistenz workshop-
+konform nachziehen wollten, wären die kleinsten Schritte:
+
+1. **SQLite-Datei im Container** — eine Datei, kein neues Infra-Stück.
+2. **Consul KV nutzen** — Consul ist seit Story 2 im Stack. Saga-State
+   unter `kv/saga/{id}` ablegen. Pragmatisch, aber Atomicity bei
+   Step-Updates ist schwächer.
+3. **Postgres oder Redis** — saubere Lösung, aber neue Compose-
+   Komponente und mehr Boilerplate.
+
+Für einen 60-Minuten-Slot wäre das alles zu viel. Deshalb in-memory —
+und der Punkt steht hier statt im Code.
+
+**Take-away:** Persistenz ist **nicht das Saga-Pattern, sondern
+generelle Orchestrator-Robustheit**. Jeder mehrstufige Prozess braucht
+sie — Saga macht das Problem nur sichtbarer, weil ihre Schritte
+außerhalb des eigenen Service Spuren hinterlassen. Welche Technologie
+genau, ist sekundär — entscheidend ist die Zusicherung **„nach Crash
+kann ich aufräumen"**. In Produktion ist die wichtigere Frage selten
+„brauche ich eine DB?", sondern **„schreibe ich die Orchestrator-
+Mechanik selbst, oder nutze ich eine Workflow Engine?"**. Letzteres
+unterschätzen Teams regelmäßig — und schreiben dann monatelang das,
+was Temporal seit Jahren in Produktion löst.
+
+---
+
 ## Sammelthemen für die Diskussion
 
 - Welche Schritte einer Reisebuchung sind eigentlich **gar nicht

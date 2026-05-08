@@ -19,7 +19,6 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 - [ ] Die Services werden nacheinander aufgerufen (Orchestration-Saga)
 - [ ] Bei Fehler in einem Schritt werden alle vorherigen Schritte kompensiert (Rollback)
 - [ ] Jeder Service bietet einen Stornieren/Kompensieren-Endpoint an
-- [ ] Der Saga-Status wird persistiert (für Recovery nach Absturz)
 - [ ] Der aktuelle Status einer Buchung kann abgefragt werden (PENDING, COMPLETED, COMPENSATING, FAILED)
 
 ## Technische Hinweise
@@ -42,3 +41,4 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 - Implementiere parallele Ausführung unabhängiger Schritte
 - Füge Timeout-Handling hinzu (Was passiert, wenn ein Service nicht antwortet?)
 - Kompensation mit Retry-Logik durchführen (Kompensation darf nicht fehlschlagen) — siehe Diskussionsfragen 1, 2 und 5 in `docs/questions/story5.md`
+- Saga-Status persistieren (für Recovery nach Absturz) — kein Saga-spezifisches Thema, sondern generelle Orchestrator-Robustheit, siehe Diskussionsfrage 7 in `docs/questions/story5.md`
