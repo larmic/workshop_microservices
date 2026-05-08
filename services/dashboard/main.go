@@ -27,6 +27,7 @@ func main() {
 	consulURL := getEnv("CONSUL_URL", "http://consul:8500")
 	bookingStory3URL := getEnv("BOOKING_STORY3_URL", "http://booking-story3:8080")
 	bookingStory4URL := getEnv("BOOKING_STORY4_URL", "http://booking-story4:8080")
+	bookingStory5URL := getEnv("BOOKING_STORY5_URL", "http://booking-story5:8080")
 
 	var composeArgs []string
 	for _, f := range strings.Split(composeFilesRaw, ",") {
@@ -51,6 +52,9 @@ func main() {
 	mux.HandleFunc("POST /api/bulkhead-reset", handler.BulkheadResetHandler(bookingStory4URL))
 	mux.HandleFunc("GET /api/booking-story4/offers", handler.BookingOffersProxyHandler(bookingStory4URL))
 	mux.HandleFunc("POST /api/booking-story4/burst", handler.BurstHandler(bookingStory4URL, 20))
+	mux.HandleFunc("GET /api/saga-state", handler.SagaStateHandler(bookingStory5URL))
+	mux.HandleFunc("POST /api/saga-reset", handler.SagaResetHandler(bookingStory5URL))
+	mux.HandleFunc("POST /api/saga-trigger", handler.SagaTriggerHandler(bookingStory5URL))
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 
 	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}

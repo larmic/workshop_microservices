@@ -191,6 +191,106 @@
         .bh-bar-fill.warn { background: #b8860b; }
         .bh-bar-fill.full { background: #b3261e; }
 
+        /* Saga Section */
+        .saga-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+        .saga-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .saga-stat strong {
+            font-size: 1.1rem;
+            font-variant-numeric: tabular-nums;
+        }
+        .saga-stat.completed strong   { color: #1d7a3a; }
+        .saga-stat.failed strong      { color: #b3261e; }
+        .saga-stat.compensating strong{ color: #b8860b; }
+        .saga-stat.pending strong     { color: #555; }
+        .saga-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .saga-row {
+            background: #f9f9fb;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0.75rem 1rem;
+            align-items: center;
+        }
+        .saga-id {
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.8rem;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+        .saga-meta {
+            font-size: 0.75rem;
+            color: #555;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .saga-meta strong { color: #1a1a2e; font-variant-numeric: tabular-nums; }
+        .saga-status {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        .saga-status.completed   { background: #d4f4dd; color: #1d7a3a; }
+        .saga-status.failed      { background: #fde0e0; color: #b3261e; }
+        .saga-status.compensating{ background: #fff3cd; color: #8a6d00; }
+        .saga-status.pending     { background: #e1e8f0; color: #555; }
+        .saga-steps {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+        }
+        .saga-step {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .saga-step.booked              { background: #d4f4dd; color: #1d7a3a; }
+        .saga-step.compensated         { background: #e1e8f0; color: #555; }
+        .saga-step.compensation_failed { background: #fde0e0; color: #b3261e; }
+        .saga-step-svc { font-weight: 800; }
+        .saga-empty {
+            text-align: center;
+            color: #888;
+            font-size: 0.875rem;
+            padding: 1rem;
+        }
+        .saga-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
         /* Services grid */
         .services-grid {
             display: grid;
@@ -400,6 +500,7 @@
             <a class="link-chip" href="/api/booking-story2/openapi" target="_blank"><span>&#128214;</span> Booking Story 2</a>
             <a class="link-chip" href="/api/booking-story3/openapi" target="_blank"><span>&#128214;</span> Booking Story 3</a>
             <a class="link-chip" href="/api/booking-story4/openapi" target="_blank"><span>&#128214;</span> Booking Story 4</a>
+            <a class="link-chip" href="/api/booking-story5/openapi" target="_blank"><span>&#128214;</span> Booking Story 5</a>
         </div>
     </div>
 
@@ -418,6 +519,17 @@
                 <span class="bh-result" id="bh-result"></span>
             </div>
             <div class="cb-grid" id="bh-grid"></div>
+        </div>
+
+        <div class="cb-section">
+            <h2>Saga (Booking Story 5)</h2>
+            <div class="saga-actions">
+                <button class="bh-btn" id="saga-trigger-btn" onclick="triggerSaga()">Saga auslösen</button>
+                <button class="bh-btn" id="saga-reset-btn" onclick="resetSagas()">Saga-Store leeren</button>
+                <span class="bh-result" id="saga-result"></span>
+            </div>
+            <div class="saga-stats" id="saga-stats"></div>
+            <div class="saga-list" id="saga-list"></div>
         </div>
 
         <div class="services-grid" id="services"></div>
@@ -731,6 +843,138 @@
             }).join("");
         }
 
+        async function fetchSagaState() {
+            try {
+                const res = await fetch("/dashboard/api/saga-state");
+                if (!res.ok) throw new Error(await res.text());
+                renderSagas(await res.json());
+            } catch (e) {
+                renderSagas(null);
+            }
+        }
+
+        async function resetSagas() {
+            const btn = document.getElementById("saga-reset-btn");
+            btn.disabled = true;
+            try {
+                const res = await fetch("/dashboard/api/saga-reset", { method: "POST" });
+                if (!res.ok) throw new Error(await res.text());
+                showSagaResult("Store geleert");
+            } catch (e) {
+                showError("Saga-Reset: " + e.message);
+            } finally {
+                btn.disabled = false;
+                fetchSagaState();
+            }
+        }
+
+        function showSagaResult(text) {
+            document.getElementById("saga-result").textContent = text;
+        }
+
+        async function triggerSaga() {
+            const btn = document.getElementById("saga-trigger-btn");
+            btn.disabled = true;
+            showSagaResult("Saga läuft …");
+            const t0 = performance.now();
+            try {
+                const res = await fetch("/dashboard/api/saga-trigger", { method: "POST" });
+                const ms = Math.round(performance.now() - t0);
+                let detail = "";
+                try {
+                    const body = await res.json();
+                    if (res.ok) {
+                        detail = `bookingId=${body.bookingId}`;
+                    } else if (body && body.saga) {
+                        detail = `failed at ${body.saga.failedAt} — ${body.saga.steps.filter(s => s.status === "COMPENSATED").length}/${body.saga.steps.length} kompensiert`;
+                    } else if (body && body.error) {
+                        detail = body.error;
+                    }
+                } catch (_) {}
+                showSagaResult(`Saga: ${res.status} in ${ms} ms${detail ? " — " + detail : ""}`);
+            } catch (e) {
+                showSagaResult("Saga: Fehler — " + e.message);
+            } finally {
+                btn.disabled = false;
+                fetchSagaState();
+            }
+        }
+
+        function relativeTime(iso) {
+            if (!iso) return "";
+            const ms = Date.now() - new Date(iso).getTime();
+            if (ms < 1000) return "gerade eben";
+            const s = Math.floor(ms / 1000);
+            if (s < 60) return s + "s";
+            const m = Math.floor(s / 60);
+            if (m < 60) return m + "m " + (s % 60) + "s";
+            const h = Math.floor(m / 60);
+            return h + "h " + (m % 60) + "m";
+        }
+
+        function renderSagas(sagas) {
+            const stats = document.getElementById("saga-stats");
+            const list = document.getElementById("saga-list");
+            if (!sagas || !Array.isArray(sagas)) {
+                stats.innerHTML = "";
+                list.innerHTML = '<div class="saga-empty">Booking Story 5 nicht erreichbar</div>';
+                return;
+            }
+            const counts = { COMPLETED: 0, FAILED: 0, COMPENSATING: 0, PENDING: 0 };
+            for (const s of sagas) {
+                if (counts[s.status] !== undefined) counts[s.status]++;
+            }
+            stats.innerHTML = `
+                <span class="saga-stat completed">COMPLETED <strong>${counts.COMPLETED}</strong></span>
+                <span class="saga-stat failed">FAILED <strong>${counts.FAILED}</strong></span>
+                <span class="saga-stat compensating">COMPENSATING <strong>${counts.COMPENSATING}</strong></span>
+                <span class="saga-stat pending">PENDING <strong>${counts.PENDING}</strong></span>
+                <span class="saga-stat">Gesamt <strong>${sagas.length}</strong></span>
+            `;
+            if (sagas.length === 0) {
+                list.innerHTML = '<div class="saga-empty">Noch keine Sagas — POST gegen <code>/api/booking-story5/booking/bookings</code> abschicken.</div>';
+                return;
+            }
+            list.innerHTML = sagas.slice(0, 10).map(s => {
+                const statusClass = (s.status || "PENDING").toLowerCase();
+                const failedAt = s.failedAt
+                    ? `<span>fehlgeschlagen bei <strong>${s.failedAt}</strong></span>` : "";
+                const reason = s.reason
+                    ? `<span title="${escapeHtml(s.reason)}">Grund: <strong>${escapeHtml(truncate(s.reason, 60))}</strong></span>` : "";
+                const stepsBlock = (s.steps && s.steps.length > 0)
+                    ? `<div class="saga-steps">${s.steps.map(renderStep).join("")}</div>` : "";
+                return `
+                    <div class="saga-row">
+                        <span class="saga-id">${s.sagaId}</span>
+                        <span class="saga-meta">
+                            <span>Kunde: <strong>${escapeHtml(s.customerName || "—")}</strong></span>
+                            <span>vor <strong>${relativeTime(s.createdAt)}</strong></span>
+                            ${failedAt}
+                            ${reason}
+                        </span>
+                        <span class="saga-status ${statusClass}">${s.status}</span>
+                        ${stepsBlock}
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function renderStep(step) {
+            const cls = (step.status || "").toLowerCase();
+            const bid = step.bookingId ? ` ${step.bookingId}` : "";
+            return `<span class="saga-step ${cls}"><span class="saga-step-svc">${step.service}</span>${bid} · ${step.status}</span>`;
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[c]));
+        }
+
+        function truncate(s, n) {
+            return s.length > n ? s.slice(0, n - 1) + "…" : s;
+        }
+
         function showError(msg) {
             const el = document.getElementById("error");
             el.textContent = msg;
@@ -744,8 +988,10 @@
         fetchServices();
         fetchCircuitState();
         scheduleBulkheadPoll();
+        fetchSagaState();
         setInterval(fetchServices, 5000);
         setInterval(fetchCircuitState, 1000);
+        setInterval(fetchSagaState, 1000);
     </script>
 </body>
 </html>

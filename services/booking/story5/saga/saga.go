@@ -2,6 +2,7 @@ package saga
 
 import (
 	"encoding/json"
+	"sort"
 	"sync"
 	"time"
 )
@@ -80,4 +81,30 @@ func (s *Store) Get(id string) (Saga, bool) {
 		copy(out.Steps, stored.Steps)
 	}
 	return out, true
+}
+
+// List liefert alle Sagas, neueste zuerst. Snapshot — Mutationen
+// am Ergebnis wirken sich nicht auf den Store aus.
+func (s *Store) List() []Saga {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := make([]Saga, 0, len(s.sagas))
+	for _, stored := range s.sagas {
+		copy := *stored
+		if len(stored.Steps) > 0 {
+			copy.Steps = append([]Step(nil), stored.Steps...)
+		}
+		out = append(out, copy)
+	}
+	sort.Slice(out, func(i, j int) bool {
+		return out[i].CreatedAt.After(out[j].CreatedAt)
+	})
+	return out
+}
+
+// Reset leert den Store. Workshop-Helfer für saubere Demo-Runden.
+func (s *Store) Reset() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.sagas = make(map[string]*Saga)
 }

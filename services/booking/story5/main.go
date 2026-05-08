@@ -66,6 +66,8 @@ func main() {
 	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient, breakers, bulkheads))
 	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, breakers, sagaStore))
 	mux.HandleFunc("GET /booking/bookings/{id}", handler.GetSagaStatusHandler(sagaStore))
+	mux.HandleFunc("GET /admin/sagas", handler.ListSagasHandler(sagaStore))
+	mux.HandleFunc("POST /admin/sagas-reset", handler.ResetSagasHandler(sagaStore))
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 	mux.HandleFunc("GET /admin/circuit-state", handler.CircuitStateHandler(breakers))
 	mux.HandleFunc("GET /admin/circuit-events", handler.CircuitEventsHandler(breakers))

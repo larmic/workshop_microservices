@@ -152,6 +152,40 @@ paths:
         "404":
           description: Saga unbekannt (id nie existiert oder Service neu gestartet — der Saga-Store ist in-memory)
 
+  /admin/sagas:
+    get:
+      summary: Liste aller Sagas
+      description: |
+        Liefert alle Sagas im Store (neueste zuerst). Für das
+        Dashboard-Panel und Monitoring. In-memory — wird beim Service-
+        Neustart geleert.
+      operationId: listSagas
+      tags:
+        - admin
+      responses:
+        "200":
+          description: Liste der Sagas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Saga"
+
+  /admin/sagas-reset:
+    post:
+      summary: Saga-Store leeren
+      description: |
+        Entfernt alle Sagas aus dem Store. Demo-Helfer für saubere
+        Workshop-Runden. Wirkt nicht rückwirkend auf bereits ausgegebene
+        bookingIds.
+      operationId: resetSagas
+      tags:
+        - admin
+      responses:
+        "204":
+          description: Store geleert
+
   /admin/circuit-state:
     get:
       summary: Circuit breaker snapshots

@@ -208,6 +208,24 @@ func GetSagaStatusHandler(store *saga.Store) http.HandlerFunc {
 	}
 }
 
+// ListSagasHandler liefert alle Sagas, neueste zuerst. Für das
+// Dashboard-Panel.
+func ListSagasHandler(store *saga.Store) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(store.List())
+	}
+}
+
+// ResetSagasHandler leert den Saga-Store. Demo-Helfer.
+func ResetSagasHandler(store *saga.Store) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		store.Reset()
+		log.Println("Saga store reset")
+		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
 // compensate läuft die bereits gebuchten Schritte in umgekehrter
 // Reihenfolge ab und ruft pro Schritt DELETE /bookings/{id} auf. Die
 // Kompensations-Calls bypassen bewusst den Circuit Breaker: ist der CB
