@@ -97,6 +97,41 @@ realen Systemen nie deterministisch.
 (Flight/Car normal). Dann sind alle 20 Goroutinen praktisch zeitgleich
 bei Hotel und du siehst stabil `rejected ≈ 10`.
 
+### Beobachtung über viele Bursts hinweg
+
+Bei wiederholten Bursts (z.B. 42 Bursts à 20 = 840 Calls je Service)
+zeigt sich der Effekt sehr deutlich als **Kaskade**:
+
+```
+   flight:   in flight 0/10   calls 840   rejected 341   (~40 %)
+   hotel:    in flight 0/10   calls 840   rejected 189   (~22 %)
+   car:      in flight 0/10   calls 840   rejected   8   (~ 1 %)
+```
+
+Mit jedem Service in der Aufrufkette **sinkt die Reject-Rate**. Das
+ist kein Zufall, das ist die Konsequenz des Patterns:
+
+- **Flight** sieht den Burst in voller Wucht. 20 Goroutinen schlagen
+  zeitgleich auf, 10 bekommen einen Slot, 10 werden sofort abgewiesen.
+- **Hotel** sieht denselben Burst — aber **zeitlich entzerrt**.
+  Die 10 von Flight abgewiesenen Goroutinen sind sofort da, die 10
+  erfolgreichen kommen 50–200 ms später nach. Hotel hat nur einen Teil
+  der Last gleichzeitig zu schultern.
+- **Car** sieht das, was vom Burst übrig ist — fast geglättet. Die
+  Streuung ist groß genug, dass meist genug Slots frei sind.
+
+**Take-away in einer Zeile:** Eine Bulkhead-Kette ist gleichzeitig
+ein **Traffic-Shaper**. Jede Stufe schützt nicht nur sich selbst,
+sondern auch alle nachgelagerten Services vor ungeglätteten Bursts —
+ein kostenloser Nebeneffekt, der in Produktion oft die spürbarste
+Wirkung hat.
+
+**Spicy:** Wer im Aggregator nur das letzte Backend (Car) instrumentiert
+und „die Bulkheads funktionieren ja, fast keine Rejects" beobachtet,
+hat den Punkt verpasst — Car ist nicht ungestresst, weil sein Bulkhead
+gut konfiguriert ist, sondern weil Flight und Hotel die Last vorher
+aufgefangen haben.
+
 ---
 
 ## Frage 4 — Wenn der Bulkhead einen Aufruf abweist, läuft die Anfrage trotzdem zu Hotel und Car weiter. Ist das Teil des Bulkhead-Patterns?

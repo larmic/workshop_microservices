@@ -564,6 +564,14 @@
                 <span class="bh-result" id="bh-result"></span>
             </div>
             <div class="cb-grid" id="bh-grid"></div>
+            <div class="saga-stats" id="bh-burst-stats"></div>
+            <div class="saga-legend">
+                <strong>Legende</strong>
+                <span class="saga-step booked"><span class="saga-step-icon">&#10003;</span> KEINE REJECTS</span>
+                <span class="saga-step comp-failed"><span class="saga-step-icon">&#10007;</span> TEILWEISE</span>
+                <span class="saga-step failed"><span class="saga-step-icon">&#10007;</span> ALLE REJECTED</span>
+            </div>
+            <div class="saga-list" id="bh-burst-list"></div>
         </div>
 
         <div class="cb-section">
@@ -812,8 +820,18 @@
             btn.disabled = true;
             const t0 = performance.now();
             try {
+                const before = await fetchBulkheadStateOnce();
                 const res = await fetch("/dashboard/api/booking-story4/offers");
                 const ms = Math.round(performance.now() - t0);
+                const after = await fetchBulkheadStateOnce();
+                recordBulkheadCall({
+                    before, after,
+                    durationMs: ms,
+                    totalRequests: 1,
+                    succeeded: res.ok ? 1 : 0,
+                    failed:    res.ok ? 0 : 1,
+                    kind: "Normal",
+                });
                 showBurstResult(`Normal: ${res.status} in ${ms} ms`);
             } catch (e) {
                 showBurstResult("Normal: Fehler — " + e.message);
@@ -838,15 +856,59 @@
             }
         }
 
+        let bulkheadBursts = [];
+
+        async function fetchBulkheadStateOnce() {
+            try {
+                const res = await fetch("/dashboard/api/bulkhead-state");
+                return res.ok ? await res.json() : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // recordBulkheadCall berechnet pro Service die Differenz im
+        // Bulkhead-Counter (calls / rejected) zwischen Vorher- und
+        // Nachher-Snapshot und legt einen neuen Eintrag in der Historie an.
+        function recordBulkheadCall({ before, after, durationMs, totalRequests, succeeded, failed, kind }) {
+            if (!before || !after) return;
+            const perService = {};
+            for (const a of after) {
+                const b = before.find(x => x.name === a.name);
+                if (b) {
+                    perService[a.name] = {
+                        rejected: a.totalRejected - b.totalRejected,
+                        total:    a.totalCalls    - b.totalCalls,
+                    };
+                }
+            }
+            bulkheadBursts.unshift({
+                timestamp: new Date().toISOString(),
+                durationMs, totalRequests, succeeded, failed, kind, perService,
+            });
+            if (bulkheadBursts.length > 10) bulkheadBursts.length = 10;
+            renderBulkheadBursts();
+        }
+
         async function callOffersBurst() {
             const btn = document.getElementById("bh-burst-btn");
             btn.disabled = true;
             burstActiveUntil = Date.now() + 5000;
             showBurstResult("Burst läuft …");
             try {
+                const before = await fetchBulkheadStateOnce();
                 const res = await fetch("/dashboard/api/booking-story4/burst", { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
                 const r = await res.json();
+                const after = await fetchBulkheadStateOnce();
+                recordBulkheadCall({
+                    before, after,
+                    durationMs: r.durationMs,
+                    totalRequests: r.total,
+                    succeeded: r.succeeded,
+                    failed: r.failed,
+                    kind: "Burst",
+                });
                 showBurstResult(`Burst: ${r.total} calls in ${r.durationMs} ms — ${r.succeeded} ok, ${r.failed} fail`);
             } catch (e) {
                 showBurstResult("Burst: Fehler — " + e.message);
@@ -854,6 +916,64 @@
                 btn.disabled = false;
                 fetchBulkheadState();
             }
+        }
+
+        function renderBulkheadBursts() {
+            const stats = document.getElementById("bh-burst-stats");
+            const list = document.getElementById("bh-burst-list");
+            if (bulkheadBursts.length === 0) {
+                stats.innerHTML = "";
+                list.innerHTML = '<div class="saga-empty">Noch kein Aufruf — <em>Normaler Aufruf</em> oder <em>Burst (20 parallel)</em> klicken.</div>';
+                return;
+            }
+            const agg = { flight: 0, hotel: 0, car: 0, totalCalls: 0, totalRej: 0 };
+            for (const b of bulkheadBursts) {
+                for (const svc of SAGA_SERVICES) {
+                    const ps = b.perService[svc];
+                    if (ps) {
+                        agg[svc] += ps.rejected;
+                        agg.totalCalls += ps.total;
+                        agg.totalRej   += ps.rejected;
+                    }
+                }
+            }
+            stats.innerHTML = `
+                <span class="saga-stat">Aufrufe (zuletzt) <strong>${bulkheadBursts.length}</strong></span>
+                <span class="saga-stat">flight rej <strong>${agg.flight}</strong></span>
+                <span class="saga-stat">hotel rej <strong>${agg.hotel}</strong></span>
+                <span class="saga-stat">car rej <strong>${agg.car}</strong></span>
+                <span class="saga-stat">Gesamt rej <strong>${agg.totalRej}</strong>/${agg.totalCalls}</span>
+            `;
+            list.innerHTML = bulkheadBursts.map(b => {
+                const cells = SAGA_SERVICES.map(svc => {
+                    const ps = b.perService[svc] || { rejected: 0, total: 0 };
+                    let stateKey, icon;
+                    if (ps.total === 0)             { stateKey = "skipped";     icon = STEP_ICONS.skipped; }
+                    else if (ps.rejected === 0)     { stateKey = "booked";      icon = STEP_ICONS.booked; }
+                    else if (ps.rejected >= ps.total) { stateKey = "failed";    icon = STEP_ICONS.failed; }
+                    else                            { stateKey = "comp-failed"; icon = STEP_ICONS["comp-failed"]; }
+                    return `
+                        <span class="saga-step ${stateKey}">
+                            <span class="saga-step-svc">${svc}</span>
+                            <span class="saga-step-icon">${icon}</span>
+                            <span class="saga-step-bid">${ps.rejected}/${ps.total} rej</span>
+                        </span>
+                    `;
+                });
+                const label = b.kind === "Burst" ? `Burst ${b.totalRequests}` : (b.kind || "Aufruf");
+                return `
+                    <div class="saga-row">
+                        <span class="saga-id">${label}</span>
+                        <span class="saga-meta">
+                            <span>vor <strong>${relativeTime(b.timestamp)}</strong></span>
+                            <span>Dauer: <strong>${b.durationMs} ms</strong></span>
+                            <span>Requests: <strong>${b.succeeded}/${b.totalRequests} ok</strong></span>
+                        </span>
+                        <span></span>
+                        <div class="saga-steps">${cells.join("")}</div>
+                    </div>
+                `;
+            }).join("");
         }
 
         function bulkheadPollInterval() {
