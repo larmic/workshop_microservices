@@ -11,6 +11,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/team-neusta-skills/workshop_microservices/booking/story5/bulkhead"
@@ -259,7 +260,7 @@ func compensateSingle(ctx context.Context, client *http.Client, resolver *consul
 	defer resp.Body.Close()
 	if resp.StatusCode >= 400 {
 		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("backend returned %d: %s", resp.StatusCode, string(body))
+		return fmt.Errorf("backend returned %d: %s", resp.StatusCode, strings.TrimSpace(string(body)))
 	}
 	return nil
 }
@@ -389,7 +390,7 @@ func fetchJSON(ctx context.Context, client *http.Client, url string) (json.RawMe
 	}
 
 	if resp.StatusCode >= 400 {
-		return nil, fmt.Errorf("backend returned %d: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("backend returned %d: %s", resp.StatusCode, strings.TrimSpace(string(body)))
 	}
 
 	return json.RawMessage(body), nil
@@ -419,7 +420,7 @@ func postJSON(ctx context.Context, client *http.Client, url string, payload any)
 	}
 
 	if resp.StatusCode >= 400 {
-		return nil, fmt.Errorf("backend returned %d: %s", resp.StatusCode, string(respBody))
+		return nil, fmt.Errorf("backend returned %d: %s", resp.StatusCode, strings.TrimSpace(string(respBody)))
 	}
 
 	return json.RawMessage(respBody), nil
