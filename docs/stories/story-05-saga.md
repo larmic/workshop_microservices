@@ -21,7 +21,6 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 - [ ] Jeder Service bietet einen Stornieren/Kompensieren-Endpoint an
 - [ ] Der Saga-Status wird persistiert (für Recovery nach Absturz)
 - [ ] Der aktuelle Status einer Buchung kann abgefragt werden (PENDING, COMPLETED, COMPENSATING, FAILED)
-- [ ] Kompensation wird mit Retry-Logik durchgeführt (Kompensation darf nicht fehlschlagen)
 
 ## Technische Hinweise
 
@@ -42,3 +41,4 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 
 - Implementiere parallele Ausführung unabhängiger Schritte
 - Füge Timeout-Handling hinzu (Was passiert, wenn ein Service nicht antwortet?)
+- Kompensation mit Retry-Logik durchführen (Kompensation darf nicht fehlschlagen) — siehe Diskussionsfragen 1, 2 und 5 in `docs/questions/story5.md`
