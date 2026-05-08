@@ -33,7 +33,8 @@ services:
           { "url": "http://localhost/api/car/openapi", "name": "Car Service" },
           { "url": "http://localhost/api/booking-story1/openapi", "name": "Booking Service (Story 1)" },
           { "url": "http://localhost/api/booking-story2/openapi", "name": "Booking Service (Story 2)" },
-          { "url": "http://localhost/api/booking-story3/openapi", "name": "Booking Service (Story 3)" }
+          { "url": "http://localhost/api/booking-story3/openapi", "name": "Booking Service (Story 3)" },
+          { "url": "http://localhost/api/booking-story4/openapi", "name": "Booking Service (Story 4)" }
         ]
 
   dashboard:

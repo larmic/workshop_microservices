@@ -1,0 +1,338 @@
+openapi: 3.0.3
+info:
+  title: BookingService API
+  description: |
+    REST API for the BookingService that orchestrates Flight, Hotel and Car
+    backend services and exposes health and configuration endpoints.
+  version: 4.0.0
+
+servers:
+  - url: http://localhost/api/booking-story4
+    description: API-Gateway (Traefik)
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Returns HTTP 200 when the service is healthy.
+      operationId: getHealth
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /info:
+    get:
+      summary: Service configuration info
+      description: Returns the current service configuration without sensitive data.
+      operationId: getInfo
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: Current configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InfoResponse"
+
+  /openapi:
+    get:
+      summary: OpenAPI specification
+      description: Returns the OpenAPI specification of this service
+      operationId: getOpenApi
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: OpenAPI specification
+          content:
+            text/yaml:
+              schema:
+                type: string
+
+  /booking/offers:
+    get:
+      summary: Combined booking offers
+      description: |
+        Calls the Flight, Hotel and Car backend services and returns their
+        combined results. No error handling — the request may fail if a
+        backend service is unavailable.
+      operationId: getBookingOffers
+      tags:
+        - booking
+      responses:
+        "200":
+          description: Combined offers from all backend services
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingOffers"
+
+  /booking/bookings:
+    post:
+      summary: Create combined booking (fail-fast, no partial booking)
+      description: |
+        Books a flight, a hotel and a car by calling POST /bookings on each
+        backend service (resolved via Consul). Each call is wrapped in its own
+        circuit breaker.
+
+        Fail-fast semantics: if any circuit breaker is OPEN at the start, or
+        any backend call fails during the booking, the request aborts with
+        503 and reports which service failed. Already booked sub-bookings
+        (e.g. flight succeeded, hotel failed) are NOT rolled back — true
+        atomicity over multiple services requires the Saga pattern (see
+        Story 5).
+      operationId: createBooking
+      tags:
+        - booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingRequest"
+      responses:
+        "201":
+          description: Combined booking confirmed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "400":
+          description: Invalid request body
+        "503":
+          description: |
+            Booking aborted — at least one backend service is currently
+            failing or its circuit breaker is OPEN.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingFailure"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+      required:
+        - status
+
+    InfoResponse:
+      type: object
+      properties:
+        consulUrl:
+          type: string
+          description: URL of the Consul service registry
+          example: "http://consul:8500"
+      required:
+        - consulUrl
+        - timeout
+        - activeProfile
+
+    BookingOffers:
+      type: object
+      properties:
+        flights:
+          type: array
+          items:
+            $ref: "#/components/schemas/Flight"
+        hotels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Hotel"
+        cars:
+          type: array
+          items:
+            $ref: "#/components/schemas/Car"
+      required:
+        - flights
+        - hotels
+        - cars
+
+    Flight:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        airline:
+          type: string
+          example: Lufthansa
+        origin:
+          type: string
+          example: BER
+        destination:
+          type: string
+          example: MUC
+        price:
+          type: number
+          format: double
+          example: 129.99
+
+    Hotel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Grand Hotel
+        city:
+          type: string
+          example: Munich
+        pricePerNight:
+          type: number
+          format: double
+          example: 89.50
+
+    Car:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        provider:
+          type: string
+          example: Sixt
+        model:
+          type: string
+          example: VW Golf
+        pricePerDay:
+          type: number
+          format: double
+          example: 45.00
+
+    BookingRequest:
+      type: object
+      required:
+        - flightId
+        - hotelId
+        - carId
+        - customerName
+      properties:
+        flightId:
+          type: string
+          example: LH123
+        hotelId:
+          type: string
+          example: H1
+        carId:
+          type: string
+          example: C1
+        customerName:
+          type: string
+          example: Max Mustermann
+
+    Booking:
+      type: object
+      required:
+        - bookingId
+        - customerName
+        - flight
+        - hotel
+        - car
+      properties:
+        bookingId:
+          type: string
+          example: B-7c1a9f12
+        customerName:
+          type: string
+          example: Max Mustermann
+        flight:
+          $ref: "#/components/schemas/FlightBooking"
+        hotel:
+          $ref: "#/components/schemas/HotelBooking"
+        car:
+          $ref: "#/components/schemas/CarBooking"
+
+    FlightBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: F-7c1a9f
+        flightId:
+          type: string
+          example: LH123
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    HotelBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: H-3b5d22
+        hotelId:
+          type: string
+          example: H1
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    CarBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: C-9f4e80
+        carId:
+          type: string
+          example: C1
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    BookingFailure:
+      type: object
+      required:
+        - error
+        - failedService
+        - reason
+        - hint
+      properties:
+        error:
+          type: string
+          example: "booking aborted (fail-fast, no partial booking)"
+        failedService:
+          type: string
+          enum: [flight, hotel, car]
+          example: hotel
+        reason:
+          type: string
+          example: "circuit breaker is open"
+        previouslyBooked:
+          type: array
+          items:
+            type: string
+            enum: [flight, hotel, car]
+          description: |
+            Sub-bookings that succeeded before the failure occurred. These are
+            NOT rolled back automatically — see Story 5 (Saga pattern).
+          example: ["flight"]
+        hint:
+          type: string
+          example: "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 5)."
