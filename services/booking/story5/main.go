@@ -9,6 +9,7 @@ import (
 	"github.com/team-neusta-skills/workshop_microservices/booking/story5/bulkhead"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story5/circuitbreaker"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story5/handler"
+	"github.com/team-neusta-skills/workshop_microservices/booking/story5/saga"
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 	"github.com/team-neusta-skills/workshop_microservices/shared/env"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
@@ -20,7 +21,7 @@ var openapiSpec []byte
 
 func main() {
 	config := handler.Config{
-		Service:   "booking-4",
+		Service:   "booking-5",
 		ConsulURL: env.GetEnv("CONSUL_URL", "http://localhost:8500"),
 		Timeout:   3000,
 	}
@@ -56,12 +57,15 @@ func main() {
 		Car:    bulkhead.New(bhConfig("car")),
 	}
 
+	sagaStore := saga.NewStore()
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(config))
 	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient, breakers, bulkheads))
-	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, breakers))
+	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, breakers, sagaStore))
+	mux.HandleFunc("GET /booking/bookings/{id}", handler.GetSagaStatusHandler(sagaStore))
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 	mux.HandleFunc("GET /admin/circuit-state", handler.CircuitStateHandler(breakers))
 	mux.HandleFunc("GET /admin/circuit-events", handler.CircuitEventsHandler(breakers))

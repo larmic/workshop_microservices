@@ -76,18 +76,27 @@ paths:
 
   /booking/bookings:
     post:
-      summary: Create combined booking (fail-fast, no partial booking)
+      summary: Create combined booking via saga (all-or-nothing with compensation)
       description: |
-        Books a flight, a hotel and a car by calling POST /bookings on each
-        backend service (resolved via Consul). Each call is wrapped in its own
-        circuit breaker.
+        Orchestriert eine Saga über die drei Backend-Services in der
+        Reihenfolge Flight → Hotel → Car. Jeder Schritt ist eine eigene
+        lokale Transaktion (POST /bookings) gegen den jeweiligen Backend-
+        Service.
 
-        Fail-fast semantics: if any circuit breaker is OPEN at the start, or
-        any backend call fails during the booking, the request aborts with
-        503 and reports which service failed. Already booked sub-bookings
-        (e.g. flight succeeded, hotel failed) are NOT rolled back — true
-        atomicity over multiple services requires the Saga pattern (see
-        Story 5).
+        Schlägt ein Forward-Step fehl, gehen die bereits abgeschlossenen
+        Schritte in **Kompensation**: die jeweilige Buchung wird per
+        DELETE /bookings/{id} in umgekehrter Reihenfolge storniert. Der
+        Saga-Status wird in-memory gehalten und ist über
+        GET /booking/bookings/{id} abrufbar.
+
+        **Pre-Check:** Ist ein Circuit Breaker beim Eintritt OPEN, startet
+        die Saga gar nicht erst (`503` ohne Saga-Eintrag) — das spart
+        einen Forward-Step plus die ohnehin scheiternde Kompensation.
+
+        **Kein Retry:** Eine fehlgeschlagene Kompensation wird im
+        Step-Status als `COMPENSATION_FAILED` markiert. Die Saga geht
+        trotzdem auf `FAILED`. Persistenter Retry und Recovery nach
+        Crash sind Bonus-Punkte (siehe `docs/questions/story5.md`).
       operationId: createBooking
       tags:
         - booking
@@ -99,7 +108,7 @@ paths:
               $ref: "#/components/schemas/BookingRequest"
       responses:
         "201":
-          description: Combined booking confirmed
+          description: Saga COMPLETED — alle drei Teilbuchungen erfolgreich
           content:
             application/json:
               schema:
@@ -108,12 +117,40 @@ paths:
           description: Invalid request body
         "503":
           description: |
-            Booking aborted — at least one backend service is currently
-            failing or its circuit breaker is OPEN.
+            Saga abgebrochen — entweder Pre-Check (CB OPEN) oder ein
+            Forward-Step gescheitert. Die Antwort enthält den vollständigen
+            Saga-Status, inklusive der bereits kompensierten Schritte.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BookingFailure"
+                $ref: "#/components/schemas/SagaFailure"
+
+  /booking/bookings/{id}:
+    get:
+      summary: Saga-Status abfragen
+      description: |
+        Liefert den aktuellen Status einer Saga. Hauptsächlich für
+        Monitoring und für die Rekonstruktion durch den Kunden, der seine
+        bookingId aus der POST-Antwort kennt.
+      operationId: getSagaStatus
+      tags:
+        - booking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: B-7c1a9f12
+      responses:
+        "200":
+          description: Saga gefunden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Saga"
+        "404":
+          description: Saga unbekannt (id nie existiert oder Service neu gestartet — der Saga-Store ist in-memory)
 
   /admin/circuit-state:
     get:
@@ -201,7 +238,7 @@ components:
         service:
           type: string
           description: Identifier of the booking story service
-          example: booking-4
+          example: booking-5
         consulUrl:
           type: string
           description: URL of the Consul service registry
@@ -382,36 +419,85 @@ components:
           enum: [CONFIRMED]
           example: CONFIRMED
 
-    BookingFailure:
+    Saga:
       type: object
       required:
-        - error
-        - failedService
-        - reason
-        - hint
+        - sagaId
+        - customerName
+        - status
+        - createdAt
+        - updatedAt
       properties:
-        error:
+        sagaId:
           type: string
-          example: "booking aborted (fail-fast, no partial booking)"
-        failedService:
+          example: B-7c1a9f12
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [PENDING, COMPLETED, COMPENSATING, FAILED]
+          example: FAILED
+        steps:
+          type: array
+          description: |
+            Forward-Schritte in der Reihenfolge ihrer Ausführung. Nur Schritte,
+            die ein Backend tatsächlich gebucht haben, erscheinen hier — der
+            fehlgeschlagene Schritt selbst steht im Feld `failedAt`.
+          items:
+            $ref: "#/components/schemas/SagaStep"
+        failedAt:
           type: string
           enum: [flight, hotel, car]
+          description: Service, an dem der Forward-Step gescheitert ist (nur bei status=FAILED gesetzt).
           example: hotel
         reason:
           type: string
-          example: "circuit breaker is open"
-        previouslyBooked:
-          type: array
-          items:
-            type: string
-            enum: [flight, hotel, car]
-          description: |
-            Sub-bookings that succeeded before the failure occurred. These are
-            NOT rolled back automatically — see Story 5 (Saga pattern).
-          example: ["flight"]
-        hint:
+          description: Fehlermeldung des fehlgeschlagenen Schritts.
+          example: "backend returned 500: chaos: fail mode"
+        createdAt:
           type: string
-          example: "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 5)."
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    SagaStep:
+      type: object
+      required:
+        - service
+        - status
+      properties:
+        service:
+          type: string
+          enum: [flight, hotel, car]
+          example: flight
+        bookingId:
+          type: string
+          description: ID, die der Backend-Service nach erfolgreicher Buchung zurückgegeben hat — Grundlage für die Kompensation.
+          example: F-7c1a9f
+        status:
+          type: string
+          enum: [BOOKED, COMPENSATED, COMPENSATION_FAILED]
+          example: COMPENSATED
+        detail:
+          type: object
+          description: Rohantwort des Backend-Services bei der Buchung.
+        reason:
+          type: string
+          description: Bei COMPENSATION_FAILED — warum die Stornierung scheiterte.
+
+    SagaFailure:
+      type: object
+      required:
+        - error
+        - saga
+      properties:
+        error:
+          type: string
+          example: "saga failed at hotel — see saga state for details"
+        saga:
+          $ref: "#/components/schemas/Saga"
 
     CircuitSnapshot:
       type: object
