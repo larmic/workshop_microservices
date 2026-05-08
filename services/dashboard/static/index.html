@@ -266,17 +266,62 @@
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
-            padding: 0.25rem 0.55rem;
+            padding: 0.3rem 0.6rem;
             border-radius: 6px;
             font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            color: #1a1a2e;
+            border: 1px solid transparent;
         }
-        .saga-step.booked              { background: #d4f4dd; color: #1d7a3a; }
-        .saga-step.compensated         { background: #e1e8f0; color: #555; }
-        .saga-step.compensation_failed { background: #fde0e0; color: #b3261e; }
-        .saga-step-svc { font-weight: 800; }
+        .saga-step.booked      { background: #d4f4dd; color: #1d7a3a; border-color: #b6e3c2; }
+        .saga-step.failed      { background: #fde0e0; color: #b3261e; border-color: #f3b8b8; }
+        .saga-step.skipped     {
+            background: repeating-linear-gradient(
+                45deg, #f0f0f0, #f0f0f0 4px, #e4e4e4 4px, #e4e4e4 8px);
+            color: #888;
+            border-color: #ddd;
+        }
+        /* Split: linke Hälfte grün (gebucht), rechte Hälfte zeigt das spätere Ergebnis */
+        .saga-step.compensated {
+            background: linear-gradient(90deg, #d4f4dd 50%, #e1e8f0 50%);
+            border-color: #c5d2dd;
+        }
+        .saga-step.comp-failed {
+            background: linear-gradient(90deg, #d4f4dd 50%, #fde0e0 50%);
+            color: #b3261e;
+            border-color: #f3b8b8;
+        }
+        .saga-step-svc { font-weight: 800; min-width: 3.2em; }
+        .saga-step-icon { font-size: 0.85rem; line-height: 1; }
+        .saga-step-bid {
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
+            opacity: 0.75;
+        }
+        .saga-legend {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin: 0.75rem 0 0.75rem;
+            padding: 0.6rem 0.8rem;
+            background: #f5f6f8;
+            border: 1px dashed #ddd;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            color: #555;
+            align-items: center;
+        }
+        .saga-legend strong {
+            color: #1a1a2e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.65rem;
+            margin-right: 0.4rem;
+        }
         .saga-empty {
             text-align: center;
             color: #888;
@@ -529,6 +574,14 @@
                 <span class="bh-result" id="saga-result"></span>
             </div>
             <div class="saga-stats" id="saga-stats"></div>
+            <div class="saga-legend">
+                <strong>Legende</strong>
+                <span class="saga-step booked"><span class="saga-step-icon">&#10003;</span> BOOKED</span>
+                <span class="saga-step compensated"><span class="saga-step-icon">&#8630;</span> COMPENSATED</span>
+                <span class="saga-step comp-failed"><span class="saga-step-icon">&#10007;</span> KOMP. FEHLER</span>
+                <span class="saga-step failed"><span class="saga-step-icon">&#10007;</span> FAILED</span>
+                <span class="saga-step skipped"><span class="saga-step-icon">&#8212;</span> NICHT AUFGERUFEN</span>
+            </div>
             <div class="saga-list" id="saga-list"></div>
         </div>
 
@@ -941,8 +994,6 @@
                     ? `<span>fehlgeschlagen bei <strong>${s.failedAt}</strong></span>` : "";
                 const reason = s.reason
                     ? `<span title="${escapeHtml(s.reason)}">Grund: <strong>${escapeHtml(truncate(s.reason, 60))}</strong></span>` : "";
-                const stepsBlock = (s.steps && s.steps.length > 0)
-                    ? `<div class="saga-steps">${s.steps.map(renderStep).join("")}</div>` : "";
                 return `
                     <div class="saga-row">
                         <span class="saga-id">${s.sagaId}</span>
@@ -953,16 +1004,59 @@
                             ${reason}
                         </span>
                         <span class="saga-status ${statusClass}">${s.status}</span>
-                        ${stepsBlock}
+                        ${renderSagaStepsRow(s)}
                     </div>
                 `;
             }).join("");
         }
 
-        function renderStep(step) {
-            const cls = (step.status || "").toLowerCase();
-            const bid = step.bookingId ? ` ${step.bookingId}` : "";
-            return `<span class="saga-step ${cls}"><span class="saga-step-svc">${step.service}</span>${bid} · ${step.status}</span>`;
+        const SAGA_SERVICES = ["flight", "hotel", "car"];
+        const STEP_ICONS = {
+            booked:      "&#10003;",  // ✓
+            compensated: "&#8630;",   // ↶
+            "comp-failed": "&#10007;",// ✗
+            failed:      "&#10007;",  // ✗
+            skipped:     "&#8212;"    // —
+        };
+        const STEP_LABELS = {
+            booked:        "BOOKED",
+            compensated:   "COMPENSATED",
+            "comp-failed": "KOMP. FEHLER",
+            failed:        "FAILED",
+            skipped:       "—"
+        };
+
+        // renderSagaStepsRow zeigt IMMER alle drei Services in fester
+        // Reihenfolge. So bleibt das Layout stabil und man sieht auf
+        // einen Blick, welcher Service was war: gebucht, kompensiert,
+        // gescheitert, oder gar nicht aufgerufen.
+        function renderSagaStepsRow(saga) {
+            const byService = {};
+            for (const st of saga.steps || []) byService[st.service] = st;
+            const cells = SAGA_SERVICES.map(svc => {
+                const step = byService[svc];
+                let stateKey, bid = "";
+                if (step) {
+                    if (step.status === "BOOKED")              stateKey = "booked";
+                    else if (step.status === "COMPENSATED")    stateKey = "compensated";
+                    else if (step.status === "COMPENSATION_FAILED") stateKey = "comp-failed";
+                    else                                        stateKey = "skipped";
+                    if (step.bookingId) bid = `<span class="saga-step-bid">${escapeHtml(step.bookingId)}</span>`;
+                } else if (saga.failedAt === svc) {
+                    stateKey = "failed";
+                } else {
+                    stateKey = "skipped";
+                }
+                return `
+                    <span class="saga-step ${stateKey}">
+                        <span class="saga-step-svc">${svc}</span>
+                        <span class="saga-step-icon">${STEP_ICONS[stateKey]}</span>
+                        ${STEP_LABELS[stateKey]}
+                        ${bid}
+                    </span>
+                `;
+            });
+            return `<div class="saga-steps">${cells.join("")}</div>`;
         }
 
         function escapeHtml(s) {
