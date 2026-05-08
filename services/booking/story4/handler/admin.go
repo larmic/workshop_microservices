@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/team-neusta-skills/workshop_microservices/booking/story4/bulkhead"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story4/circuitbreaker"
 )
 
@@ -13,6 +14,18 @@ func CircuitStateHandler(breakers Breakers) http.HandlerFunc {
 		snapshots := make([]circuitbreaker.Snapshot, 0, len(all))
 		for _, cb := range all {
 			snapshots = append(snapshots, cb.Snapshot())
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(snapshots)
+	}
+}
+
+func BulkheadStateHandler(bulkheads Bulkheads) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		all := bulkheads.All()
+		snapshots := make([]bulkhead.Snapshot, 0, len(all))
+		for _, bh := range all {
+			snapshots = append(snapshots, bh.Snapshot())
 		}
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(snapshots)

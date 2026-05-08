@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/team-neusta-skills/workshop_microservices/booking/story4/bulkhead"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story4/circuitbreaker"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story4/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
@@ -43,15 +44,28 @@ func main() {
 		Car:    circuitbreaker.New(cbConfig("car")),
 	}
 
+	bhConfig := func(name string) bulkhead.Config {
+		return bulkhead.Config{
+			Name:          name,
+			MaxConcurrent: 10,
+		}
+	}
+	bulkheads := handler.Bulkheads{
+		Flight: bulkhead.New(bhConfig("flight")),
+		Hotel:  bulkhead.New(bhConfig("hotel")),
+		Car:    bulkhead.New(bhConfig("car")),
+	}
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(config))
-	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient, breakers))
+	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient, breakers, bulkheads))
 	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, breakers))
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 	mux.HandleFunc("GET /admin/circuit-state", handler.CircuitStateHandler(breakers))
 	mux.HandleFunc("GET /admin/circuit-events", handler.CircuitEventsHandler(breakers))
+	mux.HandleFunc("GET /admin/bulkhead-state", handler.BulkheadStateHandler(bulkheads))
 
 	log.Println("BookingService starting on port 8080...")
 	if err := http.ListenAndServe(":8080", middleware.CORSMiddleware(mux)); err != nil {

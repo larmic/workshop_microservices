@@ -26,6 +26,7 @@ func main() {
 	composeFilesRaw := getEnv("COMPOSE_FILES", "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml")
 	consulURL := getEnv("CONSUL_URL", "http://consul:8500")
 	bookingStory3URL := getEnv("BOOKING_STORY3_URL", "http://booking-story3:8080")
+	bookingStory4URL := getEnv("BOOKING_STORY4_URL", "http://booking-story4:8080")
 
 	var composeArgs []string
 	for _, f := range strings.Split(composeFilesRaw, ",") {
@@ -46,6 +47,9 @@ func main() {
 	mux.HandleFunc("GET /api/services/{name}/instances", handler.ListInstancesHandler(resolver, allowedServices))
 	mux.HandleFunc("POST /api/services/{name}/chaos", handler.SetChaosHandler(resolver, allowedServices))
 	mux.HandleFunc("GET /api/circuit-state", handler.CircuitStateHandler(bookingStory3URL))
+	mux.HandleFunc("GET /api/bulkhead-state", handler.BulkheadStateHandler(bookingStory4URL))
+	mux.HandleFunc("GET /api/booking-story4/offers", handler.BookingOffersProxyHandler(bookingStory4URL))
+	mux.HandleFunc("POST /api/booking-story4/burst", handler.BurstHandler(bookingStory4URL, 20))
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 
 	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}

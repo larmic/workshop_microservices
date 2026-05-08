@@ -138,6 +138,59 @@
             padding: 1rem;
         }
 
+        /* Bulkhead Section */
+        .bh-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .bh-btn {
+            padding: 0.5rem 1rem;
+            border: 1.5px solid #2d6cdf;
+            border-radius: 6px;
+            background: #fff;
+            color: #2d6cdf;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .bh-btn:hover:not(:disabled) {
+            background: #2d6cdf;
+            color: #fff;
+        }
+        .bh-btn.burst {
+            border-color: #b3261e;
+            color: #b3261e;
+        }
+        .bh-btn.burst:hover:not(:disabled) {
+            background: #b3261e;
+            color: #fff;
+        }
+        .bh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .bh-result {
+            font-size: 0.8rem;
+            color: #555;
+            font-variant-numeric: tabular-nums;
+        }
+        .bh-bar {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0 0.4rem 0;
+        }
+        .bh-bar-fill {
+            height: 100%;
+            background: #1d7a3a;
+            transition: width 0.3s, background 0.3s;
+        }
+        .bh-bar-fill.warn { background: #b8860b; }
+        .bh-bar-fill.full { background: #b3261e; }
+
         /* Services grid */
         .services-grid {
             display: grid;
@@ -346,6 +399,7 @@
             <a class="link-chip" href="/api/booking-story1/openapi" target="_blank"><span>&#128214;</span> Booking Story 1</a>
             <a class="link-chip" href="/api/booking-story2/openapi" target="_blank"><span>&#128214;</span> Booking Story 2</a>
             <a class="link-chip" href="/api/booking-story3/openapi" target="_blank"><span>&#128214;</span> Booking Story 3</a>
+            <a class="link-chip" href="/api/booking-story4/openapi" target="_blank"><span>&#128214;</span> Booking Story 4</a>
         </div>
     </div>
 
@@ -353,6 +407,16 @@
         <div class="cb-section">
             <h2>Circuit Breaker (Booking Story 3)</h2>
             <div class="cb-grid" id="cb-grid"></div>
+        </div>
+
+        <div class="cb-section">
+            <h2>Bulkhead (Booking Story 4)</h2>
+            <div class="bh-actions">
+                <button class="bh-btn" id="bh-normal-btn" onclick="callOffersNormal()">Normaler Aufruf</button>
+                <button class="bh-btn burst" id="bh-burst-btn" onclick="callOffersBurst()">Burst (20 parallel)</button>
+                <span class="bh-result" id="bh-result"></span>
+            </div>
+            <div class="cb-grid" id="bh-grid"></div>
         </div>
 
         <div class="services-grid" id="services"></div>
@@ -536,6 +600,90 @@
             }).join("");
         }
 
+        async function fetchBulkheadState() {
+            try {
+                const res = await fetch("/dashboard/api/bulkhead-state");
+                if (!res.ok) throw new Error(await res.text());
+                renderBulkhead(await res.json());
+            } catch (e) {
+                renderBulkhead(null);
+            }
+        }
+
+        function renderBulkhead(bhs) {
+            const grid = document.getElementById("bh-grid");
+            if (!bhs || !Array.isArray(bhs) || bhs.length === 0) {
+                grid.innerHTML = '<div class="cb-empty">Booking Story 4 nicht erreichbar</div>';
+                return;
+            }
+            grid.innerHTML = bhs.map(bh => {
+                const pct = bh.maxConcurrent > 0
+                    ? Math.round((bh.inFlight / bh.maxConcurrent) * 100) : 0;
+                const barClass = pct >= 100 ? "full" : pct >= 70 ? "warn" : "";
+                return `
+                    <div class="cb-card">
+                        <div class="cb-card-name">${bh.name}</div>
+                        <div class="bh-bar">
+                            <div class="bh-bar-fill ${barClass}" style="width: ${Math.min(pct, 100)}%"></div>
+                        </div>
+                        <div class="cb-card-details">
+                            <span>in flight: <strong>${bh.inFlight}/${bh.maxConcurrent}</strong></span>
+                            <span>calls: <strong>${bh.totalCalls}</strong></span>
+                            <span>rejected: <strong>${bh.totalRejected}</strong></span>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        let burstActiveUntil = 0;
+        function showBurstResult(text) {
+            document.getElementById("bh-result").textContent = text;
+        }
+
+        async function callOffersNormal() {
+            const btn = document.getElementById("bh-normal-btn");
+            btn.disabled = true;
+            const t0 = performance.now();
+            try {
+                const res = await fetch("/dashboard/api/booking-story4/offers");
+                const ms = Math.round(performance.now() - t0);
+                showBurstResult(`Normal: ${res.status} in ${ms} ms`);
+            } catch (e) {
+                showBurstResult("Normal: Fehler — " + e.message);
+            } finally {
+                btn.disabled = false;
+                fetchBulkheadState();
+            }
+        }
+
+        async function callOffersBurst() {
+            const btn = document.getElementById("bh-burst-btn");
+            btn.disabled = true;
+            burstActiveUntil = Date.now() + 5000;
+            showBurstResult("Burst läuft …");
+            try {
+                const res = await fetch("/dashboard/api/booking-story4/burst", { method: "POST" });
+                if (!res.ok) throw new Error(await res.text());
+                const r = await res.json();
+                showBurstResult(`Burst: ${r.total} calls in ${r.durationMs} ms — ${r.succeeded} ok, ${r.failed} fail`);
+            } catch (e) {
+                showBurstResult("Burst: Fehler — " + e.message);
+            } finally {
+                btn.disabled = false;
+                fetchBulkheadState();
+            }
+        }
+
+        function bulkheadPollInterval() {
+            return Date.now() < burstActiveUntil ? 500 : 1000;
+        }
+
+        function scheduleBulkheadPoll() {
+            fetchBulkheadState();
+            setTimeout(scheduleBulkheadPoll, bulkheadPollInterval());
+        }
+
         function renderCircuit(cbs) {
             const grid = document.getElementById("cb-grid");
             if (!cbs || !Array.isArray(cbs) || cbs.length === 0) {
@@ -579,6 +727,7 @@
 
         fetchServices();
         fetchCircuitState();
+        scheduleBulkheadPoll();
         setInterval(fetchServices, 5000);
         setInterval(fetchCircuitState, 1000);
     </script>
