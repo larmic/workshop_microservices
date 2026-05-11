@@ -18,6 +18,8 @@
             color: #fff;
             padding: 1.5rem 2rem;
             text-align: center;
+            position: relative;
+            z-index: 1100;
         }
         header h1 { font-size: 1.5rem; font-weight: 600; }
         header p { font-size: 0.875rem; color: #aaa; margin-top: 0.25rem; }
@@ -1128,7 +1130,7 @@
             <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
         </div>
         <div class="header-controls">
-        <div class="tools-dropdown" style="position: relative;">
+        <div class="health-dropdown" style="position: relative;">
             <button type="button" class="health-chip" id="health-chip" aria-expanded="false" onclick="toggleHealthPanel()" title="Service-Status anzeigen">
                 <span class="health-chip-dot"></span>
                 <span id="health-chip-label">prüfe…</span>
@@ -2469,13 +2471,12 @@ catch error at step X:
             chip.setAttribute("aria-expanded", open ? "true" : "false");
         }
         document.addEventListener("click", (e) => {
-            const wrap = document.getElementById("health-chip").parentElement;
-            if (!wrap.contains(e.target)) {
-                const panel = document.getElementById("health-panel");
-                if (panel && !panel.hidden) {
-                    panel.hidden = true;
-                    document.getElementById("health-chip").setAttribute("aria-expanded", "false");
-                }
+            const wrap = document.querySelector(".health-dropdown");
+            if (!wrap || wrap.contains(e.target)) return;
+            const panel = document.getElementById("health-panel");
+            if (panel && !panel.hidden) {
+                panel.hidden = true;
+                document.getElementById("health-chip").setAttribute("aria-expanded", "false");
             }
         });
 
