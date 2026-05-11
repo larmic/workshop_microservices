@@ -567,27 +567,6 @@
         .chaos-btn.active.slow     { background: #b8860b; color: #fff; border-color: #b8860b; }
         .chaos-btn.active.fail     { background: #b3261e; color: #fff; border-color: #b3261e; }
         .chaos-btn.mixed { background: #ddd; color: #444; border-color: #aaa; }
-        .latency-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.75rem;
-            color: #666;
-            margin-bottom: 0.75rem;
-        }
-        .latency-row label { white-space: nowrap; }
-        .latency-row input {
-            width: 70px;
-            padding: 0.25rem 0.4rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-variant-numeric: tabular-nums;
-        }
-        .latency-hint {
-            color: #999;
-            font-size: 0.7rem;
-        }
 
         .instances-block {
             margin-top: 0.5rem;
@@ -964,7 +943,7 @@
 <body>
     <header>
         <div class="header-title">
-            <h1><span class="title-accent">Workshop</span>: Microservices</h1>
+            <h1>Microservices</h1>
             <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
         </div>
         <div class="tools-dropdown">
@@ -1469,13 +1448,6 @@ catch error at step X:
         const icons = { flight: "&#9992;", hotel: "&#127976;", car: "&#128663;" };
         let services = [];
         let instancesByService = {};
-        const latencyByService = { flight: 2000, hotel: 2000, car: 2000 };
-
-        function onLatencyChange(name, value) {
-            const v = parseInt(value, 10);
-            if (isFinite(v) && v > 0) latencyByService[name] = v;
-        }
-
         async function fetchServices() {
             try {
                 const res = await fetch("/dashboard/api/services");
@@ -1533,15 +1505,11 @@ catch error at step X:
             }
         }
 
-        function readLatency(name) {
-            return latencyByService[name] || 2000;
-        }
-
         async function setChaos(name, mode, instanceId) {
             const card = document.getElementById("card-" + name);
             card.classList.add("loading");
             try {
-                const body = { mode, latencyMs: mode === "slow" ? readLatency(name) : 0 };
+                const body = { mode };
                 if (instanceId) body.instanceIds = [instanceId];
                 const res = await fetch("/dashboard/api/services/" + name + "/chaos", {
                     method: "POST",
@@ -1623,13 +1591,6 @@ catch error at step X:
                     </div>
                     <div class="chaos-section">
                         <h3>Chaos-Modus${aggMode === "mixed" ? " (gemischt)" : ""}</h3>
-                        <div class="latency-row">
-                            <label for="latency-${s.name}">Latenz für "Langsam":</label>
-                            <input type="number" id="latency-${s.name}" min="100" max="10000" step="100"
-                                value="${latencyByService[s.name]}"
-                                oninput="onLatencyChange('${s.name}', this.value)" />
-                            <span class="latency-hint">ms (>3000 → Timeout)</span>
-                        </div>
                         <div class="chaos-btns">
                             ${chaosBtn(s.name, "normal", "Normal", aggMode)}
                             ${chaosBtn(s.name, "slow", "Langsam", aggMode)}

@@ -12,6 +12,7 @@ services:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: flight-service
       SERVICE_ADDRESS: flight
+      CHAOS_LATENCY_MS: 2000
     depends_on:
       consul:
         condition: service_healthy
@@ -29,6 +30,7 @@ services:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: hotel-service
       SERVICE_ADDRESS: hotel
+      CHAOS_LATENCY_MS: 2000
     depends_on:
       consul:
         condition: service_healthy
@@ -46,6 +48,7 @@ services:
       CONSUL_URL: http://consul:8500
       SERVICE_NAME: car-service
       SERVICE_ADDRESS: car
+      CHAOS_LATENCY_MS: 2000
     depends_on:
       consul:
         condition: service_healthy

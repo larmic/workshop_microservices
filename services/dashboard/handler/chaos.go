@@ -26,7 +26,6 @@ type InstanceInfo struct {
 
 type SetChaosRequest struct {
 	Mode        string   `json:"mode"`
-	LatencyMs   int      `json:"latencyMs"`
 	InstanceIDs []string `json:"instanceIds,omitempty"`
 }
 
@@ -106,7 +105,9 @@ func SetChaosHandler(resolver *consul.Resolver, allowedServices []string) http.H
 			targetSet[id] = true
 		}
 
-		body, _ := json.Marshal(ChaosState{Mode: req.Mode, LatencyMs: req.LatencyMs})
+		body, _ := json.Marshal(struct {
+			Mode string `json:"mode"`
+		}{Mode: req.Mode})
 
 		client := &http.Client{Timeout: 2 * time.Second}
 		results := make([]SetChaosResult, 0, len(instances))

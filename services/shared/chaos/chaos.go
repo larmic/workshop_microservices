@@ -5,10 +5,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
 )
+
+const defaultLatencyMs = 2000
 
 type Mode string
 
@@ -33,7 +36,21 @@ func New() *Chaos {
 	if mode != Slow && mode != Fail {
 		mode = Normal
 	}
-	return &Chaos{state: State{Mode: mode, LatencyMs: 2000}}
+	return &Chaos{state: State{Mode: mode, LatencyMs: latencyFromEnv()}}
+}
+
+// latencyFromEnv liest die Slow-Latenz aus CHAOS_LATENCY_MS (z. B. via docker-compose).
+// Fix für die Lebensdauer der Instanz; nicht zur Laufzeit änderbar.
+func latencyFromEnv() int {
+	raw := os.Getenv("CHAOS_LATENCY_MS")
+	if raw == "" {
+		return defaultLatencyMs
+	}
+	n, err := strconv.Atoi(raw)
+	if err != nil || n <= 0 {
+		return defaultLatencyMs
+	}
+	return n
 }
 
 func (c *Chaos) Snapshot() State {
@@ -42,19 +59,17 @@ func (c *Chaos) Snapshot() State {
 	return c.state
 }
 
-func (c *Chaos) Set(s State) State {
-	if s.Mode != Normal && s.Mode != Slow && s.Mode != Fail {
-		s.Mode = Normal
-	}
-	if s.LatencyMs <= 0 {
-		s.LatencyMs = 2000
+func (c *Chaos) SetMode(mode Mode) State {
+	if mode != Normal && mode != Slow && mode != Fail {
+		mode = Normal
 	}
 	c.mu.Lock()
-	c.state = s
+	c.state.Mode = mode
+	s := c.state
 	c.mu.Unlock()
 
 	hostname, _ := os.Hostname()
-	log.Printf("[%s] Chaos mode set to %s (latency=%dms)", hostname, s.Mode, s.LatencyMs)
+	log.Printf("[%s] Chaos mode set to %s (latency=%dms fix)", hostname, s.Mode, s.LatencyMs)
 	return s
 }
 
@@ -91,12 +106,14 @@ func (c *Chaos) GetHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Chaos) SetHandler(w http.ResponseWriter, r *http.Request) {
-	var s State
-	if err := json.NewDecoder(r.Body).Decode(&s); err != nil {
+	var req struct {
+		Mode Mode `json:"mode"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request body: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	updated := c.Set(s)
+	updated := c.SetMode(req.Mode)
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(updated)
 }
