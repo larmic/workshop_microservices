@@ -2559,6 +2559,14 @@ catch error at step X:
             }
         }
 
+        function markHealthChipOffline() {
+            const chip = document.getElementById("health-chip");
+            const label = document.getElementById("health-chip-label");
+            chip.classList.remove("ok", "warn");
+            chip.classList.add("err");
+            label.textContent = "Backend offline";
+        }
+
         function dismissStartupOverlay() {
             if (startupDismissed) return;
             startupDismissed = true;
@@ -2605,7 +2613,10 @@ catch error at step X:
                 // antwortet, aber gerade keinen Status liefern kann.
                 if (e instanceof TypeError) {
                     networkErrorStreak++;
-                    if (networkErrorStreak >= 3) showOfflineOverlay();
+                    if (networkErrorStreak >= 3) {
+                        showOfflineOverlay();
+                        markHealthChipOffline();
+                    }
                 }
             }
         }
