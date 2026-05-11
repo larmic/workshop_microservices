@@ -654,36 +654,358 @@
         }
         .card.loading .spinner { display: block; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Header mit Tools-Dropdown rechts */
+        header {
+            position: relative;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        header .header-title h1 { font-size: 1.5rem; font-weight: 600; }
+        header .header-title p { font-size: 0.875rem; color: #aaa; margin-top: 0.25rem; }
+        .tools-dropdown { position: relative; }
+        .tools-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .tools-toggle:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); }
+        .tools-toggle .caret { font-size: 0.7rem; transition: transform 0.15s; }
+        .tools-toggle.open .caret { transform: rotate(180deg); }
+        .tools-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            min-width: 280px;
+            background: #fff;
+            color: #1a1a2e;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            padding: 0.9rem 1rem;
+            z-index: 100;
+        }
+        .tools-menu[hidden] { display: none; }
+        .tools-menu h3 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 700;
+            margin: 0.5rem 0 0.5rem;
+        }
+        .tools-menu h3:first-child { margin-top: 0; }
+        .tools-menu .links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Story-Stepper */
+        .story-stepper {
+            max-width: 1100px;
+            margin: 2rem auto 1.5rem;
+            padding: 0 1rem;
+        }
+        .stepper-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .stepper-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1rem;
+            border: 1.5px solid #d0d7e2;
+            border-radius: 8px;
+            background: #fff;
+            color: #1a1a2e;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .stepper-nav-btn:hover:not(:disabled) {
+            border-color: #2d6cdf;
+            color: #2d6cdf;
+            box-shadow: 0 2px 6px rgba(45,108,223,0.15);
+        }
+        .stepper-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .stepper-nodes {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .stepper-node {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #d0d7e2;
+            background: #fff;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .stepper-node:hover { border-color: #2d6cdf; color: #2d6cdf; }
+        .stepper-node.active {
+            background: #2d6cdf;
+            border-color: #2d6cdf;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(45,108,223,0.35);
+        }
+        .stepper-connector {
+            width: 1.2rem;
+            height: 2px;
+            background: #d0d7e2;
+        }
+        .stepper-headline {
+            text-align: center;
+        }
+        .stepper-headline h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .stepper-headline p {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.25rem;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Story-Lernhilfe-Panels */
+        .story-helpers {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+        details.story-info,
+        details.story-cheatsheet {
+            flex: 1 1 320px;
+            background: #f5f6f8;
+            border: 1px solid #e1e5ec;
+            border-radius: 8px;
+            padding: 0;
+        }
+        details.story-info summary,
+        details.story-cheatsheet summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            user-select: none;
+        }
+        details.story-info summary::-webkit-details-marker,
+        details.story-cheatsheet summary::-webkit-details-marker { display: none; }
+        details.story-info summary::before,
+        details.story-cheatsheet summary::before {
+            content: "\25B8";
+            font-size: 0.7rem;
+            color: #666;
+            transition: transform 0.15s;
+            display: inline-block;
+        }
+        details[open].story-info summary::before,
+        details[open].story-cheatsheet summary::before {
+            transform: rotate(90deg);
+        }
+        details.story-info summary .badge,
+        details.story-cheatsheet summary .badge {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 700;
+            margin-left: auto;
+        }
+        .story-info-body,
+        .story-cheatsheet-body {
+            padding: 0 1rem 1rem;
+            font-size: 0.85rem;
+            color: #333;
+            line-height: 1.55;
+        }
+        .story-info-body h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 700;
+            margin: 0.75rem 0 0.3rem;
+        }
+        .story-info-body p, .story-info-body ul, .story-info-body ol { margin-bottom: 0.5rem; }
+        .story-info-body ul, .story-info-body ol { padding-left: 1.25rem; }
+        .story-info-body em { color: #2d6cdf; font-style: normal; font-weight: 600; }
+        .story-cheatsheet-body pre {
+            background: #1a1a2e;
+            color: #e0e6f0;
+            padding: 0.9rem 1rem;
+            border-radius: 6px;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.78rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Story-Sections (eine sichtbar pro Zeit) */
+        .story-content { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+        .story-section[hidden] { display: none; }
+
+        /* Backend-Services-Panel (immer unten sichtbar) */
+        .backend-panel {
+            max-width: 1100px;
+            margin: 1rem auto 2rem;
+            padding: 1.5rem 1rem 0;
+            border-top: 2px dashed #d0d7e2;
+        }
+        .backend-panel-heading {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 700;
+            margin-bottom: 0.9rem;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            header { flex-direction: column; align-items: flex-start; }
+            .stepper-bar { flex-wrap: wrap; }
+            .stepper-connector { display: none; }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Workshop Dashboard</h1>
-        <p>Microservices verwalten</p>
+        <div class="header-title">
+            <h1>Workshop Dashboard</h1>
+            <p>Microservices verwalten</p>
+        </div>
+        <div class="tools-dropdown">
+            <button type="button" class="tools-toggle" id="tools-toggle" aria-expanded="false" onclick="toggleToolsMenu()">
+                <span>&#128736;</span>
+                <span>Werkzeuge</span>
+                <span class="caret">&#9662;</span>
+            </button>
+            <div class="tools-menu" id="tools-menu" hidden>
+                <h3>Tools</h3>
+                <div class="links-grid">
+                    <a class="link-chip" href="/api" target="_blank"><span>&#128196;</span> Swagger API</a>
+                    <a class="link-chip" href="/consul" target="_blank"><span>&#128270;</span> Consul</a>
+                    <a class="link-chip" href="http://localhost:8080" target="_blank"><span>&#9881;</span> Traefik</a>
+                </div>
+                <h3>Service APIs</h3>
+                <div class="links-grid">
+                    <a class="link-chip" href="/api/flight/openapi" target="_blank"><span>&#9992;</span> Flight</a>
+                    <a class="link-chip" href="/api/hotel/openapi" target="_blank"><span>&#127976;</span> Hotel</a>
+                    <a class="link-chip" href="/api/car/openapi" target="_blank"><span>&#128663;</span> Car</a>
+                    <a class="link-chip" href="/api/booking-story1/openapi" target="_blank"><span>&#128214;</span> Booking Story 1</a>
+                    <a class="link-chip" href="/api/booking-story2/openapi" target="_blank"><span>&#128214;</span> Booking Story 2</a>
+                    <a class="link-chip" href="/api/booking-story3/openapi" target="_blank"><span>&#128214;</span> Booking Story 3</a>
+                    <a class="link-chip" href="/api/booking-story4/openapi" target="_blank"><span>&#128214;</span> Booking Story 4</a>
+                    <a class="link-chip" href="/api/booking-story5/openapi" target="_blank"><span>&#128214;</span> Booking Story 5</a>
+                </div>
+            </div>
+        </div>
     </header>
     <div class="error-banner" id="error"></div>
 
-    <div class="links-section">
-        <h2>Tools</h2>
-        <div class="links-grid">
-            <a class="link-chip" href="/api" target="_blank"><span>&#128196;</span> Swagger API</a>
-            <a class="link-chip" href="/consul" target="_blank"><span>&#128270;</span> Consul</a>
-            <a class="link-chip" href="http://localhost:8080" target="_blank"><span>&#9881;</span> Traefik</a>
+    <nav class="story-stepper" aria-label="Story-Navigation">
+        <div class="stepper-bar">
+            <button type="button" class="stepper-nav-btn" id="stepper-prev" onclick="goPrevStory()">
+                <span>&larr;</span><span>Zur&uuml;ck</span>
+            </button>
+            <div class="stepper-nodes" id="stepper-nodes">
+                <button type="button" class="stepper-node" data-story-node="1" onclick="showStory(1)">1</button>
+                <span class="stepper-connector"></span>
+                <button type="button" class="stepper-node" data-story-node="2" onclick="showStory(2)">2</button>
+                <span class="stepper-connector"></span>
+                <button type="button" class="stepper-node" data-story-node="3" onclick="showStory(3)">3</button>
+                <span class="stepper-connector"></span>
+                <button type="button" class="stepper-node" data-story-node="4" onclick="showStory(4)">4</button>
+                <span class="stepper-connector"></span>
+                <button type="button" class="stepper-node" data-story-node="5" onclick="showStory(5)">5</button>
+            </div>
+            <button type="button" class="stepper-nav-btn" id="stepper-next" onclick="goNextStory()">
+                <span>Weiter</span><span>&rarr;</span>
+            </button>
         </div>
-        <h2>Service APIs</h2>
-        <div class="links-grid">
-            <a class="link-chip" href="/api/flight/openapi" target="_blank"><span>&#9992;</span> Flight</a>
-            <a class="link-chip" href="/api/hotel/openapi" target="_blank"><span>&#127976;</span> Hotel</a>
-            <a class="link-chip" href="/api/car/openapi" target="_blank"><span>&#128663;</span> Car</a>
-            <a class="link-chip" href="/api/booking-story1/openapi" target="_blank"><span>&#128214;</span> Booking Story 1</a>
-            <a class="link-chip" href="/api/booking-story2/openapi" target="_blank"><span>&#128214;</span> Booking Story 2</a>
-            <a class="link-chip" href="/api/booking-story3/openapi" target="_blank"><span>&#128214;</span> Booking Story 3</a>
-            <a class="link-chip" href="/api/booking-story4/openapi" target="_blank"><span>&#128214;</span> Booking Story 4</a>
-            <a class="link-chip" href="/api/booking-story5/openapi" target="_blank"><span>&#128214;</span> Booking Story 5</a>
+        <div class="stepper-headline">
+            <h2 id="stepper-title">Story</h2>
+            <p id="stepper-subtitle">&nbsp;</p>
         </div>
-    </div>
+    </nav>
 
-    <div class="container">
+    <main class="story-content">
+        <section class="story-section" data-story="1" hidden>
+            <div class="story-helpers" data-story-helpers="1">
+                <details class="story-info">
+                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                    <div class="story-info-body">
+                        <h4>Kontext</h4>
+                        <p>Der erste Booking-Service: läuft auf dem Entwicklerrechner, in der Cloud, auf einem Raspberry Pi &mdash; überall gleich. Mit Health-Check (damit Probleme früh auffallen) und externer Konfiguration (damit ein Build in jeder Umgebung läuft).</p>
+                        <h4>User Story</h4>
+                        <p>Als <em>Betriebsteam</em> möchte ich einen Service, der <em>in beliebigen Umgebungen ohne Code-Änderung läuft und sich automatisch überwachen lässt</em>, damit <em>Probleme früh erkannt werden und Deployment-Pfade nicht spezifisch sein müssen</em>.</p>
+                        <h4>Akzeptanzkriterien</h4>
+                        <ul>
+                            <li><code>GET /health</code> liefert 200 wenn der Service gesund ist</li>
+                            <li>Logs auf stdout (keine Datei-Logs)</li>
+                            <li>Backend-URLs (Flight/Hotel/Car) konfigurierbar über Umgebungsvariablen</li>
+                            <li>Info-Endpoint zeigt die aktuelle Konfiguration (ohne Secrets)</li>
+                            <li><code>GET /booking/offers</code> aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="story-cheatsheet">
+                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <div class="story-cheatsheet-body">
+<pre>ENV:
+  FLIGHT_URL=http://flight:8080
+  HOTEL_URL=http://hotel:8080
+  CAR_URL=http://car:8080
+
+GET /health → 200 OK
+GET /info   → { config: { flightURL, hotelURL, carURL } }
+
+GET /booking/offers
+  → GET FLIGHT_URL/flights
+  → GET HOTEL_URL/hotels
+  → GET CAR_URL/cars
+  → { flights, hotels, cars }
+  // Fehler? Dürfen durchschlagen — kein Error-Handling.</pre>
+                    </div>
+                </details>
+            </div>
         <div class="cb-section">
             <h2>Cloud-Native Booking Service (Story 1)</h2>
             <div class="rest-actions">
@@ -707,6 +1029,49 @@
             </div>
         </div>
 
+        </section>
+
+        <section class="story-section" data-story="2" hidden>
+            <div class="story-helpers" data-story-helpers="2">
+                <details class="story-info">
+                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                    <div class="story-info-body">
+                        <h4>Kontext</h4>
+                        <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Backend-Services registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Fällt eine Instanz aus, übernimmt automatisch eine andere.</p>
+                        <h4>User Story</h4>
+                        <p>Als <em>Betriebsteam</em> möchte ich <em>Backend-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
+                        <h4>Akzeptanzkriterien</h4>
+                        <ul>
+                            <li>Eigenes <code>consul</code>-Package mit einem <code>Resolver</code></li>
+                            <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul</li>
+                            <li>Statische URLs ersetzt durch logische Namen: <code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
+                            <li><code>POST /booking/bookings</code> orchestriert die drei Backend-Services und liefert eine aggregierte Buchung</li>
+                            <li>Optional: Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="story-cheatsheet">
+                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <div class="story-cheatsheet-body">
+<pre>resolve(name):
+  res = GET consul:8500/v1/health/service/{name}?passing=true
+  // res = [ {Service:{Address, Port}}, ... ]
+  instance = randomPick(res)
+  return "http://{instance.Address}:{instance.Port}"
+
+GET /booking/offers:
+  for svc in [flight-service, hotel-service, car-service]:
+    url = resolve(svc)
+    results[svc] = GET url/...
+
+POST /booking/bookings { flightId, hotelId, carId, customerName }:
+  for svc in [flight-service, hotel-service, car-service]:
+    url = resolve(svc)
+    POST url/bookings
+  → { bookingId, customerName, flight, hotel, car }</pre>
+                    </div>
+                </details>
+            </div>
         <div class="cb-section">
             <h2>Service Discovery via Consul (Story 2)</h2>
             <div class="rest-actions">
@@ -747,6 +1112,52 @@
             </div>
         </div>
 
+        </section>
+
+        <section class="story-section" data-story="3" hidden>
+            <div class="story-helpers" data-story-helpers="3">
+                <details class="story-info">
+                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                    <div class="story-info-body">
+                        <h4>Kontext</h4>
+                        <p>Der Flight-Service ist zeitweise nicht erreichbar (Netzprobleme, Überlast, Deployment). Der Booking-Service soll nicht mitfallen, sondern graceful degradieren: Hotel + Car liefern, Flight elegant ausblenden. Ein <em>Circuit Breaker</em> erkennt wiederholte Fehler, schaltet ab und probiert nach einer Pause vorsichtig wieder zu.</p>
+                        <h4>User Story</h4>
+                        <p>Als <em>Kunde</em> möchte ich <em>auch bei Ausfall des Flugbuchungssystems eine Teilbuchung (Hotel + Mietwagen) durchführen können</em>, damit <em>meine Reiseplanung nicht komplett blockiert wird</em>.</p>
+                        <h4>Akzeptanzkriterien</h4>
+                        <ul>
+                            <li>Circuit Breaker um jeden Backend-Aufruf (Flight, Hotel, Car) &mdash; jeweils eigener State</li>
+                            <li>Nach 5 aufeinanderfolgenden Fehlern öffnet der Circuit (OPEN)</li>
+                            <li>Bei OPEN sofortiger Fallback (z.&nbsp;B. <code>flights: []</code>)</li>
+                            <li>Nach 30 Sekunden Wechsel in HALF_OPEN; ein Probe-Call entscheidet, ob CLOSED oder OPEN</li>
+                            <li>Timeout 3 s; Zustandswechsel werden geloggt; Status über Endpoint abfragbar</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="story-cheatsheet">
+                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <div class="story-cheatsheet-body">
+<pre>state: CLOSED | OPEN | HALF_OPEN
+failures = 0
+openUntil = 0
+
+call(service):
+  if state == OPEN and now < openUntil:
+    return fallback()                        // short-circuit
+  if state == OPEN and now >= openUntil:
+    state = HALF_OPEN                        // probe slot frei
+
+  try service.invoke(timeout = 3s):
+    success → failures = 0
+              state    = CLOSED
+              return result
+    failure → failures++
+              if failures >= 5:
+                state     = OPEN
+                openUntil = now + 30s
+              return fallback()</pre>
+                    </div>
+                </details>
+            </div>
         <div class="cb-section">
             <h2>Circuit Breaker (Booking Story 3)</h2>
             <div class="rest-actions">
@@ -769,6 +1180,50 @@
             <div class="cb-grid" id="cb-grid"></div>
         </div>
 
+        </section>
+
+        <section class="story-section" data-story="4" hidden>
+            <div class="story-helpers" data-story-helpers="4">
+                <details class="story-info">
+                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                    <div class="story-info-body">
+                        <h4>Kontext</h4>
+                        <p>Wenn Hotel extrem langsam antwortet, blockieren seine Calls alle Threads des Booking-Service &mdash; Flight-Calls verhungern, obwohl Flight gesund ist. Das <em>Bulkhead-Pattern</em> isoliert die Ressourcen: jeder Backend-Service bekommt seinen eigenen Slot-Pool. Voller Pool → sofort 503 ablehnen statt queuen.</p>
+                        <h4>User Story</h4>
+                        <p>Als <em>Betriebsteam</em> möchte ich <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere beeinträchtigen</em>, damit <em>ein langsamer Service nicht das gesamte System blockiert</em>.</p>
+                        <h4>Akzeptanzkriterien</h4>
+                        <ul>
+                            <li>Jeder Backend-Service hat einen eigenen Slot-Pool (Semaphor oder Thread-Pool)</li>
+                            <li><code>maxConcurrentCalls</code> pro Service konfigurierbar</li>
+                            <li>Bei erschöpftem Pool: sofortige Ablehnung, kein Queueing</li>
+                            <li>Abgelehnte Anfragen liefern <code>503 Service Unavailable</code></li>
+                            <li>Metriken über Pool-Auslastung sind verfügbar (in-flight, total, rejected)</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="story-cheatsheet">
+                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <div class="story-cheatsheet-body">
+<pre>max      = { flight: 5, hotel: 5, car: 5 }   // pro Service
+inFlight = { flight: 0, hotel: 0, car: 0 }
+rejected = { flight: 0, hotel: 0, car: 0 }
+
+call(service):
+  if inFlight[service] >= max[service]:
+    rejected[service]++
+    return 503                              // sofort ablehnen
+  inFlight[service]++
+  try:
+    return service.invoke()
+  finally:
+    inFlight[service]--
+
+// Aggregator (Booking) ruft alle drei parallel auf:
+//   ein langsamer Hotel füllt nur seinen Pool,
+//   Flight + Car liefern weiter normal.</pre>
+                    </div>
+                </details>
+            </div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Bulkhead (Booking Story 4)</h2>
@@ -810,6 +1265,57 @@
             <div class="saga-list" id="bh-burst-list"></div>
         </div>
 
+        </section>
+
+        <section class="story-section" data-story="5" hidden>
+            <div class="story-helpers" data-story-helpers="5">
+                <details class="story-info">
+                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                    <div class="story-info-body">
+                        <h4>Kontext</h4>
+                        <p>Eine Reise = Flug + Hotel + Mietwagen. Schlägt die Hotelbuchung fehl, nachdem der Flug schon gebucht wurde, muss der Flug storniert werden. DB-Transaktionen funktionieren nicht über Service-Grenzen &mdash; das <em>Saga-Pattern</em> simuliert atomares Verhalten mit expliziten Kompensationsschritten.</p>
+                        <h4>User Story</h4>
+                        <p>Als <em>Kunde</em> möchte ich <em>eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die entweder vollständig erfolgreich ist oder komplett zurückgerollt wird</em>, damit <em>ich nicht mit einer unvollständigen Buchung dastehe</em>.</p>
+                        <h4>Akzeptanzkriterien</h4>
+                        <ul>
+                            <li>Orchestrierte Saga: Flight &rarr; Hotel &rarr; Car (zentraler Koordinator)</li>
+                            <li>Jeder Service bietet einen Stornieren-/Kompensieren-Endpoint (<code>DELETE /bookings/{id}</code>)</li>
+                            <li>Bei Fehler in einem Schritt: alle vorherigen Schritte kompensieren (Rollback in umgekehrter Reihenfolge)</li>
+                            <li>Status pro Saga abfragbar: <code>PENDING</code>, <code>COMPLETED</code>, <code>COMPENSATING</code>, <code>FAILED</code></li>
+                            <li>Optional: Retry-Logik für Kompensation; Timeout-Handling; Persistenz für Recovery</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="story-cheatsheet">
+                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <div class="story-cheatsheet-body">
+<pre>saga = { id, status: PENDING, steps: [] }
+booked = []                                    // für Rollback
+
+try:
+  flight = POST flight/bookings { ... }
+  booked.push({ svc: "flight", id: flight.id })
+  saga.steps.push({ svc: "flight", status: BOOKED })
+
+  hotel = POST hotel/bookings { ... }
+  booked.push({ svc: "hotel",  id: hotel.id })
+  saga.steps.push({ svc: "hotel",  status: BOOKED })
+
+  car = POST car/bookings { ... }
+  saga.steps.push({ svc: "car",    status: BOOKED })
+
+  saga.status = COMPLETED
+
+catch error at step X:
+  saga.status   = COMPENSATING
+  saga.failedAt = X
+  for b in reverse(booked):
+    DELETE b.svc/bookings/{b.id}              // Kompensation
+    mark step COMPENSATED
+  saga.status = FAILED</pre>
+                    </div>
+                </details>
+            </div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Saga (Booking Story 5)</h2>
@@ -844,9 +1350,13 @@
             </div>
             <div class="saga-list" id="saga-list"></div>
         </div>
+        </section>
+    </main>
 
+    <aside class="backend-panel">
+        <div class="backend-panel-heading">Backend-Services &mdash; Chaos &amp; Scaling</div>
         <div class="services-grid" id="services"></div>
-    </div>
+    </aside>
 
     <script>
         const SAMPLE_BOOKING_BODY = {
@@ -1492,6 +2002,99 @@
         function hideError() {
             document.getElementById("error").style.display = "none";
         }
+
+        // -------- Story-Stepper-Navigation --------
+        const STORY_META = {
+            1: { title: "Story 1: Der erste cloud-native Booking-Service",
+                 subtitle: "Health-Check, externe Konfiguration &mdash; ein Build, viele Umgebungen." },
+            2: { title: "Story 2: Services dynamisch finden",
+                 subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
+            3: { title: "Story 3: Wenn der Flug ausfällt",
+                 subtitle: "Circuit Breaker: nach wiederholten Fehlern abschalten und graceful degradieren." },
+            4: { title: "Story 4: Isolation ist Stärke",
+                 subtitle: "Bulkhead-Pattern: pro Backend-Service ein eigener Slot-Pool, sofortige Ablehnung statt Queue." },
+            5: { title: "Story 5: Alles oder nichts — aber richtig",
+                 subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
+        };
+        const STORY_COUNT = 5;
+        const STORY_KEY = "workshop-dashboard.currentStory";
+
+        function readInitialStory() {
+            const saved = parseInt(localStorage.getItem(STORY_KEY), 10);
+            if (saved >= 1 && saved <= STORY_COUNT) return saved;
+            return 1;
+        }
+
+        let currentStory = readInitialStory();
+
+        function showStory(n) {
+            if (n < 1 || n > STORY_COUNT) return;
+            currentStory = n;
+            try { localStorage.setItem(STORY_KEY, String(n)); } catch (_) {}
+
+            document.querySelectorAll(".story-section").forEach(sec => {
+                const sn = parseInt(sec.getAttribute("data-story"), 10);
+                sec.hidden = (sn !== n);
+            });
+            document.querySelectorAll(".stepper-node").forEach(btn => {
+                const sn = parseInt(btn.getAttribute("data-story-node"), 10);
+                btn.classList.toggle("active", sn === n);
+            });
+            document.getElementById("stepper-prev").disabled = (n === 1);
+            document.getElementById("stepper-next").disabled = (n === STORY_COUNT);
+            const meta = STORY_META[n];
+            if (meta) {
+                document.getElementById("stepper-title").innerHTML    = meta.title;
+                document.getElementById("stepper-subtitle").innerHTML = meta.subtitle;
+            }
+        }
+
+        function goPrevStory() { showStory(currentStory - 1); }
+        function goNextStory() { showStory(currentStory + 1); }
+
+        document.addEventListener("keydown", (e) => {
+            const t = e.target;
+            const tag = t && t.tagName;
+            if (tag === "INPUT" || tag === "TEXTAREA" || (t && t.isContentEditable)) return;
+            if (e.key === "ArrowLeft")  { goPrevStory(); }
+            else if (e.key === "ArrowRight") { goNextStory(); }
+        });
+
+        // -------- Werkzeuge-Dropdown --------
+        function toggleToolsMenu() {
+            const menu = document.getElementById("tools-menu");
+            const btn  = document.getElementById("tools-toggle");
+            const open = menu.hidden;
+            menu.hidden = !open;
+            btn.classList.toggle("open", open);
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
+        }
+        document.addEventListener("click", (e) => {
+            const dropdown = document.querySelector(".tools-dropdown");
+            if (!dropdown) return;
+            if (!dropdown.contains(e.target)) {
+                const menu = document.getElementById("tools-menu");
+                const btn  = document.getElementById("tools-toggle");
+                if (menu && !menu.hidden) {
+                    menu.hidden = true;
+                    btn.classList.remove("open");
+                    btn.setAttribute("aria-expanded", "false");
+                }
+            }
+        });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                const menu = document.getElementById("tools-menu");
+                const btn  = document.getElementById("tools-toggle");
+                if (menu && !menu.hidden) {
+                    menu.hidden = true;
+                    btn.classList.remove("open");
+                    btn.setAttribute("aria-expanded", "false");
+                }
+            }
+        });
+
+        showStory(currentStory);
 
         fetchServices();
         fetchCircuitState();
