@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Workshop: Microservices</title>
+    <link rel="icon" type="image/png" href="icon.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -13,7 +14,7 @@
             min-height: 100vh;
         }
         header {
-            background: #1a1a2e;
+            background: #0C0A40;
             color: #fff;
             padding: 1.5rem 2rem;
             text-align: center;
@@ -41,7 +42,7 @@
         .links-section h2 {
             font-size: 1rem;
             font-weight: 600;
-            color: #1a1a2e;
+            color: #0C0A40;
             margin-bottom: 0.75rem;
         }
         .links-grid {
@@ -59,15 +60,15 @@
             border-radius: 8px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08);
             text-decoration: none;
-            color: #2d6cdf;
+            color: #6B3CDE;
             font-size: 0.875rem;
             font-weight: 500;
             transition: box-shadow 0.15s, background 0.15s;
         }
         .link-chip:hover {
-            background: #2d6cdf;
+            background: #6B3CDE;
             color: #fff;
-            box-shadow: 0 2px 8px rgba(45,108,223,0.3);
+            box-shadow: 0 2px 8px rgba(107,60,222,0.3);
         }
         .link-chip span { font-size: 1rem; }
 
@@ -82,7 +83,7 @@
         .cb-section h2 {
             font-size: 1rem;
             font-weight: 600;
-            color: #1a1a2e;
+            color: #0C0A40;
             margin-bottom: 1rem;
         }
         .cb-grid {
@@ -99,7 +100,7 @@
         .cb-card-name {
             font-size: 0.95rem;
             font-weight: 700;
-            color: #1a1a2e;
+            color: #0C0A40;
             text-transform: capitalize;
             margin-bottom: 0.5rem;
         }
@@ -124,7 +125,7 @@
             flex-direction: column;
             gap: 0.25rem;
         }
-        .cb-card-details strong { color: #1a1a2e; font-variant-numeric: tabular-nums; }
+        .cb-card-details strong { color: #0C0A40; font-variant-numeric: tabular-nums; }
         .cb-countdown {
             font-variant-numeric: tabular-nums;
             font-weight: 700;
@@ -148,17 +149,17 @@
         }
         .bh-btn {
             padding: 0.5rem 1rem;
-            border: 1.5px solid #2d6cdf;
+            border: 1.5px solid #6B3CDE;
             border-radius: 6px;
             background: #fff;
-            color: #2d6cdf;
+            color: #6B3CDE;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s;
         }
         .bh-btn:hover:not(:disabled) {
-            background: #2d6cdf;
+            background: #6B3CDE;
             color: #fff;
         }
         .bh-btn.burst {
@@ -211,7 +212,7 @@
             border: 1.5px solid #d0d7e2;
             border-radius: 8px;
             background: #fff;
-            color: #1a1a2e;
+            color: #0C0A40;
             font-size: 0.85rem;
             font-family: inherit;
             cursor: pointer;
@@ -222,8 +223,8 @@
             flex-wrap: wrap;
         }
         .rest-btn:hover:not(:disabled) {
-            border-color: #2d6cdf;
-            box-shadow: 0 2px 6px rgba(45,108,223,0.15);
+            border-color: #6B3CDE;
+            box-shadow: 0 2px 6px rgba(107,60,222,0.15);
         }
         .rest-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .rest-btn.danger { border-color: #f3b8b8; }
@@ -242,12 +243,12 @@
             font-family: ui-monospace, "SF Mono", Monaco, monospace;
         }
         .method-chip.get    { background: #1d7a3a; }
-        .method-chip.post   { background: #2d6cdf; }
+        .method-chip.post   { background: #6B3CDE; }
         .method-chip.delete { background: #b3261e; }
         .rest-path {
             font-family: ui-monospace, "SF Mono", Monaco, monospace;
             font-size: 0.82rem;
-            color: #1a1a2e;
+            color: #0C0A40;
         }
         .rest-arrow {
             color: #888;
@@ -258,7 +259,7 @@
             padding: 0.15rem 0.55rem;
             border-radius: 999px;
             background: #eef2f7;
-            color: #1a1a2e;
+            color: #0C0A40;
             font-family: ui-monospace, "SF Mono", Monaco, monospace;
             font-size: 0.75rem;
             font-weight: 600;
@@ -287,7 +288,7 @@
         .rest-status.err  { color: #b3261e; }
         .rest-response {
             display: none;
-            background: #1a1a2e;
+            background: #0C0A40;
             color: #e0e6f0;
             padding: 0.75rem;
             border-radius: 6px;
@@ -366,7 +367,7 @@
         .saga-id {
             font-family: ui-monospace, "SF Mono", Monaco, monospace;
             font-size: 0.8rem;
-            color: #1a1a2e;
+            color: #0C0A40;
             font-weight: 700;
         }
         .saga-meta {
@@ -376,7 +377,7 @@
             gap: 0.75rem;
             flex-wrap: wrap;
         }
-        .saga-meta strong { color: #1a1a2e; font-variant-numeric: tabular-nums; }
+        .saga-meta strong { color: #0C0A40; font-variant-numeric: tabular-nums; }
         .saga-status {
             display: inline-block;
             padding: 0.25rem 0.6rem;
@@ -406,7 +407,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #1a1a2e;
+            color: #0C0A40;
             border: 1px solid transparent;
         }
         .saga-step.booked      { background: #d4f4dd; color: #1d7a3a; border-color: #b6e3c2; }
@@ -450,7 +451,7 @@
             align-items: center;
         }
         .saga-legend strong {
-            color: #1a1a2e;
+            color: #0C0A40;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-size: 0.65rem;
@@ -491,12 +492,12 @@
             font-size: 1.1rem;
             font-weight: 600;
             text-transform: capitalize;
-            color: #1a1a2e;
+            color: #0C0A40;
         }
         .replica-count {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #2d6cdf;
+            color: #6B3CDE;
             line-height: 1;
             text-align: center;
             margin-bottom: 0.75rem;
@@ -524,9 +525,9 @@
             justify-content: center;
         }
         .btn:hover:not(:disabled) {
-            background: #2d6cdf;
+            background: #6B3CDE;
             color: #fff;
-            border-color: #2d6cdf;
+            border-color: #6B3CDE;
         }
         .btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -647,7 +648,7 @@
             width: 20px;
             height: 20px;
             border: 3px solid #ddd;
-            border-top-color: #2d6cdf;
+            border-top-color: #6B3CDE;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             margin: 0.5rem auto 0;
@@ -690,7 +691,7 @@
             right: 0;
             min-width: 280px;
             background: #fff;
-            color: #1a1a2e;
+            color: #0C0A40;
             border-radius: 10px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.18);
             padding: 0.9rem 1rem;
@@ -734,16 +735,16 @@
             border: 1.5px solid #d0d7e2;
             border-radius: 8px;
             background: #fff;
-            color: #1a1a2e;
+            color: #0C0A40;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s;
         }
         .stepper-nav-btn:hover:not(:disabled) {
-            border-color: #2d6cdf;
-            color: #2d6cdf;
-            box-shadow: 0 2px 6px rgba(45,108,223,0.15);
+            border-color: #6B3CDE;
+            color: #6B3CDE;
+            box-shadow: 0 2px 6px rgba(107,60,222,0.15);
         }
         .stepper-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
         .stepper-nodes {
@@ -767,12 +768,12 @@
             transition: all 0.15s;
             font-family: inherit;
         }
-        .stepper-node:hover { border-color: #2d6cdf; color: #2d6cdf; }
+        .stepper-node:hover { border-color: #6B3CDE; color: #6B3CDE; }
         .stepper-node.active {
-            background: #2d6cdf;
-            border-color: #2d6cdf;
+            background: #6B3CDE;
+            border-color: #6B3CDE;
             color: #fff;
-            box-shadow: 0 2px 8px rgba(45,108,223,0.35);
+            box-shadow: 0 2px 8px rgba(107,60,222,0.35);
         }
         .stepper-connector {
             width: 1.2rem;
@@ -785,7 +786,7 @@
         .stepper-headline h2 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: #1a1a2e;
+            color: #0C0A40;
         }
         .stepper-headline p {
             font-size: 0.9rem;
@@ -818,7 +819,7 @@
             padding: 0.7rem 1rem;
             font-size: 0.85rem;
             font-weight: 600;
-            color: #1a1a2e;
+            color: #0C0A40;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -864,9 +865,9 @@
         }
         .story-info-body p, .story-info-body ul, .story-info-body ol { margin-bottom: 0.5rem; }
         .story-info-body ul, .story-info-body ol { padding-left: 1.25rem; }
-        .story-info-body em { color: #2d6cdf; font-style: normal; font-weight: 600; }
+        .story-info-body em { color: #6B3CDE; font-style: normal; font-weight: 600; }
         .story-cheatsheet-body pre {
-            background: #1a1a2e;
+            background: #0C0A40;
             color: #e0e6f0;
             padding: 0.9rem 1rem;
             border-radius: 6px;
@@ -903,13 +904,68 @@
             .stepper-bar { flex-wrap: wrap; }
             .stepper-connector { display: none; }
         }
+
+        /* === Workshop-Theme === */
+        .title-accent { color: #CCF465; font-weight: 700; }
+        header p { color: rgba(255,255,255,0.78); }
+
+        /* Werkzeuge: Links untereinander */
+        .tools-menu .links-grid {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.35rem;
+        }
+        .tools-menu .link-chip { justify-content: flex-start; }
+
+        /* Aktiver Stepper-Knoten im Highlight-Look */
+        .stepper-node.active {
+            background: #CCF465;
+            border-color: #CCF465;
+            color: #0C0A40;
+            box-shadow: 0 2px 10px rgba(204,244,101,0.55);
+        }
+
+        /* Highlight-Akzente für aktive Connector-Striche */
+        .stepper-connector.done { background: #6B3CDE; }
+
+        /* Footer */
+        .workshop-footer {
+            max-width: 1100px;
+            margin: 2.5rem auto 1.5rem;
+            padding: 1.25rem 1rem 0;
+            border-top: 1px solid #d0d7e2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        .workshop-footer .footer-author strong { color: #0C0A40; }
+        .workshop-footer .footer-author .accent {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: #CCF465;
+            color: #0C0A40;
+            font-weight: 700;
+            margin-right: 0.4rem;
+        }
+        .workshop-footer .footer-logo {
+            height: 32px;
+            width: auto;
+            opacity: 0.8;
+            transition: opacity 0.15s;
+        }
+        .workshop-footer .footer-logo:hover { opacity: 1; }
     </style>
 </head>
 <body>
     <header>
         <div class="header-title">
-            <h1>Workshop Dashboard</h1>
-            <p>Microservices verwalten</p>
+            <h1><span class="title-accent">Workshop</span>: Microservices</h1>
+            <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
         </div>
         <div class="tools-dropdown">
             <button type="button" class="tools-toggle" id="tools-toggle" aria-expanded="false" onclick="toggleToolsMenu()">
@@ -1357,6 +1413,15 @@ catch error at step X:
         <div class="backend-panel-heading">Backend-Services &mdash; Chaos &amp; Scaling</div>
         <div class="services-grid" id="services"></div>
     </aside>
+
+    <footer class="workshop-footer">
+        <div class="footer-author">
+            <span class="accent">Workshop</span> von <strong>Lars Michaelis</strong>
+        </div>
+        <a href="https://www.team-neusta.de/" target="_blank" rel="noopener" aria-label="team neusta">
+            <img class="footer-logo" src="team-neusta-logo.svg" alt="team neusta">
+        </a>
+    </footer>
 
     <script>
         const SAMPLE_BOOKING_BODY = {
