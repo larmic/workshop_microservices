@@ -30,6 +30,9 @@ func main() {
 	bookingStory3URL := getEnv("BOOKING_STORY3_URL", "http://booking-story3:8080")
 	bookingStory4URL := getEnv("BOOKING_STORY4_URL", "http://booking-story4:8080")
 	bookingStory5URL := getEnv("BOOKING_STORY5_URL", "http://booking-story5:8080")
+	traefikPingURL := getEnv("TRAEFIK_PING_URL", "http://traefik:8080/api/version")
+	swaggerUIURL := getEnv("SWAGGER_UI_URL", "http://swagger-ui:8080/api/")
+	consulStatusURL := getEnv("CONSUL_STATUS_URL", consulURL+"/v1/status/leader")
 
 	var composeArgs []string
 	for _, f := range strings.Split(composeFilesRaw, ",") {
@@ -47,6 +50,12 @@ func main() {
 		"booking-story5": bookingStory5URL,
 	}
 
+	infraTargets := []handler.InfraTarget{
+		{Name: "consul", URL: consulStatusURL},
+		{Name: "traefik", URL: traefikPingURL},
+		{Name: "swagger-ui", URL: swaggerUIURL},
+	}
+
 	staticContent, _ := fs.Sub(staticFS, "static")
 
 	resolver := consul.NewResolver(consulURL, &http.Client{Timeout: 2 * time.Second})
@@ -54,7 +63,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /api/services", handler.ListServicesHandler(composeArgs, allowedServices))
-	mux.HandleFunc("GET /api/health-overview", handler.HealthOverviewHandler(composeArgs, allowedServices, resolver, bookingURLs))
+	mux.HandleFunc("GET /api/health-overview", handler.HealthOverviewHandler(composeArgs, allowedServices, resolver, bookingURLs, infraTargets))
 	mux.HandleFunc("POST /api/services/{name}/scale", handler.ScaleServiceHandler(composeArgs, allowedServices))
 	mux.HandleFunc("GET /api/services/{name}/instances", handler.ListInstancesHandler(resolver, allowedServices, composeArgs))
 	mux.HandleFunc("POST /api/services/{name}/chaos", handler.SetChaosHandler(resolver, allowedServices))

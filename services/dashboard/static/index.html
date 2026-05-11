@@ -2456,12 +2456,14 @@ catch error at step X:
             "down": "nicht erreichbar"
         };
         const SCALABLE_ICONS = { flight: "&#9992;", hotel: "&#127976;", car: "&#128663;" };
+        const INFRA_ICONS = { consul: "&#128270;", traefik: "&#9881;", "swagger-ui": "&#128196;" };
 
         let startupDismissed = false;
         let networkErrorStreak = 0;
         let lastHealthOverview = null;
         let startupSkipShown = false;
         const STARTUP_SKIP_AFTER_MS = 30000;
+        const HEALTH_POLL_MS = 1500;
 
         function toggleHealthPanel() {
             const panel = document.getElementById("health-panel");
@@ -2484,54 +2486,56 @@ catch error at step X:
             return s.status === "ready" || s.status === "scaled-to-zero";
         }
 
+        function rowPrefix(s) {
+            if (s.kind === "scalable") return (SCALABLE_ICONS[s.name] || "") + " ";
+            if (s.kind === "infra") return (INFRA_ICONS[s.name] || "") + " ";
+            return "";
+        }
         function renderStartupList(services) {
             const list = document.getElementById("startup-list");
+            const infra = services.filter(s => s.kind === "infra");
             const booking = services.filter(s => s.kind === "booking");
             const scalable = services.filter(s => s.kind === "scalable");
-            const rowsHTML = [
-                ...booking.map(renderStartupRow),
-                scalable.length && booking.length ? '<hr class="startup-divider">' : "",
-                ...scalable.map(renderStartupRow)
-            ].filter(Boolean).join("");
-            list.innerHTML = rowsHTML;
+            const groups = [infra, booking, scalable].filter(g => g.length > 0);
+            const html = groups
+                .map(g => g.map(renderStartupRow).join(""))
+                .join('<hr class="startup-divider">');
+            list.innerHTML = html;
         }
         function renderStartupRow(s) {
             const icon = s.status === "starting"
                 ? '<span class="spinner"></span>'
                 : `<span>${HEALTH_ICONS[s.status] || ""}</span>`;
-            const prefix = s.kind === "scalable" ? (SCALABLE_ICONS[s.name] || "") + " " : "";
             const meta = s.kind === "scalable"
                 ? `<span class="startup-meta">${s.replicas ?? 0} Replicas · ${HEALTH_LABELS[s.status]}</span>`
                 : `<span class="startup-meta">${HEALTH_LABELS[s.status]}</span>`;
             return `<div class="startup-row status-${s.status}">
                 <span class="startup-icon">${icon}</span>
-                <span class="startup-name">${prefix}${s.name}</span>
+                <span class="startup-name">${rowPrefix(s)}${s.name}</span>
                 ${meta}
             </div>`;
         }
 
         function renderHealthPanel(services) {
+            const infra = services.filter(s => s.kind === "infra");
             const booking = services.filter(s => s.kind === "booking");
             const scalable = services.filter(s => s.kind === "scalable");
             const rowHTML = (s) => {
                 const icon = s.status === "starting"
                     ? '<span class="spinner"></span>'
                     : `<span class="status-icon">${HEALTH_ICONS[s.status] || ""}</span>`;
-                const prefix = s.kind === "scalable" ? (SCALABLE_ICONS[s.name] || "") + " " : "";
                 const meta = s.kind === "scalable"
                     ? `${s.replicas ?? 0} · ${HEALTH_LABELS[s.status]}`
                     : HEALTH_LABELS[s.status];
                 return `<div class="health-panel-row status-${s.status}">
                     ${icon}
-                    <span>${prefix}${s.name}</span>
+                    <span>${rowPrefix(s)}${s.name}</span>
                     <span class="status-label">${meta}</span>
                 </div>`;
             };
-            const html = `
-                <div class="health-panel-group">${booking.map(rowHTML).join("")}</div>
-                ${scalable.length ? `<div class="health-panel-group">${scalable.map(rowHTML).join("")}</div>` : ""}
-            `;
-            document.getElementById("health-panel-content").innerHTML = html;
+            const groupHTML = (g) => g.length ? `<div class="health-panel-group">${g.map(rowHTML).join("")}</div>` : "";
+            document.getElementById("health-panel-content").innerHTML =
+                groupHTML(infra) + groupHTML(booking) + groupHTML(scalable);
         }
 
         function updateHealthChip(services) {
@@ -2619,7 +2623,7 @@ catch error at step X:
 
         scheduleStartupSkipButton();
         pollHealthOverview();
-        setInterval(pollHealthOverview, 1500);
+        setInterval(pollHealthOverview, HEALTH_POLL_MS);
 
         fetchServices();
         fetchCircuitState();

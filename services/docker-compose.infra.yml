@@ -7,6 +7,9 @@ services:
     volumes:
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+    depends_on:
+      dashboard:
+        condition: service_started
 
   consul:
     image: hashicorp/consul:1.22
@@ -22,6 +25,7 @@ services:
 
   swagger-ui:
     image: swaggerapi/swagger-ui:latest
+    attach: false
     ports:
       - "8084:8080"
     environment:
