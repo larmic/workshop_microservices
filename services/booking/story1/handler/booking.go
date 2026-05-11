@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Config struct {
@@ -45,11 +46,13 @@ func BookingOffersHandler(config Config, client *http.Client) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(BookingOffers{
+		if err := json.NewEncoder(w).Encode(BookingOffers{
 			Flights: flights,
 			Hotels:  hotels,
 			Cars:    cars,
-		})
+		}); err != nil {
+			log.Printf("encode booking offers failed: %v", err)
+		}
 	}
 }
 
@@ -63,6 +66,11 @@ func fetchJSON(client *http.Client, url string) (json.RawMessage, error) {
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("upstream %s returned HTTP %d: %s",
+			url, resp.StatusCode, strings.TrimSpace(string(body)))
 	}
 
 	return json.RawMessage(body), nil

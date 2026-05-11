@@ -191,6 +191,140 @@
         .bh-bar-fill.warn { background: #b8860b; }
         .bh-bar-fill.full { background: #b3261e; }
 
+        /* REST-Call Buttons mit Method/Pfad/Service-Chips */
+        .rest-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+        .rest-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .rest-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            border: 1.5px solid #d0d7e2;
+            border-radius: 8px;
+            background: #fff;
+            color: #1a1a2e;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            text-align: left;
+            align-self: flex-start;
+            max-width: 100%;
+            flex-wrap: wrap;
+        }
+        .rest-btn:hover:not(:disabled) {
+            border-color: #2d6cdf;
+            box-shadow: 0 2px 6px rgba(45,108,223,0.15);
+        }
+        .rest-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .rest-btn.danger { border-color: #f3b8b8; }
+        .rest-btn.danger:hover:not(:disabled) {
+            border-color: #b3261e;
+            box-shadow: 0 2px 6px rgba(179,38,30,0.18);
+        }
+        .method-chip {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #fff;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+        }
+        .method-chip.get    { background: #1d7a3a; }
+        .method-chip.post   { background: #2d6cdf; }
+        .method-chip.delete { background: #b3261e; }
+        .rest-path {
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.82rem;
+            color: #1a1a2e;
+        }
+        .rest-arrow {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        .service-chip {
+            display: inline-block;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: #1a1a2e;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .service-chip.flight { background: #e3effd; color: #1456b3; }
+        .service-chip.hotel  { background: #fdeede; color: #8a4a00; }
+        .service-chip.car    { background: #e6f4ea; color: #1d7a3a; }
+        .rest-btn-sub {
+            font-size: 0.72rem;
+            color: #666;
+            margin-left: 0.4rem;
+            margin-top: 0.1rem;
+        }
+        .rest-response-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .rest-status {
+            font-size: 0.78rem;
+            color: #555;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            min-height: 1em;
+        }
+        .rest-status.ok   { color: #1d7a3a; }
+        .rest-status.err  { color: #b3261e; }
+        .rest-response {
+            display: none;
+            background: #1a1a2e;
+            color: #e0e6f0;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.72rem;
+            line-height: 1.4;
+            max-height: 240px;
+            overflow: auto;
+            white-space: pre;
+            margin: 0;
+        }
+        .rest-response.visible { display: block; }
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .panel-header h2 { margin-bottom: 0; }
+        .panel-reset-btn {
+            padding: 0.4rem 0.9rem;
+            border: 1.5px solid #d0d7e2;
+            border-radius: 6px;
+            background: #fff;
+            color: #555;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .panel-reset-btn:hover:not(:disabled) {
+            border-color: #b3261e;
+            color: #b3261e;
+        }
+        .panel-reset-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
         /* Saga Section */
         .saga-stats {
             display: flex;
@@ -551,16 +685,118 @@
 
     <div class="container">
         <div class="cb-section">
+            <h2>Cloud-Native Booking Service (Story 1)</h2>
+            <div class="rest-actions">
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-story1/offers', 's1-offers')">
+                        <span class="method-chip get">GET</span>
+                        <span class="rest-path">/booking/offers</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story1</span>
+                        <span class="rest-btn-sub">aggregiert
+                            <span class="service-chip flight">flight</span>
+                            <span class="service-chip hotel">hotel</span>
+                            <span class="service-chip car">car</span>
+                            (statische URLs aus Env-Vars)</span>
+                    </button>
+                    <div class="rest-response-wrap">
+                        <span class="rest-status" id="s1-offers-status"></span>
+                        <pre class="rest-response" id="s1-offers-body"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cb-section">
+            <h2>Service Discovery via Consul (Story 2)</h2>
+            <div class="rest-actions">
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-story2/offers', 's2-offers')">
+                        <span class="method-chip get">GET</span>
+                        <span class="rest-path">/booking/offers</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story2</span>
+                        <span class="rest-btn-sub">Services
+                            <span class="service-chip flight">flight</span>
+                            <span class="service-chip hotel">hotel</span>
+                            <span class="service-chip car">car</span>
+                            via Consul-Resolver aufgel&ouml;st</span>
+                    </button>
+                    <div class="rest-response-wrap">
+                        <span class="rest-status" id="s2-offers-status"></span>
+                        <pre class="rest-response" id="s2-offers-body"></pre>
+                    </div>
+                </div>
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callRest(this, 'POST', '/dashboard/api/booking-story2/bookings', 's2-booking', SAMPLE_BOOKING_BODY)">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">/booking/bookings</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story2</span>
+                        <span class="rest-btn-sub">Buchung &uuml;ber discovered Services
+                            <span class="service-chip flight">flight</span>
+                            <span class="service-chip hotel">hotel</span>
+                            <span class="service-chip car">car</span>
+                            (Demo-Body: Max Mustermann)</span>
+                    </button>
+                    <div class="rest-response-wrap">
+                        <span class="rest-status" id="s2-booking-status"></span>
+                        <pre class="rest-response" id="s2-booking-body"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cb-section">
             <h2>Circuit Breaker (Booking Story 3)</h2>
+            <div class="rest-actions">
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-story3/offers', 's3-offers')">
+                        <span class="method-chip get">GET</span>
+                        <span class="rest-path">/booking/offers</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story3</span>
+                        <span class="rest-btn-sub">Circuit Breaker um
+                            <span class="service-chip flight">flight</span>
+                            &mdash; bei wiederholten Fehlern öffnet der CB und liefert sofort einen Fallback</span>
+                    </button>
+                    <div class="rest-response-wrap">
+                        <span class="rest-status" id="s3-offers-status"></span>
+                        <pre class="rest-response" id="s3-offers-body"></pre>
+                    </div>
+                </div>
+            </div>
             <div class="cb-grid" id="cb-grid"></div>
         </div>
 
         <div class="cb-section">
-            <h2>Bulkhead (Booking Story 4)</h2>
-            <div class="bh-actions">
-                <button class="bh-btn" id="bh-normal-btn" onclick="callOffersNormal()">Normaler Aufruf</button>
-                <button class="bh-btn burst" id="bh-burst-btn" onclick="callOffersBurst()">Burst (20 parallel)</button>
-                <button class="bh-btn" id="bh-reset-btn" onclick="resetBulkheadStats()">Reset</button>
+            <div class="panel-header">
+                <h2>Bulkhead (Booking Story 4)</h2>
+                <button class="panel-reset-btn" id="bh-reset-btn" onclick="resetBulkheadStats()" title="Bulkhead-Counters zurücksetzen">Reset</button>
+            </div>
+            <div class="rest-actions">
+                <div class="rest-row">
+                    <button class="rest-btn" id="bh-normal-btn" onclick="callOffersNormal()">
+                        <span class="method-chip get">GET</span>
+                        <span class="rest-path">/booking/offers</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story4</span>
+                        <span class="rest-btn-sub">aggregiert
+                            <span class="service-chip flight">flight</span>
+                            <span class="service-chip hotel">hotel</span>
+                            <span class="service-chip car">car</span>
+                            mit Bulkhead um jeden Service-Call</span>
+                    </button>
+                </div>
+                <div class="rest-row">
+                    <button class="rest-btn danger" id="bh-burst-btn" onclick="callOffersBurst()">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">/admin/burst</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story4</span>
+                        <span class="rest-btn-sub">feuert 20 parallele GET /booking/offers &mdash; Bulkhead-Rejects werden sichtbar</span>
+                    </button>
+                </div>
                 <span class="bh-result" id="bh-result"></span>
             </div>
             <div class="cb-grid" id="bh-grid"></div>
@@ -575,10 +811,26 @@
         </div>
 
         <div class="cb-section">
-            <h2>Saga (Booking Story 5)</h2>
-            <div class="saga-actions">
-                <button class="bh-btn" id="saga-trigger-btn" onclick="triggerSaga()">Saga auslösen</button>
-                <button class="bh-btn" id="saga-reset-btn" onclick="resetSagas()">Saga-Store leeren</button>
+            <div class="panel-header">
+                <h2>Saga (Booking Story 5)</h2>
+                <button class="panel-reset-btn" id="saga-reset-btn" onclick="resetSagas()" title="Saga-Store leeren">Reset</button>
+            </div>
+            <div class="rest-actions">
+                <div class="rest-row">
+                    <button class="rest-btn" id="saga-trigger-btn" onclick="triggerSaga()">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">/booking/bookings</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story5</span>
+                        <span class="rest-btn-sub">orchestriert
+                            <span class="service-chip flight">flight</span>
+                            &rarr;
+                            <span class="service-chip hotel">hotel</span>
+                            &rarr;
+                            <span class="service-chip car">car</span>
+                            &mdash; bei Fehler Rollback der bereits gebuchten Schritte</span>
+                    </button>
+                </div>
                 <span class="bh-result" id="saga-result"></span>
             </div>
             <div class="saga-stats" id="saga-stats"></div>
@@ -597,6 +849,48 @@
     </div>
 
     <script>
+        const SAMPLE_BOOKING_BODY = {
+            flightId: "LH123",
+            hotelId: "H1",
+            carId: "C1",
+            customerName: "Max Mustermann"
+        };
+
+        // callRest führt einen REST-Call gegen das Dashboard-Backend aus
+        // und rendert HTTP-Status, Duration und Response-Body unterhalb
+        // des klickenden Buttons. Wird von den Story-1/2/3-Buttons genutzt.
+        async function callRest(btn, method, path, idPrefix, body) {
+            const statusEl = document.getElementById(idPrefix + "-status");
+            const bodyEl = document.getElementById(idPrefix + "-body");
+            btn.disabled = true;
+            statusEl.className = "rest-status";
+            statusEl.textContent = "läuft …";
+            const t0 = performance.now();
+            try {
+                const init = { method };
+                if (body !== undefined) {
+                    init.headers = { "Content-Type": "application/json" };
+                    init.body = JSON.stringify(body);
+                }
+                const res = await fetch(path, init);
+                const ms = Math.round(performance.now() - t0);
+                const text = await res.text();
+                let formatted = text;
+                try { formatted = JSON.stringify(JSON.parse(text), null, 2); } catch (_) {}
+                statusEl.className = "rest-status " + (res.ok ? "ok" : "err");
+                statusEl.textContent = `HTTP ${res.status} · ${ms} ms · ${text.length} bytes`;
+                bodyEl.textContent = formatted;
+                bodyEl.classList.add("visible");
+            } catch (e) {
+                statusEl.className = "rest-status err";
+                statusEl.textContent = "Fehler: " + e.message;
+                bodyEl.textContent = "";
+                bodyEl.classList.remove("visible");
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
         const icons = { flight: "&#9992;", hotel: "&#127976;", car: "&#128663;" };
         let services = [];
         let instancesByService = {};
