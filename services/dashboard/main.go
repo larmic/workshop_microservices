@@ -39,6 +39,14 @@ func main() {
 
 	allowedServices := []string{"flight", "hotel", "car"}
 
+	bookingURLs := map[string]string{
+		"booking-story1": bookingStory1URL,
+		"booking-story2": bookingStory2URL,
+		"booking-story3": bookingStory3URL,
+		"booking-story4": bookingStory4URL,
+		"booking-story5": bookingStory5URL,
+	}
+
 	staticContent, _ := fs.Sub(staticFS, "static")
 
 	resolver := consul.NewResolver(consulURL, &http.Client{Timeout: 2 * time.Second})
@@ -46,6 +54,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /api/services", handler.ListServicesHandler(composeArgs, allowedServices))
+	mux.HandleFunc("GET /api/health-overview", handler.HealthOverviewHandler(composeArgs, allowedServices, resolver, bookingURLs))
 	mux.HandleFunc("POST /api/services/{name}/scale", handler.ScaleServiceHandler(composeArgs, allowedServices))
 	mux.HandleFunc("GET /api/services/{name}/instances", handler.ListInstancesHandler(resolver, allowedServices, composeArgs))
 	mux.HandleFunc("POST /api/services/{name}/chaos", handler.SetChaosHandler(resolver, allowedServices))

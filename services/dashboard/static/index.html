@@ -937,6 +937,188 @@
             transition: opacity 0.15s;
         }
         .workshop-footer .footer-logo:hover { opacity: 1; }
+
+        /* Service-Readiness: Status-Chip, Loading-Overlay, Offline-Overlay */
+        .health-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.85rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 999px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .health-chip:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); }
+        .health-chip.ok .health-chip-dot { background: #22c55e; }
+        .health-chip.warn .health-chip-dot { background: #f59e0b; }
+        .health-chip.err .health-chip-dot { background: #ef4444; }
+        .health-chip-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #9ca3af;
+            box-shadow: 0 0 0 0 currentColor;
+        }
+        .health-chip.warn .health-chip-dot { animation: pulse 1.6s ease-in-out infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .health-panel {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            min-width: 320px;
+            background: #fff;
+            color: #0C0A40;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            padding: 0.9rem 1rem;
+            z-index: 100;
+        }
+        .health-panel[hidden] { display: none; }
+        .health-panel h3 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 700;
+            margin: 0 0 0.6rem;
+        }
+        .health-panel-group { margin-bottom: 0.6rem; }
+        .health-panel-group:last-child { margin-bottom: 0; }
+        .health-panel-row {
+            display: grid;
+            grid-template-columns: 18px 1fr auto;
+            gap: 0.55rem;
+            align-items: center;
+            padding: 0.3rem 0;
+            font-size: 0.85rem;
+        }
+        .health-panel-row + .health-panel-row { border-top: 1px solid #f0f0f4; }
+        .health-panel-row .status-icon { font-size: 0.95rem; line-height: 1; }
+        .health-panel-row .status-label { color: #666; font-size: 0.75rem; }
+        .health-panel-row.status-ready .status-icon { color: #16a34a; }
+        .health-panel-row.status-starting .status-icon { color: #f59e0b; }
+        .health-panel-row.status-scaled-to-zero .status-icon { color: #9ca3af; }
+        .health-panel-row.status-down .status-icon { color: #ef4444; }
+
+        .startup-overlay, .offline-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(12,10,64,0.92);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 2rem;
+            backdrop-filter: blur(4px);
+        }
+        .startup-overlay[hidden], .offline-overlay[hidden] { display: none; }
+        .startup-card {
+            background: #fff;
+            color: #0C0A40;
+            border-radius: 14px;
+            padding: 2rem 2.25rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            max-width: 460px;
+            width: 100%;
+        }
+        .startup-card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .startup-card .startup-sub {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 1.25rem;
+        }
+        .startup-list { display: flex; flex-direction: column; }
+        .startup-row {
+            display: grid;
+            grid-template-columns: 22px 1fr auto;
+            gap: 0.6rem;
+            align-items: center;
+            padding: 0.45rem 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f1f1f5;
+        }
+        .startup-row:last-child { border-bottom: none; }
+        .startup-row .startup-name { font-weight: 500; }
+        .startup-row .startup-meta { font-size: 0.75rem; color: #888; }
+        .startup-row .startup-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+        }
+        .startup-row.status-ready .startup-icon { color: #16a34a; }
+        .startup-row.status-starting .startup-icon { color: #f59e0b; }
+        .startup-row.status-scaled-to-zero .startup-icon { color: #9ca3af; }
+        .startup-row.status-down .startup-icon { color: #ef4444; }
+        .startup-row .spinner {
+            width: 14px; height: 14px;
+            border: 2px solid #fde68a;
+            border-top-color: #d97706;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .startup-divider {
+            border: 0;
+            border-top: 1px dashed #e0e0e6;
+            margin: 0.5rem 0;
+        }
+        .startup-actions {
+            margin-top: 1.25rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        .startup-actions button {
+            background: transparent;
+            border: 1px solid #d0d0d8;
+            color: #555;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .startup-actions button:hover { background: #f5f5fa; }
+        .startup-actions button.primary {
+            background: #6B3CDE;
+            border-color: #6B3CDE;
+            color: #fff;
+        }
+        .startup-actions button.primary:hover { background: #5a31bd; }
+
+        .offline-card { text-align: center; max-width: 420px; }
+        .offline-card .offline-icon {
+            font-size: 2.4rem;
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+        }
+        .offline-card h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .offline-card p { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
+        .offline-card code {
+            background: #f3f3f7;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #0C0A40;
+        }
     </style>
 </head>
 <body>
@@ -944,6 +1126,17 @@
         <div class="header-title">
             <h1>Microservices</h1>
             <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
+        </div>
+        <div class="header-controls">
+        <div class="tools-dropdown" style="position: relative;">
+            <button type="button" class="health-chip" id="health-chip" aria-expanded="false" onclick="toggleHealthPanel()" title="Service-Status anzeigen">
+                <span class="health-chip-dot"></span>
+                <span id="health-chip-label">prüfe…</span>
+            </button>
+            <div class="health-panel" id="health-panel" hidden>
+                <h3>Service-Status</h3>
+                <div id="health-panel-content"></div>
+            </div>
         </div>
         <div class="tools-dropdown">
             <button type="button" class="tools-toggle" id="tools-toggle" aria-expanded="false" onclick="toggleToolsMenu()">
@@ -971,8 +1164,32 @@
                 </div>
             </div>
         </div>
+        </div>
     </header>
     <div class="error-banner" id="error"></div>
+
+    <div class="startup-overlay" id="startup-overlay">
+        <div class="startup-card">
+            <h2>Workshop wird gestartet&hellip;</h2>
+            <p class="startup-sub">Warte, bis alle Services bereit sind.</p>
+            <div class="startup-list" id="startup-list"></div>
+            <div class="startup-actions">
+                <button type="button" id="startup-skip" onclick="dismissStartupOverlay()" hidden>Trotzdem weiter</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="offline-overlay" id="offline-overlay" hidden>
+        <div class="startup-card offline-card">
+            <div class="offline-icon">&#9888;</div>
+            <h2>Dashboard-Backend nicht erreichbar</h2>
+            <p>Das Dashboard versucht laufend, sich zu verbinden.</p>
+            <p>Stelle sicher, dass der Stack läuft: <code>make docker-up</code></p>
+            <div class="startup-actions">
+                <button type="button" class="primary" onclick="retryOffline()">Erneut versuchen</button>
+            </div>
+        </div>
+    </div>
 
     <nav class="story-stepper" aria-label="Story-Navigation">
         <div class="stepper-bar">
@@ -1456,7 +1673,11 @@ catch error at step X:
                 render();
                 hideError();
             } catch (e) {
-                showError("Fehler beim Laden: " + e.message);
+                // Netzwerk-Fehler werden vom Offline-Overlay (pollHealthOverview)
+                // behandelt — nur API-Fehler zeigen wir hier als Banner.
+                if (!(e instanceof TypeError)) {
+                    showError("Fehler beim Laden: " + e.message);
+                }
             }
         }
 
@@ -2219,7 +2440,185 @@ catch error at step X:
             }
         });
 
+        // -------- Service-Readiness: Overlays, Status-Chip --------
+        const HEALTH_ICONS = {
+            "ready": "&#10003;",
+            "starting": "",
+            "scaled-to-zero": "&#9679;",
+            "down": "&#10007;"
+        };
+        const HEALTH_LABELS = {
+            "ready": "bereit",
+            "starting": "startet…",
+            "scaled-to-zero": "skaliert auf 0",
+            "down": "nicht erreichbar"
+        };
+        const SCALABLE_ICONS = { flight: "&#9992;", hotel: "&#127976;", car: "&#128663;" };
+
+        let startupDismissed = false;
+        let networkErrorStreak = 0;
+        let lastHealthOverview = null;
+        let startupSkipShown = false;
+        const STARTUP_SKIP_AFTER_MS = 30000;
+
+        function toggleHealthPanel() {
+            const panel = document.getElementById("health-panel");
+            const chip  = document.getElementById("health-chip");
+            const open  = panel.hidden;
+            panel.hidden = !open;
+            chip.setAttribute("aria-expanded", open ? "true" : "false");
+        }
+        document.addEventListener("click", (e) => {
+            const wrap = document.getElementById("health-chip").parentElement;
+            if (!wrap.contains(e.target)) {
+                const panel = document.getElementById("health-panel");
+                if (panel && !panel.hidden) {
+                    panel.hidden = true;
+                    document.getElementById("health-chip").setAttribute("aria-expanded", "false");
+                }
+            }
+        });
+
+        function isServiceConsideredOk(s) {
+            return s.status === "ready" || s.status === "scaled-to-zero";
+        }
+
+        function renderStartupList(services) {
+            const list = document.getElementById("startup-list");
+            const booking = services.filter(s => s.kind === "booking");
+            const scalable = services.filter(s => s.kind === "scalable");
+            const rowsHTML = [
+                ...booking.map(renderStartupRow),
+                scalable.length && booking.length ? '<hr class="startup-divider">' : "",
+                ...scalable.map(renderStartupRow)
+            ].filter(Boolean).join("");
+            list.innerHTML = rowsHTML;
+        }
+        function renderStartupRow(s) {
+            const icon = s.status === "starting"
+                ? '<span class="spinner"></span>'
+                : `<span>${HEALTH_ICONS[s.status] || ""}</span>`;
+            const prefix = s.kind === "scalable" ? (SCALABLE_ICONS[s.name] || "") + " " : "";
+            const meta = s.kind === "scalable"
+                ? `<span class="startup-meta">${s.replicas ?? 0} Replicas · ${HEALTH_LABELS[s.status]}</span>`
+                : `<span class="startup-meta">${HEALTH_LABELS[s.status]}</span>`;
+            return `<div class="startup-row status-${s.status}">
+                <span class="startup-icon">${icon}</span>
+                <span class="startup-name">${prefix}${s.name}</span>
+                ${meta}
+            </div>`;
+        }
+
+        function renderHealthPanel(services) {
+            const booking = services.filter(s => s.kind === "booking");
+            const scalable = services.filter(s => s.kind === "scalable");
+            const rowHTML = (s) => {
+                const icon = s.status === "starting"
+                    ? '<span class="spinner"></span>'
+                    : `<span class="status-icon">${HEALTH_ICONS[s.status] || ""}</span>`;
+                const prefix = s.kind === "scalable" ? (SCALABLE_ICONS[s.name] || "") + " " : "";
+                const meta = s.kind === "scalable"
+                    ? `${s.replicas ?? 0} · ${HEALTH_LABELS[s.status]}`
+                    : HEALTH_LABELS[s.status];
+                return `<div class="health-panel-row status-${s.status}">
+                    ${icon}
+                    <span>${prefix}${s.name}</span>
+                    <span class="status-label">${meta}</span>
+                </div>`;
+            };
+            const html = `
+                <div class="health-panel-group">${booking.map(rowHTML).join("")}</div>
+                ${scalable.length ? `<div class="health-panel-group">${scalable.map(rowHTML).join("")}</div>` : ""}
+            `;
+            document.getElementById("health-panel-content").innerHTML = html;
+        }
+
+        function updateHealthChip(services) {
+            const chip = document.getElementById("health-chip");
+            const label = document.getElementById("health-chip-label");
+            const total = services.length;
+            const ok = services.filter(isServiceConsideredOk).length;
+            const starting = services.filter(s => s.status === "starting").length;
+            const down = services.filter(s => s.status === "down").length;
+
+            chip.classList.remove("ok", "warn", "err");
+            if (down > 0) {
+                chip.classList.add("err");
+                label.textContent = `${down} offline · ${ok}/${total}`;
+            } else if (starting > 0) {
+                chip.classList.add("warn");
+                label.textContent = `${starting} startet · ${ok}/${total}`;
+            } else {
+                chip.classList.add("ok");
+                label.textContent = `${ok}/${total} bereit`;
+            }
+        }
+
+        function dismissStartupOverlay() {
+            if (startupDismissed) return;
+            startupDismissed = true;
+            document.getElementById("startup-overlay").hidden = true;
+        }
+
+        function showOfflineOverlay() {
+            document.getElementById("offline-overlay").hidden = false;
+            // Während offline ist auch der Loading-Overlay sinnlos.
+            if (!startupDismissed) {
+                document.getElementById("startup-overlay").hidden = true;
+            }
+        }
+        function hideOfflineOverlay() {
+            document.getElementById("offline-overlay").hidden = true;
+            if (!startupDismissed) {
+                document.getElementById("startup-overlay").hidden = false;
+            }
+        }
+        function retryOffline() {
+            pollHealthOverview();
+        }
+
+        async function pollHealthOverview() {
+            try {
+                const res = await fetch("/dashboard/api/health-overview");
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                const data = await res.json();
+                networkErrorStreak = 0;
+                lastHealthOverview = data;
+                if (!document.getElementById("offline-overlay").hidden) hideOfflineOverlay();
+
+                updateHealthChip(data.services);
+                renderHealthPanel(data.services);
+
+                if (!startupDismissed) {
+                    renderStartupList(data.services);
+                    const allOk = data.services.every(isServiceConsideredOk);
+                    if (allOk) dismissStartupOverlay();
+                }
+            } catch (e) {
+                // Netzwerkfehler (TypeError) → Backend offline. HTTP-Fehler
+                // zählen wir nicht in den Streak, weil das Backend dann zwar
+                // antwortet, aber gerade keinen Status liefern kann.
+                if (e instanceof TypeError) {
+                    networkErrorStreak++;
+                    if (networkErrorStreak >= 3) showOfflineOverlay();
+                }
+            }
+        }
+
+        function scheduleStartupSkipButton() {
+            setTimeout(() => {
+                if (startupDismissed || startupSkipShown) return;
+                startupSkipShown = true;
+                const btn = document.getElementById("startup-skip");
+                if (btn) btn.hidden = false;
+            }, STARTUP_SKIP_AFTER_MS);
+        }
+
         showStory(currentStory);
+
+        scheduleStartupSkipButton();
+        pollHealthOverview();
+        setInterval(pollHealthOverview, 1500);
 
         fetchServices();
         fetchCircuitState();
