@@ -26,9 +26,19 @@ type State struct {
 	LatencyMs int  `json:"latencyMs"`
 }
 
+// Snapshot ist das, was über GET /admin/chaos nach außen geht. Enthält
+// zusätzlich zum konfigurierten State den Zeitstempel des letzten von
+// einem Aufrufer beobachteten Requests (für die Backend-Card im Dashboard,
+// die kurz pulst, wenn eine Replica gerade gerufen wurde).
+type Snapshot struct {
+	State
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+}
+
 type Chaos struct {
-	mu    sync.RWMutex
-	state State
+	mu         sync.RWMutex
+	state      State
+	lastSeenAt time.Time
 }
 
 func New() *Chaos {
@@ -57,6 +67,28 @@ func (c *Chaos) Snapshot() State {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 	return c.state
+}
+
+// snapshotWithLastSeen erstellt die nach außen sichtbare Sicht für GET
+// /admin/chaos: aktueller State + Zeitpunkt des letzten "regulären"
+// Requests (nicht-whitelisted) gegen die Instanz.
+func (c *Chaos) snapshotWithLastSeen() Snapshot {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	snap := Snapshot{State: c.state}
+	if !c.lastSeenAt.IsZero() {
+		t := c.lastSeenAt
+		snap.LastSeenAt = &t
+	}
+	return snap
+}
+
+// markSeen merkt sich, dass die Instanz gerade einen regulären Request
+// beantwortet. Wird vom Middleware-Pfad atomar gesetzt.
+func (c *Chaos) markSeen(now time.Time) {
+	c.mu.Lock()
+	c.lastSeenAt = now
+	c.mu.Unlock()
 }
 
 func (c *Chaos) SetMode(mode Mode) State {
@@ -88,6 +120,7 @@ func (c *Chaos) Middleware(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
+		c.markSeen(time.Now().UTC())
 		s := c.Snapshot()
 		switch s.Mode {
 		case Slow:
@@ -102,7 +135,7 @@ func (c *Chaos) Middleware(next http.Handler) http.Handler {
 
 func (c *Chaos) GetHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(c.Snapshot())
+	_ = json.NewEncoder(w).Encode(c.snapshotWithLastSeen())
 }
 
 func (c *Chaos) SetHandler(w http.ResponseWriter, r *http.Request) {

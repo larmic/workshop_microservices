@@ -22,7 +22,43 @@ type ScaleRequest struct {
 }
 
 type composeContainer struct {
+	Name  string `json:"Name"`
+	ID    string `json:"ID"`
 	State string `json:"State"`
+}
+
+// ContainerNamesByHostname mappt die kurze Container-ID (= os.Hostname inside
+// each replica) auf den menschenfreundlichen docker-compose-Container-Namen
+// (z. B. "services-car-4"). So kann das Dashboard pro Replica nicht nur die
+// kryptische Consul-Service-ID, sondern auch den Compose-Namen anzeigen.
+func ContainerNamesByHostname(composeArgs []string, serviceName string) map[string]string {
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	args := append([]string{}, composeArgs...)
+	args = append(args, "ps", "--format", "json", serviceName)
+
+	cmd := exec.CommandContext(ctx, "docker", append([]string{"compose"}, args...)...)
+	var stdout bytes.Buffer
+	cmd.Stdout = &stdout
+	if err := cmd.Run(); err != nil {
+		return nil
+	}
+
+	out := make(map[string]string)
+	for _, line := range strings.Split(strings.TrimSpace(stdout.String()), "\n") {
+		if line == "" {
+			continue
+		}
+		var c composeContainer
+		if err := json.Unmarshal([]byte(line), &c); err != nil {
+			continue
+		}
+		if len(c.ID) >= 12 && c.Name != "" {
+			out[c.ID[:12]] = c.Name
+		}
+	}
+	return out
 }
 
 func ListServicesHandler(composeArgs []string, allowedServices []string) http.HandlerFunc {

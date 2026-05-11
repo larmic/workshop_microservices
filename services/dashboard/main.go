@@ -47,7 +47,7 @@ func main() {
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /api/services", handler.ListServicesHandler(composeArgs, allowedServices))
 	mux.HandleFunc("POST /api/services/{name}/scale", handler.ScaleServiceHandler(composeArgs, allowedServices))
-	mux.HandleFunc("GET /api/services/{name}/instances", handler.ListInstancesHandler(resolver, allowedServices))
+	mux.HandleFunc("GET /api/services/{name}/instances", handler.ListInstancesHandler(resolver, allowedServices, composeArgs))
 	mux.HandleFunc("POST /api/services/{name}/chaos", handler.SetChaosHandler(resolver, allowedServices))
 	mux.HandleFunc("GET /api/booking-story1/offers", handler.ProxyHandler(bookingStory1URL, http.MethodGet, "/booking/offers"))
 	mux.HandleFunc("GET /api/booking-story2/offers", handler.ProxyHandler(bookingStory2URL, http.MethodGet, "/booking/offers"))
