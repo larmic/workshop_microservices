@@ -2,7 +2,7 @@
 
 Moderationsleitfaden für den Microservices-Workshop am Beispiel der Reisebuchungsplattform (Flug, Hotel, Auto). Knappe Stichpunkte, Diskussions-Anker und Verweise auf die Hands-on-Stories.
 
-Ergänzende Dokumente: [Stories](stories.md) · [Vorbereitung](vorbereitung.md) · [Idea-Sammlung](idea.md)
+Ergänzende Dokumente: [Vorbereitung](vorbereitung.md) · [Idea-Sammlung](idea.md)
 
 ---
 
@@ -36,7 +36,7 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 🍽 | Mittagspause | 60 Min |
 | 6f | Hands-on: Story 6 (Choreography-Saga) | 60 Min |
 | 7 | Vortrag & Diskussion: CQRS | 30 Min |
-| 8 | Hands-on: Story 10 (Distributed Tracing) | 60 Min |
+| 8 | Hands-on: Story 7 (Distributed Tracing) | 60 Min |
 | ☕ | Kaffeepause | 15 Min |
 | 9 | Diskussion: BFF | 20 Min |
 | 10 | Diskussion: Downtimeless Deployment | 20 Min |
@@ -204,7 +204,7 @@ Zwischen dem Schreibvorgang (Saga fertig) und dem Auftauchen im Read-Model liege
 
 ---
 
-## 8. Hands-on: Story 10 — [Den roten Faden im Log](stories/story-10-tracing.md) (60 Min)
+## 8. Hands-on: Story 7 — [Den roten Faden im Log](stories/story-07-tracing.md) (60 Min)
 
 - Lernpointe: Distributed Tracing macht Geschäftsvorgänge über Service-Grenzen hinweg sichtbar
 - Recap-Frage: Wo hätte euch Tracing schon in Stories 3–6 geholfen?

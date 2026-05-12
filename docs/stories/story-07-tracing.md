@@ -1,4 +1,4 @@
-# Story 10: Den roten Faden im Log
+# Story 7: Den roten Faden im Log
 
 **Thema:** Distributed Tracing
 **Zeitrahmen:** ca. 60 Minuten
