@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'services/**'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,15 +15,16 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      flight: ${{ steps.filter.outputs.flight }}
-      hotel: ${{ steps.filter.outputs.hotel }}
-      car: ${{ steps.filter.outputs.car }}
-      booking: ${{ steps.filter.outputs.booking }}
-      dashboard: ${{ steps.filter.outputs.dashboard }}
+      flight: ${{ steps.filter.outputs.flight == 'true' || github.event_name == 'workflow_dispatch' }}
+      hotel: ${{ steps.filter.outputs.hotel == 'true' || github.event_name == 'workflow_dispatch' }}
+      car: ${{ steps.filter.outputs.car == 'true' || github.event_name == 'workflow_dispatch' }}
+      booking: ${{ steps.filter.outputs.booking == 'true' || github.event_name == 'workflow_dispatch' }}
+      dashboard: ${{ steps.filter.outputs.dashboard == 'true' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
         id: filter
+        if: github.event_name != 'workflow_dispatch'
         with:
           filters: |
             flight:
