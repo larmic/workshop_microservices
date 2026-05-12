@@ -2759,9 +2759,15 @@ on timeout(sagaId):
         }
         function hideOfflineOverlay() {
             document.getElementById("offline-overlay").hidden = true;
-            if (!startupDismissed) {
-                document.getElementById("startup-overlay").hidden = false;
-            }
+            // Backend ist wieder da: Startup-Overlay neu zeigen, damit der
+            // Nutzer sieht, welche Services noch hochfahren. Der nächste
+            // pollHealthOverview-Tick blendet es aus, sobald alles bereit ist.
+            startupDismissed = false;
+            startupSkipShown = false;
+            const skipBtn = document.getElementById("startup-skip");
+            if (skipBtn) skipBtn.hidden = true;
+            document.getElementById("startup-overlay").hidden = false;
+            scheduleStartupSkipButton();
         }
         function retryOffline() {
             pollHealthOverview();
