@@ -1,6 +1,6 @@
 ---
 name: new-booking-story
-description: Legt eine neue Booking-Service Story an (Verzeichnisstruktur, Code, OpenAPI, HTTP-Tests, Makefile, GitHub Workflows, Docker Compose)
+description: Legt eine neue Booking-Service Story an (Verzeichnisstruktur, Code, OpenAPI, HTTP-Tests, Makefile, GitHub Workflows, Docker Compose, Dashboard)
 user_invocable: true
 ---
 
@@ -27,7 +27,9 @@ Das erste Argument ist die Story-Nummer (z.B. `3` fuer Story 3). Wenn keine Numm
 Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als Template und erstelle die angepasste Version unter `services/booking/storyN/`:
 
 1. **`services/booking/storyN/main.go`**
-   - Kopiere 1:1 von storyP/main.go (keine Aenderungen noetig)
+   - Kopiere von storyP/main.go
+   - Aendere `Service: "booking-P"` zu `Service: "booking-N"` (Consul-Registrierung &mdash; sonst kollidieren Story P und Story N auf demselben Service-Namen)
+   - Beachte: Die Imports auf `booking/storyP/...` werden vom "Wichtig"-Hinweis unten generisch durch `booking/storyN/...` ersetzt
 
 2. **`services/booking/storyN/api/openapi.yaml`**
    - Kopiere von storyP/api/openapi.yaml
@@ -164,6 +166,61 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
             loadBalancer:
               servers:
                 - url: "http://booking-storyN:8080"
+      ```
+
+### Dashboard erweitern
+
+Das Dashboard (`services/dashboard/`) zeigt pro Story einen Stepper-Eintrag, einen API-Link und einen Inhaltsbereich an. Ausserdem wartet die Startup-Overlay auf den Health-Check der neuen Story, damit der Workshop erst startet, wenn alle Booking-Services bereit sind.
+
+13. **`services/dashboard/main.go`**
+    - Fuege nach `bookingStory{P}URL` eine neue URL-Variable hinzu:
+      ```go
+      bookingStoryNURL := getEnv("BOOKING_STORYN_URL", "http://booking-storyN:8080")
+      ```
+    - Fuege in der `bookingURLs`-Map einen neuen Eintrag hinzu:
+      ```go
+      "booking-storyN": bookingStoryNURL,
+      ```
+    - **Hinweis:** Damit erscheint Story N automatisch im `/api/health-overview` und in der Startup-Overlay &mdash; keine weiteren Handler noetig, solange Story N keine eigenen Dashboard-API-Endpunkte braucht (Story-spezifische Endpunkte wie `saga-state` aus Story 5 werden bei Bedarf separat hinzugefuegt).
+
+14. **`services/dashboard/static/index.html`**
+    - **API-Link** nach dem letzten `Booking Story P`-Eintrag in der `.links-grid` (Sektion "Service APIs"):
+      ```html
+      <a class="link-chip" href="/api/booking-storyN/openapi" target="_blank"><span>&#128214;</span> Booking Story N</a>
+      ```
+    - **Stepper-Button** nach dem letzten `data-story-node="P"`-Button in `.stepper-nodes`:
+      ```html
+      <span class="stepper-connector"></span>
+      <button type="button" class="stepper-node" data-story-node="N" onclick="showStory(N)">N</button>
+      ```
+    - **STORY_META-Eintrag** im JavaScript-Block (nach Eintrag P):
+      ```javascript
+      N: { title: "Story N: <Titel aus docs/stories/story-NN-*.md>",
+           subtitle: "<Kurz-Subtitle, ein Satz>" },
+      ```
+    - **STORY_COUNT** inkrementieren:
+      ```javascript
+      const STORY_COUNT = N;
+      ```
+    - **Neue `<section class="story-section" data-story="N" hidden>`** am Ende von `<main class="story-content">` einfuegen. Minimaler Stub mit Story-Info-Block (Kontext, User Story, Akzeptanzkriterien aus `docs/stories/story-NN-*.md`) und optional einem Cheatsheet-Block. **Keine** story-spezifischen UI-Buttons im Stub &mdash; die fuegen die Workshop-Teilnehmer beim Bearbeiten der Story selbst hinzu. Vorlage (Story-Inhalte aus der Doku uebernehmen):
+      ```html
+      <section class="story-section" data-story="N" hidden>
+          <div class="story-helpers" data-story-helpers="N">
+              <details class="story-info">
+                  <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                  <div class="story-info-body">
+                      <h4>Kontext</h4>
+                      <p>...</p>
+                      <h4>User Story</h4>
+                      <p>Als <em>...</em> moechte ich <em>...</em>, damit <em>...</em>.</p>
+                      <h4>Akzeptanzkriterien</h4>
+                      <ul>
+                          <li>...</li>
+                      </ul>
+                  </div>
+              </details>
+          </div>
+      </section>
       ```
 
 ### Abschluss

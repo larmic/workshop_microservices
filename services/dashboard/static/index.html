@@ -1163,6 +1163,7 @@
                     <a class="link-chip" href="/api/booking-story3/openapi" target="_blank"><span>&#128214;</span> Booking Story 3</a>
                     <a class="link-chip" href="/api/booking-story4/openapi" target="_blank"><span>&#128214;</span> Booking Story 4</a>
                     <a class="link-chip" href="/api/booking-story5/openapi" target="_blank"><span>&#128214;</span> Booking Story 5</a>
+                    <a class="link-chip" href="/api/booking-story6/openapi" target="_blank"><span>&#128214;</span> Booking Story 6</a>
                 </div>
             </div>
         </div>
@@ -1208,6 +1209,8 @@
                 <button type="button" class="stepper-node" data-story-node="4" onclick="showStory(4)">4</button>
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="5" onclick="showStory(5)">5</button>
+                <span class="stepper-connector"></span>
+                <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">6</button>
             </div>
             <button type="button" class="stepper-nav-btn" id="stepper-next" onclick="goNextStory()">
                 <span>Weiter</span><span>&rarr;</span>
@@ -1603,6 +1606,57 @@ catch error at step X:
             </div>
             <div class="saga-list" id="saga-list"></div>
         </div>
+        </section>
+
+        <section class="story-section" data-story="6" hidden>
+            <div class="story-helpers" data-story-helpers="6">
+                <details class="story-info">
+                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                    <div class="story-info-body">
+                        <h4>Kontext</h4>
+                        <p>In Story 5 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Backend-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Lösung: Booking publiziert ein <em>Event</em>, die Backends abonnieren und reagieren eigenständig &mdash; wir wechseln von <em>Orchestration</em> zu <em>Choreography</em>.</p>
+                        <h4>User Story</h4>
+                        <p>Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Backend-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
+                        <h4>Akzeptanzkriterien</h4>
+                        <ul>
+                            <li>Booking publiziert bei Fehlschlag ein <code>CompensationRequested</code>-Event (statt synchron <code>DELETE</code>)</li>
+                            <li>Flight/Hotel/Car abonnieren das Event und kompensieren selbst</li>
+                            <li>Services antworten mit Reply-Event (<code>BookingCancelled</code> oder <code>CancellationFailed</code>)</li>
+                            <li>Booking führt den Saga-Status anhand der Reply-Events nach</li>
+                            <li>Timeout-Erkennung im Booking: ausbleibendes Reply &rarr; Status <code>STUCK</code> + Alarm-Log</li>
+                            <li>Idempotenz: doppelte Events werden anhand der <code>eventId</code> ignoriert</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="story-cheatsheet">
+                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <div class="story-cheatsheet-body">
+<pre>// Forward bleibt wie Story 5 (Saga, sync Aufrufe).
+// Neu: Kompensation läuft asynchron über Events.
+
+on bookingStepFailed(sagaId, alreadyBooked):
+  saga.status = COMPENSATING
+  for b in reverse(alreadyBooked):
+    publish "CompensationRequested" {
+      eventId, sagaId, service: b.svc, bookingId: b.id
+    }
+  schedule timeout(sagaId, expectedReplies = len(alreadyBooked))
+
+on event "BookingCancelled" {sagaId, service}:
+  saga.markCompensated(service)
+  if saga.allCompensated(): saga.status = FAILED
+
+on event "CancellationFailed" {sagaId, service}:
+  saga.markCompensationFailed(service)
+  saga.status = COMPENSATION_INCOMPLETE
+
+on timeout(sagaId):
+  if saga still has open replies:
+    saga.status = STUCK
+    log.alert("operator eingreifen", sagaId)</pre>
+                    </div>
+                </details>
+            </div>
         </section>
     </main>
 
@@ -2363,8 +2417,10 @@ catch error at step X:
                  subtitle: "Bulkhead-Pattern: pro Backend-Service ein eigener Slot-Pool, sofortige Ablehnung statt Queue." },
             5: { title: "Story 5: Alles oder nichts — aber richtig",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
+            6: { title: "Story 6: Die Saga wird leise — Kompensation via Events",
+                 subtitle: "Choreography-Saga: Kompensation wandert vom Booking-Service in die Backends, ausgelöst durch Events." },
         };
-        const STORY_COUNT = 5;
+        const STORY_COUNT = 6;
         const STORY_KEY = "workshop-dashboard.currentStory";
 
         function readInitialStory() {
