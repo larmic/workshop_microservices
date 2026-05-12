@@ -2,7 +2,7 @@
 
 Moderationsleitfaden für den Microservices-Workshop am Beispiel der Reisebuchungsplattform (Flug, Hotel, Auto). Knappe Stichpunkte, Diskussions-Anker und Verweise auf die Hands-on-Stories.
 
-Ergänzende Dokumente: [Vorbereitung](vorbereitung.md) · [Idea-Sammlung](idea.md)
+Ergänzende Dokumente: [Vorbereitung](vorbereitung.md) · [Idea-Sammlung](idea.md) · [Fragen](questions)
 
 ---
 
