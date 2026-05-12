@@ -303,6 +303,70 @@
             margin: 0;
         }
         .rest-response.visible { display: block; }
+        .story7-hint {
+            font-size: 0.85rem;
+            color: #555;
+            margin: 0 0 0.9rem 0;
+            line-height: 1.5;
+        }
+        .trace-result {
+            margin-top: 1rem;
+            padding: 0.9rem 1rem;
+            background: #f5f7fb;
+            border: 1px solid #d0d7e2;
+            border-radius: 8px;
+            font-size: 0.82rem;
+        }
+        .trace-result-line {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .trace-result-line strong { min-width: 4.5rem; color: #333; }
+        .trace-result-line code {
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            background: #0C0A40;
+            color: #e0e6f0;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            word-break: break-all;
+        }
+        .trace-result-cmd {
+            flex: 1 1 100%;
+            background: #0C0A40;
+            color: #e0e6f0;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.74rem;
+            line-height: 1.45;
+            margin: 0.25rem 0 0 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .trace-result-body { margin-top: 0.6rem; }
+        .trace-result-body summary {
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #555;
+        }
+        .trace-result-body pre {
+            margin: 0.4rem 0 0 0;
+            background: #0C0A40;
+            color: #e0e6f0;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.74rem;
+            line-height: 1.4;
+            max-height: 220px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
         .panel-header {
             display: flex;
             align-items: center;
@@ -1737,17 +1801,94 @@ on timeout(sagaId):
                             <li>Die OpenAPI-Dokumentation des Booking-Services beschreibt den
                                 <code>traceparent</code>-Header.</li>
                         </ul>
-                        <h4>Demo-Befehle</h4>
-                        <p>Mit eigenem Trace-Kontext aufrufen:</p>
-                        <pre><code>curl -X POST http://localhost/api/booking-story7/booking/bookings \
-  -H "Content-Type: application/json" \
-  -H "traceparent: 00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01" \
-  -d '{"customerName":"Demo","flightId":"LH123","hotelId":"H1","carId":"C1"}'</code></pre>
-                        <p>Logs filtern:</p>
-                        <pre><code>docker compose logs booking-story7 flight hotel car | jq -c 'select(.trace_id=="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")'</code></pre>
+                    </div>
+                </details>
+                <details class="story-cheatsheet">
+                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <div class="story-cheatsheet-body">
+<pre>// W3C Trace Context: 00-&lt;trace-id-32hex&gt;-&lt;span-id-16hex&gt;-&lt;flags-2hex&gt;
+
+// Server-Middleware: eingehenden Header übernehmen oder neu erzeugen
+on incomingRequest(req):
+  tc = parse(req.header("traceparent")) ?: generateNew()
+  res.header("traceparent") = tc.toHeader()    // zurück zum Client
+  ctx = ctx.with(tc)
+  next(req.withContext(ctx))
+
+// Client-Inject: pro ausgehendem Hop neue Span-ID, gleiche Trace-ID
+on outgoingRequest(ctx, req):
+  tc = ctx.get(TraceContext)
+  hop = tc.copy(spanId = randomSpanId())
+  req.setHeader("traceparent", hop.toHeader())
+
+// Logging: jede Zeile bekommt trace_id als Feld
+log.info("forward step done",
+  trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")
+
+// Async-Grenze: Trace-ID als Event-Property mitschicken
+event = {
+  eventId, sagaId, bookingId,
+  traceparent: ctx.tc.toHeader()    // damit der Konsument den Trace fortführt
+}
+publish(event)
+
+on receiveCompensationEvent(event):
+  tc = parse(event.traceparent) ?: generateNew()
+  asyncCtx = bgCtx.with(tc)
+  go process(asyncCtx, event)       // Logs der Goroutine tragen die trace_id</pre>
                     </div>
                 </details>
             </div>
+        <div class="cb-section">
+            <div class="panel-header">
+                <h2>Distributed Tracing (Booking Story 7)</h2>
+            </div>
+            <p class="story7-hint">Nach jedem Call zeigt die Anzeige unten die <code>trace_id</code> aus dem <code>traceparent</code>-Response-Header und liefert einen kopierbaren Filter-Befehl. Damit l&auml;sst sich der komplette Vorgang &uuml;ber alle vier Services hinweg in den Compose-Logs rekonstruieren.</p>
+            <div class="rest-actions">
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callTracing7(this, 'GET', '/booking/offers', 's7-offers')">
+                        <span class="method-chip get">GET</span>
+                        <span class="rest-path">/booking/offers</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story7</span>
+                        <span class="rest-btn-sub">Angebote &uuml;ber
+                            <span class="service-chip flight">flight</span>
+                            <span class="service-chip hotel">hotel</span>
+                            <span class="service-chip car">car</span>
+                            &mdash; trace_id wird automatisch generiert und propagiert</span>
+                    </button>
+                </div>
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callTracing7(this, 'POST', '/booking/bookings', 's7-booking-auto', SAMPLE_BOOKING_BODY)">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">/booking/bookings</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story7</span>
+                        <span class="rest-btn-sub">Saga starten &mdash; <strong>trace_id automatisch</strong> generiert, in Forward- und Compensation-Logs aller Services sichtbar</span>
+                    </button>
+                </div>
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callTracing7(this, 'POST', '/booking/bookings', 's7-booking-custom', SAMPLE_BOOKING_BODY, true)">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">/booking/bookings</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story7</span>
+                        <span class="rest-btn-sub">Saga starten mit <strong>eigenem traceparent</strong>-Header &mdash; Service &uuml;bernimmt die vorgegebene trace_id (z.B. vom API-Gateway)</span>
+                    </button>
+                </div>
+            </div>
+            <div class="trace-result" id="s7-result" hidden>
+                <div class="trace-result-line"><strong>Status:</strong> <span id="s7-result-status"></span></div>
+                <div class="trace-result-line"><strong>trace_id:</strong> <code id="s7-result-traceid">&mdash;</code></div>
+                <div class="trace-result-line"><strong>Filter:</strong>
+                    <pre class="trace-result-cmd" id="s7-result-cmd"></pre>
+                </div>
+                <details class="trace-result-body">
+                    <summary>Response-Body</summary>
+                    <pre id="s7-result-response"></pre>
+                </details>
+            </div>
+        </div>
         </section>
     </main>
 
@@ -2433,6 +2574,75 @@ on timeout(sagaId):
             } finally {
                 btn.disabled = false;
                 fetchSaga6State();
+            }
+        }
+
+        // ----- Story 7: Distributed Tracing -----
+        //
+        // Ruft direkt das Traefik-Routing /api/booking-story7/... auf. Die
+        // tracing.Middleware im Booking-Service generiert (oder übernimmt)
+        // den Trace-Kontext und gibt den effektiven `traceparent`-Header
+        // in der Response zurück. Genau diese trace_id zeigt die UI an —
+        // plus einen kopierbaren Filter-Befehl für die Compose-Logs.
+
+        function randomHex(n) {
+            const bytes = new Uint8Array(n);
+            crypto.getRandomValues(bytes);
+            return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+        }
+
+        function extractTraceId(traceparentHeader) {
+            if (!traceparentHeader) return null;
+            const parts = traceparentHeader.split("-");
+            return parts.length === 4 ? parts[1] : null;
+        }
+
+        function showTracingResult(status, ok, traceId, body) {
+            const wrap = document.getElementById("s7-result");
+            const statusEl = document.getElementById("s7-result-status");
+            const traceEl = document.getElementById("s7-result-traceid");
+            const cmdEl = document.getElementById("s7-result-cmd");
+            const respEl = document.getElementById("s7-result-response");
+
+            wrap.hidden = false;
+            statusEl.textContent = status;
+            statusEl.style.color = ok ? "#1d7a3a" : "#b3261e";
+            traceEl.textContent = traceId || "— (kein Header empfangen)";
+            cmdEl.textContent = traceId
+                ? `docker compose logs booking-story7 flight hotel car | jq -c 'select(.trace_id=="${traceId}")'`
+                : "(Filter-Befehl steht erst nach erfolgreichem Call zur Verfügung)";
+            respEl.textContent = body || "";
+        }
+
+        async function callTracing7(btn, method, path, idPrefix, body, useCustomTrace) {
+            btn.disabled = true;
+            const headers = { "Accept": "application/json" };
+            if (body) headers["Content-Type"] = "application/json";
+            if (useCustomTrace) {
+                headers["traceparent"] = `00-${randomHex(16)}-${randomHex(8)}-01`;
+            }
+            const t0 = performance.now();
+            try {
+                const res = await fetch("/api/booking-story7" + path, {
+                    method,
+                    headers,
+                    body: body ? JSON.stringify(body) : undefined,
+                });
+                const ms = Math.round(performance.now() - t0);
+                const text = await res.text();
+                let pretty = text;
+                try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch (_) {}
+                const traceId = extractTraceId(res.headers.get("traceparent"));
+                showTracingResult(
+                    `${res.status} ${res.statusText} (${ms} ms)${useCustomTrace ? " — custom traceparent gesendet" : ""}`,
+                    res.ok,
+                    traceId,
+                    pretty,
+                );
+            } catch (e) {
+                showTracingResult("Fehler — " + e.message, false, null, "");
+            } finally {
+                btn.disabled = false;
             }
         }
 
