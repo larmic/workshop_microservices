@@ -2,7 +2,7 @@
 
 Moderationsleitfaden für den Microservices-Workshop am Beispiel der Reisebuchungsplattform (Flug, Hotel, Auto). Knappe Stichpunkte, Diskussions-Anker und Verweise auf die Hands-on-Stories.
 
-Ergänzende Dokumente: [Vorbereitung](vorbereitung.md) · [Idea-Sammlung](idea.md) · [Fragen](questions)
+Ergänzende Dokumente: [Vorbereitung](vorbereitung.md) · [Fragen](questions)
 
 ---
 
@@ -51,7 +51,6 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 - Leitfrage: **„Brauchen wir Microservices überhaupt?"**
   - Erst Monolith, MS nur wenn wirklich sinnvoll
   - Workshop zeigt, *wie* man sie macht — nicht, *dass* man sie braucht
-- Verweis: [idea.md](idea.md) — „Brauchen wir Microservices?"
 
 ---
 
@@ -60,7 +59,7 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-Dive, sondern Einordnung.
 
 - **Monolith** — alles in einem Prozess, einer DB, einem Deployment
-- **SOA** — unternehmensweite Service-Orientierung, oft mit ESB
+- **SOA** — unternehmensweite Service-Orientierung, oft mit ESB; **Scope-Unterschied zu MS:** SOA ist ein unternehmensweiter Architekturansatz, Microservices sind eine Implementierungsstrategie auf Team-Ebene
 - **SOAP / WS-\*** — XML, WSDL, schwergewichtig
 - **REST + JSON** — leichtgewichtig, ressourcenorientiert, der heutige Default
 - **Microservices** — kleine, unabhängig deploybare Services pro Bounded Context
@@ -106,6 +105,11 @@ Alle Teilnehmer am Start halten — bei Problemen sofort einsammeln und parallel
 
 These aufwerfen und mit der Gruppe sezieren.
 
+**Wann sind Microservices überhaupt sinnvoll? (Gruppenfrage zuerst sammeln)**
+- Technischer Bedarf für einen Teilaspekt mit anderer Last (Beispiel Check24: Einträge einstellen selten, Einträge suchen sehr häufig — beides skaliert unterschiedlich)
+- Mehrere Teams am selben Produkt → unabhängige Tech-Entscheidungen (Sprachen, Stile, Release-Zyklen)
+- Einfachere Einarbeitung pro Service, weil man nicht die Gesamtarchitektur kennen muss
+
 **Pro-Argumente (das Netzwerk macht's komplex):**
 - Partielle Ausfälle → Circuit Breaker, Bulkhead
 - Keine verteilten Transaktionen → Saga
@@ -114,6 +118,9 @@ These aufwerfen und mit der Gruppe sezieren.
 - Konsistenz → Eventual Consistency, CQRS
 
 **Aber auch on top:**
+- Richtigen Service-Schnitt finden — bei MS unausweichlich, beim Monolithen nicht. DDD und Event Storming sind die Werkzeuge der Wahl
+- Single Sign-On / Auth über Service-Grenzen (OAuth, SAML) — im Monolithen oft gar kein Thema
+- Synchron vs. asynchron entscheiden (HTTP vs. MQ): synchron braucht Verfügbarkeit der Gegenseite, asynchron hat kein direktes Feedback
 - Deployment-Topologie, Versionierung
 - Team-Schnitte (Conway's Law)
 - Polyglot Persistence

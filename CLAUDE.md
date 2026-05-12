@@ -23,9 +23,8 @@ User stories for the hands-on tasks are in `docs/stories/` (`story-01` … `stor
 ## Project Structure
 
 - `docs/` — workshop documentation
-  - `themen.md` — topic overview
+  - `themen.md` — topic overview & moderation guide
   - `vorbereitung.md` — workstation setup
-  - `idea.md` — workshop concept
   - `stories/` — user stories
   - `instructions/` — trainer notes
   - `questions/` — discussion prompts
