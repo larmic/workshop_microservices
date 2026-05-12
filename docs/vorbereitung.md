@@ -1,60 +1,87 @@
 # Workshop-Vorbereitung
 
-Diese Anleitung beschreibt, wie du deinen Arbeitsplatz für den Microservices-Workshop einrichtest.
+Diese Anleitung beschreibt, wie du das Repo auscheckst, die Umgebung startest und mit dem Workshop loslegst.
 
 ## Voraussetzungen
 
-Folgende Tools müssen auf deinem Rechner installiert sein:
-
 - **Git**
-- **Docker** (inkl. Docker Compose)
-- **IDE / Editor** nach Wahl (z.B. IntelliJ IDEA, VS Code)
-- **Framework** deiner Wahl lokal lauffähig (z.B. Spring Boot, Quarkus, Go, ...)
+- **Docker** inkl. Docker Compose
+- **IDE / Editor** nach Wahl (optional, nur wenn du die Stories selbst implementieren willst)
+- Eigene Sprache/Framework deiner Wahl, in der du den Booking-Service umsetzen möchtest (Java/Spring Boot, Quarkus, Go, Node.js, ...)
 
 ## 1. Repository klonen
 
 ```bash
 git clone https://github.com/larmic/workshop_microservices.git
-cd workshop_microservices
+cd workshop_microservices/services
 ```
 
-## 2. Backend-Services starten
+Alle weiteren Befehle werden aus dem Verzeichnis `services/` ausgeführt.
 
-Die drei Backend-Services (Flight, Hotel, Car) und eine Swagger UI werden per Docker Compose gestartet:
+## 2. Umgebung starten
+
+Es gibt zwei Wege, die Workshop-Umgebung hochzufahren — beide bringen die gleichen Container ans Laufen (Flight, Hotel, Car, Booking-Referenzlösungen, Traefik, Consul, Swagger UI, Dashboard).
+
+### Variante A — Images von Docker Hub ziehen (empfohlen für Teilnehmer)
+
+Schnell und ohne lokalen Build:
 
 ```bash
-docker compose -f services/docker-compose.yml up -d
+make docker-up-hub
 ```
 
-Nach dem Start laufen folgende Services:
+Im Hintergrund: `docker compose ... pull` lädt fertige Images von Docker Hub (`larmic/workshop-microservices-*`), dann `docker compose ... up`.
 
-| Service    | URL                        | Beschreibung              |
-|------------|----------------------------|---------------------------|
-| Flight     | http://localhost:8081       | Flugbuchungen             |
-| Hotel      | http://localhost:8082       | Hotelbuchungen            |
-| Car        | http://localhost:8083       | Mietwagenbuchungen        |
-| Swagger UI | http://localhost:8084       | API-Dokumentation         |
+### Variante B — Images lokal bauen
 
-## 3. Prüfen, ob alles läuft
-
-Öffne die Swagger UI im Browser:
-
-> http://localhost:8084
-
-Dort siehst du die API-Dokumentation aller drei Backend-Services und kannst die Endpoints direkt ausprobieren.
-
-Alternativ per Terminal:
+Wenn du Änderungen am Code oder an den Dockerfiles vornimmst, baust du die Images lokal:
 
 ```bash
-# Health Checks
-curl http://localhost:8081/health
-curl http://localhost:8082/health
-curl http://localhost:8083/health
-
-# Beispiel: Verfügbare Flüge abfragen
-curl http://localhost:8081/flights
+make docker-up
 ```
 
-## 4. Los geht's
+Das entspricht `docker compose ... up --build` über alle drei Compose-Dateien.
 
-Dein Arbeitsplatz ist eingerichtet. Starte jetzt mit [Story 1: Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md).
+### Ohne Makefile
+
+Falls `make` nicht verfügbar ist, gehen beide Varianten auch direkt:
+
+```bash
+# Variante A (Docker Hub)
+docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml pull
+docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up
+
+# Variante B (lokal bauen)
+docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up --build
+```
+
+Alle weiteren Make-Targets siehst du mit `make help`.
+
+## 3. Dashboard öffnen
+
+Das **Dashboard** ist das zentrale Tool für den Workshop. Hier startest, stoppst und skalierst du Services, siehst Health-Status und kommst in einem Klick zu den anderen Tools.
+
+> **<http://localhost>**
+
+![Workshop Dashboard](assets/dashboard.png)
+
+## 4. Weitere URLs
+
+| Tool              | URL                              | Zweck                                |
+|-------------------|----------------------------------|--------------------------------------|
+| Dashboard         | <http://localhost>               | Workshop-Steuerzentrale              |
+| Swagger UI        | <http://localhost/api>           | API-Dokumentation aller Services     |
+| Consul UI         | <http://localhost/consul>        | Service Discovery & Health           |
+| Traefik Dashboard | <http://localhost:8080>          | Routing & Reverse-Proxy-Monitoring   |
+
+Schneller Health-Check vom Terminal:
+
+```bash
+curl http://localhost/api/flight/health
+curl http://localhost/api/hotel/health
+curl http://localhost/api/car/health
+```
+
+## 5. Los geht's
+
+Dein Arbeitsplatz ist eingerichtet. Starte mit [Story 1: Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md).
