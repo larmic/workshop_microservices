@@ -77,6 +77,42 @@ func CancelBookingHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+type CompensationEvent struct {
+	EventID   string `json:"eventId"`
+	SagaID    string `json:"sagaId"`
+	BookingID string `json:"bookingId"`
+}
+
+// CompensationEventHandler nimmt ein CompensationRequested-Event entgegen,
+// antwortet sofort mit 202 Accepted und führt die Stornierung asynchron
+// in einer Goroutine aus (fire & forget aus Sicht des Senders).
+func CompensationEventHandler(w http.ResponseWriter, r *http.Request) {
+	hostname, _ := os.Hostname()
+	log.Printf("[%s] %s %s from %s", hostname, r.Method, r.URL.Path, r.RemoteAddr)
+
+	var ev CompensationEvent
+	if err := json.NewDecoder(r.Body).Decode(&ev); err != nil {
+		http.Error(w, "invalid event body", http.StatusBadRequest)
+		return
+	}
+	if ev.EventID == "" || ev.SagaID == "" || ev.BookingID == "" {
+		http.Error(w, "eventId, sagaId and bookingId are required", http.StatusBadRequest)
+		return
+	}
+
+	log.Printf("[%s] event=CompensationRequested service=car phase=received   eventId=%s sagaId=%s bookingId=%s",
+		hostname, ev.EventID, ev.SagaID, ev.BookingID)
+
+	w.WriteHeader(http.StatusAccepted)
+
+	go func() {
+		log.Printf("[%s] event=CompensationRequested service=car phase=processing eventId=%s sagaId=%s bookingId=%s",
+			hostname, ev.EventID, ev.SagaID, ev.BookingID)
+		log.Printf("[%s] event=CompensationRequested service=car phase=done       eventId=%s sagaId=%s bookingId=%s",
+			hostname, ev.EventID, ev.SagaID, ev.BookingID)
+	}()
+}
+
 func newBookingID(prefix string) string {
 	b := make([]byte, 3)
 	rand.Read(b)

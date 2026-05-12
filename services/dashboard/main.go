@@ -81,6 +81,9 @@ func main() {
 	mux.HandleFunc("GET /api/saga-state", handler.SagaStateHandler(bookingStory5URL))
 	mux.HandleFunc("POST /api/saga-reset", handler.SagaResetHandler(bookingStory5URL))
 	mux.HandleFunc("POST /api/saga-trigger", handler.SagaTriggerHandler(bookingStory5URL))
+	mux.HandleFunc("GET /api/saga6-state", handler.SagaStateHandler(bookingStory6URL))
+	mux.HandleFunc("POST /api/saga6-reset", handler.SagaResetHandler(bookingStory6URL))
+	mux.HandleFunc("POST /api/saga6-trigger", handler.SagaTriggerHandler(bookingStory6URL))
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 
 	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}

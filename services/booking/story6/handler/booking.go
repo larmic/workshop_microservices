@@ -226,18 +226,24 @@ func ResetSagasHandler(store *saga.Store) http.HandlerFunc {
 	}
 }
 
-// compensate läuft die bereits gebuchten Schritte in umgekehrter
-// Reihenfolge ab und ruft pro Schritt DELETE /bookings/{id} auf. Die
-// Kompensations-Calls bypassen bewusst den Circuit Breaker: ist der CB
-// für Hotel OPEN, wollen wir die Stornierung trotzdem versuchen — sie
-// ist idempotent und der Backend-Service kann ein einzelnes DELETE auch
-// im kranken Zustand oft noch verarbeiten.
+// compensate löst die Kompensation für jeden bereits gebuchten Schritt
+// asynchron aus: Pro Schritt schickt Booking ein CompensationRequested-Event
+// per HTTP-POST an Flight/Hotel/Car. Der Backend-Service antwortet sofort
+// mit 202 Accepted und erledigt die Stornierung in einer Goroutine — Booking
+// wartet NICHT auf die fachliche Verarbeitung.
 //
-// Es findet KEIN Retry statt (siehe Story 5, Bonus-Punkt). Ein
-// fehlgeschlagener Kompensations-Schritt wird als COMPENSATION_FAILED
-// markiert und die Saga geht trotzdem auf FAILED. Das Monitoring
-// (saga state, Logs) ist dafür der Auffang.
+// Das ist der pädagogische Kern von Story 6 (Choreography-Saga): Die
+// Verantwortung für die Ausführung der Stornierung liegt beim Backend,
+// nicht mehr im Booking-Service. Booking ist nach „Event raus" fertig.
+//
+// Schmalspur-Variante: Wir benutzen kein echtes Pub/Sub-System, sondern
+// HTTP-POST. Die Implikationen (keine Persistenz, keine Redelivery,
+// kein Dead-Letter) werden in docs/questions/story6.md diskutiert. Ein
+// fehlgeschlagener Event-Dispatch wird nur geloggt — der Step bleibt
+// optimistisch auf StepCompensated, weil Booking ohnehin keinen Reply
+// erwartet.
 func compensate(ctx context.Context, client *http.Client, resolver *consul.Resolver, s *saga.Saga) {
+	dispatched := 0
 	for i := len(s.Steps) - 1; i >= 0; i-- {
 		step := &s.Steps[i]
 		if step.Status != saga.StepBooked {
@@ -249,38 +255,57 @@ func compensate(ctx context.Context, client *http.Client, resolver *consul.Resol
 			log.Printf("Saga %s compensation %s skipped: no bookingId", s.SagaID, step.Service)
 			continue
 		}
-		err := compensateSingle(ctx, client, resolver, consulNameFor[step.Service], step.BookingID)
-		if err != nil {
-			step.Status = saga.StepCompensationFailed
-			step.Reason = err.Error()
-			log.Printf("Saga %s compensation %s/%s FAILED: %v",
-				s.SagaID, step.Service, step.BookingID, err)
-			continue
+		eventID := newEventID()
+		log.Printf("Saga %s event=CompensationRequested phase=publishing      eventId=%s service=%s bookingId=%s",
+			s.SagaID, eventID, step.Service, step.BookingID)
+		if err := compensateSingle(ctx, client, resolver, consulNameFor[step.Service], eventID, s.SagaID, step.BookingID); err != nil {
+			log.Printf("Saga %s event=CompensationRequested phase=dispatch-failed eventId=%s service=%s bookingId=%s err=%v",
+				s.SagaID, eventID, step.Service, step.BookingID, err)
+		} else {
+			log.Printf("Saga %s event=CompensationRequested phase=dispatched     eventId=%s service=%s bookingId=%s",
+				s.SagaID, eventID, step.Service, step.BookingID)
 		}
 		step.Status = saga.StepCompensated
-		log.Printf("Saga %s compensation %s/%s ok", s.SagaID, step.Service, step.BookingID)
+		dispatched++
 	}
+	log.Printf("Saga %s compensation dispatched asynchronously to %d service(s) — booking finishes immediately",
+		s.SagaID, dispatched)
 }
 
-func compensateSingle(ctx context.Context, client *http.Client, resolver *consul.Resolver, consulName, bookingID string) error {
+func compensateSingle(ctx context.Context, client *http.Client, resolver *consul.Resolver, consulName, eventID, sagaID, bookingID string) error {
 	url, err := resolver.ResolveServiceURL(consulName)
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, url+"/bookings/"+bookingID, nil)
+	payload, err := json.Marshal(map[string]string{
+		"eventId":   eventID,
+		"sagaId":    sagaID,
+		"bookingId": bookingID,
+	})
 	if err != nil {
 		return err
 	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url+"/events/compensation", bytes.NewReader(payload))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode >= 400 {
+	if resp.StatusCode != http.StatusAccepted {
 		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("backend returned %d: %s", resp.StatusCode, strings.TrimSpace(string(body)))
+		return fmt.Errorf("backend returned %d (expected 202 Accepted): %s", resp.StatusCode, strings.TrimSpace(string(body)))
 	}
 	return nil
+}
+
+func newEventID() string {
+	b := make([]byte, 4)
+	_, _ = rand.Read(b)
+	return "ev-" + hex.EncodeToString(b)
 }
 
 func extractBookingID(raw json.RawMessage) string {

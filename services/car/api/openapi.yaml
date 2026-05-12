@@ -128,6 +128,28 @@ paths:
         '204':
           description: Buchung storniert (oder war nie vorhanden) — Endpoint ist idempotent
 
+  /events/compensation:
+    post:
+      summary: Kompensations-Event entgegennehmen (Story 6)
+      description: |
+        Nimmt ein `CompensationRequested`-Event vom Booking-Service entgegen
+        und antwortet **sofort mit 202 Accepted**. Die eigentliche Stornierung
+        läuft asynchron in einer Goroutine — der Sender wartet nicht auf das
+        Ergebnis (fire & forget). Genutzt in der Choreography-Saga von Story 6,
+        im Gegensatz zum synchronen `DELETE /bookings/{id}` aus Story 5.
+      operationId: receiveCompensationEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompensationEvent'
+      responses:
+        '202':
+          description: Event entgegengenommen, Verarbeitung läuft asynchron
+        '400':
+          description: Ungültiges Event (fehlende Pflichtfelder)
+
 components:
   schemas:
     HealthResponse:
@@ -196,3 +218,23 @@ components:
           type: string
           enum: [CONFIRMED]
           example: CONFIRMED
+
+    CompensationEvent:
+      type: object
+      required:
+        - eventId
+        - sagaId
+        - bookingId
+      properties:
+        eventId:
+          type: string
+          description: Eindeutige Event-ID, vom Sender erzeugt. Nutzbar als Dedup-Key für Idempotenz.
+          example: ev-3f9a1c
+        sagaId:
+          type: string
+          description: Saga-ID des Booking-Service, mit der das Event korreliert wird.
+          example: S-7c1a9f
+        bookingId:
+          type: string
+          description: ID der zu stornierenden Buchung in diesem Service.
+          example: C-9f4e80

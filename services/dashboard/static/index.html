@@ -1657,6 +1657,40 @@ on timeout(sagaId):
                     </div>
                 </details>
             </div>
+        <div class="cb-section">
+            <div class="panel-header">
+                <h2>Choreography-Saga (Booking Story 6)</h2>
+                <button class="panel-reset-btn" id="saga6-reset-btn" onclick="resetSagas6()" title="Saga-Store leeren">Reset</button>
+            </div>
+            <div class="rest-actions">
+                <div class="rest-row">
+                    <button class="rest-btn" id="saga6-trigger-btn" onclick="triggerSaga6()">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">/booking/bookings</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-story6</span>
+                        <span class="rest-btn-sub">orchestriert
+                            <span class="service-chip flight">flight</span>
+                            &rarr;
+                            <span class="service-chip hotel">hotel</span>
+                            &rarr;
+                            <span class="service-chip car">car</span>
+                            &mdash; bei Fehler wird die Kompensation als Event an die Backends dispatched (async, fire &amp; forget)</span>
+                    </button>
+                </div>
+                <span class="bh-result" id="saga6-result"></span>
+            </div>
+            <div class="saga-stats" id="saga6-stats"></div>
+            <div class="saga-legend">
+                <strong>Legende</strong>
+                <span class="saga-step booked"><span class="saga-step-icon">&#10003;</span> BOOKED</span>
+                <span class="saga-step compensated"><span class="saga-step-icon">&#8630;</span> COMPENSATED (dispatched)</span>
+                <span class="saga-step comp-failed"><span class="saga-step-icon">&#10007;</span> KOMP. FEHLER</span>
+                <span class="saga-step failed"><span class="saga-step-icon">&#10007;</span> FAILED</span>
+                <span class="saga-step skipped"><span class="saga-step-icon">&#8212;</span> NICHT AUFGERUFEN</span>
+            </div>
+            <div class="saga-list" id="saga6-list"></div>
+        </div>
         </section>
     </main>
 
@@ -2279,6 +2313,72 @@ on timeout(sagaId):
             }
         }
 
+        // ----- Story 6: Choreography-Saga (analog zu Story 5, eigene Targets) -----
+
+        const SAGA6_RENDER_OPTS = {
+            statsId: "saga6-stats",
+            listId: "saga6-list",
+            label: "Booking Story 6",
+            triggerPath: "/api/booking-story6/booking/bookings",
+        };
+
+        async function fetchSaga6State() {
+            try {
+                const res = await fetch("/dashboard/api/saga6-state");
+                if (!res.ok) throw new Error(await res.text());
+                renderSagas(await res.json(), SAGA6_RENDER_OPTS);
+            } catch (e) {
+                renderSagas(null, SAGA6_RENDER_OPTS);
+            }
+        }
+
+        async function resetSagas6() {
+            const btn = document.getElementById("saga6-reset-btn");
+            btn.disabled = true;
+            try {
+                const res = await fetch("/dashboard/api/saga6-reset", { method: "POST" });
+                if (!res.ok) throw new Error(await res.text());
+                showSaga6Result("Store geleert");
+            } catch (e) {
+                showError("Saga6-Reset: " + e.message);
+            } finally {
+                btn.disabled = false;
+                fetchSaga6State();
+            }
+        }
+
+        function showSaga6Result(text) {
+            document.getElementById("saga6-result").textContent = text;
+        }
+
+        async function triggerSaga6() {
+            const btn = document.getElementById("saga6-trigger-btn");
+            btn.disabled = true;
+            showSaga6Result("Saga läuft …");
+            const t0 = performance.now();
+            try {
+                const res = await fetch("/dashboard/api/saga6-trigger", { method: "POST" });
+                const ms = Math.round(performance.now() - t0);
+                let detail = "";
+                try {
+                    const body = await res.json();
+                    if (res.ok) {
+                        detail = `bookingId=${body.bookingId}`;
+                    } else if (body && body.saga) {
+                        detail = `failed at ${body.saga.failedAt} — Kompensation dispatched (async)`;
+                    } else if (body && body.error) {
+                        detail = body.error;
+                    }
+                } catch (_) {}
+                showSaga6Result(`Saga: ${res.status} in ${ms} ms${detail ? " — " + detail : ""}`);
+            } catch (e) {
+                showSaga6Result("Saga: Fehler — " + e.message);
+            } finally {
+                btn.disabled = false;
+                fetchSaga6State();
+            }
+        }
+
         function relativeTime(iso) {
             if (!iso) return "";
             const ms = Date.now() - new Date(iso).getTime();
@@ -2291,12 +2391,16 @@ on timeout(sagaId):
             return h + "h " + (m % 60) + "m";
         }
 
-        function renderSagas(sagas) {
-            const stats = document.getElementById("saga-stats");
-            const list = document.getElementById("saga-list");
+        function renderSagas(sagas, opts = {}) {
+            const statsId = opts.statsId || "saga-stats";
+            const listId = opts.listId || "saga-list";
+            const label = opts.label || "Booking Story 5";
+            const triggerPath = opts.triggerPath || "/api/booking-story5/booking/bookings";
+            const stats = document.getElementById(statsId);
+            const list = document.getElementById(listId);
             if (!sagas || !Array.isArray(sagas)) {
                 stats.innerHTML = "";
-                list.innerHTML = '<div class="saga-empty">Booking Story 5 nicht erreichbar</div>';
+                list.innerHTML = '<div class="saga-empty">' + label + ' nicht erreichbar</div>';
                 return;
             }
             const counts = { COMPLETED: 0, FAILED: 0, COMPENSATING: 0, PENDING: 0 };
@@ -2311,7 +2415,7 @@ on timeout(sagaId):
                 <span class="saga-stat">Gesamt <strong>${sagas.length}</strong></span>
             `;
             if (sagas.length === 0) {
-                list.innerHTML = '<div class="saga-empty">Noch keine Sagas — POST gegen <code>/api/booking-story5/booking/bookings</code> abschicken.</div>';
+                list.innerHTML = '<div class="saga-empty">Noch keine Sagas — POST gegen <code>' + triggerPath + '</code> abschicken.</div>';
                 return;
             }
             list.innerHTML = sagas.slice(0, 10).map(s => {
@@ -2696,11 +2800,13 @@ on timeout(sagaId):
         fetchCircuitState();
         scheduleBulkheadPoll();
         fetchSagaState();
+        fetchSaga6State();
         // Häufiges Polling: macht den "zuletzt gerufen"-Wechsel und das
         // Erscheinen neuer Replicas (nach Scale-Up) schnell sichtbar.
         setInterval(fetchServices, 600);
         setInterval(fetchCircuitState, 1000);
         setInterval(fetchSagaState, 1000);
+        setInterval(fetchSaga6State, 1000);
     </script>
 </body>
 </html>
