@@ -79,3 +79,26 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   └── car/          # CarService (Port 8083)
 └── README.md
 ```
+
+## Lizenz & Nutzung
+
+Dieses Repository ist **source-available, aber nicht klassisch Open Source**. Lesen, klonen und persönliche Nutzung sind ausdrücklich erwünscht — kommerzielle Nutzung erfordert eine separate Vereinbarung.
+
+| Inhalt | Lizenz |
+|---|---|
+| Quellcode in `services/` | [PolyForm Noncommercial 1.0.0](LICENSE) |
+| Workshop-Inhalt in `docs/` | [CC BY-NC 4.0](docs/LICENSE) |
+
+**Erlaubt (ohne Rückfrage):**
+
+- Code und Doku lesen, klonen, forken
+- Persönliche Nutzung zum Lernen, Experimentieren und Nachvollziehen — etwa als ehemaliger Workshop-Teilnehmer
+- Nutzung im Rahmen von Bildungs- oder Forschungseinrichtungen
+
+**Erfordert eine schriftliche Genehmigung:**
+
+- Durchführung dieses Workshops (oder wesentlicher Teile davon) als bezahltes Angebot
+- Integration substantieller Teile des Codes in kommerzielle Produkte oder Services
+- Wiederverwendung der Workshop-Materialien in kommerziellen Trainings
+
+Für kommerzielle Nutzung: Lars Michaelis &lt;l.michaelis@neusta.de&gt;

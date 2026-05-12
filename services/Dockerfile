@@ -22,7 +22,7 @@ LABEL org.opencontainers.image.vendor="Team Neusta"
 LABEL org.opencontainers.image.authors="Lars Michaelis <l.michaelis@neusta.de>"
 LABEL org.opencontainers.image.url="https://github.com/larmic/workshop-microservices"
 LABEL org.opencontainers.image.source="https://github.com/larmic/workshop-microservices"
-LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.licenses="PolyForm-Noncommercial-1.0.0"
 
 WORKDIR /root/
 

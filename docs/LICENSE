@@ -1,0 +1,43 @@
+# Workshop Content License
+
+The workshop content in this directory — including all Markdown
+documents, stories, instructions, diagrams, and accompanying
+materials — is licensed under
+
+**Creative Commons Attribution-NonCommercial 4.0 International
+(CC BY-NC 4.0)**.
+
+- Human-readable summary: <https://creativecommons.org/licenses/by-nc/4.0/>
+- Full legal code: <https://creativecommons.org/licenses/by-nc/4.0/legalcode>
+
+Copyright (c) 2026 Lars Michaelis / team neusta GmbH
+
+## What this means
+
+You are free to:
+
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material
+
+Under the following terms:
+
+- **Attribution** — You must give appropriate credit (Lars Michaelis /
+  team neusta GmbH, link to <https://github.com/larmic/workshop-microservices>),
+  provide a link to the license, and indicate if changes were made.
+- **NonCommercial** — You may not use the material for commercial
+  purposes. This explicitly includes running paid workshops, trainings,
+  or seminars based on this material.
+
+## Commercial Use
+
+Commercial use of this workshop material — in particular, running this
+workshop (or substantial parts of it) as a paid offering — requires a
+separate written license.
+
+Contact: Lars Michaelis &lt;l.michaelis@neusta.de&gt;
+
+## Note on Source Code
+
+The source code in the `services/` directory is licensed separately
+under the PolyForm Noncommercial License 1.0.0. See the [LICENSE](../LICENSE)
+file in the repository root.
