@@ -31,6 +31,7 @@ func main() {
 	bookingStory4URL := getEnv("BOOKING_STORY4_URL", "http://booking-story4:8080")
 	bookingStory5URL := getEnv("BOOKING_STORY5_URL", "http://booking-story5:8080")
 	bookingStory6URL := getEnv("BOOKING_STORY6_URL", "http://booking-story6:8080")
+	bookingStory7URL := getEnv("BOOKING_STORY7_URL", "http://booking-story7:8080")
 	traefikPingURL := getEnv("TRAEFIK_PING_URL", "http://traefik:8080/api/version")
 	swaggerUIURL := getEnv("SWAGGER_UI_URL", "http://swagger-ui:8080/api/")
 	consulStatusURL := getEnv("CONSUL_STATUS_URL", consulURL+"/v1/status/leader")
@@ -50,6 +51,7 @@ func main() {
 		"booking-story4": bookingStory4URL,
 		"booking-story5": bookingStory5URL,
 		"booking-story6": bookingStory6URL,
+		"booking-story7": bookingStory7URL,
 	}
 
 	infraTargets := []handler.InfraTarget{

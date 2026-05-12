@@ -23,6 +23,7 @@ jobs:
       booking-story4: ${{ steps.filter.outputs.booking-story4 }}
       booking-story5: ${{ steps.filter.outputs.booking-story5 }}
       booking-story6: ${{ steps.filter.outputs.booking-story6 }}
+      booking-story7: ${{ steps.filter.outputs.booking-story7 }}
       dashboard: ${{ steps.filter.outputs.dashboard }}
     steps:
       - uses: actions/checkout@v6
@@ -80,6 +81,12 @@ jobs:
               - 'services/Dockerfile'
             booking-story6:
               - 'services/booking/story6/**'
+              - 'services/shared/**'
+              - 'services/go.mod'
+              - 'services/go.sum'
+              - 'services/Dockerfile'
+            booking-story7:
+              - 'services/booking/story7/**'
               - 'services/shared/**'
               - 'services/go.mod'
               - 'services/go.sum'
@@ -296,6 +303,29 @@ jobs:
             SERVICE_DESC=Workshop Microservices - Booking Service (Story 6)
             SERVICE_PORT=8080
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking-story6:latest
+
+  build-booking-story7:
+    needs: changes
+    if: needs.changes.outputs.booking-story7 == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/build-push-action@v7
+        with:
+          context: services
+          file: services/Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVICE_PATH=booking/story7
+            SERVICE_DESC=Workshop Microservices - Booking Service (Story 7)
+            SERVICE_PORT=8080
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking-story7:latest
 
   build-dashboard:
     needs: changes

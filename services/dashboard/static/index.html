@@ -1164,6 +1164,7 @@
                     <a class="link-chip" href="/api/booking-story4/openapi" target="_blank"><span>&#128214;</span> Booking Story 4</a>
                     <a class="link-chip" href="/api/booking-story5/openapi" target="_blank"><span>&#128214;</span> Booking Story 5</a>
                     <a class="link-chip" href="/api/booking-story6/openapi" target="_blank"><span>&#128214;</span> Booking Story 6</a>
+                    <a class="link-chip" href="/api/booking-story7/openapi" target="_blank"><span>&#128214;</span> Booking Story 7</a>
                 </div>
             </div>
         </div>
@@ -1211,6 +1212,8 @@
                 <button type="button" class="stepper-node" data-story-node="5" onclick="showStory(5)">5</button>
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">6</button>
+                <span class="stepper-connector"></span>
+                <button type="button" class="stepper-node" data-story-node="7" onclick="showStory(7)">7</button>
             </div>
             <button type="button" class="stepper-nav-btn" id="stepper-next" onclick="goNextStory()">
                 <span>Weiter</span><span>&rarr;</span>
@@ -1691,6 +1694,18 @@ on timeout(sagaId):
             </div>
             <div class="saga-list" id="saga6-list"></div>
         </div>
+        </section>
+
+        <section class="story-section" data-story="7" hidden>
+            <div class="story-helpers" data-story-helpers="7">
+                <details class="story-info">
+                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                    <div class="story-info-body">
+                        <h4>Kontext</h4>
+                        <p>Story 7 ist noch in Arbeit. Inhalt und UI werden im Workshop ergänzt.</p>
+                    </div>
+                </details>
+            </div>
         </section>
     </main>
 
@@ -2523,8 +2538,10 @@ on timeout(sagaId):
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             6: { title: "Story 6: Die Saga wird leise — Kompensation via Events",
                  subtitle: "Choreography-Saga: Kompensation wandert vom Booking-Service in die Backends, ausgelöst durch Events." },
+            7: { title: "Story 7: Den roten Faden im Log",
+                 subtitle: "Distributed Tracing: Geschäftsvorgänge über Service-Grenzen hinweg verfolgen." },
         };
-        const STORY_COUNT = 6;
+        const STORY_COUNT = 7;
         const STORY_KEY = "workshop-dashboard.currentStory";
 
         function readInitialStory() {

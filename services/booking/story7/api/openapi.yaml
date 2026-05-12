@@ -1,0 +1,651 @@
+openapi: 3.0.3
+info:
+  title: BookingService API
+  description: |
+    REST API for the BookingService that orchestrates Flight, Hotel and Car
+    backend services and exposes health and configuration endpoints.
+  version: 7.0.0
+
+servers:
+  - url: http://localhost/api/booking-story7
+    description: API-Gateway (Traefik)
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Returns HTTP 200 when the service is healthy.
+      operationId: getHealth
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /info:
+    get:
+      summary: Service configuration info
+      description: Returns the current service configuration without sensitive data.
+      operationId: getInfo
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: Current configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InfoResponse"
+
+  /openapi:
+    get:
+      summary: OpenAPI specification
+      description: Returns the OpenAPI specification of this service
+      operationId: getOpenApi
+      tags:
+        - monitoring
+      responses:
+        "200":
+          description: OpenAPI specification
+          content:
+            text/yaml:
+              schema:
+                type: string
+
+  /booking/offers:
+    get:
+      summary: Combined booking offers
+      description: |
+        Calls the Flight, Hotel and Car backend services and returns their
+        combined results. No error handling — the request may fail if a
+        backend service is unavailable.
+      operationId: getBookingOffers
+      tags:
+        - booking
+      responses:
+        "200":
+          description: Combined offers from all backend services
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingOffers"
+
+  /booking/bookings:
+    post:
+      summary: Create combined booking via saga (all-or-nothing with compensation)
+      description: |
+        Orchestriert eine Saga über die drei Backend-Services in der
+        Reihenfolge Flight → Hotel → Car. Jeder Schritt ist eine eigene
+        lokale Transaktion (POST /bookings) gegen den jeweiligen Backend-
+        Service.
+
+        Schlägt ein Forward-Step fehl, gehen die bereits abgeschlossenen
+        Schritte in **Kompensation**: die jeweilige Buchung wird per
+        DELETE /bookings/{id} in umgekehrter Reihenfolge storniert. Der
+        Saga-Status wird in-memory gehalten und ist über
+        GET /booking/bookings/{id} abrufbar.
+
+        **Pre-Check:** Ist ein Circuit Breaker beim Eintritt OPEN, startet
+        die Saga gar nicht erst (`503` ohne Saga-Eintrag) — das spart
+        einen Forward-Step plus die ohnehin scheiternde Kompensation.
+
+        **Kein Retry:** Eine fehlgeschlagene Kompensation wird im
+        Step-Status als `COMPENSATION_FAILED` markiert. Die Saga geht
+        trotzdem auf `FAILED`. Persistenter Retry und Recovery nach
+        Crash sind Bonus-Punkte (siehe `docs/questions/story5.md`).
+      operationId: createBooking
+      tags:
+        - booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingRequest"
+      responses:
+        "201":
+          description: Saga COMPLETED — alle drei Teilbuchungen erfolgreich
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "400":
+          description: Invalid request body
+        "503":
+          description: |
+            Saga abgebrochen — entweder Pre-Check (CB OPEN) oder ein
+            Forward-Step gescheitert. Die Antwort enthält den vollständigen
+            Saga-Status, inklusive der bereits kompensierten Schritte.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SagaFailure"
+
+  /booking/bookings/{id}:
+    get:
+      summary: Saga-Status abfragen
+      description: |
+        Liefert den aktuellen Status einer Saga. Hauptsächlich für
+        Monitoring und für die Rekonstruktion durch den Kunden, der seine
+        bookingId aus der POST-Antwort kennt.
+      operationId: getSagaStatus
+      tags:
+        - booking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: B-7c1a9f12
+      responses:
+        "200":
+          description: Saga gefunden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Saga"
+        "404":
+          description: Saga unbekannt (id nie existiert oder Service neu gestartet — der Saga-Store ist in-memory)
+
+  /admin/sagas:
+    get:
+      summary: Liste aller Sagas
+      description: |
+        Liefert alle Sagas im Store (neueste zuerst). Für das
+        Dashboard-Panel und Monitoring. In-memory — wird beim Service-
+        Neustart geleert.
+      operationId: listSagas
+      tags:
+        - admin
+      responses:
+        "200":
+          description: Liste der Sagas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Saga"
+
+  /admin/sagas-reset:
+    post:
+      summary: Saga-Store leeren
+      description: |
+        Entfernt alle Sagas aus dem Store. Demo-Helfer für saubere
+        Workshop-Runden. Wirkt nicht rückwirkend auf bereits ausgegebene
+        bookingIds.
+      operationId: resetSagas
+      tags:
+        - admin
+      responses:
+        "204":
+          description: Store geleert
+
+  /admin/circuit-state:
+    get:
+      summary: Circuit breaker snapshots
+      description: |
+        Returns the current state of all circuit breakers (flight, hotel, car).
+      operationId: getCircuitState
+      tags:
+        - admin
+      responses:
+        "200":
+          description: Snapshot per backend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CircuitSnapshot"
+
+  /admin/circuit-events:
+    get:
+      summary: Recent circuit breaker state transitions
+      description: |
+        Returns the recent state transition events per circuit breaker
+        (capacity 20 events per breaker).
+      operationId: getCircuitEvents
+      tags:
+        - admin
+      responses:
+        "200":
+          description: Event log per backend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CircuitEventGroup"
+
+  /admin/bulkhead-state:
+    get:
+      summary: Bulkhead snapshots
+      description: |
+        Returns the current state of all bulkheads (flight, hotel, car) with
+        in-flight count, total calls and total rejected (pool was full).
+      operationId: getBulkheadState
+      tags:
+        - admin
+      responses:
+        "200":
+          description: Snapshot per backend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BulkheadSnapshot"
+
+  /admin/bulkhead-reset:
+    post:
+      summary: Reset bulkhead counters
+      description: |
+        Resets totalCalls and totalRejected for all bulkheads to 0. The
+        currently in-flight calls are not affected.
+      operationId: resetBulkheadCounters
+      tags:
+        - admin
+      responses:
+        "204":
+          description: Counters reset
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+      required:
+        - status
+
+    InfoResponse:
+      type: object
+      properties:
+        service:
+          type: string
+          description: Identifier of the booking story service
+          example: booking-5
+        consulUrl:
+          type: string
+          description: URL of the Consul service registry
+          example: "http://consul:8500"
+        timeout:
+          type: integer
+          example: 3000
+      required:
+        - service
+        - consulUrl
+        - timeout
+
+    BookingOffers:
+      type: object
+      properties:
+        flights:
+          type: array
+          items:
+            $ref: "#/components/schemas/Flight"
+        hotels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Hotel"
+        cars:
+          type: array
+          items:
+            $ref: "#/components/schemas/Car"
+      required:
+        - flights
+        - hotels
+        - cars
+
+    Flight:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        airline:
+          type: string
+          example: Lufthansa
+        origin:
+          type: string
+          example: BER
+        destination:
+          type: string
+          example: MUC
+        price:
+          type: number
+          format: double
+          example: 129.99
+
+    Hotel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Grand Hotel
+        city:
+          type: string
+          example: Munich
+        pricePerNight:
+          type: number
+          format: double
+          example: 89.50
+
+    Car:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        provider:
+          type: string
+          example: Sixt
+        model:
+          type: string
+          example: VW Golf
+        pricePerDay:
+          type: number
+          format: double
+          example: 45.00
+
+    BookingRequest:
+      type: object
+      required:
+        - flightId
+        - hotelId
+        - carId
+        - customerName
+      properties:
+        flightId:
+          type: string
+          example: LH123
+        hotelId:
+          type: string
+          example: H1
+        carId:
+          type: string
+          example: C1
+        customerName:
+          type: string
+          example: Max Mustermann
+
+    Booking:
+      type: object
+      required:
+        - bookingId
+        - customerName
+        - flight
+        - hotel
+        - car
+      properties:
+        bookingId:
+          type: string
+          example: B-7c1a9f12
+        customerName:
+          type: string
+          example: Max Mustermann
+        flight:
+          $ref: "#/components/schemas/FlightBooking"
+        hotel:
+          $ref: "#/components/schemas/HotelBooking"
+        car:
+          $ref: "#/components/schemas/CarBooking"
+
+    FlightBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: F-7c1a9f
+        flightId:
+          type: string
+          example: LH123
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    HotelBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: H-3b5d22
+        hotelId:
+          type: string
+          example: H1
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    CarBooking:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: C-9f4e80
+        carId:
+          type: string
+          example: C1
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [CONFIRMED]
+          example: CONFIRMED
+
+    Saga:
+      type: object
+      required:
+        - sagaId
+        - customerName
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        sagaId:
+          type: string
+          example: B-7c1a9f12
+        customerName:
+          type: string
+          example: Max Mustermann
+        status:
+          type: string
+          enum: [PENDING, COMPLETED, COMPENSATING, FAILED]
+          example: FAILED
+        steps:
+          type: array
+          description: |
+            Forward-Schritte in der Reihenfolge ihrer Ausführung. Nur Schritte,
+            die ein Backend tatsächlich gebucht haben, erscheinen hier — der
+            fehlgeschlagene Schritt selbst steht im Feld `failedAt`.
+          items:
+            $ref: "#/components/schemas/SagaStep"
+        failedAt:
+          type: string
+          enum: [flight, hotel, car]
+          description: Service, an dem der Forward-Step gescheitert ist (nur bei status=FAILED gesetzt).
+          example: hotel
+        reason:
+          type: string
+          description: Fehlermeldung des fehlgeschlagenen Schritts.
+          example: "backend returned 500: chaos: fail mode"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    SagaStep:
+      type: object
+      required:
+        - service
+        - status
+      properties:
+        service:
+          type: string
+          enum: [flight, hotel, car]
+          example: flight
+        bookingId:
+          type: string
+          description: ID, die der Backend-Service nach erfolgreicher Buchung zurückgegeben hat — Grundlage für die Kompensation.
+          example: F-7c1a9f
+        status:
+          type: string
+          enum: [BOOKED, COMPENSATED, COMPENSATION_FAILED]
+          example: COMPENSATED
+        detail:
+          type: object
+          description: Rohantwort des Backend-Services bei der Buchung.
+        reason:
+          type: string
+          description: Bei COMPENSATION_FAILED — warum die Stornierung scheiterte.
+
+    SagaFailure:
+      type: object
+      required:
+        - error
+        - saga
+      properties:
+        error:
+          type: string
+          example: "saga failed at hotel — see saga state for details"
+        saga:
+          $ref: "#/components/schemas/Saga"
+
+    CircuitSnapshot:
+      type: object
+      required:
+        - name
+        - state
+        - failureCount
+        - failureThreshold
+        - lastStateChangeAt
+        - openTimeoutSeconds
+        - totalCalls
+        - totalFailures
+        - totalShortCircuits
+      properties:
+        name:
+          type: string
+          enum: [flight, hotel, car]
+          example: hotel
+        state:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+          example: CLOSED
+        failureCount:
+          type: integer
+          example: 0
+        failureThreshold:
+          type: integer
+          example: 5
+        lastStateChangeAt:
+          type: string
+          format: date-time
+        openUntil:
+          type: string
+          format: date-time
+          description: Only present when state is OPEN
+        openTimeoutSeconds:
+          type: integer
+          example: 30
+        totalCalls:
+          type: integer
+          format: int64
+          example: 42
+        totalFailures:
+          type: integer
+          format: int64
+          example: 3
+        totalShortCircuits:
+          type: integer
+          format: int64
+          example: 0
+
+    CircuitEvent:
+      type: object
+      required:
+        - timestamp
+        - from
+        - to
+        - reason
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        from:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+        to:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+        reason:
+          type: string
+          example: failure threshold reached
+
+    CircuitEventGroup:
+      type: object
+      required:
+        - name
+        - events
+      properties:
+        name:
+          type: string
+          enum: [flight, hotel, car]
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/CircuitEvent"
+
+    BulkheadSnapshot:
+      type: object
+      required:
+        - name
+        - maxConcurrent
+        - inFlight
+        - totalCalls
+        - totalRejected
+      properties:
+        name:
+          type: string
+          enum: [flight, hotel, car]
+          example: hotel
+        maxConcurrent:
+          type: integer
+          example: 10
+        inFlight:
+          type: integer
+          example: 3
+        totalCalls:
+          type: integer
+          format: int64
+          description: |
+            Total number of attempts (passed + rejected). The number of
+            successfully passed calls is totalCalls - totalRejected.
+          example: 20
+        totalRejected:
+          type: integer
+          format: int64
+          description: Subset of totalCalls that did NOT get a pool slot.
+          example: 10

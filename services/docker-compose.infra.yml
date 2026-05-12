@@ -40,7 +40,8 @@ services:
           { "url": "http://localhost/api/booking-story3/openapi", "name": "Booking Service (Story 3)" },
           { "url": "http://localhost/api/booking-story4/openapi", "name": "Booking Service (Story 4)" },
           { "url": "http://localhost/api/booking-story5/openapi", "name": "Booking Service (Story 5)" },
-          { "url": "http://localhost/api/booking-story6/openapi", "name": "Booking Service (Story 6)" }
+          { "url": "http://localhost/api/booking-story6/openapi", "name": "Booking Service (Story 6)" },
+          { "url": "http://localhost/api/booking-story7/openapi", "name": "Booking Service (Story 7)" }
         ]
 
   dashboard:
