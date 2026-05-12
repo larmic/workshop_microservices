@@ -183,7 +183,7 @@ Lösungsoptionen, jeweils mit Komplexität:
    will — Versionierung leakt nach oben.
 3. **Service Mesh / API-Gateway.** Traffic-Splitting wird zentral
    konfiguriert (z.B. `90 % → v1, 10 % → v2`), die Aufrufer wissen
-   davon nichts. → Brücke zu Story 8 (Downtimeless Deployment).
+   davon nichts. → Brücke zu Story 9 (Downtimeless Deployment).
 
 **Spicy Take-away:** Service Discovery löst „wo läuft das?", nicht
 „welche Version will ich?". Sobald ihr Canary / Blue-Green / A/B-Tests

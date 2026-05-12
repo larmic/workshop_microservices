@@ -64,14 +64,16 @@ Die Schritt-für-Schritt-Anleitung zur Einrichtung des Arbeitsplatzes findet sic
 | 3 | [Wenn der Flug ausfällt](stories/story-03-circuit-breaker.md) | Circuit Breaker — graceful Degradation bei Ausfall des FlightService. | ca. 60 Min. |
 | 4 | [Isolation ist Stärke](stories/story-04-bulkhead.md) | Bulkhead Pattern — Ressourcen-Isolation verhindert Kaskadenausfälle. | ca. 60 Min. |
 | 5 | [Alles oder nichts - aber richtig](stories/story-05-saga.md) | Saga Pattern — verteilte Transaktionen mit Kompensationslogik für Komplettbuchungen. | ca. 60 Min. |
-| 6 | [Events erzählen Geschichten](stories/story-06-events-cqrs.md) | Event-Driven Architecture & CQRS — asynchrone Verarbeitung und optimierte Lesemodelle. | ca. 60 Min. |
+| 6 | [Die Saga wird leise](stories/story-06-choreography-saga.md) | Choreography-Saga — Kompensation wandert vom Booking-Service in die Backends via Events. | ca. 60 Min. |
+| 7 | [Lesen ist nicht Schreiben](stories/story-07-cqrs.md) | CQRS — getrennte Lese- und Schreibmodelle, Buchungs-Historie als denormalisiertes Read-Model. | ca. 60 Min. |
 
 ### Optional (bei Zeit)
 
 | # | Story | Thema | Zeitrahmen |
 |---|-------|-------|------------|
-| 7 | [Mobile First](stories/story-07-bff.md) | Backends for Frontends — ein spezialisiertes Backend für die mobile App. | ca. 60 Min. |
-| 8 | [Ohne Unterbrechung](stories/story-08-downtimeless-deployment.md) | Downtimeless Deployment — Rolling Updates ohne Ausfallzeit. | ca. 60 Min. |
+| 8 | [Mobile First](stories/story-08-bff.md) | Backends for Frontends — ein spezialisiertes Backend für die mobile App. | ca. 60 Min. |
+| 9 | [Ohne Unterbrechung](stories/story-09-downtimeless-deployment.md) | Downtimeless Deployment — Rolling Updates ohne Ausfallzeit. | ca. 60 Min. |
+| 10 | [Den roten Faden im Log](stories/story-10-tracing.md) | Distributed Tracing — Geschäftsvorgänge über Service-Grenzen hinweg verfolgen. | ca. 60 Min. |
 
 ---
 
@@ -123,13 +125,16 @@ Story 1 (Grundsetup + Konfiguration)
             │
             ├── Story 4 (Bulkhead)
             │
-            └── Story 5 (Saga)
+            └── Story 5 (Saga, sync Kompensation)
                     │
-                    └── Story 6 (Events/CQRS)
+                    └── Story 6 (Choreography-Saga, async Kompensation via Events)
+                            │
+                            └── Story 7 (CQRS — Read-Model aus Events)
 
 Optional:
-    Story 1 + Story 2 → Story 7 (BFF)
-    Story 1 + Story 2 → Story 8 (Downtimeless)
+    Story 1 + Story 2 → Story 8 (BFF)
+    Story 1 + Story 2 → Story 9 (Downtimeless)
+    Story 5 + Story 6 → Story 10 (Distributed Tracing)
 ```
 
 ### Glossar
@@ -139,7 +144,9 @@ Optional:
 | Circuit Breaker | Schutzmechanismus, der bei wiederholten Fehlern weitere Aufrufe unterbricht |
 | Bulkhead | Isolierung von Ressourcen, um Kaskadenausfälle zu verhindern |
 | Saga | Pattern für verteilte Transaktionen mit Kompensationslogik |
-| CQRS | Trennung von Lese- und Schreibmodellen |
+| Orchestration-Saga | Zentraler Koordinator (Booking) steuert Forward- und Kompensationsschritte synchron |
+| Choreography-Saga | Services reagieren auf Events anderer Services — Saga-Wissen ist verteilt |
+| CQRS | Trennung von Lese- und Schreibmodellen zur unabhängigen Optimierung — kann, muss aber nicht mit Events kombiniert werden |
 | BFF | Backend for Frontend - spezialisiertes Backend pro Client-Typ |
 | Eventual Consistency | Daten werden irgendwann konsistent, nicht sofort |
 | Graceful Shutdown | Kontrolliertes Herunterfahren ohne Abbruch laufender Operationen |

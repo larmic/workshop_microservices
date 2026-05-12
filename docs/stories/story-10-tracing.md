@@ -1,4 +1,4 @@
-# Story 9: Den roten Faden im Log
+# Story 10: Den roten Faden im Log
 
 **Thema:** Distributed Tracing
 **Zeitrahmen:** ca. 60 Minuten
@@ -89,6 +89,9 @@ analysieren kann, ohne Logs nach Zeitstempeln zusammenzupuzzeln**.
 - **Story 5 (Saga):** Erst mit Tracing sieht man die Saga als
   zusammenhängende Operation, nicht als Fragmente in mehreren
   Service-Logs.
-- **Story 6 (Events/CQRS):** Tracing über asynchrone Events ist
-  nicht-trivial — Trace-ID muss als Property auf das Event mitwandern.
-  Guter Anschluss-Diskussionspunkt.
+- **Story 6 (Choreography-Saga):** Tracing über asynchrone Events ist
+  nicht-trivial — Trace-ID muss als Property auf das Event mitwandern,
+  sonst zerfällt der Trace an der Bus-Grenze.
+- **Story 7 (CQRS):** Read-Model-Updates erscheinen als eigene
+  Spans im Trace — schöner Beleg für Eventual Consistency, weil die
+  Lücke zwischen Schreib-Span und Read-Update-Span direkt sichtbar wird.

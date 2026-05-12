@@ -1,4 +1,4 @@
-# Story 7: Mobile First
+# Story 8: Mobile First
 
 **Thema:** Backends for Frontends (BFF)
 **Zeitrahmen:** ca. 60 Minuten
