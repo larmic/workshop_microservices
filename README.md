@@ -28,36 +28,9 @@ Der Workshop behandelt die wichtigsten Patterns und Best Practices für Microser
 
 ## Themen
 
+Der Workshop behandelt Grundlagen, Resilience Patterns, Kommunikation & Routing, Daten & Events, Deployment & Betrieb sowie Kultur & Organisation rund um Microservices.
+
 Die vollständige Themenübersicht findet sich in [docs/themen.md](docs/themen.md).
-
-### Grundlagen
-- Twelve-Factor-App
-- Health-Checks
-- 1 DB pro Service
-- External Configuration
-
-### Resilience Patterns
-- Circuit Breaker
-- Bulkhead Pattern
-- Saga Pattern
-
-### Kommunikation & Routing
-- API-Gateway
-- Service Discovery / Service Registry
-- Backends for Frontends (BFF)
-
-### Daten & Events
-- Eventsourcing / Event-Driven Architecture
-- CQRS
-
-### Deployment & Betrieb
-- Downtimeless Deployment
-- API First Ansatz
-
-### Kultur & Organisation
-- Microservices ohne DevOps?
-- "You build it, you run it"
-- Cloud Native
 
 ## Einstieg
 
