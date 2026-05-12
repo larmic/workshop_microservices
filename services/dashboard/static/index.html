@@ -1702,7 +1702,49 @@ on timeout(sagaId):
                     <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
-                        <p>Story 7 ist noch in Arbeit. Inhalt und UI werden im Workshop ergänzt.</p>
+                        <p>
+                            Die Service-Logs zeigen jede Anfrage isoliert: Booking loggt seine Saga, Flight/Hotel/Car loggen
+                            ihre lokalen Buchungen &mdash; aber niemand kann ein <code>POST /booking/bookings</code> über
+                            alle Services hinweg als <em>eine zusammenhängende Operation</em> verfolgen. Korrelation
+                            passiert heute nur über Timestamps und Augenmaß. Mit jeder zusätzlichen Komponente wird das
+                            schmerzhafter, spätestens bei der Saga aus Story 5/6 (bis zu sechs HTTP-Calls über drei
+                            Backends).
+                        </p>
+                        <p>
+                            Eine <strong>Trace-ID</strong> pro eingehender Anfrage, die durch alle nachgelagerten Aufrufe
+                            propagiert wird, löst das Problem &mdash; auch ohne eigenes Tracing-Backend: ein
+                            <code>grep &lt;trace-id&gt;</code> über die Compose-Logs zeigt den kompletten Ablauf.
+                        </p>
+                        <h4>User Story</h4>
+                        <p>
+                            Als <em>Entwickler:in im Betrieb</em> möchte ich
+                            <em>einen einzelnen Geschäftsvorgang über Service-Grenzen hinweg in den Logs verfolgen können</em>,
+                            damit ich <em>Fehlerursachen, Latenzen und Saga-Verläufe gezielt analysieren kann, ohne Logs
+                            nach Zeitstempeln zusammenzupuzzeln</em>.
+                        </p>
+                        <h4>Akzeptanzkriterien</h4>
+                        <ul>
+                            <li>Bei jedem eingehenden Request am Booking-Service wird ein Trace-Kontext erzeugt oder aus dem
+                                Header übernommen (W3C Trace Context: <code>traceparent</code>).</li>
+                            <li>Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call weitergereicht (Flight, Hotel, Car
+                                und deren Kompensation).</li>
+                            <li>Auch über die <strong>asynchronen Compensation-Events</strong> aus Story 6 wird der
+                                Trace-Kontext mitgeführt (als Event-Property).</li>
+                            <li>Jede Logzeile aller Services enthält die Trace-ID, sodass
+                                <code>docker compose logs | grep &lt;trace-id&gt;</code> den vollständigen Ablauf zeigt
+                                &mdash; Forward-Buchung und etwaige Kompensation.</li>
+                            <li>Logs sind strukturiert (JSON), damit <code>trace_id</code> ein eigenes Feld ist.</li>
+                            <li>Die OpenAPI-Dokumentation des Booking-Services beschreibt den
+                                <code>traceparent</code>-Header.</li>
+                        </ul>
+                        <h4>Demo-Befehle</h4>
+                        <p>Mit eigenem Trace-Kontext aufrufen:</p>
+                        <pre><code>curl -X POST http://localhost/api/booking-story7/booking/bookings \
+  -H "Content-Type: application/json" \
+  -H "traceparent: 00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01" \
+  -d '{"customerName":"Demo","flightId":"LH123","hotelId":"H1","carId":"C1"}'</code></pre>
+                        <p>Logs filtern:</p>
+                        <pre><code>docker compose logs booking-story7 flight hotel car | jq -c 'select(.trace_id=="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")'</code></pre>
                     </div>
                 </details>
             </div>

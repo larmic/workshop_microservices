@@ -4,6 +4,12 @@ info:
   description: |
     REST API for the BookingService that orchestrates Flight, Hotel and Car
     backend services and exposes health and configuration endpoints.
+
+    **Distributed Tracing (Story 7):** Alle Endpunkte akzeptieren optional
+    den W3C-`traceparent`-Header. Wenn gesetzt, übernimmt der Service den
+    Trace-Kontext und propagiert ihn an alle nachgelagerten Backend-Aufrufe
+    sowie auf asynchrone Compensation-Events. Ohne Header wird ein neuer
+    Trace-Kontext generiert. Die Response trägt den effektiven Header zurück.
   version: 7.0.0
 
 servers:
@@ -100,6 +106,8 @@ paths:
       operationId: createBooking
       tags:
         - booking
+      parameters:
+        - $ref: "#/components/parameters/Traceparent"
       requestBody:
         required: true
         content:
@@ -256,6 +264,22 @@ paths:
           description: Counters reset
 
 components:
+  parameters:
+    Traceparent:
+      name: traceparent
+      in: header
+      required: false
+      description: |
+        W3C Trace Context Header. Format:
+        `00-<trace-id-32hex>-<span-id-16hex>-<flags-2hex>`. Wird der Header
+        gesetzt, übernimmt der Service den Trace-Kontext und propagiert ihn
+        an alle Backend-Calls sowie auf asynchrone Compensation-Events.
+        Ohne Header wird ein neuer Trace-Kontext generiert.
+      schema:
+        type: string
+        pattern: "^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$"
+        example: "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+
   schemas:
     HealthResponse:
       type: object

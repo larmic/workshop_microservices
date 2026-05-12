@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "embed"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,12 +16,15 @@ import (
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 //go:embed api/openapi.yaml
 var openapiSpec []byte
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+
 	consulURL := os.Getenv("CONSUL_URL")
 	serviceName := os.Getenv("SERVICE_NAME")
 	serviceAddress := os.Getenv("SERVICE_ADDRESS")
@@ -54,7 +58,7 @@ func main() {
 		}
 	}
 
-	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(chaosState.Middleware(mux))}
+	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(tracing.Middleware(chaosState.Middleware(mux)))}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

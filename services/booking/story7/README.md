@@ -1,74 +1,82 @@
-# Booking Service — Story 7: Choreography-Saga via Events
+# Booking Service — Story 7: Distributed Tracing
 
 ## Was diese Story zeigt
 
-Story 5 implementiert die Kompensation **synchron**: Bei einem Fehlschlag im
-Forward-Pfad ruft der Booking-Service nacheinander `DELETE /bookings/{id}`
-gegen Flight, Hotel und Car auf und wartet auf jede Antwort, bevor er dem
-Kunden `FAILED` zurückgibt.
+Story 7 baut auf der Choreography-Saga aus Story 6 auf und ergänzt sie um
+**Distributed Tracing**. Alle vier Services (Booking, Flight, Hotel, Car)
+verteilen einen gemeinsamen Trace-Kontext nach W3C-Trace-Context-Standard
+und schreiben die Trace-ID in jede strukturierte Logzeile.
 
-Story 7 dreht die Verantwortung um: Booking publiziert pro Schritt ein
-`CompensationRequested`-Event an die Backend-Services und ist **sofort
-fertig**. Die Backends führen die Stornierung selbst in einer Goroutine aus.
+Das macht einen kompletten Buchungsvorgang über alle Services hinweg
+nachverfolgbar — auch über die asynchrone Compensation-Grenze, an der
+HTTP-Header verloren gehen würden.
 
-## Im Vergleich
+## Was technisch neu ist gegenüber Story 6
 
-```
-Story 5 (Orchestration, synchron)
-─────────────────────────────────
-  booking ─DELETE /bookings/F-...──► flight   (wartet auf 204)
-  booking ─DELETE /bookings/H-...──► hotel    (wartet auf 204)
-  booking ─DELETE /bookings/C-...──► car      (wartet auf 204)
-  booking → Antwort an Kunden: FAILED
-
-
-Story 7 (Choreography, asynchron — fire & forget)
-─────────────────────────────────────────────────
-  booking ─POST /events/compensation──► flight ──► 202 Accepted (sofort)
-                                                    │
-                                                    └─► storniert in Goroutine
-  booking ─POST /events/compensation──► hotel  ──► 202 Accepted (sofort)
-                                                    │
-                                                    └─► storniert in Goroutine
-  booking ─POST /events/compensation──► car    ──► 202 Accepted (sofort)
-                                                    │
-                                                    └─► storniert in Goroutine
-  booking → Antwort an Kunden: FAILED  (ohne auf die Backends zu warten)
-```
-
-| Aspekt | Story 5 (Orchestration) | Story 7 (Choreography) |
+| Aspekt | Story 6 | Story 7 |
 |---|---|---|
-| **Wer storniert?** | Booking-Service zentral | Jedes Backend selbst |
-| **Wartet Booking auf Ergebnis?** | Ja, pro Schritt | Nur auf `202 Accepted` |
-| **Antwortzeit für den Kunden bei Fehler** | Summe aller Kompensations-Latenzen | Konstant, unabhängig von Backend-Last |
-| **Wo sitzt der Bug, wenn Stornierung schiefgeht?** | im Booking-Service | im jeweiligen Backend |
-| **Robustheit bei Backend-Ausfall** | Booking sieht den Fehler und kann reagieren | Booking weiß nichts, Event ist verloren |
+| **Logging** | `log.Printf` mit Format-String | `slog`-JSON-Handler, jede Zeile mit `trace_id` |
+| **Trace-Kontext eingehend** | Nicht vorhanden | `tracing.Middleware` liest `traceparent` oder generiert |
+| **Trace-Kontext ausgehend** | Nicht propagiert | `tracing.Inject` setzt `traceparent` auf jeden Outbound-Call |
+| **Async-Grenze (Compensation)** | Kein Trace-Bezug | `traceparent` als Event-Property im Body |
+| **Saga aus Logs rekonstruieren** | `grep <saga-id>` (nur Booking-Side) | `grep <trace-id>` über alle Services |
 
-Der letzte Punkt ist absichtlich der unangenehmste — und der eigentliche
-didaktische Kern: **Choreography löst nicht alles**. Was unsere
-Schmalspur-Variante mit HTTP-Events alles **nicht** kann (Persistenz,
-Redelivery, Dead-Letter, Fan-out), und warum echte Message-Broker (Kafka,
-RabbitMQ, NATS) genau deshalb existieren, wird in
-[`docs/questions/story7.md`](../../../docs/questions/story7.md)
-diskutiert.
+## Demo
 
-## Logging
-
-Alle vier beteiligten Services schreiben strukturierte Log-Zeilen mit
-denselben Korrelations-Feldern (`eventId`, `sagaId`). Damit lässt sich ein
-einzelner Saga-Verlauf über alle Services hinweg per `grep` rekonstruieren:
+Eine Buchung absenden:
 
 ```bash
-docker compose logs booking-story7 flight hotel car | grep S-abc123
+curl -X POST http://localhost/api/booking-story7/booking/bookings \
+  -H "Content-Type: application/json" \
+  -d '{"customerName":"Demo","flightId":"LH123","hotelId":"H1","carId":"C1"}'
 ```
 
-Phasen im Log:
+Trace-ID aus den Logs ablesen und filtern:
 
-| Phase | Wo | Bedeutung |
-|---|---|---|
-| `publishing` | booking-story7 | Booking hat das Event vorbereitet und versendet jetzt |
-| `dispatched` | booking-story7 | Backend hat `202 Accepted` zurückgegeben |
-| `dispatch-failed` | booking-story7 | Versand fehlgeschlagen (Netz / 5xx) — Step bleibt trotzdem `COMPENSATED` |
-| `received` | flight/hotel/car | Event ist beim Backend angekommen, vor der Verarbeitung |
-| `processing` | flight/hotel/car | Asynchrone Verarbeitung in der Goroutine startet |
-| `done` | flight/hotel/car | Verarbeitung abgeschlossen |
+```bash
+docker compose logs booking-story7 flight hotel car | jq -c 'select(.trace_id=="<trace-id>")'
+```
+
+Oder mit eigenem `traceparent` (z.B. vom Frontend / API-Gateway):
+
+```bash
+curl -X POST http://localhost/api/booking-story7/booking/bookings \
+  -H "Content-Type: application/json" \
+  -H "traceparent: 00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01" \
+  -d '{"customerName":"Demo","flightId":"LH123","hotelId":"H1","carId":"C1"}'
+```
+
+Die Response trägt den `traceparent` zurück (effektive Trace-ID), und alle
+beteiligten Services loggen mit `trace_id=aaaaaaaa...`.
+
+## Async-Grenze: warum `traceparent` im Event-Body
+
+Bei der Compensation aus Story 6 schickt Booking ein `CompensationRequested`-
+Event per HTTP-POST, das Backend antwortet sofort mit `202 Accepted` und
+verarbeitet in einer Goroutine. Beim Goroutine-Start ist der ursprüngliche
+HTTP-Request bereits zu Ende — der Trace-Kontext muss daher **explizit als
+Property im Event-Body** mitwandern:
+
+```json
+{
+  "eventId": "ev-...",
+  "sagaId": "B-...",
+  "bookingId": "F-...",
+  "traceparent": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+}
+```
+
+Der Compensation-Handler liest die Property, baut den Trace-Kontext daraus
+und übergibt ihn an die Goroutine — sodass die `phase=processing`- und
+`phase=done`-Logzeilen dieselbe `trace_id` tragen wie die ursprüngliche
+Buchung.
+
+## Hintergrund zur Implementierung
+
+- **Geteilte Bibliothek:** `services/shared/tracing/` (Parse, New,
+  Middleware, Inject, Logger) — ~100 Zeilen, sprachunabhängiger Stil.
+- **Pflicht-Pfad** der Story ist tool-agnostisch: keine OTel-Library, kein
+  Jaeger/Tempo. `grep <trace-id>` ist das Demo-Werkzeug.
+- **Bonus-Pfad** (in `docs/instructions/distributed-tracing.md`): Wie man
+  OpenTelemetry + Jaeger einbindet, Sampling betreibt und die richtigen
+  Markt-Tools wählt.

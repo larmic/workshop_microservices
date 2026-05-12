@@ -3,7 +3,9 @@ package main
 import (
 	_ "embed"
 	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/team-neusta-skills/workshop_microservices/booking/story7/bulkhead"
@@ -14,12 +16,15 @@ import (
 	"github.com/team-neusta-skills/workshop_microservices/shared/env"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 //go:embed api/openapi.yaml
 var openapiSpec []byte
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+
 	config := handler.Config{
 		Service:   "booking-7",
 		ConsulURL: env.GetEnv("CONSUL_URL", "http://localhost:8500"),
@@ -75,7 +80,7 @@ func main() {
 	mux.HandleFunc("POST /admin/bulkhead-reset", handler.BulkheadResetHandler(bulkheads))
 
 	log.Println("BookingService starting on port 8080...")
-	if err := http.ListenAndServe(":8080", middleware.CORSMiddleware(mux)); err != nil {
+	if err := http.ListenAndServe(":8080", middleware.CORSMiddleware(tracing.Middleware(mux))); err != nil {
 		log.Fatal(err)
 	}
 }

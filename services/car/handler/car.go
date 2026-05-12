@@ -1,12 +1,14 @@
 package handler
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
+
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 type Car struct {
@@ -36,15 +38,13 @@ var cars = []Car{
 }
 
 func CarsHandler(w http.ResponseWriter, r *http.Request) {
-	hostname, _ := os.Hostname()
-	log.Printf("[%s] %s %s from %s", hostname, r.Method, r.URL.Path, r.RemoteAddr)
+	logRequest(r)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(cars)
 }
 
 func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
-	hostname, _ := os.Hostname()
-	log.Printf("[%s] %s %s from %s", hostname, r.Method, r.URL.Path, r.RemoteAddr)
+	logRequest(r)
 
 	var req BookingRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -59,8 +59,12 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 		Status:       "CONFIRMED",
 	}
 
-	log.Printf("[%s] Car booking confirmed: bookingId=%s carId=%s customer=%q",
-		hostname, booking.BookingID, booking.CarID, booking.CustomerName)
+	tracing.Logger(r.Context()).Info("car booking confirmed",
+		"host", hostname(),
+		"bookingId", booking.BookingID,
+		"carId", booking.CarID,
+		"customer", booking.CustomerName,
+	)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -68,27 +72,34 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CancelBookingHandler(w http.ResponseWriter, r *http.Request) {
-	hostname, _ := os.Hostname()
-	log.Printf("[%s] %s %s from %s", hostname, r.Method, r.URL.Path, r.RemoteAddr)
+	logRequest(r)
 
 	id := r.PathValue("id")
-	log.Printf("[%s] Car booking cancelled: bookingId=%s", hostname, id)
+	tracing.Logger(r.Context()).Info("car booking cancelled",
+		"host", hostname(),
+		"bookingId", id,
+	)
 
 	w.WriteHeader(http.StatusNoContent)
 }
 
 type CompensationEvent struct {
-	EventID   string `json:"eventId"`
-	SagaID    string `json:"sagaId"`
-	BookingID string `json:"bookingId"`
+	EventID     string `json:"eventId"`
+	SagaID      string `json:"sagaId"`
+	BookingID   string `json:"bookingId"`
+	Traceparent string `json:"traceparent,omitempty"`
 }
 
 // CompensationEventHandler nimmt ein CompensationRequested-Event entgegen,
 // antwortet sofort mit 202 Accepted und führt die Stornierung asynchron
 // in einer Goroutine aus (fire & forget aus Sicht des Senders).
+//
+// Trace-Kontext wandert über die `traceparent`-Property im Event-Body
+// mit (Async-Grenze) und wird vor dem Goroutine-Start in den Kontext gelegt,
+// damit die Stornierungs-Logzeilen dieselbe trace_id tragen wie die
+// ursprüngliche Buchung.
 func CompensationEventHandler(w http.ResponseWriter, r *http.Request) {
-	hostname, _ := os.Hostname()
-	log.Printf("[%s] %s %s from %s", hostname, r.Method, r.URL.Path, r.RemoteAddr)
+	logRequest(r)
 
 	var ev CompensationEvent
 	if err := json.NewDecoder(r.Body).Decode(&ev); err != nil {
@@ -100,17 +111,46 @@ func CompensationEventHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("[%s] event=CompensationRequested service=car phase=received   eventId=%s sagaId=%s bookingId=%s",
-		hostname, ev.EventID, ev.SagaID, ev.BookingID)
+	asyncCtx := contextFromEvent(ev.Traceparent)
+	logger := tracing.Logger(asyncCtx).With(
+		"host", hostname(),
+		"event", "CompensationRequested",
+		"service", "car",
+		"eventId", ev.EventID,
+		"sagaId", ev.SagaID,
+		"bookingId", ev.BookingID,
+	)
+
+	logger.Info("compensation event", "phase", "received")
 
 	w.WriteHeader(http.StatusAccepted)
 
 	go func() {
-		log.Printf("[%s] event=CompensationRequested service=car phase=processing eventId=%s sagaId=%s bookingId=%s",
-			hostname, ev.EventID, ev.SagaID, ev.BookingID)
-		log.Printf("[%s] event=CompensationRequested service=car phase=done       eventId=%s sagaId=%s bookingId=%s",
-			hostname, ev.EventID, ev.SagaID, ev.BookingID)
+		logger.Info("compensation event", "phase", "processing")
+		logger.Info("compensation event", "phase", "done")
 	}()
+}
+
+func logRequest(r *http.Request) {
+	tracing.Logger(r.Context()).Info("request",
+		"host", hostname(),
+		"method", r.Method,
+		"path", r.URL.Path,
+		"remote", r.RemoteAddr,
+	)
+}
+
+func hostname() string {
+	h, _ := os.Hostname()
+	return h
+}
+
+func contextFromEvent(traceparent string) context.Context {
+	tc, ok := tracing.Parse(traceparent)
+	if !ok {
+		tc = tracing.New()
+	}
+	return tracing.WithContext(context.Background(), tc)
 }
 
 func newBookingID(prefix string) string {

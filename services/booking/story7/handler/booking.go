@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -18,6 +17,7 @@ import (
 	"github.com/team-neusta-skills/workshop_microservices/booking/story7/circuitbreaker"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story7/saga"
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 type Config struct {
@@ -78,7 +78,7 @@ var consulNameFor = map[string]string{
 
 func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, breakers Breakers, bulkheads Bulkheads) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+		logRequest(r)
 
 		flights := fetchOffersWithBHCB(r.Context(), w, bulkheads.Flight, breakers.Flight, "flight",
 			resolver, client, "flight-service", "/flights")
@@ -103,7 +103,9 @@ func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, breake
 // GET /booking/bookings/{id} abrufbar.
 func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breakers Breakers, store *saga.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+		ctx := r.Context()
+		logger := tracing.Logger(ctx)
+		logRequest(r)
 
 		// Pre-Check: ist ein CB OPEN, fängt die Saga gar nicht erst an.
 		// Der Pre-Check spart einen Forward-Step plus die anschließende
@@ -111,7 +113,7 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breake
 		for _, cb := range breakers.All() {
 			snap := cb.Snapshot()
 			if snap.State == "OPEN" {
-				writePreCheckFailure(w, snap.Name)
+				writePreCheckFailure(ctx, w, snap.Name)
 				return
 			}
 		}
@@ -131,7 +133,7 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breake
 			CreatedAt:    now,
 		}
 		store.Save(s)
-		log.Printf("Saga %s started for customer=%q", sagaID, req.CustomerName)
+		logger.Info("saga started", "sagaId", sagaID, "customer", req.CustomerName)
 
 		type stepDef struct {
 			label   string
@@ -145,19 +147,28 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breake
 		}
 
 		for _, def := range defs {
-			raw, err := bookSingle(r.Context(), def.cb, resolver, client, consulNameFor[def.label], def.payload)
+			raw, err := bookSingle(ctx, def.cb, resolver, client, consulNameFor[def.label], def.payload)
 			if err != nil {
 				s.Status = saga.StatusCompensating
 				s.FailedAt = def.label
 				s.Reason = err.Error()
 				store.Save(s)
-				log.Printf("Saga %s forward step %s failed: %v — compensating %d step(s)",
-					sagaID, def.label, err, len(s.Steps))
+				logger.Warn("saga forward step failed — compensating",
+					"sagaId", sagaID,
+					"step", def.label,
+					"err", err.Error(),
+					"compensateSteps", len(s.Steps),
+				)
 
 				// Kompensation läuft in eigenem Background-Context: das
 				// Aufräumen darf nicht abgebrochen werden, nur weil der
-				// Client die Verbindung zumacht.
+				// Client die Verbindung zumacht. Der Trace-Kontext wird
+				// explizit kopiert, damit alle Compensation-Logzeilen
+				// dieselbe trace_id tragen.
 				compCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+				if tc, ok := tracing.FromContext(ctx); ok {
+					compCtx = tracing.WithContext(compCtx, tc)
+				}
 				compensate(compCtx, client, resolver, &s)
 				cancel()
 
@@ -178,7 +189,7 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breake
 
 		s.Status = saga.StatusCompleted
 		store.Save(s)
-		log.Printf("Saga %s completed", sagaID)
+		logger.Info("saga completed", "sagaId", sagaID)
 
 		booking := Booking{
 			BookingID:    sagaID,
@@ -196,7 +207,7 @@ func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breake
 
 func GetSagaStatusHandler(store *saga.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+		logRequest(r)
 		id := r.PathValue("id")
 		s, ok := store.Get(id)
 		if !ok {
@@ -221,7 +232,7 @@ func ListSagasHandler(store *saga.Store) http.HandlerFunc {
 func ResetSagasHandler(store *saga.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		store.Reset()
-		log.Println("Saga store reset")
+		tracing.Logger(r.Context()).Info("saga store reset")
 		w.WriteHeader(http.StatusNoContent)
 	}
 }
@@ -232,17 +243,11 @@ func ResetSagasHandler(store *saga.Store) http.HandlerFunc {
 // mit 202 Accepted und erledigt die Stornierung in einer Goroutine — Booking
 // wartet NICHT auf die fachliche Verarbeitung.
 //
-// Das ist der pädagogische Kern von Story 7 (Choreography-Saga): Die
-// Verantwortung für die Ausführung der Stornierung liegt beim Backend,
-// nicht mehr im Booking-Service. Booking ist nach „Event raus" fertig.
-//
-// Schmalspur-Variante: Wir benutzen kein echtes Pub/Sub-System, sondern
-// HTTP-POST. Die Implikationen (keine Persistenz, keine Redelivery,
-// kein Dead-Letter) werden in docs/questions/story7.md diskutiert. Ein
-// fehlgeschlagener Event-Dispatch wird nur geloggt — der Step bleibt
-// optimistisch auf StepCompensated, weil Booking ohnehin keinen Reply
-// erwartet.
+// Story 7-Aspekt: Der Trace-Kontext wandert über die `traceparent`-Property
+// im Event-Body mit, sodass die spätere Stornierungs-Logzeile im Backend
+// dieselbe trace_id trägt wie die Buchung — auch über die Async-Grenze.
 func compensate(ctx context.Context, client *http.Client, resolver *consul.Resolver, s *saga.Saga) {
+	logger := tracing.Logger(ctx)
 	dispatched := 0
 	for i := len(s.Steps) - 1; i >= 0; i-- {
 		step := &s.Steps[i]
@@ -252,24 +257,29 @@ func compensate(ctx context.Context, client *http.Client, resolver *consul.Resol
 		if step.BookingID == "" {
 			step.Status = saga.StepCompensationFailed
 			step.Reason = "no bookingId captured — cannot compensate"
-			log.Printf("Saga %s compensation %s skipped: no bookingId", s.SagaID, step.Service)
+			logger.Warn("compensation skipped: no bookingId",
+				"sagaId", s.SagaID, "service", step.Service)
 			continue
 		}
 		eventID := newEventID()
-		log.Printf("Saga %s event=CompensationRequested phase=publishing      eventId=%s service=%s bookingId=%s",
-			s.SagaID, eventID, step.Service, step.BookingID)
+		stepLogger := logger.With(
+			"sagaId", s.SagaID,
+			"event", "CompensationRequested",
+			"eventId", eventID,
+			"service", step.Service,
+			"bookingId", step.BookingID,
+		)
+		stepLogger.Info("compensation event", "phase", "publishing")
 		if err := compensateSingle(ctx, client, resolver, consulNameFor[step.Service], eventID, s.SagaID, step.BookingID); err != nil {
-			log.Printf("Saga %s event=CompensationRequested phase=dispatch-failed eventId=%s service=%s bookingId=%s err=%v",
-				s.SagaID, eventID, step.Service, step.BookingID, err)
+			stepLogger.Error("compensation event", "phase", "dispatch-failed", "err", err.Error())
 		} else {
-			log.Printf("Saga %s event=CompensationRequested phase=dispatched     eventId=%s service=%s bookingId=%s",
-				s.SagaID, eventID, step.Service, step.BookingID)
+			stepLogger.Info("compensation event", "phase", "dispatched")
 		}
 		step.Status = saga.StepCompensated
 		dispatched++
 	}
-	log.Printf("Saga %s compensation dispatched asynchronously to %d service(s) — booking finishes immediately",
-		s.SagaID, dispatched)
+	logger.Info("compensation dispatched — booking finishes immediately",
+		"sagaId", s.SagaID, "services", dispatched)
 }
 
 func compensateSingle(ctx context.Context, client *http.Client, resolver *consul.Resolver, consulName, eventID, sagaID, bookingID string) error {
@@ -277,10 +287,15 @@ func compensateSingle(ctx context.Context, client *http.Client, resolver *consul
 	if err != nil {
 		return err
 	}
+	traceparent := ""
+	if tc, ok := tracing.FromContext(ctx); ok {
+		traceparent = tc.Header()
+	}
 	payload, err := json.Marshal(map[string]string{
-		"eventId":   eventID,
-		"sagaId":    sagaID,
-		"bookingId": bookingID,
+		"eventId":     eventID,
+		"sagaId":      sagaID,
+		"bookingId":   bookingID,
+		"traceparent": traceparent,
 	})
 	if err != nil {
 		return err
@@ -290,6 +305,7 @@ func compensateSingle(ctx context.Context, client *http.Client, resolver *consul
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
+	tracing.Inject(ctx, req)
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
@@ -327,7 +343,7 @@ func writeSagaFailure(w http.ResponseWriter, s saga.Saga, message string) {
 	_ = json.NewEncoder(w).Encode(SagaFailureResponse{Error: message, Saga: s})
 }
 
-func writePreCheckFailure(w http.ResponseWriter, service string) {
+func writePreCheckFailure(ctx context.Context, w http.ResponseWriter, service string) {
 	now := time.Now().UTC()
 	s := saga.Saga{
 		Status:    saga.StatusFailed,
@@ -336,7 +352,7 @@ func writePreCheckFailure(w http.ResponseWriter, service string) {
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
-	log.Printf("Saga not started: circuit breaker for %s is OPEN", service)
+	tracing.Logger(ctx).Warn("saga not started: circuit breaker open", "service", service)
 	writeSagaFailure(w, s, "saga not started — circuit breaker is open for "+service)
 }
 
@@ -396,23 +412,24 @@ func fetchOffersWithBHCB(
 		})
 	})
 	if err != nil {
-		markFallback(w, serviceLabel, err)
+		markFallback(ctx, w, serviceLabel, err)
 		return emptyJSONArray
 	}
 	return data
 }
 
-func markFallback(w http.ResponseWriter, serviceLabel string, err error) {
+func markFallback(ctx context.Context, w http.ResponseWriter, serviceLabel string, err error) {
+	logger := tracing.Logger(ctx)
 	w.Header().Add("X-Fallback", serviceLabel)
 	switch {
 	case errors.Is(err, bulkhead.ErrBulkheadFull):
 		w.Header().Add("X-Bulkhead-Full", serviceLabel)
-		log.Printf("%s call rejected (bulkhead full)", serviceLabel)
+		logger.Warn("call rejected: bulkhead full", "service", serviceLabel)
 	case errors.Is(err, circuitbreaker.ErrCircuitOpen):
 		w.Header().Add("X-Circuit-Open", serviceLabel)
-		log.Printf("%s call short-circuited (CB OPEN)", serviceLabel)
+		logger.Warn("call short-circuited: CB OPEN", "service", serviceLabel)
 	default:
-		log.Printf("%s call failed, applying fallback: %v", serviceLabel, err)
+		logger.Warn("call failed — applying fallback", "service", serviceLabel, "err", err.Error())
 	}
 }
 
@@ -421,6 +438,7 @@ func fetchJSON(ctx context.Context, client *http.Client, url string) (json.RawMe
 	if err != nil {
 		return nil, err
 	}
+	tracing.Inject(ctx, req)
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -450,6 +468,7 @@ func postJSON(ctx context.Context, client *http.Client, url string, payload any)
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
+	tracing.Inject(ctx, req)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -467,6 +486,14 @@ func postJSON(ctx context.Context, client *http.Client, url string, payload any)
 	}
 
 	return json.RawMessage(respBody), nil
+}
+
+func logRequest(r *http.Request) {
+	tracing.Logger(r.Context()).Info("request",
+		"method", r.Method,
+		"path", r.URL.Path,
+		"remote", r.RemoteAddr,
+	)
 }
 
 func newBookingID() string {
