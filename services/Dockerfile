@@ -16,8 +16,12 @@ FROM scratch
 ARG SERVICE_DESC="Workshop Microservices"
 ARG SERVICE_PORT=8080
 
+LABEL org.opencontainers.image.title="${SERVICE_DESC}"
+LABEL org.opencontainers.image.description="${SERVICE_DESC} – part of the team neusta microservices workshop"
+LABEL org.opencontainers.image.vendor="Team Neusta"
+LABEL org.opencontainers.image.authors="Lars Michaelis <l.michaelis@neusta.de>"
+LABEL org.opencontainers.image.url="https://github.com/larmic/workshop-microservices"
 LABEL org.opencontainers.image.source="https://github.com/larmic/workshop-microservices"
-LABEL org.opencontainers.image.description="${SERVICE_DESC}"
 LABEL org.opencontainers.image.licenses="MIT"
 
 WORKDIR /root/
