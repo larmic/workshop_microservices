@@ -1,0 +1,268 @@
+### ===========================
+### BookingService Story 6
+### ===========================
+
+### Booking Service - Health Check
+GET http://{{host}}:{{bookingPort}}/health
+
+> {%
+    client.test("Booking health status is 200", function () {
+        client.assert(response.status === 200, "Expected 200");
+    });
+    client.test("Booking health status is UP", function () {
+        client.assert(response.body.status === "UP", "Expected status UP");
+    });
+%}
+
+### Booking Service - Configuration Info
+GET http://{{host}}:{{bookingPort}}/info
+
+> {%
+    client.test("Info status is 200", function () {
+        client.assert(response.status === 200, "Expected 200");
+    });
+    client.test("Info contains service identifier", function () {
+        client.assert(response.body.service === "booking-5", "Expected service booking-5");
+    });
+    client.test("Info contains consulUrl", function () {
+        client.assert(response.body.consulUrl !== undefined, "Expected consulUrl");
+    });
+    client.test("Info contains timeout", function () {
+        client.assert(response.body.timeout !== undefined, "Expected timeout");
+    });
+%}
+
+### Booking Service - Combined Booking Offers (unverändert seit Story 3, kein Saga-Bezug)
+GET http://{{host}}:{{bookingPort}}/booking/offers
+
+> {%
+    client.test("Booking offers status is 200", function () {
+        client.assert(response.status === 200, "Expected 200");
+    });
+    client.test("Response contains flights, hotels, cars", function () {
+        client.assert(response.body.flights !== undefined, "Expected flights");
+        client.assert(response.body.hotels !== undefined, "Expected hotels");
+        client.assert(response.body.cars !== undefined, "Expected cars");
+    });
+%}
+
+### ===========================
+### Saga: Happy Path
+### ===========================
+
+### Chaos zurücksetzen vor dem Happy-Path-Test
+POST http://{{host}}:{{flightPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "normal" }
+
+###
+POST http://{{host}}:{{hotelPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "normal" }
+
+###
+POST http://{{host}}:{{carPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "normal" }
+
+### Saga starten — alle drei Backends gesund, erwartet 201 + COMPLETED
+POST http://{{host}}:{{bookingPort}}/booking/bookings
+Content-Type: application/json
+
+{
+  "flightId": "LH123",
+  "hotelId": "H1",
+  "carId": "C1",
+  "customerName": "Max Mustermann"
+}
+
+> {%
+    client.test("Booking status is 201", function () {
+        client.assert(response.status === 201, "Expected 201");
+    });
+    client.test("Response contains bookingId and customerName", function () {
+        client.assert(response.body.bookingId !== undefined, "Expected bookingId");
+        client.assert(response.body.customerName === "Max Mustermann", "Expected Max Mustermann");
+    });
+    client.test("All sub-bookings are CONFIRMED", function () {
+        client.assert(response.body.flight.status === "CONFIRMED", "Expected flight CONFIRMED");
+        client.assert(response.body.hotel.status === "CONFIRMED", "Expected hotel CONFIRMED");
+        client.assert(response.body.car.status === "CONFIRMED", "Expected car CONFIRMED");
+    });
+    client.global.set("sagaId", response.body.bookingId);
+%}
+
+### Saga-Status nach Happy Path — erwartet COMPLETED mit drei BOOKED-Schritten
+GET http://{{host}}:{{bookingPort}}/booking/bookings/{{sagaId}}
+
+> {%
+    client.test("Saga status is 200", function () {
+        client.assert(response.status === 200, "Expected 200");
+    });
+    client.test("Saga is COMPLETED", function () {
+        client.assert(response.body.status === "COMPLETED", "Expected COMPLETED, got " + response.body.status);
+    });
+    client.test("Saga has 3 BOOKED steps", function () {
+        client.assert(response.body.steps.length === 3, "Expected 3 steps");
+        response.body.steps.forEach(function (s) {
+            client.assert(s.status === "BOOKED", "Expected step BOOKED, got " + s.status);
+            client.assert(s.bookingId, "Expected step bookingId");
+        });
+    });
+%}
+
+### ===========================
+### Saga: Hotel fällt aus → Kompensation des Flugs
+### ===========================
+
+### Hotel auf "fail" stellen
+POST http://{{host}}:{{hotelPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "fail" }
+
+### Saga starten — erwartet 503, FAILED, Flight COMPENSATED, Hotel als failedAt
+POST http://{{host}}:{{bookingPort}}/booking/bookings
+Content-Type: application/json
+
+{
+  "flightId": "LH123",
+  "hotelId": "H1",
+  "carId": "C1",
+  "customerName": "Compensation Test"
+}
+
+> {%
+    client.test("Booking status is 503", function () {
+        client.assert(response.status === 503, "Expected 503, got " + response.status);
+    });
+    client.test("Response contains saga state", function () {
+        client.assert(response.body.saga !== undefined, "Expected saga in response");
+        client.assert(response.body.saga.status === "FAILED", "Expected FAILED");
+        client.assert(response.body.saga.failedAt === "hotel", "Expected failedAt=hotel");
+    });
+    client.test("Flight step was COMPENSATED", function () {
+        var flight = response.body.saga.steps.find(function (s) { return s.service === "flight"; });
+        client.assert(flight !== undefined, "Expected flight step in saga");
+        client.assert(flight.status === "COMPENSATED",
+            "Expected flight COMPENSATED, got " + (flight && flight.status));
+    });
+    client.global.set("failedSagaId", response.body.saga.sagaId);
+%}
+
+### Failed-Saga-Status erneut abfragen — Snapshot ist persistent in-memory
+GET http://{{host}}:{{bookingPort}}/booking/bookings/{{failedSagaId}}
+
+> {%
+    client.test("Failed saga status is 200", function () {
+        client.assert(response.status === 200, "Expected 200");
+    });
+    client.test("Saga is FAILED with failedAt=hotel", function () {
+        client.assert(response.body.status === "FAILED", "Expected FAILED");
+        client.assert(response.body.failedAt === "hotel", "Expected failedAt=hotel");
+    });
+%}
+
+### ===========================
+### Saga: Car fällt aus → Kompensation Flight + Hotel
+### ===========================
+
+### Hotel zurück auf normal, Car auf "fail"
+POST http://{{host}}:{{hotelPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "normal" }
+
+###
+POST http://{{host}}:{{carPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "fail" }
+
+### Saga starten — erwartet 503, beide Vorgänger COMPENSATED in Reihenfolge Hotel → Flight
+POST http://{{host}}:{{bookingPort}}/booking/bookings
+Content-Type: application/json
+
+{
+  "flightId": "LH123",
+  "hotelId": "H1",
+  "carId": "C1",
+  "customerName": "Two-Step Compensation"
+}
+
+> {%
+    client.test("Booking status is 503", function () {
+        client.assert(response.status === 503, "Expected 503");
+    });
+    client.test("Saga FAILED at car", function () {
+        client.assert(response.body.saga.status === "FAILED", "Expected FAILED");
+        client.assert(response.body.saga.failedAt === "car", "Expected failedAt=car");
+    });
+    client.test("Both flight and hotel were COMPENSATED", function () {
+        var flight = response.body.saga.steps.find(function (s) { return s.service === "flight"; });
+        var hotel = response.body.saga.steps.find(function (s) { return s.service === "hotel"; });
+        client.assert(flight && flight.status === "COMPENSATED", "Expected flight COMPENSATED");
+        client.assert(hotel && hotel.status === "COMPENSATED", "Expected hotel COMPENSATED");
+    });
+%}
+
+### ===========================
+### Saga: Pre-Check schlägt zu (CB OPEN)
+### ===========================
+### Voraussetzung: in einem vorherigen Lauf 5+ Hotel-Failures provozieren,
+### damit der Hotel-CB OPEN ist. Antwort enthält dann saga.status=FAILED mit
+### saga.steps=[] — Saga wurde gar nicht erst gestartet.
+
+POST http://{{host}}:{{bookingPort}}/booking/bookings
+Content-Type: application/json
+
+{
+  "flightId": "LH123",
+  "hotelId": "H1",
+  "carId": "C1",
+  "customerName": "Pre-Check Test"
+}
+
+### ===========================
+### Aufräumen: alle Backends zurück auf normal
+### ===========================
+POST http://{{host}}:{{flightPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "normal" }
+
+###
+POST http://{{host}}:{{hotelPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "normal" }
+
+###
+POST http://{{host}}:{{carPort}}/admin/chaos
+Content-Type: application/json
+
+{ "mode": "normal" }
+
+### Saga-Status für unbekannte ID — 404
+GET http://{{host}}:{{bookingPort}}/booking/bookings/B-deadbeef
+
+> {%
+    client.test("Unknown saga returns 404", function () {
+        client.assert(response.status === 404, "Expected 404");
+    });
+%}
+
+### Booking Service - OpenAPI Specification
+GET http://{{host}}:{{bookingPort}}/openapi
+
+> {%
+    client.test("OpenAPI status is 200", function () {
+        client.assert(response.status === 200, "Expected 200");
+    });
+    client.test("OpenAPI response is YAML", function () {
+        client.assert(response.contentType.mimeType === "application/yaml", "Expected application/yaml");
+    });
+%}
