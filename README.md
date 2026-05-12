@@ -19,18 +19,14 @@ Dieser Workshop richtet sich an:
 
 Der Workshop behandelt die wichtigsten Patterns und Best Practices für Microservice-Architekturen. Anhand einer praktischen Beispieldomäne (Reisebuchung: Hotel, Flug, Mietwagen) werden die Konzepte hands-on erarbeitet.
 
+Die vollständige Themenübersicht findet sich in [docs/themen.md](docs/themen.md).
+
 ## Format
 
 - **Dauer:** 2 Tage
 - **Mix aus:** Kurzvorträgen und Gruppenarbeit
 - **Schwerpunkt:** Praktische Hands-On-Übungen
 - **Aufgabenformat:** User Stories
-
-## Themen
-
-Der Workshop behandelt Grundlagen, Resilience Patterns, Kommunikation & Routing, Daten & Events, Deployment & Betrieb sowie Kultur & Organisation rund um Microservices.
-
-Die vollständige Themenübersicht findet sich in [docs/themen.md](docs/themen.md).
 
 ## Einstieg
 
@@ -39,17 +35,23 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 ## Projektstruktur
 
 ```
-├── docs/             # Workshop-Dokumentation
-│   ├── vorbereitung.md # Arbeitsplatz einrichten
-│   ├── stories.md    # User Stories (Index)
-│   ├── stories/      # Einzelne Story-Dateien
-│   ├── idea.md       # Workshop-Konzept
-│   └── themen.md     # Themenübersicht
-├── services/         # Backend-Services (Go)
-│   ├── go.mod        # Go-Modul
-│   ├── flight/       # FlightService (Port 8081)
-│   ├── hotel/        # HotelService (Port 8082)
-│   └── car/          # CarService (Port 8083)
+├── docs/                  # Workshop-Dokumentation
+│   ├── vorbereitung.md    # Arbeitsplatz einrichten
+│   ├── themen.md          # Themenübersicht
+│   ├── idea.md            # Workshop-Konzept
+│   ├── stories/           # User Stories (story-01 … story-07)
+│   ├── instructions/      # Trainer-Hinweise
+│   └── questions/         # Fragen & Diskussionsimpulse
+├── services/              # Backend-Services (Go)
+│   ├── booking/           # BookingService (story1 … story7)
+│   ├── flight/            # FlightService
+│   ├── hotel/             # HotelService
+│   ├── car/               # CarService
+│   ├── dashboard/         # Dashboard-UI
+│   ├── traefik/           # API-Gateway-Konfiguration
+│   ├── shared/            # Gemeinsame Bibliotheken
+│   ├── docker-compose.yml # Lokales Setup
+│   └── Makefile
 └── README.md
 ```
 
