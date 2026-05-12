@@ -92,6 +92,3 @@ analysieren kann, ohne Logs nach Zeitstempeln zusammenzupuzzeln**.
 - **Story 6 (Choreography-Saga):** Tracing über asynchrone Events ist
   nicht-trivial — Trace-ID muss als Property auf das Event mitwandern,
   sonst zerfällt der Trace an der Bus-Grenze.
-- **Story 7 (CQRS):** Read-Model-Updates erscheinen als eigene
-  Spans im Trace — schöner Beleg für Eventual Consistency, weil die
-  Lücke zwischen Schreib-Span und Read-Update-Span direkt sichtbar wird.

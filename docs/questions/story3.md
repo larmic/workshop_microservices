@@ -231,7 +231,7 @@ Lösungsansätze, von „simpel" bis „aufwendig":
    Replicas die gleiche Sicht auf jedes Backend. Aufwand hoch,
    Konsistenz-Probleme inklusive.
 4. **Service Mesh (z.B. Envoy).** Der Sidecar hält den CB-State, der
-   App-Restart hat keinen Einfluss. → Brücke zu Story 7+.
+   App-Restart hat keinen Einfluss.
 
 **Spicy Take-away:** Lokale CB-Statistik ist **per Definition
 ephemerer Zustand**. Wer das vergisst, hat nach jedem Deploy ein paar

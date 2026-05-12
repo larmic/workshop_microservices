@@ -65,7 +65,6 @@ Die Schritt-für-Schritt-Anleitung zur Einrichtung des Arbeitsplatzes findet sic
 | 4 | [Isolation ist Stärke](stories/story-04-bulkhead.md) | Bulkhead Pattern — Ressourcen-Isolation verhindert Kaskadenausfälle. | ca. 60 Min. |
 | 5 | [Alles oder nichts - aber richtig](stories/story-05-saga.md) | Saga Pattern — verteilte Transaktionen mit Kompensationslogik für Komplettbuchungen. | ca. 60 Min. |
 | 6 | [Die Saga wird leise](stories/story-06-choreography-saga.md) | Choreography-Saga — Kompensation wandert vom Booking-Service in die Backends via Events. | ca. 60 Min. |
-| 7 | [Lesen ist nicht Schreiben](stories/story-07-cqrs.md) | CQRS — getrennte Lese- und Schreibmodelle, Buchungs-Historie als denormalisiertes Read-Model. | ca. 60 Min. |
 
 ### Optional (bei Zeit)
 
@@ -128,8 +127,6 @@ Story 1 (Grundsetup + Konfiguration)
             └── Story 5 (Saga, sync Kompensation)
                     │
                     └── Story 6 (Choreography-Saga, async Kompensation via Events)
-                            │
-                            └── Story 7 (CQRS — Read-Model aus Events)
 
 Optional:
     Story 1 + Story 2 → Story 8 (BFF)

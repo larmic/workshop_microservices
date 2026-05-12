@@ -155,10 +155,11 @@ als das fertige Werkzeug zu nehmen.
   wenn wir einen echten Broker hätten? (Hint: der `compensateSingle`-Code
   würde zum `bus.Publish(topic, event)`-Einzeiler. Service-Discovery
   brauchen wir auch nicht mehr — der Broker macht das implizit.)
-- Brücke zu Story 7 (CQRS): Wenn wir das Read-Model aus Events füttern
-  und ein Event verloren geht — wie repariert man das Read-Model? (Hint:
-  Event-Replay; setzt aber **persistente** Events voraus, also einen
-  Broker mit Log-Semantik wie Kafka.)
+- Brücke zum Vortrag **CQRS** (siehe `docs/themen.md`): Wenn wir das
+  Read-Model aus Events füttern und ein Event verloren geht — wie
+  repariert man das Read-Model? (Hint: Event-Replay; setzt aber
+  **persistente** Events voraus, also einen Broker mit Log-Semantik
+  wie Kafka.)
 - Wann ist Choreography schlechter als Orchestration? (Hint: Wenn das
   Saga-Wissen verstreut ist und niemand mehr weiß, wer auf welches Event
   wie reagiert — der „verteilte Monolith".)
