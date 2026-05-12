@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE_PATH: booking/story1
-    image: larmic/workshop-microservices-booking-story1:latest
+    image: larmic/workshop-microservices-booking:story1
     ports:
       - "8085:8080"
     environment:
@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE_PATH: booking/story2
-    image: larmic/workshop-microservices-booking-story2:latest
+    image: larmic/workshop-microservices-booking:story2
     ports:
       - "8086:8080"
     environment:
@@ -37,7 +37,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE_PATH: booking/story3
-    image: larmic/workshop-microservices-booking-story3:latest
+    image: larmic/workshop-microservices-booking:story3
     ports:
       - "8087:8080"
     environment:
@@ -53,7 +53,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE_PATH: booking/story4
-    image: larmic/workshop-microservices-booking-story4:latest
+    image: larmic/workshop-microservices-booking:story4
     ports:
       - "8088:8080"
     environment:
@@ -69,7 +69,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE_PATH: booking/story5
-    image: larmic/workshop-microservices-booking-story5:latest
+    image: larmic/workshop-microservices-booking:story5
     ports:
       - "8089:8080"
     environment:
@@ -85,7 +85,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE_PATH: booking/story6
-    image: larmic/workshop-microservices-booking-story6:latest
+    image: larmic/workshop-microservices-booking:story6
     ports:
       - "8090:8080"
     environment:
@@ -101,7 +101,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERVICE_PATH: booking/story7
-    image: larmic/workshop-microservices-booking-story7:latest
+    image: larmic/workshop-microservices-booking:story7
     ports:
       - "8091:8080"
     environment:

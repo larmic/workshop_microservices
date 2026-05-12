@@ -60,7 +60,7 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
    - Fuege ein neues Target nach dem letzten `docker-build-booking-story*`-Target hinzu:
      ```
      docker-build-booking-storyN: ## Baut das BookingService StoryN Docker-Image
-     	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/storyN --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story N)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-storyN:latest .
+     	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/storyN --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story N)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:storyN .
      ```
 
 8. **`.github/workflows/build.yml`**
@@ -83,38 +83,7 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
      ```
 
 9. **`.github/workflows/docker.yml`**
-   - Im `changes`-Job: Fuege `booking-storyN: ${{ steps.filter.outputs.booking-storyN }}` als neuen Output hinzu
-   - Im `changes`-Job filter: Fuege einen neuen Filter-Eintrag hinzu:
-     ```
-     booking-storyN:
-       - 'services/booking/storyN/**'
-       - 'services/go.mod'
-     ```
-   - Fuege einen neuen Build-Job am Ende hinzu, nach dem Muster der bestehenden booking-story Jobs:
-     ```yaml
-       build-booking-storyN:
-         needs: changes
-         if: needs.changes.outputs.booking-storyN == 'true'
-         runs-on: ubuntu-latest
-         steps:
-           - uses: actions/checkout@v6
-           - uses: docker/login-action@v4
-             with:
-               username: ${{ secrets.DOCKERHUB_USERNAME }}
-               password: ${{ secrets.DOCKERHUB_TOKEN }}
-           - uses: docker/setup-buildx-action@v4
-           - uses: docker/build-push-action@v7
-             with:
-               context: services
-               file: services/Dockerfile
-               push: true
-               platforms: linux/amd64,linux/arm64
-               build-args: |
-                 SERVICE_PATH=booking/storyN
-                 SERVICE_DESC=Workshop Microservices - Booking Service (Story N)
-                 SERVICE_PORT=8080
-               tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking-storyN:latest
-     ```
+   - Im `build-booking`-Job die Matrix-Liste `story:` um `N` erweitern (z.B. von `[1, 2, ..., 7]` auf `[1, 2, ..., 7, N]`). Der Job pusht das Image dann automatisch als Tag `storyN` ins gemeinsame Repo `workshop-microservices-booking`. Keine weiteren Aenderungen noetig &mdash; der `booking`-Filter triggert bereits auf `services/booking/**`.
 
 10. **`services/docker-compose.infra.yml`**
     - Fuege in der Swagger-UI `URLS`-Liste einen neuen Eintrag hinzu:
@@ -131,7 +100,7 @@ Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als
             dockerfile: Dockerfile
             args:
               SERVICE_PATH: booking/storyN
-          image: larmic/workshop-microservices-booking-storyN:latest
+          image: larmic/workshop-microservices-booking:storyN
           ports:
             - "PORT:8080"
           environment:

@@ -20,25 +20,25 @@ docker-build-car: ## Baut das Car-Service Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=car --build-arg SERVICE_DESC="Workshop Microservices - Car Service" --build-arg SERVICE_PORT=8083 -t workshop-microservices-car:latest .
 
 docker-build-booking-story1: ## Baut das BookingService Story1 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story1 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 1)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story1:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story1 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 1)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story1 .
 
 docker-build-booking-story2: ## Baut das BookingService Story2 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story2 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 2)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story2:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story2 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 2)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story2 .
 
 docker-build-booking-story3: ## Baut das BookingService Story3 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story3 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 3)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story3:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story3 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 3)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story3 .
 
 docker-build-booking-story4: ## Baut das BookingService Story4 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story4 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 4)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story4:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story4 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 4)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story4 .
 
 docker-build-booking-story5: ## Baut das BookingService Story5 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story5 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 5)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story5:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story5 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 5)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story5 .
 
 docker-build-booking-story6: ## Baut das BookingService Story6 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story6 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 6)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story6:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story6 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 6)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story6 .
 
 docker-build-booking-story7: ## Baut das BookingService Story7 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story7 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 7)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking-story7:latest .
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story7 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story 7)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story7 .
 
 docker-build-dashboard: ## Baut das Scaling-UI Docker-Image
 	docker build -f dashboard/Dockerfile -t workshop-microservices-dashboard:latest .
