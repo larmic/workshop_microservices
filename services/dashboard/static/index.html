@@ -727,6 +727,23 @@
             transition: background 0.15s, border-color 0.15s;
         }
         .tools-toggle:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); }
+
+        .feedback-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1rem;
+            background: #D3F871;
+            border: 1px solid #D3F871;
+            border-radius: 8px;
+            color: #0A0349;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.15s, transform 0.1s;
+        }
+        .feedback-link:hover { background: #c5ed5e; }
+        .feedback-link:active { transform: translateY(1px); }
         .tools-toggle .caret { font-size: 0.7rem; transition: transform 0.15s; }
         .tools-toggle.open .caret { transform: rotate(180deg); }
         .tools-menu {
@@ -1195,6 +1212,10 @@
             <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
         </div>
         <div class="header-controls">
+        <a class="feedback-link" href="https://github.com/larmic/workshop_microservices/discussions" target="_blank" rel="noopener" title="Feedback im GitHub Discussions-Thread hinterlassen">
+            <span>&#128172;</span>
+            <span>Feedback</span>
+        </a>
         <div class="health-dropdown" style="position: relative;">
             <button type="button" class="health-chip" id="health-chip" aria-expanded="false" onclick="toggleHealthPanel()" title="Service-Status anzeigen">
                 <span class="health-chip-dot"></span>

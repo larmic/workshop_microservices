@@ -114,6 +114,18 @@
     margin: 0 0 1.5rem 0;
 }
 
+/* Spruch / Quote — Eyecatcher unter dem Slide-Titel */
+.reveal .quote,
+.reveal p.quote {
+    font-style: italic;
+    color: var(--slide-text);
+    font-size: 1.1em;
+    margin: 0.5rem auto 1.5rem;
+    max-width: 75%;
+    text-align: center;
+    line-height: 1.4;
+}
+
 .reveal a {
     color: var(--r-link-color);
     text-decoration: none;
@@ -210,6 +222,7 @@
     margin: 0.8em 0;
     text-align: center;
 }
+
 
 /* Mittagspause: durchgehender Balken zwischen Vor- und Nachmittag */
 .reveal .lunch-bar {

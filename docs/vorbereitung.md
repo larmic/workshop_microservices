@@ -85,3 +85,21 @@ curl http://localhost/api/car/health
 ## 5. Los geht's
 
 Dein Arbeitsplatz ist eingerichtet. Starte mit [Story 1: Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md).
+
+---
+
+## Trainer-Aufgabe: Feedback einsammeln
+
+Feedback läuft über **GitHub Discussions** im Repo `larmic/workshop_microservices`. Der Link ist auf der Feedback-Slide (Slide 2) sowie als prominenter Button in der Dashboard-Kopfleiste hinterlegt.
+
+Einmalige Einrichtung:
+
+1. Im Repo: Settings → Features → ✓ Discussions
+2. Kategorie *Workshop Feedback* anlegen (Format „Open-ended")
+
+Pro Workshop-Run optional ein vorbereiteter Sammel-Thread:
+
+- **Titel:** z.B. `Feedback Kickoff — YYYY-MM-DD`
+- **Body:** Datum und die sechs Fragen aus der Disclaimer-Slide (roter Faden, Patterns, Zeitrahmen, Beispiele, Dashboard, Sonstiges)
+
+Falls das Repo umzieht, die URL in `services/slides/chapters/02-feedback.md` und in `services/dashboard/static/index.html` (Feedback-Button) anpassen.
