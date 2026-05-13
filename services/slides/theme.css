@@ -81,14 +81,22 @@
     padding: 1.5rem 0;
 }
 
-/* Intro-Slide: Bild vertikal zentriert (Reveal-center ist global aus) */
+/* Intro-Slide: Section voll-höhe, Bild vertikal zentriert
+   (Reveal-eigene vertikale Zentrierung ist global aus via center: false) */
+.reveal .slides > section:has(.intro) {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .reveal .intro {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 80vh;
     text-align: center;
+    width: 100%;
 }
 
 .reveal h1, .reveal h2 {

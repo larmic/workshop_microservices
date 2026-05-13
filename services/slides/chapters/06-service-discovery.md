@@ -8,15 +8,3 @@ if err != nil {
 }
 resp, err := http.Get(addr + "/flights")
 ```
-
----
-
-## Zur Hands-on-Story
-
-<div class="box">
-
-**Story 2 — Service Discovery**
-
-Im Dashboard öffnen und der Anleitung folgen.
-
-</div>

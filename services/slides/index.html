@@ -16,25 +16,25 @@
 <div class="reveal">
     <div class="slides">
         <!--
-            Kapitel der Reihe nach. Neue Kapitel als weiteres <section>
-            mit data-markdown="./chapters/NN-name.md" einfügen.
+            Eine Markdown-Datei pro Slide. Neue Slide:
+              1. Datei unter chapters/ anlegen
+              2. Hier ein <section data-markdown="..."> an die gewünschte
+                 Stelle einfügen
+            Für vertikale Subslides: <section> mit verschachtelten <section>s
+            (siehe "Warum / Trade-offs" weiter unten).
+            data-separator-notes erlaubt "Note:" im Markdown für Sprechertext.
         -->
-        <section data-markdown="./chapters/00-intro.md"
-                 data-separator="^\r?\n---\r?\n"
-                 data-separator-vertical="^\r?\n--\r?\n"
-                 data-separator-notes="^Note:"></section>
-        <section data-markdown="./chapters/01-grundlagen.md"
-                 data-separator="^\r?\n---\r?\n"
-                 data-separator-vertical="^\r?\n--\r?\n"
-                 data-separator-notes="^Note:"></section>
-        <section data-markdown="./chapters/02-service-discovery.md"
-                 data-separator="^\r?\n---\r?\n"
-                 data-separator-vertical="^\r?\n--\r?\n"
-                 data-separator-notes="^Note:"></section>
-        <section data-markdown="./chapters/99-schluss.md"
-                 data-separator="^\r?\n---\r?\n"
-                 data-separator-vertical="^\r?\n--\r?\n"
-                 data-separator-notes="^Note:"></section>
+        <section data-markdown="./chapters/01-intro.md" data-separator-notes="^Note:"></section>
+        <section data-markdown="./chapters/02-demo.md" data-separator-notes="^Note:"></section>
+        <section data-markdown="./chapters/03-agenda.md" data-separator-notes="^Note:"></section>
+        <section>
+            <section data-markdown="./chapters/04-warum.md" data-separator-notes="^Note:"></section>
+            <section data-markdown="./chapters/04a-tradeoffs.md" data-separator-notes="^Note:"></section>
+        </section>
+        <section data-markdown="./chapters/05-kernidee.md" data-separator-notes="^Note:"></section>
+        <section data-markdown="./chapters/06-service-discovery.md" data-separator-notes="^Note:"></section>
+        <section data-markdown="./chapters/07-hands-on.md" data-separator-notes="^Note:"></section>
+        <section data-markdown="./chapters/08-schluss.md" data-separator-notes="^Note:"></section>
     </div>
 </div>
 
