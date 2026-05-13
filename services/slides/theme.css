@@ -43,8 +43,8 @@
     --r-heading-text-shadow: none;
     --r-heading-font-weight: 800;
     --r-heading1-text-shadow: none;
-    --r-heading1-size: 72pt;
-    --r-heading2-size: 72pt;
+    --r-heading1-size: 56pt;
+    --r-heading2-size: 56pt;
     --r-heading3-size: 1.25em;
     --r-heading4-size: 1em;
 
@@ -81,29 +81,54 @@
     padding: 1.5rem 0;
 }
 
-/* Intro-Slide: Section voll-höhe, Bild vertikal zentriert
-   (Reveal-eigene vertikale Zentrierung ist global aus via center: false) */
-.reveal .slides > section:has(.intro) {
-    height: 100%;
+/* Slide-Layout — Reveal-Standard-Override:
+     Reveal positioniert <section> per position: absolute mit top: 0 und auto-
+     Höhe (= content height). Damit „Titel oben + Content im verbleibenden
+     Raum zentriert" funktioniert, muss die Section voll-höhe sein.
+     Wir setzen top: 0; bottom: 0 (= full height bei absolute positioning) und
+     display: flex auf die aktive Slide (.present), um Reveals Transition-
+     Logik für inaktive Slides nicht zu stören.
+
+     Flexbox-Trick fürs Zentrieren:
+       margin-top: auto auf erstem Content-Element schiebt es nach unten;
+       margin-bottom: auto auf letztem Element schiebt es nach oben;
+       wenn nur ein Element → beide → zentriert. */
+.reveal .slides > section.present,
+.reveal .slides > section > section.present {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    top: 0;
+    bottom: 0;
+    height: auto;
+}
+
+/* Erstes Content-Element (nach Titel/Subtitle bzw. als first-child) */
+.reveal section > *:not(h1):not(h2):not(.subtitle):not(p.subtitle):first-child,
+.reveal section > h1 + *:not(.subtitle):not(p.subtitle),
+.reveal section > h2 + *:not(.subtitle):not(p.subtitle),
+.reveal section > .subtitle + *,
+.reveal section > p.subtitle + * {
+    margin-top: auto;
+}
+
+/* Letztes Element */
+.reveal section > *:last-child {
+    margin-bottom: auto;
 }
 
 .reveal .intro {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
-    width: 100%;
 }
 
 .reveal h1, .reveal h2 {
     font-family: var(--font-futura-title);
     color: var(--slide-text);
     font-weight: 800;
-    font-size: 72pt;
+    font-size: 56pt;
     text-align: center;
     font-stretch: condensed;
     line-height: 1.1;
@@ -120,9 +145,9 @@
 .reveal p.subtitle {
     color: var(--box-border);   /* helleres Lila */
     font-weight: 500;
-    font-size: 24pt;
+    font-size: 20pt;
     text-align: center;
-    margin: 0 0 2rem 0;
+    margin: 0 0 0 0;
 }
 
 .reveal a {
