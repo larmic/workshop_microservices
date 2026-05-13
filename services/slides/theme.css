@@ -18,30 +18,33 @@
 
 :root {
     --slide-bg: #ffffff;
-    --slide-text: #000000;
+    --slide-text: rgb(10, 3, 73);   /* dunkles Lila statt schwarz */
     --wave: rgb(238, 231, 251);
     --box-bg: rgb(10, 3, 73);
     --box-border: rgb(115, 72, 225);
     --box-text: #ffffff;
     --highlight: rgb(211, 248, 113);
 
+    --font-futura: "Futura", "Futura-Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-futura-title: "Futura Condensed ExtraBold", "Futura-CondensedExtraBold", "Futura Bold Condensed", "Futura", sans-serif;
+
     --r-background-color: var(--slide-bg);
-    --r-main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --r-main-font: var(--font-futura);
     --r-main-font-size: 36px;
     --r-main-color: var(--slide-text);
     --r-block-margin: 20px;
 
     --r-heading-margin: 0 0 20px 0;
-    --r-heading-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --r-heading-font: var(--font-futura-title);
     --r-heading-color: var(--slide-text);
-    --r-heading-line-height: 1.2;
+    --r-heading-line-height: 1.1;
     --r-heading-letter-spacing: normal;
     --r-heading-text-transform: none;
     --r-heading-text-shadow: none;
-    --r-heading-font-weight: 600;
+    --r-heading-font-weight: 800;
     --r-heading1-text-shadow: none;
-    --r-heading1-size: 2.6em;
-    --r-heading2-size: 1.7em;
+    --r-heading1-size: 72pt;
+    --r-heading2-size: 72pt;
     --r-heading3-size: 1.25em;
     --r-heading4-size: 1em;
 
@@ -62,6 +65,13 @@
     color: var(--r-main-color);
 }
 
+/* Futura aggressiv erzwingen — Reveal-Defaults überschreiben.
+   Ausnahme: Code-Blöcke bleiben monospace (weiter unten gesetzt). */
+.reveal,
+.reveal * {
+    font-family: var(--font-futura);
+}
+
 .reveal .slides {
     text-align: left;
 }
@@ -71,9 +81,40 @@
     padding: 1.5rem 0;
 }
 
-.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
-    color: var(--r-heading-color);
+/* Intro-Slide: Bild vertikal zentriert (Reveal-center ist global aus) */
+.reveal .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.reveal h1, .reveal h2 {
+    font-family: var(--font-futura-title);
+    color: var(--slide-text);
+    font-weight: 800;
+    font-size: 72pt;
+    text-align: center;
+    font-stretch: condensed;
+    line-height: 1.1;
+    margin: 0 0 0.4rem 0;
+}
+
+.reveal h3, .reveal h4 {
+    color: var(--slide-text);
     font-weight: 600;
+}
+
+/* Optionaler Subtitle direkt unter dem Slide-Titel */
+.reveal .subtitle,
+.reveal p.subtitle {
+    color: var(--box-border);   /* helleres Lila */
+    font-weight: 500;
+    font-size: 24pt;
+    text-align: center;
+    margin: 0 0 2rem 0;
 }
 
 .reveal a {
@@ -153,8 +194,14 @@
     color: #e0e6f0;
 }
 
-.reveal code {
+.reveal code,
+.reveal pre,
+.reveal pre code,
+.reveal pre code * {
     font-family: var(--r-code-font);
+}
+
+.reveal code {
     background: rgba(115, 72, 225, 0.1);
     color: #4d27a8;
     padding: 0.1em 0.35em;
@@ -256,16 +303,6 @@
 /* Reveal-Controls (Pfeile) über die Welle heben */
 .reveal .controls {
     z-index: 40;
-}
-
-/* Intro-Slide: nur Bild, groß zentriert */
-.reveal .intro {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 100%;
 }
 
 .reveal .intro img.intro-image {
