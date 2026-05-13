@@ -1,7 +1,5 @@
 ## Agenda
 
-<p class="subtitle">Zwei Tage</p>
-
 <div class="cols">
 <div>
 
@@ -9,14 +7,9 @@
 
 - Ankommen & Motivation
 - Architektur & Kommunikation
-- ☕ Kaffeepause
 - 12 Factor App
 - Setup Dev-Umgebung
 - „MS = Monolithen mit Netzwerk?"
-- 🍽 Mittagspause
-- **Story 1:** Cloud-native Setup
-- ☕ Kaffeepause
-- **Story 2:** Service Discovery
 
 </div>
 <div>
@@ -25,13 +18,25 @@
 
 - **Story 3:** Circuit Breaker
 - **Story 4:** Bulkhead
-- ☕ Kaffeepause
 - **Story 5:** Saga (Orchestration)
-- 🍽 Mittagspause
+
+</div>
+</div>
+
+<div class="lunch-bar">🍽 Mittagspause</div>
+
+<div class="cols">
+<div>
+
+- **Story 1:** Cloud-native Setup
+- **Story 2:** Service Discovery
+
+</div>
+<div>
+
 - **Story 6:** Choreography-Saga
 - CQRS
 - **Story 7:** Distributed Tracing
-- ☕ Kaffeepause
 - BFF
 - Downtimeless Deployment
 - Abschluss & Kulturwandel

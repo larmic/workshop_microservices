@@ -202,6 +202,18 @@
     font-size: 0.75em;
 }
 
+/* Mittagspause: durchgehender Balken zwischen Vor- und Nachmittag */
+.reveal .lunch-bar {
+    background: var(--wave);
+    color: var(--slide-text);
+    text-align: center;
+    padding: 0.4em 1em;
+    margin: 0.8em 0;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85em;
+}
+
 /* Code */
 .reveal pre {
     box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);

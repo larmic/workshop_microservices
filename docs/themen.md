@@ -16,13 +16,11 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 |-------|-------|------|
 | 1 | Ankommen & Motivation | 30 Min |
 | 2 | Vortrag: Architektur & Kommunikation (Geschichte) | 45 Min |
-| ☕ | Kaffeepause | 15 Min |
 | 3 | Vortrag: 12 Factor App | 30 Min |
 | 4 | Setup der Entwicklungsumgebung | 45 Min |
 | 5 | Diskussion: „MS = Monolithen mit Netzwerkproblemen" | 30 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 6a | Hands-on: Story 1 (Cloud-native Setup) | 90 Min |
-| ☕ | Kaffeepause | 15 Min |
 | 6b | Hands-on: Story 2 (Service Discovery) | 60 Min |
 
 ### Tag 2 (≈ 8 h inkl. Pausen)
@@ -31,13 +29,11 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 |-------|-------|------|
 | 6c | Hands-on: Story 3 (Circuit Breaker) | 60 Min |
 | 6d | Hands-on: Story 4 (Bulkhead) | 60 Min |
-| ☕ | Kaffeepause | 15 Min |
 | 6e | Hands-on: Story 5 (Saga, Orchestration) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 6f | Hands-on: Story 6 (Choreography-Saga) | 60 Min |
 | 7 | Vortrag & Diskussion: CQRS | 30 Min |
 | 8 | Hands-on: Story 7 (Distributed Tracing) | 60 Min |
-| ☕ | Kaffeepause | 15 Min |
 | 9 | Diskussion: BFF | 20 Min |
 | 10 | Diskussion: Downtimeless Deployment | 20 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
