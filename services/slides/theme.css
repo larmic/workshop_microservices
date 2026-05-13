@@ -179,6 +179,29 @@
     border-bottom-color: rgba(211, 248, 113, 0.5);
 }
 
+/* Zwei-Spalten-Layout (z.B. für die Agenda mit Tag 1 / Tag 2) */
+.reveal .cols {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.reveal .cols > div {
+    flex: 1;
+    min-width: 0;
+}
+
+.reveal .cols h3 {
+    color: var(--box-border);
+    margin: 0 0 0.6em 0;
+    font-size: 1.5em;
+}
+
+.reveal .cols ul {
+    font-size: 0.75em;
+}
+
 /* Code */
 .reveal pre {
     box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);
