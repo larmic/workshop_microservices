@@ -5,41 +5,29 @@
 
 ### Tag 1
 
-- Ankommen & Motivation
-- Architektur & Kommunikation
-- 12 Factor App
-- Setup Dev-Umgebung
-- „MS = Monolithen mit Netzwerk?"
+<p class="quadrant">Theorie & Setup</p>
 
 </div>
 <div>
 
 ### Tag 2
 
-- **Story 3:** Circuit Breaker
-- **Story 4:** Bulkhead
-- **Story 5:** Saga (Orchestration)
+<p class="quadrant">Hands-on, Runde 2</p>
 
 </div>
 </div>
 
-<div class="lunch-bar">🍽 Mittagspause</div>
+<div class="lunch-bar">🍽 Mittagspause (12:30 bis 13:30)</div>
 
 <div class="cols">
 <div>
 
-- **Story 1:** Cloud-native Setup
-- **Story 2:** Service Discovery
+<p class="quadrant">Hands-on, Runde 1</p>
 
 </div>
 <div>
 
-- **Story 6:** Choreography-Saga
-- CQRS
-- **Story 7:** Distributed Tracing
-- BFF
-- Downtimeless Deployment
-- Abschluss & Kulturwandel
+<p class="quadrant">Lose Enden & Abschluss</p>
 
 </div>
 </div>

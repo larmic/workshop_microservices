@@ -202,6 +202,15 @@
     font-size: 0.75em;
 }
 
+/* Prägnanter Quadranten-Satz (Agenda) */
+.reveal .quadrant {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: var(--slide-text);
+    margin: 0.8em 0;
+    text-align: center;
+}
+
 /* Mittagspause: durchgehender Balken zwischen Vor- und Nachmittag */
 .reveal .lunch-bar {
     background: var(--wave);
