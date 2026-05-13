@@ -9,7 +9,7 @@ RUN go mod download
 RUN go test -v ./dashboard/...
 RUN CGO_ENABLED=0 go build -a -o main ./dashboard
 
-FROM docker:28-cli
+FROM docker:29-cli
 
 LABEL org.opencontainers.image.title="Workshop Microservices - Dashboard"
 LABEL org.opencontainers.image.description="Dashboard for the team neusta microservices workshop – orchestrates demo services via docker compose"
