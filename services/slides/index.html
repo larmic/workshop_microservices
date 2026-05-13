@@ -62,11 +62,16 @@
 
     // Welle: voll-breit. Der Peak (höchster Punkt) wandert von links nach
     // rechts entlang des Slide-Fortschritts. Path wird neu berechnet.
+    // Wellenform: Cosinus über volle viewBox (Halbwellenlänge = Bildschirm).
+    // Ein Peak und ein Tal pro Slide — der Peak wandert mit dem Fortschritt
+    // von links nach rechts, das Tal entsprechend gegenläufig.
+    // Tal-Werte unter VIEW_H werden auf VIEW_H geclampt: die Welle "taucht
+    // ins Wasser ein" statt eine harte horizontale Basislinie zu zeigen.
     const WAVE_VIEW_W = 1440;
     const WAVE_VIEW_H = 110;
-    const WAVE_BASE_Y = 80;       // Basislinie (alles >= BASE_Y ist gefüllt)
-    const WAVE_PEAK_BOOST = 60;   // zusätzliche Höhe am Peak
-    const WAVE_SAMPLES = 120;
+    const WAVE_BASE_Y = 75;       // Mittellinie der Welle
+    const WAVE_AMP = 38;          // Amplitude (Peak liegt BASE-AMP, Tal BASE+AMP)
+    const WAVE_SAMPLES = 160;
 
     function buildWavePath(ratio) {
         const peakX = ratio * WAVE_VIEW_W;
@@ -74,8 +79,7 @@
         for (let i = 0; i <= WAVE_SAMPLES; i++) {
             const x = (i / WAVE_SAMPLES) * WAVE_VIEW_W;
             const cosVal = Math.cos((x - peakX) / WAVE_VIEW_W * Math.PI);
-            const lift = WAVE_PEAK_BOOST * Math.max(0, cosVal);
-            const y = WAVE_BASE_Y - lift;
+            const y = Math.min(WAVE_VIEW_H, WAVE_BASE_Y - WAVE_AMP * cosVal);
             d += (i === 0 ? 'M ' : ' L ') + x.toFixed(2) + ' ' + y.toFixed(2);
         }
         d += ' L ' + WAVE_VIEW_W + ' ' + WAVE_VIEW_H;
