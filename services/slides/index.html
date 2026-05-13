@@ -62,24 +62,30 @@
 
     // Welle: voll-breit. Der Peak (höchster Punkt) wandert von links nach
     // rechts entlang des Slide-Fortschritts. Path wird neu berechnet.
-    // Wellenform: Cosinus über volle viewBox (Halbwellenlänge = Bildschirm).
-    // Ein Peak und ein Tal pro Slide — der Peak wandert mit dem Fortschritt
-    // von links nach rechts, das Tal entsprechend gegenläufig.
-    // Tal-Werte unter VIEW_H werden auf VIEW_H geclampt: die Welle "taucht
-    // ins Wasser ein" statt eine harte horizontale Basislinie zu zeigen.
+    // Wellenform: zwei überlagerte, überall glatte Funktionen.
+    //   basis(x) = Cosinus mit voller Wellenlänge = VIEW_W → permanente
+    //              kleine Erhöhungen an beiden Rändern, Senke in der Mitte.
+    //   main(x)  = Gauss-Glocke um peakX → wandernder Hauptpeak.
+    // Beide sind C^∞-stetig, daher entsteht nirgends ein Knick. Auf Slide 1
+    // fällt main mit der linken Basis-Erhöhung zusammen (großer Peak links),
+    // die rechte Basis-Erhöhung bleibt als „leicht hoch" erhalten.
     const WAVE_VIEW_W = 1440;
     const WAVE_VIEW_H = 110;
-    const WAVE_BASE_Y = 75;       // Mittellinie der Welle
-    const WAVE_AMP = 38;          // Amplitude (Peak liegt BASE-AMP, Tal BASE+AMP)
-    const WAVE_SAMPLES = 160;
+    const WAVE_BASE_Y = 85;        // Y-Basislinie (kein Peak)
+    const WAVE_SMALL_AMP = 18;     // permanente Rand-Erhöhungen (Basis-Welle)
+    const WAVE_LARGE_AMP = 42;     // wandernder Hauptpeak (Glocke)
+    const WAVE_GAUSS_K = 2.5;      // Glockenbreite: kleinere Werte = breiter
+    const WAVE_SAMPLES = 200;
 
     function buildWavePath(ratio) {
         const peakX = ratio * WAVE_VIEW_W;
         let d = '';
         for (let i = 0; i <= WAVE_SAMPLES; i++) {
             const x = (i / WAVE_SAMPLES) * WAVE_VIEW_W;
-            const cosVal = Math.cos((x - peakX) / WAVE_VIEW_W * Math.PI);
-            const y = Math.min(WAVE_VIEW_H, WAVE_BASE_Y - WAVE_AMP * cosVal);
+            const basis = WAVE_SMALL_AMP * (1 + Math.cos(2 * Math.PI * x / WAVE_VIEW_W)) / 2;
+            const t = (x - peakX) * WAVE_GAUSS_K / WAVE_VIEW_W;
+            const main = WAVE_LARGE_AMP * Math.exp(-t * t);
+            const y = WAVE_BASE_Y - basis - main;
             d += (i === 0 ? 'M ' : ' L ') + x.toFixed(2) + ' ' + y.toFixed(2);
         }
         d += ' L ' + WAVE_VIEW_W + ' ' + WAVE_VIEW_H;
