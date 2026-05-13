@@ -96,7 +96,7 @@
     text-align: center;
     font-stretch: condensed;
     line-height: 1.1;
-    margin: 0 0 0.4rem 0;
+    margin: 0;
 }
 
 .reveal h3, .reveal h4 {
@@ -111,7 +111,7 @@
     font-weight: 500;
     font-size: 20pt;
     text-align: center;
-    margin: 0 0 0 0;
+    margin: 0 0 1.5rem 0;
 }
 
 .reveal a {
@@ -237,10 +237,13 @@
     border-bottom: 1px solid #eee;
 }
 
-/* Progress bar & controls */
+/* Progress-Balken: dünn, ganz unten am Viewport-Rand */
 .reveal .progress {
-    color: var(--box-border);
-    height: 4px;
+    bottom: 0;
+    height: 3px;
+    color: var(--highlight);   /* Füllung – Reveal nutzt color statt background */
+    background: rgba(10, 3, 73, 0.15);
+    z-index: 25;               /* über Welle (20), unter Controls (40) */
 }
 
 .reveal .controls {
