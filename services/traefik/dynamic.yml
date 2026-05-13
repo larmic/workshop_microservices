@@ -112,6 +112,14 @@ http:
         - web
       service: consul
 
+    slides:
+      rule: "PathPrefix(`/slides`)"
+      entryPoints:
+        - web
+      middlewares:
+        - slides-stripprefix
+      service: slides
+
   middlewares:
     flight-stripprefix:
       stripPrefix:
@@ -167,6 +175,11 @@ http:
       stripPrefix:
         prefixes:
           - "/dashboard"
+
+    slides-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/slides"
 
   services:
     flight:
@@ -233,3 +246,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://consul:8500"
+
+    slides:
+      loadBalancer:
+        servers:
+          - url: "http://slides:80"

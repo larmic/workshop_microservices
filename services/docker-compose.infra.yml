@@ -44,6 +44,11 @@ services:
           { "url": "http://localhost/api/booking-story7/openapi", "name": "Booking Service (Story 7)" }
         ]
 
+  slides:
+    image: nginx:alpine
+    volumes:
+      - ./slides:/usr/share/nginx/html:ro
+
   dashboard:
     build:
       context: .
