@@ -127,8 +127,10 @@
 }
 
 .reveal ul, .reveal ol {
-    display: block;
-    margin-left: 1.2em;
+    display: inline-block;       /* schrumpft auf Inhaltsbreite, zentriert via parent text-align */
+    text-align: left;            /* Bullets bündig links innerhalb der Liste */
+    margin: 0.8em 0 0 0;         /* Luft zum vorigen Element — Reveal-Default ist 0 */
+    padding-left: 1.2em;
 }
 
 .reveal li + li {
@@ -155,7 +157,10 @@
     border-radius: 12px;
     color: var(--box-text);
     padding: 1rem 1.4rem;
-    margin: var(--r-block-margin) 0;
+    margin: var(--r-block-margin) auto;
+    width: fit-content;
+    max-width: 80%;
+    text-align: left;
     box-shadow: 0 4px 16px rgba(10, 3, 73, 0.18);
 }
 
