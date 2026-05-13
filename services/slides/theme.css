@@ -72,8 +72,11 @@
     font-family: var(--font-futura);
 }
 
+/* Reveal-Standard-Layout: center: true zentriert die gesamte Section vertikal.
+   Innerhalb der Section stacken Titel, Subtitle und Content natürlich
+   untereinander; der Block sitzt als Ganzes mittig auf der Slide. */
 .reveal .slides {
-    text-align: left;
+    text-align: center;
 }
 
 .reveal .slides > section,
@@ -81,46 +84,7 @@
     padding: 1.5rem 0;
 }
 
-/* Slide-Layout — Reveal-Standard-Override:
-     Reveal positioniert <section> per position: absolute mit top: 0 und auto-
-     Höhe (= content height). Damit „Titel oben + Content im verbleibenden
-     Raum zentriert" funktioniert, muss die Section voll-höhe sein.
-     Wir setzen top: 0; bottom: 0 (= full height bei absolute positioning) und
-     display: flex auf die aktive Slide (.present), um Reveals Transition-
-     Logik für inaktive Slides nicht zu stören.
-
-     Flexbox-Trick fürs Zentrieren:
-       margin-top: auto auf erstem Content-Element schiebt es nach unten;
-       margin-bottom: auto auf letztem Element schiebt es nach oben;
-       wenn nur ein Element → beide → zentriert. */
-.reveal .slides > section.present,
-.reveal .slides > section > section.present {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    top: 0;
-    bottom: 0;
-    height: auto;
-}
-
-/* Erstes Content-Element (nach Titel/Subtitle bzw. als first-child) */
-.reveal section > *:not(h1):not(h2):not(.subtitle):not(p.subtitle):first-child,
-.reveal section > h1 + *:not(.subtitle):not(p.subtitle),
-.reveal section > h2 + *:not(.subtitle):not(p.subtitle),
-.reveal section > .subtitle + *,
-.reveal section > p.subtitle + * {
-    margin-top: auto;
-}
-
-/* Letztes Element */
-.reveal section > *:last-child {
-    margin-bottom: auto;
-}
-
 .reveal .intro {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
 }
 
