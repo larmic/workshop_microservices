@@ -212,6 +212,10 @@
 
 /* ---------------------------------------------------------------------- */
 /* Welle am unteren Slide-Rand mit Logo                                   */
+/*                                                                        */
+/* Voll-breite Welle. Der Peak (höchster Punkt) wandert mit dem Slide-    */
+/* Fortschritt von links nach rechts. Der SVG-Path wird in index.html     */
+/* dynamisch berechnet und beim slidechanged-Event aktualisiert.          */
 /* ---------------------------------------------------------------------- */
 
 .slide-wave {
@@ -221,7 +225,7 @@
     bottom: 0;
     height: 110px;
     pointer-events: none;
-    z-index: 30;
+    z-index: 20;
     overflow: hidden;
 }
 
@@ -231,16 +235,25 @@
     height: 100%;
 }
 
-.slide-wave .wave-logo {
-    position: absolute;
-    right: 2.5rem;
-    bottom: 1.4rem;
-    height: 42px;
-    width: auto;
-    z-index: 31;
+.slide-wave .wave-path {
+    transition: d 0.5s ease;
 }
 
-/* Intro-Slide: zentriertes Bild + Titel */
+.slide-wave .wave-logo {
+    position: absolute;
+    left: 1.8rem;
+    bottom: 0.35rem;
+    height: 20px;
+    width: auto;
+    z-index: 21;
+}
+
+/* Reveal-Controls (Pfeile) über die Welle heben */
+.reveal .controls {
+    z-index: 40;
+}
+
+/* Intro-Slide: nur Bild, groß zentriert */
 .reveal .intro {
     display: flex;
     flex-direction: column;
@@ -251,7 +264,8 @@
 }
 
 .reveal .intro img.intro-image {
-    max-height: 360px;
-    max-width: 70%;
-    margin-bottom: 1.5rem;
+    max-height: 75vh;
+    max-width: 90%;
+    width: auto;
+    height: auto;
 }

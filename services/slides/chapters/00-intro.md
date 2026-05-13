@@ -4,12 +4,6 @@
 
 <img class="intro-image" src="./assets/intro.png" alt="Microservices Workshop"/>
 
-# Microservices
-
-### Architektur, Patterns, Praxis
-
-Workshop · team neusta
-
 </div>
 
 ---

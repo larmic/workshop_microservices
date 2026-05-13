@@ -41,8 +41,7 @@
 <!-- Welle am unteren Slide-Rand mit team neusta Logo -->
 <div class="slide-wave" aria-hidden="true">
     <svg viewBox="0 0 1440 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,60 C240,110 480,10 720,40 C960,70 1200,110 1440,50 L1440,110 L0,110 Z"
-              fill="rgb(238,231,251)"/>
+        <path id="wave-path" class="wave-path" fill="rgb(238,231,251)" d=""/>
     </svg>
     <img class="wave-logo" src="/dashboard/team-neusta-logo.svg" alt="team neusta"/>
 </div>
@@ -57,9 +56,41 @@
         slideNumber: 'c/t',
         transition: 'slide',
         controls: true,
-        progress: true,
+        progress: false,
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
     });
+
+    // Welle: voll-breit. Der Peak (höchster Punkt) wandert von links nach
+    // rechts entlang des Slide-Fortschritts. Path wird neu berechnet.
+    const WAVE_VIEW_W = 1440;
+    const WAVE_VIEW_H = 110;
+    const WAVE_BASE_Y = 80;       // Basislinie (alles >= BASE_Y ist gefüllt)
+    const WAVE_PEAK_BOOST = 60;   // zusätzliche Höhe am Peak
+    const WAVE_SAMPLES = 120;
+
+    function buildWavePath(ratio) {
+        const peakX = ratio * WAVE_VIEW_W;
+        let d = '';
+        for (let i = 0; i <= WAVE_SAMPLES; i++) {
+            const x = (i / WAVE_SAMPLES) * WAVE_VIEW_W;
+            const cosVal = Math.cos((x - peakX) / WAVE_VIEW_W * Math.PI);
+            const lift = WAVE_PEAK_BOOST * Math.max(0, cosVal);
+            const y = WAVE_BASE_Y - lift;
+            d += (i === 0 ? 'M ' : ' L ') + x.toFixed(2) + ' ' + y.toFixed(2);
+        }
+        d += ' L ' + WAVE_VIEW_W + ' ' + WAVE_VIEW_H;
+        d += ' L 0 ' + WAVE_VIEW_H + ' Z';
+        return d;
+    }
+
+    function updateWave() {
+        const total = Reveal.getTotalSlides();
+        const passed = Reveal.getSlidePastCount();
+        const ratio = total > 1 ? passed / (total - 1) : 0;
+        document.getElementById('wave-path').setAttribute('d', buildWavePath(ratio));
+    }
+    Reveal.on('ready', updateWave);
+    Reveal.on('slidechanged', updateWave);
 </script>
 </body>
 </html>
