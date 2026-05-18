@@ -87,3 +87,5 @@
 </div>
 
 </div>
+
+<span class="show-all fragment" aria-hidden="true"></span>

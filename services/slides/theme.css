@@ -452,3 +452,28 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* Bereits eingeblendete (aber nicht zuletzt aktivierte) Faktoren abdimmen.
+   Reveal setzt auf das zuletzt geklickte Fragment .current-fragment;
+   alle vorherigen behalten nur .visible. */
+.reveal .factor.fragment.visible {
+    opacity: 0.35;
+    transition: opacity 0.3s ease;
+}
+
+.reveal .factor.fragment.visible.current-fragment {
+    opacity: 1;
+}
+
+/* Letzter Klick: unsichtbares Fragment triggert „alle voll" via :has(). */
+.reveal .show-all {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.reveal section:has(.show-all.visible) .factor.fragment.visible {
+    opacity: 1;
+}
