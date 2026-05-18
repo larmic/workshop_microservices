@@ -25,8 +25,9 @@ type registrationPayload struct {
 }
 
 type healthCheck struct {
-	HTTP     string `json:"HTTP"`
-	Interval string `json:"Interval"`
+	HTTP                           string `json:"HTTP"`
+	Interval                       string `json:"Interval"`
+	DeregisterCriticalServiceAfter string `json:"DeregisterCriticalServiceAfter,omitempty"`
 }
 
 func Register(consulURL string, cfg ServiceConfig) (string, error) {
@@ -34,7 +35,7 @@ func Register(consulURL string, cfg ServiceConfig) (string, error) {
 	initialBackoff := 1 * time.Second
 
 	hostname, err := os.Hostname()
-	if err != nil {
+	if err != nil || hostname == "" {
 		hostname = cfg.Address
 	}
 
@@ -46,8 +47,9 @@ func Register(consulURL string, cfg ServiceConfig) (string, error) {
 		Address: hostname,
 		Port:    cfg.Port,
 		Check: healthCheck{
-			HTTP:     fmt.Sprintf("http://%s:%d/health", hostname, cfg.Port),
-			Interval: "10s",
+			HTTP:                           fmt.Sprintf("http://%s:%d/health", hostname, cfg.Port),
+			Interval:                       "10s",
+			DeregisterCriticalServiceAfter: "1m",
 		},
 	}
 
