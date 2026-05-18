@@ -43,6 +43,9 @@ docker-build-booking-story7: ## Baut das BookingService Story7 Docker-Image
 docker-build-dashboard: ## Baut das Scaling-UI Docker-Image
 	docker build -f dashboard/Dockerfile -t workshop-microservices-dashboard:latest .
 
+docker-down: ## Stoppt alle Services und entfernt Container, Netzwerke und anonyme Volumes
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml down -v
+
 docker-up: ## Baut und startet alle Services mit Docker Compose
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up --build
 

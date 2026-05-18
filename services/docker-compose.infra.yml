@@ -16,6 +16,8 @@ services:
     command: agent -dev -ui -client=0.0.0.0 -log-level=info -ui-content-path=/consul/
     ports:
       - "8500:8500"
+    tmpfs:
+      - /consul/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
       interval: 5s
