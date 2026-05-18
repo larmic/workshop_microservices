@@ -1,6 +1,6 @@
-## TN Skills
+## Brauchen wir Microservices?
 
-<p class="subtitle">Microservices → Modulith</p>
+<p class="subtitle">TN Skills — gestartet mit Microservices, heute Modulith</p>
 
 <div class="cols">
 <div>
@@ -25,3 +25,16 @@
 
 </div>
 </div>
+
+<div class="box">
+
+- Microservices sind <span class="hl">nicht immer</span> die richtige Wahl
+- Mit einem <span class="hl">Monolithen zu starten</span> ist meist die bessere Option
+- Dieser Workshop zeigt das <span class="hl">wie</span> — nicht das <span class="hl">ob</span>
+
+</div>
+
+Note:
+- TN Skills: 2 Teams, je ein Service; Reporting-Service in C# wurde angefangen, aber abgebrochen — Komplexität für die Team-Größe zu hoch.
+- Heute: gleiches Produkt, 5 statt 14 Leute, ein Modulith. Deployment & Betrieb deutlich einfacher, Feature-Velocity gestiegen.
+- Take-away für den Workshop: Microservices sind ein Werkzeug, kein Ziel. Conway's Law (Org-Struktur dominiert Architektur) ist die einzige zwingend gute Begründung.
