@@ -90,6 +90,11 @@ func FromContext(ctx context.Context) (TraceContext, bool) {
 // einen neuen Trace-Kontext und legt ihn in `r.Context()` ab. Setzt den
 // Header zusätzlich auf der Response, damit Clients sehen, mit welcher
 // Trace-ID ihr Request bearbeitet wurde.
+//
+// Geeignet für Entry-Point-Services (z.B. den Booking-Service), die als
+// erste Station eines Vorgangs auch dann einen Trace starten sollen,
+// wenn der Aufrufer keinen mitschickt. Downstream-Services nutzen
+// stattdessen Propagate.
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tc, ok := Parse(r.Header.Get(HeaderName))
@@ -98,6 +103,25 @@ func Middleware(next http.Handler) http.Handler {
 		}
 		w.Header().Set(HeaderName, tc.Header())
 		next.ServeHTTP(w, r.WithContext(WithContext(r.Context(), tc)))
+	})
+}
+
+// Propagate liest einen eingehenden `traceparent`-Header und legt ihn in
+// `r.Context()` ab. Im Unterschied zu Middleware wird **kein** Trace
+// erzeugt, wenn kein gültiger Header vorhanden ist — der Service bleibt
+// dann ohne Trace-Kontext, Logger fällt auf den Default-Logger zurück
+// und `trace_id` erscheint nicht in den Logs.
+//
+// Geeignet für Downstream-Services (Flight, Hotel, Car), die niemals
+// selbst einen Trace initiieren sollen. Erst wenn der Entry-Point den
+// Trace explizit propagiert, taucht die Trace-ID hier in den Logs auf.
+func Propagate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if tc, ok := Parse(r.Header.Get(HeaderName)); ok {
+			w.Header().Set(HeaderName, tc.Header())
+			r = r.WithContext(WithContext(r.Context(), tc))
+		}
+		next.ServeHTTP(w, r)
 	})
 }
 

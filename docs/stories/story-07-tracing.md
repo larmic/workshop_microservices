@@ -20,6 +20,17 @@ Problem auch ohne ein eigenes Tracing-Backend: ein simples
 `grep <trace-id>` über die Compose-Logs zeigt den vollständigen Ablauf
 einer Buchung.
 
+**Wer initiiert den Trace?** Bewusst nur der Booking-Service als
+Entry-Point. Flight, Hotel und Car sind **passive Trace-Empfänger** —
+sie verlängern einen eintreffenden `traceparent`-Header, erzeugen aber
+**niemals selbst** einen neuen. Dadurch entsteht der "rote Faden" erst,
+sobald Story 7 ihn im Booking-Service zieht; in Stories 1–6 (ohne
+Tracing-Propagation) bleiben die Logs von Flight/Hotel/Car ohne
+`trace_id` — der Kontrast macht den Effekt sichtbar. Dieses Muster
+spiegelt auch die reale Welt wider: Trace-Initiierung gehört an den
+Entry-Point (API-Gateway, Public-Service), nicht in jeden
+Downstream-Hop.
+
 ## User Story
 
 Als **Entwickler:in im Betrieb**
@@ -80,6 +91,14 @@ analysieren kann, ohne Logs nach Zeitstempeln zusammenzupuzzeln**.
   **explizit als Property** auf das Event mitwandern — der HTTP-Header
   geht beim Übergang in die Worker-Goroutine verloren. Im Event-Body
   z.B. ein Feld `"traceparent": "00-..."`.
+- **Zwei Middlewares, zwei Rollen:** Die Library stellt bewusst zwei
+  Einstiegspunkte bereit. `Middleware` erzeugt einen Trace, falls keiner
+  reinkommt — das ist die Entry-Point-Variante (Booking-Service).
+  `Propagate` übernimmt nur einen bereits vorhandenen Trace und legt
+  sonst nichts an — das ist die Downstream-Variante (Flight/Hotel/Car).
+  Diese Trennung sorgt dafür, dass die Trace-ID in den
+  Downstream-Logs erst auftaucht, wenn der Entry-Point sie aktiv
+  propagiert — und nicht zufällig vom Service selbst generiert wurde.
 
 ## Bonus (optional)
 

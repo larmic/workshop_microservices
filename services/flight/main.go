@@ -58,7 +58,7 @@ func main() {
 		}
 	}
 
-	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(tracing.Middleware(chaosState.Middleware(mux)))}
+	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(tracing.Propagate(chaosState.Middleware(mux)))}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

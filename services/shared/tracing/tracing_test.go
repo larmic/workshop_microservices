@@ -128,6 +128,67 @@ func TestMiddlewareRegeneratesOnInvalidHeader(t *testing.T) {
 	}
 }
 
+func TestPropagateNoopWhenMissing(t *testing.T) {
+	var hadCtx bool
+	handler := Propagate(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, hadCtx = FromContext(r.Context())
+	}))
+
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if hadCtx {
+		t.Error("expected no trace context when header missing, but handler saw one")
+	}
+	if got := rec.Header().Get(HeaderName); got != "" {
+		t.Errorf("expected no response header when header missing, got %q", got)
+	}
+}
+
+func TestPropagateAdoptsIncoming(t *testing.T) {
+	incoming := "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+	var captured TraceContext
+	var hadCtx bool
+	handler := Propagate(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		captured, hadCtx = FromContext(r.Context())
+	}))
+
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req.Header.Set(HeaderName, incoming)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if !hadCtx {
+		t.Fatal("handler did not see trace context in request")
+	}
+	if captured.TraceID != "0af7651916cd43dd8448eb211c80319c" {
+		t.Errorf("trace id not adopted from header: got %q", captured.TraceID)
+	}
+	if got := rec.Header().Get(HeaderName); got != incoming {
+		t.Errorf("response header %q does not match incoming %q", got, incoming)
+	}
+}
+
+func TestPropagateNoopOnInvalidHeader(t *testing.T) {
+	var hadCtx bool
+	handler := Propagate(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, hadCtx = FromContext(r.Context())
+	}))
+
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req.Header.Set(HeaderName, "garbage")
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if hadCtx {
+		t.Error("invalid header must not produce a trace context (unlike Middleware, which regenerates)")
+	}
+	if got := rec.Header().Get(HeaderName); got != "" {
+		t.Errorf("expected no response header on invalid input, got %q", got)
+	}
+}
+
 func TestInjectKeepsTraceIDChangesSpanID(t *testing.T) {
 	original := TraceContext{
 		TraceID: "0af7651916cd43dd8448eb211c80319c",
