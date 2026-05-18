@@ -75,3 +75,17 @@
 </div>
 
 </div>
+
+Note:
+- **I Codebase** — Eine Codebase pro App in Versionskontrolle, daraus viele Deploys (Dev/Staging/Prod). Mehrere Apps teilen NIE den Source — wenn gemeinsamer Code, dann als Library extrahieren.
+- **II Dependencies** — Alle Abhängigkeiten explizit im Manifest deklarieren (go.mod, package.json, requirements.txt). Nicht auf System-Pakete verlassen. Isolation via Container oder venv.
+- **III Config** — Alles was sich zwischen Deploys unterscheidet (DB-URL, Secrets, Hostnames) kommt aus Umgebungsvariablen. Niemals Config-Dateien im Repo.
+- **IV Backing Services** — DB, Cache, Queue werden per URL angesprochen. Lokales Postgres oder Cloud-RDS ist nur ein Config-Switch — kein Code-Change.
+- **V Build, Release, Run** — Build erzeugt Artefakt aus Code. Release = Build + Config. Run führt aus. Strikt getrennt, kein „schnell auf Prod Code ändern".
+- **VI Processes** — App-Prozesse sind stateless. Was persistent sein muss, geht in Backing Services. Ermöglicht einfache horizontale Skalierung.
+- **VII Port Binding** — Service stellt sich selbst über HTTP/TCP-Port bereit (embedded Server). Kein „in einen Tomcat/Apache deployen" — die App IST der Server.
+- **VIII Concurrency** — Statt einen Riesen-Prozess zu skalieren, mehrere kleine Prozesse parallel starten. Unix-Process-Modell, horizontal statt vertikal.
+- **IX Disposability** — Prozesse müssen jederzeit gestartet/gestoppt werden können. Schneller Boot, SIGTERM korrekt behandeln (laufende Requests sauber beenden).
+- **X Dev / Prod Parity** — Gap zwischen Dev und Prod minimieren: gleiche Backing Services lokal wie produktiv (Docker hilft), kurze Zeit zwischen Commit und Deploy.
+- **XI Logs** — App schreibt unstrukturiert auf stdout. Aggregation, Routing und Archivierung übernimmt die Plattform (ELK, Loki, CloudWatch).
+- **XII Admin Processes** — One-off-Tasks (DB-Migrationen, Konsole, Cleanup) laufen in derselben Umgebung wie die App — gleicher Code, gleiche Config, gleiche Dependencies.
