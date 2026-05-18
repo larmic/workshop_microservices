@@ -4,6 +4,17 @@
     "config:recommended"
   ],
   "dependencyDashboard": true,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^services/slides/index\\.html$"],
+      "matchStrings": [
+        "cdn\\.jsdelivr\\.net/npm/(?<depName>reveal\\.js)@(?<currentValue>[0-9.]+)/"
+      ],
+      "datasourceTemplate": "npm",
+      "versioningTemplate": "npm"
+    }
+  ],
   "packageRules": [
     {
       "matchManagers": ["gomod"],
@@ -16,6 +27,19 @@
     {
       "matchManagers": ["dockerfile"],
       "groupName": "Docker base images"
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["reveal.js"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "reveal.js"
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["reveal.js"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "reveal.js (major)",
+      "dependencyDashboardApproval": true
     }
   ]
 }
