@@ -373,3 +373,12 @@
     width: auto;
     height: auto;
 }
+
+.reveal img.journey-image {
+    display: block;
+    margin: 1rem auto 0;
+    max-width: 95%;
+    max-height: 78vh;
+    width: auto;
+    height: auto;
+}
