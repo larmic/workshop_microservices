@@ -566,23 +566,17 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* Recap-Grid (3 + 2 zentriert, gleiche Card-Optik wie .factor-grid)       */
+/* Recap-Grid (2 x 2, gleiche Card-Optik wie .factor-grid)                 */
 /* ---------------------------------------------------------------------- */
 
 .reveal .recap-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.6rem;
-    width: 95%;
+    width: 80%;
     margin: 0.5rem auto 0;
     text-align: left;
 }
-
-.reveal .recap-grid > .factor:nth-child(1) { grid-column: 1 / span 2; }
-.reveal .recap-grid > .factor:nth-child(2) { grid-column: 3 / span 2; }
-.reveal .recap-grid > .factor:nth-child(3) { grid-column: 5 / span 2; }
-.reveal .recap-grid > .factor:nth-child(4) { grid-column: 2 / span 2; }
-.reveal .recap-grid > .factor:nth-child(5) { grid-column: 4 / span 2; }
 
 /* Recap-Karten: gleicher Dimm-Mechanismus wie 12-Faktor-Slide */
 .reveal section:has(.recap-grid .show-all.visible) .recap-grid > .factor.fragment.visible {
