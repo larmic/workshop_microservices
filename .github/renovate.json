@@ -31,6 +31,10 @@
       "groupName": "Docker base images"
     },
     {
+      "matchManagers": ["gradle", "gradle-wrapper"],
+      "groupName": "Kotlin/Gradle dependencies"
+    },
+    {
       "matchManagers": ["custom.regex"],
       "matchPackageNames": ["reveal.js"],
       "matchUpdateTypes": ["minor", "patch"],

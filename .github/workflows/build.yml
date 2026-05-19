@@ -197,3 +197,24 @@ jobs:
 
       - name: Build
         run: go build -v -o bin/dashboard ./dashboard
+
+  build-booking-custom:
+    name: Build BookingService Custom (Kotlin/Ktor)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/booking/custom
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Build (shadowJar)
+        run: ./gradlew --no-daemon shadowJar

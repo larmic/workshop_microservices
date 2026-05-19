@@ -19,11 +19,13 @@ Die Story-Auswahl erfolgt **explizit über den Tag** (kein `latest`):
 | `story5`  | Saga (Orchestration)                                                  |
 | `story6`  | Saga (Choreography)                                                   |
 | `story7`  | Distributed Tracing                                                   |
+| `custom`  | Beispiel-Custom-Lösung in Kotlin/Ktor (Story 1, alternative Sprache)  |
 
 Pull-Beispiel:
 
 ```bash
 docker pull larmic/workshop-microservices-booking:story3
+docker pull larmic/workshop-microservices-booking:custom
 ```
 
 ## Hinweis
