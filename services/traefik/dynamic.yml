@@ -24,69 +24,69 @@ http:
         - car-stripprefix
       service: car
 
-    booking-story1:
-      rule: "PathPrefix(`/api/booking-story1`)"
+    booking-ref-story1:
+      rule: "PathPrefix(`/api/booking-ref-story1`)"
       entryPoints:
         - web
       middlewares:
-        - booking-story1-stripprefix
-      service: booking-story1
+        - booking-ref-story1-stripprefix
+      service: booking-ref-story1
 
-    booking-story2:
-      rule: "PathPrefix(`/api/booking-story2`)"
+    booking-ref-story2:
+      rule: "PathPrefix(`/api/booking-ref-story2`)"
       entryPoints:
         - web
       middlewares:
-        - booking-story2-stripprefix
-      service: booking-story2
+        - booking-ref-story2-stripprefix
+      service: booking-ref-story2
 
-    booking-story3:
-      rule: "PathPrefix(`/api/booking-story3`)"
+    booking-ref-story3:
+      rule: "PathPrefix(`/api/booking-ref-story3`)"
       entryPoints:
         - web
       middlewares:
-        - booking-story3-stripprefix
-      service: booking-story3
+        - booking-ref-story3-stripprefix
+      service: booking-ref-story3
 
-    booking-story4:
-      rule: "PathPrefix(`/api/booking-story4`)"
+    booking-ref-story4:
+      rule: "PathPrefix(`/api/booking-ref-story4`)"
       entryPoints:
         - web
       middlewares:
-        - booking-story4-stripprefix
-      service: booking-story4
+        - booking-ref-story4-stripprefix
+      service: booking-ref-story4
 
-    booking-story5:
-      rule: "PathPrefix(`/api/booking-story5`)"
+    booking-ref-story5:
+      rule: "PathPrefix(`/api/booking-ref-story5`)"
       entryPoints:
         - web
       middlewares:
-        - booking-story5-stripprefix
-      service: booking-story5
+        - booking-ref-story5-stripprefix
+      service: booking-ref-story5
 
-    booking-story6:
-      rule: "PathPrefix(`/api/booking-story6`)"
+    booking-ref-story6:
+      rule: "PathPrefix(`/api/booking-ref-story6`)"
       entryPoints:
         - web
       middlewares:
-        - booking-story6-stripprefix
-      service: booking-story6
+        - booking-ref-story6-stripprefix
+      service: booking-ref-story6
 
-    booking-story7:
-      rule: "PathPrefix(`/api/booking-story7`)"
+    booking-ref-story7:
+      rule: "PathPrefix(`/api/booking-ref-story7`)"
       entryPoints:
         - web
       middlewares:
-        - booking-story7-stripprefix
-      service: booking-story7
+        - booking-ref-story7-stripprefix
+      service: booking-ref-story7
 
-    booking-workshop:
-      rule: "PathPrefix(`/api/booking-workshop`)"
+    booking-custom:
+      rule: "PathPrefix(`/api/booking-custom`)"
       entryPoints:
         - web
       middlewares:
-        - booking-workshop-stripprefix
-      service: booking-workshop
+        - booking-custom-stripprefix
+      service: booking-custom
 
     root:
       rule: "Path(`/`)"
@@ -144,45 +144,45 @@ http:
         prefixes:
           - "/api/car"
 
-    booking-story1-stripprefix:
+    booking-ref-story1-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-story1"
+          - "/api/booking-ref-story1"
 
-    booking-story2-stripprefix:
+    booking-ref-story2-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-story2"
+          - "/api/booking-ref-story2"
 
-    booking-story3-stripprefix:
+    booking-ref-story3-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-story3"
+          - "/api/booking-ref-story3"
 
-    booking-story4-stripprefix:
+    booking-ref-story4-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-story4"
+          - "/api/booking-ref-story4"
 
-    booking-story5-stripprefix:
+    booking-ref-story5-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-story5"
+          - "/api/booking-ref-story5"
 
-    booking-story6-stripprefix:
+    booking-ref-story6-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-story6"
+          - "/api/booking-ref-story6"
 
-    booking-story7-stripprefix:
+    booking-ref-story7-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-story7"
+          - "/api/booking-ref-story7"
 
-    booking-workshop-stripprefix:
+    booking-custom-stripprefix:
       stripPrefix:
         prefixes:
-          - "/api/booking-workshop"
+          - "/api/booking-custom"
 
     dashboard-stripprefix:
       stripPrefix:
@@ -210,45 +210,45 @@ http:
         servers:
           - url: "http://car:8080"
 
-    booking-story1:
+    booking-ref-story1:
       loadBalancer:
         servers:
-          - url: "http://booking-story1:8080"
+          - url: "http://booking-ref-story1:8080"
 
-    booking-story2:
+    booking-ref-story2:
       loadBalancer:
         servers:
-          - url: "http://booking-story2:8080"
+          - url: "http://booking-ref-story2:8080"
 
-    booking-story3:
+    booking-ref-story3:
       loadBalancer:
         servers:
-          - url: "http://booking-story3:8080"
+          - url: "http://booking-ref-story3:8080"
 
-    booking-story4:
+    booking-ref-story4:
       loadBalancer:
         servers:
-          - url: "http://booking-story4:8080"
+          - url: "http://booking-ref-story4:8080"
 
-    booking-story5:
+    booking-ref-story5:
       loadBalancer:
         servers:
-          - url: "http://booking-story5:8080"
+          - url: "http://booking-ref-story5:8080"
 
-    booking-story6:
+    booking-ref-story6:
       loadBalancer:
         servers:
-          - url: "http://booking-story6:8080"
+          - url: "http://booking-ref-story6:8080"
 
-    booking-story7:
+    booking-ref-story7:
       loadBalancer:
         servers:
-          - url: "http://booking-story7:8080"
+          - url: "http://booking-ref-story7:8080"
 
-    booking-workshop:
+    booking-custom:
       loadBalancer:
         servers:
-          - url: "http://booking-workshop:8080"
+          - url: "http://booking-custom:8080"
 
     dashboard:
       loadBalancer:

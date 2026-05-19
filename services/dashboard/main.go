@@ -25,17 +25,18 @@ func main() {
 	projectName := getEnv("COMPOSE_PROJECT_NAME", "services")
 	composeFilesRaw := getEnv("COMPOSE_FILES", "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml")
 	consulURL := getEnv("CONSUL_URL", "http://consul:8500")
-	bookingStory1URL := getEnv("BOOKING_STORY1_URL", "http://booking-story1:8080")
-	bookingStory2URL := getEnv("BOOKING_STORY2_URL", "http://booking-story2:8080")
-	bookingStory3URL := getEnv("BOOKING_STORY3_URL", "http://booking-story3:8080")
-	bookingStory4URL := getEnv("BOOKING_STORY4_URL", "http://booking-story4:8080")
-	bookingStory5URL := getEnv("BOOKING_STORY5_URL", "http://booking-story5:8080")
-	bookingStory6URL := getEnv("BOOKING_STORY6_URL", "http://booking-story6:8080")
-	bookingStory7URL := getEnv("BOOKING_STORY7_URL", "http://booking-story7:8080")
-	// Leer-String = Workshop-Service ist nicht Teil des aktuellen Setups.
-	// Nur die docker-compose.workshop.yml setzt die ENV; bei `make docker-up`
-	// bleibt sie unset und der Workshop-Teil wird komplett ausgeblendet.
-	bookingWorkshopURL := getEnv("BOOKING_WORKSHOP_URL", "")
+	bookingRefStory1URL := getEnv("BOOKING_REF_STORY1_URL", "http://booking-ref-story1:8080")
+	bookingRefStory2URL := getEnv("BOOKING_REF_STORY2_URL", "http://booking-ref-story2:8080")
+	bookingRefStory3URL := getEnv("BOOKING_REF_STORY3_URL", "http://booking-ref-story3:8080")
+	bookingRefStory4URL := getEnv("BOOKING_REF_STORY4_URL", "http://booking-ref-story4:8080")
+	bookingRefStory5URL := getEnv("BOOKING_REF_STORY5_URL", "http://booking-ref-story5:8080")
+	bookingRefStory6URL := getEnv("BOOKING_REF_STORY6_URL", "http://booking-ref-story6:8080")
+	bookingRefStory7URL := getEnv("BOOKING_REF_STORY7_URL", "http://booking-ref-story7:8080")
+	// Leer-String = Custom-Service ist nicht Teil des aktuellen Setups.
+	// Nur die docker-compose.custom.yml setzt die ENV; bei einem reinen
+	// Reference-Setup bleibt sie unset und der Custom-Teil wird komplett
+	// ausgeblendet.
+	bookingCustomURL := getEnv("BOOKING_CUSTOM_URL", "")
 	traefikPingURL := getEnv("TRAEFIK_PING_URL", "http://traefik:8080/api/version")
 	swaggerUIURL := getEnv("SWAGGER_UI_URL", "http://swagger-ui:8080/api/")
 	consulStatusURL := getEnv("CONSUL_STATUS_URL", consulURL+"/v1/status/leader")
@@ -49,16 +50,16 @@ func main() {
 	allowedServices := []string{"flight", "hotel", "car"}
 
 	bookingURLs := map[string]string{
-		"booking-story1": bookingStory1URL,
-		"booking-story2": bookingStory2URL,
-		"booking-story3": bookingStory3URL,
-		"booking-story4": bookingStory4URL,
-		"booking-story5": bookingStory5URL,
-		"booking-story6": bookingStory6URL,
-		"booking-story7": bookingStory7URL,
+		"booking-ref-story1": bookingRefStory1URL,
+		"booking-ref-story2": bookingRefStory2URL,
+		"booking-ref-story3": bookingRefStory3URL,
+		"booking-ref-story4": bookingRefStory4URL,
+		"booking-ref-story5": bookingRefStory5URL,
+		"booking-ref-story6": bookingRefStory6URL,
+		"booking-ref-story7": bookingRefStory7URL,
 	}
-	if bookingWorkshopURL != "" {
-		bookingURLs["booking-workshop"] = bookingWorkshopURL
+	if bookingCustomURL != "" {
+		bookingURLs["booking-custom"] = bookingCustomURL
 	}
 
 	infraTargets := []handler.InfraTarget{
@@ -78,28 +79,28 @@ func main() {
 	mux.HandleFunc("POST /api/services/{name}/scale", handler.ScaleServiceHandler(composeArgs, allowedServices))
 	mux.HandleFunc("GET /api/services/{name}/instances", handler.ListInstancesHandler(resolver, allowedServices, composeArgs))
 	mux.HandleFunc("POST /api/services/{name}/chaos", handler.SetChaosHandler(resolver, allowedServices))
-	mux.HandleFunc("GET /api/booking-story1/offers", handler.ProxyHandler(bookingStory1URL, http.MethodGet, "/booking/offers"))
-	mux.HandleFunc("GET /api/booking-story2/offers", handler.ProxyHandler(bookingStory2URL, http.MethodGet, "/booking/offers"))
-	mux.HandleFunc("POST /api/booking-story2/bookings", handler.ProxyHandler(bookingStory2URL, http.MethodPost, "/booking/bookings"))
-	mux.HandleFunc("GET /api/booking-story3/offers", handler.ProxyHandler(bookingStory3URL, http.MethodGet, "/booking/offers"))
-	mux.HandleFunc("GET /api/circuit-state", handler.CircuitStateHandler(bookingStory3URL))
-	mux.HandleFunc("GET /api/bulkhead-state", handler.BulkheadStateHandler(bookingStory4URL))
-	mux.HandleFunc("POST /api/bulkhead-reset", handler.BulkheadResetHandler(bookingStory4URL))
-	mux.HandleFunc("GET /api/booking-story4/offers", handler.BookingOffersProxyHandler(bookingStory4URL))
-	mux.HandleFunc("POST /api/booking-story4/burst", handler.BurstHandler(bookingStory4URL, 20))
-	mux.HandleFunc("GET /api/saga-state", handler.SagaStateHandler(bookingStory5URL))
-	mux.HandleFunc("POST /api/saga-reset", handler.SagaResetHandler(bookingStory5URL))
-	mux.HandleFunc("POST /api/saga-trigger", handler.SagaTriggerHandler(bookingStory5URL))
-	mux.HandleFunc("GET /api/saga6-state", handler.SagaStateHandler(bookingStory6URL))
-	mux.HandleFunc("POST /api/saga6-reset", handler.SagaResetHandler(bookingStory6URL))
-	mux.HandleFunc("POST /api/saga6-trigger", handler.SagaTriggerHandler(bookingStory6URL))
-	mux.HandleFunc("GET /api/booking-workshop-available", func(w http.ResponseWriter, r *http.Request) {
-		if bookingWorkshopURL == "" {
+	mux.HandleFunc("GET /api/booking-ref-story1/offers", handler.ProxyHandler(bookingRefStory1URL, http.MethodGet, "/booking/offers"))
+	mux.HandleFunc("GET /api/booking-ref-story2/offers", handler.ProxyHandler(bookingRefStory2URL, http.MethodGet, "/booking/offers"))
+	mux.HandleFunc("POST /api/booking-ref-story2/bookings", handler.ProxyHandler(bookingRefStory2URL, http.MethodPost, "/booking/bookings"))
+	mux.HandleFunc("GET /api/booking-ref-story3/offers", handler.ProxyHandler(bookingRefStory3URL, http.MethodGet, "/booking/offers"))
+	mux.HandleFunc("GET /api/circuit-state", handler.CircuitStateHandler(bookingRefStory3URL))
+	mux.HandleFunc("GET /api/bulkhead-state", handler.BulkheadStateHandler(bookingRefStory4URL))
+	mux.HandleFunc("POST /api/bulkhead-reset", handler.BulkheadResetHandler(bookingRefStory4URL))
+	mux.HandleFunc("GET /api/booking-ref-story4/offers", handler.BookingOffersProxyHandler(bookingRefStory4URL))
+	mux.HandleFunc("POST /api/booking-ref-story4/burst", handler.BurstHandler(bookingRefStory4URL, 20))
+	mux.HandleFunc("GET /api/saga-state", handler.SagaStateHandler(bookingRefStory5URL))
+	mux.HandleFunc("POST /api/saga-reset", handler.SagaResetHandler(bookingRefStory5URL))
+	mux.HandleFunc("POST /api/saga-trigger", handler.SagaTriggerHandler(bookingRefStory5URL))
+	mux.HandleFunc("GET /api/saga6-state", handler.SagaStateHandler(bookingRefStory6URL))
+	mux.HandleFunc("POST /api/saga6-reset", handler.SagaResetHandler(bookingRefStory6URL))
+	mux.HandleFunc("POST /api/saga6-trigger", handler.SagaTriggerHandler(bookingRefStory6URL))
+	mux.HandleFunc("GET /api/booking-custom-available", func(w http.ResponseWriter, r *http.Request) {
+		if bookingCustomURL == "" {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
 		client := &http.Client{Timeout: 1500 * time.Millisecond}
-		resp, err := client.Get(bookingWorkshopURL + "/health")
+		resp, err := client.Get(bookingCustomURL + "/health")
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
@@ -107,19 +108,19 @@ func main() {
 		_ = resp.Body.Close()
 		w.WriteHeader(http.StatusOK)
 	})
-	if bookingWorkshopURL != "" {
-		mux.HandleFunc("GET /api/booking-workshop/offers", handler.ProxyHandler(bookingWorkshopURL, http.MethodGet, "/booking/offers"))
-		mux.HandleFunc("POST /api/booking-workshop/bookings", handler.ProxyHandler(bookingWorkshopURL, http.MethodPost, "/booking/bookings"))
-		mux.HandleFunc("GET /api/booking-workshop/circuit-state", handler.CircuitStateHandler(bookingWorkshopURL))
-		mux.HandleFunc("GET /api/booking-workshop/bulkhead-state", handler.BulkheadStateHandler(bookingWorkshopURL))
-		mux.HandleFunc("POST /api/booking-workshop/bulkhead-reset", handler.BulkheadResetHandler(bookingWorkshopURL))
-		mux.HandleFunc("POST /api/booking-workshop/burst", handler.BurstHandler(bookingWorkshopURL, 20))
-		mux.HandleFunc("GET /api/booking-workshop/saga-state", handler.SagaStateHandler(bookingWorkshopURL))
-		mux.HandleFunc("POST /api/booking-workshop/saga-reset", handler.SagaResetHandler(bookingWorkshopURL))
-		mux.HandleFunc("POST /api/booking-workshop/saga-trigger", handler.SagaTriggerHandler(bookingWorkshopURL))
-		mux.HandleFunc("GET /api/booking-workshop/saga6-state", handler.SagaStateHandler(bookingWorkshopURL))
-		mux.HandleFunc("POST /api/booking-workshop/saga6-reset", handler.SagaResetHandler(bookingWorkshopURL))
-		mux.HandleFunc("POST /api/booking-workshop/saga6-trigger", handler.SagaTriggerHandler(bookingWorkshopURL))
+	if bookingCustomURL != "" {
+		mux.HandleFunc("GET /api/booking-custom/offers", handler.ProxyHandler(bookingCustomURL, http.MethodGet, "/booking/offers"))
+		mux.HandleFunc("POST /api/booking-custom/bookings", handler.ProxyHandler(bookingCustomURL, http.MethodPost, "/booking/bookings"))
+		mux.HandleFunc("GET /api/booking-custom/circuit-state", handler.CircuitStateHandler(bookingCustomURL))
+		mux.HandleFunc("GET /api/booking-custom/bulkhead-state", handler.BulkheadStateHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/bulkhead-reset", handler.BulkheadResetHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/burst", handler.BurstHandler(bookingCustomURL, 20))
+		mux.HandleFunc("GET /api/booking-custom/saga-state", handler.SagaStateHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/saga-reset", handler.SagaResetHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/saga-trigger", handler.SagaTriggerHandler(bookingCustomURL))
+		mux.HandleFunc("GET /api/booking-custom/saga6-state", handler.SagaStateHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/saga6-reset", handler.SagaResetHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/saga6-trigger", handler.SagaTriggerHandler(bookingCustomURL))
 	}
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 

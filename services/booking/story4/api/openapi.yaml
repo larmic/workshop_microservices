@@ -7,7 +7,7 @@ info:
   version: 4.0.0
 
 servers:
-  - url: http://localhost/api/booking-story4
+  - url: http://localhost/api/booking-ref-story4
     description: API-Gateway (Traefik)
 
 paths:

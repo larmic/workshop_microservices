@@ -33,7 +33,7 @@ kotlin {
 }
 
 tasks.shadowJar {
-    archiveBaseName.set("booking-my-own-solution")
+    archiveBaseName.set("booking-custom")
     archiveClassifier.set("all")
     archiveVersion.set("")
     mergeServiceFiles()

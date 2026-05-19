@@ -12,7 +12,7 @@ func SagaStateHandler(bookingURL string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		resp, err := client.Get(bookingURL + "/admin/sagas")
 		if err != nil {
-			http.Error(w, "booking-story5 unreachable: "+err.Error(), http.StatusBadGateway)
+			http.Error(w, "booking service unreachable: "+err.Error(), http.StatusBadGateway)
 			return
 		}
 		defer resp.Body.Close()
@@ -33,7 +33,7 @@ func SagaResetHandler(bookingURL string) http.HandlerFunc {
 		}
 		resp, err := client.Do(req)
 		if err != nil {
-			http.Error(w, "booking-story5 unreachable: "+err.Error(), http.StatusBadGateway)
+			http.Error(w, "booking service unreachable: "+err.Error(), http.StatusBadGateway)
 			return
 		}
 		defer resp.Body.Close()
@@ -56,7 +56,7 @@ func SagaTriggerHandler(bookingURL string) http.HandlerFunc {
 		req.Header.Set("Content-Type", "application/json")
 		resp, err := client.Do(req)
 		if err != nil {
-			http.Error(w, "booking-story5 unreachable: "+err.Error(), http.StatusBadGateway)
+			http.Error(w, "booking service unreachable: "+err.Error(), http.StatusBadGateway)
 			return
 		}
 		defer resp.Body.Close()

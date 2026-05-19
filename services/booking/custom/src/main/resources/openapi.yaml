@@ -7,7 +7,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost/api/booking-story1
+  - url: http://localhost/api/booking-custom
     description: API-Gateway (Traefik)
 paths:
   /health:

@@ -37,13 +37,13 @@ services:
           { "url": "http://localhost/api/flight/openapi", "name": "Flight Service" },
           { "url": "http://localhost/api/hotel/openapi", "name": "Hotel Service" },
           { "url": "http://localhost/api/car/openapi", "name": "Car Service" },
-          { "url": "http://localhost/api/booking-story1/openapi", "name": "Booking Service (Story 1)" },
-          { "url": "http://localhost/api/booking-story2/openapi", "name": "Booking Service (Story 2)" },
-          { "url": "http://localhost/api/booking-story3/openapi", "name": "Booking Service (Story 3)" },
-          { "url": "http://localhost/api/booking-story4/openapi", "name": "Booking Service (Story 4)" },
-          { "url": "http://localhost/api/booking-story5/openapi", "name": "Booking Service (Story 5)" },
-          { "url": "http://localhost/api/booking-story6/openapi", "name": "Booking Service (Story 6)" },
-          { "url": "http://localhost/api/booking-story7/openapi", "name": "Booking Service (Story 7)" }
+          { "url": "http://localhost/api/booking-ref-story1/openapi", "name": "Booking Service (Reference Story 1)" },
+          { "url": "http://localhost/api/booking-ref-story2/openapi", "name": "Booking Service (Reference Story 2)" },
+          { "url": "http://localhost/api/booking-ref-story3/openapi", "name": "Booking Service (Reference Story 3)" },
+          { "url": "http://localhost/api/booking-ref-story4/openapi", "name": "Booking Service (Reference Story 4)" },
+          { "url": "http://localhost/api/booking-ref-story5/openapi", "name": "Booking Service (Reference Story 5)" },
+          { "url": "http://localhost/api/booking-ref-story6/openapi", "name": "Booking Service (Reference Story 6)" },
+          { "url": "http://localhost/api/booking-ref-story7/openapi", "name": "Booking Service (Reference Story 7)" }
         ]
 
   slides:

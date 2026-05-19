@@ -7,7 +7,7 @@ info:
   version: 6.0.0
 
 servers:
-  - url: http://localhost/api/booking-story6
+  - url: http://localhost/api/booking-ref-story6
     description: API-Gateway (Traefik)
 
 paths:

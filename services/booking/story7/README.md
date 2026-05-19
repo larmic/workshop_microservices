@@ -26,7 +26,7 @@ HTTP-Header verloren gehen würden.
 Eine Buchung absenden:
 
 ```bash
-curl -X POST http://localhost/api/booking-story7/booking/bookings \
+curl -X POST http://localhost/api/booking-ref-story7/booking/bookings \
   -H "Content-Type: application/json" \
   -d '{"customerName":"Demo","flightId":"LH123","hotelId":"H1","carId":"C1"}'
 ```
@@ -34,13 +34,13 @@ curl -X POST http://localhost/api/booking-story7/booking/bookings \
 Trace-ID aus den Logs ablesen und filtern:
 
 ```bash
-docker compose logs booking-story7 flight hotel car | jq -c 'select(.trace_id=="<trace-id>")'
+docker compose logs booking-ref-story7 flight hotel car | jq -c 'select(.trace_id=="<trace-id>")'
 ```
 
 Oder mit eigenem `traceparent` (z.B. vom Frontend / API-Gateway):
 
 ```bash
-curl -X POST http://localhost/api/booking-story7/booking/bookings \
+curl -X POST http://localhost/api/booking-ref-story7/booking/bookings \
   -H "Content-Type: application/json" \
   -H "traceparent: 00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01" \
   -d '{"customerName":"Demo","flightId":"LH123","hotelId":"H1","carId":"C1"}'

@@ -1,0 +1,38 @@
+services:
+  booking-custom:
+    container_name: booking-custom
+    build:
+      context: ${CUSTOM_BOOKING_PATH}
+    image: workshop-microservices-booking:custom
+    ports:
+      - "8099:8080"
+    environment:
+      FLIGHT_SERVICE_URL: http://flight:8080
+      HOTEL_SERVICE_URL: http://hotel:8080
+      CAR_SERVICE_URL: http://car:8080
+
+  # Override: signalisiert dem Dashboard, dass der Custom-Service Teil
+  # des aktuellen Setups ist. Ohne diese ENV taucht "booking-custom" gar
+  # nicht erst in der Health-Übersicht auf.
+  dashboard:
+    environment:
+      BOOKING_CUSTOM_URL: http://booking-custom:8080
+
+  # Override: erweitert die Swagger-UI-Liste um den Custom-Service.
+  # Identisch zu docker-compose.infra.yml + ein zusätzlicher Eintrag am Ende.
+  swagger-ui:
+    environment:
+      URLS: >-
+        [
+          { "url": "http://localhost/api/flight/openapi", "name": "Flight Service" },
+          { "url": "http://localhost/api/hotel/openapi", "name": "Hotel Service" },
+          { "url": "http://localhost/api/car/openapi", "name": "Car Service" },
+          { "url": "http://localhost/api/booking-ref-story1/openapi", "name": "Booking Service (Reference Story 1)" },
+          { "url": "http://localhost/api/booking-ref-story2/openapi", "name": "Booking Service (Reference Story 2)" },
+          { "url": "http://localhost/api/booking-ref-story3/openapi", "name": "Booking Service (Reference Story 3)" },
+          { "url": "http://localhost/api/booking-ref-story4/openapi", "name": "Booking Service (Reference Story 4)" },
+          { "url": "http://localhost/api/booking-ref-story5/openapi", "name": "Booking Service (Reference Story 5)" },
+          { "url": "http://localhost/api/booking-ref-story6/openapi", "name": "Booking Service (Reference Story 6)" },
+          { "url": "http://localhost/api/booking-ref-story7/openapi", "name": "Booking Service (Reference Story 7)" },
+          { "url": "http://localhost/api/booking-custom/openapi", "name": "Booking Service (Custom)" }
+        ]

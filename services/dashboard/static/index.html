@@ -944,7 +944,7 @@
         .story-content { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
         .story-section[hidden] { display: none; }
 
-        /* Source-Toggle (Reference vs Workshop pro Story) */
+        /* Source-Toggle (Reference vs Custom pro Story) */
         .source-toggle {
             display: inline-flex;
             align-items: center;
@@ -1290,14 +1290,14 @@
                     <a class="link-chip" href="/api/flight/openapi" target="_blank"><span>&#9992;</span> Flight</a>
                     <a class="link-chip" href="/api/hotel/openapi" target="_blank"><span>&#127976;</span> Hotel</a>
                     <a class="link-chip" href="/api/car/openapi" target="_blank"><span>&#128663;</span> Car</a>
-                    <a class="link-chip" href="/api/booking-story1/openapi" target="_blank"><span>&#128214;</span> Booking Story 1</a>
-                    <a class="link-chip" href="/api/booking-story2/openapi" target="_blank"><span>&#128214;</span> Booking Story 2</a>
-                    <a class="link-chip" href="/api/booking-story3/openapi" target="_blank"><span>&#128214;</span> Booking Story 3</a>
-                    <a class="link-chip" href="/api/booking-story4/openapi" target="_blank"><span>&#128214;</span> Booking Story 4</a>
-                    <a class="link-chip" href="/api/booking-story5/openapi" target="_blank"><span>&#128214;</span> Booking Story 5</a>
-                    <a class="link-chip" href="/api/booking-story6/openapi" target="_blank"><span>&#128214;</span> Booking Story 6</a>
-                    <a class="link-chip" href="/api/booking-story7/openapi" target="_blank"><span>&#128214;</span> Booking Story 7</a>
-                    <a class="link-chip" id="link-booking-workshop" href="/api/booking-workshop/openapi" target="_blank" hidden><span>&#128736;</span> Booking Workshop</a>
+                    <a class="link-chip" href="/api/booking-ref-story1/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 1</a>
+                    <a class="link-chip" href="/api/booking-ref-story2/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 2</a>
+                    <a class="link-chip" href="/api/booking-ref-story3/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 3</a>
+                    <a class="link-chip" href="/api/booking-ref-story4/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 4</a>
+                    <a class="link-chip" href="/api/booking-ref-story5/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 5</a>
+                    <a class="link-chip" href="/api/booking-ref-story6/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 6</a>
+                    <a class="link-chip" href="/api/booking-ref-story7/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 7</a>
+                    <a class="link-chip" id="link-booking-custom" href="/api/booking-custom/openapi" target="_blank" hidden><span>&#128736;</span> Booking Custom</a>
                 </div>
             </div>
         </div>
@@ -1403,17 +1403,17 @@ GET /booking/offers
         <div class="source-toggle" data-source-toggle="1">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(1,'reference')">Reference</button>
-            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(1,'workshop')">Workshop</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(1,'custom')">Custom</button>
         </div>
         <div class="cb-section">
             <h2>Cloud-Native Booking Service (Story 1)</h2>
             <div class="rest-actions">
                 <div class="rest-row">
-                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-story1/offers', 's1-offers')">
+                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-ref-story1/offers', 's1-offers')">
                         <span class="method-chip get">GET</span>
                         <span class="rest-path">/booking/offers</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story1</span>
+                        <span class="service-chip">booking-ref-story1</span>
                         <span class="rest-btn-sub">aggregiert
                             <span class="service-chip flight">flight</span>
                             <span class="service-chip hotel">hotel</span>
@@ -1474,17 +1474,17 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
         <div class="source-toggle" data-source-toggle="2">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(2,'reference')">Reference</button>
-            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(2,'workshop')">Workshop</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(2,'custom')">Custom</button>
         </div>
         <div class="cb-section">
             <h2>Service Discovery via Consul (Story 2)</h2>
             <div class="rest-actions">
                 <div class="rest-row">
-                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-story2/offers', 's2-offers')">
+                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-ref-story2/offers', 's2-offers')">
                         <span class="method-chip get">GET</span>
                         <span class="rest-path">/booking/offers</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story2</span>
+                        <span class="service-chip">booking-ref-story2</span>
                         <span class="rest-btn-sub">Services
                             <span class="service-chip flight">flight</span>
                             <span class="service-chip hotel">hotel</span>
@@ -1497,11 +1497,11 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
                     </div>
                 </div>
                 <div class="rest-row">
-                    <button class="rest-btn" onclick="callRest(this, 'POST', '/dashboard/api/booking-story2/bookings', 's2-booking', SAMPLE_BOOKING_BODY)">
+                    <button class="rest-btn" onclick="callRest(this, 'POST', '/dashboard/api/booking-ref-story2/bookings', 's2-booking', SAMPLE_BOOKING_BODY)">
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story2</span>
+                        <span class="service-chip">booking-ref-story2</span>
                         <span class="rest-btn-sub">Buchung &uuml;ber discovered Services
                             <span class="service-chip flight">flight</span>
                             <span class="service-chip hotel">hotel</span>
@@ -1565,17 +1565,17 @@ call(service):
         <div class="source-toggle" data-source-toggle="3">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(3,'reference')">Reference</button>
-            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(3,'workshop')">Workshop</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(3,'custom')">Custom</button>
         </div>
         <div class="cb-section">
             <h2>Circuit Breaker (Booking Story 3)</h2>
             <div class="rest-actions">
                 <div class="rest-row">
-                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-story3/offers', 's3-offers')">
+                    <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-ref-story3/offers', 's3-offers')">
                         <span class="method-chip get">GET</span>
                         <span class="rest-path">/booking/offers</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story3</span>
+                        <span class="service-chip">booking-ref-story3</span>
                         <span class="rest-btn-sub">Circuit Breaker um
                             <span class="service-chip flight">flight</span>
                             &mdash; bei wiederholten Fehlern öffnet der CB und liefert sofort einen Fallback</span>
@@ -1636,7 +1636,7 @@ call(service):
         <div class="source-toggle" data-source-toggle="4">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(4,'reference')">Reference</button>
-            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(4,'workshop')">Workshop</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(4,'custom')">Custom</button>
         </div>
         <div class="cb-section">
             <div class="panel-header">
@@ -1649,7 +1649,7 @@ call(service):
                         <span class="method-chip get">GET</span>
                         <span class="rest-path">/booking/offers</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story4</span>
+                        <span class="service-chip">booking-ref-story4</span>
                         <span class="rest-btn-sub">aggregiert
                             <span class="service-chip flight">flight</span>
                             <span class="service-chip hotel">hotel</span>
@@ -1662,7 +1662,7 @@ call(service):
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/admin/burst</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story4</span>
+                        <span class="service-chip">booking-ref-story4</span>
                         <span class="rest-btn-sub">feuert 20 parallele GET /booking/offers &mdash; Bulkhead-Rejects werden sichtbar</span>
                     </button>
                 </div>
@@ -1733,7 +1733,7 @@ catch error at step X:
         <div class="source-toggle" data-source-toggle="5">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(5,'reference')">Reference</button>
-            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(5,'workshop')">Workshop</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(5,'custom')">Custom</button>
         </div>
         <div class="cb-section">
             <div class="panel-header">
@@ -1746,7 +1746,7 @@ catch error at step X:
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story5</span>
+                        <span class="service-chip">booking-ref-story5</span>
                         <span class="rest-btn-sub">orchestriert
                             <span class="service-chip flight">flight</span>
                             &rarr;
@@ -1823,7 +1823,7 @@ on timeout(sagaId):
         <div class="source-toggle" data-source-toggle="6">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(6,'reference')">Reference</button>
-            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(6,'workshop')">Workshop</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(6,'custom')">Custom</button>
         </div>
         <div class="cb-section">
             <div class="panel-header">
@@ -1836,7 +1836,7 @@ on timeout(sagaId):
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story6</span>
+                        <span class="service-chip">booking-ref-story6</span>
                         <span class="rest-btn-sub">orchestriert
                             <span class="service-chip flight">flight</span>
                             &rarr;
@@ -1943,7 +1943,7 @@ on receiveCompensationEvent(event):
         <div class="source-toggle" data-source-toggle="7">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(7,'reference')">Reference</button>
-            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(7,'workshop')">Workshop</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(7,'custom')">Custom</button>
         </div>
         <div class="cb-section">
             <div class="panel-header">
@@ -1956,7 +1956,7 @@ on receiveCompensationEvent(event):
                         <span class="method-chip get">GET</span>
                         <span class="rest-path">/booking/offers</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story7</span>
+                        <span class="service-chip">booking-ref-story7</span>
                         <span class="rest-btn-sub">Angebote &uuml;ber
                             <span class="service-chip flight">flight</span>
                             <span class="service-chip hotel">hotel</span>
@@ -1969,7 +1969,7 @@ on receiveCompensationEvent(event):
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story7</span>
+                        <span class="service-chip">booking-ref-story7</span>
                         <span class="rest-btn-sub">Saga starten &mdash; <strong>trace_id automatisch</strong> generiert, in Forward- und Compensation-Logs aller Services sichtbar</span>
                     </button>
                 </div>
@@ -1978,7 +1978,7 @@ on receiveCompensationEvent(event):
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
-                        <span class="service-chip">booking-story7</span>
+                        <span class="service-chip">booking-ref-story7</span>
                         <span class="rest-btn-sub">Saga starten mit <strong>eigenem traceparent</strong>-Header &mdash; Service &uuml;bernimmt die vorgegebene trace_id (z.B. vom API-Gateway)</span>
                     </button>
                 </div>
@@ -2005,7 +2005,7 @@ on receiveCompensationEvent(event):
 
     <footer class="workshop-footer">
         <div class="footer-author">
-            <span class="accent">Workshop</span> von <strong>Lars Michaelis</strong>
+            <span class="accent">Custom</span> von <strong>Lars Michaelis</strong>
         </div>
         <a href="https://www.team-neusta.de/" target="_blank" rel="noopener" aria-label="team neusta">
             <img class="footer-logo" src="/dashboard/team-neusta-logo.svg" alt="team neusta">
@@ -2020,16 +2020,16 @@ on receiveCompensationEvent(event):
             customerName: "Max Mustermann"
         };
 
-        // Pro Story merken, ob die Referenz oder der Workshop-Service angesprochen werden soll.
+        // Pro Story merken, ob die Referenz oder der Custom-Service angesprochen werden soll.
         const BookingMode = { 1: "reference", 2: "reference", 3: "reference", 4: "reference", 5: "reference", 6: "reference", 7: "reference" };
 
-        // Schreibt eine Story-bezogene URL um, wenn der zugehörige Tab im Workshop-Modus ist.
+        // Schreibt eine Story-bezogene URL um, wenn der zugehörige Tab im Custom-Modus ist.
         function bookingUrl(storyNum, path) {
-            if (BookingMode[storyNum] !== "workshop") return path;
+            if (BookingMode[storyNum] !== "custom") return path;
             return path
-                .replace(/\/dashboard\/api\/booking-story\d/, "/dashboard/api/booking-workshop")
-                .replace(/\/dashboard\/api\/(circuit-state|bulkhead-state|bulkhead-reset|saga-state|saga-reset|saga-trigger|saga6-state|saga6-reset|saga6-trigger)/, "/dashboard/api/booking-workshop/$1")
-                .replace(/\/api\/booking-story\d/, "/api/booking-workshop");
+                .replace(/\/dashboard\/api\/booking-ref-story\d/, "/dashboard/api/booking-custom")
+                .replace(/\/dashboard\/api\/(circuit-state|bulkhead-state|bulkhead-reset|saga-state|saga-reset|saga-trigger|saga6-state|saga6-reset|saga6-trigger)/, "/dashboard/api/booking-custom/$1")
+                .replace(/\/api\/booking-ref-story\d/, "/api/booking-custom");
         }
 
         // Wird vom Toggle-UI in jeder Story aufgerufen. Setzt den Mode und stößt
@@ -2045,42 +2045,42 @@ on receiveCompensationEvent(event):
             if (storyNum === 6 && typeof fetchSaga6State === "function") fetchSaga6State();
         }
 
-        // Workshop-Service-Erreichbarkeit. Wird beim Page-Load und periodisch
-        // geprüft; der Workshop-Button im Toggle ist deaktiviert, solange der
-        // Service nicht erreichbar ist (z.B. weil `make docker-up-workshop`
-        // gar nicht gelaufen ist).
-        let workshopAvailable = false;
-        async function probeWorkshopAvailable() {
+        // Custom-Service-Erreichbarkeit. Wird beim Page-Load und periodisch
+        // geprüft; der Custom-Button im Toggle ist deaktiviert, solange der
+        // Service nicht erreichbar ist (z.B. weil der Custom-Service-Build
+        // im `make docker-up` fehlgeschlagen ist).
+        let customAvailable = false;
+        async function probeCustomAvailable() {
             try {
                 const ctrl = new AbortController();
                 const timer = setTimeout(() => ctrl.abort(), 2000);
-                const res = await fetch("/dashboard/api/booking-workshop-available", { signal: ctrl.signal });
+                const res = await fetch("/dashboard/api/booking-custom-available", { signal: ctrl.signal });
                 clearTimeout(timer);
                 return res.ok;
             } catch (e) {
                 return false;
             }
         }
-        async function refreshWorkshopAvailability() {
-            workshopAvailable = await probeWorkshopAvailable();
-            document.querySelectorAll('.source-btn[data-mode="workshop"]').forEach(btn => {
-                btn.disabled = !workshopAvailable;
-                btn.title = workshopAvailable ? "" : "Workshop-Service nicht erreichbar – Setup siehe Vorbereitung";
+        async function refreshCustomAvailability() {
+            customAvailable = await probeCustomAvailable();
+            document.querySelectorAll('.source-btn[data-mode="custom"]').forEach(btn => {
+                btn.disabled = !customAvailable;
+                btn.title = customAvailable ? "" : "Custom-Service nicht erreichbar – Setup siehe Vorbereitung";
             });
-            const workshopLink = document.getElementById("link-booking-workshop");
-            if (workshopLink) workshopLink.hidden = !workshopAvailable;
-            if (!workshopAvailable) {
+            const customLink = document.getElementById("link-booking-custom");
+            if (customLink) customLink.hidden = !customAvailable;
+            if (!customAvailable) {
                 for (const n of [1, 2, 3, 4, 5, 6, 7]) {
-                    if (BookingMode[n] === "workshop") setBookingMode(n, "reference");
+                    if (BookingMode[n] === "custom") setBookingMode(n, "reference");
                 }
             }
         }
-        // Beim Page-Load die Workshop-Buttons sofort als "wird geprüft" markieren,
+        // Beim Page-Load die Custom-Buttons sofort als "wird geprüft" markieren,
         // damit es kein Klickfenster vor dem ersten Probe-Call gibt.
         document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll('.source-btn[data-mode="workshop"]').forEach(btn => {
+            document.querySelectorAll('.source-btn[data-mode="custom"]').forEach(btn => {
                 btn.disabled = true;
-                btn.title = "Workshop-Service wird geprüft …";
+                btn.title = "Custom-Service wird geprüft …";
             });
         });
 
@@ -2100,7 +2100,7 @@ on receiveCompensationEvent(event):
                     init.headers = { "Content-Type": "application/json" };
                     init.body = JSON.stringify(body);
                 }
-                const m = path.match(/booking-story(\d)/);
+                const m = path.match(/booking-ref-story(\d)/);
                 const effectivePath = m ? bookingUrl(parseInt(m[1], 10), path) : path;
                 const res = await fetch(effectivePath, init);
                 const ms = Math.round(performance.now() - t0);
@@ -2431,7 +2431,7 @@ on receiveCompensationEvent(event):
             const t0 = performance.now();
             try {
                 const before = await fetchBulkheadStateOnce();
-                const res = await fetch(bookingUrl(4, "/dashboard/api/booking-story4/offers"));
+                const res = await fetch(bookingUrl(4, "/dashboard/api/booking-ref-story4/offers"));
                 const ms = Math.round(performance.now() - t0);
                 const after = await fetchBulkheadStateOnce();
                 recordBulkheadCall({
@@ -2507,7 +2507,7 @@ on receiveCompensationEvent(event):
             showBurstResult("Burst läuft …");
             try {
                 const before = await fetchBulkheadStateOnce();
-                const res = await fetch(bookingUrl(4, "/dashboard/api/booking-story4/burst"), { method: "POST" });
+                const res = await fetch(bookingUrl(4, "/dashboard/api/booking-ref-story4/burst"), { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
                 const r = await res.json();
                 const after = await fetchBulkheadStateOnce();
@@ -2689,7 +2689,7 @@ on receiveCompensationEvent(event):
             statsId: "saga6-stats",
             listId: "saga6-list",
             label: "Booking Story 6",
-            triggerPath: "/api/booking-story6/booking/bookings",
+            triggerPath: "/api/booking-ref-story6/booking/bookings",
         };
 
         async function fetchSaga6State() {
@@ -2751,7 +2751,7 @@ on receiveCompensationEvent(event):
 
         // ----- Story 7: Distributed Tracing -----
         //
-        // Ruft direkt das Traefik-Routing /api/booking-story7/... auf. Die
+        // Ruft direkt das Traefik-Routing /api/booking-ref-story7/... auf. Die
         // tracing.Middleware im Booking-Service generiert (oder übernimmt)
         // den Trace-Kontext und gibt den effektiven `traceparent`-Header
         // in der Response zurück. Genau diese trace_id zeigt die UI an —
@@ -2781,7 +2781,7 @@ on receiveCompensationEvent(event):
             statusEl.style.color = ok ? "#1d7a3a" : "#b3261e";
             traceEl.textContent = traceId || "— (kein Header empfangen)";
             cmdEl.textContent = traceId
-                ? `docker compose logs booking-story7 flight hotel car | jq -c 'select(.trace_id=="${traceId}")'`
+                ? `docker compose logs booking-ref-story7 flight hotel car | jq -c 'select(.trace_id=="${traceId}")'`
                 : "(Filter-Befehl steht erst nach erfolgreichem Call zur Verfügung)";
             respEl.textContent = body || "";
         }
@@ -2795,7 +2795,7 @@ on receiveCompensationEvent(event):
             }
             const t0 = performance.now();
             try {
-                const res = await fetch(bookingUrl(7, "/api/booking-story7") + path, {
+                const res = await fetch(bookingUrl(7, "/api/booking-ref-story7") + path, {
                     method,
                     headers,
                     body: body ? JSON.stringify(body) : undefined,
@@ -2834,7 +2834,7 @@ on receiveCompensationEvent(event):
             const statsId = opts.statsId || "saga-stats";
             const listId = opts.listId || "saga-list";
             const label = opts.label || "Booking Story 5";
-            const triggerPath = opts.triggerPath || "/api/booking-story5/booking/bookings";
+            const triggerPath = opts.triggerPath || "/api/booking-ref-story5/booking/bookings";
             const stats = document.getElementById(statsId);
             const list = document.getElementById(listId);
             if (!sagas || !Array.isArray(sagas)) {
@@ -3254,8 +3254,8 @@ on receiveCompensationEvent(event):
         setInterval(fetchCircuitState, 1000);
         setInterval(fetchSagaState, 1000);
         setInterval(fetchSaga6State, 1000);
-        refreshWorkshopAvailability();
-        setInterval(refreshWorkshopAvailability, 5000);
+        refreshCustomAvailability();
+        setInterval(refreshCustomAvailability, 5000);
     </script>
 </body>
 </html>

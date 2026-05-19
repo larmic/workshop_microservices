@@ -1,6 +1,6 @@
 services:
-  booking-story1:
-    container_name: booking-story1
+  booking-ref-story1:
+    container_name: booking-ref-story1
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,8 +14,8 @@ services:
       HOTEL_SERVICE_URL: http://hotel:8080
       CAR_SERVICE_URL: http://car:8080
 
-  booking-story2:
-    container_name: booking-story2
+  booking-ref-story2:
+    container_name: booking-ref-story2
     build:
       context: .
       dockerfile: Dockerfile
@@ -30,8 +30,8 @@ services:
       consul:
         condition: service_healthy
 
-  booking-story3:
-    container_name: booking-story3
+  booking-ref-story3:
+    container_name: booking-ref-story3
     build:
       context: .
       dockerfile: Dockerfile
@@ -46,8 +46,8 @@ services:
       consul:
         condition: service_healthy
 
-  booking-story4:
-    container_name: booking-story4
+  booking-ref-story4:
+    container_name: booking-ref-story4
     build:
       context: .
       dockerfile: Dockerfile
@@ -62,8 +62,8 @@ services:
       consul:
         condition: service_healthy
 
-  booking-story5:
-    container_name: booking-story5
+  booking-ref-story5:
+    container_name: booking-ref-story5
     build:
       context: .
       dockerfile: Dockerfile
@@ -78,8 +78,8 @@ services:
       consul:
         condition: service_healthy
 
-  booking-story6:
-    container_name: booking-story6
+  booking-ref-story6:
+    container_name: booking-ref-story6
     build:
       context: .
       dockerfile: Dockerfile
@@ -94,8 +94,8 @@ services:
       consul:
         condition: service_healthy
 
-  booking-story7:
-    container_name: booking-story7
+  booking-ref-story7:
+    container_name: booking-ref-story7
     build:
       context: .
       dockerfile: Dockerfile

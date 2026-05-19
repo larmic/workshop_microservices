@@ -64,5 +64,5 @@ Unter `services/booking/story3/` liegt eine vollständige Go-Reference, die dire
 1. Stack starten: `docker compose -f services/docker-compose.yml -f services/docker-compose.infra.yml -f services/docker-compose.reference.yml up -d`
 2. Dashboard öffnen (`http://localhost/dashboard`). Alle drei CBs zeigen CLOSED.
 3. Flight im Dashboard auf "Fehler" stellen. Fünfmal `curl localhost:8087/booking/offers` schicken — der Flight-CB wechselt nach OPEN, Antwort enthält `flights: []` und Header `X-Circuit-Open: flight`.
-4. Logs des `booking-story3` Containers ansehen (`docker compose logs -f booking-story3`) — jede Entscheidung des Breakers ist sichtbar.
+4. Logs des `booking-ref-story3` Containers ansehen (`docker compose logs -f booking-ref-story3`) — jede Entscheidung des Breakers ist sichtbar.
 5. Flight zurück auf "Normal". Nach 30 Sekunden geht der CB beim nächsten Call automatisch in HALF_OPEN, der Probe-Call schließt den Breaker wieder.

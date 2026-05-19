@@ -59,16 +59,16 @@ denselben Korrelations-Feldern (`eventId`, `sagaId`). Damit lässt sich ein
 einzelner Saga-Verlauf über alle Services hinweg per `grep` rekonstruieren:
 
 ```bash
-docker compose logs booking-story6 flight hotel car | grep S-abc123
+docker compose logs booking-ref-story6 flight hotel car | grep S-abc123
 ```
 
 Phasen im Log:
 
 | Phase | Wo | Bedeutung |
 |---|---|---|
-| `publishing` | booking-story6 | Booking hat das Event vorbereitet und versendet jetzt |
-| `dispatched` | booking-story6 | Backend hat `202 Accepted` zurückgegeben |
-| `dispatch-failed` | booking-story6 | Versand fehlgeschlagen (Netz / 5xx) — Step bleibt trotzdem `COMPENSATED` |
+| `publishing` | booking-ref-story6 | Booking hat das Event vorbereitet und versendet jetzt |
+| `dispatched` | booking-ref-story6 | Backend hat `202 Accepted` zurückgegeben |
+| `dispatch-failed` | booking-ref-story6 | Versand fehlgeschlagen (Netz / 5xx) — Step bleibt trotzdem `COMPENSATED` |
 | `received` | flight/hotel/car | Event ist beim Backend angekommen, vor der Verarbeitung |
 | `processing` | flight/hotel/car | Asynchrone Verarbeitung in der Goroutine startet |
 | `done` | flight/hotel/car | Verarbeitung abgeschlossen |

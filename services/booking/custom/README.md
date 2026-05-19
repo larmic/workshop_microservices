@@ -1,7 +1,11 @@
-# Booking — My Own Solution (Kotlin / Ktor)
+# Booking — Custom Solution (Kotlin / Ktor)
 
 Eigene Umsetzung der **Story 1** in Kotlin mit [Ktor](https://ktor.io/).
 Funktional identisch zur Go-Referenz unter `services/booking/story1/`.
+
+Diese Lösung dient als Default-Custom-Service im Workshop-Setup
+(`docker-compose.custom.yml`) — Teilnehmer können sie ersetzen,
+indem sie `CUSTOM_BOOKING_PATH` in `.env` auf ihr eigenes Projekt zeigen lassen.
 
 ## Eigenschaften
 
@@ -30,9 +34,9 @@ Funktional identisch zur Go-Referenz unter `services/booking/story1/`.
 
 HTTP-Client-Timeout: 5000 ms (hardcoded, analog zur Go-Referenz).
 
-## Port-Konvention im Workshop-Setup
+## Port-Konvention im Custom-Setup
 
-Der Workshop-Container **muss intern auf Port 8080 lauschen** — analog
+Der Custom-Container **muss intern auf Port 8080 lauschen** — analog
 zu allen Story-Referenzen. Dashboard und Traefik gehen davon aus.
 
 Wer eine Sprache/Framework wählt, dessen Standard-Port abweicht (z.B.
@@ -44,7 +48,7 @@ Vom Host aus erreichbar:
 
 | Pfad | Was |
 |---|---|
-| `http://localhost/api/booking-workshop/health` | über Traefik (API-Gateway) |
+| `http://localhost/api/booking-custom/health` | über Traefik (API-Gateway) |
 | `http://localhost:8099/health` | direkt am Container (Host-Port `8099`) |
 
 ## Build & Run
@@ -52,19 +56,19 @@ Vom Host aus erreichbar:
 ### Mit Docker (empfohlen)
 
 ```sh
-docker build -t booking-my-own-solution .
+docker build -t booking-custom .
 docker run --rm -p 8080:8080 \
   -e FLIGHT_SERVICE_URL=http://host.docker.internal:8081 \
   -e HOTEL_SERVICE_URL=http://host.docker.internal:8082 \
   -e CAR_SERVICE_URL=http://host.docker.internal:8083 \
-  booking-my-own-solution
+  booking-custom
 ```
 
 ### Lokal (mit Gradle)
 
 ```sh
 gradle shadowJar
-java -jar build/libs/booking-my-own-solution-all.jar
+java -jar build/libs/booking-custom-all.jar
 ```
 
 ## Smoke-Test

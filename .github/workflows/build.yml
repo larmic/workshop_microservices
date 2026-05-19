@@ -62,8 +62,8 @@ jobs:
       - name: Build
         run: go build -v -o bin/car ./car
 
-  build-booking-story1:
-    name: Build BookingService Story1
+  build-booking-ref-story1:
+    name: Build BookingService Reference Story1
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -77,10 +77,10 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v -o bin/booking-story1 ./booking/story1
+        run: go build -v -o bin/booking-ref-story1 ./booking/story1
 
-  build-booking-story2:
-    name: Build BookingService Story2
+  build-booking-ref-story2:
+    name: Build BookingService Reference Story2
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -94,10 +94,10 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v -o bin/booking-story2 ./booking/story2
+        run: go build -v -o bin/booking-ref-story2 ./booking/story2
 
-  build-booking-story3:
-    name: Build BookingService Story3
+  build-booking-ref-story3:
+    name: Build BookingService Reference Story3
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -111,10 +111,10 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v -o bin/booking-story3 ./booking/story3
+        run: go build -v -o bin/booking-ref-story3 ./booking/story3
 
-  build-booking-story4:
-    name: Build BookingService Story4
+  build-booking-ref-story4:
+    name: Build BookingService Reference Story4
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -128,10 +128,10 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v -o bin/booking-story4 ./booking/story4
+        run: go build -v -o bin/booking-ref-story4 ./booking/story4
 
-  build-booking-story5:
-    name: Build BookingService Story5
+  build-booking-ref-story5:
+    name: Build BookingService Reference Story5
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -145,10 +145,10 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v -o bin/booking-story5 ./booking/story5
+        run: go build -v -o bin/booking-ref-story5 ./booking/story5
 
-  build-booking-story6:
-    name: Build BookingService Story6
+  build-booking-ref-story6:
+    name: Build BookingService Reference Story6
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -162,10 +162,10 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v -o bin/booking-story6 ./booking/story6
+        run: go build -v -o bin/booking-ref-story6 ./booking/story6
 
-  build-booking-story7:
-    name: Build BookingService Story7
+  build-booking-ref-story7:
+    name: Build BookingService Reference Story7
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -179,7 +179,7 @@ jobs:
           go-version-file: services/go.mod
 
       - name: Build
-        run: go build -v -o bin/booking-story7 ./booking/story7
+        run: go build -v -o bin/booking-ref-story7 ./booking/story7
 
   build-dashboard:
     name: Build Scaling UI

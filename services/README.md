@@ -9,8 +9,9 @@ Microservices für das Travel-Booking-System (Flight, Hotel, Car, Booking).
 | Flight          | `/api/flight/**`           | [openapi.yaml](flight/api/openapi.yaml)          |
 | Hotel           | `/api/hotel/**`            | [openapi.yaml](hotel/api/openapi.yaml)           |
 | Car             | `/api/car/**`              | [openapi.yaml](car/api/openapi.yaml)             |
-| Booking Story 1 | `/api/booking-story1/**`   | [openapi.yaml](booking/story1/api/openapi.yaml)  |
-| Booking Story 2 | `/api/booking-story2/**`   | [openapi.yaml](booking/story2/api/openapi.yaml)  |
+| Booking Reference Story 1 | `/api/booking-ref-story1/**` | [openapi.yaml](booking/story1/api/openapi.yaml)  |
+| Booking Reference Story 2 | `/api/booking-ref-story2/**` | [openapi.yaml](booking/story2/api/openapi.yaml)  |
+| Booking Custom            | `/api/booking-custom/**`     | [openapi.yaml](booking/custom/src/main/resources/openapi.yaml) |
 
 Alle Services sind über den Traefik Reverse Proxy auf Port 80 erreichbar:
 
@@ -18,8 +19,9 @@ Alle Services sind über den Traefik Reverse Proxy auf Port 80 erreichbar:
 curl http://localhost/api/flight/flights
 curl http://localhost/api/hotel/hotels
 curl http://localhost/api/car/cars
-curl http://localhost/api/booking-story1/booking/offers
-curl http://localhost/api/booking-story2/booking/offers
+curl http://localhost/api/booking-ref-story1/booking/offers
+curl http://localhost/api/booking-ref-story2/booking/offers
+curl http://localhost/api/booking-custom/booking/offers
 ```
 
 ## Infrastruktur
@@ -37,7 +39,8 @@ curl http://localhost/api/booking-story2/booking/offers
 |--------------------------------|-------------------------------------------------|
 | `docker-compose.yml`           | Basis-Services (Flight, Hotel, Car)              |
 | `docker-compose.infra.yml`     | Infrastruktur (Traefik, Consul, Swagger UI)      |
-| `docker-compose.reference.yml` | Referenzlösungen (Booking Story 1, Story 2, …)   |
+| `docker-compose.reference.yml` | Referenzlösungen (Booking Reference Story 1…7)   |
+| `docker-compose.custom.yml`    | Custom-Lösung des Teilnehmers (Booking Custom)   |
 
 ## Quickstart
 
