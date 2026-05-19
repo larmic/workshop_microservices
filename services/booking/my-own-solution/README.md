@@ -30,6 +30,23 @@ Funktional identisch zur Go-Referenz unter `services/booking/story1/`.
 
 HTTP-Client-Timeout: 5000 ms (hardcoded, analog zur Go-Referenz).
 
+## Port-Konvention im Workshop-Setup
+
+Der Workshop-Container **muss intern auf Port 8080 lauschen** — analog
+zu allen Story-Referenzen. Dashboard und Traefik gehen davon aus.
+
+Wer eine Sprache/Framework wählt, dessen Standard-Port abweicht (z.B.
+Quarkus auf 8081), konfiguriert die App entsprechend auf 8080 um —
+üblicherweise via `application.properties` bzw. einer Framework-ENV
+(`QUARKUS_HTTP_PORT=8080`, `SERVER_PORT=8080`, …).
+
+Vom Host aus erreichbar:
+
+| Pfad | Was |
+|---|---|
+| `http://localhost/api/booking-workshop/health` | über Traefik (API-Gateway) |
+| `http://localhost:8099/health` | direkt am Container (Host-Port `8099`) |
+
 ## Build & Run
 
 ### Mit Docker (empfohlen)

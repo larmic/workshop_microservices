@@ -1297,6 +1297,7 @@
                     <a class="link-chip" href="/api/booking-story5/openapi" target="_blank"><span>&#128214;</span> Booking Story 5</a>
                     <a class="link-chip" href="/api/booking-story6/openapi" target="_blank"><span>&#128214;</span> Booking Story 6</a>
                     <a class="link-chip" href="/api/booking-story7/openapi" target="_blank"><span>&#128214;</span> Booking Story 7</a>
+                    <a class="link-chip" id="link-booking-workshop" href="/api/booking-workshop/openapi" target="_blank" hidden><span>&#128736;</span> Booking Workshop</a>
                 </div>
             </div>
         </div>
@@ -2066,6 +2067,8 @@ on receiveCompensationEvent(event):
                 btn.disabled = !workshopAvailable;
                 btn.title = workshopAvailable ? "" : "Workshop-Service nicht erreichbar – Setup siehe Vorbereitung";
             });
+            const workshopLink = document.getElementById("link-booking-workshop");
+            if (workshopLink) workshopLink.hidden = !workshopAvailable;
             if (!workshopAvailable) {
                 for (const n of [1, 2, 3, 4, 5, 6, 7]) {
                     if (BookingMode[n] === "workshop") setBookingMode(n, "reference");

@@ -1,13 +1,14 @@
 # --- Build stage ---
-FROM gradle:8.11-jdk21-alpine AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
-WORKDIR /home/gradle/app
+WORKDIR /app
 
-COPY --chown=gradle:gradle settings.gradle.kts build.gradle.kts gradle.properties ./
-RUN gradle --no-daemon dependencies > /dev/null 2>&1 || true
+COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
+COPY gradle ./gradle
+RUN ./gradlew --no-daemon dependencies > /dev/null 2>&1 || true
 
-COPY --chown=gradle:gradle src ./src
-RUN gradle --no-daemon shadowJar
+COPY src ./src
+RUN ./gradlew --no-daemon shadowJar
 
 # --- Runtime stage ---
 FROM eclipse-temurin:21-jre-alpine
@@ -21,7 +22,7 @@ LABEL org.opencontainers.image.authors="Lars Michaelis <l.michaelis@neusta.de>"
 LABEL org.opencontainers.image.licenses="PolyForm-Noncommercial-1.0.0"
 
 WORKDIR /app
-COPY --from=builder /home/gradle/app/build/libs/booking-my-own-solution-all.jar app.jar
+COPY --from=builder /app/build/libs/booking-my-own-solution-all.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-XX:+UseSerialGC", "-Xss512k", "-jar", "app.jar"]

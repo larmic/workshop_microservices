@@ -53,9 +53,14 @@ docker-up-hub: ## Zieht Images von Docker Hub und startet alle Services
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml pull
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up
 
-docker-add-workshop: ## Hängt den eigenen Workshop-Service in einen laufenden Stack ein bzw. baut ihn neu (Stack vorher mit make docker-up oder make docker-up-hub starten)
+docker-add-workshop: ## Hängt den eigenen Workshop-Service in einen laufenden Stack ein bzw. baut ihn neu und folgt anschließend dessen Logs (Strg+C stoppt booking-workshop, der Rest läuft weiter)
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up -d --no-deps --build booking-workshop
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up -d --no-deps dashboard
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up -d --no-deps dashboard swagger-ui
+	@echo ""
+	@echo "==> booking-workshop läuft. Strg+C stoppt nur den Workshop-Service (Dashboard und Stack bleiben am Laufen)."
+	@echo ""
+	@trap 'echo ""; echo "==> Stoppe booking-workshop ..."; docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml stop booking-workshop; exit 0' INT; \
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml logs -f booking-workshop
 
 docker-down-workshop: ## Stoppt das Workshop-Setup und entfernt Container, Netzwerke und anonyme Volumes
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml down -v
