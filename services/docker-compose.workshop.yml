@@ -12,3 +12,10 @@ services:
     #depends_on:
     #  consul:
     #    condition: service_healthy
+
+  # Override: signalisiert dem Dashboard, dass der Workshop-Service Teil
+  # des aktuellen Setups ist. Ohne diese ENV taucht "booking-workshop" gar
+  # nicht erst in der Health-Übersicht auf.
+  dashboard:
+    environment:
+      BOOKING_WORKSHOP_URL: http://booking-workshop:8080

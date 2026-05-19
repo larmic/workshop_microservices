@@ -105,8 +105,13 @@ Stories bauen kumulativ aufeinander auf — ihr erweitert iterativ **einen** Ser
    ```bash
    make docker-up-workshop
    ```
-   Das fährt alle Container hoch (Flight/Hotel/Car/Consul/Traefik/Dashboard + Referenz-Stories) und baut zusätzlich euer Image.
-4. **Im Dashboard pro Story** zwischen *Reference* und *Workshop* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf.
+   Die Referenz-Images werden vom Docker Hub gezogen (nicht neu gebaut), nur euer Workshop-Service wird lokal gebaut.
+4. **Im Dashboard pro Story** zwischen *Reference* und *Workshop* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf. Der Workshop-Toggle ist grau, solange euer Service nicht erreichbar ist.
+5. **Code-Iteration**: Wenn ihr euren Service-Code geändert habt und das Image neu bauen wollt — ohne den ganzen Stack zu restarten:
+   ```bash
+   make docker-rebuild-workshop
+   ```
+   Das baut das Image und ersetzt nur den `booking-workshop`-Container. Alle anderen Container laufen weiter.
 
 ### Interne URLs
 

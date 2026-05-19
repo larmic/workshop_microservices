@@ -1,4 +1,4 @@
-.PHONY: help all build clean run-flight run-hotel run-car run-booking-story1 run-booking-story2 run-booking-story3 run-booking-story4 run-booking-story5 run-booking-story6 run-booking-story7 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 docker-build-booking-story3 docker-build-booking-story4 docker-build-booking-story5 docker-build-booking-story6 docker-build-booking-story7 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-up-workshop docker-down docker-down-workshop
+.PHONY: help all build clean run-flight run-hotel run-car run-booking-story1 run-booking-story2 run-booking-story3 run-booking-story4 run-booking-story5 run-booking-story6 run-booking-story7 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 docker-build-booking-story3 docker-build-booking-story4 docker-build-booking-story5 docker-build-booking-story6 docker-build-booking-story7 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-up-workshop docker-rebuild-workshop docker-down docker-down-workshop
 
 .DEFAULT_GOAL := help
 
@@ -53,8 +53,13 @@ docker-up-hub: ## Zieht Images von Docker Hub und startet alle Services
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml pull
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up
 
-docker-up-workshop: ## Startet alle Services inkl. Workshop-BookingService (benötigt .env mit WORKSHOP_BOOKING_PATH)
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up --build
+docker-up-workshop: ## Initialer Start: zieht Referenz-Images vom Docker Hub, baut nur den Workshop-Service und startet alles (benötigt .env mit WORKSHOP_BOOKING_PATH)
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml pull
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml build booking-workshop
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up --no-build
+
+docker-rebuild-workshop: ## Code-Iteration: baut Workshop-Image neu und ersetzt nur den Workshop-Container (Stack läuft weiter)
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up -d --no-deps --build booking-workshop
 
 docker-down-workshop: ## Stoppt das Workshop-Setup und entfernt Container, Netzwerke und anonyme Volumes
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml down -v
