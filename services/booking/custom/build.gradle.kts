@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("jvm") version "2.3.21"
+    kotlin("plugin.serialization") version "2.3.21"
     application
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "9.4.1"
 }
 
 group = "workshop.booking"
@@ -12,7 +12,7 @@ repositories {
     mavenCentral()
 }
 
-val ktorVersion = "3.0.3"
+val ktorVersion = "3.5.0"
 
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktorVersion")
