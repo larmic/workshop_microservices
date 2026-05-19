@@ -28,6 +28,7 @@ Als <em>Betriebsteam</em> m&ouml;chte ich einen Service, der <em>in beliebigen U
 - Logs auf <code>stdout</code>
 - Backend-URLs (Flight/Hotel/Car) konfigurierbar &uuml;ber Umgebungsvariablen
 - `GET /info` zeigt die aktuelle Konfiguration
+- `GET /openapi` liefert die OpenAPI-Spec aus &mdash; [Vorlage](https://github.com/larmic/workshop_microservices/blob/main/services/booking/story1/api/openapi.yaml)
 - `GET /booking/offers` aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse
 
 </div>

@@ -1328,6 +1328,7 @@
                             <li>Logs auf stdout</li>
                             <li>Backend-URLs (Flight/Hotel/Car) konfigurierbar über Umgebungsvariablen</li>
                             <li><code>GET /info</code> zeigt die aktuelle Konfiguration</li>
+                            <li><code>GET /openapi</code> liefert die OpenAPI-Spec aus &mdash; Vorlage: <a href="https://github.com/larmic/workshop_microservices/blob/main/services/booking/story1/api/openapi.yaml" target="_blank"><code>booking/story1/api/openapi.yaml</code></a></li>
                             <li><code>GET /booking/offers</code> aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse</li>
                         </ul>
                     </div>
@@ -1340,8 +1341,9 @@
   HOTEL_URL=http://hotel:8080
   CAR_URL=http://car:8080
 
-GET /health → 200 OK
-GET /info   → { config: { flightURL, hotelURL, carURL } }
+GET /health  → 200 OK
+GET /info    → { config: { flightURL, hotelURL, carURL } }
+GET /openapi → OpenAPI-Spec (text/yaml)
 
 GET /booking/offers
   → GET FLIGHT_URL/flights
