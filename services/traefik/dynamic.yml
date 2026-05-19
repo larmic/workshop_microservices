@@ -80,6 +80,14 @@ http:
         - booking-story7-stripprefix
       service: booking-story7
 
+    booking-workshop:
+      rule: "PathPrefix(`/api/booking-workshop`)"
+      entryPoints:
+        - web
+      middlewares:
+        - booking-workshop-stripprefix
+      service: booking-workshop
+
     root:
       rule: "Path(`/`)"
       entryPoints:
@@ -171,6 +179,11 @@ http:
         prefixes:
           - "/api/booking-story7"
 
+    booking-workshop-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/booking-workshop"
+
     dashboard-stripprefix:
       stripPrefix:
         prefixes:
@@ -231,6 +244,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://booking-story7:8080"
+
+    booking-workshop:
+      loadBalancer:
+        servers:
+          - url: "http://booking-workshop:8080"
 
     dashboard:
       loadBalancer:

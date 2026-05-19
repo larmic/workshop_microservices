@@ -32,6 +32,7 @@ func main() {
 	bookingStory5URL := getEnv("BOOKING_STORY5_URL", "http://booking-story5:8080")
 	bookingStory6URL := getEnv("BOOKING_STORY6_URL", "http://booking-story6:8080")
 	bookingStory7URL := getEnv("BOOKING_STORY7_URL", "http://booking-story7:8080")
+	bookingWorkshopURL := getEnv("BOOKING_WORKSHOP_URL", "http://booking-workshop:8080")
 	traefikPingURL := getEnv("TRAEFIK_PING_URL", "http://traefik:8080/api/version")
 	swaggerUIURL := getEnv("SWAGGER_UI_URL", "http://swagger-ui:8080/api/")
 	consulStatusURL := getEnv("CONSUL_STATUS_URL", consulURL+"/v1/status/leader")
@@ -45,13 +46,14 @@ func main() {
 	allowedServices := []string{"flight", "hotel", "car"}
 
 	bookingURLs := map[string]string{
-		"booking-story1": bookingStory1URL,
-		"booking-story2": bookingStory2URL,
-		"booking-story3": bookingStory3URL,
-		"booking-story4": bookingStory4URL,
-		"booking-story5": bookingStory5URL,
-		"booking-story6": bookingStory6URL,
-		"booking-story7": bookingStory7URL,
+		"booking-story1":   bookingStory1URL,
+		"booking-story2":   bookingStory2URL,
+		"booking-story3":   bookingStory3URL,
+		"booking-story4":   bookingStory4URL,
+		"booking-story5":   bookingStory5URL,
+		"booking-story6":   bookingStory6URL,
+		"booking-story7":   bookingStory7URL,
+		"booking-workshop": bookingWorkshopURL,
 	}
 
 	infraTargets := []handler.InfraTarget{
@@ -86,6 +88,18 @@ func main() {
 	mux.HandleFunc("GET /api/saga6-state", handler.SagaStateHandler(bookingStory6URL))
 	mux.HandleFunc("POST /api/saga6-reset", handler.SagaResetHandler(bookingStory6URL))
 	mux.HandleFunc("POST /api/saga6-trigger", handler.SagaTriggerHandler(bookingStory6URL))
+	mux.HandleFunc("GET /api/booking-workshop/offers", handler.ProxyHandler(bookingWorkshopURL, http.MethodGet, "/booking/offers"))
+	mux.HandleFunc("POST /api/booking-workshop/bookings", handler.ProxyHandler(bookingWorkshopURL, http.MethodPost, "/booking/bookings"))
+	mux.HandleFunc("GET /api/booking-workshop/circuit-state", handler.CircuitStateHandler(bookingWorkshopURL))
+	mux.HandleFunc("GET /api/booking-workshop/bulkhead-state", handler.BulkheadStateHandler(bookingWorkshopURL))
+	mux.HandleFunc("POST /api/booking-workshop/bulkhead-reset", handler.BulkheadResetHandler(bookingWorkshopURL))
+	mux.HandleFunc("POST /api/booking-workshop/burst", handler.BurstHandler(bookingWorkshopURL, 20))
+	mux.HandleFunc("GET /api/booking-workshop/saga-state", handler.SagaStateHandler(bookingWorkshopURL))
+	mux.HandleFunc("POST /api/booking-workshop/saga-reset", handler.SagaResetHandler(bookingWorkshopURL))
+	mux.HandleFunc("POST /api/booking-workshop/saga-trigger", handler.SagaTriggerHandler(bookingWorkshopURL))
+	mux.HandleFunc("GET /api/booking-workshop/saga6-state", handler.SagaStateHandler(bookingWorkshopURL))
+	mux.HandleFunc("POST /api/booking-workshop/saga6-reset", handler.SagaResetHandler(bookingWorkshopURL))
+	mux.HandleFunc("POST /api/booking-workshop/saga6-trigger", handler.SagaTriggerHandler(bookingWorkshopURL))
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 
 	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}

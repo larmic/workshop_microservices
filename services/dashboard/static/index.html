@@ -944,6 +944,46 @@
         .story-content { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
         .story-section[hidden] { display: none; }
 
+        /* Source-Toggle (Reference vs Workshop pro Story) */
+        .source-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fff;
+            border: 1px solid #e1e5ec;
+            border-radius: 999px;
+            padding: 0.25rem 0.4rem 0.25rem 0.85rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .source-toggle-label {
+            font-size: 0.75rem;
+            color: #555;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .source-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #555;
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .source-btn:hover:not(.active) {
+            background: #f0f2f5;
+            color: #0A0349;
+        }
+        .source-btn.active {
+            background: #7348E1;
+            border-color: #7348E1;
+            color: #fff;
+        }
+
         /* Backend-Services-Panel (immer unten sichtbar) */
         .backend-panel {
             max-width: 1100px;
@@ -1354,6 +1394,11 @@ GET /booking/offers
                     </div>
                 </details>
             </div>
+        <div class="source-toggle" data-source-toggle="1">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(1,'reference')">Reference</button>
+            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(1,'workshop')">Workshop</button>
+        </div>
         <div class="cb-section">
             <h2>Cloud-Native Booking Service (Story 1)</h2>
             <div class="rest-actions">
@@ -1420,6 +1465,11 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
                     </div>
                 </details>
             </div>
+        <div class="source-toggle" data-source-toggle="2">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(2,'reference')">Reference</button>
+            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(2,'workshop')">Workshop</button>
+        </div>
         <div class="cb-section">
             <h2>Service Discovery via Consul (Story 2)</h2>
             <div class="rest-actions">
@@ -1506,6 +1556,11 @@ call(service):
                     </div>
                 </details>
             </div>
+        <div class="source-toggle" data-source-toggle="3">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(3,'reference')">Reference</button>
+            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(3,'workshop')">Workshop</button>
+        </div>
         <div class="cb-section">
             <h2>Circuit Breaker (Booking Story 3)</h2>
             <div class="rest-actions">
@@ -1572,6 +1627,11 @@ call(service):
                     </div>
                 </details>
             </div>
+        <div class="source-toggle" data-source-toggle="4">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(4,'reference')">Reference</button>
+            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(4,'workshop')">Workshop</button>
+        </div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Bulkhead (Booking Story 4)</h2>
@@ -1664,6 +1724,11 @@ catch error at step X:
                     </div>
                 </details>
             </div>
+        <div class="source-toggle" data-source-toggle="5">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(5,'reference')">Reference</button>
+            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(5,'workshop')">Workshop</button>
+        </div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Saga (Booking Story 5)</h2>
@@ -1749,6 +1814,11 @@ on timeout(sagaId):
                     </div>
                 </details>
             </div>
+        <div class="source-toggle" data-source-toggle="6">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(6,'reference')">Reference</button>
+            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(6,'workshop')">Workshop</button>
+        </div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Choreography-Saga (Booking Story 6)</h2>
@@ -1864,6 +1934,11 @@ on receiveCompensationEvent(event):
                     </div>
                 </details>
             </div>
+        <div class="source-toggle" data-source-toggle="7">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(7,'reference')">Reference</button>
+            <button class="source-btn" data-mode="workshop" onclick="setBookingMode(7,'workshop')">Workshop</button>
+        </div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Distributed Tracing (Booking Story 7)</h2>
@@ -1939,6 +2014,31 @@ on receiveCompensationEvent(event):
             customerName: "Max Mustermann"
         };
 
+        // Pro Story merken, ob die Referenz oder der Workshop-Service angesprochen werden soll.
+        const BookingMode = { 1: "reference", 2: "reference", 3: "reference", 4: "reference", 5: "reference", 6: "reference", 7: "reference" };
+
+        // Schreibt eine Story-bezogene URL um, wenn der zugehörige Tab im Workshop-Modus ist.
+        function bookingUrl(storyNum, path) {
+            if (BookingMode[storyNum] !== "workshop") return path;
+            return path
+                .replace(/\/dashboard\/api\/booking-story\d/, "/dashboard/api/booking-workshop")
+                .replace(/\/dashboard\/api\/(circuit-state|bulkhead-state|bulkhead-reset|saga-state|saga-reset|saga-trigger|saga6-state|saga6-reset|saga6-trigger)/, "/dashboard/api/booking-workshop/$1")
+                .replace(/\/api\/booking-story\d/, "/api/booking-workshop");
+        }
+
+        // Wird vom Toggle-UI in jeder Story aufgerufen. Setzt den Mode und stößt
+        // sofort einen Refresh der Story-spezifischen Polling-Tasks an.
+        function setBookingMode(storyNum, mode) {
+            BookingMode[storyNum] = mode;
+            document.querySelectorAll('[data-source-toggle="' + storyNum + '"] .source-btn').forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.mode === mode);
+            });
+            if (storyNum === 3 && typeof fetchCircuitState === "function") fetchCircuitState();
+            if (storyNum === 4 && typeof fetchBulkheadState === "function") fetchBulkheadState();
+            if (storyNum === 5 && typeof fetchSagaState === "function") fetchSagaState();
+            if (storyNum === 6 && typeof fetchSaga6State === "function") fetchSaga6State();
+        }
+
         // callRest führt einen REST-Call gegen das Dashboard-Backend aus
         // und rendert HTTP-Status, Duration und Response-Body unterhalb
         // des klickenden Buttons. Wird von den Story-1/2/3-Buttons genutzt.
@@ -1955,7 +2055,9 @@ on receiveCompensationEvent(event):
                     init.headers = { "Content-Type": "application/json" };
                     init.body = JSON.stringify(body);
                 }
-                const res = await fetch(path, init);
+                const m = path.match(/booking-story(\d)/);
+                const effectivePath = m ? bookingUrl(parseInt(m[1], 10), path) : path;
+                const res = await fetch(effectivePath, init);
                 const ms = Math.round(performance.now() - t0);
                 const text = await res.text();
                 let formatted = text;
@@ -2006,7 +2108,7 @@ on receiveCompensationEvent(event):
 
         async function fetchCircuitState() {
             try {
-                const res = await fetch("/dashboard/api/circuit-state");
+                const res = await fetch(bookingUrl(3, "/dashboard/api/circuit-state"));
                 if (!res.ok) throw new Error(await res.text());
                 const cbs = await res.json();
                 renderCircuit(cbs);
@@ -2239,7 +2341,7 @@ on receiveCompensationEvent(event):
 
         async function fetchBulkheadState() {
             try {
-                const res = await fetch("/dashboard/api/bulkhead-state");
+                const res = await fetch(bookingUrl(4, "/dashboard/api/bulkhead-state"));
                 if (!res.ok) throw new Error(await res.text());
                 renderBulkhead(await res.json());
             } catch (e) {
@@ -2284,7 +2386,7 @@ on receiveCompensationEvent(event):
             const t0 = performance.now();
             try {
                 const before = await fetchBulkheadStateOnce();
-                const res = await fetch("/dashboard/api/booking-story4/offers");
+                const res = await fetch(bookingUrl(4, "/dashboard/api/booking-story4/offers"));
                 const ms = Math.round(performance.now() - t0);
                 const after = await fetchBulkheadStateOnce();
                 recordBulkheadCall({
@@ -2308,7 +2410,7 @@ on receiveCompensationEvent(event):
             const btn = document.getElementById("bh-reset-btn");
             btn.disabled = true;
             try {
-                const res = await fetch("/dashboard/api/bulkhead-reset", { method: "POST" });
+                const res = await fetch(bookingUrl(4, "/dashboard/api/bulkhead-reset"), { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
                 showBurstResult("Counters zurückgesetzt");
             } catch (e) {
@@ -2323,7 +2425,7 @@ on receiveCompensationEvent(event):
 
         async function fetchBulkheadStateOnce() {
             try {
-                const res = await fetch("/dashboard/api/bulkhead-state");
+                const res = await fetch(bookingUrl(4, "/dashboard/api/bulkhead-state"));
                 return res.ok ? await res.json() : null;
             } catch (e) {
                 return null;
@@ -2360,7 +2462,7 @@ on receiveCompensationEvent(event):
             showBurstResult("Burst läuft …");
             try {
                 const before = await fetchBulkheadStateOnce();
-                const res = await fetch("/dashboard/api/booking-story4/burst", { method: "POST" });
+                const res = await fetch(bookingUrl(4, "/dashboard/api/booking-story4/burst"), { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
                 const r = await res.json();
                 const after = await fetchBulkheadStateOnce();
@@ -2481,7 +2583,7 @@ on receiveCompensationEvent(event):
 
         async function fetchSagaState() {
             try {
-                const res = await fetch("/dashboard/api/saga-state");
+                const res = await fetch(bookingUrl(5, "/dashboard/api/saga-state"));
                 if (!res.ok) throw new Error(await res.text());
                 renderSagas(await res.json());
             } catch (e) {
@@ -2493,7 +2595,7 @@ on receiveCompensationEvent(event):
             const btn = document.getElementById("saga-reset-btn");
             btn.disabled = true;
             try {
-                const res = await fetch("/dashboard/api/saga-reset", { method: "POST" });
+                const res = await fetch(bookingUrl(5, "/dashboard/api/saga-reset"), { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
                 showSagaResult("Store geleert");
             } catch (e) {
@@ -2514,7 +2616,7 @@ on receiveCompensationEvent(event):
             showSagaResult("Saga läuft …");
             const t0 = performance.now();
             try {
-                const res = await fetch("/dashboard/api/saga-trigger", { method: "POST" });
+                const res = await fetch(bookingUrl(5, "/dashboard/api/saga-trigger"), { method: "POST" });
                 const ms = Math.round(performance.now() - t0);
                 let detail = "";
                 try {
@@ -2547,7 +2649,7 @@ on receiveCompensationEvent(event):
 
         async function fetchSaga6State() {
             try {
-                const res = await fetch("/dashboard/api/saga6-state");
+                const res = await fetch(bookingUrl(6, "/dashboard/api/saga6-state"));
                 if (!res.ok) throw new Error(await res.text());
                 renderSagas(await res.json(), SAGA6_RENDER_OPTS);
             } catch (e) {
@@ -2559,7 +2661,7 @@ on receiveCompensationEvent(event):
             const btn = document.getElementById("saga6-reset-btn");
             btn.disabled = true;
             try {
-                const res = await fetch("/dashboard/api/saga6-reset", { method: "POST" });
+                const res = await fetch(bookingUrl(6, "/dashboard/api/saga6-reset"), { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
                 showSaga6Result("Store geleert");
             } catch (e) {
@@ -2580,7 +2682,7 @@ on receiveCompensationEvent(event):
             showSaga6Result("Saga läuft …");
             const t0 = performance.now();
             try {
-                const res = await fetch("/dashboard/api/saga6-trigger", { method: "POST" });
+                const res = await fetch(bookingUrl(6, "/dashboard/api/saga6-trigger"), { method: "POST" });
                 const ms = Math.round(performance.now() - t0);
                 let detail = "";
                 try {
@@ -2648,7 +2750,7 @@ on receiveCompensationEvent(event):
             }
             const t0 = performance.now();
             try {
-                const res = await fetch("/api/booking-story7" + path, {
+                const res = await fetch(bookingUrl(7, "/api/booking-story7") + path, {
                     method,
                     headers,
                     body: body ? JSON.stringify(body) : undefined,

@@ -59,6 +59,7 @@ services:
     environment:
       COMPOSE_PROJECT_NAME: services
       COMPOSE_FILES: "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml"
+      BOOKING_WORKSHOP_URL: http://booking-workshop:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker-compose.yml:/compose/docker-compose.yml:ro

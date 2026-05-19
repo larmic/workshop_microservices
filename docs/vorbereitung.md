@@ -82,7 +82,58 @@ curl http://localhost/api/hotel/health
 curl http://localhost/api/car/health
 ```
 
-## 5. Los geht's
+## 5. Eigenen Booking-Service einklinken (Workshop-Setup)
+
+Wenn deine Gruppe einen eigenen Booking-Service umsetzt, kannst du ihn neben der Referenz-Lösung ins Setup einklinken und im Dashboard pro Story zwischen Referenz und eurer Lösung umschalten.
+
+### Konzept
+
+Stories bauen kumulativ aufeinander auf — ihr erweitert iterativ **einen** Service, statt für jede Story ein neues Projekt anzulegen. Das Repo bleibt unverändert, eure Lösung lebt in einem **separaten Verzeichnis** (eigenes Repo, irgendwo auf der Platte). Compose baut euer Image über einen konfigurierbaren Pfad.
+
+### Setup
+
+1. **Eigenes Projekt anlegen** — irgendwo, mit einer `Dockerfile`-Datei in der Wurzel. Sprache/Framework frei. Der Service muss auf Port `8080` HTTP entgegennehmen.
+2. **`.env` anlegen** im Verzeichnis `services/`:
+   ```bash
+   cp .env.example .env
+   ```
+   und in `.env` den absoluten Pfad zu eurem Projekt eintragen:
+   ```bash
+   WORKSHOP_BOOKING_PATH=/absolute/path/to/your/booking-service
+   ```
+3. **Stack mit Workshop-Service starten**:
+   ```bash
+   make docker-up-workshop
+   ```
+   Das fährt alle Container hoch (Flight/Hotel/Car/Consul/Traefik/Dashboard + Referenz-Stories) und baut zusätzlich euer Image.
+4. **Im Dashboard pro Story** zwischen *Reference* und *Workshop* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf.
+
+### Interne URLs
+
+Euer Service läuft im selben Docker-Netz wie die Referenz-Implementierung. Die internen Hostnamen sind identisch:
+
+| Backend  | URL                          |
+|----------|------------------------------|
+| Flight   | `http://flight:8080`         |
+| Hotel    | `http://hotel:8080`          |
+| Car      | `http://car:8080`            |
+| Consul   | `http://consul:8500`         |
+
+Diese Werte werden eurem Container als Environment-Variablen `FLIGHT_SERVICE_URL`, `HOTEL_SERVICE_URL`, `CAR_SERVICE_URL`, `CONSUL_URL` übergeben.
+
+### Hinweise für Windows-Teilnehmer
+
+- **Pfade** mit Forward-Slashes statt Backslashes: `WORKSHOP_BOOKING_PATH=C:/Users/foo/projects/my-booking-service`
+- **Line endings** der `.env` müssen LF sein (nicht CRLF) — sonst landet `\r` am Pfadende und der Build schlägt mit "no such file" fehl. Editor entsprechend einstellen oder `.env` über WSL/Git Bash erzeugen.
+- **Build-Performance**: das Projekt sollte im WSL2-Filesystem liegen (z.B. `~/projects/...`), nicht unter `/mnt/c/...`.
+
+### Workshop-Setup stoppen
+
+```bash
+make docker-down-workshop
+```
+
+## 6. Los geht's
 
 Dein Arbeitsplatz ist eingerichtet. Starte mit [Story 1: Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md).
 
