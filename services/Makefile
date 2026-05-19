@@ -1,4 +1,4 @@
-.PHONY: help all build clean run-flight run-hotel run-car run-booking-story1 run-booking-story2 run-booking-story3 run-booking-story4 run-booking-story5 run-booking-story6 run-booking-story7 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 docker-build-booking-story3 docker-build-booking-story4 docker-build-booking-story5 docker-build-booking-story6 docker-build-booking-story7 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-add-workshop docker-down docker-down-workshop
+.PHONY: help all build clean run-flight run-hotel run-car run-booking-story1 run-booking-story2 run-booking-story3 run-booking-story4 run-booking-story5 run-booking-story6 run-booking-story7 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-story1 docker-build-booking-story2 docker-build-booking-story3 docker-build-booking-story4 docker-build-booking-story5 docker-build-booking-story6 docker-build-booking-story7 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-down
 
 .DEFAULT_GOAL := help
 
@@ -43,24 +43,13 @@ docker-build-booking-story7: ## Baut das BookingService Story7 Docker-Image
 docker-build-dashboard: ## Baut das Scaling-UI Docker-Image
 	docker build -f dashboard/Dockerfile -t workshop-microservices-dashboard:latest .
 
-docker-down: ## Stoppt alle Services und entfernt Container, Netzwerke und anonyme Volumes
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml down -v
-
-docker-up: ## Baut und startet alle Services mit Docker Compose
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up --build
-
-docker-up-hub: ## Zieht Images von Docker Hub und startet alle Services
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml pull
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml up
-
-docker-add-workshop: ## Hängt den eigenen Workshop-Service in einen laufenden Stack ein bzw. baut ihn neu und folgt anschließend dessen Logs (Strg+C stoppt booking-workshop, der Rest läuft weiter)
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up -d --no-deps --build booking-workshop
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up -d --no-deps dashboard swagger-ui
-	@echo ""
-	@echo "==> booking-workshop läuft. Strg+C stoppt nur den Workshop-Service (Dashboard und Stack bleiben am Laufen)."
-	@echo ""
-	@trap 'echo ""; echo "==> Stoppe booking-workshop ..."; docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml stop booking-workshop; exit 0' INT; \
-	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml logs -f booking-workshop
-
-docker-down-workshop: ## Stoppt das Workshop-Setup und entfernt Container, Netzwerke und anonyme Volumes
+docker-down: ## Stoppt alle Services (inkl. Workshop) und entfernt Container, Netzwerke und anonyme Volumes
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml down -v
+
+docker-up: ## Baut und startet alle Services (inkl. Workshop-Booking aus WORKSHOP_BOOKING_PATH) mit Docker Compose
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up --build
+
+docker-up-hub: ## Zieht Reference-Images aus Docker Hub, baut nur den Workshop-Service lokal und startet alles
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml pull
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml build booking-workshop
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.workshop.yml up
