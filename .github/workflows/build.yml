@@ -1,4 +1,4 @@
-name: Build Go-Services
+name: Build Services
 
 on:
   push:
@@ -9,6 +9,10 @@ on:
     branches: [main]
     paths:
       - 'services/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-flight:
