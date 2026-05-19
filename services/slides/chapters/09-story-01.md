@@ -25,9 +25,9 @@ Als <em>Betriebsteam</em> m&ouml;chte ich einen Service, der <em>in beliebigen U
 #### Akzeptanzkriterien
 
 - `GET /health` liefert 200 wenn der Service gesund ist
-- Logs auf <code>stdout</code> (keine Datei-Logs)
+- Logs auf <code>stdout</code>
 - Backend-URLs (Flight/Hotel/Car) konfigurierbar &uuml;ber Umgebungsvariablen
-- Info-Endpoint zeigt die aktuelle Konfiguration (ohne Secrets)
+- `GET /info` zeigt die aktuelle Konfiguration
 - `GET /booking/offers` aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse
 
 </div>
