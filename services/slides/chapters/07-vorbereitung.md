@@ -31,7 +31,7 @@ open http://localhost     # Dashboard = Workshop-Steuerzentrale
   <span class="chip brand">OpenAPI</span>
 </div>
 
-&rarr; Details &amp; Health-Checks: [docs/vorbereitung.md](https://github.com/larmic/workshop_microservices/blob/main/docs/vorbereitung.md)
+&rarr; [docs/vorbereitung.md](https://github.com/larmic/workshop_microservices/blob/main/docs/vorbereitung.md)
 
 Note:
 - Wir machen das Setup gemeinsam, Zeitbudget ~45 min — niemand sitzt nachher allein vor einem roten Terminal.

@@ -518,3 +518,73 @@
     margin-left: 0.4em;
     box-shadow: 0 1px 3px rgba(10, 3, 73, 0.18);
 }
+
+/* ---------------------------------------------------------------------- */
+/* Story-Card (Wiedererkennungseffekt zum Dashboard-Story-Panel)           */
+/* ---------------------------------------------------------------------- */
+
+.reveal .story-card {
+    background: #f5f6f8;
+    border: 1px solid #e1e5ec;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-size: 0.55em;
+    line-height: 1.55;
+    color: #333;
+}
+
+.reveal .story-card h4 {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    font-weight: 700;
+    margin: 0.85rem 0 0.3rem;
+    line-height: 1.2;
+}
+
+.reveal .story-card h4:first-child { margin-top: 0; }
+
+.reveal .story-card p,
+.reveal .story-card ul { margin: 0 0 0.5rem; }
+.reveal .story-card ul { padding-left: 1.25rem; }
+.reveal .story-card li + li { margin-top: 0.15rem; }
+
+.reveal .story-card em {
+    color: var(--box-border);
+    font-style: normal;
+    font-weight: 600;
+}
+
+.reveal .story-card code {
+    background: rgba(115, 72, 225, 0.12);
+    color: #4d27a8;
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Recap-Grid (3 + 2 zentriert, gleiche Card-Optik wie .factor-grid)       */
+/* ---------------------------------------------------------------------- */
+
+.reveal .recap-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.6rem;
+    width: 95%;
+    margin: 0.5rem auto 0;
+    text-align: left;
+}
+
+.reveal .recap-grid > .factor:nth-child(1) { grid-column: 1 / span 2; }
+.reveal .recap-grid > .factor:nth-child(2) { grid-column: 3 / span 2; }
+.reveal .recap-grid > .factor:nth-child(3) { grid-column: 5 / span 2; }
+.reveal .recap-grid > .factor:nth-child(4) { grid-column: 2 / span 2; }
+.reveal .recap-grid > .factor:nth-child(5) { grid-column: 4 / span 2; }
+
+/* Recap-Karten: gleicher Dimm-Mechanismus wie 12-Faktor-Slide */
+.reveal section:has(.recap-grid .show-all.visible) .recap-grid > .factor.fragment.visible {
+    opacity: 1;
+}
