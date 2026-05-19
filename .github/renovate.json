@@ -15,6 +15,19 @@
       ],
       "datasourceTemplate": "npm",
       "versioningTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^services/booking/custom/build\\.gradle\\.kts$/",
+        "/^\\.github/workflows/build\\.yml$/"
+      ],
+      "matchStrings": [
+        "jvmToolchain\\((?<currentValue>\\d+)\\)",
+        "java-version:\\s*['\"](?<currentValue>\\d+)['\"]"
+      ],
+      "depNameTemplate": "java",
+      "datasourceTemplate": "java-version"
     }
   ],
   "packageRules": [
@@ -33,6 +46,17 @@
     {
       "matchManagers": ["gradle", "gradle-wrapper"],
       "groupName": "Kotlin/Gradle dependencies"
+    },
+    {
+      "matchPackageNames": ["eclipse-temurin", "java"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "Java toolchain major upgrade"
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["java"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "enabled": false
     },
     {
       "matchManagers": ["custom.regex"],
