@@ -19,10 +19,10 @@
 </div>
 
 <div class="factor fragment">
-<h3><span class="numeral">3</span> Client-Side LB vs. Service Mesh</h3>
-<p>Unser Resolver w&auml;hlt zuf&auml;llig. Warum baut die halbe Branche stattdessen <span class="hl">Envoy / Istio / Linkerd</span>?</p>
-<code>N Sprachen = N Implementierungen</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Client-Side LB hat vier unangenehme Eigenschaften: (1) Logik wird pro Sprach-Stack neu gebaut, (2) kein zentrales Tuning (jede &Auml;nderung = Rebuild aller Services), (3) Beobachtbarkeit ist verteilt, (4) mTLS muss jeder Client selbst k&ouml;nnen. Service Mesh packt das in den Sidecar-Proxy, sprachunabh&auml;ngig.<br><strong>Spicy:</strong> Client-Side LB ist richtig f&uuml;r homogene Sprachlandschaft + wenige Services. Bei vielen Teams / Sprachen / Services ist Mesh g&uuml;nstiger &mdash; initiale Kosten (Ops, Komplexit&auml;t) aber hoch. Bewusste Architektur-Entscheidung, kein No-Brainer.</aside>
+<h3><span class="numeral">3</span> Client-Side LB <em>vs.</em> Service Mesh?</h3>
+<p>Falsche Dichotomie &mdash; Mesh <span class="hl">macht</span> Client-Side LB. Brauchen wir beides?</p>
+<code>Discovery &rarr; LB-Sidecar &rarr; Mesh</code>
+<aside class="notes"><strong>Meine Antwort:</strong> Zwei Achsen trennen: <strong>wer entscheidet</strong> (Client-Side vs. Server-Side) und <strong>wo l&auml;uft der Code</strong> (Library / Sidecar / Plattform). Client-Side LB gibt es als Library (Workshop), als reinen Envoy-Sidecar (ohne Mesh) und implizit in Plattformen (`kube-proxy`). Das Sprach-Argument gegen Library ist mit einem reinen LB-Sidecar bereits erledigt &mdash; daf&uuml;r braucht's noch kein Mesh.<br><strong>Was Mesh wirklich differenziert:</strong> L7-Resilience (Retry, CB, Timeout, Outlier Detection), mTLS by default, zentrale Control Plane (YAML-&Auml;nderung, alle Sidecars ziehen nach), Traffic-Splitting (Canary), einheitliche Observability pro Hop.<br><strong>Brauchen wir beides?</strong> Keine Oder-Frage &mdash; <strong>Mesh enth&auml;lt Service Discovery</strong> (in K8s der API-Server, mit Consul Connect Consul selbst, sonst xDS). Drei Stufen: <strong>1.</strong> nur Discovery (Workshop, App-Team), <strong>2.</strong> Discovery + LB-Sidecar (oft &uuml;bersehener Mittelweg), <strong>3.</strong> Mesh (Plattform-Team, Resilience + mTLS + Routing + Observability).<br><strong>Spicy:</strong> Echte Frage ist nicht &bdquo;Mesh ja/nein&ldquo;, sondern: <em>brauchen wir mTLS, Traffic-Splitting und L7-Resilience &uuml;berall, oder reicht Stufe 1 oder 2?</em> Wer direkt zu Istio greift, hat sechs Monate sp&auml;ter Sidecar-Wildwuchs ohne Team, das ihn operiert. Linkerd ist schlanker, Consul Connect f&uuml;r Nicht-K8s.</aside>
 </div>
 
 <div class="factor fragment">

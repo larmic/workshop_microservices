@@ -86,45 +86,91 @@ geht klar zu „Plattform übernimmt das" (Service Mesh, K8s Services).
 
 ---
 
-## Frage 3 — Wir machen Client-Side Load Balancing. Warum gibt es dann überhaupt Server-Side LB und Service Mesh?
+## Frage 3 — Wir machen Client-Side Load Balancing. Warum gibt es dann überhaupt Service Mesh — oder brauchen wir am Ende beides?
 
 **Frage:** Unser Resolver wählt zufällig eine gesunde Instanz. Das ist
 einfach und funktioniert. Warum baut die halbe Branche stattdessen
-Service Mesh mit Envoy / Istio / Linkerd?
+Service Mesh mit Envoy / Istio / Linkerd? Und ist das überhaupt ein
+Gegensatz?
 
-**Antwort:** Weil Client-Side LB **mehrere unangenehme Eigenschaften**
-hat, die in der Demo nicht auffallen:
+**Antwort:** „Client-Side LB vs. Service Mesh" ist eine **falsche
+Dichotomie**. Ein Service Mesh **macht** Client-Side LB — nur eben
+im Sidecar statt im App-Prozess. Man muss zwei Achsen sauber trennen:
 
-1. **Logik wird in jedem Sprach-Stack einzeln gebaut.** Go, Java,
-   Python, Node — jeder Client braucht den gleichen LB-Code. In Story 4
-   bauen wir Bulkhead und CB ebenfalls im Service. Bei 5 Sprachen sind
-   das 5 Implementierungen, die divergieren.
-2. **Kein zentrales Tuning.** Wenn ihr das Retry-Verhalten ändern
-   wollt, müsst ihr alle Services rebuilden und redeployen.
-3. **Beobachtbarkeit ist verteilt.** Jeder Client hat seine eigenen
-   Metriken. Ein einheitliches Bild über die Plattform fehlt.
-4. **Sicherheit (mTLS).** Jeder Client muss Zertifikate handhaben.
+| Achse | Optionen |
+|-------|----------|
+| **Wer entscheidet?** (Topologie der Auswahl) | Client-Side (Aufrufer wählt) ↔ Server-Side (zentraler LB/Proxy davor wählt) |
+| **Wo läuft der Code?** (Deployment) | Library im App-Prozess ↔ Sidecar-Prozess ↔ Plattform-Service |
 
-Ein Service Mesh nimmt all das in den **Sidecar-Proxy** und macht es
-sprachunabhängig:
+Client-Side LB gibt es als Library (Spring Cloud LoadBalancer, Netflix
+Ribbon, unser Workshop-Resolver), als reinen Sidecar (Envoy ohne
+Mesh-Drumherum) und implizit in Plattformen (`kube-proxy` lokal pro
+Knoten). „Client-Side" ist also eine **Entscheidungs-Topologie**, keine
+**Deployment-Topologie**.
+
+Damit entkräftet sich auch der naive Reflex „Library schlecht, Sidecar
+gut, also Mesh". Sobald die LB-Logik in einem **reinen LB-Sidecar**
+sitzt, ist das Sprach-Stack-Argument schon erledigt — dafür braucht
+man noch kein Mesh.
+
+### Was unterscheidet ein Mesh wirklich?
+
+Service Mesh ist nicht „Sidecar statt Library", sondern **Sidecar
+plus deutlich mehr als nur LB**:
+
+1. **L7-Resilience eingebaut** — Retry, Timeout, Circuit Breaker,
+   Outlier Detection, Rate Limit. Stories 3 / 4 / 5 bauen wir im
+   Workshop in der App; ein Mesh nimmt das ab.
+2. **mTLS by default** zwischen allen Services — Zero-Trust, ohne
+   dass die App Zertifikate sieht.
+3. **Zentrale Control Plane** — eine YAML/CRD-Änderung, alle Sidecars
+   ziehen nach. Retry-Verhalten ändern = kein Redeploy.
+4. **Traffic-Splitting** für Canary / Blue-Green / A-B — die Antwort
+   auf Frage 5.
+5. **Einheitliche Observability** — jeder Hop emittiert dieselben
+   Metriken / Traces aus demselben Layer.
+
+### Brauchen wir beides?
+
+Das ist keine Oder-Frage: **Mesh enthält Service Discovery.** Die
+Control Plane muss wissen, welche Endpoints es gibt — in K8s übernimmt
+das der API-Server, mit Consul Connect übernimmt das Consul selbst,
+in standalone Envoy ein xDS-Server.
+
+Die ehrliche Schichtung:
+
+| Stufe | Was steckt drin | Wer betreibt |
+|-------|-----------------|--------------|
+| **1. Nur Discovery** (Workshop) | Registry + Resolver-Library | App-Team |
+| **2. Discovery + LB-Sidecar** | Wie 1, aber Auflösung im Sidecar | App-Team + Plattform |
+| **3. Service Mesh** | Discovery + LB + Retry/CB/Timeout + mTLS + Routing + Observability | Plattform-Team |
+
+Stufe 2 ist ein oft übersehener Mittelweg — sinnvoll bei
+polyglotter Landschaft ohne den vollen Mesh-Betrieb.
 
 ```
-Client-Side LB (unser Workshop):
-   App ──► (eigener LB-Code) ──► Backend-Instanz
+Stufe 1 (Workshop):
+   App ──► (eigene Resolver-Library) ──► Backend
 
-Service Mesh:
+Stufe 2 (LB-Sidecar):
+   App ──► Sidecar (Envoy als LB) ──► Backend
+            ↑ nur LB + Discovery
+
+Stufe 3 (Mesh):
    App ──► Sidecar (Envoy) ──► Sidecar (Envoy) ──► App
-            ↑ macht LB,         ↑ macht LB,
-              CB, Retry,          CB, Retry,
-              mTLS, Tracing       mTLS, Tracing
+            ↑ LB, CB, Retry,    ↑ LB, CB, Retry,
+              mTLS, Tracing,      mTLS, Tracing,
+              Authz, Routing      Authz, Routing
+   ▲ alle gesteuert von einer zentralen Control Plane
 ```
 
-**Spicy Take-away:** Client-Side LB ist die richtige Lösung, **wenn
-ihr eine homogene Sprachlandschaft und wenig Services habt**. Sobald
-ihr in die Größenordnung „mehrere Teams, mehrere Sprachen, viele
-Services" kommt, ist Service Mesh günstiger — die initialen Kosten
-(Operations, Komplexität) sind aber hoch. Das ist eine **bewusste
-Architektur-Entscheidung, kein No-Brainer in beide Richtungen**.
+**Spicy Take-away:** Die echte Frage ist nicht „Mesh ja/nein", sondern
+„**brauchen wir mTLS, Traffic-Splitting und L7-Resilience wirklich
+überall, oder reicht Stufe 1 oder 2?**". Wer die Frage nicht stellt
+und direkt zu Istio greift, hat sechs Monate später einen Sidecar-
+Wildwuchs und kein Team, das den Mesh sauber operiert. Linkerd ist
+schlanker, Consul Connect die Variante für Nicht-K8s-Welten — und ein
+LB-Sidecar ohne Mesh ist ein legitimer Mittelweg.
 
 ---
 
