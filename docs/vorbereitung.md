@@ -101,17 +101,17 @@ Stories bauen kumulativ aufeinander auf — ihr erweitert iterativ **einen** Ser
    ```bash
    WORKSHOP_BOOKING_PATH=/absolute/path/to/your/booking-service
    ```
-3. **Stack mit Workshop-Service starten**:
+3. **Stack starten** wie üblich (siehe Abschnitt 2): `make docker-up-hub` oder `make docker-up`.
+
+4. **Workshop-Service dazuhängen** in einem zweiten Terminal:
    ```bash
-   make docker-up-workshop
+   make docker-add-workshop
    ```
-   Die Referenz-Images werden vom Docker Hub gezogen (nicht neu gebaut), nur euer Workshop-Service wird lokal gebaut.
-4. **Im Dashboard pro Story** zwischen *Reference* und *Workshop* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf. Der Workshop-Toggle ist grau, solange euer Service nicht erreichbar ist.
-5. **Code-Iteration**: Wenn ihr euren Service-Code geändert habt und das Image neu bauen wollt — ohne den ganzen Stack zu restarten:
-   ```bash
-   make docker-rebuild-workshop
-   ```
-   Das baut das Image und ersetzt nur den `booking-workshop`-Container. Alle anderen Container laufen weiter.
+   Das baut euer Image, startet den `booking-workshop`-Container und erneuert das Dashboard mit der passenden Konfiguration. Alle anderen Container laufen unverändert weiter.
+
+5. **Im Dashboard pro Story** zwischen *Reference* und *Workshop* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf. Der Workshop-Toggle ist grau, solange euer Service nicht erreichbar ist.
+
+6. **Code-Iteration** — wenn ihr euren Service-Code geändert habt und ein neues Image braucht, einfach noch einmal `make docker-add-workshop` aufrufen. Es baut neu und ersetzt nur den `booking-workshop`-Container.
 
 ### Interne URLs
 
