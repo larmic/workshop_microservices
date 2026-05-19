@@ -1325,9 +1325,9 @@
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
                             <li><code>GET /health</code> liefert 200 wenn der Service gesund ist</li>
-                            <li>Logs auf stdout (keine Datei-Logs)</li>
+                            <li>Logs auf stdout</li>
                             <li>Backend-URLs (Flight/Hotel/Car) konfigurierbar über Umgebungsvariablen</li>
-                            <li>Info-Endpoint zeigt die aktuelle Konfiguration (ohne Secrets)</li>
+                            <li><code>GET /info</code> zeigt die aktuelle Konfiguration</li>
                             <li><code>GET /booking/offers</code> aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse</li>
                         </ul>
                     </div>
