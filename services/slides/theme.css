@@ -264,11 +264,18 @@
     font-family: var(--r-code-font);
     font-size: 0.55em;
     line-height: 1.35;
-    width: 80%;
+    width: fit-content;
+    max-width: 80%;
     margin: var(--r-block-margin) auto;
     white-space: pre;
     overflow-x: auto;
     box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);
+}
+
+/* In zwei-spaltigem Layout f&uuml;llt die Box die Spalte aus */
+.reveal .cols pre.cheatsheet {
+    width: 100%;
+    max-width: none;
 }
 
 .reveal pre.cheatsheet .cmd {
