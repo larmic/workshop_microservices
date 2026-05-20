@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Workshop-Feedback</title>
+    <style>
+        :root {
+            --primary-dark: #0A0349;
+            --primary-violet: #7348E1;
+            --highlight: #D3F871;
+            --wave: #EEE7FB;
+            --good-bg: #d4f4dd;
+            --good-fg: #1d7a3a;
+            --bad-bg: #fde0e0;
+            --bad-fg: #b3261e;
+            --warn-bg: #fff3cd;
+            --warn-fg: #8a6d00;
+            --muted: #888;
+            --line: #e0e0e6;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--primary-dark);
+            background: var(--primary-dark);
+            background-image: linear-gradient(160deg, var(--primary-dark) 0%, #1a0d6e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+            max-width: 540px;
+            width: 100%;
+            padding: 1.75rem 1.75rem 1.5rem;
+        }
+        h1 {
+            font-size: 1.4rem;
+            margin: 0 0 0.35rem;
+            color: var(--primary-dark);
+        }
+        .sub {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 0 0 1.25rem;
+        }
+        .thumb-row {
+            display: flex;
+            gap: 0.75rem;
+            margin: 0 0 1.25rem;
+        }
+        .thumb {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.95rem 0.5rem;
+            background: #f5f5fa;
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.08s;
+        }
+        .thumb:active { transform: translateY(1px); }
+        .thumb .emoji { font-size: 1.9rem; line-height: 1; }
+        .thumb:hover { background: #ecebf5; }
+        .thumb[aria-pressed="true"][data-thumb="up"] {
+            background: var(--good-bg); border-color: var(--good-fg); color: var(--good-fg);
+        }
+        .thumb[aria-pressed="true"][data-thumb="down"] {
+            background: var(--bad-bg); border-color: var(--bad-fg); color: var(--bad-fg);
+        }
+        label.field-label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            font-weight: 700;
+            margin: 0.25rem 0 0.4rem;
+        }
+        .optional {
+            text-transform: none;
+            letter-spacing: 0;
+            color: #aaa;
+            font-weight: 400;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1px solid #d0d0d8;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: var(--primary-dark);
+            background: #fff;
+        }
+        textarea { resize: vertical; min-height: 120px; }
+        textarea:focus, input[type="text"]:focus {
+            outline: 2px solid var(--primary-violet);
+            outline-offset: -1px;
+            border-color: var(--primary-violet);
+        }
+        .counter {
+            font-size: 0.72rem;
+            color: #aaa;
+            text-align: right;
+            margin: 0.2rem 0 0.85rem;
+        }
+        .status {
+            padding: 0.6rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin: 0.25rem 0 0.75rem;
+        }
+        .status.success { background: var(--good-bg); color: var(--good-fg); }
+        .status.error { background: var(--bad-bg); color: var(--bad-fg); }
+        .status.warn { background: var(--warn-bg); color: var(--warn-fg); }
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        button.btn {
+            background: var(--primary-violet);
+            border: 1px solid var(--primary-violet);
+            color: #fff;
+            padding: 0.75rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.08s;
+        }
+        button.btn:hover { background: #5a31bd; }
+        button.btn:active { transform: translateY(1px); }
+        button.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--line);
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <main class="card" role="main">
+        <h1>Workshop-Feedback</h1>
+        <p class="sub">Anonym und sofort beim Trainer. Mehrfaches Feedback ist ausdr&uuml;cklich erw&uuml;nscht.</p>
+
+        <div class="thumb-row" role="radiogroup" aria-label="Bewertung">
+            <button type="button" class="thumb" data-thumb="up" id="thumb-up" aria-pressed="false">
+                <span class="emoji">&#128077;</span>
+                <span>Positiv</span>
+            </button>
+            <button type="button" class="thumb" data-thumb="down" id="thumb-down" aria-pressed="false">
+                <span class="emoji">&#128078;</span>
+                <span>Problem</span>
+            </button>
+        </div>
+
+        <label class="field-label" for="text">Dein Feedback</label>
+        <textarea id="text" maxlength="2000" rows="5" placeholder="Was war gut, was nicht? Konkrete Stories oder Stellen helfen am meisten."></textarea>
+        <div class="counter"><span id="counter">0</span> / 2000</div>
+
+        <label class="field-label" for="name">Name <span class="optional">(optional, nur f&uuml;r R&uuml;ckfragen)</span></label>
+        <input id="name" type="text" maxlength="80" autocomplete="off">
+
+        <div class="status" id="status" hidden></div>
+
+        <div class="actions">
+            <button type="button" class="btn" id="send-btn">Senden</button>
+        </div>
+
+        <div class="footer">
+            Wird direkt an einen privaten Trainer-Channel geschickt. Keine Cookies, kein Tracking, keine Drittanbieter.
+            Quelle: <a href="https://github.com/larmic/workshop_microservices" target="_blank" rel="noopener" style="color: var(--primary-violet);">github.com/larmic/workshop_microservices</a>
+        </div>
+    </main>
+
+    <script>
+        // Discord-Webhook-URL. Wird zur Build-Zeit von GitHub Actions aus dem
+        // Repository-Secret DISCORD_WEBHOOK_URL eingesetzt. Lokal bleibt der
+        // Placeholder bestehen — der Send-Button verweigert dann den Versand.
+        const WEBHOOK_URL = "__DISCORD_WEBHOOK_URL__";
+
+        const SOURCE = new URLSearchParams(location.search).get("source") || "feedback-page";
+
+        let thumb = null;
+        const $ = (id) => document.getElementById(id);
+
+        function setThumb(value) {
+            thumb = value;
+            $("thumb-up").setAttribute("aria-pressed", value === "up" ? "true" : "false");
+            $("thumb-down").setAttribute("aria-pressed", value === "down" ? "true" : "false");
+        }
+        function setStatus(kind, msg) {
+            const el = $("status");
+            if (!kind) { el.hidden = true; el.className = "status"; el.textContent = ""; return; }
+            el.hidden = false;
+            el.className = "status " + kind;
+            el.textContent = msg;
+        }
+        function sanitize(s) {
+            return s.replaceAll("@", "@​").replaceAll("```", "`​``");
+        }
+        function formatContent(thumb, text, name, source) {
+            const emoji = thumb === "down" ? "\u{1F44E}" : "\u{1F44D}";
+            const ts = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
+            let header = `${emoji}  *${ts}*  —  _${source}_`;
+            if (name) header += `  —  *${sanitize(name)}*`;
+            const quoted = sanitize(text)
+                .split("\n")
+                .map((l) => "> " + l)
+                .join("\n");
+            const content = header + "\n" + quoted;
+            return content.length > 1900 ? content.slice(0, 1900) + "…" : content;
+        }
+
+        async function submit() {
+            const text = $("text").value.trim();
+            const name = $("name").value.trim();
+            if (!thumb) { setStatus("error", "Bitte 👍 oder 👎 wählen."); return; }
+            if (!text) { setStatus("error", "Bitte einen kurzen Text eingeben."); return; }
+            if (WEBHOOK_URL.startsWith("__") || !WEBHOOK_URL.startsWith("https://")) {
+                setStatus("error", "Webhook nicht konfiguriert (lokaler Build). Bitte die deployte Seite verwenden.");
+                return;
+            }
+
+            const btn = $("send-btn");
+            btn.disabled = true;
+            setStatus(null);
+            try {
+                const r = await fetch(WEBHOOK_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        content: formatContent(thumb, text, name, SOURCE),
+                        allowed_mentions: { parse: [] },
+                    }),
+                });
+                if (r.ok) {
+                    setStatus("success", "Danke! 🙌 Du kannst gerne weitere Punkte senden.");
+                    $("text").value = "";
+                    $("name").value = "";
+                    $("counter").textContent = "0";
+                    setThumb(null);
+                } else if (r.status === 429) {
+                    setStatus("warn", "Zu viele Anfragen — bitte kurz warten und nochmal probieren.");
+                } else {
+                    setStatus("error", "Senden fehlgeschlagen (HTTP " + r.status + ").");
+                }
+            } catch (e) {
+                setStatus("error", "Netzwerkfehler. Bitte erneut versuchen.");
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        $("thumb-up").addEventListener("click", () => setThumb("up"));
+        $("thumb-down").addEventListener("click", () => setThumb("down"));
+        $("text").addEventListener("input", (e) => { $("counter").textContent = e.target.value.length; });
+        $("send-btn").addEventListener("click", submit);
+        // Cmd/Ctrl+Enter sendet ab — praktisch beim Tippen längerer Texte.
+        $("text").addEventListener("keydown", (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submit();
+        });
+    </script>
+</body>
+</html>

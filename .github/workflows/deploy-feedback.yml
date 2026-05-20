@@ -1,0 +1,60 @@
+name: Deploy Feedback Page
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'feedback/**'
+      - '.github/workflows/deploy-feedback.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # Setzt den Webhook nur in das Build-Artefakt, nicht in den Repo-Stand.
+      # Bricht hart ab, falls das Secret fehlt oder der Placeholder schon weg ist.
+      - name: Inject Discord webhook URL
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "::error::Secret DISCORD_WEBHOOK_URL ist nicht gesetzt. In Settings → Secrets and variables → Actions hinzufügen."
+            exit 1
+          fi
+          python3 - <<'PYEOF'
+          import os, pathlib, sys
+          p = pathlib.Path("feedback/index.html")
+          content = p.read_text()
+          placeholder = "__DISCORD_WEBHOOK_URL__"
+          if placeholder not in content:
+              sys.exit(f"ERROR: placeholder {placeholder} nicht in {p} gefunden")
+          p.write_text(content.replace(placeholder, os.environ["DISCORD_WEBHOOK_URL"]))
+          print(f"Webhook URL in {p} eingesetzt.")
+          PYEOF
+
+      - name: Upload feedback/ as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: feedback
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

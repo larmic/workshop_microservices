@@ -61,7 +61,6 @@ services:
       COMPOSE_PROJECT_NAME: services
       COMPOSE_FILES: "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml,/compose/docker-compose.custom.yml"
       BOOKING_CUSTOM_URL: http://booking-custom:8080
-      FEEDBACK_WEBHOOK_URL: ${FEEDBACK_WEBHOOK_URL:-}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker-compose.yml:/compose/docker-compose.yml:ro

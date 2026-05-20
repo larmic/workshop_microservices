@@ -739,15 +739,11 @@
             color: #0A0349;
             font-size: 0.85rem;
             font-weight: 700;
-            font-family: inherit;
-            line-height: 1;
             text-decoration: none;
-            cursor: pointer;
             transition: background 0.15s, transform 0.1s;
         }
         .feedback-link:hover { background: #c5ed5e; }
         .feedback-link:active { transform: translateY(1px); }
-        .feedback-link:disabled { opacity: 0.5; cursor: not-allowed; }
         .tools-toggle .caret { font-size: 0.7rem; transition: transform 0.15s; }
         .tools-toggle.open .caret { transform: rotate(180deg); }
         .tools-menu {
@@ -1252,65 +1248,6 @@
             font-size: 0.85rem;
             color: #0A0349;
         }
-
-        /* Feedback-Modal */
-        .feedback-overlay {
-            position: fixed; inset: 0;
-            background: rgba(10,3,73,0.92);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000; padding: 2rem;
-            backdrop-filter: blur(4px);
-        }
-        .feedback-overlay[hidden] { display: none; }
-        .feedback-card { max-width: 520px; width: 100%; }
-        .feedback-thumb-row { display: flex; gap: 0.75rem; margin: 1rem 0 1.25rem; }
-        .feedback-thumb {
-            flex: 1;
-            display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
-            padding: 0.85rem 0.5rem;
-            background: #f5f5fa;
-            border: 2px solid #e0e0e6;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.85rem; font-weight: 600; color: #555;
-            transition: background 0.15s, border-color 0.15s, color 0.15s;
-        }
-        .feedback-thumb .fb-emoji { font-size: 1.6rem; line-height: 1; }
-        .feedback-thumb:hover { background: #ecebf5; }
-        .feedback-thumb[aria-pressed="true"][data-thumb="up"] {
-            background: #d4f4dd; border-color: #1d7a3a; color: #1d7a3a;
-        }
-        .feedback-thumb[aria-pressed="true"][data-thumb="down"] {
-            background: #fde0e0; border-color: #b3261e; color: #b3261e;
-        }
-        .feedback-label {
-            display: block;
-            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
-            color: #888; font-weight: 700;
-            margin: 0.25rem 0 0.35rem;
-        }
-        .feedback-optional { text-transform: none; letter-spacing: 0; color: #aaa; font-weight: 400; }
-        .feedback-textarea, .feedback-input {
-            width: 100%;
-            padding: 0.55rem 0.75rem;
-            border: 1px solid #d0d0d8;
-            border-radius: 8px;
-            font-size: 0.9rem; font-family: inherit;
-            color: #0A0349; background: #fff;
-            box-sizing: border-box;
-        }
-        .feedback-textarea { resize: vertical; min-height: 110px; }
-        .feedback-textarea:focus, .feedback-input:focus {
-            outline: 2px solid #7348E1; outline-offset: -1px; border-color: #7348E1;
-        }
-        .feedback-counter { font-size: 0.72rem; color: #aaa; text-align: right; margin: 0.2rem 0 0.85rem; }
-        .feedback-status {
-            padding: 0.55rem 0.75rem; border-radius: 6px;
-            font-size: 0.85rem; margin-top: 0.5rem;
-        }
-        .feedback-status.success { background: #d4f4dd; color: #1d7a3a; }
-        .feedback-status.error { background: #fde0e0; color: #b3261e; }
     </style>
 </head>
 <body>
@@ -1320,10 +1257,10 @@
             <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
         </div>
         <div class="header-controls">
-        <button type="button" class="feedback-link" id="feedback-link" title="Feedback an den Trainer senden">
+        <a class="feedback-link" href="https://larmic.github.io/workshop_microservices/?source=dashboard" target="_blank" rel="noopener" title="Feedback an den Trainer senden">
             <span>&#128172;</span>
             <span>Feedback</span>
-        </button>
+        </a>
         <div class="health-dropdown" style="position: relative;">
             <button type="button" class="health-chip" id="health-chip" aria-expanded="false" onclick="toggleHealthPanel()" title="Service-Status anzeigen">
                 <span class="health-chip-dot"></span>
@@ -1387,38 +1324,6 @@
             <p>Stelle sicher, dass der Stack läuft: <code>make docker-up</code></p>
             <div class="startup-actions">
                 <button type="button" class="primary" onclick="retryOffline()">Erneut versuchen</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="feedback-overlay" id="feedback-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="feedback-title">
-        <div class="startup-card feedback-card">
-            <h2 id="feedback-title">Workshop-Feedback</h2>
-            <p class="startup-sub">Anonym und sofort beim Trainer. Mehrfaches Feedback ist erw&uuml;nscht.</p>
-
-            <div class="feedback-thumb-row" role="radiogroup" aria-label="Bewertung">
-                <button type="button" class="feedback-thumb" data-thumb="up" id="fb-thumb-up" aria-pressed="false">
-                    <span class="fb-emoji">&#128077;</span>
-                    <span>Positiv</span>
-                </button>
-                <button type="button" class="feedback-thumb" data-thumb="down" id="fb-thumb-down" aria-pressed="false">
-                    <span class="fb-emoji">&#128078;</span>
-                    <span>Problem</span>
-                </button>
-            </div>
-
-            <label class="feedback-label" for="fb-text">Dein Feedback</label>
-            <textarea id="fb-text" class="feedback-textarea" maxlength="2000" rows="5" placeholder="Was war gut, was nicht? Konkrete Stories oder Stellen helfen am meisten."></textarea>
-            <div class="feedback-counter"><span id="fb-counter">0</span> / 2000</div>
-
-            <label class="feedback-label" for="fb-name">Name <span class="feedback-optional">(optional, nur f&uuml;r R&uuml;ckfragen)</span></label>
-            <input id="fb-name" class="feedback-input" type="text" maxlength="80" autocomplete="off">
-
-            <div class="feedback-status" id="fb-status" hidden></div>
-
-            <div class="startup-actions">
-                <button type="button" onclick="closeFeedbackModal()">Abbrechen</button>
-                <button type="button" class="primary" id="fb-send" onclick="submitFeedback()">Senden</button>
             </div>
         </div>
     </div>
@@ -3350,93 +3255,6 @@ on receiveCompensationEvent(event):
         setInterval(fetchSaga6State, 1000);
         refreshCustomAvailability();
         setInterval(refreshCustomAvailability, 5000);
-
-        // Feedback-Modal
-        const FEEDBACK_DISCUSSIONS_URL = "https://github.com/larmic/workshop_microservices/discussions";
-        let feedbackThumb = null;
-
-        async function initFeedback() {
-            let enabled = false;
-            try {
-                const r = await fetch("/dashboard/api/feedback/status", { cache: "no-store" });
-                if (r.ok) enabled = !!(await r.json()).enabled;
-            } catch (e) { /* offline → fallback */ }
-            const btn = document.getElementById("feedback-link");
-            if (!btn) return;
-            if (enabled) {
-                btn.title = "Feedback an den Trainer senden";
-                btn.addEventListener("click", openFeedbackModal);
-            } else {
-                btn.title = "Feedback im GitHub Discussions-Thread hinterlassen";
-                btn.addEventListener("click", () => window.open(FEEDBACK_DISCUSSIONS_URL, "_blank", "noopener"));
-            }
-        }
-
-        function openFeedbackModal() {
-            document.getElementById("feedback-overlay").hidden = false;
-            setFeedbackThumb(null);
-            document.getElementById("fb-text").value = "";
-            document.getElementById("fb-name").value = "";
-            document.getElementById("fb-counter").textContent = "0";
-            setFeedbackStatus(null);
-            setTimeout(() => document.getElementById("fb-text").focus(), 0);
-        }
-        function closeFeedbackModal() {
-            document.getElementById("feedback-overlay").hidden = true;
-        }
-        function setFeedbackThumb(value) {
-            feedbackThumb = value;
-            document.getElementById("fb-thumb-up").setAttribute("aria-pressed", value === "up" ? "true" : "false");
-            document.getElementById("fb-thumb-down").setAttribute("aria-pressed", value === "down" ? "true" : "false");
-        }
-        function setFeedbackStatus(kind, msg) {
-            const el = document.getElementById("fb-status");
-            if (!kind) { el.hidden = true; el.className = "feedback-status"; el.textContent = ""; return; }
-            el.hidden = false;
-            el.className = "feedback-status " + kind;
-            el.textContent = msg;
-        }
-        async function submitFeedback() {
-            const text = document.getElementById("fb-text").value.trim();
-            const name = document.getElementById("fb-name").value.trim();
-            if (!feedbackThumb) { setFeedbackStatus("error", "Bitte 👍 oder 👎 wählen."); return; }
-            if (!text) { setFeedbackStatus("error", "Bitte einen kurzen Text eingeben."); return; }
-            const sendBtn = document.getElementById("fb-send");
-            sendBtn.disabled = true;
-            setFeedbackStatus(null);
-            try {
-                const r = await fetch("/dashboard/api/feedback", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ thumb: feedbackThumb, text, name }),
-                });
-                if (r.status === 204) {
-                    setFeedbackStatus("success", "Danke! 🙌");
-                    setTimeout(closeFeedbackModal, 1500);
-                } else if (r.status === 429) {
-                    setFeedbackStatus("error", "Bitte kurz warten — zu viele Anfragen.");
-                } else {
-                    setFeedbackStatus("error", "Senden fehlgeschlagen, bitte erneut versuchen.");
-                }
-            } catch (e) {
-                setFeedbackStatus("error", "Netzwerkfehler, bitte erneut versuchen.");
-            } finally {
-                sendBtn.disabled = false;
-            }
-        }
-
-        document.getElementById("fb-thumb-up").addEventListener("click", () => setFeedbackThumb("up"));
-        document.getElementById("fb-thumb-down").addEventListener("click", () => setFeedbackThumb("down"));
-        document.getElementById("fb-text").addEventListener("input", (e) => {
-            document.getElementById("fb-counter").textContent = e.target.value.length;
-        });
-        document.getElementById("feedback-overlay").addEventListener("click", (e) => {
-            if (e.target.id === "feedback-overlay") closeFeedbackModal();
-        });
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape" && !document.getElementById("feedback-overlay").hidden) closeFeedbackModal();
-        });
-        initFeedback();
     </script>
 </body>
 </html>

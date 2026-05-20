@@ -13,4 +13,4 @@
 
 </div>
 
-Wenn euch etwas auffällt, direkt rein das <span class="hl">Dashboard</span>.
+Wenn euch etwas auffällt, direkt auf <a href="https://larmic.github.io/workshop_microservices/?source=slides" target="_blank"><span class="hl">larmic.github.io/workshop_microservices</span></a> &mdash; auch sp&auml;ter aus dem Dashboard heraus erreichbar.
