@@ -108,7 +108,65 @@ fun parse(header: String?): TraceContext? {
 
 ---
 
-## 5. Logging-Korrelation — warum strukturiert?
+## 5. Wer erstellt was? — Durchlauf in unserem Stack
+
+Im Workshop-Setup ist die Aufgabenverteilung bewusst asymmetrisch: **Booking** ist der einzige Entry-Point, **Flight / Hotel / Car** sind passive Trace-Empfänger. Konkret:
+
+```
+Client ─POST /booking/bookings─►  Booking
+                                  ├── erstellt Trace-ID T  (falls keiner reinkommt)
+                                  ├── erstellt Span-ID S1  (eigener Server-Span)
+                                  │
+                                  ├─traceparent: 00-T-S2-01─►  Flight   (loggt mit T, S2)
+                                  ├─traceparent: 00-T-S3-01─►  Hotel    (loggt mit T, S3)
+                                  └─traceparent: 00-T-S4-01─►  Car      (loggt mit T, S4)
+
+                                  ├── publish event { traceparent: 00-T-S5-01 }
+                                                                  │
+                                              Flight ◄────────────┘   (loggt mit T, S5)
+```
+
+Eine **Trace-ID T**, fünf verschiedene **Span-IDs (S1–S5)** — alle von Booking erstellt. Flight/Hotel/Car erzeugen selbst gar nichts.
+
+### Was Booking erstellt
+
+1. **Trace-ID** — einmalig beim eingehenden Request, falls kein `traceparent` mitkommt (Browser/curl-Fall). Dafür ist die `Middleware`-Variante zuständig (siehe Abschnitt 4).
+2. **Span-ID Nr. 1** — für den eigenen Server-Span (die eingehende `POST /booking/bookings`-Verarbeitung).
+3. **Span-ID Nr. 2–4** — pro Outbound-Call zu Flight, Hotel, Car (Client-Inject). Trace-ID bleibt konstant, Span-ID ist pro Hop neu.
+4. **`traceparent` als Event-Property** — beim Publish eines `CompensationRequested`-Events in Story 6/7.
+
+### Was Flight / Hotel / Car erstellen — nichts
+
+Sie nutzen die `Propagate`-Middleware:
+
+- Lesen den eintreffenden `traceparent`.
+- Loggen mit der mitgelieferten Trace-ID + Span-ID.
+- **Fehlt der Header → keine `trace_id` im Log**, *kein* Fallback auf eine selbst generierte ID. Absicht: nur der Entry-Point sät Trace-IDs. Der Kontrast macht in den Stories 1–6 (ohne Tracing) sichtbar, dass die Backend-Logs ohne `trace_id` bleiben — der rote Faden entsteht erst, sobald Booking ihn in Story 7 zieht.
+- Bei Story 6/7-Compensation-Events: parsen `traceparent` aus der Event-Property, legen den Kontext in ihre Worker-Goroutine, loggen damit weiter.
+
+### Was wäre, wenn ein Downstream-Service selbst weitere Services aufruft?
+
+Aktuell haben Flight/Hotel/Car keine eigenen Downstream-Abhängigkeiten. Sobald sie das hätten (z. B. Flight ruft einen externen Reservierungs-Provider, Hotel ein Loyalty-Backend), würde sich am Pattern **nichts** ändern:
+
+- Die `Propagate`-Middleware hat den eingehenden Trace-Kontext bereits in den Request-Context gelegt.
+- Flight nutzt **denselben Client-Inject** wie Booking — generiert pro Hop eine **neue Span-ID** (`S_new`), behält die **Trace-ID T** bei.
+- Der externe Provider sieht `traceparent: 00-T-S_new-01`.
+- Falls der externe Provider Trace-Context versteht, loggt er ebenfalls mit T. Andernfalls endet der rote Faden dort — aber alles bis dahin bleibt korreliert.
+
+```
+Client ─POST /booking/bookings─►  Booking ─traceparent: 00-T-S2-01─►  Flight
+                                                                      ├── Propagate übernimmt: ctx = {T, S2}
+                                                                      ├── Client-Inject: neue Span-ID S_new
+                                                                      └─traceparent: 00-T-S_new-01─►  external Provider
+```
+
+> ⚠️ **Wichtig:** Flight darf in diesem Szenario **nicht** versehentlich eine neue Trace-ID erzeugen — sonst zerfällt der Trace genau dort. Die strikte Trennung von `Middleware` (erzeugt, falls keiner kommt — nur am Entry-Point!) und `Propagate` (übernimmt nur — überall sonst) bleibt auch im erweiterten Setup gültig.
+
+**Faustregel:** Jeder Service, der Aufrufe annimmt und weiterleitet, braucht eine Server-Middleware vom Typ *Propagate*, aber niemals *Middleware*. Trace-Initiierung gehört exklusiv an die Systemgrenze (API-Gateway, Public-Service) — nicht in den Downstream-Hop.
+
+---
+
+## 6. Logging-Korrelation — warum strukturiert?
 
 Mit `log.Printf("booking %s failed: %v", id, err)` muss man `trace_id=...` manuell in jeden Format-String einsetzen. Das wird nach drei Wochen vergessen, und ab dann fehlt die ID in Hälfte der Logzeilen.
 
@@ -131,7 +189,7 @@ Output (JSON):
 
 ---
 
-## 6. Selbst bauen oder Library?
+## 7. Selbst bauen oder Library?
 
 | Aspekt | Selbst | Library (OpenTelemetry) |
 |---|---|---|
@@ -149,7 +207,7 @@ Output (JSON):
 
 ---
 
-## 7. Marktüberblick
+## 8. Marktüberblick
 
 ### Standards (Wire-Formate)
 
@@ -190,7 +248,7 @@ Für den Workshop (Bonus): **Jaeger All-in-One** als einzelner Container ist die
 
 ---
 
-## 8. Sampling — die Cost-Frage
+## 9. Sampling — die Cost-Frage
 
 In Produktion sind Traces teuer (Storage, Netzwerk, Backend-Kosten). Niemand tracet jede Anfrage. Übliche Strategien:
 
@@ -205,7 +263,7 @@ In Produktion sind Traces teuer (Storage, Netzwerk, Backend-Kosten). Niemand tra
 
 ---
 
-## 9. Tracing über Async-Grenzen
+## 10. Tracing über Async-Grenzen
 
 Sobald die Kommunikation nicht mehr synchron HTTP ist (Story 6: Compensation-Events), reicht der HTTP-Header nicht mehr. Der Trace-Kontext muss als **Property auf dem Event** mitwandern:
 
@@ -224,7 +282,7 @@ Der Konsument liest die Property, legt den Trace-Kontext in den Goroutine-/Threa
 
 ---
 
-## 10. Diskussionsfragen
+## 11. Diskussionsfragen
 
 1. **Wer schreibt die Trace-ID heute schon in eure Logs?** Häufige Lücke: das Gateway (Traefik/Nginx) generiert eine, aber die Backend-Services schreiben sie nicht in die App-Logs.
 2. **Wie weit reicht euer Trace?** Bis zum Frontend? In den Browser? Über CDN-Hops? Per Mobile-App-SDK?
@@ -235,7 +293,7 @@ Der Konsument liest die Property, legt den Trace-Kontext in den Goroutine-/Threa
 
 ---
 
-## 11. Wo der Code liegt (Reference-Implementierung)
+## 12. Wo der Code liegt (Reference-Implementierung)
 
 | Was | Pfad |
 |---|---|
