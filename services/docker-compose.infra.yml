@@ -43,7 +43,8 @@ services:
           { "url": "http://localhost/api/booking-ref-story4/openapi", "name": "Booking Service (Reference Story 4)" },
           { "url": "http://localhost/api/booking-ref-story5/openapi", "name": "Booking Service (Reference Story 5)" },
           { "url": "http://localhost/api/booking-ref-story6/openapi", "name": "Booking Service (Reference Story 6)" },
-          { "url": "http://localhost/api/booking-ref-story7/openapi", "name": "Booking Service (Reference Story 7)" }
+          { "url": "http://localhost/api/booking-ref-story7/openapi", "name": "Booking Service (Reference Story 7)" },
+          { "url": "http://localhost/api/booking-custom/openapi", "name": "Booking Service (Custom)" }
         ]
 
   slides:
@@ -58,9 +59,11 @@ services:
     image: larmic/workshop-microservices-dashboard:latest
     environment:
       COMPOSE_PROJECT_NAME: services
-      COMPOSE_FILES: "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml"
+      COMPOSE_FILES: "/compose/docker-compose.yml,/compose/docker-compose.infra.yml,/compose/docker-compose.reference.yml,/compose/docker-compose.custom.yml"
+      BOOKING_CUSTOM_URL: http://booking-custom:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker-compose.yml:/compose/docker-compose.yml:ro
       - ./docker-compose.infra.yml:/compose/docker-compose.infra.yml:ro
       - ./docker-compose.reference.yml:/compose/docker-compose.reference.yml:ro
+      - ./docker-compose.custom.yml:/compose/docker-compose.custom.yml:ro
