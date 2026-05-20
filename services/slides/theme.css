@@ -478,6 +478,39 @@
     opacity: 1;
 }
 
+/* Karten-Reihe (z. B. Service Discovery): 3 Karten oben, 2 zentriert darunter. */
+.reveal .factor-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.8rem;
+    width: 95%;
+    margin: 0.5rem auto 0;
+    text-align: left;
+}
+
+.reveal .factor-row > .factor {
+    grid-column: span 2;
+}
+
+.reveal .factor-row > .factor:nth-child(4) {
+    grid-column: 2 / span 2;
+}
+
+.reveal .factor-row > .factor:nth-child(5) {
+    grid-column: 4 / span 2;
+}
+
+/* Block, der erst nach allen Karten-Fragments via .show-all sichtbar wird. */
+.reveal .market-row {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    margin-top: 1.2rem;
+}
+
+.reveal section:has(.show-all.visible) .market-row {
+    opacity: 1;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Slide 07 — Vorbereitung: Chip-Reihen + Zeit-Badge                       */
 /* ---------------------------------------------------------------------- */
