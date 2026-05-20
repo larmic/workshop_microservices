@@ -5,19 +5,8 @@
 <div class="cols">
 <div>
 
-### Konzepte
-
-- **Agent** l&auml;uft auf jedem Host / als Sidecar
-- **Service-Registry** + **Health-Check-Engine** in einem
-- HTTP-API auf Port **8500** (DNS-Interface auf 8600)
-- **Selbst-Heilung**: `DeregisterCriticalServiceAfter` r&auml;umt tote Instanzen
-- **Datacenter-f&auml;hig**: ein Agent pro DC, Cross-DC-Replikation
-- Im Workshop: <span class="hl">register / deregister / resolve</span>
-
-</div>
-<div>
-
-<pre>REGISTER (beim Start):
+```text
+REGISTER (beim Start):
   PUT consul:8500/v1/agent/service/register
   {
     Name:    "flight-service",
@@ -33,17 +22,35 @@
 
 DEREGISTER (beim Shutdown):
   PUT consul:8500/v1/agent/service/deregister/{serviceID}
+```
 
-RESOLVE (vor jedem Call):
+</div>
+<div>
+
+```text
+resolve(name):
   res = GET consul:8500/v1/health/service/{name}?passing=true
   // res = [ {Service:{Address, Port}}, ... ]
   instance = randomPick(res)
-  return "http://{instance.Address}:{instance.Port}"</pre>
+  return "http://{instance.Address}:{instance.Port}"
+
+GET /booking/offers:
+  for svc in [flight-service, hotel-service, car-service]:
+    url = resolve(svc)
+    results[svc] = GET url/...
+
+POST /booking/bookings { flightId, hotelId, carId, customerName }:
+  for svc in [flight-service, hotel-service, car-service]:
+    url = resolve(svc)
+    POST url/bookings
+  -> { bookingId, customerName, flight, hotel, car }
+```
 
 </div>
 </div>
 
 Note:
+- Linke Spalte = Lifecycle der Instanz (anmelden / abmelden). Rechte Spalte = das, was der Caller bei jedem Request tut (resolvieren + downstream rufen).
 - Identischer Pseudo-Code findet sich im Dashboard unter Story 2 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
 - `?passing=true` ist der Knackpunkt: ohne den Filter bekommt ihr auch unhealthy Instanzen zur&uuml;ck. Health-Check ist nur dann wertvoll, wenn der Client ihn auch respektiert.
 - `DeregisterCriticalServiceAfter: 1m` &mdash; Consul r&auml;umt tote Eintr&auml;ge selbst weg, falls der Shutdown-Hook nicht durchkommt (Kill -9, OOM, etc.). Wichtig f&uuml;r Selbstheilung.

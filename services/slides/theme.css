@@ -251,6 +251,7 @@
     max-height: 540px;
     background: var(--box-bg);
     color: #e0e6f0;
+    text-align: left;
 }
 
 .reveal code,
