@@ -13,7 +13,11 @@
 - `20-saga.md` &mdash; Domino-Reihe (`assets/saga.png`)
 - `26-tracing.md` &mdash; Paket-Sendung (`assets/tracing.png`)
 
-Die fünf Pattern-Slides binden ihr Bild als **slide-weiten Hintergrund-Watermark** ein (`data-background-image` + `data-background-opacity="0.18"`) &mdash; kein Box-Rahmen mehr, factor-row und chips überlagern die subtile Bild-Textur.
+Pro Pattern-Block gibt es jetzt:
+- Eine **Hero-Slide** an Position 0 des Vertikal-Stacks (`{n}-titel.md`) — nur Titel + Subtitle + Bild bei **Opacity 0.40** (Bild ist klar erkennbar, dominiert aber nicht).
+- Die **Karten-Slide** + alle **Sub-Slides** mit demselben Bild als **Watermark bei Opacity 0.18** (factor-row und chips überlagern die subtile Bild-Textur).
+
+Choreography-Hero (`23-titel.md`) hat aktuell noch kein Bild — kommt sobald `choreography.png` generiert ist.
 
 ---
 
