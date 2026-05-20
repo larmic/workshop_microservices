@@ -25,7 +25,7 @@ jobs:
             short: "Car-Service (Go-REST-API). Demo-Image fuer den Microservices-Workshop."
             readme: .github/dockerhub/car.md
           - image: workshop-microservices-booking
-            short: "Booking-Service (Story-Auswahl per Tag: story1..story7). Workshop-Demo."
+            short: "Booking-Service (Story-Auswahl per Tag: story1..story7, custom). Workshop-Demo."
             readme: .github/dockerhub/booking.md
           - image: workshop-microservices-dashboard
             short: "Dashboard-UI fuer den Microservices-Workshop. Demo-Image."
