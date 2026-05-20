@@ -14,6 +14,7 @@ Diese Anleitung beschreibt, wie du das Repo auscheckst, die Umgebung startest un
 ```bash
 git clone https://github.com/larmic/workshop_microservices.git
 cd workshop_microservices/services
+cp .env.example .env
 ```
 
 Alle weiteren Befehle werden aus dem Verzeichnis `services/` ausgeführt.
