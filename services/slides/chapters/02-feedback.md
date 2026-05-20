@@ -13,4 +13,4 @@
 
 </div>
 
-Wenn euch etwas auffällt, direkt rein in den [GitHub-Discussions-Thread](https://github.com/larmic/workshop_microservices/discussions).
+Wenn euch etwas auffällt, direkt rein das <span class="hl">Dashboard</span>.

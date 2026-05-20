@@ -10,17 +10,17 @@
 
 <div class="box">
 
-### In 3 Schritten startklar
+### In wenigen Schritten startklar
 
 ```bash
 git clone https://github.com/larmic/workshop_microservices.git
+cp .env.example .env      # wird später angepasst
 cd workshop_microservices/services
 make docker-up-hub        # zieht fertige Images von Docker Hub
 open http://localhost     # Dashboard = Workshop-Steuerzentrale
 
 (https://github.com/larmic/workshop_microservices/blob/main/docs/vorbereitung.md)
 ```
-
 </div>
 
 <img class="dashboard-image" src="./assets/dashboard-ui.png" alt="Workshop-Dashboard mit Flight-, Hotel-, Car- und Booking-Services"/>

@@ -40,6 +40,7 @@ func main() {
 	traefikPingURL := getEnv("TRAEFIK_PING_URL", "http://traefik:8080/api/version")
 	swaggerUIURL := getEnv("SWAGGER_UI_URL", "http://swagger-ui:8080/api/")
 	consulStatusURL := getEnv("CONSUL_STATUS_URL", consulURL+"/v1/status/leader")
+	feedbackWebhookURL := getEnv("FEEDBACK_WEBHOOK_URL", "")
 
 	var composeArgs []string
 	for _, f := range strings.Split(composeFilesRaw, ",") {
@@ -122,6 +123,8 @@ func main() {
 		mux.HandleFunc("POST /api/booking-custom/saga6-reset", handler.SagaResetHandler(bookingCustomURL))
 		mux.HandleFunc("POST /api/booking-custom/saga6-trigger", handler.SagaTriggerHandler(bookingCustomURL))
 	}
+	mux.HandleFunc("POST /api/feedback", handler.FeedbackHandler(feedbackWebhookURL, nil))
+	mux.HandleFunc("GET /api/feedback/status", handler.FeedbackStatusHandler(feedbackWebhookURL))
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 
 	srv := &http.Server{Addr: ":8080", Handler: middleware.CORSMiddleware(mux)}
