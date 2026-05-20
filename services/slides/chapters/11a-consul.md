@@ -5,8 +5,7 @@
 <div class="cols">
 <div>
 
-```text
-REGISTER (beim Start):
+<pre class="cheatsheet"><span class="cmd">REGISTER (beim Start):</span>
   PUT consul:8500/v1/agent/service/register
   {
     Name:    "flight-service",
@@ -20,31 +19,30 @@ REGISTER (beim Start):
     }
   }
 
-DEREGISTER (beim Shutdown):
+<span class="cmd">DEREGISTER (beim Shutdown):</span>
   PUT consul:8500/v1/agent/service/deregister/{serviceID}
-```
+</pre>
 
 </div>
 <div>
 
-```text
-resolve(name):
+<pre class="cheatsheet"><span class="cmd">resolve(name):</span>
   res = GET consul:8500/v1/health/service/{name}?passing=true
   // res = [ {Service:{Address, Port}}, ... ]
   instance = randomPick(res)
   return "http://{instance.Address}:{instance.Port}"
 
-GET /booking/offers:
+<span class="cmd">GET /booking/offers:</span>
   for svc in [flight-service, hotel-service, car-service]:
     url = resolve(svc)
     results[svc] = GET url/...
 
-POST /booking/bookings { flightId, hotelId, carId, customerName }:
+<span class="cmd">POST /booking/bookings { flightId, hotelId, carId, customerName }:</span>
   for svc in [flight-service, hotel-service, car-service]:
     url = resolve(svc)
     POST url/bookings
-  -> { bookingId, customerName, flight, hotel, car }
-```
+  &rarr; { bookingId, customerName, flight, hotel, car }
+</pre>
 
 </div>
 </div>

@@ -24,7 +24,6 @@ Als <em>Betriebsteam</em> m&ouml;chte ich <em>Backend-Services &uuml;ber logisch
 
 #### Akzeptanzkriterien
 
-- Eigenes `consul`-Package mit einem `Resolver`
 - Resolver fragt `GET /v1/health/service/{name}?passing=true` bei Consul
 - Statische URLs ersetzt durch logische Namen: `flight-service`, `hotel-service`, `car-service`
 - `POST /booking/bookings` orchestriert die drei Backend-Services und liefert eine aggregierte Buchung

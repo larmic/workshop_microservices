@@ -1441,7 +1441,6 @@ GET /booking/offers
                         <p>Als <em>Betriebsteam</em> möchte ich <em>Backend-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
-                            <li>Eigenes <code>consul</code>-Package mit einem <code>Resolver</code></li>
                             <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul</li>
                             <li>Statische URLs ersetzt durch logische Namen: <code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
                             <li><code>POST /booking/bookings</code> orchestriert die drei Backend-Services und liefert eine aggregierte Buchung</li>

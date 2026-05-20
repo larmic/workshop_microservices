@@ -26,7 +26,6 @@ Ein Booking-Service, der:
 ## Aufgaben
 
 ### 1. Consul Resolver implementieren
-- Eigenes `consul`-Package mit einem `Resolver` erstellen
 - Consul HTTP API (`/v1/health/service/{name}?passing=true`) abfragen
 - Service-URL aus der Antwort (Address + Port) zusammenbauen
 

@@ -251,7 +251,29 @@
     max-height: 540px;
     background: var(--box-bg);
     color: #e0e6f0;
+}
+
+/* Pseudo-Code-Spickzettel: dunkle Box ohne Syntax-Highlighting, eigene Klasse
+   damit Inline-<span> nicht vom Highlight-Plugin geschluckt werden. */
+.reveal pre.cheatsheet {
+    background: var(--box-bg);
+    color: #e0e6f0;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
     text-align: left;
+    font-family: var(--r-code-font);
+    font-size: 0.55em;
+    line-height: 1.35;
+    width: 80%;
+    margin: var(--r-block-margin) auto;
+    white-space: pre;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);
+}
+
+.reveal pre.cheatsheet .cmd {
+    color: var(--highlight);
+    font-weight: 700;
 }
 
 .reveal code,
