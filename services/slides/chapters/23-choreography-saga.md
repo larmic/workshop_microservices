@@ -34,8 +34,8 @@
 
 <div class="factor fragment">
 <h3>Trade-off</h3>
-<p>Gewinn: Entkopplung. Verlust: Bug sitzt jetzt &uuml;berall &mdash; <em>verteilter Monolith</em> lauert.</p>
-<code>Wissen verteilt</code>
+<p>Gewinn: Entkopplung. Verlust: Wissen ist jetzt <span class="hl">&uuml;berall</span>.</p>
+<code>verteilter Monolith</code>
 <aside class="notes">Orchestration konzentriert das Saga-Wissen an einer Stelle (Booking). Choreography verteilt es: Booking publiziert, Backends reagieren auf Events anderer. Ein Bug in der Saga-Logik kann jetzt in jedem beteiligten Service sitzen. Ohne klare Event-Vertr&auml;ge und Dokumentation hat man <em>verteilten Monolithen</em> &mdash; die schlimmste beider Welten. Choreography ist eleganter, aber operativ aufwendiger.</aside>
 </div>
 

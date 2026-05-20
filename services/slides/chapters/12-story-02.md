@@ -1,6 +1,6 @@
 ## Story 2
 
-<p class="subtitle">Service Discovery via Consul <span class="time-badge">&asymp; 60 min</span></p>
+<p class="subtitle">Services finden sich selbst <span class="time-badge">&asymp; 60 min</span></p>
 
 <div class="cols">
 <div>

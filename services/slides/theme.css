@@ -645,3 +645,34 @@
 .reveal section:has(.recap-grid .show-all.visible) .recap-grid > .factor.fragment.visible {
     opacity: 1;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Kapitel-Trenner: invertierte Farbgebung, gro&szlig;e Typografie           */
+/* ---------------------------------------------------------------------- */
+
+.reveal .chapter-slide {
+    color: #fff;
+}
+
+.reveal .chapter-slide h2 {
+    color: #fff;
+    font-size: 88pt;
+    margin: 0.3em 0 0;
+}
+
+.reveal .chapter-slide .chapter-num {
+    font-family: var(--font-futura-title);
+    color: var(--highlight);
+    font-size: 20pt;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 0 0.4em 0;
+}
+
+.reveal .chapter-slide .subtitle {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 24pt;
+    margin-top: 1.5rem;
+    font-style: italic;
+}

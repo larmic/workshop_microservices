@@ -1,6 +1,6 @@
 ## Story 1
 
-<p class="subtitle">Cloud-native Booking-Service <span class="time-badge">&asymp; 90 min</span></p>
+<p class="subtitle">Erst lauff&auml;hig, dann smart <span class="time-badge">&asymp; 90 min</span></p>
 
 <div class="cols">
 <div>
