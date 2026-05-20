@@ -33,10 +33,10 @@
 </div>
 
 <div class="factor fragment">
-<h3><span class="numeral">5</span> Canary &amp; Versionierung</h3>
-<p>Wie deploye ich `flight-service` v2 mit <span class="hl">5 %</span> Traffic, ohne dass alle sofort drauf gehen?</p>
-<code>5 % v2 / 95 % v1?</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Mit unserem Stand: <strong>gar nicht.</strong> Zufallsauswahl unter allen gesunden Instanzen &mdash; v2 bekommt sofort den gleichen Anteil wie v1. Drei L&ouml;sungspfade: (1) <strong>Tags / Metadaten</strong> in Consul (Resolver liest Tag, gewichtet &mdash; muss in jedem Client gebaut werden), (2) <strong>separate logische Namen</strong> (sauberer, aber Versionierung leakt nach oben), (3) <strong>Service Mesh / API-Gateway</strong> (Traffic-Splitting zentral konfiguriert).<br><strong>Spicy:</strong> Service Discovery l&ouml;st &bdquo;wo l&auml;uft das?&ldquo;, nicht &bdquo;welche Version will ich?&ldquo;. Sobald Canary / Blue-Green / A/B-Tests im Spiel sind, kommt eine zweite Schicht ins Spiel.</aside>
+<h3><span class="numeral">5</span> Consul im K8s-Cluster?</h3>
+<p>Kubernetes bringt seine eigene Service Discovery mit. Ist Consul daneben <span class="hl">noch sinnvoll</span>?</p>
+<code>kube-dns vs. Consul</code>
+<aside class="notes"><strong>Meine Antwort:</strong> Im reinen K8s-Setup: <strong>nein.</strong> Der API-Server ist die Registry, `kube-dns` / CoreDNS l&ouml;st <code>flight-service.default.svc.cluster.local</code> auf, `kube-proxy` macht die Lastverteilung &mdash; alles ohne Zusatzkomponente, ohne Self-Registration im Code. Ein zweites Consul daneben w&auml;re reines Duplikat plus Sync-Problem.<br><strong>Wann doch?</strong> (1) <strong>Hybrid-/Multi-Cluster</strong>: Services laufen teils in K8s, teils auf VMs / Bare Metal / anderem Cluster &mdash; eine cluster-&uuml;bergreifende Registry. (2) <strong>Consul Connect als Service Mesh</strong> (mTLS, L7-Routing, Intentions) &mdash; dann ist Discovery nur Beiwerk, das Mesh ist der Grund. (3) <strong>Legacy-Brownfield</strong> mit existierender Consul-Infrastruktur, bei der K8s schrittweise dazukommt.<br><strong>Spicy:</strong> &bdquo;Wir nehmen Consul, weil wir das immer so machen&ldquo; ist in einem reinen K8s-Setup eine teure Gewohnheit. Die Frage ist nicht &bdquo;Consul ja/nein?&ldquo;, sondern &bdquo;welches Problem habe ich, das K8s nicht schon l&ouml;st?&ldquo; &mdash; meist hei&szlig;t die Antwort dann Mesh, nicht Discovery.</aside>
 </div>
 
 <div class="factor fragment">
