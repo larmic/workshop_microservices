@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="./assets/service_discovery.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+
 ## Service Discovery
 
 <p class="subtitle">Services finden sich &uuml;ber Namen &mdash; nicht &uuml;ber URLs</p>

@@ -425,6 +425,18 @@
     box-shadow: 0 4px 16px rgba(10, 3, 73, 0.22);
 }
 
+/* Kompakter Visual-Anker auf Pattern-Hauptfolien (zwischen Subtitle und factor-row). */
+.reveal img.pattern-image {
+    display: block;
+    margin: 0.3rem auto 0.6rem;
+    max-width: 38%;
+    max-height: 22vh;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(10, 3, 73, 0.18);
+}
+
 /* ---------------------------------------------------------------------- */
 /* 12-Faktor-Grid (3×4) auf 06a-12-faktoren                                */
 /* ---------------------------------------------------------------------- */

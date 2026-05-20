@@ -2,37 +2,94 @@
 
 > Offene Punkte für den Online-Gang. Aktuell vor allem **Bildmaterial** zur Auflockerung der text­lastigen Slides.
 
-## Bild-Empfehlungen
+---
 
-Aktuell gibt es nur zwei Bilder (`assets/intro.png`, `assets/way_to_microservices.png`). Bei 47 Slides ist das wenig. Die folgenden Stellen würden besonders profitieren — sortiert nach Priorität.
+## ✅ Bereits eingesetzte Bilder
 
-### Priorität 1 &mdash; sofortiger Wirkungseffekt
+- `07-vorbereitung.md` &mdash; Dashboard-Screenshot (`assets/dashboard-ui.png`) als `<img class="dashboard-image">`
+- `11-service-discovery.md` &mdash; Registry-Diagramm (`assets/service_discovery.png`)
+- `14-circuit-breaker.md` &mdash; Sicherungskasten (`assets/circuitbreaker.png`)
+- `17-bulkhead.md` &mdash; Schiffsquerschnitt mit Schotten (`assets/bulkhead.png`)
+- `20-saga.md` &mdash; Domino-Reihe (`assets/saga.png`)
+- `26-tracing.md` &mdash; Paket-Sendung (`assets/tracing.png`)
 
-| Slide | Bild-Idee | Such-Begriffe |
+Die fünf Pattern-Slides binden ihr Bild als **slide-weiten Hintergrund-Watermark** ein (`data-background-image` + `data-background-opacity="0.18"`) &mdash; kein Box-Rahmen mehr, factor-row und chips überlagern die subtile Bild-Textur.
+
+---
+
+## Noch offene AI-Bild-Prompts
+
+**Jeder Prompt ist self-contained.** Block kopieren, in deinen Generator einfügen (Midjourney, DALL-E 3, Flux, Stable Diffusion XL, Imagen 3, Meshy, …) und absenden. Alle Vorgaben (Farb-Hex-Codes, Aspect Ratio, Negativ-Liste) sind im Prompt-Text enthalten.
+
+Workshop-Palette zur Erinnerung — die Hex-Codes erscheinen in jedem Prompt:
+
+| Farbe | Hex | Rolle |
 |---|---|---|
-| `17-bulkhead.md` | **Schiffsquerschnitt mit Schotten** ⭐ — die literale Metapher | `ship cross section bulkhead compartments illustration`, `watertight compartment vector` |
-| `26c-tracing-mehr.md` | **Jaeger/Tempo-Waterfall-Mockup** — zeigt was OpenTelemetry-UIs liefern | `jaeger trace waterfall screenshot`, `distributed tracing UI` |
+| Primär-Dunkel | `#0A0349` | Outlines, dominante Flächen |
+| Primär-Lila | `#7348E1` | Akzente, Verbindungen |
+| Highlight | `#D3F871` | kleine Status-/Warn-Tupfer |
+| Welle | `#EEE7FB` | dezente Hintergrund-Flächen |
+| Background | `#FFFFFF` | Slide-Hintergrund |
 
-> ✅ `07-vorbereitung.md` &mdash; Dashboard-Screenshot ist als `assets/dashboard-ui.png` integriert.
+---
 
-### Priorität 2 &mdash; gute Metaphern-Anker
+### 1. Tracing Waterfall (Slide `26c-tracing-mehr.md`)
 
-| Slide | Bild-Idee | Such-Begriffe |
-|---|---|---|
-| `14-circuit-breaker.md` | Sicherungskasten / Hardware-CB | `electrical circuit breaker fuse box vector`, `circuit breaker icon` |
-| `11-service-discovery.md` | Telefonbuch / Wegweiser / Service-Registry | `phonebook illustration`, `service registry diagram`, undraw.co `directory` |
-| `20-saga.md` | Domino-Reihe rückwärts / Wikinger-Saga | `domino chain illustration`, `viking longship`, `narrative thread` |
-| `23-choreography-saga.md` | Tänzer ohne Choreograph / Orchester vs. Ensemble | `dance choreography vector`, `orchestra conductor`, `jazz ensemble` |
-| `26-tracing.md` | Paketverfolgung / Sendungs-QR-Code | `package tracking illustration`, undraw.co `shipping`, `parcel tracking` |
+**Was es zeigt:** Mockup einer Tracing-UI à la Jaeger / Grafana Tempo — ein „Wasserfall" verschachtelter Spans.
 
-### Priorität 3 &mdash; Bonus für Closing
+```
+A clean UI mockup of a distributed tracing dashboard panel in modern minimal flat design, in the visual style of Jaeger or Grafana Tempo but explicitly without any product branding or logos. The panel has a header bar at the top reading "Trace · 1.2s" with a subtle ID badge. Below the header is a vertical waterfall of nested colored bars representing HTTP spans. From top to bottom: one wide top-level span occupying the full panel width labeled "POST booking 1.2s"; indented below it three parallel-stacked spans of varying widths labeled "flight 120ms", "hotel 180ms" (with a small red error dot at its right end), and "car 900ms"; and a final shorter indented span at the bottom labeled "DELETE flight 80ms" representing a compensation step. On the right side a thin sidebar shows span details with key-value pairs. Subtle drop shadow under the main card. White background hex #FFFFFF, light gray hex #F5F6F8 for the inner content area. Aspect ratio 16:9, landscape orientation, output size 1792x1024 pixels. Color palette: dark blue-purple hex #0A0349 for the header bar and dark text, light purple hex #7348E1 for the span bars in varying opacity for hierarchy, lime green hex #D3F871 for healthy status accents, a muted red tone for the single error indicator. Negative prompt: no real product names or logos, no Jaeger or Grafana branding, no people, not photorealistic, no heavy shadows.
+```
 
-| Slide | Bild-Idee | Such-Begriffe |
-|---|---|---|
-| `29-zusammenfassung.md` | Reisekarte / Zielgerade / Schiff im Hafen | `journey map illustration`, `seven stops map`, undraw.co `destination` |
-| `06-12-faktor-app.md` | Heroku-Bezug / 12-Heroku-Originale | Vorsicht Lizenz — eher abstrahieren statt Logo |
+---
 
-## Bild-Quellen mit Lizenz-Notizen
+### 2. Choreography (Slide `23-choreography-saga.md`)
+
+**Was es zeigt:** Abstrakte Figuren in synchronisierter Bewegung ohne Dirigenten — sie kommunizieren über Events.
+
+```
+An abstract flat vector illustration in modern minimal friendly style, showing four stylized human figure silhouettes arranged in a loose circle on a white background. The figures are simple geometric shapes with no facial features, with arms raised in motion as if dancing or performing in sync. Smooth curved arrows flow between them in a counter-clockwise pattern, each arrow carrying a small lime-green dot-shaped event icon along its path. The arrangement explicitly shows synchronized movement without a central conductor — each figure responds to the previous one through the event arrows. White background hex #FFFFFF. Aspect ratio 16:9, landscape orientation, output size 1792x1024 pixels. Color palette: dark blue-purple hex #0A0349 for the figure silhouettes, light purple hex #7348E1 for the connecting arrows, lime green hex #D3F871 for the event dots along the arrows. Negative prompt: no realistic faces, no central figure or conductor, no text, no letters, no words, no logos, not photorealistic, no heavy shadows.
+```
+
+---
+
+### 3. Closing — Journey Map (Slide `29-zusammenfassung.md`)
+
+**Was es zeigt:** Reise-Karte mit 7 Stationen — Sinnbild für die 7 Workshop-Stories.
+
+```
+A modern flat illustration in friendly minimal vector style, like an illustrated board-game adventure map, showing a curving path or trail on a stylized landscape map viewed slightly from above as if from a hot-air balloon. The path winds gently through seven milestone pins from the left (start) to the right (destination). Each pin is a small flag or location marker, subtly numbered 1 through 7. Around the path are abstract hills, geometric trees, and simple cloud shapes suggesting an illustrated adventure landscape. White background hex #FFFFFF with subtle pale lavender hex #EEE7FB clouds. Aspect ratio 16:9, landscape orientation, output size 1792x1024 pixels. Color palette: dark blue-purple hex #0A0349 for the winding path and pin outlines, light purple hex #7348E1 for the pin flags and accent markers, lime green hex #D3F871 for the dots on completed milestones, pale lavender hex #EEE7FB for the clouds and distant hills. Negative prompt: no real geography, no recognizable landmarks, no people, no text labels except small numbers 1 through 7 on the pins, not photorealistic, no heavy shadows.
+```
+
+---
+
+### Provider-spezifische Tipps (optional)
+
+- **Midjourney v6** — am Ende des Prompts anhängen: `--ar 16:9 --v 6 --style raw --no text, letters, people, photorealistic`
+- **Stable Diffusion XL** — den „Negative prompt:"-Teil hinten herausziehen und in den Negative-Slot kopieren; den Rest in den Positive-Slot.
+- **DALL-E 3 / Imagen 3 / Flux** — Prompt 1:1 einfügen, keine Sonderbehandlung nötig.
+- Wenn das erste Ergebnis zu kantig oder zu langweilig ist, am Stil-Anfang ergänzen: `in the style of undraw.co illustrations`, `friendly geometric shapes`, oder `subtle gradient fills`.
+
+### Nach dem Generieren
+
+1. Bild als PNG mit weißem (oder transparentem) Hintergrund ablegen unter `services/slides/assets/`. Empfohlene Namen: `tracing-waterfall.png`, `choreography.png`, `journey-map.png`.
+2. Im jeweiligen Slide-Markdown einbinden &mdash; **zwei Varianten**:
+
+   **Variante A &mdash; als Watermark-Hintergrund** (wie auf den anderen Pattern-Slides). Ganz oben in der Datei als Slide-Kommentar:
+   ```markdown
+   <!-- .slide: data-background-image="./assets/choreography.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+   ```
+   Opacity bei Bedarf anpassen: `0.10`&ndash;`0.15` für sehr dezente Textur, `0.20`&ndash;`0.30` für klarer sichtbare Bilder. Geeignet für `choreography.png` (analoges Pattern wie Bulkhead/Saga).
+
+   **Variante B &mdash; als sichtbares Bild im Slide** (für UI-Mockups oder Hero-Bilder am Closing). Im Markdown an passender Stelle:
+   ```html
+   <img class="dashboard-image" src="./assets/tracing-waterfall.png" alt="..."/>
+   ```
+   Geeignet für `tracing-waterfall.png` (UI-Mockup mit Detail-Inhalt, der bei niedriger Opacity unleserlich würde) und `journey-map.png` (Closing-Highlight, soll sichtbar sein).
+
+---
+
+## Falls du Bilder lieber selbst suchst (statt KI)
 
 | Quelle | Eigenschaften | Lizenz |
 |---|---|---|
@@ -44,18 +101,9 @@ Aktuell gibt es nur zwei Bilder (`assets/intro.png`, `assets/way_to_microservice
 | [unsplash.com](https://unsplash.com) | Foto-Stock | freie Nutzung |
 | [Excalidraw](https://excalidraw.com) | selbst zeichnen (Schotten, Saga-Sequenz) | export PNG/SVG |
 
-## Visueller Stil-Hinweis
+Bei unDraw die Primärfarbe auf `#7348E1` setzen — fügt sich nahtlos in die Slide-Palette ein.
 
-Workshop-Palette (siehe `theme.css` und Wurzel-`CLAUDE.md`):
-
-| Farbe | Hex | Verwendung |
-|---|---|---|
-| Primär-Dunkel | `#0A0349` | Box-Hintergrund, Kapitel-Slides |
-| Primär-Violett | `#7348E1` | Rahmen, Links, Akzente |
-| Highlight | `#D3F871` | `.hl`, Pull-Quotes |
-| Welle | `#EEE7FB` | Dekoration am Slide-Rand |
-
-**Empfehlung:** Bilder am besten in **Lila/Cyan-Tönen** oder **monochrom dunkelblau** &mdash; passt zur Palette. Stark farbige Stock-Fotos wirken fremd. Bei unDraw die Primärfarbe auf `#7348E1` setzen — fügt sich nahtlos ein.
+---
 
 ## Sonstige offene Punkte
 
