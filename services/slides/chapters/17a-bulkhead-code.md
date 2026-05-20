@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="./assets/bulkhead.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+
 ## Bulkhead
 
 <p class="subtitle">Semaphore in Pseudo-Code</p>

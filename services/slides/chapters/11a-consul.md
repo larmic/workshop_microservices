@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="./assets/service_discovery.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+
 ## Consul
 
 <p class="subtitle">HTTP-Registry &mdash; so sieht's konkret aus</p>

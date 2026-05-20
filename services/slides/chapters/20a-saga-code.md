@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="./assets/saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+
 ## Saga
 
 <p class="subtitle">Orchestrator in Pseudo-Code</p>
