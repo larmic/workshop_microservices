@@ -11,8 +11,9 @@ Aktuell gibt es nur zwei Bilder (`assets/intro.png`, `assets/way_to_microservice
 | Slide | Bild-Idee | Such-Begriffe |
 |---|---|---|
 | `17-bulkhead.md` | **Schiffsquerschnitt mit Schotten** ⭐ — die literale Metapher | `ship cross section bulkhead compartments illustration`, `watertight compartment vector` |
-| `07-vorbereitung.md` | **Dashboard-Screenshot** (selbst anfertigen) — Orientierung beim Setup | Screenshot von `http://localhost` nach `make docker-up` |
 | `26c-tracing-mehr.md` | **Jaeger/Tempo-Waterfall-Mockup** — zeigt was OpenTelemetry-UIs liefern | `jaeger trace waterfall screenshot`, `distributed tracing UI` |
+
+> ✅ `07-vorbereitung.md` &mdash; Dashboard-Screenshot ist als `assets/dashboard-ui.png` integriert.
 
 ### Priorität 2 &mdash; gute Metaphern-Anker
 
