@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"$HOME/go/bin:$(go env GOPATH 2>/dev/null)/bin:$PATH\"; jq -r '.tool_input.file_path // empty' | { read -r f; case \"$f\" in *.go) if command -v goimports >/dev/null 2>&1; then goimports -w \"$f\"; elif command -v gofmt >/dev/null 2>&1; then gofmt -w \"$f\"; fi ;; esac; } 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
