@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       # Setzt den Webhook nur in das Build-Artefakt, nicht in den Repo-Stand.
       # Bricht hart ab, falls das Secret fehlt oder der Placeholder schon weg ist.
@@ -51,10 +51,10 @@ jobs:
           PYEOF
 
       - name: Upload feedback/ as Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: feedback
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
