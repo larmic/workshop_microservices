@@ -198,11 +198,11 @@
     <script>
         // Discord-Webhook-URL. Wird zur Build-Zeit von GitHub Actions aus dem
         // Repository-Secret DISCORD_WEBHOOK_URL eingesetzt. Lokal bleibt der
-        // Placeholder bestehen — der Send-Button verweigert dann den Versand.
+        // Placeholder bestehen, der Send-Button verweigert dann den Versand.
         const WEBHOOK_URL = "__DISCORD_WEBHOOK_URL__";
 
         const SOURCE = new URLSearchParams(location.search).get("source") || "feedback-page";
-        // Öffentliche URL des Favicons — Discord lädt das Bild serverseitig
+        // Öffentliche URL des Favicons. Discord lädt das Bild serverseitig
         // und cached es als Avatar des Webhook-Posts.
         const AVATAR_URL = new URL("./icon.png", location.href).href;
         const NAME_STORAGE_KEY = "workshop-feedback:name";
@@ -228,8 +228,8 @@
         function formatContent(thumb, text, name, source) {
             const emoji = thumb === "down" ? "\u{1F44E}" : "\u{1F44D}";
             const ts = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
-            let header = `${emoji}  *${ts}*  —  _${source}_`;
-            if (name) header += `  —  *${sanitize(name)}*`;
+            let header = `${emoji}  *${ts}*  ·  _${source}_`;
+            if (name) header += `  ·  *${sanitize(name)}*`;
             const quoted = sanitize(text)
                 .split("\n")
                 .map((l) => "> " + l)
@@ -268,7 +268,7 @@
                     $("counter").textContent = "0";
                     setThumb(null);
                 } else if (r.status === 429) {
-                    setStatus("warn", "Zu viele Anfragen — bitte kurz warten und nochmal probieren.");
+                    setStatus("warn", "Zu viele Anfragen, bitte kurz warten und nochmal probieren.");
                 } else {
                     setStatus("error", "Senden fehlgeschlagen (HTTP " + r.status + ").");
                 }
@@ -288,7 +288,7 @@
         try {
             const stored = localStorage.getItem(NAME_STORAGE_KEY);
             if (stored) $("name").value = stored;
-        } catch (e) { /* Storage nicht verfügbar (Private Mode) — egal */ }
+        } catch (e) { /* Storage nicht verfügbar (Private Mode), egal */ }
         $("name").addEventListener("input", (e) => {
             try {
                 const v = e.target.value.trim();
@@ -296,7 +296,7 @@
                 else localStorage.removeItem(NAME_STORAGE_KEY);
             } catch (e) { /* ignore */ }
         });
-        // Cmd/Ctrl+Enter sendet ab — praktisch beim Tippen längerer Texte.
+        // Cmd/Ctrl+Enter sendet ab, praktisch beim Tippen längerer Texte.
         $("text").addEventListener("keydown", (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submit();
         });
