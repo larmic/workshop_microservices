@@ -202,6 +202,10 @@
         const WEBHOOK_URL = "__DISCORD_WEBHOOK_URL__";
 
         const SOURCE = new URLSearchParams(location.search).get("source") || "feedback-page";
+        // Öffentliche URL des Favicons — Discord lädt das Bild serverseitig
+        // und cached es als Avatar des Webhook-Posts.
+        const AVATAR_URL = new URL("./icon.png", location.href).href;
+        const NAME_STORAGE_KEY = "workshop-feedback:name";
 
         let thumb = null;
         const $ = (id) => document.getElementById(id);
@@ -253,13 +257,14 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         content: formatContent(thumb, text, name, SOURCE),
+                        username: "Workshop-Feedback",
+                        avatar_url: AVATAR_URL,
                         allowed_mentions: { parse: [] },
                     }),
                 });
                 if (r.ok) {
                     setStatus("success", "Danke! 🙌 Du kannst gerne weitere Punkte senden.");
                     $("text").value = "";
-                    $("name").value = "";
                     $("counter").textContent = "0";
                     setThumb(null);
                 } else if (r.status === 429) {
@@ -278,6 +283,19 @@
         $("thumb-down").addEventListener("click", () => setThumb("down"));
         $("text").addEventListener("input", (e) => { $("counter").textContent = e.target.value.length; });
         $("send-btn").addEventListener("click", submit);
+        // Name aus dem Browser wiederherstellen und bei jeder Änderung sichern.
+        // localStorage statt Cookie: kein Server-Roundtrip, kein Tracking-Konflikt.
+        try {
+            const stored = localStorage.getItem(NAME_STORAGE_KEY);
+            if (stored) $("name").value = stored;
+        } catch (e) { /* Storage nicht verfügbar (Private Mode) — egal */ }
+        $("name").addEventListener("input", (e) => {
+            try {
+                const v = e.target.value.trim();
+                if (v) localStorage.setItem(NAME_STORAGE_KEY, v);
+                else localStorage.removeItem(NAME_STORAGE_KEY);
+            } catch (e) { /* ignore */ }
+        });
         // Cmd/Ctrl+Enter sendet ab — praktisch beim Tippen längerer Texte.
         $("text").addEventListener("keydown", (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submit();
