@@ -1,37 +1,45 @@
-# Microservices Workshop
+# Microservices-Workshop
 
-Educational workshop project (German language) teaching microservice architecture patterns and best practices.
+Workshop-Projekt zur Vermittlung von Architekturmustern und Best Practices für
+Microservices. Sprache des gesamten Workshop-Materials: Deutsch.
 
-## Audience & Language
+## Zielgruppe & Sprache
 
-- Target audience: software architects, developers becoming architects, tech leads with architectural responsibility
-- All workshop content (docs, stories, instructions) is written in German
-- Code, identifiers and commit messages: English
+- Zielgruppe: Software-Architekt:innen, Entwickler:innen auf dem Weg zur
+  Architekturrolle, Tech-Leads mit Architekturverantwortung
+- Alle Workshop-Inhalte (Dokumentation, Stories, Trainer-Hinweise) sind auf
+  Deutsch verfasst
+- Code, Bezeichner und Commit-Messages: Englisch
 
-## Tech Stack
+## Tech-Stack
 
-- Reference implementation in `services/` is written in Go (currently 1.25)
-- Tech stack for workshop participants is intentionally **free of choice** — they may use any language/framework that fits the task
-- Example domain: travel booking system (Hotel, Flight, Car rental, Booking orchestration)
+- Die Referenz-Implementierung in `services/` ist in Go geschrieben (aktuell 1.25)
+- Der Tech-Stack der Teilnehmenden ist bewusst **frei wählbar**: jede Sprache
+  oder jedes Framework, das zur Aufgabe passt, ist erlaubt
+- Beispiel-Domäne: Reise-Buchungssystem (Hotel, Flug, Mietwagen,
+  Buchungs-Orchestrierung)
 
-## Workshop Topics
+## Workshop-Themen
 
-The full topic overview lives in `docs/themen.md`. Topics span foundations, resilience patterns, communication & routing, data & events, deployment & operations, and culture & organisation.
+Die vollständige Themenübersicht liegt in `docs/themen.md`. Die Themen umfassen
+Grundlagen, Resilience-Patterns, Kommunikation & Routing, Daten & Events,
+Deployment & Betrieb sowie Kultur & Organisation.
 
-User stories for the hands-on tasks are in `docs/stories/` (`story-01` … `story-07`).
+Die User-Stories für die Hands-on-Aufgaben liegen in `docs/stories/`
+(`story-01` bis `story-07`).
 
-## Project Structure
+## Projektstruktur
 
-- `docs/` — workshop documentation
-  - `themen.md` — topic overview & moderation guide
-  - `vorbereitung.md` — workstation setup
-  - `stories/` — user stories
-  - `instructions/` — trainer notes
-  - `questions/` — discussion prompts
-- `services/` — reference Go implementation
-  - `booking/` — BookingService with one folder per story (`story1` … `story7`)
-  - `flight/`, `hotel/`, `car/` — domain services
-  - `dashboard/` — dashboard UI
-  - `traefik/` — API gateway configuration
-  - `shared/` — shared libraries
-  - `docker-compose*.yml`, `Makefile` — local setup
+- `docs/`: Workshop-Dokumentation
+  - `themen.md`: Themenübersicht und Moderations-Leitfaden
+  - `vorbereitung.md`: Setup der Arbeitsumgebung
+  - `stories/`: User-Stories
+  - `instructions/`: Trainer-Hinweise
+  - `questions/`: Diskussionsfragen
+- `services/`: Go-Referenz-Implementierung
+  - `booking/`: BookingService mit einem Ordner pro Story (`story1` bis `story7`)
+  - `flight/`, `hotel/`, `car/`: Domain-Services
+  - `dashboard/`: Dashboard-UI
+  - `traefik/`: API-Gateway-Konfiguration
+  - `shared/`: gemeinsame Bibliotheken
+  - `docker-compose*.yml`, `Makefile`: lokales Setup
