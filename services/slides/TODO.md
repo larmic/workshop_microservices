@@ -11,13 +11,13 @@
 - `14-circuit-breaker.md` &mdash; Sicherungskasten (`assets/circuitbreaker.png`)
 - `17-bulkhead.md` &mdash; Schiffsquerschnitt mit Schotten (`assets/bulkhead.png`)
 - `20-saga.md` &mdash; Domino-Reihe (`assets/saga.png`)
+- `23-choreography-saga.md` &mdash; synchronisierte Figuren (`assets/choreography_saga.png`)
 - `26-tracing.md` &mdash; Paket-Sendung (`assets/tracing.png`)
+- `29-zusammenfassung.md` &mdash; Journey-Map (`assets/zusammenfassung.png`)
 
 Pro Pattern-Block gibt es jetzt:
 - Eine **Hero-Slide** an Position 0 des Vertikal-Stacks (`{n}-titel.md`) — nur Titel + Subtitle + Bild bei **Opacity 0.40** (Bild ist klar erkennbar, dominiert aber nicht).
 - Die **Karten-Slide** + alle **Sub-Slides** mit demselben Bild als **Watermark bei Opacity 0.18** (factor-row und chips überlagern die subtile Bild-Textur).
-
-Choreography-Hero (`23-titel.md`) hat aktuell noch kein Bild — kommt sobald `choreography.png` generiert ist.
 
 ---
 
@@ -34,36 +34,6 @@ Workshop-Palette zur Erinnerung — die Hex-Codes erscheinen in jedem Prompt:
 | Highlight | `#D3F871` | kleine Status-/Warn-Tupfer |
 | Welle | `#EEE7FB` | dezente Hintergrund-Flächen |
 | Background | `#FFFFFF` | Slide-Hintergrund |
-
----
-
-### 1. Tracing Waterfall (Slide `26c-tracing-mehr.md`)
-
-**Was es zeigt:** Mockup einer Tracing-UI à la Jaeger / Grafana Tempo — ein „Wasserfall" verschachtelter Spans.
-
-```
-A clean UI mockup of a distributed tracing dashboard panel in modern minimal flat design, in the visual style of Jaeger or Grafana Tempo but explicitly without any product branding or logos. The panel has a header bar at the top reading "Trace · 1.2s" with a subtle ID badge. Below the header is a vertical waterfall of nested colored bars representing HTTP spans. From top to bottom: one wide top-level span occupying the full panel width labeled "POST booking 1.2s"; indented below it three parallel-stacked spans of varying widths labeled "flight 120ms", "hotel 180ms" (with a small red error dot at its right end), and "car 900ms"; and a final shorter indented span at the bottom labeled "DELETE flight 80ms" representing a compensation step. On the right side a thin sidebar shows span details with key-value pairs. Subtle drop shadow under the main card. White background hex #FFFFFF, light gray hex #F5F6F8 for the inner content area. Aspect ratio 16:9, landscape orientation, output size 1792x1024 pixels. Color palette: dark blue-purple hex #0A0349 for the header bar and dark text, light purple hex #7348E1 for the span bars in varying opacity for hierarchy, lime green hex #D3F871 for healthy status accents, a muted red tone for the single error indicator. Negative prompt: no real product names or logos, no Jaeger or Grafana branding, no people, not photorealistic, no heavy shadows.
-```
-
----
-
-### 2. Choreography (Slide `23-choreography-saga.md`)
-
-**Was es zeigt:** Abstrakte Figuren in synchronisierter Bewegung ohne Dirigenten — sie kommunizieren über Events.
-
-```
-An abstract flat vector illustration in modern minimal friendly style, showing four stylized human figure silhouettes arranged in a loose circle on a white background. The figures are simple geometric shapes with no facial features, with arms raised in motion as if dancing or performing in sync. Smooth curved arrows flow between them in a counter-clockwise pattern, each arrow carrying a small lime-green dot-shaped event icon along its path. The arrangement explicitly shows synchronized movement without a central conductor — each figure responds to the previous one through the event arrows. White background hex #FFFFFF. Aspect ratio 16:9, landscape orientation, output size 1792x1024 pixels. Color palette: dark blue-purple hex #0A0349 for the figure silhouettes, light purple hex #7348E1 for the connecting arrows, lime green hex #D3F871 for the event dots along the arrows. Negative prompt: no realistic faces, no central figure or conductor, no text, no letters, no words, no logos, not photorealistic, no heavy shadows.
-```
-
----
-
-### 3. Closing — Journey Map (Slide `29-zusammenfassung.md`)
-
-**Was es zeigt:** Reise-Karte mit 7 Stationen — Sinnbild für die 7 Workshop-Stories.
-
-```
-A modern flat illustration in friendly minimal vector style, like an illustrated board-game adventure map, showing a curving path or trail on a stylized landscape map viewed slightly from above as if from a hot-air balloon. The path winds gently through seven milestone pins from the left (start) to the right (destination). Each pin is a small flag or location marker, subtly numbered 1 through 7. Around the path are abstract hills, geometric trees, and simple cloud shapes suggesting an illustrated adventure landscape. White background hex #FFFFFF with subtle pale lavender hex #EEE7FB clouds. Aspect ratio 16:9, landscape orientation, output size 1792x1024 pixels. Color palette: dark blue-purple hex #0A0349 for the winding path and pin outlines, light purple hex #7348E1 for the pin flags and accent markers, lime green hex #D3F871 for the dots on completed milestones, pale lavender hex #EEE7FB for the clouds and distant hills. Negative prompt: no real geography, no recognizable landmarks, no people, no text labels except small numbers 1 through 7 on the pins, not photorealistic, no heavy shadows.
-```
 
 ---
 

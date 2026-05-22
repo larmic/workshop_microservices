@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="./assets/choreography_saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+
 ## Eventing braucht einen Broker
 
 <p class="subtitle">&hellip; was unsere Webhook-Variante nicht kann</p>

@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="./assets/zusammenfassung.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+
 ## Die Reise &mdash; sieben Stories
 
 <p class="subtitle">Was bleibt</p>

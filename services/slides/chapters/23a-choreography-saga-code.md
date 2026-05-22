@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="./assets/choreography_saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+
 ## Choreography-Saga
 
 <p class="subtitle">Event-Handler in Pseudo-Code</p>
