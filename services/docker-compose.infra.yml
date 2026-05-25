@@ -12,7 +12,7 @@ services:
         condition: service_started
 
   consul:
-    image: hashicorp/consul:1.22
+    image: hashicorp/consul:2.0
     command: agent -dev -ui -client=0.0.0.0 -log-level=info -ui-content-path=/consul/
     ports:
       - "8500:8500"
