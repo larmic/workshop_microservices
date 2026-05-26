@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Workshop: Microservices</title>
+    <link rel="icon" type="image/png" href="./feedback/icon.png">
+    <style>
+        :root {
+            --primary-dark: #0A0349;
+            --primary-violet: #7348E1;
+            --highlight: #D3F871;
+            --wave: #EEE7FB;
+            --line: #e0e0e6;
+            --muted: #888;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--primary-dark);
+            background: var(--primary-dark);
+            background-image: linear-gradient(160deg, var(--primary-dark) 0%, #1a0d6e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+            max-width: 540px;
+            width: 100%;
+            padding: 1.75rem 1.75rem 1.5rem;
+        }
+        h1 {
+            font-size: 1.4rem;
+            margin: 0 0 0.35rem;
+            color: var(--primary-dark);
+        }
+        .sub {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 0 0 1.25rem;
+        }
+        .tile-row {
+            display: flex;
+            gap: 0.75rem;
+            margin: 0 0 0.5rem;
+        }
+        .tile {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.4rem 0.75rem;
+            background: #f5f5fa;
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            font-weight: 700;
+            transition: background 0.15s, border-color 0.15s, transform 0.08s;
+        }
+        .tile:hover {
+            background: var(--wave);
+            border-color: var(--primary-violet);
+        }
+        .tile:active { transform: translateY(1px); }
+        .tile .emoji { font-size: 2.4rem; line-height: 1; }
+        .tile .hint {
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: #555;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--line);
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .footer a { color: var(--primary-violet); }
+        @media (max-width: 480px) {
+            .tile-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <main class="card" role="main">
+        <h1>Workshop: Microservices</h1>
+        <p class="sub">Folien und Feedback zum Workshop. Bitte den passenden Bereich w&auml;hlen.</p>
+
+        <div class="tile-row">
+            <a class="tile" href="./slides/">
+                <span class="emoji">&#127916;</span>
+                <span>Folien</span>
+                <span class="hint">Reveal.js Pr&auml;sentation</span>
+            </a>
+            <a class="tile" href="./feedback/">
+                <span class="emoji">&#128172;</span>
+                <span>Feedback</span>
+                <span class="hint">Anonym an den Trainer</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            Quelle: <a href="https://github.com/larmic/workshop_microservices" target="_blank" rel="noopener">github.com/larmic/workshop_microservices</a>
+        </div>
+    </main>
+</body>
+</html>

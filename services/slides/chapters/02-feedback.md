@@ -21,7 +21,7 @@
 
 <img class="qr-image" src="./assets/qr-code.png" alt="QR-Code zur Feedback-Seite"/>
 
-<p class="qr-url"><a href="https://larmic.github.io/workshop_microservices/?source=slides" target="_blank">larmic.github.io/workshop_microservices</a></p>
+<p class="qr-url"><a href="https://larmic.github.io/workshop_microservices/feedback/?source=slides" target="_blank">larmic.github.io/workshop_microservices/feedback</a></p>
 
 </div>
 </div>

@@ -172,4 +172,4 @@ Pro Workshop-Run optional ein vorbereiteter Sammel-Thread:
 - **Titel:** z.B. `Feedback Kickoff — YYYY-MM-DD`
 - **Body:** Datum und die sechs Fragen aus der Disclaimer-Slide (roter Faden, Patterns, Zeitrahmen, Beispiele, Dashboard, Sonstiges)
 
-Falls das Repo umzieht, die URL in `services/slides/chapters/02-feedback.md` und in `services/dashboard/static/index.html` (Feedback-Button) anpassen.
+Falls das Repo umzieht, die URLs in `services/slides/chapters/02-feedback.md`, in `services/dashboard/static/index.html` (Feedback-Button) sowie ggf. den Repo-Link in `landing/index.html` anpassen. Der Pages-Workflow `.github/workflows/deploy-pages.yml` baut die Site aus `feedback/`, `services/slides/` und `landing/index.html` und legt sie unter `/feedback/`, `/slides/` und `/` ab.

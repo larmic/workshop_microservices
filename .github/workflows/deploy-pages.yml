@@ -1,11 +1,15 @@
-name: Deploy Feedback Page
+name: Deploy Pages (Feedback + Slides)
 
 on:
   push:
     branches: [main]
     paths:
       - 'feedback/**'
-      - '.github/workflows/deploy-feedback.yml'
+      - 'services/slides/**'
+      - 'landing/**'
+      - 'services/dashboard/static/icon.png'
+      - 'services/dashboard/static/team-neusta-logo.svg'
+      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 concurrency:
@@ -29,6 +33,25 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v6
 
+      # Layout der Pages-Site zusammenbauen:
+      #   /          → Landing-Page (landing/index.html)
+      #   /feedback/ → feedback/
+      #   /slides/   → services/slides/ + benötigte dashboard-Assets
+      - name: Build site layout
+        run: |
+          set -euo pipefail
+          mkdir -p _site/feedback _site/slides/dashboard
+          cp -r feedback/. _site/feedback/
+          rsync -a --exclude='.DS_Store' --exclude='TODO.md' services/slides/ _site/slides/
+          cp services/dashboard/static/icon.png _site/slides/dashboard/icon.png
+          cp services/dashboard/static/team-neusta-logo.svg _site/slides/dashboard/team-neusta-logo.svg
+          cp landing/index.html _site/index.html
+          touch _site/.nojekyll
+          # /dashboard/... -> ./dashboard/... im Slides-HTML. Lokal nutzt der
+          # Nginx-Container Traefik-Routing zum Dashboard, auf Pages liegen die
+          # Assets neben index.html im _site/slides/dashboard/.
+          sed -i 's|"/dashboard/|"./dashboard/|g' _site/slides/index.html
+
       # Setzt den Webhook nur in das Build-Artefakt, nicht in den Repo-Stand.
       # Bricht hart ab, falls das Secret fehlt oder der Placeholder schon weg ist.
       - name: Inject Discord webhook URL
@@ -41,7 +64,7 @@ jobs:
           fi
           python3 - <<'PYEOF'
           import os, pathlib, sys
-          p = pathlib.Path("feedback/index.html")
+          p = pathlib.Path("_site/feedback/index.html")
           content = p.read_text()
           placeholder = "__DISCORD_WEBHOOK_URL__"
           if placeholder not in content:
@@ -50,10 +73,10 @@ jobs:
           print(f"Webhook URL in {p} eingesetzt.")
           PYEOF
 
-      - name: Upload feedback/ as Pages artifact
+      - name: Upload _site as Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: feedback
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
