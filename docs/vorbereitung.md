@@ -155,21 +155,3 @@ Stoppt alle Container — Referenz-Services, Infrastruktur und Custom-Service in
 ## 6. Los geht's
 
 Dein Arbeitsplatz ist eingerichtet. Starte mit [Story 1: Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md).
-
----
-
-## Trainer-Aufgabe: Feedback einsammeln
-
-Feedback läuft über **GitHub Discussions** im Repo `larmic/workshop_microservices`. Der Link ist auf der Feedback-Slide (Slide 2) sowie als prominenter Button in der Dashboard-Kopfleiste hinterlegt.
-
-Einmalige Einrichtung:
-
-1. Im Repo: Settings → Features → ✓ Discussions
-2. Kategorie *Workshop Feedback* anlegen (Format „Open-ended")
-
-Pro Workshop-Run optional ein vorbereiteter Sammel-Thread:
-
-- **Titel:** z.B. `Feedback Kickoff — YYYY-MM-DD`
-- **Body:** Datum und die sechs Fragen aus der Disclaimer-Slide (roter Faden, Patterns, Zeitrahmen, Beispiele, Dashboard, Sonstiges)
-
-Falls das Repo umzieht, die URLs in `services/slides/chapters/02-feedback.md`, in `services/dashboard/static/index.html` (Feedback-Button) sowie ggf. den Repo-Link in `landing/index.html` anpassen. Der Pages-Workflow `.github/workflows/deploy-pages.yml` baut die Site aus `feedback/`, `services/slides/` und `landing/index.html` und legt sie unter `/feedback/`, `/slides/` und `/` ab.
