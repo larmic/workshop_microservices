@@ -26,6 +26,7 @@ Als <em>Betriebsteam</em> m&ouml;chte ich <em>Backend-Services &uuml;ber logisch
 
 - Resolver fragt `GET /v1/health/service/{name}?passing=true` bei Consul
 - Statische URLs ersetzt durch logische Namen: `flight-service`, `hotel-service`, `car-service`
+- Bestehender `GET /booking/offers` aus Story 1 umgebaut, l&ouml;st Flight/Hotel/Car &uuml;ber den Consul-Resolver auf statt &uuml;ber statische Env-URLs
 - `POST /booking/bookings` orchestriert die drei Backend-Services und liefert eine aggregierte Buchung
 - Optional: Client-Side Load Balancing bei mehreren Instanzen (zuf&auml;llige Auswahl)
 

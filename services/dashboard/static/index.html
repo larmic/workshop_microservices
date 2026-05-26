@@ -1467,6 +1467,7 @@ GET /booking/offers
                         <ul>
                             <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul</li>
                             <li>Statische URLs ersetzt durch logische Namen: <code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
+                            <li>Bestehender <code>GET /booking/offers</code> aus Story 1 umgebaut, löst Flight/Hotel/Car über den Consul-Resolver auf statt über statische Env-URLs</li>
                             <li><code>POST /booking/bookings</code> orchestriert die drei Backend-Services und liefert eine aggregierte Buchung</li>
                             <li>Optional: Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)</li>
                         </ul>
