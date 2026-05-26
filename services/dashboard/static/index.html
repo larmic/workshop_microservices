@@ -867,7 +867,8 @@
             margin-bottom: 1.25rem;
         }
         details.story-info,
-        details.story-cheatsheet {
+        details.story-cheatsheet,
+        details.story-setup {
             flex: 1 1 320px;
             background: #f5f6f8;
             border: 1px solid #e1e5ec;
@@ -875,7 +876,8 @@
             padding: 0;
         }
         details.story-info summary,
-        details.story-cheatsheet summary {
+        details.story-cheatsheet summary,
+        details.story-setup summary {
             list-style: none;
             cursor: pointer;
             padding: 0.7rem 1rem;
@@ -888,9 +890,11 @@
             user-select: none;
         }
         details.story-info summary::-webkit-details-marker,
-        details.story-cheatsheet summary::-webkit-details-marker { display: none; }
+        details.story-cheatsheet summary::-webkit-details-marker,
+        details.story-setup summary::-webkit-details-marker { display: none; }
         details.story-info summary::before,
-        details.story-cheatsheet summary::before {
+        details.story-cheatsheet summary::before,
+        details.story-setup summary::before {
             content: "\25B8";
             font-size: 0.7rem;
             color: #666;
@@ -898,11 +902,13 @@
             display: inline-block;
         }
         details[open].story-info summary::before,
-        details[open].story-cheatsheet summary::before {
+        details[open].story-cheatsheet summary::before,
+        details[open].story-setup summary::before {
             transform: rotate(90deg);
         }
         details.story-info summary .badge,
-        details.story-cheatsheet summary .badge {
+        details.story-cheatsheet summary .badge,
+        details.story-setup summary .badge {
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -911,13 +917,15 @@
             margin-left: auto;
         }
         .story-info-body,
-        .story-cheatsheet-body {
+        .story-cheatsheet-body,
+        .story-setup-body {
             padding: 0 1rem 1rem;
             font-size: 0.85rem;
             color: #333;
             line-height: 1.55;
         }
-        .story-info-body h4 {
+        .story-info-body h4,
+        .story-setup-body h4 {
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -925,8 +933,10 @@
             font-weight: 700;
             margin: 0.75rem 0 0.3rem;
         }
-        .story-info-body p, .story-info-body ul, .story-info-body ol { margin-bottom: 0.5rem; }
-        .story-info-body ul, .story-info-body ol { padding-left: 1.25rem; }
+        .story-info-body p, .story-info-body ul, .story-info-body ol,
+        .story-setup-body p, .story-setup-body ul, .story-setup-body ol { margin-bottom: 0.5rem; }
+        .story-info-body ul, .story-info-body ol,
+        .story-setup-body ul, .story-setup-body ol { padding-left: 1.25rem; }
         .story-info-body em { color: #7348E1; font-style: normal; font-weight: 600; }
         .story-cheatsheet-body pre {
             background: #0A0349;
@@ -1375,6 +1385,8 @@
                             <li>Backend-URLs (Flight/Hotel/Car) konfigurierbar über Umgebungsvariablen</li>
                             <li><code>GET /info</code> zeigt die aktuelle Konfiguration</li>
                             <li><code>GET /openapi</code> liefert die OpenAPI-Spec aus &mdash; Vorlage: <a href="https://github.com/larmic/workshop_microservices/blob/main/services/booking/story1/api/openapi.yaml" target="_blank"><code>booking/story1/api/openapi.yaml</code></a></li>
+                            <li><code>Dockerfile</code> im Service-Verzeichnis baut ein lauffähiges Image (Service lauscht auf Port <code>8080</code>)</li>
+                            <li>Pfad zum Service in <code>services/.env</code> als <code>CUSTOM_BOOKING_PATH</code> eingetragen, sodass <code>make docker-up-hub</code> den Service mitbaut</li>
                             <li><code>GET /booking/offers</code> aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse</li>
                         </ul>
                     </div>
@@ -1397,6 +1409,18 @@ GET /booking/offers
   → GET CAR_URL/cars
   → { flights, hotels, cars }
   // Fehler? Dürfen durchschlagen — kein Error-Handling.</pre>
+                    </div>
+                </details>
+                <details class="story-setup">
+                    <summary>Setup (einmalig) <span class="badge">Dockerfile + .env</span></summary>
+                    <div class="story-setup-body">
+                        <h4>Einmal pro Workshop</h4>
+                        <ul>
+                            <li><code>Dockerfile</code> im Service-Verzeichnis, Service lauscht auf Port <code>8080</code></li>
+                            <li><code>CUSTOM_BOOKING_PATH</code> in <code>services/.env</code> zeigt auf dieses Verzeichnis</li>
+                            <li>Backend-URLs (<code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code>, <code>CONSUL_URL</code>) kommen automatisch aus <code>docker-compose.custom.yml</code>, nicht selbst setzen</li>
+                            <li>Details: <code>docs/vorbereitung.md</code> Abschnitt 5</li>
+                        </ul>
                     </div>
                 </details>
             </div>
