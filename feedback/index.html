@@ -80,6 +80,9 @@
         .thumb[aria-pressed="true"][data-thumb="up"] {
             background: var(--good-bg); border-color: var(--good-fg); color: var(--good-fg);
         }
+        .thumb[aria-pressed="true"][data-thumb="neutral"] {
+            background: var(--wave); border-color: var(--primary-violet); color: var(--primary-violet);
+        }
         .thumb[aria-pressed="true"][data-thumb="down"] {
             background: var(--bad-bg); border-color: var(--bad-fg); color: var(--bad-fg);
         }
@@ -158,6 +161,11 @@
             color: var(--muted);
             line-height: 1.5;
         }
+        @media (max-width: 480px) {
+            .thumb { font-size: 0.9rem; }
+            .actions { justify-content: stretch; }
+            .actions .btn { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -170,6 +178,10 @@
                 <span class="emoji">&#128077;</span>
                 <span>Positiv</span>
             </button>
+            <button type="button" class="thumb" data-thumb="neutral" id="thumb-neutral" aria-pressed="true">
+                <span class="emoji">&#128161;</span>
+                <span>Anmerkung</span>
+            </button>
             <button type="button" class="thumb" data-thumb="down" id="thumb-down" aria-pressed="false">
                 <span class="emoji">&#128078;</span>
                 <span>Problem</span>
@@ -177,7 +189,7 @@
         </div>
 
         <label class="field-label" for="text">Dein Feedback</label>
-        <textarea id="text" maxlength="2000" rows="5" placeholder="Was war gut, was nicht? Konkrete Stories oder Stellen helfen am meisten."></textarea>
+        <textarea id="text" maxlength="2000" rows="5" autofocus placeholder="Was war gut, was nicht? Konkrete Stories oder Stellen helfen am meisten."></textarea>
         <div class="counter"><span id="counter">0</span> / 2000</div>
 
         <label class="field-label" for="name">Name <span class="optional">(optional, nur f&uuml;r R&uuml;ckfragen)</span></label>
@@ -207,12 +219,13 @@
         const AVATAR_URL = new URL("./icon.png", location.href).href;
         const NAME_STORAGE_KEY = "workshop-feedback:name";
 
-        let thumb = null;
+        let thumb = "neutral";
         const $ = (id) => document.getElementById(id);
 
         function setThumb(value) {
             thumb = value;
             $("thumb-up").setAttribute("aria-pressed", value === "up" ? "true" : "false");
+            $("thumb-neutral").setAttribute("aria-pressed", value === "neutral" ? "true" : "false");
             $("thumb-down").setAttribute("aria-pressed", value === "down" ? "true" : "false");
         }
         function setStatus(kind, msg) {
@@ -226,7 +239,9 @@
             return s.replaceAll("@", "@​").replaceAll("```", "`​``");
         }
         function formatContent(thumb, text, name, source) {
-            const emoji = thumb === "down" ? "\u{1F44E}" : "\u{1F44D}";
+            const emoji = thumb === "down" ? "\u{1F44E}"
+                        : thumb === "up"   ? "\u{1F44D}"
+                        : "\u{1F4A1}";
             const ts = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
             let header = `${emoji}  *${ts}*  ·  _${source}_`;
             if (name) header += `  ·  *${sanitize(name)}*`;
@@ -241,7 +256,6 @@
         async function submit() {
             const text = $("text").value.trim();
             const name = $("name").value.trim();
-            if (!thumb) { setStatus("error", "Bitte 👍 oder 👎 wählen."); return; }
             if (!text) { setStatus("error", "Bitte einen kurzen Text eingeben."); return; }
             if (WEBHOOK_URL.startsWith("__") || !WEBHOOK_URL.startsWith("https://")) {
                 setStatus("error", "Webhook nicht konfiguriert (lokaler Build). Bitte die deployte Seite verwenden.");
@@ -266,7 +280,7 @@
                     setStatus("success", "Danke! 🙌 Du kannst gerne weitere Punkte senden.");
                     $("text").value = "";
                     $("counter").textContent = "0";
-                    setThumb(null);
+                    setThumb("neutral");
                 } else if (r.status === 429) {
                     setStatus("warn", "Zu viele Anfragen, bitte kurz warten und nochmal probieren.");
                 } else {
@@ -280,6 +294,7 @@
         }
 
         $("thumb-up").addEventListener("click", () => setThumb("up"));
+        $("thumb-neutral").addEventListener("click", () => setThumb("neutral"));
         $("thumb-down").addEventListener("click", () => setThumb("down"));
         $("text").addEventListener("input", (e) => { $("counter").textContent = e.target.value.length; });
         $("send-btn").addEventListener("click", submit);

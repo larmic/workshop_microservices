@@ -41,9 +41,3 @@
 
 </div>
 </div>
-
-Note:
-- Tag 1 ist <em>Fundament + erste Resilience</em> (Fundament &rarr; Discovery &rarr; Circuit Breaker).
-- Tag 2 ist <em>Konsistenz + Sichtbarkeit</em> (Bulkhead &rarr; Saga &times; 2 &rarr; Tracing).
-- Jede Story ist ein 60&ndash;90 min Block: Pattern-Intro &rarr; Story umsetzen &rarr; Recap.
-- Mittag um 12:30 bewusst &mdash; nicht 12:00. Die Story-Bl&ouml;cke passen schlecht in 30-Min-Slots.

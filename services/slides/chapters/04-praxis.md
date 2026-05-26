@@ -33,8 +33,3 @@
 - Dieser Workshop zeigt das <span class="hl">wie</span> — nicht das <span class="hl">ob</span>
 
 </div>
-
-Note:
-- TN Skills: 2 Teams, je ein Service; Reporting-Service in C# wurde angefangen, aber abgebrochen — Komplexität für die Team-Größe zu hoch.
-- Heute: gleiches Produkt, 5 statt 14 Leute, ein Modulith. Deployment & Betrieb deutlich einfacher, Feature-Velocity gestiegen.
-- Take-away für den Workshop: Microservices sind ein Werkzeug, kein Ziel. Conway's Law (Org-Struktur dominiert Architektur) ist die einzige zwingend gute Begründung.
