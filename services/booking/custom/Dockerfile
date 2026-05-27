@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
+RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 RUN ./gradlew --no-daemon dependencies > /dev/null 2>&1 || true
 
 COPY src ./src
