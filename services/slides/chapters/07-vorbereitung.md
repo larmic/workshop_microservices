@@ -14,8 +14,8 @@
 
 ```bash
 git clone https://github.com/larmic/workshop_microservices.git
-cp .env.example .env      # wird später angepasst
 cd workshop_microservices/services
+cp .env.example .env      # wird später angepasst
 make docker-up-hub        # zieht fertige Images von Docker Hub
 open http://localhost     # Dashboard = Workshop-Steuerzentrale
 
