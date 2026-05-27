@@ -46,6 +46,13 @@
 <aside class="notes"><strong>Meine Antwort:</strong> Nein. Ohne Graceful Shutdown bleibt der Eintrag, bis der Health-Check nach mehreren Misses ausschl&auml;gt &mdash; typisch 10&ndash;30 s, in denen Traffic auf eine tote Instanz l&auml;uft (Connection-Refused). L&ouml;sungen: <strong>Graceful Shutdown</strong> mit aktivem `deregister`, schnellerer Health-Check-Intervall (kostet Last), <strong>Out-of-Service-Mode</strong> (keine neuen Requests, laufende beenden, dann Stop).<br><strong>Spicy:</strong> Service Discovery ist immer <strong>eventually consistent</strong>. Es gibt <strong>immer</strong> ein Zeitfenster, in dem Aufrufer auf tote Endpoints sto&szlig;en &mdash; genau einer der Gr&uuml;nde, warum wir in Story 3 / 4 Resilience-Patterns brauchen.</aside>
 </div>
 
+<div class="factor fragment">
+<h3><span class="numeral">7</span> Gefunden &ne; gesund</h3>
+<p>Consul sagt: Service ist da. Er antwortet trotzdem mit <span class="hl">500</span>, im Schneckentempo oder gar nicht. Wer f&auml;ngt das ab?</p>
+<code>Flight tot &rarr; Booking tot?</code>
+<aside class="notes"><strong>&Uuml;berleitung zu Story 3:</strong> Discovery beantwortet nur <em>wo</em> ein Service ist, nicht <em>ob er funktioniert</em>. Selbst mit perfektem Health-Check bleibt das eventually-consistent-Fenster aus Frage 6 &ndash; und der Fall, dass ein registrierter Service einfach kaputt antwortet. Genau hier setzt Story 3 an: Circuit Breaker, Timeout, Fallback, damit ein ausgefallener Flight-Service nicht den Booking-Service mitrei&szlig;t (Teilbuchung Hotel + Mietwagen ohne Flug).<br><strong>Knackig:</strong> &bdquo;Story 2 hat den Service <em>gefunden</em>. Story 3 fragt: und wenn das, was wir gefunden haben, nicht antwortet?&ldquo;</aside>
+</div>
+
 <span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
