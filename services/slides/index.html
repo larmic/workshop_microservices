@@ -114,6 +114,10 @@
         controls: true,
         progress: true,
         center: true,
+        // 16:9-Canvas: füllt moderne Beamer randlos (kein Letterboxing wie bei
+        // der 960x700-Voreinstellung) und gibt den Story-Spalten echte Breite.
+        width: 1280,
+        height: 720,
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
     });
 

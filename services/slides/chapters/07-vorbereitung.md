@@ -8,7 +8,7 @@
   <span class="chip">IDE (optional)</span>
 </div>
 
-<div class="box">
+<div class="box setup">
 
 ### In wenigen Schritten startklar
 
@@ -18,9 +18,9 @@ cd workshop_microservices/services
 cp .env.example .env      # wird später angepasst
 make docker-up-hub        # zieht fertige Images von Docker Hub
 open http://localhost     # Dashboard = Workshop-Steuerzentrale
-
-(https://github.com/larmic/workshop_microservices/blob/main/docs/vorbereitung.md)
 ```
+
+<p class="qr-url">Voller Setup-Pfad: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/vorbereitung.md">docs/vorbereitung.md</a></p>
 </div>
 
 <img class="dashboard-image" src="./assets/dashboard-ui.png" alt="Workshop-Dashboard mit Flight-, Hotel-, Car- und Booking-Services"/>

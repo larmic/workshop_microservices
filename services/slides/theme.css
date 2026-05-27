@@ -109,7 +109,7 @@
 .reveal p.subtitle {
     color: var(--box-border);   /* helleres Lila */
     font-weight: 500;
-    font-size: 20pt;
+    font-size: 23pt;
     text-align: center;
     margin: 0 0 1.5rem 0;
 }
@@ -194,7 +194,7 @@
 /* Zwei-Spalten-Layout (z.B. für die Agenda mit Tag 1 / Tag 2) */
 .reveal .cols {
     display: flex;
-    gap: 3rem;
+    gap: 2rem;
     align-items: flex-start;
     justify-content: center;
 }
@@ -211,7 +211,7 @@
 }
 
 .reveal .cols ul {
-    font-size: 0.75em;
+    font-size: 0.8em;
 }
 
 /* Prägnanter Quadranten-Satz (Agenda) */
@@ -240,7 +240,7 @@
 .reveal pre {
     box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);
     border-radius: 8px;
-    font-size: 0.55em;
+    font-size: 0.65em;
     width: 100%;
     margin: var(--r-block-margin) auto;
 }
@@ -262,7 +262,7 @@
     padding: 1rem 1.2rem;
     text-align: left;
     font-family: var(--r-code-font);
-    font-size: 0.55em;
+    font-size: 0.65em;
     line-height: 1.35;
     width: fit-content;
     max-width: 80%;
@@ -500,11 +500,23 @@
     height: auto;
 }
 
+/* Setup-Box (Vorbereitung): der Code wird abgetippt, also bewusst groß und
+   gut lesbar — losgelöst vom kleineren generischen `pre` der Code-Folien.
+   Breite Box, damit die längste Befehlszeile (git clone …) nicht umbricht. */
+.reveal .box.setup {
+    max-width: 94%;
+}
+
+.reveal .box.setup pre {
+    font-size: 0.85em;
+    line-height: 1.5;
+}
+
 .reveal img.dashboard-image {
     display: block;
-    margin: 0.8rem auto 0.3rem;
-    max-width: 85%;
-    max-height: 42vh;
+    margin: 0.6rem auto 0.2rem;
+    max-width: 62%;
+    max-height: 24vh;
     width: auto;
     height: auto;
     border-radius: 8px;
@@ -523,7 +535,7 @@
 .reveal .qr-url {
     text-align: center;
     margin: 0.7em 0 0 0;
-    font-size: 0.65em;
+    font-size: 0.72em;
     color: var(--slide-text);
     font-family: var(--font-futura);
 }
@@ -576,7 +588,7 @@
 .reveal .factor h3 {
     color: var(--box-border);
     margin: 0;
-    font-size: 0.75em;
+    font-size: 0.8em;
     font-weight: 700;
     font-family: var(--font-futura-title);
     line-height: 1.2;
@@ -602,14 +614,14 @@
 .reveal .factor p {
     margin: 0;
     color: var(--slide-text);
-    font-size: 0.55em;
+    font-size: 0.62em;
     line-height: 1.3;
 }
 
 .reveal .factor code {
     background: rgba(115, 72, 225, 0.1);
     color: #4d27a8;
-    font-size: 0.5em;
+    font-size: 0.56em;
     padding: 0.45em 0.7em;
     border-radius: 5px;
     white-space: nowrap;
@@ -682,7 +694,7 @@
     color: var(--box-bg);
     padding: 0.35em 0.9em;
     border-radius: 999px;
-    font-size: 0.55em;
+    font-size: 0.62em;
     font-weight: 600;
     border: 1px solid rgba(115, 72, 225, 0.18);
     line-height: 1.4;
@@ -716,8 +728,8 @@
     border-radius: 8px;
     padding: 1.1rem 1.4rem;
     text-align: left;
-    font-size: 0.75em;
-    line-height: 1.5;
+    font-size: 0.9em;
+    line-height: 1.45;
     color: #333;
 }
 
@@ -735,7 +747,8 @@
 
 .reveal .story-card p,
 .reveal .story-card ul { margin: 0 0 0.5rem; }
-.reveal .story-card ul { padding-left: 1.25rem; }
+/* Listen nicht ein zweites Mal durch `.cols ul` verkleinern: relativ zur Card halten. */
+.reveal .story-card ul { padding-left: 1.25rem; font-size: 0.95em; }
 .reveal .story-card li + li { margin-top: 0.15rem; }
 
 .reveal .story-card em {
@@ -763,6 +776,20 @@
     width: 80%;
     margin: 0.5rem auto 0;
     text-align: left;
+}
+
+/* Recap hat nur 2 Karten pro Folie, also reichlich Platz: Frage-Text deutlich
+   größer als in den dichten Pattern-/12-Faktoren-Karten. */
+.reveal .recap-grid .factor h3 {
+    font-size: 0.95em;
+}
+
+.reveal .recap-grid .factor p {
+    font-size: 0.82em;
+}
+
+.reveal .recap-grid .factor code {
+    font-size: 0.68em;
 }
 
 
