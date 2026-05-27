@@ -1,4 +1,4 @@
-FROM golang:1.26.3-alpine AS builder
+FROM --platform=$BUILDPLATFORM golang:1.26.3-alpine AS builder
 
 RUN apk add --no-cache ca-certificates
 
@@ -6,10 +6,12 @@ WORKDIR /go/src/app/
 COPY . /go/src/app/
 
 ARG SERVICE_PATH
+ARG TARGETOS
+ARG TARGETARCH
 
 RUN go mod download
 RUN go test -v ./${SERVICE_PATH}/...
-RUN CGO_ENABLED=0 go build -a -o main ./${SERVICE_PATH}
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o main ./${SERVICE_PATH}
 
 FROM scratch
 
