@@ -53,6 +53,27 @@
 <aside class="notes"><strong>Meine Antwort:</strong> Drei Stufen mit unterschiedlichen Trade-offs. <strong>Global</strong> (ein CB f&uuml;r alle Backends): trivial, aber ein kranker Service kappt alle. <strong>Pro Service</strong> (unsere Wahl): isoliert Ausf&auml;lle, aber innerhalb des Service kein Schutz. <strong>Pro Endpoint</strong>: sehr feingranular, aber viele CBs zu pflegen. Pro-Service ist die &uuml;bliche Default-Wahl &mdash; ein &bdquo;kranker&ldquo; Service betrifft meist alle Endpoints (Connection-Pool tot, Container down). Pro-Endpoint lohnt sich, wenn ein Service sehr unterschiedliche Workloads hat (schnell <code>search</code> vs. langsam <code>book</code>).<br><strong>Spicy:</strong> Granularit&auml;t ist eine Designentscheidung, keine Pattern-Eigenschaft. Wer einen langsamen <code>book</code>-Endpoint hat und einen schnellen <code>search</code>, fasst die zusammen &mdash; und kappt <code>search</code>, weil <code>book</code> unter Last steht.</aside>
 </div>
 
+<div class="factor fragment">
+<h3><span class="numeral">8</span> Fallback &ne; Circuit Breaker</h3>
+<p>Erster Fehler bei Flight, Z&auml;hler steht auf <code>1</code>, CB noch <code>CLOSED</code>. Kommt <span class="hl">jetzt schon</span> <code>flights: []</code> &mdash; oder erst bei OPEN?</p>
+<code>err != nil &rarr; fallback</code>
+<aside class="notes"><strong>Meine Antwort:</strong> Schon beim ersten Fehler. Die leere Liste ist die Reaktion auf <em>jeden</em> fehlgeschlagenen Call, nicht auf den offenen CB &mdash; im Code: <code>if err != nil { markFallback(); return [] }</code>, unabh&auml;ngig vom State. Der CB &auml;ndert nur das <em>Wie</em>: <strong>CLOSED</strong> &rarr; Call geht raus, kostet bis 3&nbsp;s Timeout, <em>dann</em> leere Liste (Header <code>X-Fallback</code>). <strong>OPEN</strong> (ab dem 5. Fehler) &rarr; sofort, ganz ohne Call, zus&auml;tzlich <code>X-Circuit-Open</code>. Der CB &bdquo;produziert&ldquo; die leere Liste also nicht &mdash; er sorgt nur daf&uuml;r, dass sie <em>sofort statt nach Timeout</em> kommt und das tote Backend nicht weiter beschossen wird.<br><strong>Spicy:</strong> Wer Fallback und CB gleichsetzt, sucht den Fehler an der falschen Stelle. Den Fallback baut die Fachlogik (was zeige ich bei Ausfall?), der CB entscheidet nur, ob der Aufruf &uuml;berhaupt rausgeht.</aside>
+</div>
+
+<div class="factor fragment">
+<h3><span class="numeral">9</span> CB &uuml;ber mehrere Instanzen?</h3>
+<p>Zwei Booking-Replicas. Flight-CB von <span class="hl">A</span> ist OPEN &mdash; soll <span class="hl">B</span> auch dichtmachen?</p>
+<code>state lebt im RAM <em>der</em> Instanz</code>
+<aside class="notes"><strong>Meine Antwort:</strong> Nein &mdash; lokal pro Instanz ist richtig (im Code: <code>sync.Mutex</code> + Felder im Prozess, kein Redis/Consul-KV). Der CB misst, was <em>diese</em> Instanz beobachtet. A kann ein Netz-/Routing-Problem zu Flight haben oder gerade eine kranke Flight-Replica erwischen, w&auml;hrend B Flight problemlos erreicht. Ein geteilter Zustand w&uuml;rde B grundlos mitblockieren &mdash; und damit genau die Isolation zerst&ouml;ren, f&uuml;r die man den CB baut. So machen es auch die Libraries (Resilience4j, Polly) und das Service Mesh (Sidecar pro Pod). <strong>Trade-off:</strong> bei komplett totem Backend muss jede Instanz die 5 Fehler selbst lernen &mdash; bei vielen Replicas eine Lastspitze in der Lernphase (Br&uuml;cke zu Frage 6, CB-State nach Restart).<br><strong>Spicy:</strong> &bdquo;Globaler CB-Zustand&ldquo; klingt nach mehr Kontrolle, opfert aber genau die instanz-lokale Fehler-Isolation, die der Sinn der Sache ist.</aside>
+</div>
+
+<div class="factor fragment">
+<h3><span class="numeral">10</span> 5 Fehler = 5 Anfragen</h3>
+<p>Erster Fehler bei Flight &mdash; h&auml;mmert der Service in <span class="hl">derselben</span> Anfrage noch 4&times; nach, um die 5 vollzukriegen?</p>
+<code>1 Execute pro Service pro Request</code>
+<aside class="notes"><strong>Meine Antwort:</strong> Nein. Ein <code>GET /booking/offers</code> ruft <code>cb.Execute</code> je Service <em>genau einmal</em> auf, kein Retry-Loop. Bei Flight-Fehler: Z&auml;hler +1, Fallback, fertig. Die 5 Fehler entstehen &uuml;ber <strong>5 eingehende Anfragen</strong> (5 Kunden / 5 Requests) &mdash; der Z&auml;hler ist instanz-weit geteilter Zustand &uuml;ber Requests hinweg (daher der Mutex). Nach dem 5. Fehler &rarr; OPEN, danach kommen alle weiteren Anfragen sofort als Fallback zur&uuml;ck, ohne Flight noch anzufassen. <strong>Wichtig:</strong> Der CB macht selbst <em>keine</em> Retries &mdash; Retry ist ein eigenes Pattern, das man bewusst und vorsichtig kombiniert.<br><strong>Spicy:</strong> Retry und Circuit Breaker naiv zusammenwerfen &mdash; dann z&auml;hlt ein Retry-Sturm den Breaker k&uuml;nstlich schnell hoch, oder die Retries halten das tote Backend unter Dauerfeuer. Erst CB, dann (sparsam) Retry.</aside>
+</div>
+
 <span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
