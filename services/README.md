@@ -1,6 +1,25 @@
 # Services
 
+[![Build Services](https://github.com/larmic/workshop_microservices/actions/workflows/build.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/build.yml)
+[![Docker Build & Push Go-Services](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml)
+[![Deploy Pages (Feedback + Slides)](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml)
+[![Update Docker Hub descriptions](https://github.com/larmic/workshop_microservices/actions/workflows/dockerhub-description.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/dockerhub-description.yml)
+
 Microservices für das Travel-Booking-System (Flight, Hotel, Car, Booking).
+
+Die Badges zeigen den Status des jeweils letzten Laufs jeder Pipeline. Die Images
+werden im Workflow „Docker Build & Push Go-Services" gebaut und nach Docker Hub
+gepusht.
+
+## Docker Images
+
+| Image | Tag | Größe | Docker Hub |
+|-------|-----|-------|------------|
+| Flight    | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-flight/latest?label=) | [larmic/workshop-microservices-flight](https://hub.docker.com/r/larmic/workshop-microservices-flight) |
+| Hotel     | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-hotel/latest?label=) | [larmic/workshop-microservices-hotel](https://hub.docker.com/r/larmic/workshop-microservices-hotel) |
+| Car       | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-car/latest?label=) | [larmic/workshop-microservices-car](https://hub.docker.com/r/larmic/workshop-microservices-car) |
+| Booking   | `story1`…`story7`, `custom` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-booking/story1?label=story1) | [larmic/workshop-microservices-booking](https://hub.docker.com/r/larmic/workshop-microservices-booking) |
+| Dashboard | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-dashboard/latest?label=) | [larmic/workshop-microservices-dashboard](https://hub.docker.com/r/larmic/workshop-microservices-dashboard) |
 
 ## Service-Übersicht
 
