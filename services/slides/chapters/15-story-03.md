@@ -24,7 +24,7 @@ Als <em>Kunde</em> m&ouml;chte ich <em>auch bei Ausfall des Flugbuchungssystems 
 
 #### Akzeptanzkriterien
 
-- Circuit Breaker um die Flight-Aufrufe; nach <code>5</code> aufeinanderfolgenden Fehlern &ouml;ffnet er
+- Je ein Circuit Breaker um <em>jeden</em> Backend-Aufruf (Flight, Hotel, Car); nach <code>5</code> aufeinanderfolgenden Fehlern &ouml;ffnet er
 - Bei offenem Circuit l&auml;uft ein Fallback (z.&nbsp;B. <code>flights: []</code> mit Header <code>X-Circuit-Open</code>)
 - Nach <code>30&nbsp;s</code> wechselt der Breaker in <code>HALF_OPEN</code> und l&auml;sst einen Probe-Call durch
 - Aufruf-Timeout konfiguriert (max. <code>3&nbsp;s</code>)

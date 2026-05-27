@@ -15,7 +15,7 @@ damit **meine Reiseplanung nicht komplett blockiert wird**.
 
 ## Akzeptanzkriterien
 
-- [ ] Ein Circuit Breaker ist um die FlightService-Aufrufe implementiert
+- [ ] Je ein Circuit Breaker ist um jeden Backend-Aufruf (Flight, Hotel, Car) implementiert, jeweils mit eigenem State
 - [ ] Nach 5 aufeinanderfolgenden Fehlern öffnet sich der Circuit
 - [ ] Bei offenem Circuit wird ein Fallback ausgeführt (z.B. "Flugbuchung derzeit nicht verfügbar")
 - [ ] Der Circuit schließt sich nach 30 Sekunden wieder (Half-Open State)
@@ -46,12 +46,11 @@ damit **meine Reiseplanung nicht komplett blockiert wird**.
 
 ## Bonus (optional)
 
-- Implementiere Circuit Breaker für **alle** Backend-Services (Flight, Hotel, Car) — jeder mit eigenem State.
 - Visualisiere die Circuit-States in einem Dashboard.
 
 ## Reference-Implementierung
 
-Unter `services/booking/story3/` liegt eine vollständige Go-Reference, die direkt beide Bonus-Punkte abdeckt:
+Unter `services/booking/story3/` liegt eine vollständige Go-Reference, die alle Akzeptanzkriterien samt Bonus abdeckt:
 
 - **Selbstgebauter Circuit Breaker** (keine Library) — `services/booking/story3/circuitbreaker/circuitbreaker.go`. Drei Zustände, lazy Übergang von OPEN nach HALF_OPEN beim nächsten Call, atomarer Probe-Slot gegen Probe-Storms in HALF_OPEN.
 - **Drei separate CBs** für Flight, Hotel und Car. Jeder Backend-Aufruf läuft durch seinen eigenen Breaker; bei Fallback wird der Teilbereich leer zurückgegeben (`flights: []` bzw. `flight: null`).
