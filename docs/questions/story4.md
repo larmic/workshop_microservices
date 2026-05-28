@@ -327,6 +327,90 @@ das Backend sei auch gerettet, hat das Pattern falsch verstanden.
 
 ---
 
+## Frage 9 — Brauche ich Bulkhead überhaupt, wenn der Server non-blocking ist?
+
+**Frage:** In meinem Stack ist I/O non-blocking (Go-Goroutinen, Spring
+WebFlux, Node.js, …). Threads werden bei langläufigen Backend-Calls
+nicht blockiert, sondern an die Runtime zurückgegeben. Wenn das so ist,
+reicht doch ein Rate Limit am Eingang. Brauche ich da überhaupt noch
+einen Bulkhead pro Downstream?
+
+**Antwort:** Doch, und zwar aus zwei unabhängigen Gründen.
+
+### Grund 1: Der Engpass wandert, er verschwindet nicht
+
+Non-blocking macht *Threads* billig, aber nicht *alle* Ressourcen.
+Pro in-flight Call belegt bleibt, völlig unabhängig vom
+Threading-Modell:
+
+- **Connection-Pool-Slot** im HTTP-Client. In Go:
+  `http.Transport.MaxConnsPerHost`. In Reactor-Netty: 500 Connections
+  default. Wenn Hotel langsam ist und 500 Slots belegt, kommen Flight-
+  und Car-Calls nicht mehr durch, obwohl die Runtime „Threads frei"
+  meldet. Der Pool ist *shared*.
+- **Memory.** Jeder in-flight Call hält Request- und Response-Buffer,
+  Context, Cancellation-Channel, deserialisierte DTOs. 50.000
+  gleichzeitig offene Calls sind realer Heap-Verbrauch, GC-Pausen, im
+  Extremfall OOM. „Goroutine ist nur 4 KB Stack" stimmt, ist aber nicht
+  das Problem.
+- **File-Descriptors / Sockets.** OS-Limit pro Prozess (`ulimit -n`).
+  Bei langer Latenz × hoher Rate gehen FDs aus, bevor irgendwer Threads
+  zählt.
+
+**Little's Law gilt unabhängig vom Threading-Modell:**
+
+```
+   L  =  λ  ×  W
+   │     │     └─ Verweildauer (Latenz pro Call)
+   │     └─ Ankunftsrate (Requests/s)
+   └─ gleichzeitig offene Calls (Concurrency)
+```
+
+Rate Limit drosselt `λ`. Wenn `W` hochschießt (Backend wird langsam),
+wächst `L` linear bei *gleicher* Eingangsrate. Rate Limit sieht das
+nicht. Bulkhead limitiert `L` direkt.
+
+### Grund 2: Rate Limit kennt keine Downstreams
+
+Ein Rate Limit am API-Gateway sagt: „maximal 100 req/s." Es weiß
+nicht, *welcher* Downstream gerade hängt. Wenn Hotel überlastet ist,
+müsstest du mit Rate Limit allein **alle** Requests drosseln,
+auch die, die Hotel gar nicht brauchen.
+
+Bulkhead pro Downstream ist da chirurgischer:
+
+```
+   Booking
+     │
+     ├─ Bulkhead Hotel  (10/10 voll)   → Hotel-Calls reject
+     ├─ Bulkhead Flight (3/10 frei)    → Flight-Calls gehen durch
+     └─ Bulkhead Car    (1/10 frei)    → Car-Calls gehen durch
+```
+
+Das ist **selective shedding**: Last wird dort weggeworfen, wo das
+Problem sitzt, nicht pauschal vorne am Eingang.
+
+### Take-away
+
+- Non-blocking ändert die *Form* der Ressourcen-Erschöpfung, nicht die
+  *Tatsache*.
+- Rate Limit ist ein **Eingangs-** und **Aggregats-**Schutz: gegen Flut
+  von außen, ohne Downstream-Wissen.
+- Bulkhead ist ein **Isolations-** und **Selektiv-Schutz**: pro
+  Downstream, mit Wissen welcher Backend-Slot gerade dicht ist.
+
+In reaktiven Stacks ist Bulkhead nicht zufällig weiter empfohlen.
+Resilience4j hat dafür den `SemaphoreBulkhead` (im Gegensatz zum
+klassischen `ThreadPoolBulkhead`). Spring WebFlux + Reactor-Doku
+verweisen explizit darauf, dass non-blocking *keine* Lastlimitierung
+ersetzt.
+
+**Spicy:** „Non-blocking spart mir Bulkhead" ist Wunschdenken aus der
+Trainings-Folie. In Produktion ist meistens der Connection-Pool das
+erste, was bei einem hängenden Downstream knapp wird, nicht die Threads.
+
+---
+
 ## Sammelthemen für die Diskussion
 
 - Wie würdet ihr `maxConcurrent` in einer realen Anwendung festlegen?
