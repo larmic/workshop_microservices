@@ -27,11 +27,10 @@ Als <em>System</em> m&ouml;chte ich <em>bei einer fehlgeschlagenen Buchung die K
 #### Akzeptanzkriterien
 
 - Booking publiziert bei Fehlschlag ein <code>CompensationRequested</code>-Event (statt <code>DELETE</code>)
-- Backends abonnieren das Event und f&uuml;hren ihre lokale Stornierung selbst aus
-- Backends best&auml;tigen mit <code>BookingCancelled</code> oder <code>CancellationFailed</code>
-- Booking konsumiert die Reply-Events und f&uuml;hrt den Saga-Status nach
-- <strong>Timeout-Erkennung</strong>: ausbleibendes Reply nach X Sekunden &rarr; <code>STUCK</code> + Alarm
-- <strong>Idempotenz</strong> &uuml;ber <code>eventId</code> &mdash; doppelte Events werden ignoriert
+- Backends nehmen das Event entgegen, antworten sofort <code>202 Accepted</code> und kompensieren asynchron
+- Booking setzt den Step nach Event-Dispatch auf <code>COMPENSATED</code>, die Saga auf <code>FAILED</code>
+- <strong>Idempotenz</strong>: <code>eventId</code> wird mitgesendet (persistente Speicherung ist Bonus)
+- <em>Bonus</em>: Reply-Events, Timeout-Erkennung, <code>STUCK</code>-Status (siehe Recap)
 
 </div>
 
@@ -43,5 +42,5 @@ Note:
 - Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 6 &rarr; &bdquo;Story lesen&ldquo;.
 - Sprache und Framework wieder frei. Referenz unter <code>services/booking/story6/</code>.
 - <strong>Wir nutzen bewusst keinen Broker</strong> &mdash; HTTP-Webhook-POST statt Kafka / RabbitMQ. Das ist die einfachste m&ouml;gliche Variante, um das Pattern sichtbar zu machen, und gleichzeitig die fragilste m&ouml;gliche Variante. Im Recap (Frage 1 und 3) wird das ausf&uuml;hrlich besprochen &mdash; in Produktion w&uuml;rde man hier einen echten Broker einf&uuml;hren.
-- Demo-Drehbuch: Dashboard &rarr; Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code>. Sichtbar: Booking publiziert <code>CompensationRequested</code> f&uuml;r Flight, Flight macht den Storno, antwortet mit <code>BookingCancelled</code>. Booking-Status: <code>COMPENSATING</code> &rarr; <code>FAILED</code>. <em>Variante</em>: Flight zus&auml;tzlich auf &bdquo;Fehler&ldquo;, dann Reply-Event kommt nie &rarr; nach Timeout: <code>STUCK</code>.
+- Demo-Drehbuch: Dashboard &rarr; Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code>. Sichtbar: Booking publiziert <code>CompensationRequested</code> f&uuml;r Flight, Flight antwortet sofort <code>202 Accepted</code> und macht den Storno asynchron (Log-Eintrag). Booking-Status: <code>COMPENSATING</code> &rarr; <code>FAILED</code>, noch bevor der Rollback im Backend abgeschlossen ist. <em>Anker f&uuml;r Recap-Frage 1</em>: der Rollback im Backend ist im Log sichtbar, aber nicht mehr in der Booking-Response. Was, wenn der Rollback fehlschl&auml;gt? Booking wei&szlig; es nicht.
 - Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-06-choreography-saga.md</code>.

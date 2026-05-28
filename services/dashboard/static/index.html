@@ -1809,11 +1809,10 @@ catch error at step X:
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
                             <li>Booking publiziert bei Fehlschlag ein <code>CompensationRequested</code>-Event (statt synchron <code>DELETE</code>)</li>
-                            <li>Flight/Hotel/Car abonnieren das Event und kompensieren selbst</li>
-                            <li>Services antworten mit Reply-Event (<code>BookingCancelled</code> oder <code>CancellationFailed</code>)</li>
-                            <li>Booking führt den Saga-Status anhand der Reply-Events nach</li>
-                            <li>Timeout-Erkennung im Booking: ausbleibendes Reply &rarr; Status <code>STUCK</code> + Alarm-Log</li>
-                            <li>Idempotenz: doppelte Events werden anhand der <code>eventId</code> ignoriert</li>
+                            <li>Flight/Hotel/Car nehmen das Event entgegen, antworten sofort <code>202 Accepted</code> und kompensieren asynchron</li>
+                            <li>Booking setzt den Step nach Event-Dispatch auf <code>COMPENSATED</code>, die Saga auf <code>FAILED</code></li>
+                            <li>Idempotenz: <code>eventId</code> wird mitgesendet (persistente Speicherung ist Bonus)</li>
+                            <li><em>Bonus</em>: Reply-Events, Timeout-Erkennung, <code>STUCK</code>-Status (siehe Recap-Fragen)</li>
                         </ul>
                     </div>
                 </details>
@@ -1821,28 +1820,27 @@ catch error at step X:
                     <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
 <pre>// Forward bleibt wie Story 5 (Saga, sync Aufrufe).
-// Neu: Kompensation läuft asynchron über Events.
+// Neu: Kompensation läuft asynchron, fire-and-forget.
 
 on bookingStepFailed(sagaId, alreadyBooked):
   saga.status = COMPENSATING
   for b in reverse(alreadyBooked):
-    publish "CompensationRequested" {
+    POST /events/compensation {
       eventId, sagaId, service: b.svc, bookingId: b.id
     }
-  schedule timeout(sagaId, expectedReplies = len(alreadyBooked))
+    // Backend antwortet 202 Accepted, Booking ist hier fertig.
+    saga.markCompensated(b.svc)
+  saga.status = FAILED
+  // Booking weiß NICHT, ob der fachliche Rollback geklappt hat.
+  // Reply, Timeout, STUCK siehe Recap-Frage 1 + 3 (Bonus).
 
-on event "BookingCancelled" {sagaId, service}:
-  saga.markCompensated(service)
-  if saga.allCompensated(): saga.status = FAILED
-
-on event "CancellationFailed" {sagaId, service}:
-  saga.markCompensationFailed(service)
-  saga.status = COMPENSATION_INCOMPLETE
-
-on timeout(sagaId):
-  if saga still has open replies:
-    saga.status = STUCK
-    log.alert("operator eingreifen", sagaId)</pre>
+// Backend-Seite (flight / hotel / car):
+on POST /events/compensation:
+  validate(eventId, sagaId, bookingId)
+  respond 202 Accepted
+  async:
+    rollback(bookingId)
+    log "compensation done"</pre>
                     </div>
                 </details>
             </div>

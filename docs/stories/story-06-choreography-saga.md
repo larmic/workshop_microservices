@@ -15,15 +15,23 @@ Als **System**
 möchte ich **bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Backend-Services delegieren**,
 damit **der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können**.
 
-## Akzeptanzkriterien
+## Akzeptanzkriterien (Pflicht, Schmalspur-Variante)
 
 - [ ] Bei Fehlschlag eines Saga-Schritts publiziert der Booking-Service ein `CompensationRequested`-Event (statt synchron `DELETE` aufzurufen)
-- [ ] Flight-, Hotel- und Car-Service abonnieren das Event und führen ihre lokale Stornierung selbst aus
-- [ ] Services bestätigen das Ergebnis mit einem Reply-Event (`BookingCancelled` oder `CancellationFailed`)
-- [ ] Booking konsumiert die Reply-Events und führt den Saga-Status nach (`COMPENSATING` → `FAILED` oder `COMPENSATION_INCOMPLETE`)
-- [ ] **Timeout-Erkennung im Booking-Service:** Bleibt ein erwartetes Reply-Event nach X Sekunden aus, wird die Saga als `STUCK` markiert und ein Alarm-Log geschrieben
-- [ ] Idempotenz: Doppelt zugestellte Events werden über die `eventId` erkannt und ignoriert
+- [ ] Flight-, Hotel- und Car-Service nehmen das Event entgegen, antworten **sofort mit `202 Accepted`** und führen die Stornierung asynchron in einer Goroutine / Worker-Task aus (fire-and-forget aus Sicht des Senders)
+- [ ] Booking setzt den Step nach erfolgreichem Event-Dispatch auf `COMPENSATED` und die Saga direkt auf `FAILED`. Booking erwartet **kein Reply** und wartet **nicht** auf den fachlichen Rollback
+- [ ] Das Konzept der Idempotenz wird gezeigt: `eventId` wird pro Event eindeutig erzeugt und mitgesendet (persistente Speicherung im Backend ist Bonus)
 - [ ] Der Unterschied zwischen Orchestration (Story 5) und Choreography (Story 6) wird im Code-Aufbau erkennbar und in der README des Booking-Service kurz reflektiert
+
+## Akzeptanzkriterien (Bonus, Production-Reife)
+
+Diese Punkte sind bewusst nicht Pflicht. Sie sind das, was die Schmalspur-Variante strukturell *nicht* leistet, und sind Diskussionsstoff für das Recap. Wer mag, kann sie als Vertiefung umsetzen:
+
+- [ ] Reply-Events: Backends bestätigen mit `BookingCancelled` oder `CancellationFailed`
+- [ ] Booking konsumiert die Reply-Events und führt den Saga-Status nach (`COMPENSATING` → `FAILED` oder `COMPENSATION_INCOMPLETE`)
+- [ ] Timeout-Erkennung im Booking-Service: Bleibt ein erwartetes Reply nach X Sekunden aus, wird die Saga als `STUCK` markiert und ein Alarm-Log geschrieben
+- [ ] Persistente Idempotenz: doppelt zugestellte Events werden über die `eventId` im Backend erkannt und ignoriert (Dedup-Tabelle pro `eventId`)
+- [ ] Feature-Flag zur Laufzeit zwischen synchroner Kompensation (Story 5) und asynchroner Kompensation (Story 6)
 
 ## Technische Hinweise
 
@@ -42,10 +50,11 @@ damit **der Booking-Service nicht für deren Verfügbarkeit haften muss und die 
     }
   }
   ```
-- **Reply-Pattern:** Booking ist *nicht* fertig nach „Event raus". Der Kunde will eine Endaussage („gebucht / storniert / steckt fest"). Backend antwortet daher mit einem Reply-Event; Booking konsumiert das und führt den Saga-Status nach.
-- **Was Booking aufgibt — und was nicht:**
-  - **Aufgegeben:** direkte Verantwortung für die Ausführung der Stornierung, eigene Retry-Schleifen
-  - **Bleibt:** Verantwortung für den **Gesamtstatus** der Saga gegenüber dem Kunden, Timeout-Erkennung, Operator-Eskalation
+- **Fire-and-Forget (Pflicht-Variante):** Booking ist nach „Event raus" fertig. Backend antwortet sofort `202 Accepted` und macht den eigentlichen Rollback asynchron. Booking weiß *nicht*, ob der Rollback erfolgreich war. Das ist die bewusst fragile Schmalspur, die zeigt, was Eventing-ohne-Broker strukturell nicht leistet (Diskussion im Recap).
+- **Reply-Pattern (Bonus):** Wer die volle Variante will, baut den Reply-Channel dazu: Backend POSTet später ein `BookingCancelled` / `CancellationFailed` an einen Booking-Endpoint, Booking führt den Saga-Status nach. Plus Timeout-Erkennung: bleibt ein Reply aus, geht die Saga auf `STUCK`. Das ist *kein* Fire-and-Forget mehr, sondern asynchrones Request-Reply über zwei Webhook-Richtungen.
+- **Was Booking aufgibt, was bleibt (Pflicht-Variante):**
+  - **Aufgegeben:** direkte Verantwortung für die Ausführung der Stornierung. Booking weiß auch *nicht mehr*, ob sie geklappt hat
+  - **Bleibt:** Verantwortung für den **Saga-Status** gegenüber dem Kunden (Booking gibt die Endaussage „FAILED" zurück, sobald die Events raus sind), Logging des Event-Dispatches
 - **Vergleich Orchestration ↔ Choreography:**
   - Orchestration: Wissen zentral, Bug-Lokalisierung einfach, Kopplung höher
   - Choreography: Wissen verteilt, Backends entkoppelt, „verteilter Monolith"-Risiko bei schlechtem Schnitt

@@ -23,15 +23,15 @@
 <div class="factor fragment">
 <h3>Event statt RPC</h3>
 <p>Booking publiziert <code>CompensationRequested</code> und ist mit dem <em>Befehl</em> fertig.</p>
-<code>fire-and-forget?</code>
-<aside class="notes">Statt synchron auf jede DELETE-Antwort zu warten, schickt Booking einen <em>Hinweis</em> raus: &bdquo;Diese Buchung soll storniert werden.&ldquo; Backend zieht das Event aus dem Bus (in unserer Workshop-Variante: per Webhook), macht seinen Rollback und antwortet asynchron. Booking ist von der Backend-Verf&uuml;gbarkeit entkoppelt.</aside>
+<code>fire-and-forget</code>
+<aside class="notes">Statt synchron auf jede DELETE-Antwort zu warten, schickt Booking einen <em>Hinweis</em> raus: &bdquo;Diese Buchung soll storniert werden.&ldquo; Backend nimmt das Event entgegen (in unserer Workshop-Variante: per Webhook), antwortet sofort mit 202 Accepted und macht seinen Rollback asynchron in einer Goroutine. Booking ist von der Backend-Verf&uuml;gbarkeit der Stornierung entkoppelt.</aside>
 </div>
 
 <div class="factor fragment">
-<h3>Booking bleibt verantwortlich</h3>
-<p>Reply-Events + Timeout &mdash; der <span class="hl">Gesamtstatus</span> gegen&uuml;ber dem Kunden bleibt bei Booking.</p>
-<code>nicht fire-and-forget</code>
-<aside class="notes">Der h&auml;ufigste Denkfehler: &bdquo;Event raus &rarr; Booking ist fertig.&ldquo; Falsch. Der Kunde will am Ende eine Antwort &mdash; &bdquo;Reise gebucht? storniert? steckt fest?&ldquo;. Backends m&uuml;ssen mit <code>BookingCancelled</code> / <code>CancellationFailed</code> antworten. Booking konsumiert die Replies und f&uuml;hrt den Saga-Status nach. Plus Timeout-Erkennung: bleibt ein Reply nach X Sekunden aus &rarr; <code>STUCK</code>, Operator eingreifen.</aside>
+<h3>Booking bleibt f&uuml;r den Status verantwortlich</h3>
+<p>Saga-Status, Logging, Kunden-Antwort bleiben bei Booking. <span class="hl">Auch ohne Reply-Events.</span></p>
+<code>nicht persistiert</code>
+<aside class="notes">Der h&auml;ufigste Denkfehler: &bdquo;Event raus, Booking ist fertig.&ldquo; In der Schmalspur tut Booking genau das: Saga geht nach Event-Dispatch direkt auf <code>FAILED</code>, der Kunde bekommt seine Antwort. Booking wei&szlig; danach <em>nicht</em>, ob der fachliche Rollback im Backend geklappt hat. Was strukturell verloren geht (Reply-Events, Timeout-Erkennung, <code>STUCK</code>-Detection), ist der n&auml;chste Schritt zur Production-Reife. Im Workshop bewusst weggelassen, in Recap-Frage 1 und 3 ausf&uuml;hrlich diskutiert.</aside>
 </div>
 
 <div class="factor fragment">
