@@ -17,7 +17,7 @@ type Config struct {
 type Snapshot struct {
 	Name          string `json:"name"`
 	MaxConcurrent int    `json:"maxConcurrent"`
-	InFlight      int    `json:"inFlight"`
+	InProgress    int    `json:"inProgress"`
 	TotalCalls    uint64 `json:"totalCalls"`
 	TotalRejected uint64 `json:"totalRejected"`
 }
@@ -26,7 +26,7 @@ type Bulkhead struct {
 	cfg Config
 	sem chan struct{}
 
-	inFlight      atomic.Int64
+	inProgress    atomic.Int64
 	totalCalls    atomic.Uint64
 	totalRejected atomic.Uint64
 }
@@ -59,21 +59,21 @@ func (b *Bulkhead) Execute(ctx context.Context, fn func(context.Context) error) 
 	case b.sem <- struct{}{}:
 	default:
 		b.totalRejected.Add(1)
-		log.Printf("BH[%s] FULL — Call REJECTED (inFlight=%d/%d)",
-			b.cfg.Name, b.inFlight.Load(), b.cfg.MaxConcurrent)
+		log.Printf("BH[%s] FULL — Call REJECTED (inProgress=%d/%d)",
+			b.cfg.Name, b.inProgress.Load(), b.cfg.MaxConcurrent)
 		return ErrBulkheadFull
 	}
 
-	b.inFlight.Add(1)
+	b.inProgress.Add(1)
 	defer func() {
-		b.inFlight.Add(-1)
+		b.inProgress.Add(-1)
 		<-b.sem
 	}()
 
 	return fn(ctx)
 }
 
-// Reset setzt die kumulierten Counter auf 0. inFlight bleibt absichtlich
+// Reset setzt die kumulierten Counter auf 0. inProgress bleibt absichtlich
 // unangetastet, weil dort echte laufende Calls stecken — die zu fälschen würde
 // das Snapshot-Bild verfälschen, sobald sie zurückkommen.
 func (b *Bulkhead) Reset() {
@@ -86,7 +86,7 @@ func (b *Bulkhead) Snapshot() Snapshot {
 	return Snapshot{
 		Name:          b.cfg.Name,
 		MaxConcurrent: b.cfg.MaxConcurrent,
-		InFlight:      int(b.inFlight.Load()),
+		InProgress:    int(b.inProgress.Load()),
 		TotalCalls:    b.totalCalls.Load(),
 		TotalRejected: b.totalRejected.Load(),
 	}

@@ -102,7 +102,7 @@ Semaphore-basierte Variante — minimaler Kern, illustriert das Pattern:
 
 ```kotlin
 class Bulkhead(val maxConcurrent: Int) {
-    private var inFlight = 0   // atomar / unter Mutex!
+    private var inProgress = 0   // atomar / unter Mutex!
 
     fun call(fn) {
         // Slot reservieren — Fail-Fast wenn voll
@@ -116,15 +116,15 @@ class Bulkhead(val maxConcurrent: Int) {
 
     fun acquireOrThrow() {
         synchronized(this) {
-            if (inFlight >= maxConcurrent) {
+            if (inProgress >= maxConcurrent) {
                 throw BulkheadFullError    // sofort ablehnen
             }
-            inFlight++
+            inProgress++
         }
     }
 
     fun release() {
-        synchronized(this) { inFlight-- }
+        synchronized(this) { inProgress-- }
     }
 }
 ```
@@ -156,12 +156,12 @@ fun getOffers(req): Offers {
 fun acquireOrThrow(maxWait: Duration) {
     val deadline = now() + maxWait
     synchronized(this) {
-        while (inFlight >= maxConcurrent) {
+        while (inProgress >= maxConcurrent) {
             val remaining = deadline - now()
             if (remaining <= 0) throw BulkheadFullError
             wait(remaining)        // condition variable
         }
-        inFlight++
+        inProgress++
     }
 }
 ```

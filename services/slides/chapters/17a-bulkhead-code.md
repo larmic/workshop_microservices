@@ -6,18 +6,18 @@
 
 <pre class="cheatsheet"><span class="cmd">STATE:</span>
   max      = { flight: 5, hotel: 5, car: 5 }   // pro Service
-  inFlight = { flight: 0, hotel: 0, car: 0 }
+  inProgress = { flight: 0, hotel: 0, car: 0 }
   rejected = { flight: 0, hotel: 0, car: 0 }
 
 <span class="cmd">call(service):</span>
-  if inFlight[service] &gt;= max[service]:
+  if inProgress[service] &gt;= max[service]:
     rejected[service]++
     return 503                              // sofort ablehnen
-  inFlight[service]++
+  inProgress[service]++
   try:
     return service.invoke()
   finally:
-    inFlight[service]--
+    inProgress[service]--
 
 <span class="cmd">// Aggregator (Booking) ruft alle drei parallel auf:</span>
 //   ein langsamer Hotel f&uuml;llt nur seinen Pool,

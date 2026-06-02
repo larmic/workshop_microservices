@@ -297,6 +297,14 @@
     border-radius: 4px;
 }
 
+/* Inline-Code auf dunklem Grund (Box, Kapitel-Trenner): helle Schrift statt des
+   dunklen Lila, das auf dunklem Hintergrund unlesbar ist. */
+.reveal .box code,
+.reveal .chapter-slide code {
+    background: rgba(255, 255, 255, 0.14);
+    color: #e0e6f0;
+}
+
 /* Blockquote */
 .reveal blockquote {
     background: #fff;
@@ -508,8 +516,8 @@
 }
 
 .reveal .box.setup pre {
-    font-size: 0.85em;
-    line-height: 1.5;
+    font-size: 1.1em;
+    line-height: 1.6;
 }
 
 .reveal img.dashboard-image {
@@ -666,15 +674,12 @@
     grid-column: 4 / span 2;
 }
 
-/* Block, der erst nach allen Karten-Fragments via .show-all sichtbar wird. */
+/* "Am Markt"-Block: immer sichtbar, damit die Framework-Übersicht auch im
+   statisch veröffentlichten Web-Foliensatz erscheint. Früher wurde sie erst
+   nach dem letzten Fragment (.show-all) eingeblendet und im Web kaum gefunden. */
 .reveal .market-row {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    margin-top: 1.2rem;
-}
-
-.reveal section:has(.show-all.visible) .market-row {
     opacity: 1;
+    margin-top: 1.2rem;
 }
 
 /* ---------------------------------------------------------------------- */

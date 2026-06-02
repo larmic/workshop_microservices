@@ -52,6 +52,7 @@
   <span class="chip">Cadence</span>
   <span class="chip">Camunda 8 (Zeebe)</span>
   <span class="chip">Axon Framework</span>
+  <span class="chip">MicroProfile LRA</span>
   <span class="chip">AWS Step Functions</span>
   <span class="chip">Eventuate Tram Saga</span>
   <span class="chip">MassTransit Saga</span>

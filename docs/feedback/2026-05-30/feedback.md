@@ -129,8 +129,9 @@ sind Symptome dieses Befunds. Der größte Hebel liegt daher in den Blöcken
 
 - **IDs als UUID deklariert, aber keine UUIDs geliefert.** Bestätigt und
   durchgängig: `Flight.id`, `Hotel.id`, `Car.id` sind in allen Booking-Specs
-  (`booking/story1..7/api/openapi.yaml`) und in den Domain-Service-Specs als
-  `format: uuid` deklariert. Die Handler erzeugen aber Prefix-IDs
+  (`booking/story1..7/api/openapi.yaml`) sowie in der Custom-Referenzlösung
+  (`booking/custom/src/main/resources/openapi.yaml`) als `format: uuid` deklariert.
+  Die Domain-Services (flight/hotel/car) sind nicht betroffen. Die Handler erzeugen aber Prefix-IDs
   (`flight/handler/flight.go:161-165` liefert `F-…`, analog `H-…`, `C-…`, `B-…`),
   Testdaten sind `LH123`, `H1`, `C1`. Empfehlung: `format: uuid` entfernen, die
   sprechenden Prefix-IDs sind didaktisch sogar besser. *bestätigt*. → **A1**
@@ -160,6 +161,12 @@ sind Symptome dieses Befunds. Der größte Hebel liegt daher in den Blöcken
   (`dashboard/handler/{circuit,bulkhead,saga}.go`). Wer seinen Service in einer
   anderen Sprache baut und diese Endpoints nicht implementiert, sieht im Dashboard
   keinen State. Dieser Vertrag ist nirgends dokumentiert. *bestätigt*. → **C2**
+- **Admin-Endpoints kosten Entwicklungszeit und vermischen die Lernziele.** Die vom
+  Dashboard genutzten Admin-Endpoints sind toll für die Visualisierung, ihre
+  Implementierung kostet aber spürbar Zeit. Dabei vermischen sich zwei Ziele:
+  "ich entwickle etwas, um das Pattern zu lernen" und "ich entwickle etwas, damit
+  das Dashboard schön funktioniert". Für die Auflösung gibt es noch keine Idee.
+  *Einschätzung.* → **D7**
 
 ## Abgleich-Checkliste (jeder Punkt einer Backlog-ID zugeordnet)
 
@@ -182,6 +189,7 @@ sind Symptome dieses Befunds. Der größte Hebel liegt daher in den Blöcken
 | Exkurs Rate-Limit vor Bulkhead | B2 |
 | Aufruf-Reihenfolge relevant fürs Dashboard | B4 |
 | Admin-Services fehlen, Dashboard zeigt nichts | C2 |
+| Admin-Endpoints kosten Zeit, vermischen Pattern-Lernen und Dashboard-Arbeit | D7 |
 | OpenAPIs als Story-Hinweis im Dashboard | C3 |
 | Dashboard kam exzellent an (positiv) | (Was gut lief) |
 | CB beim POST sinnvoll? In Folien betrachten | B6, E2 |

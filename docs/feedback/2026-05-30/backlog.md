@@ -9,40 +9,55 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
 
 ## A · Quick-Wins (risikoarm, klar umsetzbar)
 
-- [ ] **A1 · OpenAPI: `format: uuid` entfernen** · Priorität: Hoch
+**Status: A1 bis A6 umgesetzt am 2026-06-02** (go build/vet/test grün). Hinweise je Punkt.
+
+- [x] **A1 · OpenAPI: `format: uuid` entfernen** · Priorität: Hoch
   Betrifft `services/booking/story1..7/api/openapi.yaml` (id-Felder von Flight,
   Hotel, Car) und die Domain-Service-Specs. Die Handler liefern Prefix-IDs
   (`F-…`, `H-…`, `C-…`, `B-…`), keine UUIDs. Empfehlung: nur `type: string`, die
   sprechenden IDs behalten. Beispiele aktualisieren.
 
-- [ ] **A2 · Bulkhead `inFlight` zu `inProgress` umbenennen** · Priorität: Mittel
+- [x] **A2 · Bulkhead `inFlight` zu `inProgress` umbenennen** · Priorität: Mittel
   Konsistent über: `services/booking/story4..7/bulkhead/bulkhead.go` (Struct-Feld
   und Variablen), Slides `services/slides/chapters/17a-bulkhead-code.md` und
   `17-bulkhead.md`, `services/dashboard/static/index.html` (Label und Metrik),
   `docs/instructions/bulkhead.md`. Vermeidet Verwechslung mit dem Flight-Service.
-  Achtung: Admin-Contract (C2) gibt `inFlight` als JSON-Feld aus, gemeinsam ändern.
+  Achtung: Admin-Contract (C2) gibt das JSON-Feld aus, gemeinsam geändert (heißt
+  jetzt `inProgress`), Go-Struct via gofmt neu ausgerichtet, Dashboard-Label
+  "in flight" zu "in progress".
+  Bewusst NICHT umbenannt: der Circuit Breaker nutzt intern `probeInFlight`
+  (`booking/story3..7/circuitbreaker/circuitbreaker.go`, eine Probe-Anfrage im
+  HALF_OPEN). Das Feld ist nicht in Spec, Dashboard oder den CB-Slides sichtbar, und
+  "probe in flight" ist idiomatisch. Falls dennoch konsistent gewünscht: separater
+  Mini-Rename, offen.
 
-- [ ] **A3 · "Am Markt" im Web sichtbar machen** · Priorität: Mittel
+- [x] **A3 · "Am Markt" im Web sichtbar machen** · Priorität: Mittel
   `services/slides/theme.css:670-678`: `.market-row` aus dem Fragment-Gating lösen,
   damit die Framework-Übersicht auch im statischen Web erscheint. Trade-off notieren:
   live als Reveal vs. im Web immer sichtbar. Betrifft alle Kapitel mit `.market-row`
   (u. a. `20-saga.md`, `11-service-discovery.md`, `14-circuit-breaker.md`,
   `17-bulkhead.md`, `23-choreography-saga.md`, `26-tracing.md`).
 
-- [ ] **A4 · MicroProfile LRA bei Saga "Am Markt" ergänzen** · Priorität: Niedrig
+- [x] **A4 · MicroProfile LRA bei Saga "Am Markt" ergänzen** · Priorität: Niedrig
   `services/slides/chapters/20-saga.md:50-58`: Chip `MicroProfile LRA` hinzufügen
   (passt als Java/Jakarta-Variante neben Axon).
 
-- [ ] **A5 · Setup-Schrift vergrößern** · Priorität: Mittel
+- [x] **A5 · Setup-Schrift vergrößern** · Priorität: Mittel
   `services/slides/theme.css:510-513`: `.box.setup pre` von `0.85em` auf `1em` bis
   `1.2em`, Zeilenhöhe ggf. auf 1.6. Der Code wird abgetippt, soll gut lesbar sein.
 
-- [ ] **A6 · Kontrast-Pass (WCAG-AA)** · Priorität: Hoch
+- [x] **A6 · Kontrast-Pass (WCAG-AA)** · Priorität: Hoch
   `services/slides/theme.css`: Subtitle (`:110`), Links (`:129`), `.cols h3` (`:208`)
   und Inline-`code` (`:293-298`, `:621`) auf mindestens 4.5:1 anheben. Insbesondere
   `code`-Override für dunkle `.box` ergänzen (heute dunkles Lila auf dunklem Grund).
   Danach Palette-Sync mit dem Dashboard prüfen (Skill `sync-palette`,
   `services/CLAUDE.md` Farbpalette).
+  Umgesetzt 2026-06-02: Inline-`code` auf dunklem Grund (`.box`, `.chapter-slide`)
+  erhält helle Schrift (`#e0e6f0`), das war der eigentliche "blaue Schrift auf
+  dunkel"-Fall (ca. 1.9:1). Der breitere Paletten-Kontrast (Subtitle/Links/`.cols h3`)
+  bleibt bewusst offen: die Akzentfarbe `rgb(115,72,225)` erreicht auf Weiß bereits
+  ca. 5.6:1, eine Änderung wäre eine Brand-Entscheidung samt Dashboard-Sync und kein
+  reiner Quick-Win.
 
 ## B · Slides- und Inhalts-Klärungen (Pattern-Verständnis)
 
@@ -105,7 +120,8 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
   Story 5 `GET /admin/sagas` plus `POST /admin/sagas-reset`. Felder aus
   `booking/story3/circuitbreaker/circuitbreaker.go`,
   `booking/story4/bulkhead/bulkhead.go`, `booking/story5/saga/saga.go` übernehmen.
-  In den Stories und der Vorbereitung verlinken.
+  In den Stories und der Vorbereitung verlinken. Spannungsfeld dazu siehe D7
+  (Aufwand vs. Lernfokus). Hinweis: das Bulkhead-Feld heißt nach A2 jetzt `inProgress`.
 
 - [ ] **C3 · OpenAPI-/Story-Hinweise im Dashboard prominenter** · Priorität: Niedrig
   Basis vorhanden (`dashboard/static/index.html:1300-1310` verlinkt
@@ -141,6 +157,18 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
 - [ ] **D6 · Vorbereitungs- und Repo-Strategie** · Priorität: Mittel
   Material aktiv vorab teilen (Repo ist bereits öffentlich), Selbstlern-Charakter
   ausbauen, ggf. zwei Termine mit einer Woche Abstand zum echten Nacharbeiten.
+
+- [ ] **D7 · Aufwand der Admin-Endpoints vom Pattern-Lernen entkoppeln** · Priorität: Hoch · *Entscheidung Lars*
+  Die Admin-Endpoints (siehe C2) sind wertvoll fürs Dashboard, ihre Implementierung
+  kostet aber Zeit und vermischt zwei Ziele: das Pattern lernen vs. das Dashboard
+  bedienen. Noch keine Lösung. Mögliche Richtungen (offen, noch nichts entschieden):
+  - Admin- bzw. Instrumentierungs-Layer als fertige, einbindbare Vorlage je Sprache
+    anbieten, damit Teilnehmende ihn nicht selbst bauen.
+  - Admin-Endpoints als optional bzw. "auf der Tonspur" deklarieren (Dashboard zeigt
+    den State dann nur für die Referenz-Implementierung live).
+  - Den State minimal halten (z. B. nur `/health` plus ein generisches
+    `/admin/state`), damit der Bau-Aufwand klein bleibt.
+  Bezug: C2 (Vertrag), D1 und D3 (Lernfokus).
 
 ## E · Architektur- und Design-Entscheidungen · *Entscheidung Lars*
 

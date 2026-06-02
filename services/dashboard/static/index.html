@@ -1640,18 +1640,18 @@ call(service):
                     <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
 <pre>max      = { flight: 5, hotel: 5, car: 5 }   // pro Service
-inFlight = { flight: 0, hotel: 0, car: 0 }
+inProgress = { flight: 0, hotel: 0, car: 0 }
 rejected = { flight: 0, hotel: 0, car: 0 }
 
 call(service):
-  if inFlight[service] >= max[service]:
+  if inProgress[service] >= max[service]:
     rejected[service]++
     return 503                              // sofort ablehnen
-  inFlight[service]++
+  inProgress[service]++
   try:
     return service.invoke()
   finally:
-    inFlight[service]--
+    inProgress[service]--
 
 // Aggregator (Booking) ruft alle drei parallel auf:
 //   ein langsamer Hotel füllt nur seinen Pool,
@@ -2438,7 +2438,7 @@ on receiveCompensationEvent(event):
             }
             grid.innerHTML = bhs.map(bh => {
                 const pct = bh.maxConcurrent > 0
-                    ? Math.round((bh.inFlight / bh.maxConcurrent) * 100) : 0;
+                    ? Math.round((bh.inProgress / bh.maxConcurrent) * 100) : 0;
                 const barClass = pct >= 100 ? "full" : pct >= 70 ? "warn" : "";
                 return `
                     <div class="cb-card">
@@ -2447,7 +2447,7 @@ on receiveCompensationEvent(event):
                             <div class="bh-bar-fill ${barClass}" style="width: ${Math.min(pct, 100)}%"></div>
                         </div>
                         <div class="cb-card-details">
-                            <span>in flight: <strong>${bh.inFlight}/${bh.maxConcurrent}</strong></span>
+                            <span>in progress: <strong>${bh.inProgress}/${bh.maxConcurrent}</strong></span>
                             <span>calls: <strong>${bh.totalCalls}</strong></span>
                             <span>rejected: <strong>${bh.totalRejected}</strong></span>
                         </div>

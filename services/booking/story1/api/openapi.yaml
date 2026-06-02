@@ -135,7 +135,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         airline:
           type: string
           example: Lufthansa
@@ -155,7 +154,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         name:
           type: string
           example: Grand Hotel
@@ -172,7 +170,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         provider:
           type: string
           example: Sixt

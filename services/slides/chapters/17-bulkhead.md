@@ -22,7 +22,7 @@
 <div class="factor fragment">
 <h3>Fail-Fast</h3>
 <p>Pool voll &rarr; sofort <span class="hl">ablehnen</span>. Keine Queue, kein Warten.</p>
-<code>inFlight &ge; max &rarr; 503</code>
+<code>inProgress &ge; max &rarr; 503</code>
 <aside class="notes">Drei Strategien bei Limit-&Uuml;berschreitung: Fail-Fast, Bounded Queue, Wait + Timeout. Default in Microservices: <strong>Fail-Fast</strong>. Begr&uuml;ndung: Queueing tarnt das Problem (Backend ist eh am Limit, Queue verschiebt nur), und ein sofortiger Reject ist ein klares Backpressure-Signal nach oben. Im Code: atomarer Check &amp; Increment unter Mutex, sonst rutschen mehr Calls durch als erlaubt.</aside>
 </div>
 

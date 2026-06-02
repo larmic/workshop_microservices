@@ -310,7 +310,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         airline:
           type: string
           example: Lufthansa
@@ -330,7 +329,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         name:
           type: string
           example: Grand Hotel
@@ -347,7 +345,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         provider:
           type: string
           example: Sixt
@@ -623,7 +620,7 @@ components:
       required:
         - name
         - maxConcurrent
-        - inFlight
+        - inProgress
         - totalCalls
         - totalRejected
       properties:
@@ -634,7 +631,7 @@ components:
         maxConcurrent:
           type: integer
           example: 10
-        inFlight:
+        inProgress:
           type: integer
           example: 3
         totalCalls:
