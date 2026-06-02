@@ -31,13 +31,16 @@ beim Validieren auf `./booking/custom`.
 
 ## Was du prüfst
 
+> Alle Kommandos werden aus dem **Repo-Root** ausgeführt; die Compose-Files
+> liegen unter `services/`.
+
 1. **YAML-Validität pro Kombination**
    ```bash
-   docker compose -f docker-compose.yml -f docker-compose.infra.yml \
-                  -f docker-compose.reference.yml config --quiet
+   docker compose -f services/docker-compose.yml -f services/docker-compose.infra.yml \
+                  -f services/docker-compose.reference.yml config --quiet
    CUSTOM_BOOKING_PATH=./booking/custom docker compose \
-     -f docker-compose.yml -f docker-compose.infra.yml \
-     -f docker-compose.reference.yml -f docker-compose.custom.yml \
+     -f services/docker-compose.yml -f services/docker-compose.infra.yml \
+     -f services/docker-compose.reference.yml -f services/docker-compose.custom.yml \
      config --quiet
    ```
    `--quiet` gibt nichts aus bei Erfolg, Fehler werden auf stderr
@@ -48,7 +51,7 @@ beim Validieren auf `./booking/custom`.
    (außer es ist beabsichtigtes Overlay). Liste alle Services pro
    File mit:
    ```bash
-   docker compose -f <file> config --services
+   docker compose -f services/<file> config --services
    ```
 
 3. **Port-Konflikte** auf Host-Seite
@@ -76,7 +79,7 @@ beim Validieren auf `./booking/custom`.
    - Bei `build:` mit `args: SERVICE_PATH=…` muss der Pfad
      existieren (`booking/storyN`, `flight`, …). Verifiziere
      mit `ls services/<pfad>`.
-   - `dashboard/Dockerfile` ist eigenständig — prüfe Existenz.
+   - `services/dashboard/Dockerfile` ist eigenständig — prüfe Existenz.
 
 ## Ablauf
 

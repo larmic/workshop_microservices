@@ -6,8 +6,8 @@ description: Prüft, ob die Workshop-Farbpalette in slides/theme.css und dashboa
 # sync-palette
 
 Die Single Source of Truth der Workshop-Farbpalette sind die CSS-Variablen in
-`slides/theme.css` (`:root`). Im Dashboard sind dieselben Werte historisch
-**inline** in `dashboard/static/index.html` hinterlegt. Beide Stellen müssen
+`services/slides/theme.css` (`:root`). Im Dashboard sind dieselben Werte historisch
+**inline** in `services/dashboard/static/index.html` hinterlegt. Beide Stellen müssen
 synchron gehalten werden (siehe `services/CLAUDE.md`).
 
 ## Referenz-Palette
@@ -21,10 +21,10 @@ synchron gehalten werden (siehe `services/CLAUDE.md`).
 
 ## Ablauf
 
-1. Lies `slides/theme.css` und extrahiere alle Werte aus dem `:root`-Block
+1. Lies `services/slides/theme.css` und extrahiere alle Werte aus dem `:root`-Block
    (`--slide-text`, `--wave`, `--box-bg`, `--box-border`, `--highlight`, …).
    Normalisiere zu Hex (Großschreibung, ohne Leerzeichen).
-2. Lies `dashboard/static/index.html` und extrahiere alle Farbwerte aus dem
+2. Lies `services/dashboard/static/index.html` und extrahiere alle Farbwerte aus dem
    `<style>`-Block. Sammle Hex (`#0A0349`) und `rgb(...)`-Notationen,
    normalisiere ebenfalls zu Hex.
 3. Vergleiche pro Rolle:
@@ -53,8 +53,8 @@ Dashboard-Refactorings stabil bleiben:
 | open / Fehler     | `#fde0e0`   | `#b3261e` |
 | halfopen / Warnung| `#fff3cd`   | `#8a6d00` |
 
-Wenn die Status-Farben fehlen oder verändert sind, in `dashboard/static/index.html`
-melden, aber **nicht** an `slides/theme.css` synchronisieren.
+Wenn die Status-Farben fehlen oder verändert sind, in `services/dashboard/static/index.html`
+melden, aber **nicht** an `services/slides/theme.css` synchronisieren.
 
 ## Ausgabeformat
 

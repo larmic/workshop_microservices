@@ -13,15 +13,15 @@ oder finden Endpoints, die nicht dokumentiert sind.
 ## Geltungsbereich (Go-Services)
 
 ```
-flight/        api/openapi.yaml   main.go + handler/*.go
-hotel/         api/openapi.yaml   main.go + handler/*.go
-car/           api/openapi.yaml   main.go + handler/*.go
-booking/story1 api/openapi.yaml   main.go + handler/*.go
-booking/story2 …                  …
-booking/story7 …                  …
+services/flight/        api/openapi.yaml   main.go + handler/*.go
+services/hotel/         api/openapi.yaml   main.go + handler/*.go
+services/car/           api/openapi.yaml   main.go + handler/*.go
+services/booking/story1 api/openapi.yaml   main.go + handler/*.go
+services/booking/story2 …                  …
+services/booking/story7 …                  …
 ```
 
-`booking/custom/` enthält eine Spec unter
+`services/booking/custom/` enthält eine Spec unter
 `src/main/resources/openapi.yaml`. Diese gehört zu einer freien
 Teilnehmer-Implementierung (anderes Tech-Stack möglich) und wird
 von diesem Skill **übersprungen**, sofern der User es nicht explizit
@@ -29,11 +29,11 @@ verlangt.
 
 ## Ablauf pro Service
 
-1. **Spec-Paths einlesen** — aus `<service>/api/openapi.yaml` alle Keys
+1. **Spec-Paths einlesen** — aus `services/<service>/api/openapi.yaml` alle Keys
    unter `paths:` extrahieren, inkl. Methoden (`get`, `post`, …).
    Pfad-Parameter (`{id}`) als Platzhalter behalten.
-2. **Handler-Registrierungen einlesen** — in `<service>/main.go` und
-   `<service>/handler/*.go` nach typischen Mux-Registrierungen suchen:
+2. **Handler-Registrierungen einlesen** — in `services/<service>/main.go` und
+   `services/<service>/handler/*.go` nach typischen Mux-Registrierungen suchen:
    - Standardbibliothek: `mux.HandleFunc("…")`, `http.HandleFunc("…")`,
      `mux.Handle("…", …)`
    - chi / gorilla / echo / gin: `r.Get("…", …)`, `r.Post("…", …)`,
