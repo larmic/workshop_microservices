@@ -181,3 +181,35 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
 - [ ] **E2 · CB-Scope in Story 3** · Priorität: Mittel
   Prüfen, ob der Circuit Breaker in Story 3 auf GET beschränkt wird und die
   POST-Resilienz erst in Story 5 (Saga) sauber gelöst wird. Verknüpft mit B6.
+
+## F · Vollständigkeit & roter Faden (aus der Kuratierung vom 2026-06-02)
+
+Herleitung und Einordnung in [kuratierung.md](kuratierung.md).
+
+- [ ] **F1 · Reduktionen-Übersicht "Was wir bewusst nicht behandeln"** · Priorität: Hoch
+  Neue Folie plus Notiz in `docs/themen.md`: in-memory statt DB, HTTP-Events statt
+  Broker (Story 6), selbstgebaut statt Resilience4j/OpenTelemetry, CQRS nur als
+  Vortrag, je mit Ein-Satz-Begründung. Bündelt, was heute verstreut in
+  `docs/instructions/*` steht, und beantwortet die wiederkehrenden
+  "Warum nicht X?"-Fragen an einer Stelle.
+
+- [ ] **F2 · Database-per-Service als bewusste Reduktion sichtbar machen** · Priorität: Mittel · *Entscheidung Lars*
+  `docs/themen.md:82` behauptet, „1 DB pro Service" werde in Story 1 umgesetzt; das
+  stimmt nicht (Story 1 hat keine DB, der Zustand ist überall in-memory:
+  `services/flight/handler/flight.go`, `services/booking/story5/saga/saga.go`).
+  Aussage korrigieren und das Prinzip motivieren (Schema-Evolution, differenzierte
+  Skalierung, Transaktionsgrenzen), die Reduktion explizit kennzeichnen. Tiefe
+  offen: nur Diskussions-Anker ("Was änderte sich mit je eigener DB: Saga-Persistenz,
+  Recovery, Migrationen?") oder optionaler Bonus. Keine neue Pflicht-Story.
+  Erweitert B8.
+
+- [ ] **F3 · Inter-Story-Brücken explizit machen** · Priorität: Hoch
+  Pro Story eine kurze "bisher / Problem jetzt / Lösung"-Brücke auf der
+  Einstiegs-Folie und im Story-Header (`docs/stories/*`, die vorhandenen
+  `## Kontext`-Abschnitte vereinheitlichen). Macht den vorhandenen roten Faden
+  sichtbar. Ist die konkrete, buildbare Umsetzung von D1 und stützt B7 und D4.
+
+- [ ] **F4 · Lernpfad-/Roter-Faden-Übersichtsfolie** · Priorität: Mittel
+  Eine Übersichtsfolie mit der Problem-Pattern-Kette (Story 1 bis 7), die zeigt,
+  welches Problem jede Story löst. Orientierung für Teilnehmende, besonders in der
+  dichten Story-Folge an Tag 2 (`docs/themen.md`).

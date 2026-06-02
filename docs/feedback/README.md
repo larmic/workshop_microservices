@@ -14,6 +14,9 @@ verifiziert, eingeordnet und priorisiert.
   - `backlog.md` · priorisierte TODO-Liste mit Checkboxen. Jeder Eintrag hat eine
     stabile ID (z. B. `A1`), betroffene Dateien, Priorität und ggf. das Kennzeichen
     *Entscheidung Lars* für inhaltliche Richtungsfragen.
+- **Optionale Nacharbeit:** Wird ein Termin später kuratiert, kann zusätzlich eine
+  `kuratierung.md` im Termin-Ordner liegen (z. B. Vollständigkeits- und
+  Curriculum-Analyse, daraus abgeleitete Backlog-Einträge).
 
 ## Anonymisierung
 
@@ -30,4 +33,5 @@ die sachlichen Inhalte.
 
 ## Termine
 
-- [2026-05-30](2026-05-30/feedback.md) · erster Kickoff-Workshop
+- [2026-05-30](2026-05-30/feedback.md) · erster Kickoff-Workshop ·
+  [Kuratierung](2026-05-30/kuratierung.md)
