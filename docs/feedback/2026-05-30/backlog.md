@@ -107,11 +107,21 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
 
 ## C · Neue Doku-Seiten
 
-- [ ] **C1 · `docs/troubleshooting.md`** · Priorität: Hoch
+- [x] **C1 · `docs/troubleshooting.md`** · Priorität: Hoch
   Windows/WSL2: localhost und Traefik-Timing ("wenn nicht erreichbar, kurz warten
   und neu laden"), Docker-Desktop-Networking, Port-Konflikte (80, 8080, 8500),
   Image-Pull. GitHub-Zertifikat in WSL (Gast-WLAN, Proxy, Zertifikat hinterlegen).
   Verlinken aus `docs/vorbereitung.md`.
+  Umgesetzt 2026-06-02: `docs/troubleshooting.md` symptom-orientiert angelegt, jeder
+  Eintrag mit Marker Geltung (macOS/Linux/Windows vs. nur Windows/WSL2) und Status
+  (verifiziert vs. berichtet). Der crossplattforme Kern (Erstdiagnose, Dashboard
+  lädt nicht, Port-Konflikte inkl. 8084 und 8085-8091, Image-Pull, Reset) wurde
+  lokal auf macOS gegen den laufenden Stack getestet. Die Windows/WSL2-Punkte
+  (localhost trotz laufender Container, WSL-Zertifikat) sind aus dem Feedback
+  abgeleitet, mit Links zu offiziellen Docs versehen und klar als "berichtet, nicht
+  unter Windows reproduziert" markiert. Verlinkt aus `docs/vorbereitung.md` (Abschnitt 2
+  und Windows-Hinweise). Offen: Verifikation der Windows-Punkte durch einen
+  Windows-Teilnehmer.
 
 - [ ] **C2 · `docs/admin-contract.md`** · Priorität: Hoch
   Exakter Dashboard-Vertrag mit JSON-Schemata, damit Custom-Services in jeder

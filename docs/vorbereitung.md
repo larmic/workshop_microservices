@@ -61,6 +61,10 @@ docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compo
 
 Alle weiteren Make-Targets siehst du mit `make help`.
 
+> Wenn etwas nicht startet oder das Dashboard nicht lädt: siehe
+> [troubleshooting.md](troubleshooting.md) (Port-Konflikte, Image-Pull,
+> Windows/WSL2-Erreichbarkeit, Zertifikate).
+
 ## 3. Dashboard öffnen
 
 Das **Dashboard** ist das zentrale Tool für den Workshop. Hier startest, stoppst und skalierst du Services, siehst Health-Status und kommst in einem Klick zu den anderen Tools.
@@ -143,6 +147,7 @@ Diese Werte werden eurem Container als Environment-Variablen `FLIGHT_SERVICE_URL
 - **Pfade** mit Forward-Slashes statt Backslashes: `CUSTOM_BOOKING_PATH=C:/Users/foo/projects/my-booking-service`
 - **Line endings** der `.env` müssen LF sein (nicht CRLF) — sonst landet `\r` am Pfadende und der Build schlägt mit "no such file" fehl. Editor entsprechend einstellen oder `.env` über WSL/Git Bash erzeugen.
 - **Build-Performance**: das Projekt sollte im WSL2-Filesystem liegen (z.B. `~/projects/...`), nicht unter `/mnt/c/...`.
+- **Erreichbarkeit & Zertifikate**: Bei `localhost`-Problemen trotz laufender Container oder TLS-Fehlern beim `git clone` siehe [troubleshooting.md](troubleshooting.md).
 
 ### Stack stoppen
 
