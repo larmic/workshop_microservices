@@ -17,7 +17,7 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 1 | Ankommen & Motivation | 30 Min |
 | 2 | Vortrag: Architektur & Kommunikation (Geschichte) | 45 Min |
 | 3 | Vortrag: 12 Factor App | 30 Min |
-| 4 | Setup der Entwicklungsumgebung | 45 Min |
+| 4 | Vorbereitung verifizieren (Setup-Check) | 30 Min |
 | 5 | Diskussion: „MS = Monolithen mit Netzwerkproblemen" | 30 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 6a | Hands-on: Story 1 (Cloud-native Setup) | 90 Min |
@@ -83,11 +83,11 @@ Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-
 
 ---
 
-## 4. Setup der Entwicklungsumgebung (45 Min)
+## 4. Vorbereitung verifizieren (30 Min)
 
-Alle Teilnehmer am Start halten — bei Problemen sofort einsammeln und parallel helfen.
+Das Setup ist Pflicht-Hausaufgabe vor dem Workshop ([vorbereitung.md](vorbereitung.md), Abschnitt 0). Hier wird nur verifiziert, Restprobleme werden sofort eingesammelt und parallel gelöst.
 
-- Repository clonen
+- Kurz-Check pro Teilnehmer: Mini-Service läuft (Image baut, `/health` antwortet), Repo geklont
 - Docker Compose: Backend-Services (Flight, Hotel, Car) + Consul + API-Gateway starten
 - Health-Endpoints aller Services prüfen (`/health`)
 - Consul-UI öffnen, registrierte Services sehen

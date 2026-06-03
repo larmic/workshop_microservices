@@ -6,7 +6,7 @@
 ### Tag 1 &mdash; Vormittag
 
 - Intro &amp; 12-Faktor
-- Setup gemeinsam
+- Setup-Check (Vorbereitung)
 - Story 1 &mdash; <em>Fundament</em>
 
 </div>

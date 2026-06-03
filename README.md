@@ -40,7 +40,8 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   ├── themen.md          # Themenübersicht & Moderationsleitfaden
 │   ├── stories/           # User Stories (story-01 … story-07)
 │   ├── instructions/      # Trainer-Hinweise
-│   └── questions/         # Fragen & Diskussionsimpulse
+│   ├── questions/         # Fragen & Diskussionsimpulse
+│   └── orga/              # Vorlagen für Intranet-Text & Einladungs-Mail
 ├── services/              # Backend-Services (Go)
 │   ├── booking/           # BookingService (story1 … story7)
 │   ├── flight/            # FlightService

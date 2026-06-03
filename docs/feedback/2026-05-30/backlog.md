@@ -158,15 +158,30 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
   Tag 2 entzerren (`docs/themen.md:26-39`): Micro-Lectures zwischen die Stories
   (z. B. "Warum Saga?" vor Story 5, "Orchestration vs. Choreography" vor Story 6).
 
-- [ ] **D5 · Voraussetzungen schärfen, ggf. Vor-Workshop** · Priorität: Hoch
+- [x] **D5 · Voraussetzungen schärfen, ggf. Vor-Workshop** · Priorität: Hoch
   In `docs/vorbereitung.md:5-10` als harte Vorbedingung formulieren: Teilnehmende
   müssen ein Greenfield-Projekt in ihrer Sprache aufsetzen können, das per Dockerfile
   ein Image baut und einen Health-Endpoint bereitstellt. Optionaler Vor-Workshop
   "Was ist OpenAPI? Wie geht Docker?". Setup-Dauer realistisch einplanen.
+  Umgesetzt 2026-06-03: Pflicht-Vorbereitung als Abschnitt 0 in `docs/vorbereitung.md`
+  verankert (Greenfield-Mini-Service mit Akzeptanzkriterien: `GET /health` liefert 200,
+  Dockerfile, Image baut, Container lauscht auf 8080; dazu Stack-Smoke-Test und
+  Firmennetz-Test gegen die WSL2-/Zertifikatsprobleme aus dem Kickoff). Voraussetzungen
+  geschärft (Docker als hart markiert, Greenfield-Fähigkeit explizit). IntraHub-Text und
+  E-Mail-Einladung als Vorlagen in `docs/orga/` angelegt, beide benennen die
+  Pflicht-Vorbereitung (ca. 1 bis 2 h) und verlinken das Repo. `docs/themen.md` Block 4
+  von "Setup (45 Min)" zu "Vorbereitung verifizieren (30 Min)" umgewidmet, Folien
+  entsprechend angepasst (`services/slides/chapters/07-vorbereitung.md`, `03-agenda.md`).
+  Bewusst NICHT umgesetzt: der separate Vor-Workshop bzw. Setup-Check-Termin
+  (Entscheidung Lars). Stattdessen Troubleshooting-Verweis plus Kontaktangebot vorab.
 
-- [ ] **D6 · Vorbereitungs- und Repo-Strategie** · Priorität: Mittel
+- [~] **D6 · Vorbereitungs- und Repo-Strategie** · Priorität: Mittel
   Material aktiv vorab teilen (Repo ist bereits öffentlich), Selbstlern-Charakter
   ausbauen, ggf. zwei Termine mit einer Woche Abstand zum echten Nacharbeiten.
+  Teilweise umgesetzt 2026-06-03: Repo-Link aktiv in IntraHub-Text und
+  E-Mail-Einladung platziert (`docs/orga/`), die Pflicht-Hausaufgabe (D5) stützt den
+  Selbstlern-Charakter. Offen bleibt das Zwei-Termine-Modell mit einer Woche Abstand,
+  bewusst zurückgestellt: das Format bleibt vorerst 2 Tage am Stück.
 
 - [ ] **D7 · Aufwand der Admin-Endpoints vom Pattern-Lernen entkoppeln** · Priorität: Hoch · *Entscheidung Lars*
   Die Admin-Endpoints (siehe C2) sind wertvoll fürs Dashboard, ihre Implementierung

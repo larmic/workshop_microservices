@@ -1,11 +1,12 @@
 ## Vorbereitung
 
-<p class="subtitle">Setup gemeinsam <span class="time-badge">&asymp; 45 min</span></p>
+<p class="subtitle">Vorbereitung verifizieren <span class="time-badge">&asymp; 30 min</span></p>
 
 <div class="chip-row">
   <span class="chip">Git</span>
   <span class="chip">Docker + Compose</span>
-  <span class="chip">IDE (optional)</span>
+  <span class="chip">IDE</span>
+  <span class="chip">Mini-Service (Hausaufgabe)</span>
 </div>
 
 <div class="box setup">
@@ -27,10 +28,10 @@ open http://localhost     # Dashboard = Workshop-Steuerzentrale
 
 
 Note:
-- Wir machen das Setup gemeinsam, Zeitbudget ~45 min — niemand sitzt nachher allein vor einem roten Terminal.
+- Das Setup ist Pflicht-Hausaufgabe vor dem Workshop (`docs/vorbereitung.md`, Abschnitt 0). Hier nur verifizieren, Zeitbudget ~30 min: Mini-Service läuft, Stack läuft. Restprobleme sofort einsammeln, niemand sitzt nachher allein vor einem roten Terminal.
 - `make docker-up-hub` zieht fertige Images, kein lokaler Build nötig (= schnell). Variante B `make docker-up` baut alles selbst.
 - Dashboard auf `http://localhost` ist die Schaltzentrale für alle Stories: Start/Stop, Health, Chaos-Schalter, Links zu Swagger / Consul / Traefik (8080).
 - Was hochfährt: Flight, Hotel, Car, Booking + Consul (Service Discovery) + Swagger UI (API-Docs) + Traefik (Gateway) + Dashboard (UI).
-- Voraussetzungen: Git, Docker (inkl. Compose). IDE ist optional und nur nötig, wenn man die Stories selbst implementiert.
+- Voraussetzungen: Git, Docker (inkl. Compose), IDE und der vorab als Hausaufgabe aufgesetzte Greenfield-Mini-Service (Dockerfile, `/health`, Port 8080).
 - Sprache/Framework für den Booking-Service ist **frei** (Go, Java, Quarkus, Node, …) — die Referenz hier ist nur ein Beispiel.
 - Wer den vollen Setup-Pfad mit allen URLs und cURL-Health-Checks will, findet ihn in `docs/vorbereitung.md`.

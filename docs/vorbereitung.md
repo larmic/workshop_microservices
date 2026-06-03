@@ -1,13 +1,63 @@
 # Workshop-Vorbereitung
 
-Diese Anleitung beschreibt, wie du das Repo auscheckst, die Umgebung startest und mit dem Workshop loslegst.
+Diese Anleitung beschreibt, wie du das Repo auscheckst, die Umgebung startest und mit dem Workshop loslegst. **Abschnitt 0 ist Pflicht und wird vor dem Workshop-Termin erledigt.**
 
 ## Voraussetzungen
 
 - **Git**
-- **Docker** inkl. Docker Compose
-- **IDE / Editor** nach Wahl (optional, nur wenn du die Stories selbst implementieren willst)
+- **Docker** inkl. Docker Compose (harte Voraussetzung, ohne läuft die Workshop-Umgebung nicht)
+- **IDE / Editor** nach Wahl
 - Eigene Sprache/Framework deiner Wahl, in der du den Booking-Service umsetzen möchtest (Java/Spring Boot, Quarkus, Go, Node.js, ...)
+- Du kannst in deiner Sprache ein neues Projekt aufsetzen, das einen HTTP-Endpoint bereitstellt und per Dockerfile ein Image baut. Genau das ist die Pflicht-Hausaufgabe in Abschnitt 0, im Workshop selbst üben wir es nicht.
+
+## 0. Vor dem Workshop (Pflicht)
+
+Diese Aufgaben erledigst du **vor** dem Workshop-Termin. Aufwand: ca. 1 bis 2 Stunden. Sie stellen sicher, dass wir am Workshop-Tag direkt mit den Inhalten starten, statt Setup-Probleme zu lösen.
+
+### 0.1 Greenfield-Mini-Service (Pflicht-Hausaufgabe)
+
+Setze in deiner Sprache/deinem Framework ein neues, leeres Projekt auf. Dieser Mini-Service ist genau die Basis, die du im Workshop über alle 7 Stories hinweg erweiterst. Merke dir den Projektordner: genau diesen Pfad trägst du im Workshop als `CUSTOM_BOOKING_PATH` ein (siehe Abschnitt 5), weggeworfen wird hier nichts.
+
+Akzeptanzkriterien:
+
+- [ ] Neues Projekt in deiner Sprache/deinem Framework
+- [ ] `GET /health` antwortet mit HTTP 200
+- [ ] Eine `Dockerfile` liegt im Projekt, `docker build` läuft fehlerfrei durch
+- [ ] Der Container startet und lauscht auf Port `8080`
+
+Mehr nicht: Body und Format der Health-Antwort sind egal, ein leeres HTTP 200 genügt. Logging, Info-Endpoint und Aufrufe der Backend-Services kommen erst im Workshop ab Story 1.
+
+Smoke-Test:
+
+```bash
+docker build -t my-booking-service .
+docker run --rm -p 8080:8080 my-booking-service
+
+# zweites Terminal:
+curl -i http://localhost:8080/health   # erwartet: HTTP/1.1 200
+```
+
+Danach den Container stoppen (Ctrl+C): der Host-Port `8080` wird gleich vom Workshop-Stack belegt (Traefik-Dashboard).
+
+### 0.2 Workshop-Stack einmal starten
+
+Klone das Repo und fahre den Stack einmal hoch. Die Schritt-für-Schritt-Anleitung steht in den Abschnitten 1 bis 3.
+
+- [ ] Repo geklont, `.env` angelegt
+- [ ] `make docker-up-hub` läuft durch
+- [ ] Dashboard unter <http://localhost> erreichbar
+
+Die per `cp .env.example .env` angelegte `.env` funktioniert mit ihrem Default-Pfad sofort. Dein eigener Booking-Pfad aus 0.1 wird erst im Workshop eingetragen (Abschnitt 5).
+
+Windows/WSL2: beachte vorab die Windows-Hinweise in Abschnitt 5 (Line endings der `.env` müssen LF sein, Repo ins WSL2-Filesystem legen).
+
+### 0.3 Im Firmennetz testen
+
+Führe `git clone` und `docker build` einmal **in dem Netz aus, in dem du auch am Workshop-Tag arbeitest** (Firmen-WLAN, VPN). Firmen-Proxies und TLS-Zertifikate fallen sonst erst am Workshop-Tag auf, besonders unter Windows/WSL2. Bei Problemen: [troubleshooting.md](troubleshooting.md).
+
+### 0.4 Bei Problemen
+
+Wenn etwas hakt und [troubleshooting.md](troubleshooting.md) nicht weiterhilft: melde dich **vor** dem Workshop kurz per Mail oder Chat beim Trainer. Am Workshop-Tag selbst bleibt für Setup-Probleme wenig Zeit.
 
 ## 1. Repository klonen
 
@@ -91,7 +141,7 @@ curl http://localhost/api/hotel/health
 curl http://localhost/api/car/health
 ```
 
-## 5. Eigenen Booking-Service einklinken (Custom-Setup)
+## 5. Eigenen Booking-Service einklinken (Custom-Setup, während des Workshops)
 
 Im Dashboard kannst du pro Story zwischen *Reference* und *Custom* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf.
 

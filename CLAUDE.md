@@ -36,6 +36,7 @@ Die User-Stories für die Hands-on-Aufgaben liegen in `docs/stories/`
   - `stories/`: User-Stories
   - `instructions/`: Trainer-Hinweise
   - `questions/`: Diskussionsfragen
+  - `orga/`: Vorlagen für Intranet-Text und E-Mail-Einladung
 - `services/`: Go-Referenz-Implementierung
   - `booking/`: BookingService mit einem Ordner pro Story (`story1` bis `story7`)
   - `flight/`, `hotel/`, `car/`: Domain-Services
