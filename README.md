@@ -42,6 +42,10 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   ├── instructions/      # Trainer-Hinweise
 │   ├── questions/         # Fragen & Diskussionsimpulse
 │   └── orga/              # Vorlagen für Intranet-Text & Einladungs-Mail
+├── pages/                 # Statische Quellen der GitHub-Pages-Seite
+│   ├── landing/           # Startseite (larmic.github.io/workshop_microservices)
+│   ├── vorbereitung/      # Vorbereitung & Troubleshooting (rendert docs/*.md)
+│   └── feedback/          # Anonymes Feedback-Formular
 ├── services/              # Backend-Services (Go)
 │   ├── booking/           # BookingService (story1 … story7)
 │   ├── flight/            # FlightService
@@ -61,7 +65,7 @@ Dieses Repository ist **source-available, aber nicht klassisch Open Source**. Le
 
 | Inhalt | Lizenz |
 |---|---|
-| Quellcode in `services/` | [PolyForm Noncommercial 1.0.0](LICENSE) |
+| Quellcode in `services/` und `pages/` | [PolyForm Noncommercial 1.0.0](LICENSE) |
 | Workshop-Inhalt in `docs/` | [CC BY-NC 4.0](docs/LICENSE) |
 
 **Erlaubt (ohne Rückfrage):**
