@@ -15,7 +15,9 @@ Egal ob du gerade in ein Microservice-Projekt einsteigst oder bestehende Archite
 
 Dieser Workshop gibt dir die Werkzeuge dafür!
 
-**Schwierigkeitsgrad:** Mittel
+**Schwierigkeitsgrad:** Anspruchsvoll
+
+Keine Sorge: Microservices-Vorwissen brauchst du nicht, die Patterns erarbeiten wir gemeinsam. Du solltest aber schon etwas Erfahrung mit Software-Architektur mitbringen. Ohne diese Grundlage sind zwei Tage voller neuer Themen sehr dicht.
 
 **Dauer und Format:** 2 Tage in Präsenz (im Schuppen Eins)
 
@@ -23,7 +25,7 @@ Dieser Workshop gibt dir die Werkzeuge dafür!
 
 **Teilnahmebedingungen:**
 
-- Du kennst mindestens ein Architekturpattern
+- Du hast schon praktische Erfahrung mit Software-Architektur, mindestens ein Architekturpattern ist dir vertraut
 - Du bist Software-Architekt:in oder willst dies werden
 - Du kannst 2 Tage Zeit (am Stück) erübrigen
 - Du bringst ein Entwickler-Notebook mit (installiert: Git, **Docker inkl. Docker Compose**, IDE, Programmiersprache deiner Wahl)

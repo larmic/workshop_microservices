@@ -174,6 +174,10 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
   entsprechend angepasst (`services/slides/chapters/07-vorbereitung.md`, `03-agenda.md`).
   Bewusst NICHT umgesetzt: der separate Vor-Workshop bzw. Setup-Check-Termin
   (Entscheidung Lars). Stattdessen Troubleshooting-Verweis plus Kontaktangebot vorab.
+  Ergänzung: Schwierigkeitsgrad im Intranet-Text von "Mittel" auf "Anspruchsvoll"
+  angehoben (mündliches Feedback nach dem Kickoff: gut zu folgen, wenn man in
+  Architektur schon bewandert ist), mit Einordnung, die Microservices-Vorwissen
+  explizit ausnimmt, um die richtige Zielgruppe nicht abzuschrecken.
 
 - [~] **D6 · Vorbereitungs- und Repo-Strategie** · Priorität: Mittel
   Material aktiv vorab teilen (Repo ist bereits öffentlich), Selbstlern-Charakter
