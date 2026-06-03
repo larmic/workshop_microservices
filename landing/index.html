@@ -36,6 +36,13 @@
             width: 100%;
             padding: 1.75rem 1.75rem 1.5rem;
         }
+        .banner {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 0 0 1.25rem;
+        }
         h1 {
             font-size: 1.4rem;
             margin: 0 0 0.35rem;
@@ -88,6 +95,35 @@
             line-height: 1.5;
         }
         .footer a { color: var(--primary-violet); }
+        .workshop-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #d0d7e2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        .workshop-footer .footer-author strong { color: #0A0349; }
+        .workshop-footer .footer-author .accent {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: #CCF465;
+            color: #0A0349;
+            font-weight: 700;
+            margin-right: 0.4rem;
+        }
+        .workshop-footer .footer-logo {
+            height: 32px;
+            width: auto;
+            opacity: 0.8;
+            transition: opacity 0.15s;
+        }
+        .workshop-footer .footer-logo:hover { opacity: 1; }
         @media (max-width: 480px) {
             .tile-row { flex-direction: column; }
         }
@@ -95,9 +131,17 @@
 </head>
 <body>
     <main class="card" role="main">
+        <img class="banner" src="./slides/assets/intro.png" alt="Microservices sind auch nur Monolithen mit Netzwerkproblemen">
         <h1>Workshop: Microservices</h1>
-        <p class="sub">Folien und Feedback zum Workshop. Bitte den passenden Bereich w&auml;hlen.</p>
+        <p class="sub">Vorbereitung, Folien und Feedback zum Workshop. Bitte den passenden Bereich w&auml;hlen.</p>
 
+        <div class="tile-row">
+            <a class="tile" href="./vorbereitung/">
+                <span class="emoji">&#128640;</span>
+                <span>Vorbereitung</span>
+                <span class="hint">Pflicht vor dem Workshop</span>
+            </a>
+        </div>
         <div class="tile-row">
             <a class="tile" href="./slides/">
                 <span class="emoji">&#127916;</span>
@@ -114,6 +158,15 @@
         <div class="footer">
             Quelle: <a href="https://github.com/larmic/workshop_microservices" target="_blank" rel="noopener">github.com/larmic/workshop_microservices</a>
         </div>
+
+        <footer class="workshop-footer">
+            <div class="footer-author">
+                <span class="accent">Workshop</span> von <strong>Lars Michaelis</strong>
+            </div>
+            <a href="https://www.team-neusta.de/" target="_blank" rel="noopener" aria-label="team neusta">
+                <img class="footer-logo" src="./assets/team-neusta-logo.svg" alt="team neusta">
+            </a>
+        </footer>
     </main>
 </body>
 </html>

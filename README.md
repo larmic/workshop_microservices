@@ -30,7 +30,7 @@ Die vollständige Themenübersicht findet sich in [docs/themen.md](docs/themen.m
 
 ## Einstieg
 
-Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitung.md](docs/vorbereitung.md).
+Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitung.md](docs/vorbereitung.md), online lesbar unter <https://larmic.github.io/workshop_microservices/vorbereitung/>. Die Workshop-Seite mit Folien und Feedback: <https://larmic.github.io/workshop_microservices/>.
 
 ## Projektstruktur
 

@@ -34,4 +34,4 @@ Keine Sorge: Microservices-Vorwissen brauchst du nicht, die Patterns erarbeiten 
 
 **Vorbereitung:**
 
-Vor dem Workshop gibt es eine kleine Pflicht-Hausaufgabe (ca. 1 bis 2 Stunden): einen Mini-Service mit Health-Endpoint und Dockerfile aufsetzen, die Workshop-Umgebung einmal starten und beides einmal im Firmennetz testen. Die Details bekommst du mit der Einladung. Alles steht im öffentlichen Workshop-Repo: <https://github.com/larmic/workshop_microservices> (dort `docs/vorbereitung.md`).
+Vor dem Workshop gibt es eine kleine Pflicht-Hausaufgabe (ca. 1 bis 2 Stunden): einen Mini-Service mit Health-Endpoint und Dockerfile aufsetzen, die Workshop-Umgebung einmal starten und beides einmal im Firmennetz testen. Die Details bekommst du mit der Einladung, oder direkt online: <https://larmic.github.io/workshop_microservices/vorbereitung/> (Quellcode und Material: <https://github.com/larmic/workshop_microservices>).

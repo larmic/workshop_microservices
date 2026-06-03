@@ -1,4 +1,4 @@
-name: Deploy Pages (Feedback + Slides)
+name: Deploy Pages (Vorbereitung + Feedback + Slides)
 
 on:
   push:
@@ -7,6 +7,10 @@ on:
       - 'feedback/**'
       - 'services/slides/**'
       - 'landing/**'
+      - 'vorbereitung/**'
+      - 'docs/vorbereitung.md'
+      - 'docs/troubleshooting.md'
+      - 'docs/assets/**'
       - 'services/dashboard/static/icon.png'
       - 'services/dashboard/static/team-neusta-logo.svg'
       - '.github/workflows/deploy-pages.yml'
@@ -34,17 +38,24 @@ jobs:
         uses: actions/configure-pages@v6
 
       # Layout der Pages-Site zusammenbauen:
-      #   /          → Landing-Page (landing/index.html)
-      #   /feedback/ → feedback/
-      #   /slides/   → services/slides/ + benötigte dashboard-Assets
+      #   /              → Landing-Page (landing/index.html)
+      #   /vorbereitung/ → vorbereitung/ + docs-Markdown (client-seitig gerendert)
+      #   /feedback/     → feedback/
+      #   /slides/       → services/slides/ + benötigte dashboard-Assets
+      #   /assets/       → seitenübergreifende Assets (Footer-Logo)
       - name: Build site layout
         run: |
           set -euo pipefail
-          mkdir -p _site/feedback _site/slides/dashboard
+          mkdir -p _site/feedback _site/slides/dashboard _site/vorbereitung/assets _site/assets
           cp -r feedback/. _site/feedback/
           rsync -a --exclude='.DS_Store' --exclude='TODO.md' services/slides/ _site/slides/
           cp services/dashboard/static/icon.png _site/slides/dashboard/icon.png
           cp services/dashboard/static/team-neusta-logo.svg _site/slides/dashboard/team-neusta-logo.svg
+          cp vorbereitung/index.html _site/vorbereitung/index.html
+          cp docs/vorbereitung.md _site/vorbereitung/vorbereitung.md
+          cp docs/troubleshooting.md _site/vorbereitung/troubleshooting.md
+          cp -r docs/assets/. _site/vorbereitung/assets/
+          cp services/dashboard/static/team-neusta-logo.svg _site/assets/team-neusta-logo.svg
           cp landing/index.html _site/index.html
           touch _site/.nojekyll
           # /dashboard/... -> ./dashboard/... im Slides-HTML. Lokal nutzt der

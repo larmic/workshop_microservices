@@ -184,7 +184,11 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
   ausbauen, ggf. zwei Termine mit einer Woche Abstand zum echten Nacharbeiten.
   Teilweise umgesetzt 2026-06-03: Repo-Link aktiv in IntraHub-Text und
   E-Mail-Einladung platziert (`docs/orga/`), die Pflicht-Hausaufgabe (D5) stützt den
-  Selbstlern-Charakter. Offen bleibt das Zwei-Termine-Modell mit einer Woche Abstand,
+  Selbstlern-Charakter. Ergänzung: `docs/vorbereitung.md` und `docs/troubleshooting.md`
+  sind jetzt als GitHub-Pages-Seite öffentlich teilbar
+  (https://larmic.github.io/workshop_microservices/vorbereitung/, client-seitig
+  gerendert aus den Markdown-Quellen), Einladung und IntraHub verlinken dorthin.
+  Offen bleibt das Zwei-Termine-Modell mit einer Woche Abstand,
   bewusst zurückgestellt: das Format bleibt vorerst 2 Tage am Stück.
 
 - [ ] **D7 · Aufwand der Admin-Endpoints vom Pattern-Lernen entkoppeln** · Priorität: Hoch · *Entscheidung Lars*

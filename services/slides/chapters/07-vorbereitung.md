@@ -21,7 +21,7 @@ make docker-up-hub        # zieht fertige Images von Docker Hub
 open http://localhost     # Dashboard = Workshop-Steuerzentrale
 ```
 
-<p class="qr-url">Voller Setup-Pfad: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/vorbereitung.md">docs/vorbereitung.md</a></p>
+<p class="qr-url">Voller Setup-Pfad: <a href="https://larmic.github.io/workshop_microservices/vorbereitung/">larmic.github.io/workshop_microservices/vorbereitung</a></p>
 </div>
 
 <img class="dashboard-image" src="./assets/dashboard-ui.png" alt="Workshop-Dashboard mit Flight-, Hotel-, Car- und Booking-Services"/>
