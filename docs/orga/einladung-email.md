@@ -16,7 +16,7 @@ Platzhalter:
 
 ---
 
-**Betreff:** Workshop "Microservices richtig gemacht" am {{DATUM}} · bitte Vorbereitung bis {{DEADLINE}}
+**Betreff:** Workshop "Microservices richtig gemacht" am {{DATUM}} · bitte Vorbereitung vor den Workshop-Tagen
 
 Hallo zusammen,
 
