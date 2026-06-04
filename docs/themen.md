@@ -85,7 +85,7 @@ Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-
 
 ## 4. Vorbereitung verifizieren (30 Min)
 
-Das Setup ist Pflicht-Hausaufgabe vor dem Workshop ([vorbereitung.md](vorbereitung.md), Abschnitt 0). Hier wird nur verifiziert, Restprobleme werden sofort eingesammelt und parallel gelöst.
+Das Setup ist Pflicht-Hausaufgabe vor dem Workshop ([vorbereitung.md](vorbereitung.md)). Hier wird nur verifiziert, Restprobleme werden sofort eingesammelt und parallel gelöst.
 
 - Kurz-Check pro Teilnehmer: Mini-Service läuft (Image baut, `/health` antwortet), Repo geklont
 - Docker Compose: Backend-Services (Flight, Hotel, Car) + Consul + API-Gateway starten

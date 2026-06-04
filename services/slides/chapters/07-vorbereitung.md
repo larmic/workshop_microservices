@@ -28,7 +28,7 @@ open http://localhost     # Dashboard = Workshop-Steuerzentrale
 
 
 Note:
-- Das Setup ist Pflicht-Hausaufgabe vor dem Workshop (`docs/vorbereitung.md`, Abschnitt 0). Hier nur verifizieren, Zeitbudget ~30 min: Mini-Service läuft, Stack läuft. Restprobleme sofort einsammeln, niemand sitzt nachher allein vor einem roten Terminal.
+- Das Setup ist Pflicht-Hausaufgabe vor dem Workshop (`docs/vorbereitung.md`). Hier nur verifizieren, Zeitbudget ~30 min: Mini-Service läuft, Stack läuft. Restprobleme sofort einsammeln, niemand sitzt nachher allein vor einem roten Terminal.
 - `make docker-up-hub` zieht fertige Images, kein lokaler Build nötig (= schnell). Variante B `make docker-up` baut alles selbst.
 - Dashboard auf `http://localhost` ist die Schaltzentrale für alle Stories: Start/Stop, Health, Chaos-Schalter, Links zu Swagger / Consul / Traefik (8080).
 - Was hochfährt: Flight, Hotel, Car, Booking + Consul (Service Discovery) + Swagger UI (API-Docs) + Traefik (Gateway) + Dashboard (UI).

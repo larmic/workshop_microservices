@@ -178,6 +178,11 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
   angehoben (mündliches Feedback nach dem Kickoff: gut zu folgen, wenn man in
   Architektur schon bewandert ist), mit Einordnung, die Microservices-Vorwissen
   explizit ausnimmt, um die richtige Zielgruppe nicht abzuschrecken.
+  Nachschärfung: `docs/vorbereitung.md` in eine schlanke Pflicht-Vorbereitung
+  (Mini-Service bauen, Repo auschecken und prüfen, Firmennetz-Test) und
+  `docs/custom-setup.md` (Einklinken des eigenen Service, Tools und URLs)
+  aufgeteilt. Das Custom-Setup passiert bewusst erst gemeinsam im Workshop und
+  wird vorab nicht verlinkt, damit sich niemand spoilert.
 
 - [~] **D6 · Vorbereitungs- und Repo-Strategie** · Priorität: Mittel
   Material aktiv vorab teilen (Repo ist bereits öffentlich), Selbstlern-Charakter

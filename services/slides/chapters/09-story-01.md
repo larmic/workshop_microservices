@@ -38,7 +38,7 @@ Als <em>Betriebsteam</em> m&ouml;chte ich einen Service, der <em>in beliebigen U
 - `Dockerfile` im Service-Verzeichnis, Service lauscht auf Port `8080`
 - `CUSTOM_BOOKING_PATH` in `services/.env` zeigt auf dieses Verzeichnis
 - Backend-URLs (`FLIGHT_SERVICE_URL`, `HOTEL_SERVICE_URL`, `CAR_SERVICE_URL`, `CONSUL_URL`) kommen automatisch aus `docker-compose.custom.yml`, nicht selbst setzen
-- Details: `docs/vorbereitung.md` Abschnitt 5
+- Details: `docs/custom-setup.md`
 
 </div>
 

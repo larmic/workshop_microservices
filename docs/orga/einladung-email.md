@@ -34,7 +34,7 @@ Damit wir am Workshop-Tag direkt mit den Inhalten starten, statt Setups zu debug
 2. **Workshop-Umgebung einmal starten:** Repo klonen, Stack hochfahren, Dashboard unter <http://localhost> öffnen.
 3. **Im Firmennetz testen:** `git clone` und `docker build` einmal in dem Netz ausführen, in dem ihr auch am Workshop-Tag arbeitet. Proxy- und Zertifikatsprobleme fallen sonst erst vor Ort auf, besonders unter Windows/WSL2.
 
-Die genaue Anleitung mit Akzeptanzkriterien (Abschnitt "0. Vor dem Workshop (Pflicht)"):
+Die genaue Anleitung mit Akzeptanzkriterien:
 <https://larmic.github.io/workshop_microservices/vorbereitung/>
 
 Das Repo zum Klonen: <https://github.com/larmic/workshop_microservices>

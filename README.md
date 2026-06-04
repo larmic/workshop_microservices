@@ -36,7 +36,8 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 
 ```
 ├── docs/                  # Workshop-Dokumentation
-│   ├── vorbereitung.md    # Arbeitsplatz einrichten
+│   ├── vorbereitung.md    # Pflicht-Vorbereitung vor dem Workshop
+│   ├── custom-setup.md    # Eigenen Booking-Service einklinken (im Workshop)
 │   ├── themen.md          # Themenübersicht & Moderationsleitfaden
 │   ├── stories/           # User Stories (story-01 … story-07)
 │   ├── instructions/      # Trainer-Hinweise

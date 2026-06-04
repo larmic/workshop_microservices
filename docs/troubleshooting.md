@@ -171,10 +171,10 @@ Weiterführend:
 
 ## Weitere Windows-Stolpersteine
 
-**Geltung:** nur Windows/WSL2 · **Status:** verifiziert (in [vorbereitung.md](vorbereitung.md) dokumentiert)
+**Geltung:** nur Windows/WSL2 · **Status:** verifiziert (in [vorbereitung.md](vorbereitung.md) und [custom-setup.md](custom-setup.md) dokumentiert)
 
 Pfade mit Forward-Slashes, `.env` mit LF statt CRLF, Projekt im WSL2-Dateisystem:
-siehe die Windows-Hinweise in [vorbereitung.md](vorbereitung.md).
+siehe die Windows-Hinweise in [vorbereitung.md](vorbereitung.md) und [custom-setup.md](custom-setup.md).
 
 ## Stack komplett zurücksetzen
 
