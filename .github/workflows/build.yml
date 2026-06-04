@@ -5,10 +5,13 @@ on:
     branches: [main]
     paths:
       - 'services/**'
+      # Folien gehören zur Pages-Pipeline (deploy-pages.yml), nicht zum Go-Build
+      - '!services/slides/**'
   pull_request:
     branches: [main]
     paths:
       - 'services/**'
+      - '!services/slides/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

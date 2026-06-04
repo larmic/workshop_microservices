@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'services/**'
+      # Folien gehören zur Pages-Pipeline (deploy-pages.yml), nicht zum Docker-Build
+      - '!services/slides/**'
   workflow_dispatch:
 
 concurrency:
