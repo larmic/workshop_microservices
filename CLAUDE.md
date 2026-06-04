@@ -1,7 +1,9 @@
 # Microservices-Workshop
 
 Workshop-Projekt zur Vermittlung von Architekturmustern und Best Practices für
-Microservices. Sprache des gesamten Workshop-Materials: Deutsch.
+Microservices. Der Workshop heißt offiziell **"Microservices richtig gemacht"**
+(so in Titeln, Pages und Orga-Texten zu verwenden). Sprache des gesamten
+Workshop-Materials: Deutsch.
 
 ## Zielgruppe & Sprache
 

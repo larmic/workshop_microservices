@@ -16,11 +16,11 @@ Platzhalter:
 
 ---
 
-**Betreff:** Microservices-Workshop am {{DATUM}} · bitte Vorbereitung bis {{DEADLINE}}
+**Betreff:** Workshop "Microservices richtig gemacht" am {{DATUM}} · bitte Vorbereitung bis {{DEADLINE}}
 
 Hallo zusammen,
 
-schön, dass ihr dabei seid! Hier die wichtigsten Infos zum Microservices-Workshop:
+schön, dass ihr dabei seid! Hier die wichtigsten Infos zum Workshop "Microservices richtig gemacht":
 
 **Wann:** {{DATUM}}, {{UHRZEIT}}
 **Wo:** {{ORT}}

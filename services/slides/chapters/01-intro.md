@@ -2,7 +2,7 @@
 
 <div class="intro">
 
-<img class="intro-image" src="./assets/intro.png" alt="Microservices Workshop"/>
+<img class="intro-image" src="./assets/intro.png" alt="Microservices richtig gemacht"/>
 
 <div class="author-card">
   <img class="author-photo" src="./assets/profil.jpeg" alt="Lars Michaelis"/>

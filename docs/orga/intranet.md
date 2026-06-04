@@ -1,4 +1,4 @@
-# IntraHub-Text: Microservices-Workshop
+# IntraHub-Text: Microservices richtig gemacht
 
 Vorlage für den Workshop-Eintrag im IntraHub. Wird manuell ins Intranet
 kopiert. Die Schritt-für-Schritt-Details zur Vorbereitung leben in
@@ -6,6 +6,8 @@ kopiert. Die Schritt-für-Schritt-Details zur Vorbereitung leben in
 dupliziert.
 
 ---
+
+**Titel:** Microservices richtig gemacht
 
 Microservices sind seit Jahren in aller Munde – und trotzdem begegnen uns in der Praxis immer wieder dieselben Missverständnisse und Fallstricke. Zu kleinteilige Services, unklare Grenzen, verteilte Monolithen: Was gut gemeint ist, wird oft zur Architektur-Falle.
 

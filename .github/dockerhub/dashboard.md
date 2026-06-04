@@ -1,6 +1,6 @@
 # Workshop Microservices – Dashboard
 
-Demo-Image aus dem **Microservices-Workshop** von [larmic/workshop_microservices](https://github.com/larmic/workshop_microservices).
+Demo-Image aus dem Workshop **"Microservices richtig gemacht"** von [larmic/workshop_microservices](https://github.com/larmic/workshop_microservices).
 
 ## Inhalt
 

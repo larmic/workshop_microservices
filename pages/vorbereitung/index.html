@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="robots" content="noindex, nofollow">
-    <title>Workshop-Vorbereitung</title>
+    <title>Vorbereitung &middot; Microservices richtig gemacht</title>
     <link rel="icon" type="image/png" href="../feedback/icon.png">
     <style>
         :root {
@@ -216,7 +216,7 @@
         // der Hash bleibt frei für Heading-Anker.
         const param = new URLSearchParams(location.search).get("doc");
         const doc = Object.prototype.hasOwnProperty.call(DOCS, param) ? param : "vorbereitung.md";
-        document.title = DOCS[doc];
+        document.title = DOCS[doc] + " · Microservices richtig gemacht";
         document.querySelectorAll(".doc-tabs a").forEach((a) => {
             if (a.dataset.doc === doc) a.classList.add("active");
         });
