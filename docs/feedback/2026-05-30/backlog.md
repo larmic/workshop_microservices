@@ -208,6 +208,38 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
     `/admin/state`), damit der Bau-Aufwand klein bleibt.
   Bezug: C2 (Vertrag), D1 und D3 (Lernfokus).
 
+- [ ] **D8 · REST vs. RESTful: Theorie-Input plus Flipchart-API-Design** · Priorität: Hoch
+  Entschieden 2026-06-04 (Lars): die Einheit kommt, offen ist die Ausgestaltung.
+  Hintergrund: Viele Services sprechen über REST, RESTful-Prinzipien sind aber
+  oft unbekannt oder falsch angewendet. Betrifft `docs/themen.md:53-60` (REST
+  bisher nur als Default erwähnt), neue Slides und einen Trainer-Hinweis unter
+  `docs/instructions/`.
+  Teil 1, kurzer Theorie-Input "REST vs. RESTful" mit einfachen Beispielen:
+  Ressourcen statt Verben im Pfad (`GET /users/1423` statt
+  `GET /getUser?id=1423`), HTTP-Methode trägt die Semantik (`DELETE /users/1423`
+  statt `POST /users/1423/delete`), Idempotenz (`GET`/`PUT`/`DELETE` idempotent,
+  `POST` nicht; macht Retries im verteilten System sicher), GET ohne
+  Seiteneffekte (`GET /bookings/1423/cancel` wäre für Prefetch und Crawler
+  gefährlich), passende Status-Codes statt 200 mit Fehler-Body (201 plus
+  Location beim Anlegen, 404, 409), Sub-Ressourcen und Filter
+  (`GET /users/1423/bookings` statt `GET /getBookingsForUser?userId=1423`,
+  Query-Parameter für Filter wie `GET /flights?from=BRE`, nicht für Identität).
+  HATEOAS bzw. Richardson-Reifegrade nur als Ausblick.
+  Teil 2, Flipchart-Übung in Teams: gemeinsam eine API für ein vom Trainer
+  gestelltes Problem aus der Reise-Domäne designen, z. B. Storno oder Umbuchung
+  als bewusste Nicht-CRUD-Diskussion (ist eine Umbuchung ein `PUT` auf die
+  Buchung, ein Sub-Ressourcen-`POST`, ein Storno plus Neubuchung?). Alternativ
+  oder ergänzend: Review der eigenen Workshop-API als authentisches Beispiel
+  inkl. der RPC-artigen Reset-Endpoints (`POST /admin/bulkhead-reset`,
+  `POST /admin/sagas-reset` in `booking/story4..7/main.go`, `POST /admin/chaos`
+  in `flight/hotel/car/main.go`): bewusst so gewählt fürs Dashboard, aber ein
+  gutes Lehrbeispiel dafür, wann man von RESTful abweicht und warum.
+  Verortungs-Vorschlag: Theorie-Input im Kommunikations-Vortrag an Tag 1 direkt
+  nach dem REST-Default, die Flipchart-Übung als nicht-codender Einstieg vor dem
+  ersten Hands-on. Querverweise: löst einen Teil von D2 ein (erste konkrete
+  nicht-codende Aufgabe), stützt D4 (Theorie/Praxis-Balance an Tag 1) und
+  verknüpft mit B6/E2 (Idempotenz beim CB-POST).
+
 ## E · Architektur- und Design-Entscheidungen · *Entscheidung Lars*
 
 - [ ] **E1 · Story 5: Saga-Schema im API-Vertrag überdenken** · Priorität: Mittel

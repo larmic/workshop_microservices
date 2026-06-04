@@ -51,6 +51,17 @@ sind Symptome dieses Befunds. Der größte Hebel liegt daher in den Blöcken
   Hürde, hilft Mitnahme, unterstützt den Selbstlern-Charakter), ggf. zwei Termine
   mit einer Woche Abstand. Das Repo ist bereits öffentlich; offen ist die aktive
   Vorab-Weitergabe und das Format. *Einschätzung.* → **D6**
+- **RESTful-Prinzipien fehlen, obwohl alle Services über REST sprechen.**
+  Nachtrag 2026-06-04 (Trainer-Beobachtung): Viele Microservices kommunizieren
+  per REST, die zugrundeliegenden RESTful-Prinzipien sind aber oft unbekannt
+  oder werden falsch angewendet (`GET /getUser?id=1423` statt
+  ressourcenorientiert `GET /users/1423`, unklare Idempotenz von `DELETE`). Im
+  Workshop gibt es dazu kein Material: REST ist nur als heutiger Default genannt
+  (`docs/themen.md:53-60`), ressourcenorientiertes API-Design wird nirgends
+  erklärt oder geübt. *bestätigt* (kein RESTful-Material vorhanden). Geplant ist
+  eine eigene Einheit: kurzer Theorie-Input plus Flipchart-Übung, in der Teams
+  eine API für ein Problem aus der Reise-Domäne designen. → **D8** (verwandt mit
+  **D2** nicht-codende Aufgaben, **B6**/**E2** Idempotenz beim CB-POST)
 
 ## Setup & Voraussetzungen
 
@@ -205,3 +216,4 @@ sind Symptome dieses Befunds. Der größte Hebel liegt daher in den Blöcken
 | Warum nur 1 DB pro Service | B8 |
 | Patterns auch im Monolithen? | B7 |
 | Aufgaben ohne Coding (DDD-Whiteboard) | D2 |
+| RESTful-Prinzipien unbekannt/falsch angewendet (REST vs. RESTful) | D8 |

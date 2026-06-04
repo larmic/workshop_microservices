@@ -124,6 +124,7 @@ das eigentliche Problem (Motivation, eigenes Denken) nicht lösen.
 | F2 | DB-Reduktion sichtbar plus Anker | Diskussion | *Entscheidung Lars* (Tiefe) |
 | F3 | Inter-Story-Brücken | Artefakt jetzt | buildbare Seite von D1 |
 | F4 | Lernpfad-Übersichtsfolie | Artefakt jetzt | Orientierung, vor allem Tag 2 |
+| D8 | REST-vs.-RESTful-Einheit (Nachtrag) | entschieden, Ausgestaltung offen | Theorie-Input plus Flipchart-API-Design, erste nicht-codende Aufgabe (D2) |
 
 ## 5. Neue Punkte (Block F)
 
@@ -159,3 +160,21 @@ TODOs ab. Begründung hier, umsetzbare Form in [backlog.md](backlog.md).
    Persistenz-Tiefe (F2). Hier liegt der größte Hebel, aber kein Code löst ihn.
 5. **Sequenz:** die Artefakte zeitnah, parallel eine kurze
    Curriculum-Entscheidungsrunde für den D- und E-Block vor dem nächsten Termin.
+
+## Nachtrag 2026-06-04
+
+Nachgereichter Punkt: Viele Microservices sprechen über REST miteinander, die
+RESTful-Prinzipien sind aber oft unbekannt oder werden falsch angewendet
+(`GET /getUser?id=1423` statt `GET /users/1423`, Idempotenz von `DELETE`).
+Daraus wird eine eigene Einheit: kurzer Theorie-Input "REST vs. RESTful" plus
+eine Flipchart-Übung, in der Teams gemeinsam eine API für ein Problem aus der
+Reise-Domäne designen. Die Einheit ist entschieden, offen ist die Ausgestaltung.
+
+Das ergänzt die Vollständigkeits-Analyse aus Abschnitt 1: RESTful-API-Design
+war dort nicht erfasst und ist abzugrenzen von der API-Versionierung, die
+bewusst außerhalb des Zwei-Tage-Rahmens bleibt. RESTful ist Grundlagen-Stoff
+(wie Services sauber miteinander sprechen), Versionierung ist Betriebs-Detail
+und bleibt Randnotiz. Geführt wird der Punkt als **D8** im Backlog (Begründung
+dort und in [feedback.md](feedback.md)). Inhaltlich ist es die erste konkrete
+nicht-codende Aufgabe (Teil von **D2**), stützt die Theorie/Praxis-Balance an
+Tag 1 (**D4**) und berührt die Idempotenz-Diskussion beim CB-POST (**B6**/**E2**).
