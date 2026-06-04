@@ -12,7 +12,7 @@ Diese Vorbereitung ist **Pflicht** und wird **vor** dem Workshop-Termin erledigt
 
 ## 1. Eigenen Mini-Service bauen (Pflicht-Hausaufgabe)
 
-Setze in deiner Sprache/deinem Framework ein neues, leeres Projekt auf. Diesen Mini-Service erweiterst du im Workshop über alle 7 Stories hinweg, weggeworfen wird hier nichts. Wie er in die Workshop-Umgebung eingebunden wird, machen wir gemeinsam im Workshop.
+Setze in deiner Sprache/deinem Framework ein neues, leeres Projekt auf. Diesen Mini-Service erweiterst du im Workshop über alle 7 Stories hinweg. Wie er in die Workshop-Umgebung eingebunden wird, machen wir gemeinsam im Workshop.
 
 Akzeptanzkriterien:
 
