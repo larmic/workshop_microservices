@@ -288,6 +288,8 @@
         }
         .rest-status.ok   { color: #1d7a3a; }
         .rest-status.err  { color: #b3261e; }
+        #s7-result-status.ok  { color: #1d7a3a; }
+        #s7-result-status.err { color: #b3261e; }
         .rest-response {
             display: none;
             background: #0A0349;
@@ -1259,6 +1261,8 @@
             color: #0A0349;
         }
     </style>
+    <!-- Easteregg: SCUMM-Retro-Theme, aktiviert per Konami-Code (Klasse "retro" auf <body>) -->
+    <link rel="stylesheet" href="/dashboard/retro.css">
 </head>
 <body>
     <header>
@@ -2814,7 +2818,8 @@ on receiveCompensationEvent(event):
 
             wrap.hidden = false;
             statusEl.textContent = status;
-            statusEl.style.color = ok ? "#1d7a3a" : "#b3261e";
+            statusEl.classList.toggle("ok", ok);
+            statusEl.classList.toggle("err", !ok);
             traceEl.textContent = traceId || "— (kein Header empfangen)";
             cmdEl.textContent = traceId
                 ? `docker compose logs booking-ref-story7 flight hotel car | jq -c 'select(.trace_id=="${traceId}")'`
@@ -3043,6 +3048,34 @@ on receiveCompensationEvent(event):
             if (tag === "INPUT" || tag === "TEXTAREA" || (t && t.isContentEditable)) return;
             if (e.key === "ArrowLeft")  { goPrevStory(); }
             else if (e.key === "ArrowRight") { goNextStory(); }
+        });
+
+        // -------- Easteregg: Konami-Code → SCUMM-Retro-Theme --------
+        const RETRO_KEY = "workshop-dashboard.retroTheme";
+        const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
+                        "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+        let konamiPos = 0;
+
+        function applyRetro(on, animate) {
+            document.body.classList.toggle("retro", on);
+            if (on && animate) {
+                document.body.classList.add("retro-powering");
+                setTimeout(() => document.body.classList.remove("retro-powering"), 500);
+            }
+            try { localStorage.setItem(RETRO_KEY, on ? "1" : "0"); } catch (_) {}
+        }
+
+        document.addEventListener("keydown", (e) => {
+            const t = e.target;
+            const tag = t && t.tagName;
+            if (tag === "INPUT" || tag === "TEXTAREA" || (t && t.isContentEditable)) return;
+            const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+            konamiPos = (key === KONAMI[konamiPos]) ? konamiPos + 1
+                      : (key === KONAMI[0] ? 1 : 0);
+            if (konamiPos === KONAMI.length) {
+                konamiPos = 0;
+                applyRetro(!document.body.classList.contains("retro"), true);
+            }
         });
 
         // -------- Werkzeuge-Dropdown --------
@@ -3274,6 +3307,8 @@ on receiveCompensationEvent(event):
         }
 
         showStory(currentStory);
+        // Retro-Theme aus früherer Sitzung wiederherstellen (ohne Power-On-Flash)
+        applyRetro(localStorage.getItem(RETRO_KEY) === "1", false);
 
         scheduleStartupSkipButton();
         pollHealthOverview();

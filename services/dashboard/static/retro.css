@@ -1,0 +1,532 @@
+/*
+ * Easteregg: SCUMM/Monkey-Island-Retro-Theme.
+ * Aktivierung per Konami-Code (siehe index.html), Klasse "retro" auf <body>.
+ * Reiner Override-Layer: die Original-Palette in index.html bleibt unberührt
+ * und nimmt weiterhin an der Palette-Synchronisation (sync-palette) teil.
+ * Fonts: Press Start 2P + VT323 (beide OFL, siehe fonts/OFL.txt), lokal
+ * vendored — keine Laufzeit-Abhängigkeit zu CDNs.
+ */
+
+@font-face {
+    font-family: "PressStart2P";
+    src: url("/dashboard/fonts/press-start-2p-latin-400.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "RetroText";
+    src: url("/dashboard/fonts/vt323-latin-400.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* EGA-Palette, nur im Retro-Scope */
+body.retro {
+    --r-bg: #0B0B2E;        /* Nacht auf Mêlée Island */
+    --r-panel: #181842;     /* Panel-Flächen */
+    --r-panel-2: #10103A;   /* abgesetzte Flächen (Cards in Cards) */
+    --r-ink: #E6E6FA;       /* Standardtext */
+    --r-muted: #9A9AD0;     /* Sekundärtext */
+    --r-faint: #7777B0;     /* Tertiärtext */
+    --r-cyan: #55FFFF;
+    --r-magenta: #FF55FF;
+    --r-green: #55FF55;
+    --r-yellow: #FFFF55;
+    --r-red: #FF5555;
+    --r-line: #33336B;      /* dezente Trennlinien */
+}
+
+/* ===== Grundlayout & Typo ===== */
+body.retro {
+    background: var(--r-bg);
+    color: var(--r-ink);
+    font-family: "RetroText", ui-monospace, monospace;
+    transition: background-color 0.25s, color 0.25s;
+}
+body.retro header {
+    background: var(--r-bg);
+    border-bottom: 3px double var(--r-cyan);
+    color: var(--r-ink);
+}
+body.retro header .header-title h1 {
+    font-family: "PressStart2P", monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-shadow: 2px 2px 0 #000;
+}
+body.retro header .header-title p,
+body.retro header p { color: var(--r-muted); }
+body.retro .title-accent { color: var(--r-green); }
+body.retro .error-banner {
+    background: #3A0B0B;
+    color: var(--r-red);
+    border-bottom: 2px solid var(--r-red);
+}
+body.retro ::selection { background: var(--r-magenta); color: var(--r-bg); }
+
+/* Headings im Pixel-Look (Press Start 2P rendert breit → kleiner setzen) */
+body.retro .links-section h2,
+body.retro .cb-section h2 {
+    font-family: "PressStart2P", monospace;
+    font-size: 0.7rem;
+    color: var(--r-cyan);
+    text-transform: uppercase;
+}
+body.retro .stepper-headline h2 {
+    font-family: "PressStart2P", monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--r-ink);
+}
+body.retro .stepper-headline p { color: var(--r-muted); }
+
+/* ===== Karten & Panels: harte Kanten, Pixel-Border, kein Schatten ===== */
+body.retro .card,
+body.retro .cb-section,
+body.retro .trace-result,
+body.retro .source-toggle {
+    background: var(--r-panel);
+    border: 2px solid var(--r-cyan);
+    border-radius: 0 !important;
+    box-shadow: 4px 4px 0 #000 !important;
+}
+body.retro .card:hover { box-shadow: 4px 4px 0 #000 !important; border-color: var(--r-magenta); }
+body.retro .cb-card,
+body.retro .saga-row {
+    background: var(--r-panel-2);
+    border: 1px solid var(--r-line);
+    border-radius: 0 !important;
+}
+body.retro .card-name,
+body.retro .cb-card-name {
+    font-family: "PressStart2P", monospace;
+    font-size: 0.72rem;
+    line-height: 1.6;
+    color: var(--r-ink);
+}
+body.retro .cb-card-details { color: var(--r-muted); }
+body.retro .cb-card-details strong { color: var(--r-ink); }
+body.retro .cb-countdown { color: var(--r-red); }
+body.retro .cb-empty,
+body.retro .saga-empty { color: var(--r-faint); }
+body.retro .replica-count {
+    font-family: "PressStart2P", monospace;
+    font-size: 1.8rem;
+    color: var(--r-magenta);
+    text-shadow: 2px 2px 0 #000;
+}
+
+/* ===== Status-Badges: EGA-Farben auf dunklem Grund ===== */
+body.retro .cb-badge {
+    border-radius: 0;
+    background: var(--r-bg);
+    color: var(--r-muted);
+    border: 1px solid var(--r-muted);
+}
+body.retro .cb-badge.closed   { background: var(--r-bg); color: var(--r-green);  border-color: var(--r-green); }
+body.retro .cb-badge.open     { background: var(--r-bg); color: var(--r-red);    border-color: var(--r-red); }
+body.retro .cb-badge.halfopen { background: var(--r-bg); color: var(--r-yellow); border-color: var(--r-yellow); }
+
+/* ===== Bulkhead ===== */
+body.retro .bh-bar {
+    background: var(--r-bg);
+    border: 1px solid var(--r-line);
+    border-radius: 0;
+}
+body.retro .bh-bar-fill { background: var(--r-green); }
+body.retro .bh-bar-fill.warn { background: var(--r-yellow); }
+body.retro .bh-bar-fill.full { background: var(--r-red); }
+body.retro .bh-result { color: var(--r-muted); }
+body.retro .bh-btn {
+    background: var(--r-panel);
+    border: 2px solid var(--r-magenta);
+    border-radius: 0;
+    color: var(--r-magenta);
+    font-family: "RetroText", monospace;
+    font-size: 1rem;
+}
+body.retro .bh-btn:hover:not(:disabled) { background: var(--r-magenta); color: var(--r-bg); }
+body.retro .bh-btn.burst { border-color: var(--r-red); color: var(--r-red); }
+body.retro .bh-btn.burst:hover:not(:disabled) { background: var(--r-red); color: var(--r-bg); }
+
+/* ===== REST-Buttons & Chips ===== */
+body.retro .rest-btn {
+    background: var(--r-panel-2);
+    border: 2px solid var(--r-line);
+    border-radius: 0;
+    color: var(--r-ink);
+    font-family: "RetroText", monospace;
+    font-size: 1rem;
+}
+body.retro .rest-btn:hover:not(:disabled) {
+    border-color: var(--r-magenta);
+    box-shadow: 3px 3px 0 #000;
+}
+body.retro .rest-btn.danger { border-color: #663; }
+body.retro .rest-btn.danger:hover:not(:disabled) {
+    border-color: var(--r-red);
+    box-shadow: 3px 3px 0 #000;
+}
+body.retro .method-chip { border-radius: 0; color: var(--r-bg); }
+body.retro .method-chip.get    { background: var(--r-green); }
+body.retro .method-chip.post   { background: var(--r-magenta); }
+body.retro .method-chip.delete { background: var(--r-red); }
+body.retro .rest-path { color: var(--r-cyan); }
+body.retro .rest-arrow { color: var(--r-faint); }
+body.retro .service-chip {
+    border-radius: 0;
+    background: var(--r-bg);
+    color: var(--r-ink);
+    border: 1px solid var(--r-line);
+}
+body.retro .service-chip.flight { background: var(--r-bg); color: var(--r-cyan);   border-color: var(--r-cyan); }
+body.retro .service-chip.hotel  { background: var(--r-bg); color: var(--r-yellow); border-color: var(--r-yellow); }
+body.retro .service-chip.car    { background: var(--r-bg); color: var(--r-green);  border-color: var(--r-green); }
+body.retro .rest-btn-sub { color: var(--r-muted); }
+body.retro .rest-status { color: var(--r-muted); }
+body.retro .rest-status.ok  { color: var(--r-green); }
+body.retro .rest-status.err { color: var(--r-red); }
+body.retro #s7-result-status.ok  { color: var(--r-green); }
+body.retro #s7-result-status.err { color: var(--r-red); }
+
+/* ===== Code-/Terminal-Blöcke: schwarz/grün ===== */
+body.retro .rest-response,
+body.retro .trace-result-cmd,
+body.retro .trace-result-body pre,
+body.retro .trace-result-line code,
+body.retro .story-cheatsheet-body pre {
+    background: #000;
+    color: var(--r-green);
+    border: 1px solid var(--r-green);
+    border-radius: 0;
+}
+body.retro .story7-hint { color: var(--r-muted); }
+body.retro .trace-result-line strong { color: var(--r-ink); }
+body.retro .trace-result-body summary { color: var(--r-muted); }
+body.retro .panel-reset-btn {
+    background: var(--r-panel);
+    border: 2px solid var(--r-line);
+    border-radius: 0;
+    color: var(--r-muted);
+    font-family: "RetroText", monospace;
+    font-size: 0.95rem;
+}
+body.retro .panel-reset-btn:hover:not(:disabled) { border-color: var(--r-red); color: var(--r-red); }
+
+/* ===== Saga ===== */
+body.retro .saga-stat.completed strong    { color: var(--r-green); }
+body.retro .saga-stat.failed strong       { color: var(--r-red); }
+body.retro .saga-stat.compensating strong { color: var(--r-yellow); }
+body.retro .saga-stat.pending strong      { color: var(--r-muted); }
+body.retro .saga-id { color: var(--r-cyan); }
+body.retro .saga-meta { color: var(--r-muted); }
+body.retro .saga-meta strong { color: var(--r-ink); }
+body.retro .saga-status { border-radius: 0; border: 1px solid; }
+body.retro .saga-status.completed    { background: var(--r-bg); color: var(--r-green);  border-color: var(--r-green); }
+body.retro .saga-status.failed       { background: var(--r-bg); color: var(--r-red);    border-color: var(--r-red); }
+body.retro .saga-status.compensating { background: var(--r-bg); color: var(--r-yellow); border-color: var(--r-yellow); }
+body.retro .saga-status.pending      { background: var(--r-bg); color: var(--r-muted);  border-color: var(--r-muted); }
+body.retro .saga-step { border-radius: 0; color: var(--r-ink); }
+body.retro .saga-step.booked { background: #0F2E0F; color: var(--r-green); border-color: var(--r-green); }
+body.retro .saga-step.failed { background: #2E0F0F; color: var(--r-red);   border-color: var(--r-red); }
+body.retro .saga-step.skipped {
+    background: repeating-linear-gradient(
+        45deg, var(--r-panel-2), var(--r-panel-2) 4px, var(--r-line) 4px, var(--r-line) 8px);
+    color: var(--r-faint);
+    border-color: var(--r-line);
+}
+/* Split-Optik wie im Original: links "gebucht", rechts das spätere Ergebnis */
+body.retro .saga-step.compensated {
+    background: linear-gradient(90deg, #0F2E0F 50%, var(--r-panel-2) 50%);
+    color: var(--r-muted);
+    border-color: var(--r-muted);
+}
+body.retro .saga-step.comp-failed {
+    background: linear-gradient(90deg, #0F2E0F 50%, #2E0F0F 50%);
+    color: var(--r-red);
+    border-color: var(--r-red);
+}
+body.retro .saga-legend {
+    background: var(--r-panel-2);
+    border: 1px dashed var(--r-line);
+    border-radius: 0;
+    color: var(--r-muted);
+}
+body.retro .saga-legend strong { color: var(--r-cyan); }
+
+/* ===== Service-Cards: Replica-Buttons & Chaos ===== */
+body.retro .btn {
+    background: var(--r-panel);
+    border: 2px solid var(--r-cyan);
+    border-radius: 0;
+    color: var(--r-cyan);
+}
+body.retro .btn:hover:not(:disabled) {
+    background: var(--r-magenta);
+    border-color: var(--r-magenta);
+    color: var(--r-bg);
+}
+body.retro .chaos-section { border-top: 1px dashed var(--r-line); }
+body.retro .chaos-section h3,
+body.retro .instances-heading { color: var(--r-faint); }
+body.retro .chaos-btn {
+    background: var(--r-panel-2);
+    border: 1.5px solid var(--r-line);
+    border-radius: 0;
+    color: var(--r-muted);
+    font-family: "RetroText", monospace;
+    font-size: 0.95rem;
+}
+body.retro .chaos-btn:hover { border-color: var(--r-muted); }
+body.retro .chaos-btn.active.normal { background: var(--r-green);  color: var(--r-bg); border-color: var(--r-green); }
+body.retro .chaos-btn.active.slow   { background: var(--r-yellow); color: var(--r-bg); border-color: var(--r-yellow); }
+body.retro .chaos-btn.active.fail   { background: var(--r-red);    color: var(--r-bg); border-color: var(--r-red); }
+body.retro .chaos-btn.mixed { background: var(--r-line); color: var(--r-ink); border-color: var(--r-muted); }
+body.retro .instance-row { border-top: 1px dashed var(--r-line); }
+body.retro .instance-id { color: var(--r-muted); }
+body.retro .instance-mode { border-radius: 0; }
+body.retro .instance-mode.normal  { background: var(--r-bg); color: var(--r-green);  border: 1px solid var(--r-green); }
+body.retro .instance-mode.slow    { background: var(--r-bg); color: var(--r-yellow); border: 1px solid var(--r-yellow); }
+body.retro .instance-mode.fail    { background: var(--r-bg); color: var(--r-red);    border: 1px solid var(--r-red); }
+body.retro .instance-mode.unknown { background: var(--r-bg); color: var(--r-faint);  border: 1px solid var(--r-faint); }
+body.retro .instance-row.served-recent {
+    background: rgba(85, 255, 85, 0.16);
+    border-radius: 0;
+    animation: retro-served-pulse 1.1s ease-out;
+}
+@keyframes retro-served-pulse {
+    0%   { background: rgba(85, 255, 85, 0.45); }
+    100% { background: rgba(85, 255, 85, 0.16); }
+}
+body.retro .spinner {
+    border-color: var(--r-line);
+    border-top-color: var(--r-cyan);
+}
+
+/* ===== Header-Controls, Tools-Dropdown, Health-Panel ===== */
+body.retro .tools-toggle,
+body.retro .health-chip {
+    background: var(--r-panel);
+    border: 1px solid var(--r-cyan);
+    border-radius: 0;
+    color: var(--r-cyan);
+    font-family: "RetroText", monospace;
+    font-size: 0.95rem;
+}
+body.retro .tools-toggle:hover,
+body.retro .health-chip:hover { background: var(--r-cyan); color: var(--r-bg); }
+body.retro .feedback-link {
+    background: var(--r-green);
+    border: 1px solid var(--r-green);
+    border-radius: 0;
+    color: var(--r-bg);
+    font-family: "RetroText", monospace;
+    font-size: 0.95rem;
+}
+body.retro .feedback-link:hover { background: var(--r-yellow); border-color: var(--r-yellow); }
+body.retro .health-chip-dot { border-radius: 0; }
+body.retro .health-chip.ok .health-chip-dot   { background: var(--r-green); }
+body.retro .health-chip.warn .health-chip-dot { background: var(--r-yellow); }
+body.retro .health-chip.err .health-chip-dot  { background: var(--r-red); }
+body.retro .tools-menu,
+body.retro .health-panel {
+    background: var(--r-panel);
+    color: var(--r-ink);
+    border: 2px solid var(--r-cyan);
+    border-radius: 0;
+    box-shadow: 4px 4px 0 #000;
+}
+body.retro .tools-menu h3,
+body.retro .health-panel h3 { color: var(--r-faint); }
+body.retro .health-panel-row + .health-panel-row { border-top: 1px solid var(--r-line); }
+body.retro .health-panel-row .status-label { color: var(--r-muted); }
+body.retro .health-panel-row.status-ready .status-icon          { color: var(--r-green); }
+body.retro .health-panel-row.status-starting .status-icon       { color: var(--r-yellow); }
+body.retro .health-panel-row.status-scaled-to-zero .status-icon { color: var(--r-faint); }
+body.retro .health-panel-row.status-down .status-icon           { color: var(--r-red); }
+body.retro .link-chip {
+    background: var(--r-panel-2);
+    border: 1px solid var(--r-line);
+    border-radius: 0;
+    box-shadow: none;
+    color: var(--r-cyan);
+}
+body.retro .link-chip:hover {
+    background: var(--r-cyan);
+    color: var(--r-bg);
+    box-shadow: 3px 3px 0 #000;
+}
+
+/* ===== Story-Stepper ===== */
+body.retro .stepper-nav-btn {
+    background: var(--r-panel);
+    border: 2px solid var(--r-line);
+    border-radius: 0;
+    color: var(--r-ink);
+    font-family: "RetroText", monospace;
+    font-size: 1rem;
+}
+body.retro .stepper-nav-btn:hover:not(:disabled) {
+    border-color: var(--r-magenta);
+    color: var(--r-magenta);
+    box-shadow: 3px 3px 0 #000;
+}
+body.retro .stepper-node {
+    border-radius: 0;
+    border: 2px solid var(--r-line);
+    background: var(--r-panel);
+    color: var(--r-muted);
+    font-family: "PressStart2P", monospace;
+    font-size: 0.65rem;
+}
+body.retro .stepper-node:hover { border-color: var(--r-magenta); color: var(--r-magenta); }
+body.retro .stepper-node.active {
+    background: var(--r-green);
+    border-color: var(--r-green);
+    color: var(--r-bg);
+    box-shadow: 3px 3px 0 #000;
+}
+body.retro .stepper-connector { background: var(--r-line); }
+body.retro .stepper-connector.done { background: var(--r-magenta); }
+
+/* ===== Story-Lernhilfen & Source-Toggle ===== */
+body.retro details.story-info,
+body.retro details.story-cheatsheet,
+body.retro details.story-setup {
+    background: var(--r-panel);
+    border: 1px solid var(--r-line);
+    border-radius: 0;
+}
+body.retro details.story-info summary,
+body.retro details.story-cheatsheet summary,
+body.retro details.story-setup summary { color: var(--r-cyan); }
+body.retro details.story-info summary::before,
+body.retro details.story-cheatsheet summary::before,
+body.retro details.story-setup summary::before { color: var(--r-faint); }
+body.retro details.story-info summary .badge,
+body.retro details.story-cheatsheet summary .badge,
+body.retro details.story-setup summary .badge { color: var(--r-faint); }
+body.retro .story-info-body,
+body.retro .story-cheatsheet-body,
+body.retro .story-setup-body { color: var(--r-ink); }
+body.retro .story-info-body h4,
+body.retro .story-setup-body h4 { color: var(--r-faint); }
+body.retro .story-info-body em { color: var(--r-green); }
+body.retro .source-toggle { box-shadow: none !important; padding-left: 0.85rem; }
+body.retro .source-toggle-label { color: var(--r-muted); }
+body.retro .source-btn {
+    border-radius: 0;
+    color: var(--r-muted);
+    font-family: "RetroText", monospace;
+    font-size: 0.95rem;
+}
+body.retro .source-btn:hover:not(.active) { background: var(--r-panel-2); color: var(--r-ink); }
+body.retro .source-btn.active {
+    background: var(--r-magenta);
+    border-color: var(--r-magenta);
+    color: var(--r-bg);
+}
+body.retro .source-btn:disabled:hover { background: transparent; color: var(--r-muted); }
+
+/* ===== Backend-Panel & Footer ===== */
+body.retro .backend-panel { border-top: 2px dashed var(--r-line); }
+body.retro .backend-panel-heading { color: var(--r-faint); }
+body.retro .workshop-footer {
+    border-top: 1px solid var(--r-line);
+    color: var(--r-muted);
+}
+body.retro .workshop-footer .footer-author strong { color: var(--r-ink); }
+body.retro .workshop-footer .footer-author .accent {
+    background: var(--r-green);
+    color: var(--r-bg);
+    border-radius: 0;
+}
+/* Logo auf dunklem Grund sichtbar machen */
+body.retro .workshop-footer .footer-logo { filter: brightness(0) invert(0.92); }
+
+/* ===== Overlays ===== */
+body.retro .startup-overlay,
+body.retro .offline-overlay {
+    background: rgba(11, 11, 46, 0.94);
+    backdrop-filter: none;
+}
+body.retro .startup-card {
+    background: var(--r-panel);
+    color: var(--r-ink);
+    border: 2px solid var(--r-cyan);
+    border-radius: 0;
+    box-shadow: 6px 6px 0 #000;
+}
+body.retro .startup-card h2 {
+    font-family: "PressStart2P", monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+body.retro .startup-card .startup-sub { color: var(--r-muted); }
+body.retro .startup-row { border-bottom: 1px solid var(--r-line); }
+body.retro .startup-row:last-child { border-bottom: none; }
+body.retro .startup-row .startup-meta { color: var(--r-faint); }
+body.retro .startup-row.status-ready .startup-icon          { color: var(--r-green); }
+body.retro .startup-row.status-starting .startup-icon       { color: var(--r-yellow); }
+body.retro .startup-row.status-scaled-to-zero .startup-icon { color: var(--r-faint); }
+body.retro .startup-row.status-down .startup-icon           { color: var(--r-red); }
+body.retro .startup-row .spinner {
+    border-color: var(--r-line);
+    border-top-color: var(--r-yellow);
+}
+body.retro .startup-divider { border-top: 1px dashed var(--r-line); }
+body.retro .startup-actions button {
+    background: var(--r-panel-2);
+    border: 1px solid var(--r-line);
+    border-radius: 0;
+    color: var(--r-muted);
+    font-family: "RetroText", monospace;
+    font-size: 0.95rem;
+}
+body.retro .startup-actions button:hover { background: var(--r-line); color: var(--r-ink); }
+body.retro .startup-actions button.primary {
+    background: var(--r-magenta);
+    border-color: var(--r-magenta);
+    color: var(--r-bg);
+}
+body.retro .startup-actions button.primary:hover { background: var(--r-cyan); border-color: var(--r-cyan); }
+body.retro .offline-card .offline-icon { color: var(--r-red); }
+body.retro .offline-card p { color: var(--r-muted); }
+body.retro .offline-card code {
+    background: #000;
+    color: var(--r-green);
+    border: 1px solid var(--r-green);
+    border-radius: 0;
+}
+
+/* ===== CRT: Scanlines + Vignette =====
+ * pointer-events: none ist Pflicht, sonst schluckt das Overlay alle Klicks. */
+body.retro::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1200;
+    background:
+        radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.28) 100%),
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+}
+
+/* ===== CRT Power-On beim Aktivieren ===== */
+body.retro.retro-powering::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1300;
+    background: #fff;
+    animation: retro-crt-on 0.45s ease-out forwards;
+}
+@keyframes retro-crt-on {
+    0%   { opacity: 1;   transform: scaleY(0.004); }
+    35%  { opacity: 0.9; transform: scaleY(0.004); }
+    65%  { opacity: 0.6; transform: scaleY(1); }
+    100% { opacity: 0;   transform: scaleY(1); }
+}

@@ -10,6 +10,10 @@ Single Source of Truth: CSS-Variablen in `slides/theme.css` (`:root`).
 Im Dashboard sind die Werte (historisch) inline in `dashboard/static/index.html`
 hinterlegt — beim Anpassen beide Stellen synchron halten.
 
+Ausnahme: `dashboard/static/retro.css` ist ein bewusst separates Easteregg-Theme
+(SCUMM-Retro-Look, Aktivierung per Konami-Code) und nimmt an der
+Palette-Synchronisation nicht teil.
+
 | Rolle | RGB | Hex | Verwendung |
 |---|---|---|---|
 | Primär-Dunkel | `rgb( 10,   3,  73)` | `#0A0349` | Box-Hintergrund (Slides), Header / Headings / Card-Akzent (Dashboard) |
