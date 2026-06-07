@@ -40,8 +40,8 @@ docker-build-booking-ref-story6: ## Baut das BookingService Reference Story6 Doc
 docker-build-booking-ref-story7: ## Baut das BookingService Reference Story7 Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story7 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Reference Story 7)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story7 .
 
-docker-build-dashboard: ## Baut das Scaling-UI Docker-Image
-	docker build -f dashboard/Dockerfile -t workshop-microservices-dashboard:latest .
+docker-build-dashboard: ## Baut das Scaling-UI Docker-Image (optional: DISCORD_EASTEREGG_WEBHOOK_URL=... für den Easteregg-Hook)
+	docker build -f dashboard/Dockerfile --build-arg DISCORD_EASTEREGG_WEBHOOK_URL="$(DISCORD_EASTEREGG_WEBHOOK_URL)" -t workshop-microservices-dashboard:latest .
 
 docker-down: ## Stoppt alle Services (inkl. Custom) und entfernt Container, Netzwerke und anonyme Volumes
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.custom.yml down -v

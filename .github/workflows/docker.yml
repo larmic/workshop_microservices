@@ -170,6 +170,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      # Easteregg-Webhook ist optional: ohne Secret baut das Image trotzdem,
+      # die Discord-Benachrichtigung unterbleibt dann einfach.
+      - name: Check easteregg webhook secret
+        env:
+          HOOK: ${{ secrets.DISCORD_EASTEREGG_WEBHOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::warning::Secret DISCORD_EASTEREGG_WEBHOOK_URL ist nicht gesetzt - das Retro-Easteregg sendet keine Discord-Benachrichtigung."
+          fi
       - uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -181,6 +190,8 @@ jobs:
           file: services/dashboard/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            DISCORD_EASTEREGG_WEBHOOK_URL=${{ secrets.DISCORD_EASTEREGG_WEBHOOK_URL }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-dashboard:latest
 
   build-booking-custom:

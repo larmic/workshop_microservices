@@ -1078,6 +1078,14 @@
             transition: opacity 0.15s;
         }
         .workshop-footer .footer-logo:hover { opacity: 1; }
+        .footer-secret {
+            opacity: 0.35;
+            cursor: help;
+            margin-left: 0.5rem;
+            transition: opacity 0.15s;
+            user-select: none;
+        }
+        .footer-secret:hover { opacity: 0.85; }
 
         /* Service-Readiness: Status-Chip, Loading-Overlay, Offline-Overlay */
         .health-chip {
@@ -2046,6 +2054,7 @@ on receiveCompensationEvent(event):
     <footer class="workshop-footer">
         <div class="footer-author">
             <span class="accent">Workshop</span> von <strong>Lars Michaelis</strong>
+            <span class="footer-secret" title="Psst. Dieses Dashboard hat eine geheime Seite. Echte Piraten kennen den ber&uuml;hmtesten Cheat-Code der Videospielgeschichte &middot; er hat schon 1988 in Contra (NES) 30 Leben spendiert.">&#9875;</span>
         </div>
         <a href="https://www.team-neusta.de/" target="_blank" rel="noopener" aria-label="team neusta">
             <img class="footer-logo" src="/dashboard/team-neusta-logo.svg" alt="team neusta">
@@ -3052,18 +3061,55 @@ on receiveCompensationEvent(event):
 
         // -------- Easteregg: Konami-Code → SCUMM-Retro-Theme --------
         const RETRO_KEY = "workshop-dashboard.retroTheme";
+        const RETRO_FOUND_KEY = "workshop-dashboard.retroDiscovered";
+        // Wird beim DockerHub-Build (docker.yml) aus dem Repository-Secret
+        // DISCORD_EASTEREGG_WEBHOOK_URL eingesetzt. Lokal bleibt der
+        // Platzhalter stehen, dann unterbleibt die Benachrichtigung.
+        const RETRO_WEBHOOK_URL = "__DISCORD_EASTEREGG_WEBHOOK_URL__";
         const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
                         "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
         let konamiPos = 0;
+
+        // Benachrichtigt einmalig pro Browser (localStorage-Flag) den Trainer
+        // über die Entdeckung. Bewusst anonym: kein Name, kein Hostname.
+        // Fire-and-forget, Fehler werden geschluckt (offline-robust).
+        function notifyRetroDiscovered() {
+            if (RETRO_WEBHOOK_URL.startsWith("__") || !RETRO_WEBHOOK_URL.startsWith("https://")) return;
+            try {
+                if (localStorage.getItem(RETRO_FOUND_KEY) === "1") return;
+                localStorage.setItem(RETRO_FOUND_KEY, "1");
+            } catch (_) { return; }
+            const ts = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
+            fetch(RETRO_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    content: `🏴‍☠️  *${ts}*  ·  Jemand hat das Retro-Easteregg im Dashboard entdeckt! (Story ${currentStory})`,
+                    username: "Booking Island",
+                    allowed_mentions: { parse: [] },
+                }),
+            }).catch(() => {});
+        }
 
         function applyRetro(on, animate) {
             document.body.classList.toggle("retro", on);
             if (on && animate) {
                 document.body.classList.add("retro-powering");
                 setTimeout(() => document.body.classList.remove("retro-powering"), 500);
+                notifyRetroDiscovered();
+                console.log("%cWillkommen auf Booking Island! 🏴‍☠️ Erneute Eingabe segelt zurück.",
+                    "color:#55FF55;background:#0B0B2E;padding:4px 8px;font-family:monospace;");
             }
             try { localStorage.setItem(RETRO_KEY, on ? "1" : "0"); } catch (_) {}
         }
+
+        // Versteckter Hinweis für alle, die in die Konsole schauen
+        console.log("%c⚓ Ahoi! Du schaust hinter die Kulissen?\n" +
+            "Hinter dir! Ein dreiköpfiger Affe! 🙈🙉🙊\n\n" +
+            "Dieses Dashboard hat eine geheime Seite. Echte Piraten kennen den\n" +
+            "berühmtesten Cheat-Code der Videospielgeschichte · er hat schon\n" +
+            "1988 in Contra (NES) 30 Leben spendiert. Tippe ihn einfach hier ein.",
+            "color:#55FF55;background:#0B0B2E;padding:8px 12px;font-family:monospace;line-height:1.6;");
 
         document.addEventListener("keydown", (e) => {
             const t = e.target;

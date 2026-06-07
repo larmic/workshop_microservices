@@ -9,6 +9,15 @@ ARG TARGETOS
 ARG TARGETARCH
 
 RUN go mod download
+
+# Discord-Webhook fürs Retro-Easteregg: wird nur beim CI-Build (docker.yml)
+# aus dem Repository-Secret gesetzt. Ohne Wert bleibt der Platzhalter in
+# index.html stehen und die Benachrichtigung unterbleibt (z.B. lokale Builds).
+ARG DISCORD_EASTEREGG_WEBHOOK_URL=""
+RUN if [ -n "$DISCORD_EASTEREGG_WEBHOOK_URL" ]; then \
+        sed -i "s|__DISCORD_EASTEREGG_WEBHOOK_URL__|${DISCORD_EASTEREGG_WEBHOOK_URL}|" dashboard/static/index.html; \
+    fi
+
 RUN go test -v ./dashboard/...
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o main ./dashboard
 
