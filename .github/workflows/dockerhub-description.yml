@@ -31,7 +31,7 @@ jobs:
             short: "Dashboard-UI fuer den Workshop 'Microservices richtig gemacht'. Demo-Image."
             readme: .github/dockerhub/dashboard.md
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: peter-evans/dockerhub-description@v5
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
