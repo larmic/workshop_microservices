@@ -12,7 +12,7 @@ repositories {
     mavenCentral()
 }
 
-val ktorVersion = "3.5.1"
+val ktorVersion = "3.5.2"
 
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktorVersion")
@@ -21,7 +21,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("ch.qos.logback:logback-classic:1.6.0")
+    implementation("ch.qos.logback:logback-classic:1.6.1")
 }
 
 application {
