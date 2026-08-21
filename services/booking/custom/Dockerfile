@@ -1,5 +1,5 @@
 # --- Build stage ---
-FROM eclipse-temurin:25.0.3_9-jdk-alpine AS builder
+FROM eclipse-temurin:25.0.4_7-jdk-alpine AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY src ./src
 RUN ./gradlew --no-daemon shadowJar
 
 # --- Runtime stage ---
-FROM eclipse-temurin:25.0.3_9-jre-alpine
+FROM eclipse-temurin:25.0.4_7-jre-alpine
 
 ARG SERVICE_DESC="Booking Custom (Kotlin/Ktor)"
 
