@@ -283,3 +283,14 @@ Herleitung und Einordnung in [kuratierung.md](kuratierung.md).
   Eine Übersichtsfolie mit der Problem-Pattern-Kette (Story 1 bis 7), die zeigt,
   welches Problem jede Story löst. Orientierung für Teilnehmende, besonders in der
   dichten Story-Folge an Tag 2 (`docs/themen.md`).
+
+## G · Reichweite & Community (eigene Idee, kein Workshop-Feedback)
+
+- [ ] **G1 · Mehr GitHub-Stars für das Repo gewinnen** · Priorität: Niedrig · *Entscheidung Lars*
+  Eigener Wunsch (2026-06-08, Lars), kein anonymisiertes Teilnehmer-Feedback.
+  Bewusst hier geparkt, der genaue Ablageort ist noch offen (ggf. später nach
+  `services/slides/TODO.md`). Ziel: mehr Sterne auf dem öffentlichen Repo
+  (https://github.com/larmic/workshop_microservices). Erste Idee: im Workshop
+  bzw. in den Folien dezent dafür werben, z. B. Call-to-Action auf der
+  Closing-Slide (`services/slides/chapters/29-zusammenfassung.md`) oder ein
+  Footer-Hinweis. Ausgestaltung noch offen, hier zunächst nur als TODO notiert.
