@@ -21,6 +21,10 @@ verifiziert, eingeordnet und priorisiert.
   eigene `plan-<id>-<thema>.md` im Termin-Ordner (z. B.
   `plan-d8-rest-vs-restful.md`): Kontext, Entscheidungen, Artefakte,
   Reihenfolge, Verifikation. Erst planen, dann umsetzen.
+- **Alte Story-Nummerierung:** Ordner vor 2026-09 verwenden die Zählung des
+  Kickoffs (Stories 1 bis 7 mit Code). Seit der Umnummerierung (D8) ist Story 2 eine
+  Design-Session ohne Code, alt N entspricht neu N+1 für N ≥ 2. Die historischen
+  Texte bleiben unverändert.
 
 ## Anonymisierung
 

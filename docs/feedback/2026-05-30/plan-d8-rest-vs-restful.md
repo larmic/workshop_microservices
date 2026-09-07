@@ -2,7 +2,12 @@
 
 Planungsstand: 2026-09-06, freigegeben (Lars). Ergänzt 2026-09-07: die
 Diskussionsphase wird ein Quiz "RESTful oder nicht?" mit drei festen Beispielen
-(Lars). Umsetzung noch nicht begonnen.
+(Lars). Umgesetzt 2026-09-07 in einem PR (Branch
+`feature/d8-story-2-rest-vs-restful`), Abweichungen vom Plan: die
+Booking-Ordner erscheinen in Git wegen gleicher Zielpfade als M/A/D statt R;
+`health_overview.go` liegt unter `services/dashboard/handler/`; `.factor-row`
+bekam eine Variante `.six` für sechs Karten. Offen nach Merge: Docker-Hub-Tag
+`story2` löschen, Hero-Bild generieren.
 Backlog-Eintrag: [D8 in backlog.md](backlog.md). Herleitung in
 [feedback.md](feedback.md) und [kuratierung.md](kuratierung.md). Pfade relativ
 zur Repo-Wurzel. Die Story-Nummern in diesem Dokument sind die **neuen**
