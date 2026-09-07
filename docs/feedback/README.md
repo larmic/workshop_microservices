@@ -17,6 +17,10 @@ verifiziert, eingeordnet und priorisiert.
 - **Optionale Nacharbeit:** Wird ein Termin später kuratiert, kann zusätzlich eine
   `kuratierung.md` im Termin-Ordner liegen (z. B. Vollständigkeits- und
   Curriculum-Analyse, daraus abgeleitete Backlog-Einträge).
+- **Optionale Pläne:** Größere Backlog-Punkte bekommen vor der Umsetzung eine
+  eigene `plan-<id>-<thema>.md` im Termin-Ordner (z. B.
+  `plan-d8-rest-vs-restful.md`): Kontext, Entscheidungen, Artefakte,
+  Reihenfolge, Verifikation. Erst planen, dann umsetzen.
 
 ## Anonymisierung
 

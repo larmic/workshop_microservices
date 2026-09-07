@@ -208,8 +208,13 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
     `/admin/state`), damit der Bau-Aufwand klein bleibt.
   Bezug: C2 (Vertrag), D1 und D3 (Lernfokus).
 
-- [ ] **D8 · REST vs. RESTful: Theorie-Input plus Flipchart-API-Design** · Priorität: Hoch
+- [~] **D8 · REST vs. RESTful: Theorie-Input plus Flipchart-API-Design** · Priorität: Hoch
   Entschieden 2026-06-04 (Lars): die Einheit kommt, offen ist die Ausgestaltung.
+  Geplant 2026-09-06, Plan freigegeben: [plan-d8-rest-vs-restful.md](plan-d8-rest-vs-restful.md).
+  Ausgestaltung: Übung als Variante 1 (Storno/Umbuchung am Flipchart), Verortung
+  als neue Story 2 zwischen Story 1 und der Discovery-Story, die heutigen
+  Stories 2..7 werden vollständig (inkl. Technik) zu 3..8 umnummeriert.
+  Umsetzung noch offen.
   Hintergrund: Viele Services sprechen über REST, RESTful-Prinzipien sind aber
   oft unbekannt oder falsch angewendet. Betrifft `docs/themen.md:53-60` (REST
   bisher nur als Default erwähnt), neue Slides und einen Trainer-Hinweis unter
