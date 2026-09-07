@@ -75,14 +75,11 @@ Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-
 ## 3. Vortrag: Bedingungen an einen Microservice — 12 Factor App (30 Min)
 
 - 12 Faktoren kurz durchgehen, jeweils mit Praxisbezug zum Booking-Service
-- Schwerpunkte, die im Workshop praktisch werden:
-  - **Codebase** — ein Service, ein Repo
-  - **Config** — Externe Konfiguration (kommt in Story 1)
-  - **Backing Services** — DB, Consul als angehängte Ressourcen
-  - **Build, Release, Run** — saubere Trennung
-  - **Disposability** — schneller Start, sauberer Shutdown (Health-Checks)
-  - **Dev/Prod Parity** — Docker hilft hier massiv
-- Hinweis: Health-Checks, externe Konfiguration und „1 DB pro Service" werden in Story 1 konkret umgesetzt
+- Alle zwölf stehen auf einer Folie; ein Klick hebt die drei hervor, die Story 1 konkret umsetzt:
+  - **Config** (III): Backend-URLs aus Umgebungsvariablen, `/info`-Endpoint zeigt die aktive Konfiguration
+  - **Port Binding** (VII): der Service bringt seinen HTTP-Server mit und lauscht auf Port 8080
+  - **Logs** (XI): auf stdout, keine Logfiles
+- Nicht behandelt: Disposability (kein SIGTERM-Handling im Workshop). Der Health-Check ist kein Faktor der zwölf, sondern ein Betriebsthema und kommt in Story 1 trotzdem vor.
 
 ---
 

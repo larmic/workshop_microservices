@@ -1,23 +1,35 @@
+<div class="page">
+
+<p class="kicker">2011 &middot; Adam Wiggins, Mitgr&uuml;nder von Heroku</p>
+
 ## 12-Faktor-App
 
-<p class="subtitle">2011 &mdash; Adam Wiggins (Heroku-Entwickler)</p>
+<div class="page-body">
 
-<div class="cols">
-<div class="fragment">
-
-### Problem
-
-1. Apps liefen auf dem Laptop, explodierten in Prod &mdash; <em>„Bei mir läuft's!"</em>
-2. Neue Entwickler:innen brauchen Tage für ein lauffähiges Setup
-3. Config-Werte (Passwörter, API-Keys) direkt im Code
-
+<div class="cards cards-3">
+<div class="card">
+<h3>&bdquo;Bei mir l&auml;uft&rsquo;s&ldquo;</h3>
+<p>Die App lief auf dem Laptop und explodierte in Produktion.</p>
 </div>
-<div class="fragment">
-
-### Ziel
-
-1. Sammlung von Best Practices
-2. Unabhängig von Sprache &amp; Framework
-
+<div class="card">
+<h3>Tage bis zum ersten Start</h3>
+<p>Neue Kolleginnen und Kollegen brauchten Tage f&uuml;r ein lauff&auml;higes Setup.</p>
+</div>
+<div class="card">
+<h3>Passw&ouml;rter im Repo</h3>
+<p>Config-Werte und API-Keys lagen direkt im Code.</p>
 </div>
 </div>
+
+<div class="foot">
+<p>Kein neues Framework, keine Bibliothek. Nur zw&ouml;lf Regeln.</p>
+<div class="callout">Unabh&auml;ngig von Sprache und Framework.</div>
+</div>
+
+</div>
+
+</div>
+
+Note:
+- Drei Schmerzen aus dem Heroku-Alltag 2011, die jede:r kennt. Die zw&ouml;lf Faktoren sind die Antwort darauf, nicht mehr.
+- Betonen: keine Technologie-Entscheidung, sondern Arbeitsregeln. Gelten f&uuml;r Go genauso wie f&uuml;r Kotlin oder PHP.

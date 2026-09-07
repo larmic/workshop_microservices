@@ -28,7 +28,7 @@
 <div class="compare-note">Das UI war initial separat</div>
 </div>
 
-<div class="compare-foot">
+<div class="foot">
 <p>Microservices sind nicht immer die richtige Wahl.<br>Mit einem Monolithen zu starten ist meist die bessere Option.</p>
 <div class="callout">Dieser Workshop zeigt das Wie, nicht das Ob.</div>
 </div>
