@@ -1,3 +1,4 @@
 /.idea/
 /services/bin/
 /services/.env
+.DS_Store
