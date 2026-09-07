@@ -1,179 +1,237 @@
 /*
  * Workshop Microservices — reveal.js theme
  *
- * Farbpalette (slides-spezifisch — Single Source of Truth):
- *   --slide-bg          #ffffff           Slide-Hintergrund (weiß)
- *   --slide-text        #000000           Standard-Textfarbe auf Slides (schwarz)
- *   --wave              rgb(238,231,251)  Welle am unteren Slide-Rand
- *   --box-bg            rgb( 10,  3, 73)  Box-Hintergrund (dunkles Blau-Violett)
- *   --box-border        rgb(115, 72,225)  Box-Rahmen (dünn)
- *   --box-text          #ffffff           Text in Boxen (weiß)
- *   --highlight         rgb(211,248,113)  Highlight / Akzent (limegrün)
+ * Raster (Canvas 1280 x 720, center: false in index.html):
+ *   - Titelzone oben links: Kicker-Zeile (Story-Marker) + h2 + Subtitle
+ *   - Inhaltsfeld linksbündig, 1152 px breit
+ *   - Schutzzone unten (--safe-bottom, 120 px) für die Welle: dort steht kein Inhalt
+ *   Alle Größen in Slide-Pixeln, keine em-Kaskaden. Basis-Schriftgröße steht
+ *   explizit auf .reveal (reveal.css setzt keine).
  *
- * Verwendung:
- *   <div class="box">…</div>            normale Box (dunkler Hintergrund, weißer Text)
- *   <span class="hl">…</span>           Highlight-Markierung
- *   <!-- .slide: data-background-color="#ffffff" -->   weiße Slide (Default)
+ * Farbpalette (Single Source of Truth, siehe services/CLAUDE.md), ein Job pro Farbe:
+ *   --ink       #0A0349  Text, Titel, Merksatz-Block, Code-Grund
+ *   --violet    #7348E1  Subtitle, Linien, Links, Labels, Bullet-Marker
+ *   --lavender  #EEE7FB  Kartengrund, Welle (die einzige Fläche neben Weiß)
+ *   --lime      #D3F871  Story-Marker, Time-Badge, Highlight (.hl)
+ *   --paper     #FFFFFF  Foliengrund
+ *   --code-text #E0E6F0  Text auf Ink
+ *
+ * Bausteine:
+ *   .card / .factor / .story-card   Lavendel-Karte (ein Look für Pattern, Recap, Story)
+ *   .box                            Ink-Merksatz, volle Breite, max. einer pro Folie
+ *   pre.cheatsheet                  Pseudo-Code auf Ink (identisch zum Dashboard-Spickzettel)
+ *   .story-pill / section[data-story]  Story-Marker (Lime auf Ink), im Dashboard identisch
+ *   .hero                           Titelfolie eines Pattern-Blocks, Bild rechts per data-background-*
+ *   .chapter-slide                  Kapitel-Trenner, invertiert und zentriert
+ *
+ * Debug: index.html?debug=1 zeichnet Raster und Schutzzone und meldet Überlauf in der Konsole.
  */
 
 :root {
-    --slide-bg: #ffffff;
-    --slide-text: rgb(10, 3, 73);   /* dunkles Lila statt schwarz */
-    --wave: rgb(238, 231, 251);
-    --box-bg: rgb(10, 3, 73);
-    --box-border: rgb(115, 72, 225);
-    --box-text: #ffffff;
-    --highlight: rgb(211, 248, 113);
+    --ink: #0A0349;
+    --violet: #7348E1;
+    --lavender: #EEE7FB;
+    --lime: #D3F871;
+    --paper: #ffffff;
+    --code-text: #e0e6f0;
+    --violet-line: rgba(115, 72, 225, 0.28);
+    --violet-tint: rgba(115, 72, 225, 0.10);
+    --code-inline: #4d27a8;
 
-    --font-futura: "Futura", "Futura-Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-futura-title: "Futura Condensed ExtraBold", "Futura-CondensedExtraBold", "Futura Bold Condensed", "Futura", sans-serif;
+    --pad-top: 64px;
+    --pad-x: 64px;
+    --safe-bottom: 120px;
 
-    --r-background-color: var(--slide-bg);
-    --r-main-font: var(--font-futura);
-    --r-main-font-size: 36px;
-    --r-main-color: var(--slide-text);
-    --r-block-margin: 20px;
+    --font-sans: "Futura", "Futura-Medium", "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-display: "Futura Condensed ExtraBold", "Futura-CondensedExtraBold", "Futura Bold Condensed", "Jost", sans-serif;
+    --font-mono: "SFMono-Regular", Menlo, Consolas, monospace;
 
-    --r-heading-margin: 0 0 20px 0;
-    --r-heading-font: var(--font-futura-title);
-    --r-heading-color: var(--slide-text);
-    --r-heading-line-height: 1.1;
-    --r-heading-letter-spacing: normal;
-    --r-heading-text-transform: none;
-    --r-heading-text-shadow: none;
-    --r-heading-font-weight: 800;
-    --r-heading1-text-shadow: none;
-    --r-heading1-size: 56pt;
-    --r-heading2-size: 56pt;
-    --r-heading3-size: 1.25em;
-    --r-heading4-size: 1em;
-
-    --r-code-font: "SFMono-Regular", Menlo, Consolas, monospace;
-    --r-link-color: var(--box-border);
-    --r-link-color-dark: #4d27a8;
-    --r-link-color-hover: #4d27a8;
-
-    --r-selection-background-color: var(--box-border);
+    /* Reveal-Variablen für Plugins und Kompatibilität */
+    --r-background-color: var(--paper);
+    --r-main-font: var(--font-sans);
+    --r-main-color: var(--ink);
+    --r-heading-font: var(--font-display);
+    --r-heading-color: var(--ink);
+    --r-code-font: var(--font-mono);
+    --r-link-color: var(--violet);
+    --r-link-color-hover: var(--code-inline);
+    --r-selection-background-color: var(--violet);
     --r-selection-color: #fff;
 }
 
+/* ---------------------------------------------------------------------- */
+/* Grundfläche, Schrift, Raster                                           */
+/* ---------------------------------------------------------------------- */
+
 .reveal-viewport {
-    background: var(--slide-bg);
+    background: var(--paper);
 }
 
 .reveal {
-    color: var(--r-main-color);
+    color: var(--ink);
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 500;              /* Futura.ttc hat kein 400: Medium = 500 */
 }
 
-/* Futura aggressiv erzwingen — Reveal-Defaults überschreiben.
-   Ausnahme: Code-Blöcke bleiben monospace (weiter unten gesetzt). */
 .reveal,
 .reveal * {
-    font-family: var(--font-futura);
+    font-family: var(--font-sans);
 }
 
-/* Reveal-Standard-Layout: center: true zentriert die gesamte Section vertikal.
-   Innerhalb der Section stacken Titel, Subtitle und Content natürlich
-   untereinander; der Block sitzt als Ganzes mittig auf der Slide. */
+.reveal strong { font-weight: 700; }
+
 .reveal .slides {
-    text-align: center;
+    text-align: left;
 }
 
+/* Jede Folie ist 720 px hoch und reserviert oben die Kicker-Zeile,
+   unten die Schutzzone für die Welle. Kein display, kein top: das steuert Reveal. */
 .reveal .slides > section,
 .reveal .slides > section > section {
-    padding: 1.5rem 0;
+    box-sizing: border-box;
+    height: 100%;
+    padding: var(--pad-top) var(--pad-x) var(--safe-bottom);
 }
 
-.reveal .intro {
-    text-align: center;
+.reveal .slides > section.stack {
+    padding: 0;
 }
 
-.reveal h1, .reveal h2 {
-    font-family: var(--font-futura-title);
-    color: var(--slide-text);
+.reveal .slides section > :last-child {
+    margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Titelzone                                                              */
+/* ---------------------------------------------------------------------- */
+
+.reveal h1,
+.reveal h2 {
+    font-family: var(--font-display);
+    color: var(--ink);
     font-weight: 800;
-    font-size: 56pt;
-    text-align: center;
-    font-stretch: condensed;
-    line-height: 1.1;
-    margin: 0;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-align: left;
+    text-wrap: balance;
+    margin: 0 0 6px;
 }
 
-.reveal h3, .reveal h4 {
-    color: var(--slide-text);
-    font-weight: 600;
+.reveal h3,
+.reveal h4 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-weight: 800;
+    margin: 0 0 8px;
 }
 
-/* Optionaler Subtitle direkt unter dem Slide-Titel */
+.reveal h3 { font-size: 28px; line-height: 1.15; }
+.reveal h4 { font-size: 20px; line-height: 1.2; }
+
 .reveal .subtitle,
 .reveal p.subtitle {
-    color: var(--box-border);   /* helleres Lila */
+    color: var(--violet);
     font-weight: 500;
-    font-size: 23pt;
-    text-align: center;
-    margin: 0 0 1.5rem 0;
+    font-size: 22px;
+    line-height: 1.3;
+    text-align: left;
+    margin: 0 0 24px;
 }
 
-/* Spruch / Quote — Eyecatcher unter dem Slide-Titel */
-.reveal .quote,
-.reveal p.quote {
+/* Quote direkt unter dem Titel: Eyecatcher (02-feedback). Überall sonst: Merksatz, siehe unten. */
+.reveal h2 + .quote {
     font-style: italic;
-    color: var(--slide-text);
-    font-size: 1.1em;
-    margin: 0.5rem auto 1.5rem;
-    max-width: 75%;
-    text-align: center;
-    line-height: 1.4;
+    color: var(--ink);
+    font-size: 26px;
+    line-height: 1.35;
+    margin: 4px 0 24px;
+    max-width: 960px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Text, Listen, Links, Inline-Code                                       */
+/* ---------------------------------------------------------------------- */
+
+.reveal p {
+    margin: 0 0 12px;
 }
 
 .reveal a {
-    color: var(--r-link-color);
+    color: var(--violet);
     text-decoration: none;
-    border-bottom: 1px solid rgba(115, 72, 225, 0.4);
+    border-bottom: 1px solid var(--violet-line);
     transition: color 0.15s, border-color 0.15s;
 }
 
 .reveal a:hover {
-    color: var(--r-link-color-hover);
-    border-bottom-color: var(--r-link-color-hover);
+    color: var(--code-inline);
+    border-bottom-color: var(--code-inline);
 }
 
-.reveal ul, .reveal ol {
-    display: inline-block;       /* schrumpft auf Inhaltsbreite, zentriert via parent text-align */
-    text-align: left;            /* Bullets bündig links innerhalb der Liste */
-    margin: 0.8em 0 0 0;         /* Luft zum vorigen Element — Reveal-Default ist 0 */
-    padding-left: 1.2em;
+.reveal ul,
+.reveal ol {
+    display: block;
+    text-align: left;
+    font-size: 26px;
+    line-height: 1.3;
+    margin: 8px 0 0;
+    padding-left: 28px;
 }
 
 .reveal li + li {
-    margin-top: 0.35em;
+    margin-top: 8px;
 }
 
 .reveal li::marker {
-    color: var(--box-border);
+    color: var(--violet);
 }
 
-/* Highlight / Akzentuierung */
+.reveal ul ul,
+.reveal ol ol {
+    font-size: 0.9em;
+    margin-top: 6px;
+}
+
 .reveal .hl,
 .reveal mark {
-    background: var(--highlight);
-    color: var(--slide-text);
+    background: var(--lime);
+    color: var(--ink);
     padding: 0 0.2em;
     border-radius: 3px;
 }
 
-/* Boxen: dunkler Hintergrund, dünner Rahmen, abgerundet, weißer Text */
+.reveal code,
+.reveal pre,
+.reveal pre code,
+.reveal pre code * {
+    font-family: var(--font-mono);
+}
+
+.reveal code {
+    background: var(--violet-tint);
+    color: var(--code-inline);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Merksatz (.box) — Ink, volle Breite, maximal einer pro Folie           */
+/* ---------------------------------------------------------------------- */
+
 .reveal .box {
-    background: var(--box-bg);
-    border: 1px solid var(--box-border);
+    background: var(--ink);
+    color: #fff;
     border-radius: 12px;
-    color: var(--box-text);
-    padding: 1rem 1.4rem;
-    margin: var(--r-block-margin) auto;
-    width: fit-content;
-    max-width: 80%;
+    padding: 18px 24px;
+    margin: 20px 0;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 22px;
+    line-height: 1.35;
     text-align: left;
-    box-shadow: 0 4px 16px rgba(10, 3, 73, 0.18);
 }
 
 .reveal .box h1,
@@ -183,20 +241,103 @@
 .reveal .box p,
 .reveal .box li,
 .reveal .box strong {
-    color: var(--box-text);
+    color: #fff;
 }
 
+.reveal .box h3 { font-size: 26px; margin: 0 0 10px; }
+.reveal .box p { margin: 0 0 8px; }
+.reveal .box p:last-child { margin-bottom: 0; }
+.reveal .box ul,
+.reveal .box ol { font-size: 22px; margin: 0; padding-left: 26px; }
+.reveal .box li + li { margin-top: 6px; }
+.reveal .box li::marker { color: var(--lime); }
+
 .reveal .box a {
-    color: var(--highlight);
+    color: var(--lime);
     border-bottom-color: rgba(211, 248, 113, 0.5);
 }
 
-/* Zwei-Spalten-Layout (z.B. für die Agenda mit Tag 1 / Tag 2) */
+.reveal .box code,
+.reveal .chapter-slide code {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--code-text);
+}
+
+/* Quote nach einem anderen Element als h2: derselbe Merksatz-Block */
+.reveal :not(h2) + .quote,
+.reveal .cols .quote {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin: 16px 0 0;
+    font-style: normal;
+    font-size: 22px;
+    line-height: 1.35;
+    max-width: none;
+    text-align: left;
+}
+
+.reveal .quote code {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--code-text);
+}
+
+.reveal h2 + .quote code {
+    background: var(--violet-tint);
+    color: var(--code-inline);
+}
+
+/* Setup-Box (07-vorbereitung): der Code wird abgetippt, deshalb groß */
+.reveal .box.setup pre {
+    margin: 8px 0 12px;
+}
+
+.reveal .box.setup pre code {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.reveal .box.setup .qr-url {
+    color: #fff;
+    margin: 0;
+}
+
+.reveal .box.setup .qr-url a {
+    color: var(--lime);
+    border-bottom-color: rgba(211, 248, 113, 0.5);
+}
+
+/* Zweispaltige Liste ohne Box ("kann mehr"-Folien) */
+.reveal .list-cols > ul,
+.reveal .list-cols > ol {
+    columns: 2;
+    column-gap: 40px;
+    font-size: 22px;
+    line-height: 1.35;
+    margin: 0;
+    padding-left: 26px;
+}
+
+.reveal .list-cols li {
+    break-inside: avoid;
+    margin: 0 0 8px;
+}
+
+.reveal .list-cols li + li {
+    margin-top: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Spalten                                                                 */
+/* ---------------------------------------------------------------------- */
+
 .reveal .cols {
     display: flex;
-    gap: 2rem;
+    gap: 32px;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
+    margin: 0;
 }
 
 .reveal .cols > div {
@@ -204,151 +345,733 @@
     min-width: 0;
 }
 
+/* Drei Spalten: die mittlere bekommt etwas mehr Raum (Story 1: Akzeptanzkriterien) */
+.reveal .cols > div:nth-child(2):nth-last-child(2) {
+    flex: 1.3;
+}
+
+/* Story-Folien haben keinen Subtitle, der Titel braucht deshalb selbst Abstand nach unten */
+.reveal section[data-story] h2 {
+    margin-bottom: 20px;
+}
+
 .reveal .cols h3 {
-    color: var(--box-border);
-    margin: 0 0 0.6em 0;
-    font-size: 1.5em;
+    color: var(--violet);
+    margin: 0 0 12px;
+    font-size: 28px;
 }
 
-.reveal .cols ul {
-    font-size: 0.8em;
+.reveal .cols ul,
+.reveal .cols ol {
+    font-size: 22px;
+    margin: 0;
 }
 
-/* Prägnanter Quadranten-Satz (Agenda) */
-.reveal .quadrant {
-    font-size: 1.2em;
-    font-weight: 500;
-    color: var(--slide-text);
-    margin: 0.8em 0;
-    text-align: center;
+.reveal .cols li + li {
+    margin-top: 6px;
 }
 
-
-/* Mittagspause: durchgehender Balken zwischen Vor- und Nachmittag */
-.reveal .lunch-bar {
-    background: var(--wave);
-    color: var(--slide-text);
-    text-align: center;
-    padding: 0.4em 1em;
-    margin: 0.8em 0;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 0.85em;
-}
-
-/* Code */
-.reveal pre {
-    box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);
-    border-radius: 8px;
-    font-size: 0.65em;
+.reveal .cols table {
     width: 100%;
-    margin: var(--r-block-margin) auto;
+}
+
+/* Zusammenfassung: Tabelle links braucht mehr Raum als der Merksatz rechts */
+.reveal .cols.summary > div:first-child {
+    flex: 1.6;
+}
+
+.reveal .cols.summary .box {
+    font-size: 19px;
+    padding: 14px 18px;
+    margin-top: 12px;
+}
+
+.reveal .cols.summary .box h3 { font-size: 24px; margin-bottom: 8px; }
+.reveal .cols.summary .box ul { font-size: 19px; }
+.reveal .cols.summary .box li + li { margin-top: 4px; }
+
+.reveal .cols.summary table {
+    font-size: 17px;
+}
+
+.reveal .cols.summary table td {
+    padding: 5px 10px;
+}
+
+/* Vorbereitung: Setup-Box links, Dashboard-Bild rechts */
+.reveal .cols.setup-cols > div:first-child {
+    flex: 2.4;
+}
+
+.reveal .cols.setup-cols img.dashboard-image {
+    max-width: 100%;
+    max-height: 260px;
+    margin: 0;
+}
+
+/* Mittagspause: Balken zwischen Vor- und Nachmittag (Agenda) */
+.reveal .lunch-bar {
+    background: var(--lavender);
+    color: var(--ink);
+    text-align: center;
+    padding: 8px 16px;
+    margin: 16px 0;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Code                                                                   */
+/* ---------------------------------------------------------------------- */
+
+.reveal pre {
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 12px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .reveal pre code {
+    display: block;
     border-radius: 8px;
-    padding: 1rem 1.2rem;
-    max-height: 540px;
-    background: var(--box-bg);
-    color: #e0e6f0;
+    padding: 16px 20px;
+    max-height: none;
+    background: var(--ink);
+    color: var(--code-text);
 }
 
-/* Pseudo-Code-Spickzettel: dunkle Box ohne Syntax-Highlighting, eigene Klasse
-   damit Inline-<span> nicht vom Highlight-Plugin geschluckt werden. */
+/* Pseudo-Code-Spickzettel: eigene Klasse, damit Inline-<span> nicht vom
+   Highlight-Plugin geschluckt werden. Identisch zum Dashboard-Spickzettel. */
 .reveal pre.cheatsheet {
-    background: var(--box-bg);
-    color: #e0e6f0;
+    background: var(--ink);
+    color: var(--code-text);
     border-radius: 8px;
-    padding: 1rem 1.2rem;
+    padding: 14px 20px;
     text-align: left;
-    font-family: var(--r-code-font);
-    font-size: 0.65em;
-    line-height: 1.35;
-    width: fit-content;
-    max-width: 80%;
-    margin: var(--r-block-margin) auto;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.25;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 12px 0 0;
     white-space: pre;
-    overflow-x: auto;
-    box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);
+    overflow: hidden;
 }
 
-/* In zwei-spaltigem Layout f&uuml;llt die Box die Spalte aus */
+/* Zweispaltig: 12 px, damit Zeilen bis ca. 72 Zeichen (ausgerichtete Kommentare) nicht umbrechen */
 .reveal .cols pre.cheatsheet {
-    width: 100%;
-    max-width: none;
+    font-size: 12px;
+    padding: 14px 16px;
+    margin-top: 0;
 }
 
 .reveal pre.cheatsheet .cmd {
-    color: var(--highlight);
+    color: var(--lime);
     font-weight: 700;
 }
 
-.reveal code,
-.reveal pre,
-.reveal pre code,
-.reveal pre code * {
-    font-family: var(--r-code-font);
+/* Zweispaltig dürfen Kommentar-Spans umbrechen, statt abgeschnitten zu werden */
+.reveal .cols pre.cheatsheet .cmd {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
-.reveal code {
-    background: rgba(115, 72, 225, 0.1);
-    color: #4d27a8;
-    padding: 0.1em 0.35em;
-    border-radius: 4px;
+/* Sehr lange Zeilen (26b, bis 78 Zeichen mit angehängten Kommentaren): engere
+   Spalten, kleinere Schrift, damit nichts umbricht oder abgeschnitten wird */
+.reveal .cols.dense {
+    gap: 16px;
 }
 
-/* Inline-Code auf dunklem Grund (Box, Kapitel-Trenner): helle Schrift statt des
-   dunklen Lila, das auf dunklem Hintergrund unlesbar ist. */
-.reveal .box code,
-.reveal .chapter-slide code {
-    background: rgba(255, 255, 255, 0.14);
-    color: #e0e6f0;
+.reveal .cols.dense pre.cheatsheet {
+    font-size: 11.5px;
+    padding: 14px 12px;
 }
 
-/* Blockquote */
-.reveal blockquote {
-    background: #fff;
-    border-left: 4px solid var(--box-border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    padding: 1rem 1.2rem;
-    border-radius: 6px;
-    width: 80%;
-    color: #333;
-    font-style: normal;
+/* Cheatsheet mit anschließendem Merksatz (26a): beide etwas kompakter */
+.reveal pre.cheatsheet + .quote {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 20px;
 }
 
-/* Tables */
+/* ---------------------------------------------------------------------- */
+/* Tabellen                                                               */
+/* ---------------------------------------------------------------------- */
+
 .reveal table {
-    background: rgba(255, 255, 255, 0.65);
+    background: var(--paper);
+    border-collapse: collapse;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-    margin: var(--r-block-margin) auto;
+    margin: 12px 0 0;
+    font-size: 18px;
+    line-height: 1.3;
 }
 
 .reveal table th {
-    background: var(--box-bg);
+    background: var(--ink);
     color: #fff;
     text-align: left;
-    padding: 0.5em 0.75em;
+    padding: 8px 12px;
+    font-weight: 700;
 }
 
 .reveal table td {
-    padding: 0.4em 0.75em;
-    border-bottom: 1px solid #eee;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--violet-line);
+    vertical-align: middle;
 }
 
-/* Progress-Balken: dünn, ganz unten am Viewport-Rand */
+.reveal table tr:last-child td {
+    border-bottom: none;
+}
+
+.reveal table code {
+    font-size: 0.9em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Karte (.card / .factor / .story-card): Lavendel, kein Schatten           */
+/* ---------------------------------------------------------------------- */
+
+.reveal .card,
+.reveal .factor,
+.reveal .story-card {
+    background: var(--lavender);
+    border: 1px solid var(--violet-line);
+    border-radius: 12px;
+    box-shadow: none;
+    padding: 12px 16px;
+    color: var(--ink);
+    text-align: left;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.reveal .card code,
+.reveal .factor code,
+.reveal .story-card code {
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--code-inline);
+}
+
+/* Pattern- und Recap-Karten */
+.reveal .factor {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.reveal .factor h3 {
+    color: var(--ink);
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.reveal .factor p {
+    margin: 0;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.reveal .factor code {
+    font-size: 14px;
+    padding: 0.4em 0.7em;
+    border-radius: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: flex-start;
+    max-width: 100%;
+}
+
+.reveal .factor.fragment.visible {
+    transition: opacity 0.3s ease;
+}
+
+/* Nummern-Marker in Karten: dieselbe Familie wie der Story-Marker */
+.reveal .numeral {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--lime);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 13px;
+    line-height: 1;
+    padding: 0.35em 0.6em;
+    border-radius: 999em;
+    min-width: 1.6em;
+    text-align: center;
+}
+
+/* 12-Faktor-Grid: 4 x 3, gleiche Reihenhöhen */
+.reveal .factor-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+}
+
+.reveal .factor-grid > .factor {
+    padding: 10px 14px;
+}
+
+/* Karten-Reihe: 3 oben, 2 zentriert darunter */
+.reveal .factor-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+}
+
+.reveal .factor-row > .factor {
+    grid-column: span 2;
+}
+
+.reveal .factor-row > .factor:nth-child(4) {
+    grid-column: 2 / span 2;
+}
+
+.reveal .factor-row > .factor:nth-child(5) {
+    grid-column: 4 / span 2;
+}
+
+/* Sechs Karten (REST vs. RESTful): 3 + 3 */
+.reveal .factor-row.six > .factor:nth-child(4),
+.reveal .factor-row.six > .factor:nth-child(5) {
+    grid-column: span 2;
+}
+
+/* "Am Markt": immer sichtbar, auch im statischen Web */
+.reveal .market-row {
+    opacity: 1;
+    margin-top: 16px;
+}
+
+.reveal .market-row h3 {
+    color: var(--violet);
+    font-size: 20px;
+    margin: 0 0 8px;
+}
+
+/* Recap-Grid: maximal zwei Reihen. 2 Spalten bis 4 Karten,
+   .cols-3 für 5 bis 6, .cols-4 für 7 bis 8 Karten. */
+.reveal .recap-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+}
+
+.reveal .recap-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.reveal .recap-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+.reveal .recap-grid .factor h3 { font-size: 22px; }
+.reveal .recap-grid .factor p { font-size: 18px; }
+.reveal .recap-grid .factor code { font-size: 15px; }
+
+.reveal .recap-grid.cols-3 .factor h3 { font-size: 20px; }
+.reveal .recap-grid.cols-3 .factor p { font-size: 17px; }
+
+.reveal .recap-grid.cols-4 .factor h3 { font-size: 18px; }
+.reveal .recap-grid.cols-4 .factor p { font-size: 16px; }
+.reveal .recap-grid.cols-4 .factor code { font-size: 14px; }
+
+/* Story-Karte: Wiedererkennung zur Story-Karte im Dashboard */
+.reveal .story-card {
+    font-size: 16px;
+    line-height: 1.4;
+    padding: 14px 18px;
+}
+
+.reveal .story-card h4 {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--violet);
+    border-bottom: 1px solid var(--violet-line);
+    padding-bottom: 2px;
+    margin: 14px 0 6px;
+    line-height: 1.2;
+}
+
+.reveal .story-card h4:first-child { margin-top: 0; }
+
+.reveal .story-card p,
+.reveal .story-card ul { margin: 0 0 8px; }
+.reveal .story-card p:last-child,
+.reveal .story-card ul:last-child { margin-bottom: 0; }
+.reveal .story-card ul { padding-left: 20px; font-size: 16px; line-height: 1.4; }
+.reveal .story-card li + li { margin-top: 3px; }
+
+.reveal .story-card em {
+    color: var(--violet);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.reveal .story-card code {
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+/* Legacy-Marker aus alten Folien: unsichtbar, falls noch irgendwo vorhanden */
+.reveal .show-all {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Marker: Story-Pill, Time-Badge, Chips                                   */
+/* ---------------------------------------------------------------------- */
+
+/* @sync story-pill begin — textgleich in services/dashboard/static/index.html */
+.story-pill {
+    display: inline-block;
+    background: #0A0349;
+    color: #D3F871;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+/* @sync story-pill end */
+
+.reveal .story-pill {
+    font-family: var(--font-display);
+}
+
+/* Story-Marker in der Kicker-Zeile: aus <!-- .slide: data-story="N" --> */
+.reveal section[data-story]::before {
+    content: "Story " attr(data-story);
+    position: absolute;
+    top: 28px;
+    left: var(--pad-x);
+    display: inline-block;
+    background: var(--ink);
+    color: var(--lime);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* Agenda: Pille in Listenpunkten etwas kleiner und optisch auf der Textlinie */
+.reveal li .story-pill {
+    font-size: 12px;
+    padding: 5px 10px;
+    margin-right: 4px;
+    position: relative;
+    top: -2px;
+}
+
+.reveal table .story-pill {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+.reveal .time-badge {
+    display: inline-block;
+    background: var(--lime);
+    color: var(--ink);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.2;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.reveal .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+    margin: 8px 0 0;
+}
+
+.reveal .chip {
+    background: var(--lavender);
+    color: var(--ink);
+    padding: 0.35em 0.9em;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    border: 1px solid var(--violet-line);
+    line-height: 1.4;
+}
+
+.reveal .chip.brand {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bilder                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.reveal img.journey-image {
+    display: block;
+    margin: 12px 0 0;
+    max-width: 100%;
+    max-height: 420px;
+    width: auto;
+    height: auto;
+}
+
+.reveal img.dashboard-image {
+    display: block;
+    margin: 12px 0 0;
+    max-width: 60%;
+    max-height: 120px;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--violet-line);
+}
+
+.reveal img.qr-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 60%;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+}
+
+.reveal .qr-url {
+    text-align: center;
+    margin: 8px 0 0;
+    font-size: 16px;
+    color: var(--ink);
+}
+
+.reveal .qr-url a {
+    color: var(--violet);
+    font-weight: 700;
+    border-bottom: 1px dashed var(--violet);
+}
+
+/* Kleiner Bild-Anker oben rechts auf den Pattern-Hauptfolien */
+.reveal img.pattern-image {
+    position: absolute;
+    top: 36px;
+    right: var(--pad-x);
+    height: 110px;
+    width: auto;
+    max-width: 220px;
+    margin: 0;
+    border-radius: 8px;
+    filter: brightness(1.05);      /* der fast weiße Bildgrund (#f7f7f7) wird Papierweiß */
+}
+
+/* Hero-Hintergrundbilder ebenso. Nur wenn ein Bild gesetzt ist, die dunklen
+   Kapitel-Trenner bleiben unberührt. */
+.reveal .slide-background-content[style*="background-image"] {
+    filter: brightness(1.05);
+}
+
+.reveal section:has(> img.pattern-image) h2,
+.reveal section:has(> img.pattern-image) .subtitle {
+    max-width: 75%;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Hero (Titelfolie eines Pattern-Blocks): Bild rechts, Titel links       */
+/* ---------------------------------------------------------------------- */
+
+.reveal .slides > section > section.hero,
+.reveal .slides > section.hero {
+    padding-top: 240px;
+    padding-right: 50%;
+}
+
+.reveal .hero h2 {
+    font-size: 64px;
+    margin-bottom: 12px;
+}
+
+.reveal .hero .subtitle {
+    font-size: 26px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Kapitel-Trenner: invertiert, zentriert                                 */
+/* ---------------------------------------------------------------------- */
+
+.reveal .slides > section.chapter-slide {
+    text-align: center;
+    padding-top: 220px;
+    color: #fff;
+}
+
+.reveal .chapter-slide h2 {
+    color: #fff;
+    font-size: 104px;
+    text-align: center;
+    margin: 16px 0 0;
+}
+
+.reveal .chapter-slide .chapter-num {
+    display: inline-block;
+    background: var(--lime);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin: 0;
+}
+
+.reveal .chapter-slide .subtitle {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 26px;
+    text-align: center;
+    margin: 20px 0 0;
+    font-style: italic;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Intro: Bild und Kontakt-Karte, die einzige zentrierte Inhaltsfolie      */
+/* ---------------------------------------------------------------------- */
+
+.reveal .intro {
+    text-align: center;
+}
+
+.reveal .intro img.intro-image {
+    max-height: 380px;
+    max-width: 90%;
+    width: auto;
+    height: auto;
+}
+
+.reveal .intro .author-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 6% 0 auto;
+    padding: 12px 18px;
+    background: var(--lavender);
+    border: 1px solid var(--violet-line);
+    border-radius: 14px;
+    width: fit-content;
+}
+
+.reveal .intro .author-photo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--violet);
+    flex-shrink: 0;
+}
+
+.reveal .intro .author-info {
+    text-align: left;
+    line-height: 1.25;
+}
+
+.reveal .intro .author-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--ink);
+}
+
+.reveal .intro .author-role {
+    font-size: 14px;
+    color: var(--violet);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.reveal .intro ul.author-links {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: block;
+    text-align: left;
+    font-size: 12px;
+}
+
+.reveal .intro ul.author-links li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    line-height: 1.5;
+    color: var(--ink);
+}
+
+.reveal .intro ul.author-links li + li {
+    margin-top: 2px;
+}
+
+.reveal .intro .author-icon {
+    width: 13px;
+    height: 13px;
+    fill: var(--violet);
+    flex-shrink: 0;
+}
+
+.reveal .intro ul.author-links a {
+    color: var(--ink);
+    border-bottom: 1px dotted var(--violet-line);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Reveal-Chrome: Progress, Controls, Slide-Number                        */
+/* ---------------------------------------------------------------------- */
+
 .reveal .progress {
     bottom: 0;
     height: 3px;
-    color: var(--highlight);   /* Füllung – Reveal nutzt color statt background */
+    color: var(--lime);
     background: rgba(10, 3, 73, 0.15);
-    z-index: 25;               /* über Welle (20), unter Controls (40) */
+    z-index: 25;
 }
 
 .reveal .controls {
-    color: var(--box-border);
+    color: var(--violet);
+    z-index: 40;
 }
 
 .reveal .slide-number {
@@ -357,18 +1080,15 @@
     bottom: 0.7rem;
     background: rgba(10, 3, 73, 0.7);
     color: #fff;
-    font-family: var(--r-code-font);
+    font-family: var(--font-mono);
     border-radius: 4px;
     padding: 0.15em 0.5em;
     z-index: 21;
 }
 
 /* ---------------------------------------------------------------------- */
-/* Welle am unteren Slide-Rand mit Logo                                   */
-/*                                                                        */
-/* Voll-breite Welle. Der Peak (höchster Punkt) wandert mit dem Slide-    */
-/* Fortschritt von links nach rechts. Der SVG-Path wird in index.html     */
-/* dynamisch berechnet und beim slidechanged-Event aktualisiert.          */
+/* Welle am unteren Rand mit Logo. Höhe wird in index.html an die          */
+/* Slide-Skalierung gekoppelt, damit die Schutzzone auf jedem Beamer stimmt. */
 /* ---------------------------------------------------------------------- */
 
 .slide-wave {
@@ -377,6 +1097,7 @@
     right: 0;
     bottom: 0;
     height: 110px;
+    box-sizing: border-box;
     pointer-events: none;
     z-index: 20;
     overflow: hidden;
@@ -401,436 +1122,16 @@
     z-index: 21;
 }
 
-/* Reveal-Controls (Pfeile) über die Welle heben */
-.reveal .controls {
-    z-index: 40;
-}
-
-.reveal .intro img.intro-image {
-    max-height: 75vh;
-    max-width: 90%;
-    width: auto;
-    height: auto;
-}
-
 /* ---------------------------------------------------------------------- */
-/* Intro-Slide: Author / Kontakt-Karte                                    */
+/* Debug (index.html?debug=1): Raster, Schutzzone, Überlauf                */
 /* ---------------------------------------------------------------------- */
 
-.reveal .intro .author-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 1.2rem 6% 0 auto;       /* leicht rechts vom Hauptbild */
-    padding: 0.7rem 1.1rem;
-    background: #fff;
-    border: 1px solid rgba(115, 72, 225, 0.25);
-    border-radius: 14px;
-    box-shadow: 0 4px 14px rgba(10, 3, 73, 0.10);
-    width: fit-content;
+html.debug-grid .reveal .slides section:not(.stack) {
+    outline: 1px dashed rgba(115, 72, 225, 0.5);
+    outline-offset: -1px;
+    background-image: linear-gradient(to top, rgba(255, 0, 0, 0.10) var(--safe-bottom), transparent var(--safe-bottom));
 }
 
-.reveal .intro .author-photo {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--box-border);
-    box-shadow: 0 2px 6px rgba(10, 3, 73, 0.18);
-    flex-shrink: 0;
-}
-
-.reveal .intro .author-info {
-    text-align: left;
-    line-height: 1.25;
-}
-
-.reveal .intro .author-name {
-    font-family: var(--font-futura-title);
-    font-weight: 800;
-    font-size: 20pt;
-    color: var(--slide-text);
-}
-
-.reveal .intro .author-role {
-    font-size: 12pt;
-    color: var(--box-border);
-    font-weight: 500;
-    margin-bottom: 0.35em;
-}
-
-.reveal .intro ul.author-links {
-    list-style: none;
-    margin: 0.35em 0 0 0;
-    padding: 0;
-    display: block;
-    text-align: left;
-}
-
-.reveal .intro ul.author-links li {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin: 0;
-    font-size: 9pt;
-    line-height: 1.5;
-    color: var(--slide-text);
-}
-
-.reveal .intro ul.author-links li + li {
-    margin-top: 0.15em;
-}
-
-.reveal .intro .author-icon {
-    width: 13px;
-    height: 13px;
-    fill: var(--box-border);
-    flex-shrink: 0;
-}
-
-.reveal .intro ul.author-links a {
-    color: var(--slide-text);
-    border-bottom: 1px dotted rgba(115, 72, 225, 0.35);
-    transition: color 0.15s, border-color 0.15s;
-}
-
-.reveal .intro ul.author-links a:hover {
-    color: var(--r-link-color-hover);
-    border-bottom-color: var(--r-link-color-hover);
-}
-
-.reveal img.journey-image {
-    display: block;
-    margin: 1rem auto 0;
-    max-width: 95%;
-    max-height: 78vh;
-    width: auto;
-    height: auto;
-}
-
-/* Setup-Box (Vorbereitung): der Code wird abgetippt, also bewusst groß und
-   gut lesbar — losgelöst vom kleineren generischen `pre` der Code-Folien.
-   Breite Box, damit die längste Befehlszeile (git clone …) nicht umbricht. */
-.reveal .box.setup {
-    max-width: 94%;
-}
-
-.reveal .box.setup pre {
-    font-size: 1.1em;
-    line-height: 1.6;
-}
-
-.reveal img.dashboard-image {
-    display: block;
-    margin: 0.6rem auto 0.2rem;
-    max-width: 62%;
-    max-height: 24vh;
-    width: auto;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(10, 3, 73, 0.22);
-}
-
-.reveal img.qr-image {
-    display: block;
-    margin: 0 auto;
-    max-width: 40%;
-    max-height: 22vh;
-    width: auto;
-    height: auto;
-}
-
-.reveal .qr-url {
-    text-align: center;
-    margin: 0.7em 0 0 0;
-    font-size: 0.72em;
-    color: var(--slide-text);
-    font-family: var(--font-futura);
-}
-
-.reveal .qr-url a {
-    color: var(--box-border);
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 1px dashed var(--box-border);
-}
-
-/* Kompakter Visual-Anker auf Pattern-Hauptfolien (zwischen Subtitle und factor-row). */
-.reveal img.pattern-image {
-    display: block;
-    margin: 0.3rem auto 0.6rem;
-    max-width: 38%;
-    max-height: 22vh;
-    width: auto;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 3px 12px rgba(10, 3, 73, 0.18);
-}
-
-/* ---------------------------------------------------------------------- */
-/* 12-Faktor-Grid (3×4) auf 06a-12-faktoren                                */
-/* ---------------------------------------------------------------------- */
-
-.reveal .factor-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 0.6rem;
-    width: 95%;
-    margin: 0.5rem auto 0;
-    text-align: left;
-}
-
-.reveal .factor {
-    background: #fff;
-    border: 1px solid var(--box-border);
-    border-radius: 10px;
-    padding: 0.8rem 1rem;
-    box-shadow: 0 2px 6px rgba(10, 3, 73, 0.08);
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    min-width: 0;
-}
-
-.reveal .factor h3 {
-    color: var(--box-border);
-    margin: 0;
-    font-size: 0.8em;
-    font-weight: 700;
-    font-family: var(--font-futura-title);
-    line-height: 1.2;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-}
-
-.reveal .factor h3 .numeral {
-    display: inline-block;
-    background: var(--box-bg);
-    color: var(--highlight);
-    font-weight: 800;
-    font-size: 0.85em;
-    line-height: 1;
-    padding: 0.3em 0.55em;
-    border-radius: 999em;
-    min-width: 1.6em;
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(10, 3, 73, 0.25);
-}
-
-.reveal .factor p {
-    margin: 0;
-    color: var(--slide-text);
-    font-size: 0.62em;
-    line-height: 1.3;
-}
-
-.reveal .factor code {
-    background: rgba(115, 72, 225, 0.1);
-    color: #4d27a8;
-    font-size: 0.56em;
-    padding: 0.45em 0.7em;
-    border-radius: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Sanfter Einblende-&Uuml;bergang f&uuml;r Factor-Cards (keine Dim-Logik mehr). */
-.reveal .factor.fragment.visible {
-    transition: opacity 0.3s ease;
-}
-
-/* `.show-all` ist ein Legacy-Marker (fr&uuml;her f&uuml;r das Wiederaufhellen der gedimmten Karten).
-   Bleibt visuell unsichtbar, damit alte Slides nicht brechen. */
-.reveal .show-all {
-    position: absolute;
-    width: 0;
-    height: 0;
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Karten-Reihe (z. B. Service Discovery): 3 Karten oben, 2 zentriert darunter. */
-.reveal .factor-row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.8rem;
-    width: 95%;
-    margin: 0.5rem auto 0;
-    text-align: left;
-}
-
-.reveal .factor-row > .factor {
-    grid-column: span 2;
-}
-
-.reveal .factor-row > .factor:nth-child(4) {
-    grid-column: 2 / span 2;
-}
-
-.reveal .factor-row > .factor:nth-child(5) {
-    grid-column: 4 / span 2;
-}
-
-/* Sechs Karten (z. B. REST vs. RESTful): 3 + 3 statt 3 + 2. */
-.reveal .factor-row.six > .factor:nth-child(4),
-.reveal .factor-row.six > .factor:nth-child(5) {
-    grid-column: span 2;
-}
-
-/* "Am Markt"-Block: immer sichtbar, damit die Framework-Übersicht auch im
-   statisch veröffentlichten Web-Foliensatz erscheint. Früher wurde sie erst
-   nach dem letzten Fragment (.show-all) eingeblendet und im Web kaum gefunden. */
-.reveal .market-row {
-    opacity: 1;
-    margin-top: 1.2rem;
-}
-
-/* ---------------------------------------------------------------------- */
-/* Slide 07 — Vorbereitung: Chip-Reihen + Zeit-Badge                       */
-/* ---------------------------------------------------------------------- */
-
-.reveal .chip-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-    margin: 0.6rem auto;
-}
-
-.reveal .chip {
-    background: #eef2f7;
-    color: var(--box-bg);
-    padding: 0.35em 0.9em;
-    border-radius: 999px;
-    font-size: 0.62em;
-    font-weight: 600;
-    border: 1px solid rgba(115, 72, 225, 0.18);
-    line-height: 1.4;
-}
-
-.reveal .chip.brand {
-    background: var(--box-bg);
-    color: #fff;
-    border-color: var(--box-border);
-}
-
-.reveal .time-badge {
-    display: inline-block;
-    background: var(--highlight);
-    color: var(--slide-text);
-    padding: 0.2em 0.8em;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 0.65em;
-    margin-left: 0.4em;
-    box-shadow: 0 1px 3px rgba(10, 3, 73, 0.18);
-}
-
-/* ---------------------------------------------------------------------- */
-/* Story-Card (Wiedererkennungseffekt zum Dashboard-Story-Panel)           */
-/* ---------------------------------------------------------------------- */
-
-.reveal .story-card {
-    background: #f5f6f8;
-    border: 1px solid #e1e5ec;
-    border-radius: 8px;
-    padding: 1.1rem 1.4rem;
-    text-align: left;
-    font-size: 0.9em;
-    line-height: 1.45;
-    color: #333;
-}
-
-.reveal .story-card h4 {
-    font-size: 0.7em;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #888;
-    font-weight: 700;
-    margin: 0.85rem 0 0.3rem;
-    line-height: 1.2;
-}
-
-.reveal .story-card h4:first-child { margin-top: 0; }
-
-.reveal .story-card p,
-.reveal .story-card ul { margin: 0 0 0.5rem; }
-/* Listen nicht ein zweites Mal durch `.cols ul` verkleinern: relativ zur Card halten. */
-.reveal .story-card ul { padding-left: 1.25rem; font-size: 0.95em; }
-.reveal .story-card li + li { margin-top: 0.15rem; }
-
-.reveal .story-card em {
-    color: var(--box-border);
-    font-style: normal;
-    font-weight: 600;
-}
-
-.reveal .story-card code {
-    background: rgba(115, 72, 225, 0.12);
-    color: #4d27a8;
-    padding: 0.1em 0.4em;
-    border-radius: 4px;
-    font-size: 0.95em;
-}
-
-/* ---------------------------------------------------------------------- */
-/* Recap-Grid (2 x 2, gleiche Card-Optik wie .factor-grid)                 */
-/* ---------------------------------------------------------------------- */
-
-.reveal .recap-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;
-    width: 80%;
-    margin: 0.5rem auto 0;
-    text-align: left;
-}
-
-/* Recap hat nur 2 Karten pro Folie, also reichlich Platz: Frage-Text deutlich
-   größer als in den dichten Pattern-/12-Faktoren-Karten. */
-.reveal .recap-grid .factor h3 {
-    font-size: 0.95em;
-}
-
-.reveal .recap-grid .factor p {
-    font-size: 0.82em;
-}
-
-.reveal .recap-grid .factor code {
-    font-size: 0.68em;
-}
-
-
-/* ---------------------------------------------------------------------- */
-/* Kapitel-Trenner: invertierte Farbgebung, gro&szlig;e Typografie           */
-/* ---------------------------------------------------------------------- */
-
-.reveal .chapter-slide {
-    color: #fff;
-}
-
-.reveal .chapter-slide h2 {
-    color: #fff;
-    font-size: 88pt;
-    margin: 0.3em 0 0;
-}
-
-.reveal .chapter-slide .chapter-num {
-    font-family: var(--font-futura-title);
-    color: var(--highlight);
-    font-size: 20pt;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin: 0 0 0.4em 0;
-}
-
-.reveal .chapter-slide .subtitle {
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 24pt;
-    margin-top: 1.5rem;
-    font-style: italic;
+html.debug-grid .reveal .slides section.overflow {
+    outline: 3px solid #e00;
 }

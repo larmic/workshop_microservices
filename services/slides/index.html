@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6.0.1/dist/reveal.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6.0.1/dist/plugin/highlight/monokai.css">
 
+    <!-- Webfont-Fallback: Futura bleibt lokal die erste Wahl, Jost springt ein,
+         wo Futura fehlt (Windows, Linux, GitHub Pages). Wird nur geladen, wenn
+         ein Textlauf sie braucht. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700;800&display=swap">
+
     <link rel="stylesheet" href="./theme.css">
 </head>
 <body>
@@ -125,7 +132,9 @@
         transition: 'slide',
         controls: true,
         progress: true,
-        center: true,
+        // Festes Raster: Titelzone oben, Inhalt linksbündig, Schutzzone für die
+        // Welle unten (siehe theme.css). Vertikale Zentrierung ist deshalb aus.
+        center: false,
         // 16:9-Canvas: füllt moderne Beamer randlos (kein Letterboxing wie bei
         // der 960x700-Voreinstellung) und gibt den Story-Spalten echte Breite.
         width: 1280,
@@ -174,6 +183,63 @@
     }
     Reveal.on('ready', updateWave);
     Reveal.on('slidechanged', updateWave);
+
+    // Die Welle lebt in Viewport-Pixeln, die Schutzzone der Folien in Slide-Pixeln.
+    // Damit der Wellenkamm auf jedem Beamer auf derselben Slide-Linie liegt, wächst
+    // die Welle mit der Reveal-Skalierung; der Letterbox-Rest darunter wird mit der
+    // Wellenfarbe gefüllt.
+    const WAVE_SLIDE_H = 110;
+    function syncWave(scale) {
+        if (document.documentElement.classList.contains('reveal-print')) return;
+        const wave = document.querySelector('.slide-wave');
+        const gap = Math.max(0, (window.innerHeight - 720 * scale) / 2);
+        wave.style.height = (WAVE_SLIDE_H * scale + gap) + 'px';
+        wave.style.borderBottom = gap + 'px solid rgb(238,231,251)';
+    }
+    Reveal.on('ready', () => syncWave(Reveal.getScale()));
+    Reveal.on('resize', e => syncWave(e.scale));
+
+    // Webfont nachgeladen: Layout einmal neu rechnen, damit Umbrüche stimmen.
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => Reveal.layout());
+    }
+
+    // Debug-Modus (?debug=1): Raster und Schutzzone einzeichnen, Überlauf melden.
+    // Gemessen werden die Unterkanten aller Kinder der aktuellen Folie gegen die
+    // Oberkante der Schutzzone. Mit ?print-pdf&debug=1&pdfSeparateFragments=false
+    // sind alle Folien gleichzeitig sichtbar und das ganze Deck wird geprüft.
+    const DEBUG = new URLSearchParams(location.search).has('debug');
+    const SAFE_BOTTOM = 120;
+    function checkOverflow(sections) {
+        const scale = Reveal.getScale();
+        sections.forEach(sec => {
+            const r = sec.getBoundingClientRect();
+            if (!r.height) return;
+            // Oberkante der Schutzzone, von der Folienoberkante aus gerechnet (im
+            // Print-Modus kollabiert die Section-Höhe, r.bottom wäre dort falsch).
+            const limit = r.top + (720 - SAFE_BOTTOM) * scale;
+            let maxBottom = -Infinity;
+            for (const el of sec.children) {
+                if (el.matches('aside.notes')) continue;
+                maxBottom = Math.max(maxBottom, el.getBoundingClientRect().bottom);
+            }
+            const over = maxBottom > limit + 1 || sec.scrollWidth > sec.clientWidth + 1;
+            sec.classList.toggle('overflow', over);
+            if (over) {
+                console.warn('[overflow]', sec.dataset.markdown || JSON.stringify(Reveal.getIndices(sec)),
+                    Math.round((maxBottom - limit) / scale) + 'px');
+            }
+        });
+    }
+    if (DEBUG) {
+        document.documentElement.classList.add('debug-grid');
+        Reveal.on('ready', e => checkOverflow([e.currentSlide]));
+        Reveal.on('slidechanged', e => checkOverflow([e.currentSlide]));
+        Reveal.on('fragmentshown', () => checkOverflow([Reveal.getCurrentSlide()]));
+        Reveal.on('pdf-ready', () => checkOverflow([...document.querySelectorAll('.reveal .slides section:not(.stack)')]));
+        Reveal.on('ready', () => console.info('[debug] base font-size',
+            getComputedStyle(document.querySelector('.reveal')).fontSize));
+    }
 </script>
 </body>
 </html>
