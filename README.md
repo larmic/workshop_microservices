@@ -39,7 +39,7 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   ├── vorbereitung.md    # Pflicht-Vorbereitung vor dem Workshop
 │   ├── custom-setup.md    # Eigenen Booking-Service einklinken (im Workshop)
 │   ├── themen.md          # Themenübersicht & Moderationsleitfaden
-│   ├── stories/           # User Stories (story-01 … story-07)
+│   ├── stories/           # User Stories (story-01 … story-08)
 │   ├── instructions/      # Trainer-Hinweise
 │   ├── questions/         # Fragen & Diskussionsimpulse
 │   └── orga/              # Vorlagen für Intranet-Text & Einladungs-Mail
@@ -48,7 +48,7 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   ├── vorbereitung/      # Vorbereitung & Troubleshooting (rendert docs/*.md)
 │   └── feedback/          # Anonymes Feedback-Formular
 ├── services/              # Backend-Services (Go)
-│   ├── booking/           # BookingService (story1 … story7)
+│   ├── booking/           # BookingService (story1, story3 … story8; Story 2 hat keinen Code)
 │   ├── flight/            # FlightService
 │   ├── hotel/             # HotelService
 │   ├── car/               # CarService

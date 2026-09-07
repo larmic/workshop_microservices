@@ -24,7 +24,7 @@
 <h3>Orchestrator</h3>
 <p>Zentraler Koordinator steuert den Ablauf. Wissen liegt an <em>einer</em> Stelle.</p>
 <code>Booking wei&szlig; alles</code>
-<aside class="notes">Booking kennt: Reihenfolge der Schritte, was wurde schon aufgerufen, was muss kompensiert werden, aktueller Saga-Status. Hotel / Flight / Car bleiben <em>dumm und einfach</em> &mdash; sie kennen nur ihre eigenen lokalen Transaktionen. Vorteil: ein Bug in der Saga-Logik steckt an <em>einer</em> Stelle. Alternative ist Choreography (Story 6) &mdash; verteiltes Saga-Wissen &uuml;ber Events.</aside>
+<aside class="notes">Booking kennt: Reihenfolge der Schritte, was wurde schon aufgerufen, was muss kompensiert werden, aktueller Saga-Status. Hotel / Flight / Car bleiben <em>dumm und einfach</em> &mdash; sie kennen nur ihre eigenen lokalen Transaktionen. Vorteil: ein Bug in der Saga-Logik steckt an <em>einer</em> Stelle. Alternative ist Choreography (Story 7) &mdash; verteiltes Saga-Wissen &uuml;ber Events.</aside>
 </div>
 
 <div class="factor fragment">
@@ -64,8 +64,8 @@
 <span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
-- Hook: &bdquo;In Story 3 haben wir bei POST Fail-Fast gemacht &mdash; wenn ein CB OPEN ist, ganzen Buchungsversuch abbrechen. Aber: was, wenn der Flug schon gebucht ist und <em>dann</em> kippt das Hotel?&ldquo; Demo: Flight normal, Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code> &mdash; im Dashboard ist sichtbar, wie Flight gebucht und dann kompensiert wird.
+- Hook: &bdquo;In Story 4 haben wir bei POST Fail-Fast gemacht &mdash; wenn ein CB OPEN ist, ganzen Buchungsversuch abbrechen. Aber: was, wenn der Flug schon gebucht ist und <em>dann</em> kippt das Hotel?&ldquo; Demo: Flight normal, Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code> &mdash; im Dashboard ist sichtbar, wie Flight gebucht und dann kompensiert wird.
 - Karten-Reihenfolge bewusst: erst die Abgrenzung gegen ACID (Lokale Transaktionen), dann die Mechanik (Forward + Kompensation, Orchestrator, Status), zuletzt das ehrliche Trade-off (Eventual Consistency).
 - Wer was wo nutzt: <strong>Temporal / Cadence</strong> sind heute Branchen-Standard f&uuml;r &bdquo;Saga as Code&ldquo; &mdash; Engine k&uuml;mmert sich um State, Retry, Recovery. <strong>Camunda 8</strong> stark in BPMN-orientierten Enterprise-Umgebungen. <strong>AWS Step Functions</strong> als managed Variante. <strong>Eventuate / MassTransit / NServiceBus</strong> sind Saga-Libraries im jeweiligen .NET-/Java-Stack.
-- Wichtigster Take-away f&uuml;r die Brain Bridge: Saga ist <em>nicht</em> Eventing. Saga kann sync HTTP sein (Story 5) oder asynchron &uuml;ber Events laufen (Choreography, Story 6). Das eine ist das Pattern, das andere die Transport-Wahl.
-- &Uuml;berleitung: Wir schauen uns die Mechanik konkret an &mdash; in genau der Form, wie sie im Dashboard-Spickzettel und im Story-5-Code steckt.
+- Wichtigster Take-away f&uuml;r die Brain Bridge: Saga ist <em>nicht</em> Eventing. Saga kann sync HTTP sein (Story 6) oder asynchron &uuml;ber Events laufen (Choreography, Story 7). Das eine ist das Pattern, das andere die Transport-Wahl.
+- &Uuml;berleitung: Wir schauen uns die Mechanik konkret an &mdash; in genau der Form, wie sie im Dashboard-Spickzettel und im Story-6-Code steckt.

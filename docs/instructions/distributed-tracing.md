@@ -1,12 +1,12 @@
 # Distributed Tracing — Workshop-Notizen
 
-> Trainer-Notizen für Story 7. Kurz gehalten: Konzepte vorab, alles Weitere am konkreten Beispiel.
+> Trainer-Notizen für Story 8. Kurz gehalten: Konzepte vorab, alles Weitere am konkreten Beispiel.
 
 ## 1. Worum geht es?
 
 **Analogie:** Sendungsverfolgung. Ein Paket wandert vom Online-Shop über DHL, einen Partner in Polen, einen lokalen Kurier — ohne **gemeinsame Sendungsnummer** weiß am Ende niemand, wo es steckt.
 
-**Problem:** Eine fachliche Operation („buche Flug + Hotel + Mietwagen") läuft über vier Services. Jeder loggt seine Sicht — aber niemand kann die Zeilen zu **einer** Operation zusammenführen. Spätestens mit Saga (Stories 5/6) wird Debugging zur Detektivarbeit.
+**Problem:** Eine fachliche Operation („buche Flug + Hotel + Mietwagen") läuft über vier Services. Jeder loggt seine Sicht — aber niemand kann die Zeilen zu **einer** Operation zusammenführen. Spätestens mit Saga (Stories 6/7) wird Debugging zur Detektivarbeit.
 
 **Lösung:** Eine **Trace-ID**, einmal pro Request vergeben, durch alle Hops weitergereicht und in jede Logzeile geschrieben. `grep <trace-id>` über die Compose-Logs zeigt den kompletten Vorgang.
 
@@ -85,7 +85,7 @@ Client ──► Booking
 1. **Trace-ID T** — einmalig, falls kein `traceparent` reinkommt (Browser/curl-Fall).
 2. **Span-ID S0** — initiale Span im Booking-Context. **Mit dieser ID loggt Booking während der ganzen Anfrage.**
 3. **Span-IDs S1, S2, S3** — pro Outbound-Call zu Flight, Hotel, Car. Diese leben **nur im Outbound-Header**, nicht im Booking-Log.
-4. **`traceparent` als Event-Property** — beim async Publish in Story 6/7 (siehe Abschnitt 4).
+4. **`traceparent` als Event-Property** — beim async Publish in Story 7/8 (siehe Abschnitt 4).
 
 **Flight / Hotel / Car** (Downstream): erstellen **nichts** für eingehende Requests.
 - `Propagate`-Middleware übernimmt den eintreffenden `traceparent` in den Request-Context.
@@ -158,7 +158,7 @@ Reference-Implementierung: `services/shared/tracing/tracing.go` (~100 Zeilen).
 
 ## 4. Tracing über Async-Grenzen
 
-Bei der Choreography-Saga (Story 6) reicht der HTTP-Header nicht mehr — der Trace-Kontext muss **als Property auf dem Event** mitwandern:
+Bei der Choreography-Saga (Story 7) reicht der HTTP-Header nicht mehr — der Trace-Kontext muss **als Property auf dem Event** mitwandern:
 
 ```json
 {
@@ -273,7 +273,7 @@ Für den Workshop-Bonus: **Jaeger All-in-One** ist die kürzeste Strecke zur ers
 |---|---|
 | Tracing-Bibliothek (Parse, Generate, Middleware, Inject, Logger) | `services/shared/tracing/tracing.go` |
 | Tests | `services/shared/tracing/tracing_test.go` |
-| Server-Middleware verdrahten | `services/booking/story7/main.go`, `services/{flight,hotel,car}/main.go` |
-| Outbound-Inject + strukturierte Logs | `services/booking/story7/handler/booking.go` |
-| Trace-Kontext in Compensation-Events | `services/booking/story7/saga/*.go`, `services/{flight,hotel,car}/handler/compensation.go` |
+| Server-Middleware verdrahten | `services/booking/story8/main.go`, `services/{flight,hotel,car}/main.go` |
+| Outbound-Inject + strukturierte Logs | `services/booking/story8/handler/booking.go` |
+| Trace-Kontext in Compensation-Events | `services/booking/story8/saga/*.go`, `services/{flight,hotel,car}/handler/compensation.go` |
 | Backend-Handler nutzen Trace-Logger | `services/{flight,hotel,car}/handler/*.go` |

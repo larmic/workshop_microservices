@@ -1,4 +1,4 @@
-.PHONY: help all build clean run-flight run-hotel run-car run-booking-ref-story1 run-booking-ref-story2 run-booking-ref-story3 run-booking-ref-story4 run-booking-ref-story5 run-booking-ref-story6 run-booking-ref-story7 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story2 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-down
+.PHONY: help all build clean run-flight run-hotel run-car run-booking-ref-story1 run-booking-ref-story3 run-booking-ref-story4 run-booking-ref-story5 run-booking-ref-story6 run-booking-ref-story7 run-booking-ref-story8 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-booking-ref-story8 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-down
 
 .DEFAULT_GOAL := help
 
@@ -8,7 +8,7 @@ help: ## Zeigt diese Hilfe an
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
-docker-build: docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story2 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-dashboard ## Baut alle Docker-Images
+docker-build: docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-booking-ref-story8 docker-build-dashboard ## Baut alle Docker-Images
 
 docker-build-flight: ## Baut das Flight-Service Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=flight --build-arg SERVICE_DESC="Workshop Microservices - Flight Service" --build-arg SERVICE_PORT=8081 -t workshop-microservices-flight:latest .
@@ -21,9 +21,6 @@ docker-build-car: ## Baut das Car-Service Docker-Image
 
 docker-build-booking-ref-story1: ## Baut das BookingService Reference Story1 Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story1 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Reference Story 1)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story1 .
-
-docker-build-booking-ref-story2: ## Baut das BookingService Reference Story2 Docker-Image
-	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story2 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Reference Story 2)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story2 .
 
 docker-build-booking-ref-story3: ## Baut das BookingService Reference Story3 Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story3 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Reference Story 3)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story3 .
@@ -39,6 +36,9 @@ docker-build-booking-ref-story6: ## Baut das BookingService Reference Story6 Doc
 
 docker-build-booking-ref-story7: ## Baut das BookingService Reference Story7 Docker-Image
 	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story7 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Reference Story 7)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story7 .
+
+docker-build-booking-ref-story8: ## Baut das BookingService Reference Story8 Docker-Image
+	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/story8 --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Reference Story 8)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:story8 .
 
 docker-build-dashboard: ## Baut das Scaling-UI Docker-Image (optional: DISCORD_EASTEREGG_WEBHOOK_URL=... für den Easteregg-Hook)
 	docker build -f dashboard/Dockerfile --build-arg DISCORD_EASTEREGG_WEBHOOK_URL="$(DISCORD_EASTEREGG_WEBHOOK_URL)" -t workshop-microservices-dashboard:latest .

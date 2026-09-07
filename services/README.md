@@ -18,7 +18,7 @@ gepusht.
 | Flight    | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-flight/latest?label=) | [larmic/workshop-microservices-flight](https://hub.docker.com/r/larmic/workshop-microservices-flight) |
 | Hotel     | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-hotel/latest?label=) | [larmic/workshop-microservices-hotel](https://hub.docker.com/r/larmic/workshop-microservices-hotel) |
 | Car       | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-car/latest?label=) | [larmic/workshop-microservices-car](https://hub.docker.com/r/larmic/workshop-microservices-car) |
-| Booking   | `story1`…`story7`, `custom` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-booking/story1?label=story1) | [larmic/workshop-microservices-booking](https://hub.docker.com/r/larmic/workshop-microservices-booking) |
+| Booking   | `story1`…`story8`, `custom` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-booking/story1?label=story1) | [larmic/workshop-microservices-booking](https://hub.docker.com/r/larmic/workshop-microservices-booking) |
 | Dashboard | `latest` | ![size](https://img.shields.io/docker/image-size/larmic/workshop-microservices-dashboard/latest?label=) | [larmic/workshop-microservices-dashboard](https://hub.docker.com/r/larmic/workshop-microservices-dashboard) |
 
 ## Service-Übersicht
@@ -29,8 +29,12 @@ gepusht.
 | Hotel           | `/api/hotel/**`            | [openapi.yaml](hotel/api/openapi.yaml)           |
 | Car             | `/api/car/**`              | [openapi.yaml](car/api/openapi.yaml)             |
 | Booking Reference Story 1 | `/api/booking-ref-story1/**` | [openapi.yaml](booking/story1/api/openapi.yaml)  |
-| Booking Reference Story 2 | `/api/booking-ref-story2/**` | [openapi.yaml](booking/story2/api/openapi.yaml)  |
+| Booking Reference Story 3 | `/api/booking-ref-story3/**` | [openapi.yaml](booking/story3/api/openapi.yaml)  |
 | Booking Custom            | `/api/booking-custom/**`     | [openapi.yaml](booking/custom/src/main/resources/openapi.yaml) |
+
+Die weiteren Referenz-Stories folgen demselben Muster (`/api/booking-ref-story4/**`
+bis `/api/booking-ref-story8/**`). Story 2 ist eine Design-Session am Flipchart und
+hat weder Code noch Service noch Port.
 
 Alle Services sind über den Traefik Reverse Proxy auf Port 80 erreichbar:
 
@@ -39,7 +43,7 @@ curl http://localhost/api/flight/flights
 curl http://localhost/api/hotel/hotels
 curl http://localhost/api/car/cars
 curl http://localhost/api/booking-ref-story1/booking/offers
-curl http://localhost/api/booking-ref-story2/booking/offers
+curl http://localhost/api/booking-ref-story3/booking/offers
 curl http://localhost/api/booking-custom/booking/offers
 ```
 
@@ -58,7 +62,7 @@ curl http://localhost/api/booking-custom/booking/offers
 |--------------------------------|-------------------------------------------------|
 | `docker-compose.yml`           | Basis-Services (Flight, Hotel, Car)              |
 | `docker-compose.infra.yml`     | Infrastruktur (Traefik, Consul, Swagger UI)      |
-| `docker-compose.reference.yml` | Referenzlösungen (Booking Reference Story 1…7)   |
+| `docker-compose.reference.yml` | Referenzlösungen (Booking Reference Story 1, 3…8) |
 | `docker-compose.custom.yml`    | Custom-Lösung des Teilnehmers (Booking Custom)   |
 
 ## Quickstart

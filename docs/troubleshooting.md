@@ -79,7 +79,7 @@ Symptom: `docker compose up` bricht ab mit `bind: address already in use` (oder
 | 8080 | Traefik-Dashboard |
 | 8500 | Consul |
 | 8084 | Swagger UI (direkt) |
-| 8085 bis 8091 | Booking-Referenz Story 1 bis 7 (direkt) |
+| 8085, 8087 bis 8092 | Booking-Referenz Story 1 und 3 bis 8 (direkt, Formel `8084 + Story-Nummer`; 8086 bleibt frei, Story 2 ist eine Design-Session ohne Service) |
 | 8099 | Booking-Custom (direkt, an Traefik vorbei) |
 
 Belegung finden:
@@ -108,6 +108,24 @@ Reverse-Proxy. Den belegenden Prozess beenden oder die Umgebung freiräumen
 - **Netz / Proxy.** Hinter Firmen-Proxy den Docker-Proxy konfigurieren (Docker
   Desktop: Settings, Resources, Proxies).
 - **Fallback:** lokal bauen statt ziehen mit `make docker-up`.
+
+## Nach einem Repo-Update zeigt eine Story den falschen Inhalt
+
+**Geltung:** macOS/Linux/Windows · **Status:** erwartbar seit 2026-09
+
+Im September 2026 wurden die Stories 2 bis 7 zu 3 bis 8 umnummeriert (Story 2
+ist seitdem eine Design-Session ohne Code). Die Docker-Tags `story3` bis
+`story7` tragen deshalb neuen Inhalt. Wer noch Images aus der Zeit davor lokal
+gecacht hat, sieht zum Beispiel unter `booking-ref-story4` weiter den alten
+Bulkhead-Stand statt des Circuit Breakers.
+
+Abhilfe: Images neu ziehen bzw. neu bauen.
+
+```bash
+make -C services docker-up-hub   # zieht die aktuellen Tags von Docker Hub
+# oder
+make -C services docker-up       # baut lokal aus dem aktuellen Stand
+```
 
 ## Nur Windows/WSL2: `http://localhost` nicht erreichbar, obwohl alle Container laufen
 

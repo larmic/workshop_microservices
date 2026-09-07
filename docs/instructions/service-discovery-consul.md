@@ -1,6 +1,6 @@
 # Service Discovery mit Consul — Workshop-Notizen
 
-> Trainer-Notizen für Story 2. Reihenfolge folgt einer typischen Slide-Sequenz; jeder Abschnitt hat einen kleinen Hinweis, was an der Tafel/auf der Folie passieren sollte.
+> Trainer-Notizen für Story 3. Reihenfolge folgt einer typischen Slide-Sequenz; jeder Abschnitt hat einen kleinen Hinweis, was an der Tafel/auf der Folie passieren sollte.
 
 ## 1. Worum geht es?
 
@@ -162,7 +162,7 @@ fun resolve(consulUrl, name): String {
 
 ## 5. Server-Side vs. Client-Side Discovery
 
-Das ist der **wichtigste pädagogische Übergang** der Story 2. Wer trifft die Entscheidung „welche Instanz wird angerufen"?
+Das ist der **wichtigste pädagogische Übergang** der Story 3. Wer trifft die Entscheidung „welche Instanz wird angerufen"?
 
 ### Client-Side Discovery (Workshop-Variante)
 
@@ -281,7 +281,7 @@ Discovery wird komplett in einen Sidecar-Proxy ausgelagert. Anwendungscode ruft 
 Zum Abschluss, wenn Zeit bleibt:
 
 1. **Was, wenn Consul selbst ausfällt?** Single-Point-of-Failure! Antwort: Consul-Cluster (3 oder 5 Server), Caller-seitiges Caching für Übergangszeiträume.
-2. **Wie testet ihr Discovery?** Service skalieren, Container killen, schauen ob das System weiterläuft. Chaos Engineering — vergleiche Story 3 / Dashboard.
+2. **Wie testet ihr Discovery?** Service skalieren, Container killen, schauen ob das System weiterläuft. Chaos Engineering — vergleiche Story 4 / Dashboard.
 3. **Client-Side vs. Server-Side: was passt zu eurem Stack?** Spring Cloud → Client-Side ist trivial. Polyglot mit Mesh-Vorhandensein → Server-Side. Kubernetes → eingebaut.
 4. **Wie lange darf eine tote Instanz in der Registry stehen?** Tradeoff `Check.Interval` (Last) ↔ Failover-Geschwindigkeit ↔ `DeregisterCriticalServiceAfter` (Aufräumen).
 5. **Service-Discovery-Daten persistieren?** Consul macht das per Default in Raft. Im Workshop läuft Consul aber im Dev-Mode (`agent -dev`) — alles im RAM. Was heißt das? Restart = leer. Diskussion: Wann ist das ein Problem?
@@ -296,7 +296,7 @@ Zum Abschluss, wenn Zeit bleibt:
 | Register/Deregister + Retry/Backoff | `services/shared/consul/register.go` |
 | Resolver (Random Load Balancing) | `services/shared/consul/resolver.go` |
 | Lifecycle (Register beim Start, Deregister vor Server-Shutdown, Signal-Handling) | `services/flight/main.go` (analog `hotel/main.go`, `car/main.go`) |
-| Resolver-Verwendung im Caller | `services/booking/story2/main.go`, `services/booking/story2/handler/booking.go` |
+| Resolver-Verwendung im Caller | `services/booking/story3/main.go`, `services/booking/story3/handler/booking.go` |
 | Consul-Container im Compose-Setup | `services/docker-compose.infra.yml` (Service `consul`, Dev-Mode, UI auf Port 8500) |
 | Begleitend: Zusammenspiel Traefik / Docker-DNS / Consul | `services/load-balancing.md` |
-| Story-Beschreibung (was Teilnehmer bauen) | `docs/stories/story-02-service-discovery.md` |
+| Story-Beschreibung (was Teilnehmer bauen) | `docs/stories/story-03-service-discovery.md` |

@@ -25,10 +25,10 @@
 </pre>
 
 Note:
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 4 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
+- Identischer Pseudo-Code findet sich im Dashboard unter Story 5 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
 - Drei Knackpunkte hervorheben:
   - <strong>Check &amp; Increment m&uuml;ssen atomar</strong> sein (Mutex / Compare-and-Set / Semaphore-Primitive). Sonst rutschen unter Last mehr Calls durch als erlaubt &mdash; die Isolation ist dahin.
   - <strong>release() im finally</strong> &mdash; vergessen hei&szlig;t Slot-Lecks, der Pool f&uuml;llt sich &uuml;ber die Zeit, der Bulkhead &ouml;ffnet nie wieder.
   - <strong>Ein Bulkhead pro Downstream</strong>. Ein gemeinsamer Pool h&auml;tte das Pattern ad absurdum gef&uuml;hrt.
-- Reference-Code: <code>services/booking/story4/bulkhead/bulkhead.go</code> &mdash; ca. 60 Zeilen Go mit <code>chan struct{}</code> als Semaphore.
+- Reference-Code: <code>services/booking/story5/bulkhead/bulkhead.go</code> &mdash; ca. 60 Zeilen Go mit <code>chan struct{}</code> als Semaphore.
 - Diskussions-Anker: Sollte ein Bulkhead-Reject als CB-Failure z&auml;hlen? (Antwort im Recap: nein &mdash; CB und Bulkhead sind komplement&auml;r und unabh&auml;ngig.)

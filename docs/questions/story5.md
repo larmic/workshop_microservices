@@ -1,366 +1,423 @@
-# Workshop-Fragen: Saga (Story 5)
+# Workshop-Fragen: Bulkhead (Story 5)
 
-Provokante Fragen rund um das Saga Pattern und die Frage, was passiert,
-wenn das „alles oder nichts" *selbst* anfängt zu wackeln. Ziel: nicht
-nur den Happy Path verstehen, sondern die Failure-Modi, die in echten
-Systemen die schwierigen sind — und die Brücke zu Story 6
-(Choreography-Saga via Events) bewusst sehen.
-
----
-
-## Frage 1 — Was passiert, wenn die Kompensation selbst fehlschlägt?
-
-**Frage:** Wir kompensieren mit `DELETE /bookings/{id}` gegen Hotel,
-Flight, Car. Was, wenn dieser Aufruf seinerseits einen 5xx wirft oder
-in einen Timeout läuft? Der Flug ist gebucht, das Hotel hat „nein"
-gesagt, und jetzt kann ich den Flug nicht mehr stornieren — was nun?
-
-**Antwort:** Saga macht eine **starke Annahme**: Forward-Steps dürfen
-scheitern, Kompensationen **müssen letztlich gelingen**. Ohne diese
-Annahme bricht das ganze Konstrukt zusammen. Die Lehrbuch-Antworten:
-
-| Strategie | Was sie tut | Wann sie greift |
-|---|---|---|
-| **Idempotenz** | mehrfacher `DELETE` → immer dasselbe Ergebnis | bauliche Voraussetzung |
-| **Retry mit Backoff** | transienten Fehler aussitzen | Service kurz weg, Netz-Wackler |
-| **Persistenter Saga-Log** | Crash darf keine offene Kompensation verlieren | Booking-Service stürzt mitten in `COMPENSATING` ab |
-| **Dead-Letter / Operator-Inbox** | Mensch greift ein | alle Retries erschöpft |
-| **Pivot zur fachlichen Alternative** | Statt Storno → Gutschein | Flug ist schon abgehoben, „technische" Storno unmöglich |
-| **Compensation-by-design** | Reservierung als Status, nicht als Löschung | macht „Kompensation kann nicht scheitern" zur Eigenschaft des Modells |
-
-**Take-away:** Eine Saga ohne Plan für gescheiterte Kompensation ist
-**keine Saga, sondern eine optimistische Hoffnung**. Die Frage „was bei
-Misserfolg" ist nicht optional — sie ist das eigentliche Engineering an
-dem Pattern.
+Provokante Fragen zum Bulkhead-Pattern und zu seiner Wechselwirkung mit
+dem Circuit Breaker aus Story 4. Ziel: das Pattern als gezielte
+Antwort auf ein konkretes Problem (Ressourcen-Erschöpfung) verstehen,
+nicht als „CB+Bulkhead = doppelt sicher".
 
 ---
 
-## Frage 2 — Wir haben keinen Retry implementiert. Ist das schlimm?
+## Frage 1 — Was bringt Bulkhead, was Circuit Breaker nicht schon kann?
 
-**Frage:** In unserer Workshop-Implementierung ruft Booking die
-Kompensation **genau einmal** auf. Schlägt sie fehl, ist die Saga
-einfach `FAILED`. Verletzen wir damit das Pattern?
+**Frage:** Wir haben in Story 4 schon einen Circuit Breaker. Der schaltet
+ab, wenn ein Backend krank ist. Wozu jetzt noch ein Bulkhead?
 
-**Antwort:** Ja, formal verletzen wir das letzte Akzeptanzkriterium von
-Story 5. Pragmatisch ist die Entscheidung trotzdem vertretbar — *wenn*
-sie bewusst getroffen wird. Was wir damit aufgeben und wie wir es
-absichern:
+**Antwort:** Die beiden Patterns lösen verschiedene Probleme:
+
+- **Circuit Breaker** = "Backend ist krank, ich versuche es eine Weile
+  gar nicht mehr." Reaktion auf **Fehler-Rate**.
+- **Bulkhead** = "Ich verbrenne maximal N gleichzeitige Threads/Slots
+  für dieses Backend, egal wie viel Last reinkommt." Reaktion auf
+  **Ressourcen-Druck**, nicht auf Fehler.
+
+Klassisches Killer-Szenario, das **nur Bulkhead** löst: Hotel antwortet
+in 2 s — fehlerfrei, der CB bleibt CLOSED. Trotzdem laufen unter Last
+beliebig viele Threads in Hotel-Calls auf, der Booking-Service hat keine
+Threads mehr für Flight oder Car frei. Der CB sieht keinen Grund zu
+reagieren. Bulkhead hingegen kappt nach 10 parallelen Hotel-Calls und
+lässt Flight/Car ungestört durch.
 
 ```
-   ohne Retry
-   ─────────────────────────────────────────────────────────
-   booking ─DELETE→ hotel  ─►  500 Internal Server Error
-                              │
-                              └─►  Saga-Status = FAILED
-                                   Flug bleibt fälschlich gebucht
-                                   Niemand merkt es ohne Monitoring
+                 ┌────────────────────┐
+   Last  ─────►  │  Booking-Service   │
+                 │                    │
+                 │  ┌──Bulkhead Hotel ─┴─►  Hotel
+                 │  │     (max 10)
+                 │  ├──Bulkhead Flight ──►  Flight
+                 │  │     (max 10)
+                 │  └──Bulkhead Car ───►   Car
+                 │        (max 10)
+                 └────────────────────┘
 ```
-
-Was *zwingend* dazugehört, wenn man Retry weglässt:
-
-1. **Saga-Status persistieren** (`PENDING`/`COMPENSATING`/`FAILED`) —
-   sonst weiß niemand, dass eine Saga überhaupt hängt.
-2. **Alert auf Sagas im Status `FAILED` mit unfertiger Kompensation** —
-   das ist der Operator-Eingriff.
-3. **Idempotente Kompensations-Endpoints** — damit ein manueller
-   Retry („Operator klickt nochmal") gefahrlos möglich ist.
-
-**Take-away:** Retry weglassen ist erlaubt — aber dann muss das
-**Monitoring der Retry sein**. Was du nicht im Code hast, musst du im
-Dashboard haben. Was du in keinem von beiden hast, hast du nicht.
 
 ---
 
-## Frage 3 — Wäre Eventing nicht die natürlichere Antwort als sync HTTP?
+## Frage 2 — Werden bei einem Burst von 20 die Backends auch wirklich nur mit 10 gleichzeitigen Aufrufen belastet?
 
-**Frage:** Booking macht einen synchronen `DELETE` gegen Hotel. Wenn
-Hotel kurz weg ist, muss Booking das selbst auffangen (Retry-Schleife,
-Timeout, Saga-State). Wäre es nicht viel sauberer, wenn Booking ein
-Event `CancelBooking` rauslegt, Hotel das aus dem Broker zieht und
-Booking damit „fertig" ist?
+**Frage:** Wenn ich 20 parallele Aufrufe gegen `/booking/offers` schicke
+und der Bulkhead `maxConcurrent=10` hat — wie viele Aufrufe sehen
+Flight, Hotel und Car wirklich?
 
-**Antwort:** Doch — und genau das ist der Sprung von **Orchestration
-über sync HTTP** (Story 5) zu **Event-getriebener Saga** (Story 6).
-Was du dabei gewinnst und was sich verschiebt:
+**Antwort:** Maximal 10 gleichzeitig — pro Backend. Genau das ist der
+Sinn des Patterns. Die anderen 10 werden im Booking-Service abgewiesen,
+bevor sie das Backend überhaupt erreichen, und der Aufrufer bekommt
+einen Fallback (leeres Array). Der Backend-Service wird also vor Last
+geschützt — er sieht von den 20 Client-Requests nur die ersten 10 als
+echte Anfragen.
 
-```
-   heute (sync Orchestration)
-   ─────────────────────────────────────────────────────────
-   booking ─DELETE──► hotel       Retry-Schleife in booking
-   booking ◄──204─── hotel        Booking trägt die Verantwortung
-
-   mit Eventing
-   ─────────────────────────────────────────────────────────
-   booking ─CancelBookingCommand─► [bus] ─► hotel
-                                              │
-   booking ◄─BookingCancelledEvent─[bus] ◄────┘
-                                              │
-                                   oder       └─CancellationFailedEvent
-```
-
-| Aspekt | sync HTTP | Eventing |
-|---|---|---|
-| Retry-Logik | im Booking-Code | im Broker (Redelivery) |
-| Hotel down | Booking schlägt fehl | Event wartet in Queue |
-| Booking-Crash mitten drin | offene Saga, Recovery aus DB | Events bleiben im Bus, Resume kostenfrei |
-| Latenz | sofortige Antwort | eventually consistent |
-| Topologie | Booking kennt Hotel-URL | Booking kennt nur Topic |
-| Komplexität im Stack | gering | Broker, Outbox, DLQ |
-
-**Aber** — der Punkt, der oft untergeht: Booking ist **nicht** fertig
-nach „Event raus". Der Kunde will am Ende eine Antwort:
-„Reise gebucht? storniert? steckt fest?". Also:
-
-- Hotel publiziert `BookingCancelled` zurück.
-- Booking konsumiert das Reply-Event und führt seinen Saga-Status nach.
-- Booking braucht weiterhin **Timeout-Erkennung** (Reply nach X Minuten
-  nicht da → eskalieren).
-
-Das ist im Endeffekt **asynchrone Orchestrierung**, nicht „Booking ist
-seine Verantwortung los". Die Verantwortung *für die Ausführung* wandert
-zu Hotel; die Verantwortung *für den Gesamtstatus gegenüber dem Kunden*
-bleibt bei Booking.
-
-**Take-away:** Eventing ist die robustere Architektur — aber sie
-verschiebt die Komplexität, sie eliminiert sie nicht. Story 5 zeigt
-die Saga **isoliert** (sync, ein Konzept). Story 6 schaltet das
-Eventing dazu und macht die Kompensation asynchron — das ist die
-**Choreography-Saga**. Das Thema **CQRS** wird im Vortrag separat
-behandelt (siehe `docs/themen.md`): ein Read-Model kann die Event-
-Infrastruktur aus Story 6 *nutzen*, muss aber nicht — denn CQRS
-ist „Lese- und Schreibmodell trennen", nicht „Events haben". Saga
-und CQRS bleiben sauber getrennte Konzepte.
+Wichtig: das Limit ist **gleichzeitig**, nicht **insgesamt**. Wenn ein
+Slot frei wird (Call ist fertig), darf der nächste rein.
 
 ---
 
-## Frage 4 — Warum liefert `DELETE /bookings/{id}` bei unbekannter ID 204, nicht 404?
+## Frage 3 — Warum sind nach einem Burst von 20 mit allen Backends auf "langsam" auf Hotel z.B. nur 7 rejected, nicht 10?
 
-**Frage:** Wir geben `204 No Content` auch zurück, wenn die ID nie
-existiert hat. Verschleiert das nicht echte Fehler? Wäre `404` nicht
-ehrlicher?
+**Frage:** Erwartung wäre `calls=20, rejected=10`. Tatsächlich: `calls=20,
+rejected=7`. Warum ist die Zahl unsauber?
 
-**Antwort:** **Nein** — und der Grund kommt direkt aus der Saga-Mechanik:
-
-1. **Idempotenz ist ein Feature, nicht ein Schönheitsmakel.**
-   Saga-Retries dürfen mehrfach denselben Storno absetzen. Jeder Aufruf
-   nach dem ersten würde bei `404`-Antwort die Retry-Logik fälschlich
-   als „Fehler" interpretieren — obwohl der Effekt längst eingetreten
-   ist.
-2. **Ohne State kann der Service ehrlich gar nicht zwischen
-   „nie existiert", „bereits storniert" und „gerade erst gebucht und
-   schon wieder weg" unterscheiden.** Die Workshop-Services persistieren
-   nichts. `404` wäre also geraten, nicht gewusst.
-3. **REST-konvention für DELETE ist umstritten, aber Saga-Praxis ist
-   klar:** Kompensations-Endpoints sind „at-least-once safe". Status
-   2xx auf jeden plausiblen Aufruf, 4xx nur bei strukturell falschen
-   Anfragen (z.B. ID-Format invalid).
+**Antwort:** Wegen der **sequenziellen Aufruf-Reihenfolge** (Flight →
+Hotel → Car) und Timing-Jitter. Skizze:
 
 ```
-                  Aufrufer-Sicht
-   ─────────────────────────────────────────────
-   1. DELETE /bookings/F-7c1a9f   →  204   "ok"
-   2. DELETE /bookings/F-7c1a9f   →  204   "auch ok, idempotent"
-   3. DELETE /bookings/F-deadbe   →  204   "kannte ich nicht — egal"
+t=0      ┌─ 20 Goroutinen treffen FLIGHT-Bulkhead
+         ├─► 10 bekommen Slot   ──► Flight läuft 2 s
+         └─► 10 abgewiesen      ──► gehen sofort zu HOTEL
 
-                  Aufrufer-Logik
-   ─────────────────────────────────────────────
-   if status != 204:
-       retry()    ← klare, einfache Regel
+t≈0      die 10 abgewiesenen treffen HOTEL-Bulkhead
+         └─► alle 10 bekommen Slot ──► Hotel läuft 2 s
+                                        (Hotel jetzt voll: 10/10)
+
+t≈2000   Flight-Slots werden frei.
+         Die 10 erfolgreichen Flight-Goroutinen wollen jetzt zu HOTEL.
+         GLEICHZEITIG werden die ersten Hotel-Slots frei (laufen seit t=0).
+
+         Race im 50–200 ms breiten Zeitfenster:
+           ─►  3 Goroutinen erwischen einen frei werdenden Slot
+           ─►  7 Goroutinen kommen zu früh, Pool noch voll → REJECTED
 ```
 
-**Take-away:** Idempotenz schlägt Ehrlichkeit. Ein
-Kompensations-Endpoint, der „korrekte" 4xx liefert, zwingt jeden
-Aufrufer dazu, die 4xx wieder als „eigentlich ok" zu interpretieren —
-das ist die schlechtere Stelle für die Sonderlogik.
+Bei **Flight** ist die Zahl sauber `rejected=10`, weil dort alle 20 zur
+gleichen Zeit (t=0) ankommen — keine Streuung, klare Kante.
+
+**Take-away:** Bulkhead garantiert nur die obere Schranke "max 10
+parallel". Die genaue Anzahl der Rejects ist timing-abhängig und in
+realen Systemen nie deterministisch.
+
+**Wenn man eine saubere Demo will:** nur **Hotel** auf langsam stellen
+(Flight/Car normal). Dann sind alle 20 Goroutinen praktisch zeitgleich
+bei Hotel und du siehst stabil `rejected ≈ 10`.
+
+### Beobachtung über viele Bursts hinweg
+
+Bei wiederholten Bursts (z.B. 42 Bursts à 20 = 840 Calls je Service)
+zeigt sich der Effekt sehr deutlich als **Kaskade**:
+
+```
+   flight:   in flight 0/10   calls 840   rejected 341   (~40 %)
+   hotel:    in flight 0/10   calls 840   rejected 189   (~22 %)
+   car:      in flight 0/10   calls 840   rejected   8   (~ 1 %)
+```
+
+Mit jedem Service in der Aufrufkette **sinkt die Reject-Rate**. Das
+ist kein Zufall, das ist die Konsequenz des Patterns:
+
+- **Flight** sieht den Burst in voller Wucht. 20 Goroutinen schlagen
+  zeitgleich auf, 10 bekommen einen Slot, 10 werden sofort abgewiesen.
+- **Hotel** sieht denselben Burst — aber **zeitlich entzerrt**.
+  Die 10 von Flight abgewiesenen Goroutinen sind sofort da, die 10
+  erfolgreichen kommen 50–200 ms später nach. Hotel hat nur einen Teil
+  der Last gleichzeitig zu schultern.
+- **Car** sieht das, was vom Burst übrig ist — fast geglättet. Die
+  Streuung ist groß genug, dass meist genug Slots frei sind.
+
+**Take-away in einer Zeile:** Eine Bulkhead-Kette ist gleichzeitig
+ein **Traffic-Shaper**. Jede Stufe schützt nicht nur sich selbst,
+sondern auch alle nachgelagerten Services vor ungeglätteten Bursts —
+ein kostenloser Nebeneffekt, der in Produktion oft die spürbarste
+Wirkung hat.
+
+**Spicy:** Wer im Aggregator nur das letzte Backend (Car) instrumentiert
+und „die Bulkheads funktionieren ja, fast keine Rejects" beobachtet,
+hat den Punkt verpasst — Car ist nicht ungestresst, weil sein Bulkhead
+gut konfiguriert ist, sondern weil Flight und Hotel die Last vorher
+aufgefangen haben.
 
 ---
 
-## Frage 5 — Wie merkt man überhaupt, dass eine Saga gerade hängt?
+## Frage 4 — Wenn der Bulkhead einen Aufruf abweist, läuft die Anfrage trotzdem zu Hotel und Car weiter. Ist das Teil des Bulkhead-Patterns?
 
-**Frage:** Wenn Forward fehlschlägt und Kompensation auch, sieht der
-Kunde eine Fehlermeldung und Booking schreibt eine Logzeile. Reicht das?
+**Frage:** Ein Bulkhead-Reject auf Flight führt nicht zum Abbruch der
+gesamten Anfrage — es geht weiter zu Hotel und Car. Ist das, was
+Bulkhead macht?
 
-**Antwort:** Nein — Logzeilen sind die Untergrenze. Eine Saga lebt von
-**Beobachtbarkeit ihres Zustands**, nicht von Einzel-Logs. Was im
-Workshop nicht implementiert ist, was aber in jeder produktiven
-Saga-Implementierung gehört:
+**Antwort:** **Nein.** Streng genommen sind das zwei orthogonale Dinge:
 
-| Signal | Was es zeigt | Alarm-Schwelle |
-|---|---|---|
-| **Saga-Status-Verteilung** (Counter) | wieviele in `PENDING`, `COMPLETED`, `FAILED`, `COMPENSATING` | `COMPENSATING > 0` für > N Min |
-| **Saga-Dauer** (Histogramm) | wie lange läuft eine Saga im Schnitt | p99 > erwarteter Wert |
-| **Compensation-Erfolgsrate** | wieviele Kompensationen klappen beim ersten Versuch | < 99 % → Backend krank |
-| **Retry-Counter pro Schritt** | wie oft wird derselbe `DELETE` wiederholt | unerwartete Spitzen |
-| **DLQ-Tiefe** (bei Eventing) | wieviele Events sind unprozessierbar | > 0 → manueller Eingriff |
-| **Distributed Tracing** | welcher Schritt war Auslöser | jeder Span trägt Saga-ID |
+1. **Was Bulkhead macht:** "Pool ist voll → sofort ablehnen, kein
+   Queueing." Punkt. Was der Aufrufer mit der Ablehnung tut, ist nicht
+   Sache des Patterns.
+2. **Was unser Code zusätzlich macht:** Fail-Soft im
+   `/booking/offers`-Handler. Bei einem Fehler (egal ob CB-Open,
+   Bulkhead-Full oder echter Backend-Fehler) wird ein leeres Array
+   zurückgegeben und das nächste Backend trotzdem aufgerufen. Diese
+   Logik existiert seit Story 4 für den Circuit Breaker — wir haben den
+   Bulkhead-Reject einfach in dieselbe Behandlung einsortiert.
 
-**Spicy Take-away:** „Wir loggen das" ist die Antwort von Teams, die
-noch keine hängende Saga im Produktionsbetrieb gesehen haben. Eine
-hängende Saga ist nicht laut — sie ist **still**. Sie schreibt keine
-Fehlermeldung mehr, weil der Step, der sie geschrieben hätte, nicht mehr
-läuft. Das einzige, was sie sichtbar macht, ist ein **Counter, der zu
-lange auf einem Wert stehen bleibt.**
+```
+fetchOffersWithBHCB(...)
+   │
+   └─► bh.Execute        ─► Bulkhead voll? → ErrBulkheadFull
+          │                                          │
+          └─► cb.Execute    ─► CB OPEN? → ErrCircuitOpen
+                 │                                   │
+                 └─► HTTP-Call                       │
+                       ↓                             ↓
+                       err? ────────► markFallback() + emptyJSONArray
+                                       (── Strategie des Aggregators ──)
+```
+
+Im Schreibpfad (`POST /booking/bookings`) ist die Strategie eine andere:
+**Fail-Fast** — wenn ein CB OPEN ist oder ein Call fehlschlägt, bricht
+die ganze Buchung ab. Eine Teilbuchung wäre für den Kunden schlimmer als
+ein 503.
+
+**Take-away:** Bulkhead ist ein **Mechanismus**. Was nach einem Reject
+passiert (Fail-Soft, Fail-Fast, Retry mit anderem Backend, …), ist eine
+**Designentscheidung des Aufrufers** — die hängt davon ab, ob die
+Operation idempotent ist, ob Teilergebnisse sinnvoll sind, usw.
 
 ---
 
-## Frage 6 — Wer ist der Owner einer Saga: Booking oder die Backends?
+## Frage 5 — Im Dashboard sehe ich, dass der Circuit Breaker auf OPEN geht, während der Bulkhead reagiert. Ist das richtig so?
 
-**Frage:** In unserer Implementierung wissen Hotel/Flight/Car gar nichts
-davon, dass sie Teil einer Saga sind. Sie kennen nur ihre eigenen
-`POST` und `DELETE`. Ist das richtig so, oder müsste die Saga-Idee
-weiter „nach unten" durchgereicht werden?
+**Frage:** Wenn ich einen Burst mit langsamem Backend mache, wird
+manchmal auch der CB OPEN — gleichzeitig mit Bulkhead-Rejects. Beeinflusst
+der Bulkhead den CB?
 
-**Antwort:** Bei **Orchestration-Saga** ist es genau richtig so —
-und das ist eines der Kernargumente für Orchestration:
+**Antwort:** **Nein, der Bulkhead beeinflusst den CB nicht** — und das
+ist Absicht. Im Code:
 
-```
-   booking (Orchestrator) ──────►  weiß alles
-       │                            ▪ Reihenfolge der Schritte
-       │                            ▪ wer wurde schon aufgerufen
-       │                            ▪ was muss kompensiert werden
-       │                            ▪ aktuellen Saga-Status
-       │
-       ├─POST /bookings─►  hotel    weiß: nur „eine Buchung"
-       ├─POST /bookings─►  flight   weiß: nur „eine Buchung"
-       └─POST /bookings─►  car      weiß: nur „eine Buchung"
+```go
+err := bh.Execute(ctx, func(ctx context.Context) error {
+    return cb.Execute(ctx, func(ctx context.Context) error {
+        // echter Backend-Call
+    })
+})
 ```
 
-Hotel, Flight, Car bleiben **dumm und einfach**. Sie kennen ihre
-eigenen lokalen Transaktionen — Buchen, Stornieren — und sonst nichts.
-Das ist gut, weil:
+Wenn der Bulkhead voll ist, gibt er sofort `ErrBulkheadFull` zurück —
+**ohne** `cb.Execute` aufzurufen. Der CB sieht von dem Reject nichts,
+seine Counter (`failureCount`, `totalCalls`) bleiben sauber.
 
-- die Backends in *anderen* Sagen mitspielen können (z.B. „Premium-Reise
-  + Versicherung") ohne Code-Änderung.
-- ein Bug in der Saga-Logik nur an **einer** Stelle steckt (Booking),
-  nicht in drei.
-- ein neues Backend (z.B. „Mietboot") ohne Anpassung der Bestehenden
-  hinzukommen kann.
+**Begründung:**
 
-Bei **Choreography-Saga** (Story 6) wandert ein Stück Saga-Wissen in die
-Backends — sie reagieren auf Events anderer. Das ist eleganter aber
-auch verwobener: ein Bug in der Saga-Logik kann jetzt in jedem der
-beteiligten Services sitzen.
+- Ein Bulkhead-Reject sagt "ich schütze mich selbst", nicht "das Backend
+  ist krank". Würden wir das als Failure ans CB melden, würde der CB
+  irgendwann fälschlich auf OPEN gehen — obwohl das Backend in Wahrheit
+  gesund antwortet. Wir würden uns selbst die Tür zumachen.
+- Beide Patterns sind unabhängig: CB = Backend-Gesundheit. Bulkhead =
+  Eigenschutz vor Ressourcen-Erschöpfung.
 
-**Take-away:** Orchestration konzentriert das Wissen. Choreography
-verteilt es. Beides ist legitim, aber **Wissen verteilen ohne Plan**
-führt zu „verteilter Monolith" — der schlimmsten beider Welten.
+**Wenn der CB im Demo trotzdem OPEN ist, sind die wahrscheinlichen
+Ursachen:**
+
+1. **Latenz > 3000 ms** im Chaos-Slider → der `httpClient.Timeout` von
+   3 s schlägt zu → das ist ein echter Failure (Timeout) → nach 5
+   Timeouts geht der CB auf OPEN.
+2. Backend stand im Modus **"Fehler"** statt "Langsam" → 500 zurück →
+   echte Failures → CB öffnet nach 5.
+3. **Reste aus einem vorherigen Lauf**: der CB bleibt nach OPEN noch
+   30 s offen, danach HALF_OPEN. Er räumt sich nicht durch einen Reset
+   des Bulkheads auf.
+
+Kontrollierte Reproduktion:
+
+| Latenz | Bulkhead reagiert? | CB reagiert?                         |
+|--------|--------------------|--------------------------------------|
+| 2000 ms | ja (bei Burst)    | nein — Backend antwortet rechtzeitig |
+| 3500 ms | ja                | ja — `httpClient`-Timeout = Failure  |
+
+**Take-away:** CB und Bulkhead sind **komplementär, nicht alternativ**.
+Sie können gleichzeitig feuern — und das ist gut so, weil sie auf
+verschiedene Symptome reagieren.
 
 ---
 
-## Frage 7 — Braucht eine Saga zwingend eine Datenbank?
+## Frage 6 — Warum stellt der Bulkhead Anfragen nicht in eine Schlange, sondern lehnt sofort ab?
 
-**Frage:** Wir halten den Saga-Status in unserem Workshop in-memory. In
-Produktion wäre das nicht akzeptabel. Heißt das, jede Saga braucht eine
-„echte" Datenbank? Und wenn ja: welche Art?
+**Frage:** Wäre es nicht freundlicher, wartende Aufrufe in eine kurze
+Queue zu stellen, statt sie sofort mit Fallback abzufertigen?
 
-**Antwort:** Hier zuerst die wichtigste Klarstellung: **Persistenz ist
-kein Saga-spezifisches Thema.** Jeder Service, der einen mehrstufigen
-Prozess steuert, kann mitten im Ablauf abstürzen und seinen
-In-Memory-State verlieren. Saga macht das Problem nur **sichtbarer**,
-weil die einzelnen Schritte externe Seiteneffekte (gebuchte Flüge,
-gestartete Zahlungen) hinterlassen. Aber der **Mechanismus** dahinter
-— „mein Prozess kann mitten drin sterben, ich brauche durable State,
-um aufzuräumen" — gilt auch für Batch-Jobs, Workflows, Long-Running
-HTTP-Handler oder Importer.
+**Antwort:** Eine begrenzte Queue wäre eine Variante (siehe
+Resilience4j: `maxWaitDuration`). In unserer Implementierung haben wir
+**bewusst nicht gequeued**, aus zwei Gründen:
 
-Was die Saga **wirklich** braucht, ist also nicht „eine Datenbank" im
-engen Sinne, sondern eine **durable, transaktional konsistente Ablage
-ihres Fortschritts** — derselbe Anspruch, den jedes mehrstufige System
-hat. Einziger zwingender Grund: **Crash-Recovery des Orchestrators.**
+1. **Queueing tarnt das Problem.** Wenn der Bulkhead voll ist, ist das
+   Backend bereits am Limit. Eine Queue verschiebt das Problem nur in
+   die Zukunft und erhöht die End-to-End-Latency. Beim Workshop sieht
+   man am sofortigen Reject klar: "wir sind über der Kapazität".
+2. **Backpressure-Signal nach oben.** Ein sofortiger Reject (mit 503
+   bzw. Fallback) sagt dem Aufrufer: "lass mich in Ruhe, ich bin voll."
+   Eine Queue absorbiert das Signal und kaschiert es.
 
-```
-   Ohne Persistenz                          Mit Persistenz
-   ─────────────────                        ─────────────────
-   Saga läuft im RAM                        Saga liegt in DB
-        │                                        │
-   Flug gebucht ✓                           Flug gebucht ✓
-                                            → Saga-State persistiert
-        │                                        │
-   Orchestrator stürzt 💥                    Orchestrator stürzt 💥
-        │                                        │
-   Niemand weiß mehr, dass der              Neuer Orchestrator startet,
-   Flug gebucht ist                         liest offene Sagas, kompensiert
-        ↓                                        ↓
-   Orphan booking, kein Aufräumen           Aufräumen funktioniert
-```
+**Take-away:** Queue oder kein Queue ist eine bewusste Entscheidung.
+Default für die Demo: **kein Queue**, sofort sichtbar im Counter
+`rejected`.
 
-Ohne Persistenz ist die Saga damit zwar **keine vollständige Saga**,
-sondern ein optimistisches Skript — aber das wäre **jeder andere
-mehrstufige Prozess** ohne State-Persistenz auch.
+---
 
-**Spektrum der „Datenbank" — von leichtgewichtig zu vollausgestattet:**
+## Frage 7 — Wir haben `maxConcurrent=10` hartkodiert. Wo kommt diese Zahl her?
 
-| Variante | Beispiele | Wann sinnvoll |
-|---|---|---|
-| Relationale DB | Postgres, MySQL — Saga-Tabelle + Steps-Tabelle | Standard, wenn die App ohnehin eine DB hat |
-| Document Store | MongoDB, DynamoDB — Saga als JSON-Dokument | wenn der Saga-Ablauf variabel ist |
-| Event Log | Kafka Compacted Topics, Event Sourcing | Saga-State ist abgeleitet aus Events |
-| Embedded Store | SQLite, BoltDB | Single-Node-Deployments, Edge-Services |
-| KV-Store | Redis (AOF), etcd, **Consul KV** | leichtgewichtig, aber schwächere Transaktionalität |
-| Workflow Engine | Temporal, Cadence, Camunda, Axon Framework | „Saga as Code" — Engine löst Recovery für dich |
+**Frage:** Warum ausgerechnet 10? Wäre 5 sicherer? Oder 100, damit weniger
+abgewiesen wird?
 
-**Der elegante Ausweg in modernen Stacks:** Workflow Engines drehen
-das Modell um. Statt selbst State, Retry und Recovery zu coden, schreibt
-man die Geschäftslogik als Workflow, die Engine kümmert sich um den Rest:
+**Antwort:** 10 ist eine **Workshop-Default-Zahl**, die fürs Demo gut
+funktioniert (20er-Burst → klar sichtbarer Effekt). In Produktion
+orientiert man die Zahl an konkreten Begrenzungen weiter unten:
+
+- **Connection-Pool des HTTP-Clients.** Wenn der Booking-Service nur
+  20 gleichzeitige Verbindungen zu Hotel halten kann, ist
+  `maxConcurrent > 20` sinnlos — die Calls würden auf der TCP-Schicht
+  sowieso warten.
+- **Thread-Pool des Backends.** Hotel kann z.B. 50 Anfragen parallel
+  bedienen. Wenn 5 Booking-Replicas mit `maxConcurrent=20` darauf
+  zugreifen, sind das schon 100 — Hotel kippt.
+  **Faustregel:** `Booking-Replicas × maxConcurrent ≤ Backend-Kapazität`.
+- **Latenz × Throughput-Ziel.** Little's Law: `concurrency = latency
+  × throughput`. Bei 50 ms Antwortzeit und 200 req/s Ziel ist die
+  nötige Concurrency = 10. Mehr ist Verschwendung, weniger
+  würgt die Last.
 
 ```
-   Manuell (was wir gerade gebaut haben)
-   ─────────────────────────────────────
-   Code:   forward; if err { state=COMPENSATING; compensate }
-   Du:     bist verantwortlich für State, Persistenz, Retry, Recovery
-
-   Mit Temporal / Camunda / ...
-   ─────────────────────────────────────
-   Code:   workflow.Execute(BookFlight)
-           workflow.Execute(BookHotel)
-           workflow.Execute(BookCar)
-   Engine: persistiert jeden Schritt, retryt, startet nach Crash neu,
-           garantiert exactly-once-Semantik
+   maxConcurrent zu klein:     unnötige Rejects, Backend hat noch Luft
+   maxConcurrent zu groß:      schützt nichts mehr, Bulkhead wird zur Folklore
+   genau richtig:              max Last, die Backend + Pool sicher tragen
 ```
 
-**Bezug zum Workshop:** Unser Booking-Service hat **gar keine
-DB-Schicht** — auch Story 1–4 nicht. Wenn wir Persistenz workshop-
-konform nachziehen wollten, wären die kleinsten Schritte:
+**Spicy Take-away:** Wer `maxConcurrent` aus dem Bauch heraus setzt
+(„10 klingt gut"), hat den Bulkhead nicht implementiert, sondern
+dekoriert. Das Limit gehört aus **gemessener Backend-Kapazität**
+abgeleitet, nicht aus Beispiel-Code übernommen.
 
-1. **SQLite-Datei im Container** — eine Datei, kein neues Infra-Stück.
-2. **Consul KV nutzen** — Consul ist seit Story 2 im Stack. Saga-State
-   unter `kv/saga/{id}` ablegen. Pragmatisch, aber Atomicity bei
-   Step-Updates ist schwächer.
-3. **Postgres oder Redis** — saubere Lösung, aber neue Compose-
-   Komponente und mehr Boilerplate.
+---
 
-Für einen 60-Minuten-Slot wäre das alles zu viel. Deshalb in-memory —
-und der Punkt steht hier statt im Code.
+## Frage 8 — Bulkhead schützt den Aufrufer vor sich selbst. Aber wer schützt das Backend?
 
-**Take-away:** Persistenz ist **nicht das Saga-Pattern, sondern
-generelle Orchestrator-Robustheit**. Jeder mehrstufige Prozess braucht
-sie — Saga macht das Problem nur sichtbarer, weil ihre Schritte
-außerhalb des eigenen Service Spuren hinterlassen. Welche Technologie
-genau, ist sekundär — entscheidend ist die Zusicherung **„nach Crash
-kann ich aufräumen"**. In Produktion ist die wichtigere Frage selten
-„brauche ich eine DB?", sondern **„schreibe ich die Orchestrator-
-Mechanik selbst, oder nutze ich eine Workflow Engine?"**. Letzteres
-unterschätzen Teams regelmäßig — und schreiben dann monatelang das,
-was Temporal seit Jahren in Produktion löst.
+**Frage:** Wenn Booking-Service 5 Replicas hat, jede mit
+`maxConcurrent=10` für Hotel, dann darf Hotel gleichzeitig 50 Calls
+sehen. Ein Bulkhead pro Client schützt das Backend nicht wirklich, oder?
+
+**Antwort:** **Korrekt.** Client-side Bulkhead schützt **den Client**,
+nicht das Backend. Beispiel:
+
+```
+   Booking-Replica A (BH 10) ──┐
+   Booking-Replica B (BH 10) ──┤
+   Booking-Replica C (BH 10) ──┼───►  Hotel sieht bis zu 50 parallel
+   Booking-Replica D (BH 10) ──┤
+   Booking-Replica E (BH 10) ──┘
+
+   Hotel bekommt davon NICHTS mit, dass es Bulkheads gibt.
+   Wenn Hotel intern nur 30 Threads hat, wird's bei 50 eng.
+```
+
+Komplementäre Patterns auf der Backend-Seite:
+
+1. **Server-side Rate Limiting** — Hotel selbst lehnt nach 30
+   gleichzeitigen Calls ab. Schützt Hotel vor jedem Aufrufer (auch vor
+   böswilligen).
+2. **API-Gateway / Service Mesh** — zentraler Punkt, an dem über alle
+   Aufrufer hinweg ein Limit greift.
+3. **Backpressure / 429 + Retry-After** — Hotel kommuniziert
+   Überlast aktiv, Aufrufer reagieren darauf.
+
+**Spicy Take-away:** Bulkhead allein ist eine **halbierte Lösung**.
+Sie macht den eigenen Service stabil, aber das geschützte Backend
+braucht ergänzende Mechanismen. Wer nur den Client schützt und glaubt,
+das Backend sei auch gerettet, hat das Pattern falsch verstanden.
+
+---
+
+## Frage 9 — Brauche ich Bulkhead überhaupt, wenn der Server non-blocking ist?
+
+**Frage:** In meinem Stack ist I/O non-blocking (Go-Goroutinen, Spring
+WebFlux, Node.js, …). Threads werden bei langläufigen Backend-Calls
+nicht blockiert, sondern an die Runtime zurückgegeben. Wenn das so ist,
+reicht doch ein Rate Limit am Eingang. Brauche ich da überhaupt noch
+einen Bulkhead pro Downstream?
+
+**Antwort:** Doch, und zwar aus zwei unabhängigen Gründen.
+
+### Grund 1: Der Engpass wandert, er verschwindet nicht
+
+Non-blocking macht *Threads* billig, aber nicht *alle* Ressourcen.
+Pro in-flight Call belegt bleibt, völlig unabhängig vom
+Threading-Modell:
+
+- **Connection-Pool-Slot** im HTTP-Client. In Go:
+  `http.Transport.MaxConnsPerHost`. In Reactor-Netty: 500 Connections
+  default. Wenn Hotel langsam ist und 500 Slots belegt, kommen Flight-
+  und Car-Calls nicht mehr durch, obwohl die Runtime „Threads frei"
+  meldet. Der Pool ist *shared*.
+- **Memory.** Jeder in-flight Call hält Request- und Response-Buffer,
+  Context, Cancellation-Channel, deserialisierte DTOs. 50.000
+  gleichzeitig offene Calls sind realer Heap-Verbrauch, GC-Pausen, im
+  Extremfall OOM. „Goroutine ist nur 4 KB Stack" stimmt, ist aber nicht
+  das Problem.
+- **File-Descriptors / Sockets.** OS-Limit pro Prozess (`ulimit -n`).
+  Bei langer Latenz × hoher Rate gehen FDs aus, bevor irgendwer Threads
+  zählt.
+
+**Little's Law gilt unabhängig vom Threading-Modell:**
+
+```
+   L  =  λ  ×  W
+   │     │     └─ Verweildauer (Latenz pro Call)
+   │     └─ Ankunftsrate (Requests/s)
+   └─ gleichzeitig offene Calls (Concurrency)
+```
+
+Rate Limit drosselt `λ`. Wenn `W` hochschießt (Backend wird langsam),
+wächst `L` linear bei *gleicher* Eingangsrate. Rate Limit sieht das
+nicht. Bulkhead limitiert `L` direkt.
+
+### Grund 2: Rate Limit kennt keine Downstreams
+
+Ein Rate Limit am API-Gateway sagt: „maximal 100 req/s." Es weiß
+nicht, *welcher* Downstream gerade hängt. Wenn Hotel überlastet ist,
+müsstest du mit Rate Limit allein **alle** Requests drosseln,
+auch die, die Hotel gar nicht brauchen.
+
+Bulkhead pro Downstream ist da chirurgischer:
+
+```
+   Booking
+     │
+     ├─ Bulkhead Hotel  (10/10 voll)   → Hotel-Calls reject
+     ├─ Bulkhead Flight (3/10 frei)    → Flight-Calls gehen durch
+     └─ Bulkhead Car    (1/10 frei)    → Car-Calls gehen durch
+```
+
+Das ist **selective shedding**: Last wird dort weggeworfen, wo das
+Problem sitzt, nicht pauschal vorne am Eingang.
+
+### Take-away
+
+- Non-blocking ändert die *Form* der Ressourcen-Erschöpfung, nicht die
+  *Tatsache*.
+- Rate Limit ist ein **Eingangs-** und **Aggregats-**Schutz: gegen Flut
+  von außen, ohne Downstream-Wissen.
+- Bulkhead ist ein **Isolations-** und **Selektiv-Schutz**: pro
+  Downstream, mit Wissen welcher Backend-Slot gerade dicht ist.
+
+In reaktiven Stacks ist Bulkhead nicht zufällig weiter empfohlen.
+Resilience4j hat dafür den `SemaphoreBulkhead` (im Gegensatz zum
+klassischen `ThreadPoolBulkhead`). Spring WebFlux + Reactor-Doku
+verweisen explizit darauf, dass non-blocking *keine* Lastlimitierung
+ersetzt.
+
+**Spicy:** „Non-blocking spart mir Bulkhead" ist Wunschdenken aus der
+Trainings-Folie. In Produktion ist meistens der Connection-Pool das
+erste, was bei einem hängenden Downstream knapp wird, nicht die Threads.
 
 ---
 
 ## Sammelthemen für die Diskussion
 
-- Welche Schritte einer Reisebuchung sind eigentlich **gar nicht
-  technisch kompensierbar**? (Hint: Zahlung. Refund ist eine fachliche
-  Gegenbuchung, kein Delete.)
-- Wenn Hotel und Flight nach demselben Crash beide „wegen Saga"
-  storniert wurden — wie würde der Kunde davon erfahren? Welcher Service
-  schickt die E-Mail?
-- Was passiert, wenn der Orchestrator selbst während `COMPENSATING`
-  abstürzt? Was muss persistiert sein, damit der Resume nach Neustart
-  korrekt ist?
-- Würdest du den **gleichen Saga-Code** wiederverwenden für eine
-  Reise-Stornierung, die der Kunde aktiv anstößt (also Forward-Step
-  „Storno", nicht Compensation)? Oder ist das ein anderer Use-Case?
-  (Hint: oft ist es derselbe — die Saga ist nur eine Sequenz von
-  lokalen Transaktionen. Die Richtung ist Konvention, nicht Pattern.)
-- Brücke zu Story 6: Welcher Teil der heutigen Saga-Implementierung
-  würde komplett wegfallen, wenn wir auf Eventing umstellen, und welcher
-  Teil bleibt unverändert?
+- Wie würdet ihr `maxConcurrent` in einer realen Anwendung festlegen?
+  (Hint: es geht um Thread-Pool-Größe / Connection-Pool-Größe der
+  abhängigen Ressourcen, nicht um eine geratene Magic-Number.)
+- Wann wäre es sinnvoll, dass ein Bulkhead-Reject **doch** als
+  CB-Failure gewertet wird? (Hint: praktisch nie — aber Diskussion über
+  Edge-Cases wie "ich kenne die Backend-Kapazität exakt".)
+- Was wäre die Saga-Lösung für `/booking/bookings`, wenn Hotel mitten in
+  der Buchung den Bulkhead-Reject bekommt? (Brücke zu Story 6.)

@@ -87,7 +87,7 @@ paths:
         503 and reports which service failed. Already booked sub-bookings
         (e.g. flight succeeded, hotel failed) are NOT rolled back — true
         atomicity over multiple services requires the Saga pattern (see
-        Story 5).
+        Story 6).
       operationId: createBooking
       tags:
         - booking
@@ -120,6 +120,7 @@ paths:
       summary: Circuit breaker snapshots
       description: |
         Returns the current state of all circuit breakers (flight, hotel, car).
+        Used by the dashboard to visualize circuit breaker behavior.
       operationId: getCircuitState
       tags:
         - admin
@@ -151,38 +152,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CircuitEventGroup"
-
-  /admin/bulkhead-state:
-    get:
-      summary: Bulkhead snapshots
-      description: |
-        Returns the current state of all bulkheads (flight, hotel, car) with
-        in-flight count, total calls and total rejected (pool was full).
-      operationId: getBulkheadState
-      tags:
-        - admin
-      responses:
-        "200":
-          description: Snapshot per backend
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/BulkheadSnapshot"
-
-  /admin/bulkhead-reset:
-    post:
-      summary: Reset bulkhead counters
-      description: |
-        Resets totalCalls and totalRejected for all bulkheads to 0. The
-        currently in-flight calls are not affected.
-      operationId: resetBulkheadCounters
-      tags:
-        - admin
-      responses:
-        "204":
-          description: Counters reset
 
 components:
   schemas:
@@ -404,11 +373,11 @@ components:
             enum: [flight, hotel, car]
           description: |
             Sub-bookings that succeeded before the failure occurred. These are
-            NOT rolled back automatically — see Story 5 (Saga pattern).
+            NOT rolled back automatically — see Story 6 (Saga pattern).
           example: ["flight"]
         hint:
           type: string
-          example: "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 5)."
+          example: "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 6)."
 
     CircuitSnapshot:
       type: object
@@ -494,35 +463,3 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CircuitEvent"
-
-    BulkheadSnapshot:
-      type: object
-      required:
-        - name
-        - maxConcurrent
-        - inProgress
-        - totalCalls
-        - totalRejected
-      properties:
-        name:
-          type: string
-          enum: [flight, hotel, car]
-          example: hotel
-        maxConcurrent:
-          type: integer
-          example: 10
-        inProgress:
-          type: integer
-          example: 3
-        totalCalls:
-          type: integer
-          format: int64
-          description: |
-            Total number of attempts (passed + rejected). The number of
-            successfully passed calls is totalCalls - totalRejected.
-          example: 20
-        totalRejected:
-          type: integer
-          format: int64
-          description: Subset of totalCalls that did NOT get a pool slot.
-          example: 10

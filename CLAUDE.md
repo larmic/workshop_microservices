@@ -28,7 +28,7 @@ Grundlagen, Resilience-Patterns, Kommunikation & Routing, Daten & Events,
 Deployment & Betrieb sowie Kultur & Organisation.
 
 Die User-Stories für die Hands-on-Aufgaben liegen in `docs/stories/`
-(`story-01` bis `story-07`).
+(`story-01` bis `story-08`).
 
 ## Projektstruktur
 
@@ -42,7 +42,8 @@ Die User-Stories für die Hands-on-Aufgaben liegen in `docs/stories/`
 - `pages/`: statische Quellen der GitHub-Pages-Seite (Landing, Vorbereitung,
   Feedback-Formular; die Folien kommen aus `services/slides/`)
 - `services/`: Go-Referenz-Implementierung
-  - `booking/`: BookingService mit einem Ordner pro Story (`story1` bis `story7`)
+  - `booking/`: BookingService mit einem Ordner pro Code-Story (`story1`, `story3`
+    bis `story8`; Story 2 ist eine Design-Session ohne Code, Port 8086 bleibt frei)
   - `flight/`, `hotel/`, `car/`: Domain-Services
   - `dashboard/`: Dashboard-UI
   - `traefik/`: API-Gateway-Konfiguration

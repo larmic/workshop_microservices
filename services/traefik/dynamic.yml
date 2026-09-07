@@ -32,14 +32,6 @@ http:
         - booking-ref-story1-stripprefix
       service: booking-ref-story1
 
-    booking-ref-story2:
-      rule: "PathPrefix(`/api/booking-ref-story2`)"
-      entryPoints:
-        - web
-      middlewares:
-        - booking-ref-story2-stripprefix
-      service: booking-ref-story2
-
     booking-ref-story3:
       rule: "PathPrefix(`/api/booking-ref-story3`)"
       entryPoints:
@@ -79,6 +71,14 @@ http:
       middlewares:
         - booking-ref-story7-stripprefix
       service: booking-ref-story7
+
+    booking-ref-story8:
+      rule: "PathPrefix(`/api/booking-ref-story8`)"
+      entryPoints:
+        - web
+      middlewares:
+        - booking-ref-story8-stripprefix
+      service: booking-ref-story8
 
     booking-custom:
       rule: "PathPrefix(`/api/booking-custom`)"
@@ -149,11 +149,6 @@ http:
         prefixes:
           - "/api/booking-ref-story1"
 
-    booking-ref-story2-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/api/booking-ref-story2"
-
     booking-ref-story3-stripprefix:
       stripPrefix:
         prefixes:
@@ -178,6 +173,11 @@ http:
       stripPrefix:
         prefixes:
           - "/api/booking-ref-story7"
+
+    booking-ref-story8-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api/booking-ref-story8"
 
     booking-custom-stripprefix:
       stripPrefix:
@@ -215,11 +215,6 @@ http:
         servers:
           - url: "http://booking-ref-story1:8080"
 
-    booking-ref-story2:
-      loadBalancer:
-        servers:
-          - url: "http://booking-ref-story2:8080"
-
     booking-ref-story3:
       loadBalancer:
         servers:
@@ -244,6 +239,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://booking-ref-story7:8080"
+
+    booking-ref-story8:
+      loadBalancer:
+        servers:
+          - url: "http://booking-ref-story8:8080"
 
     booking-custom:
       loadBalancer:

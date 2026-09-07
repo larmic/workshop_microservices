@@ -61,8 +61,8 @@
 <span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
-- Hook: &bdquo;Story 3 hat uns gegen <em>kaputte</em> Backends geh&auml;rtet. Aber was, wenn ein Backend gar nicht kaputt ist &mdash; nur langsam? Der CB bleibt CLOSED, weil 200 zur&uuml;ckkommt &mdash; und der Booking-Service ger&auml;t trotzdem ins Stocken.&ldquo;
+- Hook: &bdquo;Story 4 hat uns gegen <em>kaputte</em> Backends geh&auml;rtet. Aber was, wenn ein Backend gar nicht kaputt ist &mdash; nur langsam? Der CB bleibt CLOSED, weil 200 zur&uuml;ckkommt &mdash; und der Booking-Service ger&auml;t trotzdem ins Stocken.&ldquo;
 - Karten-Reihenfolge bewusst: erst Analogie (Schotten), dann Mechanik (Pool pro Downstream, Fail-Fast), dann zwei wichtige Abgrenzungen (Outbound nicht Inbound, Bulkhead nicht CB).
-- Demo-Tipp: Im Dashboard auf Story 4 wechseln, Backend auf &bdquo;Langsam&ldquo; stellen, dann den <code>POST /admin/burst</code>-Button dr&uuml;cken &mdash; 20 parallele Requests, Rejects werden in der Bulkhead-Karte sichtbar.
+- Demo-Tipp: Im Dashboard auf Story 5 wechseln, Backend auf &bdquo;Langsam&ldquo; stellen, dann den <code>POST /admin/burst</code>-Button dr&uuml;cken &mdash; 20 parallele Requests, Rejects werden in der Bulkhead-Karte sichtbar.
 - Wer was wo nutzt: Resilience4j ist Standard im framework-freien Java (Semaphore- und ThreadPool-Variante). Hystrix Pionier mit ThreadPool-Isolation, heute End-of-Life. Polly im .NET-Lager. Im Service Mesh: Envoy/Istio macht das &uuml;ber <code>circuit_breakers.max_pending_requests</code> &mdash; sprach-agnostisch, ohne Anwendungscode.
-- &Uuml;berleitung: Wir schauen uns die Mechanik konkret an &mdash; in genau der Form, wie sie im Dashboard-Spickzettel und im Story-4-Code steckt.
+- &Uuml;berleitung: Wir schauen uns die Mechanik konkret an &mdash; in genau der Form, wie sie im Dashboard-Spickzettel und im Story-5-Code steckt.

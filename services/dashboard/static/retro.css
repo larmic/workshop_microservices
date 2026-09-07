@@ -188,8 +188,8 @@ body.retro .rest-btn-sub { color: var(--r-muted); }
 body.retro .rest-status { color: var(--r-muted); }
 body.retro .rest-status.ok  { color: var(--r-green); }
 body.retro .rest-status.err { color: var(--r-red); }
-body.retro #s7-result-status.ok  { color: var(--r-green); }
-body.retro #s7-result-status.err { color: var(--r-red); }
+body.retro #s8-result-status.ok  { color: var(--r-green); }
+body.retro #s8-result-status.err { color: var(--r-red); }
 
 /* ===== Code-/Terminal-Blöcke: schwarz/grün ===== */
 body.retro .rest-response,
@@ -202,7 +202,7 @@ body.retro .story-cheatsheet-body pre {
     border: 1px solid var(--r-green);
     border-radius: 0;
 }
-body.retro .story7-hint { color: var(--r-muted); }
+body.retro .story8-hint { color: var(--r-muted); }
 body.retro .trace-result-line strong { color: var(--r-ink); }
 body.retro .trace-result-body summary { color: var(--r-muted); }
 body.retro .panel-reset-btn {

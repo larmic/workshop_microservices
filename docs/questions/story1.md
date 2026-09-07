@@ -27,7 +27,7 @@ In der Cloud-Welt unterscheidet man zwei Arten:
 | **Readiness** | "Kann der Prozess Last sehen?" | Aus dem Load-Balancer rausnehmen   |
 
 Unser `/health` ist eher Liveness. Eine Readiness müsste z.B. prüfen,
-ob Consul erreichbar ist (Story 2), ob die Backends antworten (Story 3+),
+ob Consul erreichbar ist (Story 3), ob die Backends antworten (Story 4+),
 usw.
 
 **Spicy Take-away:** Ein zu „cleverer" Readiness-Check kann dafür
@@ -168,7 +168,7 @@ Backend-Verfügbarkeiten kombinieren sich multiplikativ:
 
 **Spicy Take-away:** „Kein Error-Handling" ist eine **didaktische**
 Reduktion, keine Architektur-Empfehlung. Der Workshop führt euch in
-Story 3 / 4 / 5 schrittweise an die Resilienz-Patterns heran — aber
+Story 4 / 5 / 6 schrittweise an die Resilienz-Patterns heran — aber
 in Produktion fehlt euch ohne diese Patterns ein zentraler Teil eures
 Service.
 

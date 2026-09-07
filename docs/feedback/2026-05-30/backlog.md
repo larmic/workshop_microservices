@@ -4,6 +4,11 @@ Priorisierte, umsetzbare TODOs aus dem Feedback. Herleitung und Einordnung in
 [feedback.md](feedback.md). Status: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt.
 Pfade relativ zur Repo-Wurzel.
 
+**Hinweis zur Nummerierung:** Seit 2026-09 (D8) ist Story 2 eine Design-Session
+ohne Code, die früheren Stories 2 bis 7 heißen 3 bis 8. Die Einträge in diesem
+Ordner dokumentieren den Stand des Kickoffs und verwenden die alte Zählung (alt N
+entspricht neu N+1 für N ≥ 2), nur D8 und spätere Vermerke nutzen die neue.
+
 Reihenfolge der Blöcke nach Wirkung: D und B (Didaktik, Pattern-Verständnis) haben
 den größten Hebel, A (Quick-Wins) ist schnell erledigt.
 
@@ -144,10 +149,14 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
   Vor jeder Story kurz: welches konkrete Problem, warum schmerzt es ohne das Pattern.
   Mehr "warum" statt "wie". Kernbefund.
 
-- [ ] **D2 · Nicht-codende Aufgabe ergänzen** · Priorität: Hoch
+- [~] **D2 · Nicht-codende Aufgabe ergänzen** · Priorität: Hoch
   Whiteboard- oder DDD-Warm-up: "Wie würdet ihr das System schneiden?" oder
   "Wie würdet ihr dieses Problem lösen?" vor der Lösung. Eigenes Denken anregen,
   dann mit der Referenz vergleichen.
+  Teilweise umgesetzt 2026-09-07 mit D8: die erste nicht-codende Aufgabe ist die
+  Design-Session in Story 2 (API für Storno und Umbuchung am Flipchart, Teams
+  vergleichen ihre Entwürfe, dann Quiz). Das DDD- bzw. Service-Schnitt-Warm-up
+  bleibt offen.
 
 - [ ] **D3 · Stories teilweise "auf der Tonspur"** · Priorität: Mittel
   Nicht alle 7 voll implementieren. Kandidaten zum Durchsprechen statt Bauen:
@@ -157,6 +166,10 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
 - [ ] **D4 · Theorie/Praxis über beide Tage ausbalancieren** · Priorität: Mittel
   Tag 2 entzerren (`docs/themen.md:26-39`): Micro-Lectures zwischen die Stories
   (z. B. "Warum Saga?" vor Story 5, "Orchestration vs. Choreography" vor Story 6).
+  Teilschritt 2026-09-07 mit D8: Tag 1 trägt jetzt Story 1 bis 4 (inkl. der
+  55-Minuten-Design-Session), Tag 2 nur noch Story 5 bis 8 plus CQRS, BFF,
+  Deployment und Abschluss (rund 7 h statt 8 h). `docs/themen.md` folgt dabei der
+  Slides-Agenda (`03-agenda.md`). Die Micro-Lectures selbst bleiben offen.
 
 - [x] **D5 · Voraussetzungen schärfen, ggf. Vor-Workshop** · Priorität: Hoch
   In `docs/vorbereitung.md:5-10` als harte Vorbedingung formulieren: Teilnehmende
@@ -208,13 +221,21 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
     `/admin/state`), damit der Bau-Aufwand klein bleibt.
   Bezug: C2 (Vertrag), D1 und D3 (Lernfokus).
 
-- [~] **D8 · REST vs. RESTful: Theorie-Input plus Flipchart-API-Design** · Priorität: Hoch
+- [x] **D8 · REST vs. RESTful: Theorie-Input plus Flipchart-API-Design** · Priorität: Hoch
   Entschieden 2026-06-04 (Lars): die Einheit kommt, offen ist die Ausgestaltung.
   Geplant 2026-09-06, Plan freigegeben: [plan-d8-rest-vs-restful.md](plan-d8-rest-vs-restful.md).
   Ausgestaltung: Übung als Variante 1 (Storno/Umbuchung am Flipchart), Verortung
   als neue Story 2 zwischen Story 1 und der Discovery-Story, die heutigen
   Stories 2..7 werden vollständig (inkl. Technik) zu 3..8 umnummeriert.
-  Umsetzung noch offen.
+  Umgesetzt 2026-09-07 (ein PR, fünf Commits): Stories 2..7 zu 3..8 verschoben
+  (Verzeichnisse, Ports 8087..8092, Traefik, Compose, Workflows, Docker-Tags,
+  Dashboard, Docs, Slides), Dashboard `saga6` zu `saga7`, neue Story 2 mit
+  `docs/stories/story-02-api-design-session.md`, Trainer-Hinweis
+  `docs/instructions/rest-vs-restful.md`, `docs/questions/story2.md`, Slides
+  `10a` bis `10h` (Hero ohne Bild, Prinzipien, Beispiele, Story-Karte, Quiz mit
+  drei Endpoints, Recap), Agenda und `docs/themen.md` angeglichen, Dashboard-Karte
+  ohne Service. Offen: Hero-Bild (Prompt in `services/slides/TODO.md`), Löschen
+  des verwaisten Docker-Hub-Tags `story2` nach dem ersten grünen Lauf.
   Hintergrund: Viele Services sprechen über REST, RESTful-Prinzipien sind aber
   oft unbekannt oder falsch angewendet. Betrifft `docs/themen.md:53-60` (REST
   bisher nur als Default erwähnt), neue Slides und einen Trainer-Hinweis unter

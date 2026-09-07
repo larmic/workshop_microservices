@@ -12,7 +12,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/team-neusta-skills/workshop_microservices/booking/story4/bulkhead"
 	"github.com/team-neusta-skills/workshop_microservices/booking/story4/circuitbreaker"
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 )
@@ -31,16 +30,6 @@ type Breakers struct {
 
 func (b Breakers) All() []*circuitbreaker.CircuitBreaker {
 	return []*circuitbreaker.CircuitBreaker{b.Flight, b.Hotel, b.Car}
-}
-
-type Bulkheads struct {
-	Flight *bulkhead.Bulkhead
-	Hotel  *bulkhead.Bulkhead
-	Car    *bulkhead.Bulkhead
-}
-
-func (b Bulkheads) All() []*bulkhead.Bulkhead {
-	return []*bulkhead.Bulkhead{b.Flight, b.Hotel, b.Car}
 }
 
 type BookingOffers struct {
@@ -66,15 +55,15 @@ type Booking struct {
 
 var emptyJSONArray = json.RawMessage("[]")
 
-func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, breakers Breakers, bulkheads Bulkheads) http.HandlerFunc {
+func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, breakers Breakers) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 
-		flights := fetchOffersWithBHCB(r.Context(), w, bulkheads.Flight, breakers.Flight, "flight",
+		flights := fetchOffersWithCB(r.Context(), w, breakers.Flight, "flight",
 			resolver, client, "flight-service", "/flights")
-		hotels := fetchOffersWithBHCB(r.Context(), w, bulkheads.Hotel, breakers.Hotel, "hotel",
+		hotels := fetchOffersWithCB(r.Context(), w, breakers.Hotel, "hotel",
 			resolver, client, "hotel-service", "/hotels")
-		cars := fetchOffersWithBHCB(r.Context(), w, bulkheads.Car, breakers.Car, "car",
+		cars := fetchOffersWithCB(r.Context(), w, breakers.Car, "car",
 			resolver, client, "car-service", "/cars")
 
 		w.Header().Set("Content-Type", "application/json")
@@ -88,7 +77,7 @@ func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, breake
 
 // CreateBookingHandler bucht alles oder nichts (Best-Effort) — bei einer
 // Teilbuchung sähe der Kunde sonst eine inkonsistente Bestätigung. Echte
-// atomare Buchung über mehrere Services wäre Saga (Story 5).
+// atomare Buchung über mehrere Services wäre Saga (Story 6).
 func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breakers Breakers) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
@@ -170,10 +159,10 @@ func writeBookingFailure(w http.ResponseWriter, service string, err error, previ
 		FailedService:    service,
 		Reason:           err.Error(),
 		PreviouslyBooked: previouslyBooked,
-		Hint:             "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 5).",
+		Hint:             "Echte atomare Buchung über mehrere Services erfordert Compensation/Saga (Story 6).",
 	}
 	if len(previouslyBooked) > 0 {
-		log.Printf("Booking ABORTED at %s (err=%v) — bereits gebucht und NICHT zurückgerollt: %v (Saga in Story 5)",
+		log.Printf("Booking ABORTED at %s (err=%v) — bereits gebucht und NICHT zurückgerollt: %v (Saga in Story 6)",
 			service, err, previouslyBooked)
 	} else {
 		log.Printf("Booking ABORTED at %s (err=%v) — keine Buchung durchgeführt", service, err)
@@ -207,15 +196,9 @@ func bookSingle(
 	return data, err
 }
 
-// fetchOffersWithBHCB legt den Bulkhead VOR den Circuit Breaker: ist der Pool
-// voll, kürzen wir sofort ab — ohne die CB-Statistik zu vergiften, weil der
-// Backend-Call ja gar nicht stattgefunden hat. So bleiben CB und Bulkhead in
-// ihren Zuständigkeiten getrennt: CB misst Backend-Gesundheit, Bulkhead schützt
-// vor Ressourcen-Erschöpfung.
-func fetchOffersWithBHCB(
+func fetchOffersWithCB(
 	ctx context.Context,
 	w http.ResponseWriter,
-	bh *bulkhead.Bulkhead,
 	cb *circuitbreaker.CircuitBreaker,
 	serviceLabel string,
 	resolver *consul.Resolver,
@@ -224,19 +207,17 @@ func fetchOffersWithBHCB(
 	path string,
 ) json.RawMessage {
 	var data json.RawMessage
-	err := bh.Execute(ctx, func(ctx context.Context) error {
-		return cb.Execute(ctx, func(ctx context.Context) error {
-			url, resolveErr := resolver.ResolveServiceURL(consulName)
-			if resolveErr != nil {
-				return resolveErr
-			}
-			raw, fetchErr := fetchJSON(ctx, client, url+path)
-			if fetchErr != nil {
-				return fetchErr
-			}
-			data = raw
-			return nil
-		})
+	err := cb.Execute(ctx, func(ctx context.Context) error {
+		url, resolveErr := resolver.ResolveServiceURL(consulName)
+		if resolveErr != nil {
+			return resolveErr
+		}
+		raw, fetchErr := fetchJSON(ctx, client, url+path)
+		if fetchErr != nil {
+			return fetchErr
+		}
+		data = raw
+		return nil
 	})
 	if err != nil {
 		markFallback(w, serviceLabel, err)
@@ -247,14 +228,10 @@ func fetchOffersWithBHCB(
 
 func markFallback(w http.ResponseWriter, serviceLabel string, err error) {
 	w.Header().Add("X-Fallback", serviceLabel)
-	switch {
-	case errors.Is(err, bulkhead.ErrBulkheadFull):
-		w.Header().Add("X-Bulkhead-Full", serviceLabel)
-		log.Printf("%s call rejected (bulkhead full)", serviceLabel)
-	case errors.Is(err, circuitbreaker.ErrCircuitOpen):
+	if errors.Is(err, circuitbreaker.ErrCircuitOpen) {
 		w.Header().Add("X-Circuit-Open", serviceLabel)
 		log.Printf("%s call short-circuited (CB OPEN)", serviceLabel)
-	default:
+	} else {
 		log.Printf("%s call failed, applying fallback: %v", serviceLabel, err)
 	}
 }

@@ -19,21 +19,24 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 3 | Vortrag: 12 Factor App | 30 Min |
 | 4 | Vorbereitung verifizieren (Setup-Check) | 30 Min |
 | 5 | Diskussion: „MS = Monolithen mit Netzwerkproblemen" | 30 Min |
-| 🍽 | Mittagspause | 60 Min |
 | 6a | Hands-on: Story 1 (Cloud-native Setup) | 90 Min |
-| 6b | Hands-on: Story 2 (Service Discovery) | 60 Min |
+| 🍽 | Mittagspause | 60 Min |
+| 6b | Design-Session: Story 2 (REST vs. RESTful, Flipchart, kein Code) | 55 Min |
+| 6c | Hands-on: Story 3 (Service Discovery) | 60 Min |
+| 6d | Hands-on: Story 4 (Circuit Breaker) | 60 Min |
 
-### Tag 2 (≈ 8 h inkl. Pausen)
+Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 8 h 10. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) ist die Autorität für die Verteilung auf Vormittag und Nachmittag.
+
+### Tag 2 (≈ 7 h inkl. Pausen)
 
 | Block | Thema | Zeit |
 |-------|-------|------|
-| 6c | Hands-on: Story 3 (Circuit Breaker) | 60 Min |
-| 6d | Hands-on: Story 4 (Bulkhead) | 60 Min |
-| 6e | Hands-on: Story 5 (Saga, Orchestration) | 60 Min |
+| 6e | Hands-on: Story 5 (Bulkhead) | 60 Min |
+| 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
+| 6g | Hands-on: Story 7 (Choreography-Saga) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
-| 6f | Hands-on: Story 6 (Choreography-Saga) | 60 Min |
 | 7 | Vortrag & Diskussion: CQRS | 30 Min |
-| 8 | Hands-on: Story 7 (Distributed Tracing) | 60 Min |
+| 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
 | 9 | Diskussion: BFF | 20 Min |
 | 10 | Diskussion: Downtimeless Deployment | 20 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
@@ -57,7 +60,7 @@ Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-
 - **Monolith** — alles in einem Prozess, einer DB, einem Deployment
 - **SOA** — unternehmensweite Service-Orientierung, oft mit ESB; **Scope-Unterschied zu MS:** SOA ist ein unternehmensweiter Architekturansatz, Microservices sind eine Implementierungsstrategie auf Team-Ebene
 - **SOAP / WS-\*** — XML, WSDL, schwergewichtig
-- **REST + JSON** — leichtgewichtig, ressourcenorientiert, der heutige Default
+- **REST + JSON** — leichtgewichtig, ressourcenorientiert, der heutige Default. Was "RESTful" wirklich heißt, vertieft Story 2 (Design-Session)
 - **Microservices** — kleine, unabhängig deploybare Services pro Bounded Context
 - **Modulith** — modularisierter Monolith als pragmatischer Mittelweg
 - **SCS (Self-Contained Systems)** — vertikale Schnitte inkl. UI, gröberer Schnitt als MS
@@ -124,35 +127,42 @@ These aufwerfen und mit der Gruppe sezieren.
 
 **Diskussions-Anker:** Welche Probleme hätte man im Monolithen auch? Welche entstehen erst durch das Netzwerk?
 
-**Überleitung:** Deshalb dreht sich der praktische Teil (Stories 1–6, 10) stark um Kommunikation und Resilienz.
+**Überleitung:** Deshalb dreht sich der praktische Teil (Stories 1 bis 8 und Block 10) stark um Kommunikation und Resilienz.
 
 ---
 
-## 6. Hands-on: Stories 1–6
+## 6. Hands-on: Stories 1–7
 
-Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion.
+Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion. Story 2 ist die Ausnahme: Design-Session am Flipchart, kein Code.
 
 ### 6a. Story 1 — [Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md) (90 Min)
 - Lernpointe: 12 Factor in der Praxis, Health-Checks, externe Konfiguration
 - Recap-Frage: Welche Faktoren sind in eurer Umsetzung wirklich erfüllt?
 
-### 6b. Story 2 — [Services dynamisch finden](stories/story-02-service-discovery.md) (60 Min)
-- Lernpointe: Service Discovery mit Consul ersetzt hartkodierte URLs
+### 6b. Story 2 — [Design-Session: REST vs. RESTful](stories/story-02-api-design-session.md) (55 Min)
+- Lernpointe: HTTP benutzen ist nicht dasselbe wie HTTP richtig benutzen. Ressourcen statt Verben, Idempotenz macht Retries sicher, Status-Codes sind Infrastruktur
+- Ablauf: 10 Min Theorie, 20 Min Teamarbeit am Flipchart (Storno und Umbuchung), Vorstellung, Quiz "RESTful oder nicht?" mit drei Endpoints
+- Recap-Frage: Was passiert, wenn der Client euren Storno zweimal schickt?
+- Trainer-Hinweis: [instructions/rest-vs-restful.md](instructions/rest-vs-restful.md), Fragen: [questions/story2.md](questions/story2.md)
+
+### 6c. Story 3 — [Services dynamisch finden](stories/story-03-service-discovery.md) (60 Min)
+- Lernpointe: Service Discovery mit Consul ersetzt hartkodierte URLs. Erster schreibender Endpoint (`POST /booking/bookings`) nach den Regeln aus Story 2
 - Recap-Frage: Was passiert, wenn Consul kurz weg ist?
 
-### 6c. Story 3 — [Wenn der Flug ausfällt](stories/story-03-circuit-breaker.md) (60 Min)
+### 6d. Story 4 — [Wenn der Flug ausfällt](stories/story-04-circuit-breaker.md) (60 Min)
 - Lernpointe: Circuit Breaker, graceful Degradation
 - Recap-Frage: Was ist ein gutes Default-Verhalten im „Open"-State?
 
-### 6d. Story 4 — [Isolation ist Stärke](stories/story-04-bulkhead.md) (60 Min)
+### 6e. Story 5 — [Isolation ist Stärke](stories/story-05-bulkhead.md) (60 Min)
 - Lernpointe: Ressourcen-Isolation, getrennte Thread-Pools / Connection-Pools
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?
+- Rückgriff auf Story 2: `POST /admin/bulkhead-reset` ist bewusst RPC-artig (Dashboard-Knopf, ein Aufrufer). Abweichen mit Grund
 
-### 6e. Story 5 — [Alles oder nichts – aber richtig](stories/story-05-saga.md) (60 Min)
-- Lernpointe: Orchestration-Saga mit synchroner Kompensation
+### 6f. Story 6 — [Alles oder nichts – aber richtig](stories/story-06-saga.md) (60 Min)
+- Lernpointe: Orchestration-Saga mit synchroner Kompensation. Die Idempotenz-Diskussion aus Story 2 zahlt hier ein zweites Mal ein (`DELETE /bookings/{id}` muss wiederholbar sein)
 - Recap-Frage: Wer kennt das Endergebnis bei dieser Variante?
 
-### 6f. Story 6 — [Die Saga wird leise](stories/story-06-choreography-saga.md) (60 Min)
+### 6g. Story 7 — [Die Saga wird leise](stories/story-07-choreography-saga.md) (60 Min)
 - Lernpointe: Choreography-Saga via Events, Wissen verteilt sich
 - Recap-Frage: Wann Orchestration, wann Choreography?
 
@@ -207,10 +217,10 @@ Zwischen dem Schreibvorgang (Saga fertig) und dem Auftauchen im Read-Model liege
 
 ---
 
-## 8. Hands-on: Story 7 — [Den roten Faden im Log](stories/story-07-tracing.md) (60 Min)
+## 8. Hands-on: Story 8 — [Den roten Faden im Log](stories/story-08-tracing.md) (60 Min)
 
 - Lernpointe: Distributed Tracing macht Geschäftsvorgänge über Service-Grenzen hinweg sichtbar
-- Recap-Frage: Wo hätte euch Tracing schon in Stories 3–6 geholfen?
+- Recap-Frage: Wo hätte euch Tracing schon in Stories 4–7 geholfen?
 
 ---
 

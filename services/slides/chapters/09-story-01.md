@@ -49,7 +49,7 @@ Note:
 - Hook zum Einsteigen vorlesen: &bdquo;Alle dachten, der Service l&auml;uft &mdash; bis ein Kunde anrief und fragte, warum seit drei Stunden nichts mehr geht. Vertrauen ist gut, ein Health-Endpoint ist besser.&ldquo;
 - Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) findet ihr im Dashboard unter &bdquo;Story lesen&ldquo; &mdash; identischer Text, gleiches Layout.
 - Sprache und Framework sind frei (Go, Java, Quarkus, Node, &hellip;). Die Referenz unter `services/booking/story1/` ist nur ein Go-Beispiel.
-- Kein Error-Handling in Story 1 &mdash; das ist Absicht. Wir bauen das Skelett; Resilienz kommt in Stories 3&ndash;5.
-- Setup-Hinweis steht absichtlich nur hier in Story 1. Ab Story 2 erweitern wir denselben Service iterativ, das Custom-Setup bleibt unver&auml;ndert.
+- Kein Error-Handling in Story 1 &mdash; das ist Absicht. Wir bauen das Skelett; Resilienz kommt in Stories 4&ndash;6.
+- Setup-Hinweis steht absichtlich nur hier in Story 1. Ab Story 3 erweitern wir denselben Service iterativ, das Custom-Setup bleibt unver&auml;ndert.
 - Time-Box 90 min inkl. Setup. Dashboard `http://localhost` zeigt den Story-1-Modus inkl. Spickzettel mit Pseudo-Code.
 - Vollst&auml;ndige Aufgabenbeschreibung: `docs/stories/story-01-cloud-native-booking-service.md`.

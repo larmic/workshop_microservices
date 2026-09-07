@@ -14,8 +14,8 @@ gestartet:
 
 - `docker-compose.yml` (Basis)
 - `docker-compose.infra.yml` (Traefik, Consul, Tracing, Slides-Nginx, …)
-- `docker-compose.reference.yml` (Booking-Reference-Stories 1–7,
-  Flight/Hotel/Car, Dashboard)
+- `docker-compose.reference.yml` (Booking-Reference-Stories 1 und 3–8;
+  Story 2 ist eine Design-Session ohne Service)
 - `docker-compose.custom.yml` (Custom-Booking via `CUSTOM_BOOKING_PATH`)
 
 Aufruf-Varianten (aus `Makefile`):
@@ -58,9 +58,9 @@ beim Validieren auf `./booking/custom`.
    - Sammle alle `ports:`-Mappings aus dem **gemergten** Config
      (`docker compose ... config | yq` oder grep-basiert).
    - Doppelt belegte Host-Ports → HIGH-Finding.
-   - Erwartet sind (aus aktueller Allowlist sichtbar): Traefik
-     `80`/`8080`, Booking-Reference-Stories `18080`–`18086`,
-     Custom `18099`, Slides via Nginx.
+   - Erwartet sind: Traefik `80`/`8080`, Consul `8500`, Swagger UI `8084`,
+     Booking-Reference-Stories `8085` und `8087`–`8092` (Formel
+     `8084 + Story-Nummer`, `8086` bleibt frei), Custom `8099`.
 
 4. **Traefik-Routing-Konsistenz**
    - Jeder Booking-Service muss ein passendes Traefik-Label
@@ -102,8 +102,8 @@ Geprüfte Kombinationen:
   ✗ yml + infra + reference + custom   (siehe Findings)
 
 Findings:
-[HIGH] docker-compose.custom.yml:42 — Host-Port 18080 kollidiert mit
-       docker-compose.reference.yml:18 (booking-ref-story1)
+[HIGH] docker-compose.custom.yml:42 — Host-Port 8085 kollidiert mit
+       docker-compose.reference.yml:11 (booking-ref-story1)
        → entweder Custom-Port ändern oder Mapping entfernen
 [MED]  docker-compose.reference.yml:55 — Service booking-ref-story4
        hat keinen Traefik-Router-Label

@@ -14,22 +14,6 @@ services:
       HOTEL_SERVICE_URL: http://hotel:8080
       CAR_SERVICE_URL: http://car:8080
 
-  booking-ref-story2:
-    container_name: booking-ref-story2
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        SERVICE_PATH: booking/story2
-    image: larmic/workshop-microservices-booking:story2
-    ports:
-      - "8086:8080"
-    environment:
-      CONSUL_URL: http://consul:8500
-    depends_on:
-      consul:
-        condition: service_healthy
-
   booking-ref-story3:
     container_name: booking-ref-story3
     build:
@@ -104,6 +88,22 @@ services:
     image: larmic/workshop-microservices-booking:story7
     ports:
       - "8091:8080"
+    environment:
+      CONSUL_URL: http://consul:8500
+    depends_on:
+      consul:
+        condition: service_healthy
+
+  booking-ref-story8:
+    container_name: booking-ref-story8
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_PATH: booking/story8
+    image: larmic/workshop-microservices-booking:story8
+    ports:
+      - "8092:8080"
     environment:
       CONSUL_URL: http://consul:8500
     depends_on:

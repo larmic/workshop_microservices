@@ -1,6 +1,6 @@
 // Package tracing implementiert eine minimale Variante des
 // W3C-Trace-Context-Standards (https://www.w3.org/TR/trace-context/).
-// Pflicht-Pfad für Story 7: Trace-ID aus `traceparent`-Header lesen oder
+// Pflicht-Pfad für Story 8: Trace-ID aus `traceparent`-Header lesen oder
 // neu generieren, durch alle ausgehenden Aufrufe propagieren und in jede
 // strukturierte Logzeile schreiben.
 //

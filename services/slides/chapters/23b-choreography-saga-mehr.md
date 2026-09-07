@@ -21,7 +21,7 @@
 <p class="quote">Choreography ohne durable Messaging ist eine <span class="hl">p&auml;dagogische &Uuml;bung</span> &mdash; kein Production-Pattern.</p>
 
 Note:
-- Zentrales Take-away in der Note: <em>&bdquo;Eventing eliminiert das Backend-kurz-weg-Problem nicht &mdash; es macht es stiller.&ldquo;</em> In Story 5 hat Booking den Schmerz gef&uuml;hlt und konnte reagieren. In Story 6 sieht Booking gar nichts. Solange wir nichts gegen verlorene Events haben, ist das das Gegenteil von resilient.
+- Zentrales Take-away in der Note: <em>&bdquo;Eventing eliminiert das Backend-kurz-weg-Problem nicht &mdash; es macht es stiller.&ldquo;</em> In Story 6 hat Booking den Schmerz gef&uuml;hlt und konnte reagieren. In Story 7 sieht Booking gar nichts. Solange wir nichts gegen verlorene Events haben, ist das das Gegenteil von resilient.
 - Das Antipattern explizit benennen: <pre>&bdquo;Wir wollen Eventing, aber keinen Broker betreiben.&ldquo;
 &rarr; 6 Monate sp&auml;ter: Outbox-Tabelle, Retry-Worker, Dedup-Logik, DLQ-Inbox, Replay-Skript, alles selbst gebaut.
 &rarr; 12 Monate sp&auml;ter: das ist ein schlechter Broker.</pre>

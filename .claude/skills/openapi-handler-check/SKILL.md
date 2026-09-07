@@ -17,9 +17,11 @@ services/flight/        api/openapi.yaml   main.go + handler/*.go
 services/hotel/         api/openapi.yaml   main.go + handler/*.go
 services/car/           api/openapi.yaml   main.go + handler/*.go
 services/booking/story1 api/openapi.yaml   main.go + handler/*.go
-services/booking/story2 …                  …
-services/booking/story7 …                  …
+services/booking/story3 …                  …
+services/booking/story8 …                  …
 ```
+
+Story 2 ist eine Design-Session ohne Code, ein `story2/` existiert nicht.
 
 `services/booking/custom/` enthält eine Spec unter
 `src/main/resources/openapi.yaml`. Diese gehört zu einer freien
@@ -75,8 +77,9 @@ Summary: 11/13 Pfade konsistent, 2 Drift-Punkte.
 
 ## Story-übergreifende Konsistenz
 
-Wenn alle sieben Booking-Stories geprüft werden: Markiere Routen, die
-in `story1` existieren, aber in `story5` fehlen (und umgekehrt) als
+Wenn alle sieben Code-Stories (`story1`, `story3` bis `story8`) geprüft
+werden: Markiere Routen, die in `story1` existieren, aber in `story6`
+fehlen (und umgekehrt) als
 **Info**, nicht als Fehler — Stories sollen sich didaktisch
 unterscheiden, manche Endpoints kommen pro Story hinzu. Aber:
 **Health-/Info-Endpoints** (`/health`, `/info`, `/openapi`) müssen in

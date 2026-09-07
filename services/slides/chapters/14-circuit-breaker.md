@@ -27,7 +27,7 @@
 <div class="factor fragment">
 <h3>Fallback-Strategie</h3>
 <p>Leere Liste, Cache, anderer Provider &mdash; Hauptsache <span class="hl">etwas</span>.</p>
-<aside class="notes">Der CB selbst entscheidet nicht, was passieren soll, wenn er feuert. Das ist Fachlogik: Bei <code>GET /booking/offers</code> reicht oft ein <code>flights:[]</code> mit Hinweis. Bei Schreib-Operationen knifflig &mdash; siehe Saga (Story 5).</aside>
+<aside class="notes">Der CB selbst entscheidet nicht, was passieren soll, wenn er feuert. Das ist Fachlogik: Bei <code>GET /booking/offers</code> reicht oft ein <code>flights:[]</code> mit Hinweis. Bei Schreib-Operationen knifflig &mdash; siehe Saga (Story 6).</aside>
 </div>
 
 <div class="factor fragment">
@@ -58,7 +58,7 @@
 <span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
-- Hook: &bdquo;In Story 2 haben wir die Services gefunden. Was passiert, wenn einer von ihnen kaputt ist?&ldquo; Demo-Einstieg: Flight im Dashboard auf &bdquo;Fehler&ldquo; stellen, ohne CB curlen &mdash; jeder Aufruf wartet 3 s. Mit CB &mdash; nach 5 Fehlern instant.
+- Hook: &bdquo;In Story 3 haben wir die Services gefunden. Was passiert, wenn einer von ihnen kaputt ist?&ldquo; Demo-Einstieg: Flight im Dashboard auf &bdquo;Fehler&ldquo; stellen, ohne CB curlen &mdash; jeder Aufruf wartet 3 s. Mit CB &mdash; nach 5 Fehlern instant.
 - Karten-Reihenfolge bewusst: erst Analogie (Schutzschalter), dann Mechanik (3 Zust&auml;nde), dann Payoff (schnell scheitern), dann das h&auml;ufig vergessene St&uuml;ck (Fallback), zuletzt die Abgrenzung (Outbound).
 - Wer was wo nutzt: Resilience4j ist Standard in framework-freiem Java. Spring Cloud CB ist ein Wrapper drumherum. Hystrix bewusst dabei, ist aber seit Jahren End-of-Life &mdash; trotzdem nennen, weil viele Bestandsanwendungen es noch haben. Polly im .NET-Lager analog dominant. Envoy/Istio = CB im Service Mesh, sprach-agnostisch.
-- &Uuml;berleitung: Wir schauen jetzt konkret auf die Mechanik &mdash; in genau der Form, wie sie in unserem Story-3-Code steckt.
+- &Uuml;berleitung: Wir schauen jetzt konkret auf die Mechanik &mdash; in genau der Form, wie sie in unserem Story-4-Code steckt.

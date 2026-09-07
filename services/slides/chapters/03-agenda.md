@@ -14,9 +14,9 @@
 
 ### Tag 2 &mdash; Vormittag
 
-- Story 4 &mdash; <em>Bulkhead</em>
-- Story 5 &mdash; <em>Saga</em>
-- Story 6 &mdash; <em>Choreography</em>
+- Story 5 &mdash; <em>Bulkhead</em>
+- Story 6 &mdash; <em>Saga</em>
+- Story 7 &mdash; <em>Choreography</em>
 
 </div>
 </div>
@@ -28,16 +28,21 @@
 
 ### Tag 1 &mdash; Nachmittag
 
-- Story 2 &mdash; <em>Service Discovery</em>
-- Story 3 &mdash; <em>Circuit Breaker</em>
+- Story 2 &mdash; <em>Design-Session: REST vs. RESTful</em>
+- Story 3 &mdash; <em>Service Discovery</em>
+- Story 4 &mdash; <em>Circuit Breaker</em>
 
 </div>
 <div>
 
 ### Tag 2 &mdash; Nachmittag
 
-- Story 7 &mdash; <em>Tracing</em>
+- Story 8 &mdash; <em>Tracing</em>
 - Closing &amp; Diskussion
 
 </div>
 </div>
+
+Note:
+- Story 2 ist die einzige Story ohne Code: Flipchart statt Editor, ca. 55 Minuten. Kurz ank&uuml;ndigen, damit niemand nach dem Repo-Ordner sucht.
+- Die Agenda hier ist die Autorit&auml;t, <code>docs/themen.md</code> folgt ihr.

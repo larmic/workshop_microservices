@@ -13,18 +13,23 @@ Die Story-Auswahl erfolgt **explizit über den Tag** (kein `latest`):
 | Tag       | Inhalt                                                                |
 |-----------|-----------------------------------------------------------------------|
 | `story1`  | Cloud-Native Grundlagen (12-Factor, Health Checks)                    |
-| `story2`  | Service Discovery via Consul                                          |
-| `story3`  | Circuit Breaker                                                       |
-| `story4`  | Bulkhead-Pattern                                                      |
-| `story5`  | Saga (Orchestration)                                                  |
-| `story6`  | Saga (Choreography)                                                   |
-| `story7`  | Distributed Tracing                                                   |
+| `story3`  | Service Discovery via Consul                                          |
+| `story4`  | Circuit Breaker                                                       |
+| `story5`  | Bulkhead-Pattern                                                      |
+| `story6`  | Saga (Orchestration)                                                  |
+| `story7`  | Saga (Choreography)                                                   |
+| `story8`  | Distributed Tracing                                                   |
 | `custom`  | Beispiel-Custom-Lösung in Kotlin/Ktor (Story 1, alternative Sprache)  |
+
+**Nummerierung seit 2026-09:** Story 2 ist eine Design-Session ohne Image, die
+früheren Stories 2 bis 7 heißen seitdem 3 bis 8. Ältere Anleitungen meinen mit
+`storyN` (N ≥ 2) den heutigen Tag `story(N+1)`. Lokal gecachte Images bitte neu
+ziehen.
 
 Pull-Beispiel:
 
 ```bash
-docker pull larmic/workshop-microservices-booking:story3
+docker pull larmic/workshop-microservices-booking:story4
 docker pull larmic/workshop-microservices-booking:custom
 ```
 

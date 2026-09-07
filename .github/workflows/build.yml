@@ -86,23 +86,6 @@ jobs:
       - name: Build
         run: go build -v -o bin/booking-ref-story1 ./booking/story1
 
-  build-booking-ref-story2:
-    name: Build BookingService Reference Story2
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: services
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Setup Go
-        uses: actions/setup-go@v7
-        with:
-          go-version-file: services/go.mod
-
-      - name: Build
-        run: go build -v -o bin/booking-ref-story2 ./booking/story2
-
   build-booking-ref-story3:
     name: Build BookingService Reference Story3
     runs-on: ubuntu-latest
@@ -187,6 +170,23 @@ jobs:
 
       - name: Build
         run: go build -v -o bin/booking-ref-story7 ./booking/story7
+
+  build-booking-ref-story8:
+    name: Build BookingService Reference Story8
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: services/go.mod
+
+      - name: Build
+        run: go build -v -o bin/booking-ref-story8 ./booking/story8
 
   build-dashboard:
     name: Build Scaling UI

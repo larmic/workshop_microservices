@@ -1,6 +1,6 @@
 ---
 name: new-booking-story
-description: Legt eine neue Booking-Service Story an (Verzeichnisstruktur, Code, OpenAPI, HTTP-Tests, Makefile, GitHub Workflows, Docker Compose, Dashboard)
+description: Legt eine neue Booking-Service Story an (Verzeichnisstruktur, Code, OpenAPI, Makefile, GitHub Workflows, Docker Compose, Traefik, Dashboard)
 user_invocable: true
 ---
 
@@ -10,168 +10,151 @@ Erstelle eine neue BookingService Story mit allen zugehoerigen Dateien und Build
 
 ## Argumente
 
-Das erste Argument ist die Story-Nummer (z.B. `3` fuer Story 3). Wenn keine Nummer angegeben wurde, frage den User danach.
+Das erste Argument ist die Story-Nummer (z.B. `9` fuer Story 9). Wenn keine Nummer angegeben wurde, frage den User danach.
+
+## Nummerierung und Ports
+
+- Code-Stories sind heute `story1` und `story3` bis `story8`. **Story 2 ist eine Design-Session ohne Code** (REST vs. RESTful am Flipchart): kein Verzeichnis, kein Image, kein Port. Eine neue Story bekommt also die naechste freie Nummer nach der hoechsten Code-Story, die Vorlage ist die hoechste vorhandene Code-Story.
+- Externer Host-Port: `8084 + N` (Story 1 = 8085, Story 3 = 8087, Story 8 = 8092). `8086` bleibt frei.
+- Namensschema ueberall `booking-ref-storyN` (Compose-Service, Traefik-Router, Dashboard-Proxy, Env `BOOKING_REF_STORYN_URL`, Go-Variable `bookingRefStoryNURL`). Docker-Hub-Tag ist `storyN`.
 
 ## Ablauf
 
 ### Vorbedingungen pruefen
 
 1. Lese die Story-Nummer N aus den Argumenten
-2. Berechne die vorherige Story-Nummer: P = N - 1
+2. Bestimme die Vorlage-Story P: die hoechste existierende `services/booking/storyP/` mit P < N (bei Luecken, wie Story 2, die naechste kleinere Code-Story)
 3. Pruefe ob `services/booking/storyN/` bereits existiert. Falls ja: Abbruch mit Fehlermeldung.
-4. Pruefe ob `services/booking/storyP/` existiert. Falls nein: Abbruch mit Fehlermeldung ("Story P existiert nicht, kann nicht als Vorlage verwendet werden").
-5. Berechne den externen Port: `8084 + N` (Story1=8085, Story2=8086, Story3=8087, usw.)
+4. Pruefe ob `docs/stories/story-0N-*.md` existiert. Falls nein: Hinweis ausgeben, dass die Story-Beschreibung fehlt (Kontext, User Story, Akzeptanzkriterien werden daraus uebernommen).
+5. Berechne den externen Port: `8084 + N`
 
 ### Neue Dateien erstellen
 
-Lese jeweils die Datei aus `services/booking/storyP/` (der vorherigen Story) als Template und erstelle die angepasste Version unter `services/booking/storyN/`:
+Kopiere `services/booking/storyP/` komplett nach `services/booking/storyN/` (alle Unterverzeichnisse: `api/`, `handler/`, `circuitbreaker/`, `bulkhead/`, `saga/`, `README.md`, …) und passe an:
 
-1. **`services/booking/storyN/main.go`**
-   - Kopiere von storyP/main.go
-   - Aendere `Service: "booking-P"` zu `Service: "booking-N"` (Consul-Registrierung &mdash; sonst kollidieren Story P und Story N auf demselben Service-Namen)
-   - Beachte: Die Imports auf `booking/storyP/...` werden vom "Wichtig"-Hinweis unten generisch durch `booking/storyN/...` ersetzt
+1. **`main.go`**
+   - Import-Pfade `…/booking/storyP/...` zu `…/booking/storyN/...`
+   - `Service: "booking-P"` zu `Service: "booking-N"` (Consul-Registrierung, sonst kollidieren Story P und Story N auf demselben Service-Namen)
+   - Story-Kommentare im Kopf ("Story P: …") auf die neue Story anpassen
 
-2. **`services/booking/storyN/api/openapi.yaml`**
-   - Kopiere von storyP/api/openapi.yaml
-   - Aendere `version: P.0.0` zu `version: N.0.0`
+2. **`api/openapi.yaml`**
+   - `version: P.0.0` zu `version: N.0.0`
+   - `servers.url` auf `…/api/booking-ref-storyN`
+   - `example: booking-N` beim Service-Namen (Info-Endpoint)
+   - Beschreibungstexte, die "Story P" nennen
 
-3. **`services/booking/storyN/http/requests.http`**
-   - Kopiere von storyP/http/requests.http
-   - Aendere den Header-Kommentar von "Story P" zu "Story N"
-
-4. **`services/booking/storyN/http/http-client.env.json`**
-   - Kopiere von storyP/http/http-client.env.json
-   - Aendere `bookingPort` in beiden Environments (local und docker) auf den berechneten Port (8084+N)
-
-5. **`services/booking/storyN/http/Makefile`**
-   - Kopiere 1:1 von storyP/http/Makefile (keine Aenderungen noetig)
-
-6. **`services/booking/storyN/http/README.md`**
-   - Kopiere von storyP/http/README.md
-   - Aendere "Story P" zu "Story N" im Titel und Text
-
-**Wichtig:** Kopiere auch alle weiteren Dateien und Unterverzeichnisse, die in `storyP/` existieren aber oben nicht explizit aufgefuehrt sind (z.B. zusaetzliche Handler-Dateien, Packages, etc.). Diese werden 1:1 kopiert, wobei Referenzen auf "storyP" durch "storyN" ersetzt werden.
+3. **Alle weiteren Dateien**: Referenzen auf `storyP` bzw. "Story P" durch `storyN` bzw. "Story N" ersetzen. Danach `gofmt -l services` und `go build -C services ./...`.
 
 ### Bestehende Dateien erweitern
 
-7. **`services/Makefile`**
-   - Fuege in der `.PHONY`-Zeile `run-booking-storyN` und `docker-build-booking-storyN` hinzu
-   - Fuege `docker-build-booking-storyN` als Dependency zum `docker-build`-Target hinzu
-   - Fuege ein neues Target nach dem letzten `docker-build-booking-story*`-Target hinzu:
+4. **`services/Makefile`**
+   - `.PHONY`-Zeile: `run-booking-ref-storyN` und `docker-build-booking-ref-storyN` ergaenzen
+   - `docker-build-booking-ref-storyN` als Dependency zum `docker-build`-Target
+   - Neues Target nach dem letzten `docker-build-booking-ref-story*`-Target:
      ```
-     docker-build-booking-storyN: ## Baut das BookingService StoryN Docker-Image
-     	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/storyN --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Story N)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:storyN .
+     docker-build-booking-ref-storyN: ## Baut das BookingService Reference StoryN Docker-Image
+     	docker build -f Dockerfile --build-arg SERVICE_PATH=booking/storyN --build-arg SERVICE_DESC="Workshop Microservices - Booking Service (Reference Story N)" --build-arg SERVICE_PORT=8080 -t workshop-microservices-booking:storyN .
      ```
+   - `run-booking-ref-storyN` analog zu den bestehenden `run-*`-Targets
 
-8. **`.github/workflows/build.yml`**
-   - Fuege einen neuen Job `build-booking-storyN` am Ende hinzu, nach dem Muster der bestehenden booking-story Jobs:
+5. **`.github/workflows/build.yml`**
+   - Neuen Job nach `build-booking-ref-storyP` einfuegen, Action-Versionen von den bestehenden Jobs uebernehmen (nicht raten, Renovate haelt sie aktuell):
      ```yaml
-       build-booking-storyN:
-         name: Build BookingService StoryN
+       build-booking-ref-storyN:
+         name: Build BookingService Reference StoryN
          runs-on: ubuntu-latest
          defaults:
            run:
              working-directory: services
          steps:
-           - uses: actions/checkout@v6
+           - uses: actions/checkout@<Version wie oben>
+
            - name: Setup Go
-             uses: actions/setup-go@v6
+             uses: actions/setup-go@<Version wie oben>
              with:
                go-version-file: services/go.mod
+
            - name: Build
-             run: go build -v -o bin/booking-storyN ./booking/storyN
+             run: go build -v -o bin/booking-ref-storyN ./booking/storyN
      ```
 
-9. **`.github/workflows/docker.yml`**
-   - Im `build-booking`-Job die Matrix-Liste `story:` um `N` erweitern (z.B. von `[1, 2, ..., 7]` auf `[1, 2, ..., 7, N]`). Der Job pusht das Image dann automatisch als Tag `storyN` ins gemeinsame Repo `workshop-microservices-booking`. Keine weiteren Aenderungen noetig &mdash; der `booking`-Filter triggert bereits auf `services/booking/**`.
+6. **`.github/workflows/docker.yml`**
+   - Pfad-Filter `services/booking/storyN/**` in der `booking`-Filterliste ergaenzen
+   - Matrix `story: [1, 3, 4, 5, 6, 7, 8]` um `N` erweitern. Der Job pusht das Image als Tag `storyN` ins gemeinsame Repo `workshop-microservices-booking`.
 
-10. **`services/docker-compose.infra.yml`**
-    - Fuege in der Swagger-UI `URLS`-Liste einen neuen Eintrag hinzu:
-      ```
-      { "url": "http://localhost/api/booking-storyN/openapi", "name": "Booking Service (Story N)" }
-      ```
+7. **`.github/workflows/dockerhub-description.yml`** und **`.github/dockerhub/booking.md`**
+   - Short-Description (`story1, story3..story8, custom`) und Tag-Tabelle um `storyN` ergaenzen
 
-11. **`services/docker-compose.reference.yml`**
-    - Fuege einen neuen Service am Ende hinzu. **Wichtig:** Uebernimm den `environment`- und `depends_on`-Block 1:1 vom `booking-story{P}`-Service (ab Story 2 wird Consul verwendet, aeltere Stories nutzten statische `*_SERVICE_URL`-Variablen):
-      ```yaml
-        booking-storyN:
-          build:
-            context: .
-            dockerfile: Dockerfile
-            args:
-              SERVICE_PATH: booking/storyN
-          image: larmic/workshop-microservices-booking:storyN
-          ports:
-            - "PORT:8080"
-          environment:
-            CONSUL_URL: http://consul:8500
-          depends_on:
-            consul:
-              condition: service_healthy
-      ```
-    (PORT = 8084 + N)
+8. **`services/docker-compose.infra.yml`**
+   - Swagger-UI `URLS`-Liste:
+     ```
+     { "url": "http://localhost/api/booking-ref-storyN/openapi", "name": "Booking Service (Reference Story N)" },
+     ```
 
-12. **`services/traefik/dynamic.yml`**
-    - Fuege im `http.routers`-Block einen neuen Router nach `booking-story{P}` hinzu:
-      ```yaml
-          booking-storyN:
-            rule: "PathPrefix(`/api/booking-storyN`)"
-            entryPoints:
-              - web
-            middlewares:
-              - booking-storyN-stripprefix
-            service: booking-storyN
-      ```
-    - Fuege im `http.middlewares`-Block eine neue Middleware nach `booking-story{P}-stripprefix` hinzu:
-      ```yaml
-          booking-storyN-stripprefix:
-            stripPrefix:
-              prefixes:
-                - "/api/booking-storyN"
-      ```
-    - Fuege im `http.services`-Block einen neuen Service nach `booking-story{P}` hinzu:
-      ```yaml
-          booking-storyN:
-            loadBalancer:
-              servers:
-                - url: "http://booking-storyN:8080"
-      ```
+9. **`services/docker-compose.reference.yml`**
+   - Neuer Service am Ende, `environment`- und `depends_on`-Block 1:1 von `booking-ref-storyP` uebernehmen (ab Story 3 Consul, Story 1 nutzt statische `*_SERVICE_URL`-Variablen):
+     ```yaml
+       booking-ref-storyN:
+         container_name: booking-ref-storyN
+         build:
+           context: .
+           dockerfile: Dockerfile
+           args:
+             SERVICE_PATH: booking/storyN
+         image: larmic/workshop-microservices-booking:storyN
+         ports:
+           - "PORT:8080"
+         environment:
+           CONSUL_URL: http://consul:8500
+         depends_on:
+           consul:
+             condition: service_healthy
+     ```
+     (PORT = 8084 + N)
+
+10. **`services/traefik/dynamic.yml`**
+    - `http.routers`: Router `booking-ref-storyN` nach `booking-ref-storyP` (Muster: `rule: "PathPrefix(\`/api/booking-ref-storyN\`)"`, `entryPoints: [web]`, `middlewares: [booking-ref-storyN-stripprefix]`, `service: booking-ref-storyN`)
+    - `http.middlewares`: `booking-ref-storyN-stripprefix` mit `stripPrefix.prefixes: ["/api/booking-ref-storyN"]`
+    - `http.services`: `booking-ref-storyN` mit `loadBalancer.servers[0].url: "http://booking-ref-storyN:8080"`
+    - Kontrolle: `grep -oE 'booking-ref-story[0-9]' services/traefik/dynamic.yml | sort | uniq -c` liefert fuer jede Story dieselbe Anzahl
 
 ### Dashboard erweitern
 
-Das Dashboard (`services/dashboard/`) zeigt pro Story einen Stepper-Eintrag, einen API-Link und einen Inhaltsbereich an. Ausserdem wartet die Startup-Overlay auf den Health-Check der neuen Story, damit der Workshop erst startet, wenn alle Booking-Services bereit sind.
+Das Dashboard (`services/dashboard/`) zeigt pro Story einen Stepper-Eintrag, einen API-Link und einen Inhaltsbereich. Das Startup-Overlay und das Health-Panel iterieren ueber die `bookingURLs`-Map in `main.go`, neue Stories erscheinen dort automatisch.
 
-13. **`services/dashboard/main.go`**
-    - Fuege nach `bookingStory{P}URL` eine neue URL-Variable hinzu:
+11. **`services/dashboard/main.go`**
+    - Nach `bookingRefStoryPURL` eine neue URL-Variable:
       ```go
-      bookingStoryNURL := getEnv("BOOKING_STORYN_URL", "http://booking-storyN:8080")
+      bookingRefStoryNURL := getEnv("BOOKING_REF_STORYN_URL", "http://booking-ref-storyN:8080")
       ```
-    - Fuege in der `bookingURLs`-Map einen neuen Eintrag hinzu:
+    - Eintrag in der `bookingURLs`-Map:
       ```go
-      "booking-storyN": bookingStoryNURL,
+      "booking-ref-storyN": bookingRefStoryNURL,
       ```
-    - **Hinweis:** Damit erscheint Story N automatisch im `/api/health-overview` und in der Startup-Overlay &mdash; keine weiteren Handler noetig, solange Story N keine eigenen Dashboard-API-Endpunkte braucht (Story-spezifische Endpunkte wie `saga-state` aus Story 5 werden bei Bedarf separat hinzugefuegt).
+    - Proxy-Route fuer den Offers-Aufruf, falls die Story-Section einen REST-Button bekommt:
+      ```go
+      mux.HandleFunc("GET /api/booking-ref-storyN/offers", handler.ProxyHandler(bookingRefStoryNURL, http.MethodGet, "/booking/offers"))
+      ```
+      Story-spezifische Endpunkte (wie `saga-state` in Story 6) bei Bedarf separat.
 
-14. **`services/dashboard/static/index.html`**
-    - **API-Link** nach dem letzten `Booking Story P`-Eintrag in der `.links-grid` (Sektion "Service APIs"):
+12. **`services/dashboard/static/index.html`**
+    - **API-Link** nach dem letzten `Booking Reference Story P`-Eintrag in der `.links-grid` (Sektion "Service APIs"):
       ```html
-      <a class="link-chip" href="/api/booking-storyN/openapi" target="_blank"><span>&#128214;</span> Booking Story N</a>
+      <a class="link-chip" href="/api/booking-ref-storyN/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story N</a>
       ```
     - **Stepper-Button** nach dem letzten `data-story-node="P"`-Button in `.stepper-nodes`:
       ```html
       <span class="stepper-connector"></span>
       <button type="button" class="stepper-node" data-story-node="N" onclick="showStory(N)">N</button>
       ```
-    - **STORY_META-Eintrag** im JavaScript-Block (nach Eintrag P):
+    - **`STORY_META`-Eintrag** im JavaScript-Block (nach Eintrag P):
       ```javascript
-      N: { title: "Story N: <Titel aus docs/stories/story-NN-*.md>",
+      N: { title: "Story N: <Titel aus docs/stories/story-0N-*.md>",
            subtitle: "<Kurz-Subtitle, ein Satz>" },
       ```
-    - **STORY_COUNT** inkrementieren:
-      ```javascript
-      const STORY_COUNT = N;
-      ```
-    - **Neue `<section class="story-section" data-story="N" hidden>`** am Ende von `<main class="story-content">` einfuegen. Minimaler Stub mit Story-Info-Block (Kontext, User Story, Akzeptanzkriterien aus `docs/stories/story-NN-*.md`) und optional einem Cheatsheet-Block. **Keine** story-spezifischen UI-Buttons im Stub &mdash; die fuegen die Workshop-Teilnehmer beim Bearbeiten der Story selbst hinzu. Vorlage (Story-Inhalte aus der Doku uebernehmen):
+    - **`STORY_COUNT`** auf `N` setzen.
+    - **`BookingMode`-Literal** um `N: "reference"` ergaenzen (Reference/Custom-Umschalter).
+    - **Neue `<section class="story-section" data-story="N" hidden>`** am Ende von `<main class="story-content">`. Minimaler Stub mit Story-Info-Block (Kontext, User Story, Akzeptanzkriterien aus `docs/stories/story-0N-*.md`) und optional einem Cheatsheet-Block. **Keine** story-spezifischen UI-Buttons im Stub, die fuegen die Workshop-Teilnehmer beim Bearbeiten der Story selbst hinzu. Vorlage:
       ```html
       <section class="story-section" data-story="N" hidden>
           <div class="story-helpers" data-story-helpers="N">
@@ -192,10 +175,14 @@ Das Dashboard (`services/dashboard/`) zeigt pro Story einen Stepper-Eintrag, ein
       </section>
       ```
 
+### Doku und Slides
+
+13. `docs/stories/story-0N-*.md`, `docs/questions/storyN.md`, Slides `services/slides/chapters/*-story-0N.md` und `*-story-0N-fragen.md` plus Eintrag in `services/slides/index.html`, Agenda (`03-agenda.md`), Zusammenfassungstabelle (`29-zusammenfassung.md`), Zeitleiste in `docs/themen.md`, `docs/troubleshooting.md` (Port-Tabelle), `README.md` und `CLAUDE.md` (Story-Bereiche).
+
 ### Abschluss
 
 Zeige eine Zusammenfassung:
 - Welche Dateien erstellt wurden
 - Welche Dateien geaendert wurden
 - Der zugewiesene Port
-- Hinweis: `cd services && go build -v -o /dev/null ./booking/storyN` zum Testen
+- Verifikation (vom Repo-Root, kein `cd`): `go build -C services ./...`, `gofmt -l services`, `docker compose --project-directory services -f services/docker-compose.yml -f services/docker-compose.infra.yml -f services/docker-compose.reference.yml config --quiet`

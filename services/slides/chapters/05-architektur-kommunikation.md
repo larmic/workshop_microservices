@@ -9,4 +9,5 @@ Note:
 - SOA: wenige, große Services
 - Microservices: feingranular, eine Aufgabe → ein Service
 - SCS: Self Contained System
+- REST + JSON ist der heutige Default. Was &bdquo;RESTful&ldquo; wirklich heißt und warum das mehr als Stil ist, kommt in Story 2 (Design-Session) auf den Tisch.
 - Realitätscheck: Network Latency | Deployment Hell | Debugging Horror
