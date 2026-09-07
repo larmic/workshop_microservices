@@ -34,6 +34,15 @@ Status-Farben (Dashboard, Circuit-Breaker-Badges etc.):
 | open / Fehler | `#fde0e0` | `#b3261e` |
 | halfopen / Warnung | `#fff3cd` | `#8a6d00` |
 
+## Schriften (Slides)
+
+Die Slides nutzen ausschließlich **Poppins** (SIL OFL 1.1), selbst gehostet
+unter `slides/assets/fonts/` und per `@font-face` in `slides/theme.css`
+eingebunden. Damit rendern Checkout, CI, GitHub Pages, Docker und Beamer
+identisch, auch offline. Titel laufen in ExtraBold (800), Fließtext in
+Regular (400). Keine System- oder Lizenzschriften (Futura, Faktum) im Stack;
+Details in `slides/assets/fonts/README.md`.
+
 ## Audience-Hinweis
 
 Beim Editieren von Slides oder Dashboard gilt die Workshop-Zielgruppe der

@@ -1,15 +1,12 @@
-<div class="fb">
+<div class="page fb">
 
-<div class="fb-head">
-<div class="fb-title">
+<p class="kicker">Frische Eindr&uuml;cke sind die wertvollsten. Und die fl&uuml;chtigsten.</p>
+
 <h2>Feedback</h2>
-<p class="fb-lead">Frische Eindr&uuml;cke sind die wertvollsten &mdash; und die fl&uuml;chtigsten.</p>
-</div>
-</div>
 
-<div class="fb-body">
+<div class="fb-body page-body">
 <div class="fb-questions">
-<div class="fb-sticky">Ist der rote Faden erkennbar?</div>
+<div class="fb-sticky">Ist der <span class="thread">rote Faden</span> erkennbar?</div>
 <div class="fb-pills">
 <span>Fehlen Patterns?</span>
 <span>Passt der Zeitrahmen?</span>

@@ -16,6 +16,16 @@
  *   <!-- .slide: data-background-color="#ffffff" -->   weiße Slide (Default)
  */
 
+/* Poppins (SIL OFL 1.1), Subset latin, siehe assets/fonts/README.md */
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 400; font-display: swap; src: url("./assets/fonts/poppins-400.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: italic; font-weight: 400; font-display: swap; src: url("./assets/fonts/poppins-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 500; font-display: swap; src: url("./assets/fonts/poppins-500.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 600; font-display: swap; src: url("./assets/fonts/poppins-600.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 700; font-display: swap; src: url("./assets/fonts/poppins-700.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 800; font-display: swap; src: url("./assets/fonts/poppins-800.woff2") format("woff2"); }
+/* Sacramento (SIL OFL 1.1): verbundene Schreibschrift, nur für den „roten Faden" auf der Feedback-Folie */
+@font-face { font-family: "Sacramento"; font-style: normal; font-weight: 400; font-display: swap; src: url("./assets/fonts/sacramento-400.woff2") format("woff2"); }
+
 :root {
     --slide-bg: #ffffff;
     --slide-text: rgb(10, 3, 73);   /* dunkles Lila statt schwarz */
@@ -25,17 +35,19 @@
     --box-text: #ffffff;
     --highlight: rgb(211, 248, 113);
 
-    --font-futura: "Futura", "Futura-Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-futura-title: "Futura Condensed ExtraBold", "Futura-CondensedExtraBold", "Futura Bold Condensed", "Futura", sans-serif;
+    /* Poppins, selbst gehostet (assets/fonts/, OFL). Eine Familie für Text und
+       Titel; die Titel laufen im Schnitt ExtraBold (800). */
+    --font-body: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-title: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
     --r-background-color: var(--slide-bg);
-    --r-main-font: var(--font-futura);
+    --r-main-font: var(--font-body);
     --r-main-font-size: 36px;
     --r-main-color: var(--slide-text);
     --r-block-margin: 20px;
 
     --r-heading-margin: 0 0 20px 0;
-    --r-heading-font: var(--font-futura-title);
+    --r-heading-font: var(--font-title);
     --r-heading-color: var(--slide-text);
     --r-heading-line-height: 1.1;
     --r-heading-letter-spacing: normal;
@@ -43,8 +55,8 @@
     --r-heading-text-shadow: none;
     --r-heading-font-weight: 800;
     --r-heading1-text-shadow: none;
-    --r-heading1-size: 56pt;
-    --r-heading2-size: 56pt;
+    --r-heading1-size: 58px;
+    --r-heading2-size: 58px;
     --r-heading3-size: 1.25em;
     --r-heading4-size: 1em;
 
@@ -65,11 +77,11 @@
     color: var(--r-main-color);
 }
 
-/* Futura aggressiv erzwingen — Reveal-Defaults überschreiben.
+/* Poppins überall erzwingen, Reveal-Defaults überschreiben.
    Ausnahme: Code-Blöcke bleiben monospace (weiter unten gesetzt). */
 .reveal,
 .reveal * {
-    font-family: var(--font-futura);
+    font-family: var(--font-body);
 }
 
 /* Reveal-Standard-Layout: center: true zentriert die gesamte Section vertikal.
@@ -84,17 +96,13 @@
     padding: 1.5rem 0;
 }
 
-.reveal .intro {
-    text-align: center;
-}
-
 .reveal h1, .reveal h2 {
-    font-family: var(--font-futura-title);
+    font-family: var(--font-title);
     color: var(--slide-text);
     font-weight: 800;
-    font-size: 56pt;
+    font-size: 58px;         /* Poppins ExtraBold läuft breit: kleiner als die 56pt der Futura Condensed */
+    letter-spacing: -0.02em;
     text-align: center;
-    font-stretch: condensed;
     line-height: 1.1;
     margin: 0;
 }
@@ -214,26 +222,89 @@
     font-size: 0.8em;
 }
 
-/* Prägnanter Quadranten-Satz (Agenda) */
-.reveal .quadrant {
-    font-size: 1.2em;
-    font-weight: 500;
-    color: var(--slide-text);
-    margin: 0.8em 0;
-    text-align: center;
+/* Kicker: kleine violette Zeile mit Lime-Strich über dem Folientitel
+   (Musterdeck-Inhaltsfolien). */
+.reveal .kicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--box-border);
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    text-align: left;
 }
 
+.reveal .kicker::before {
+    content: "";
+    width: 22px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--highlight);
+}
 
-/* Mittagspause: durchgehender Balken zwischen Vor- und Nachmittag */
-.reveal .lunch-bar {
-    background: var(--wave);
+/* ---------------------------------------------------------------------- */
+/* Musterdeck-Inhaltsfolie (.page): Block in voller Folienhöhe, damit der  */
+/* Header trotz center: true immer an derselben Oberkante sitzt (Trick wie */
+/* .fb). Kicker bei ~54 px, Inhaltszone endet bei ~610 px, darunter bleibt */
+/* die Welle frei. Der Inhalt (.page-body) zentriert sich in der Restfläche */
+/* zwischen Titel und Wellenzone.                                          */
+/* ---------------------------------------------------------------------- */
+
+.reveal .page {
+    width: 92%;
+    height: 672px;           /* 720 minus 2 × 24 px Section-Padding */
+    padding: 10px 0 86px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
     color: var(--slide-text);
-    text-align: center;
-    padding: 0.4em 1em;
-    margin: 0.8em 0;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 0.85em;
+}
+
+.reveal .page h2 {
+    text-align: left;
+    margin: 0 0 40px;
+}
+
+/* Auto-Margins in der Flex-Spalte: der Inhalt sitzt mittig im Rest. */
+.reveal .page .page-body {
+    margin: auto 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Agenda (03): drei Kapitel-Spalten mit hellen Ziffern                    */
+/* ---------------------------------------------------------------------- */
+
+.reveal .agenda-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+/* Spezifischer als `.reveal .agenda-col p` darunter, sonst gewinnt der Fließtext. */
+.reveal .agenda-col p.agenda-num {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 48px;
+    line-height: 1;
+    color: #D9D1F4;          /* helles Lavendel, wie die Ziffern im Muster */
+    margin: 0 0 22px;
+}
+
+.reveal .agenda-col h3 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    text-align: left;
+}
+
+.reveal .agenda-col p {
+    font-size: 19px;
+    line-height: 1.45;
+    margin: 0;
 }
 
 /* Code */
@@ -406,95 +477,90 @@
     z-index: 40;
 }
 
-.reveal .intro img.intro-image {
-    max-height: 75vh;
-    max-width: 90%;
-    width: auto;
-    height: auto;
-}
-
 /* ---------------------------------------------------------------------- */
-/* Intro-Slide: Author / Kontakt-Karte                                    */
+/* Intro-Slide: Titel, Claim, Sprecher-Block (nach Musterdeck S. 1)       */
+/*                                                                        */
+/* Linksbündig auf derselben Satzkante wie die Feedback-Folie (.fb, 92%). */
+/* Die Folie bleibt über center: true vertikal mittig; nur Typografie und */
+/* Ausrichtung sind hier folienspezifisch.                                */
 /* ---------------------------------------------------------------------- */
 
-.reveal .intro .author-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 1.2rem 6% 0 auto;       /* leicht rechts vom Hauptbild */
-    padding: 0.7rem 1.1rem;
-    background: #fff;
-    border: 1px solid rgba(115, 72, 225, 0.25);
-    border-radius: 14px;
-    box-shadow: 0 4px 14px rgba(10, 3, 73, 0.10);
-    width: fit-content;
-}
-
-.reveal .intro .author-photo {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--box-border);
-    box-shadow: 0 2px 6px rgba(10, 3, 73, 0.18);
-    flex-shrink: 0;
-}
-
-.reveal .intro .author-info {
+.reveal .intro {
+    width: 92%;
+    margin: 0 auto;
     text-align: left;
-    line-height: 1.25;
-}
-
-.reveal .intro .author-name {
-    font-family: var(--font-futura-title);
-    font-weight: 800;
-    font-size: 20pt;
     color: var(--slide-text);
 }
 
-.reveal .intro .author-role {
-    font-size: 12pt;
-    color: var(--box-border);
-    font-weight: 500;
-    margin-bottom: 0.35em;
-}
-
-.reveal .intro ul.author-links {
-    list-style: none;
-    margin: 0.35em 0 0 0;
-    padding: 0;
-    display: block;
+.reveal .intro h1.intro-title {
     text-align: left;
-}
-
-.reveal .intro ul.author-links li {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
+    font-size: 112px;        /* Display XL, deutlich über den 58px der Inhaltsfolien */
+    line-height: 0.95;
+    letter-spacing: -0.03em;
     margin: 0;
-    font-size: 9pt;
-    line-height: 1.5;
-    color: var(--slide-text);
 }
 
-.reveal .intro ul.author-links li + li {
-    margin-top: 0.15em;
+.reveal .intro .intro-claim {
+    color: var(--box-border);   /* Violett wie im Muster */
+    font-size: 30px;
+    font-weight: 500;
+    margin: 12px 0 0;
 }
 
-.reveal .intro .author-icon {
-    width: 13px;
-    height: 13px;
+.reveal .intro .speaker {
+    margin-top: 64px;
+    padding-left: 18px;
+    border-left: 5px solid var(--highlight);   /* der Lime-Balken */
+}
+
+.reveal .intro .speaker-name {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 1.15;
+}
+
+.reveal .intro .speaker-role {
+    color: var(--box-border);
+    font-size: 19px;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.reveal .intro ul.speaker-links {
+    list-style: none;
+    display: block;          /* drei Zeilen untereinander */
+    margin: 14px 0 0;
+    padding: 0;
+    text-align: left;
+}
+
+.reveal .intro ul.speaker-links li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.reveal .intro ul.speaker-links li + li {
+    margin-top: 4px;
+}
+
+.reveal .intro .speaker-icon {
+    width: 15px;
+    height: 15px;
     fill: var(--box-border);
     flex-shrink: 0;
 }
 
-.reveal .intro ul.author-links a {
+.reveal .intro ul.speaker-links a {
     color: var(--slide-text);
     border-bottom: 1px dotted rgba(115, 72, 225, 0.35);
-    transition: color 0.15s, border-color 0.15s;
 }
 
-.reveal .intro ul.author-links a:hover {
+.reveal .intro ul.speaker-links a:hover {
     color: var(--r-link-color-hover);
     border-bottom-color: var(--r-link-color-hover);
 }
@@ -545,7 +611,7 @@
     margin: 0.7em 0 0 0;
     font-size: 0.72em;
     color: var(--slide-text);
-    font-family: var(--font-futura);
+    font-family: var(--font-body);
 }
 
 .reveal .qr-url a {
@@ -598,7 +664,7 @@
     margin: 0;
     font-size: 0.8em;
     font-weight: 700;
-    font-family: var(--font-futura-title);
+    font-family: var(--font-title);
     line-height: 1.2;
     display: flex;
     align-items: center;
@@ -819,7 +885,7 @@
 }
 
 .reveal .chapter-slide .chapter-num {
-    font-family: var(--font-futura-title);
+    font-family: var(--font-title);
     color: var(--highlight);
     font-size: 20pt;
     font-weight: 700;
@@ -836,48 +902,15 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* Feedback-Folie (02): linksb&uuml;ndiger Kopf, Leitfrage als Lime-Zettel,   */
-/* weitere Fragen als Pillen, QR-Code als dunkle Karte rechts              */
+/* Feedback-Folie (02): Gerüst über .page (Kicker, Titel, Inhalt mittig),  */
+/* Leitfrage als Lime-Zettel, weitere Fragen als Pillen, QR-Code als       */
+/* dunkle Karte rechts                                                    */
 /* ---------------------------------------------------------------------- */
-
-.reveal .fb {
-    width: 92%;
-    height: 600px;
-    margin: 0 auto;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    color: var(--slide-text);
-}
-
-.reveal .fb-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 40px;
-}
-
-.reveal .fb-title h2 {
-    text-align: left;
-    font-size: 80px;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin: 0;
-}
-
-.reveal .fb-lead {
-    font-size: 24px;
-    font-style: italic;
-    color: #5B4E93;
-    margin: 14px 0 0;
-}
 
 .reveal .fb-body {
     display: flex;
     align-items: flex-start;
     gap: 44px;
-    margin-top: 44px;
 }
 
 .reveal .fb-questions {
@@ -895,6 +928,17 @@
     font-size: 38px;
     font-weight: 500;
     line-height: 1.2;
+}
+
+/* „rote Faden" als roter, verbundener Schriftzug: das Wortspiel sichtbar machen.
+   Einziger Einsatz der Schreibschrift im Deck. */
+.reveal .fb-sticky .thread {
+    font-family: "Sacramento", cursive;
+    font-weight: 400;
+    font-size: 1.55em;
+    line-height: 0.8;
+    color: #B3261E;
+    padding: 0 0.08em;
 }
 
 .reveal .fb-pills {
