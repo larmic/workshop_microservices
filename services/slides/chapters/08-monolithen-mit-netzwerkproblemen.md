@@ -1,26 +1,34 @@
-## Microservices
+<div class="page">
 
-<p class="subtitle">&hellip; sind auch nur Monolithen mit <span class="hl">Netzwerkproblemen</span></p>
+<p class="kicker">Microservices sind auch nur Monolithen</p>
 
-<div class="box">
+## &hellip; mit <span class="hl">Netzwerkproblemen</span>
 
-### Zwei Fragen, die wir im Workshop beantworten
+<div class="page-body">
 
-- Was m&uuml;ssen wir f&uuml;r eine <span class="hl">funktionierende Architektur</span> tun?
-- Was <span class="hl">kostet</span> uns das?
+<p class="lead">&rarr; und ein Methodenaufruf wird zum Netzwerkaufruf</p>
+
+<div class="cards cards-3 cards-display">
+<div class="card">
+<h3>Langsam</h3>
+<p>blockiert alles, was hinter ihm wartet</p>
+</div>
+<div class="card">
+<h3>L&uuml;gt</h3>
+<p>200 zur&uuml;ck, obwohl nichts mehr geht</p>
+</div>
+<div class="card">
+<h3>Kommt nie an</h3>
+<p>niemand wei&szlig;, ob etwas passiert ist</p>
+</div>
+</div>
+
+</div>
 
 </div>
 
 Note:
 - These provokant in den Raum stellen: stimmt das? Wo trifft sie zu, wo nicht?
-- Diskussions-Anker: Welche Probleme h&auml;tte man im Monolithen auch &mdash; und welche entstehen erst durch das Netzwerk?
-- Was das Netzwerk uns kostet, fassen wir hier nicht im Voraus auf &mdash; die Stories machen es konkret:
-  - Partielle Ausf&auml;lle &rarr; Circuit Breaker (Story 4), Bulkhead (Story 5)
-  - Keine verteilten Transaktionen &rarr; Saga (Story 6/7)
-  - Schnittstellen, auf die sich Infrastruktur verlassen kann &rarr; REST vs. RESTful (Story 2, Design-Session ohne Code)
-  - Auffindbarkeit &rarr; Service Discovery (Story 3)
-  - Nachvollziehbarkeit &rarr; Distributed Tracing (Story 8)
-  - Konsistenz &rarr; Eventual Consistency, CQRS (Diskussion)
-- Was on top kommt (Diskussion, kein Hands-on): Service-Schnitt (DDD, Event Storming), Auth &uuml;ber Service-Grenzen (OAuth/SAML), synchron vs. asynchron, Versionierung, Team-Schnitte (Conway's Law), Polyglot Persistence, Observability als eigene Disziplin.
-- Take-away: Microservices sind ein Werkzeug, kein Ziel. Am Ende der zwei Tage habt ihr eine ehrliche Aufwandseinsch&auml;tzung &mdash; und damit eine bessere Entscheidungsgrundlage f&uuml;r euer eigenes Projekt.
-- &Uuml;berleitung: Bevor wir Resilienz angehen, brauchen wir das Fundament &mdash; einen Service, der &uuml;berhaupt l&auml;uft und sich beobachten l&auml;sst. Story 1.
+- Der Kern: Ein Methodenaufruf im Monolithen ist schnell, ehrlich und kommt an. Ein Netzwerkaufruf kann langsam sein, l&uuml;gen (200 trotz Fehler) oder verschwinden. Alles, was danach kommt, ist der Umgang mit diesen drei F&auml;llen.
+- Diskussions-Anker: Welche Probleme h&auml;tte man im Monolithen auch, und welche entstehen erst durch das Netzwerk?
+- Weiter nach unten: die zwei Fragen, die der Workshop beantwortet.

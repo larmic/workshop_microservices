@@ -280,6 +280,15 @@
     margin: -30px 0 32px;
 }
 
+/* Violette Leitzeile direkt über dem Inhalt (statt unter dem Titel) */
+.reveal .page-body .lead {
+    text-align: left;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--box-border);
+    margin: 0 0 18px;
+}
+
 /* Titelzeile mit Merksatz rechts (z. B. „Diese fünf baut ihr gleich in Story 1.") */
 .reveal .page-head {
     display: flex;
@@ -305,23 +314,22 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* Agenda (03): drei Kapitel-Spalten mit hellen Ziffern                    */
+/* Agenda (03): vier Halbtage im 2×2-Raster, Label statt Ziffer            */
 /* ---------------------------------------------------------------------- */
 
-.reveal .agenda-cols {
+.reveal .agenda-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 64px;
 }
 
 /* Spezifischer als `.reveal .agenda-col p` darunter, sonst gewinnt der Fließtext. */
-.reveal .agenda-col p.agenda-num {
-    font-family: var(--font-title);
-    font-weight: 800;
-    font-size: 48px;
+.reveal .agenda-col p.agenda-label {
+    font-size: 16px;
+    font-weight: 700;
     line-height: 1;
-    color: #D9D1F4;          /* helles Lavendel, wie die Ziffern im Muster */
-    margin: 0 0 22px;
+    color: var(--box-border);
+    margin: 0 0 12px;
 }
 
 .reveal .agenda-col h3 {
@@ -419,6 +427,80 @@
 
 /* Intro-Karten (06): Titel navy wie auf S. 1 von folien-6-7.pdf */
 .reveal .cards-3 .card h3 { font-size: 24px; color: var(--slide-text); }
+
+/* Karten mit Display-Titel (08 „Netzwerkprobleme"): Titel in der Titelschrift,
+   Text darunter gedämpft. */
+.reveal .cards-display .card {
+    padding: 26px 24px 28px;
+    gap: 6px;
+}
+
+.reveal .cards-display .card h3 {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 34px;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+}
+
+.reveal .cards-display .card p {
+    color: #5B4E93;
+}
+
+/* Titel mit Lime-Markierung: Marker-Strich hinter der unteren Hälfte der
+   Buchstaben (wie im Musterdeck), damit er nicht in die Kicker-Zeile ragt. */
+.reveal .page h2 .hl {
+    background: linear-gradient(transparent 42%, var(--highlight) 42%, var(--highlight) 96%, transparent 96%);
+    padding: 0 0.1em;
+    border-radius: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Nummerierte Liste (.numlist): helle Ziffer links, Frage + Erläuterung   */
+/* rechts, Trennlinie zwischen den Zeilen. Erster Einsatz: 08b Zwei Fragen */
+/* ---------------------------------------------------------------------- */
+
+.reveal .numlist {
+    display: flex;
+    flex-direction: column;
+}
+
+.reveal .numlist-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    align-items: start;
+    padding: 26px 0;
+}
+
+.reveal .numlist-row + .numlist-row {
+    border-top: 1px solid #E4E0F5;
+}
+
+.reveal .numlist-num {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1;
+    color: #D9D1F4;
+    margin-top: 2px;
+}
+
+.reveal .numlist h3 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0 0 8px;
+    text-align: left;
+    color: var(--slide-text);
+}
+
+.reveal .numlist p {
+    font-size: 19px;
+    line-height: 1.45;
+    margin: 0;
+    color: #5B4E93;
+    max-width: 30em;
+}
 .reveal .cards-3 .card p  { font-size: 18px; line-height: 1.4; flex: none; }
 
 /* Karten als "custom fragment": von Anfang an sichtbar, per Klick wechselt der
