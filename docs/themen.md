@@ -25,7 +25,7 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 6c | Hands-on: Story 3 (Service Discovery) | 60 Min |
 | 6d | Hands-on: Story 4 (Circuit Breaker) | 60 Min |
 
-Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 8 h 10. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten, aber ohne Uhrzeiten; Minuten und Blöcke stehen allein hier.
+Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 8 h 10. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten und der Mittagspause; Minuten und Blöcke stehen allein hier.
 
 ### Tag 2 (≈ 7 h inkl. Pausen)
 

@@ -314,35 +314,99 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* Agenda (03): vier Halbtage im 2×2-Raster, Label statt Ziffer            */
+/* Agenda (03): zwei Tagesspalten mit Lime-Unterstrich, je Vormittag,      */
+/* Mittagspause (Lavendel-Pille) und Nachmittag                            */
 /* ---------------------------------------------------------------------- */
 
-.reveal .agenda-grid {
+.reveal .agenda-days {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px 64px;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0;
 }
 
-/* Spezifischer als `.reveal .agenda-col p` darunter, sonst gewinnt der Fließtext. */
-.reveal .agenda-col p.agenda-label {
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--box-border);
-    margin: 0 0 12px;
+.reveal .agenda-day {
+    padding: 0 48px 0 0;
 }
 
-.reveal .agenda-col h3 {
+.reveal .agenda-day + .agenda-day {
+    padding: 0 0 0 48px;
+    border-left: 1px solid #E4E0F5;
+}
+
+.reveal .agenda-day h3 {
+    font-family: var(--font-title);
+    font-weight: 800;
     font-size: 26px;
-    font-weight: 700;
-    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-align: left;
+    color: var(--slide-text);
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--highlight);
+}
+
+.reveal .agenda-slot {
     text-align: left;
 }
 
-.reveal .agenda-col p {
-    font-size: 19px;
-    line-height: 1.45;
-    margin: 0;
+.reveal .agenda-slot p.agenda-label {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--box-border);
+    margin: 0 0 8px;
+}
+
+.reveal .agenda-slot h4 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: left;
+    color: var(--slide-text);
+    margin: 0 0 6px;
+}
+
+.reveal .agenda-slot p {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #5B4E93;
+    margin: 0 0 6px;
+}
+
+.reveal .agenda-slot code,
+.reveal .agenda-lunch code {
+    background: none;
+    padding: 0;
+    color: #8880AE;
+    font-size: 13px;
+}
+
+.reveal .agenda-lunch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--wave);
+    border-radius: 10px;
+    padding: 8px 16px;
+    margin: 14px 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--slide-text);
+}
+
+.reveal .agenda-lunch::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--highlight);
+    flex: none;
+}
+
+.reveal .agenda-lunch code {
+    margin-left: auto;
+    color: #6F6A8A;
 }
 
 /* ---------------------------------------------------------------------- */
