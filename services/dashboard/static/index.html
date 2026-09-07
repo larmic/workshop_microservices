@@ -1472,6 +1472,38 @@ GET /booking/offers
 
         </section>
 
+        <!-- Story 2: Design-Session ohne Code. Bewusst nur die Story-Karte:
+             kein Spickzettel, kein Setup, kein Service-Umschalter, keine Buttons. -->
+        <section class="story-section" data-story="2" hidden>
+            <div class="story-helpers" data-story-helpers="2">
+                <details class="story-info" open>
+                    <summary>Story lesen <span class="badge">User Story + Aufgabe</span></summary>
+                    <div class="story-info-body">
+                        <p><strong>Diese Story findet am Flipchart statt.</strong> Es gibt keine Referenz-Implementierung, keinen Service und keinen Port. Das Dashboard zeigt hier nur die Aufgabe.</p>
+                        <h4>Kontext</h4>
+                        <p>Der Booking-Service liefert Angebote. Als Nächstes wird gebucht, und wo gebucht wird, wird storniert und umgebucht. Bevor jemand losprogrammiert, entsteht die API am Flipchart: Ressourcen statt Verben, Idempotenz macht Retries sicher, Status-Codes sind Infrastruktur.</p>
+                        <h4>User Story</h4>
+                        <p>Als <em>Produktverantwortliche</em> möchte ich <em>eine API für Storno und Umbuchung, die HTTP so nutzt, wie es gemeint ist</em>, damit <em>Retries sicher sind, Fehler sichtbar werden und wir sie nicht in drei Monaten umbauen</em>.</p>
+                        <h4>Aufgabe</h4>
+                        <ul>
+                            <li>Teams zu 3 bis 4 Personen, ein Flipchart pro Team, ca. 20 Minuten</li>
+                            <li>Szenario: eine Kundin storniert die ganze Reise (Grund soll nachvollziehbar bleiben), ein Kunde bucht nur den Flug um</li>
+                            <li>Randbedingung: der Client wiederholt Anfragen bei Timeout</li>
+                        </ul>
+                        <h4>Ergebnisformat</h4>
+                        <p>Eine Tabelle, eine Zeile pro Endpoint:</p>
+                        <ul>
+                            <li>Methode und Pfad</li>
+                            <li>Request-Kern, Antwort und Status-Code</li>
+                            <li>idempotent ja/nein</li>
+                            <li>Begründung, auch für bewusste Abweichungen</li>
+                        </ul>
+                        <p>Danach: je Team zwei Minuten Vorstellung, dann Quiz im Plenum. Die Regeln nehmt ihr mit in Story 3, dort entsteht <code>POST /booking/bookings</code>. Vollständige Beschreibung: <code>docs/stories/story-02-api-design-session.md</code>.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
         <section class="story-section" data-story="3" hidden>
             <div class="story-helpers" data-story-helpers="3">
                 <details class="story-info">

@@ -674,6 +674,12 @@
     grid-column: 4 / span 2;
 }
 
+/* Sechs Karten (z. B. REST vs. RESTful): 3 + 3 statt 3 + 2. */
+.reveal .factor-row.six > .factor:nth-child(4),
+.reveal .factor-row.six > .factor:nth-child(5) {
+    grid-column: span 2;
+}
+
 /* "Am Markt"-Block: immer sichtbar, damit die Framework-Übersicht auch im
    statisch veröffentlichten Web-Foliensatz erscheint. Früher wurde sie erst
    nach dem letzten Fragment (.show-all) eingeblendet und im Web kaum gefunden. */

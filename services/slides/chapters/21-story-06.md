@@ -40,6 +40,7 @@ Note:
 - Hook: &bdquo;Resilience-Patterns aus Story 4 und 5 helfen <em>einem</em> Aufruf. Aber sobald ich mehrere zusammenh&auml;ngende Schritte habe (Flug + Hotel + Auto) und einer kippt, brauche ich etwas anderes.&ldquo; Klassisches Beispiel: Flight gebucht, Hotel sagt nein. Was tun mit dem Flug?
 - Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 6 &rarr; &bdquo;Story lesen&ldquo;.
 - Sprache und Framework wieder frei. Referenz unter <code>services/booking/story6/</code> (Go, sequenzielle Saga in ca. 100 Zeilen).
+- R&uuml;ckblick auf Story 2: der Storno vom Flipchart ist jetzt die Kompensation. &bdquo;Ihr habt damals &uuml;ber DELETE zweimal diskutiert. Genau deshalb muss <code>DELETE /bookings/{id}</code> idempotent sein: der Orchestrator wiederholt bei Timeout.&ldquo;
 - Im Workshop bewusst <strong>nur ein Versuch</strong> f&uuml;r die Kompensation, kein Retry, kein persistenter Status &mdash; das macht das Pattern sichtbar, ohne den 60-Min-Slot zu sprengen. Persistenz + Retry sind explizite Diskussionspunkte im Recap (Fragen 1, 2, 7).
 - Demo-Drehbuch: Dashboard &rarr; Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code> &mdash; in der Saga-Karte ist sichtbar: Flight BOOKED &rarr; Hotel FAILED &rarr; status COMPENSATING &rarr; Flight COMPENSATED &rarr; status FAILED. Anschlie&szlig;end Hotel zur&uuml;ck auf normal, neue Buchung &mdash; alles gr&uuml;n.
 - Time-Box 60 min inkl. Demo. Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-06-saga.md</code>.

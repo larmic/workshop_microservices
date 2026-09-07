@@ -35,6 +35,22 @@ Workshop-Palette zur Erinnerung — die Hex-Codes erscheinen in jedem Prompt:
 | Welle | `#EEE7FB` | dezente Hintergrund-Flächen |
 | Background | `#FFFFFF` | Slide-Hintergrund |
 
+### Hero-Bild für `10a-titel.md` (REST vs. RESTful)
+
+Zielbild: eine ordentliche Regalwand mit beschrifteten Schubladen (Ressourcen) neben einem chaotischen Haufen loser Zettel mit Pfeilen (Aktionen). Die Schubladen tragen kleine Etiketten wie `/users/1423`, `/bookings/4711`; auf den Zetteln stehen sinngemäß Verben. Kein lesbarer Text im Bild nötig, die Form soll es tragen.
+
+```
+Flat vector illustration, 16:9, white background (#FFFFFF). Left half: a tidy wall of labeled drawers and shelves in deep indigo (#0A0349) outlines with soft purple (#7348E1) accents, each drawer with a small blank label tag, evoking well-organized resources. Right half: a loose, chaotic pile of paper notes and curved arrows in the same indigo, slightly tilted, evoking ad-hoc remote procedure calls. A thin vertical divider between both halves. A few tiny lime-green (#D3F871) status dots on the drawers. Subtle background shapes in very light lavender (#EEE7FB). Clean geometric shapes, generous whitespace, in the style of undraw.co illustrations. Negative prompt: text, letters, words, people, faces, photorealistic, 3D render, gradients on the background, clutter in the center.
+```
+
+Einbinden als Hero-Slide (Variante A, Opacity 0.40) ganz oben in `10a-titel.md`:
+
+```markdown
+<!-- .slide: data-background-image="./assets/rest_vs_restful.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.40" data-background-repeat="no-repeat" -->
+```
+
+Optional dasselbe Bild als Watermark (Opacity 0.18) in `10b-rest-vs-restful.md` und `10c-rest-vs-restful-beispiele.md`.
+
 ---
 
 ### Provider-spezifische Tipps (optional)
@@ -81,7 +97,7 @@ Bei unDraw die Primärfarbe auf `#7348E1` setzen — fügt sich nahtlos in die S
 
 ## Sonstige offene Punkte
 
-- [ ] **`docs/questions/story8.md`** anlegen — die anderen Stories haben eine eigene Fragen-Datei, Story 8 (Tracing) nicht. Aktuell sind die Recap-Notes aus `docs/instructions/distributed-tracing.md` (Abschnitt 9 + 10) synthetisiert. Wenn ihr die Diskussion ähnlich tief wie bei Stories 1–7 vorbereiten wollt, lohnt sich eine eigene Datei.
+- [ ] **`docs/questions/story8.md`** anlegen — die anderen Stories haben eine eigene Fragen-Datei, Story 8 (Tracing) nicht (vor der Umnummerierung 2026-09 hieß dieser Punkt `story7.md`). Aktuell sind die Recap-Notes aus `docs/instructions/distributed-tracing.md` (Abschnitt 9 + 10) synthetisiert. Wenn ihr die Diskussion ähnlich tief wie bei Stories 1–7 vorbereiten wollt, lohnt sich eine eigene Datei.
 - [ ] **Sprecher-Notizen Story 1 Recap** prüfen — wurden im finalen Polish-Pass auf 6 Boxen erweitert. Falls Zeit knapp, eine der neuen Boxen (Config oder OpenAPI) ggf. wieder rausnehmen.
 - [ ] **Foto vom Trainer** für Kapitel 1 / Closing — falls gewünscht persönliche Note.
 

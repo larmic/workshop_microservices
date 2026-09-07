@@ -38,6 +38,7 @@ Als <em>Betriebsteam</em> m&ouml;chte ich <em>Backend-Services &uuml;ber logisch
 Note:
 - Hook: &bdquo;Story 1 hatte URLs in ENV-Variablen. Was passiert, wenn Flight umzieht? Re-Deploy. Was passiert, wenn ihr Flight skaliert? Ein Backend bekommt allen Traffic.&ldquo;
 - Wiedererkennung: identische Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 3 &rarr; &bdquo;Story lesen&ldquo;.
+- Br&uuml;cke zu Story 2: <code>POST /booking/bookings</code> ist der erste schreibende Endpoint. Die Regeln vom Flipchart gelten: Ressource statt Verb, <code>201 Created</code>, Fehler als Status-Code. Kurz fragen, wer sie schon eingebaut hat.
 - Sprache und Framework wieder frei. Referenz unter `services/booking/story3/` (Go).
 - Self-Registration im Code &mdash; Flight/Hotel/Car melden sich beim Start aktiv an. Trade-off zu Sidecar / Plattform-basierter Registrierung diskutieren wir im Recap.
 - Client-Side LB: Resolver bekommt eine Liste, w&auml;hlt eine Instanz zuf&auml;llig. Keine Load-Balancer-Magie n&ouml;tig.

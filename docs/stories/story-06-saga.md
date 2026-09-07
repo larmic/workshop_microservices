@@ -35,6 +35,7 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 - **API-Endpunkte (Backend-Services):**
   - `POST /bookings` - Buchung erstellen
   - `DELETE /bookings/{id}` - Buchung stornieren (Kompensation)
+- **Rückblick auf Story 2:** Die Storno-Diskussion vom Flipchart kommt hier als Kompensation zurück. `DELETE /bookings/{id}` muss idempotent sein, weil der Orchestrator den Aufruf bei Timeout wiederholt (siehe [questions/story2.md](../questions/story2.md), Frage 4)
 
 ## Bonus (optional)
 

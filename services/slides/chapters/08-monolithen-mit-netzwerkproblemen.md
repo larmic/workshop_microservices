@@ -17,6 +17,7 @@ Note:
 - Was das Netzwerk uns kostet, fassen wir hier nicht im Voraus auf &mdash; die Stories machen es konkret:
   - Partielle Ausf&auml;lle &rarr; Circuit Breaker (Story 4), Bulkhead (Story 5)
   - Keine verteilten Transaktionen &rarr; Saga (Story 6/7)
+  - Schnittstellen, auf die sich Infrastruktur verlassen kann &rarr; REST vs. RESTful (Story 2, Design-Session ohne Code)
   - Auffindbarkeit &rarr; Service Discovery (Story 3)
   - Nachvollziehbarkeit &rarr; Distributed Tracing (Story 8)
   - Konsistenz &rarr; Eventual Consistency, CQRS (Diskussion)

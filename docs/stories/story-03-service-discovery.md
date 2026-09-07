@@ -38,6 +38,7 @@ Ein Booking-Service, der:
 - Handler in eigenes `handler`-Package extrahieren
 
 ### 3. Buchung durchführen
+- Design-Regeln aus [Story 2](story-02-api-design-session.md) anwenden: Ressource `bookings`, `POST` erzeugt eine neue Buchung und antwortet mit `201 Created`, Fehler kommen als Status-Code, nicht als `200` mit Fehler-Body
 - `POST /booking/bookings` im Booking-Service
   - Request: `{ flightId, hotelId, carId, customerName }`
   - Ruft die drei Backend-Services über den Consul Resolver auf:
