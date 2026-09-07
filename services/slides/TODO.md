@@ -6,7 +6,6 @@
 
 ## ✅ Bereits eingesetzte Bilder
 
-- `07-vorbereitung.md` &mdash; Dashboard-Screenshot (`assets/dashboard-ui.png`) als `<img class="dashboard-image">`
 - `11-service-discovery.md` &mdash; Registry-Diagramm (`assets/service_discovery.png`)
 - `14-circuit-breaker.md` &mdash; Sicherungskasten (`assets/circuitbreaker.png`)
 - `17-bulkhead.md` &mdash; Schiffsquerschnitt mit Schotten (`assets/bulkhead.png`)
