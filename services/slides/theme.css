@@ -834,3 +834,111 @@
     margin-top: 1.5rem;
     font-style: italic;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Feedback-Folie (02): linksb&uuml;ndiger Kopf, Leitfrage als Lime-Zettel,   */
+/* weitere Fragen als Pillen, QR-Code als dunkle Karte rechts              */
+/* ---------------------------------------------------------------------- */
+
+.reveal .fb {
+    width: 92%;
+    height: 600px;
+    margin: 0 auto;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: var(--slide-text);
+}
+
+.reveal .fb-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.reveal .fb-title h2 {
+    text-align: left;
+    font-size: 80px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0;
+}
+
+.reveal .fb-lead {
+    font-size: 24px;
+    font-style: italic;
+    color: #5B4E93;
+    margin: 14px 0 0;
+}
+
+.reveal .fb-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 44px;
+    margin-top: 44px;
+}
+
+.reveal .fb-questions {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Der Lime-Zettel: leicht gedreht, damit er wie angeheftet wirkt */
+.reveal .fb-sticky {
+    background: var(--highlight);
+    color: #1B2A03;
+    border-radius: 18px;
+    padding: 24px 30px 26px;
+    transform: rotate(-0.7deg);
+    font-size: 38px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.reveal .fb-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.reveal .fb-pills span {
+    font-size: 22px;
+    font-weight: 500;
+    background: #F4F2FD;
+    border: 1px solid #E4E0F5;
+    border-radius: 999px;
+    padding: 12px 22px;
+    white-space: nowrap;
+}
+
+.reveal .fb-scan {
+    flex: none;
+    width: 264px;
+    text-align: center;
+}
+
+.reveal a.fb-qr {
+    display: block;
+    background: var(--box-bg);
+    border-radius: 20px;
+    padding: 22px;
+    border-bottom: none;
+}
+
+.reveal .fb-qr img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.reveal .fb-url {
+    font-size: 20px;
+    line-height: 1.35;
+    color: #5B4E93;
+    margin: 16px 0 0;
+}
