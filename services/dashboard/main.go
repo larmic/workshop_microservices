@@ -91,9 +91,9 @@ func main() {
 	mux.HandleFunc("GET /api/saga-state", handler.SagaStateHandler(bookingRefStory6URL))
 	mux.HandleFunc("POST /api/saga-reset", handler.SagaResetHandler(bookingRefStory6URL))
 	mux.HandleFunc("POST /api/saga-trigger", handler.SagaTriggerHandler(bookingRefStory6URL))
-	mux.HandleFunc("GET /api/saga6-state", handler.SagaStateHandler(bookingRefStory7URL))
-	mux.HandleFunc("POST /api/saga6-reset", handler.SagaResetHandler(bookingRefStory7URL))
-	mux.HandleFunc("POST /api/saga6-trigger", handler.SagaTriggerHandler(bookingRefStory7URL))
+	mux.HandleFunc("GET /api/saga7-state", handler.SagaStateHandler(bookingRefStory7URL))
+	mux.HandleFunc("POST /api/saga7-reset", handler.SagaResetHandler(bookingRefStory7URL))
+	mux.HandleFunc("POST /api/saga7-trigger", handler.SagaTriggerHandler(bookingRefStory7URL))
 	mux.HandleFunc("GET /api/booking-custom-available", func(w http.ResponseWriter, r *http.Request) {
 		if bookingCustomURL == "" {
 			w.WriteHeader(http.StatusServiceUnavailable)
@@ -118,9 +118,9 @@ func main() {
 		mux.HandleFunc("GET /api/booking-custom/saga-state", handler.SagaStateHandler(bookingCustomURL))
 		mux.HandleFunc("POST /api/booking-custom/saga-reset", handler.SagaResetHandler(bookingCustomURL))
 		mux.HandleFunc("POST /api/booking-custom/saga-trigger", handler.SagaTriggerHandler(bookingCustomURL))
-		mux.HandleFunc("GET /api/booking-custom/saga6-state", handler.SagaStateHandler(bookingCustomURL))
-		mux.HandleFunc("POST /api/booking-custom/saga6-reset", handler.SagaResetHandler(bookingCustomURL))
-		mux.HandleFunc("POST /api/booking-custom/saga6-trigger", handler.SagaTriggerHandler(bookingCustomURL))
+		mux.HandleFunc("GET /api/booking-custom/saga7-state", handler.SagaStateHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/saga7-reset", handler.SagaResetHandler(bookingCustomURL))
+		mux.HandleFunc("POST /api/booking-custom/saga7-trigger", handler.SagaTriggerHandler(bookingCustomURL))
 	}
 	mux.Handle("GET /", http.FileServer(http.FS(staticContent)))
 

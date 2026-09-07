@@ -1882,11 +1882,11 @@ on POST /events/compensation:
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Choreography-Saga (Booking Story 7)</h2>
-                <button class="panel-reset-btn" id="saga6-reset-btn" onclick="resetSagas6()" title="Saga-Store leeren">Reset</button>
+                <button class="panel-reset-btn" id="saga7-reset-btn" onclick="resetSagas6()" title="Saga-Store leeren">Reset</button>
             </div>
             <div class="rest-actions">
                 <div class="rest-row">
-                    <button class="rest-btn" id="saga6-trigger-btn" onclick="triggerSaga6()">
+                    <button class="rest-btn" id="saga7-trigger-btn" onclick="triggerSaga7()">
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
@@ -1900,9 +1900,9 @@ on POST /events/compensation:
                             &mdash; bei Fehler wird die Kompensation als Event an die Backends dispatched (async, fire &amp; forget)</span>
                     </button>
                 </div>
-                <span class="bh-result" id="saga6-result"></span>
+                <span class="bh-result" id="saga7-result"></span>
             </div>
-            <div class="saga-stats" id="saga6-stats"></div>
+            <div class="saga-stats" id="saga7-stats"></div>
             <div class="saga-legend">
                 <strong>Legende</strong>
                 <span class="saga-step booked"><span class="saga-step-icon">&#10003;</span> BOOKED</span>
@@ -1911,7 +1911,7 @@ on POST /events/compensation:
                 <span class="saga-step failed"><span class="saga-step-icon">&#10007;</span> FAILED</span>
                 <span class="saga-step skipped"><span class="saga-step-icon">&#8212;</span> NICHT AUFGERUFEN</span>
             </div>
-            <div class="saga-list" id="saga6-list"></div>
+            <div class="saga-list" id="saga7-list"></div>
         </div>
         </section>
 
@@ -2083,7 +2083,7 @@ on receiveCompensationEvent(event):
             if (BookingMode[storyNum] !== "custom") return path;
             return path
                 .replace(/\/dashboard\/api\/booking-ref-story\d/, "/dashboard/api/booking-custom")
-                .replace(/\/dashboard\/api\/(circuit-state|bulkhead-state|bulkhead-reset|saga-state|saga-reset|saga-trigger|saga6-state|saga6-reset|saga6-trigger)/, "/dashboard/api/booking-custom/$1")
+                .replace(/\/dashboard\/api\/(circuit-state|bulkhead-state|bulkhead-reset|saga-state|saga-reset|saga-trigger|saga7-state|saga7-reset|saga7-trigger)/, "/dashboard/api/booking-custom/$1")
                 .replace(/\/api\/booking-ref-story\d/, "/api/booking-custom");
         }
 
@@ -2097,7 +2097,7 @@ on receiveCompensationEvent(event):
             if (storyNum === 4 && typeof fetchCircuitState === "function") fetchCircuitState();
             if (storyNum === 5 && typeof fetchBulkheadState === "function") fetchBulkheadState();
             if (storyNum === 6 && typeof fetchSagaState === "function") fetchSagaState();
-            if (storyNum === 7 && typeof fetchSaga6State === "function") fetchSaga6State();
+            if (storyNum === 7 && typeof fetchSaga7State === "function") fetchSaga7State();
         }
 
         // Custom-Service-Erreichbarkeit. Wird beim Page-Load und periodisch
@@ -2741,15 +2741,15 @@ on receiveCompensationEvent(event):
         // ----- Story 7: Choreography-Saga (analog zu Story 6, eigene Targets) -----
 
         const SAGA6_RENDER_OPTS = {
-            statsId: "saga6-stats",
-            listId: "saga6-list",
+            statsId: "saga7-stats",
+            listId: "saga7-list",
             label: "Booking Story 7",
             triggerPath: "/api/booking-ref-story7/booking/bookings",
         };
 
-        async function fetchSaga6State() {
+        async function fetchSaga7State() {
             try {
-                const res = await fetch(bookingUrl(7, "/dashboard/api/saga6-state"));
+                const res = await fetch(bookingUrl(7, "/dashboard/api/saga7-state"));
                 if (!res.ok) throw new Error(await res.text());
                 renderSagas(await res.json(), SAGA6_RENDER_OPTS);
             } catch (e) {
@@ -2758,31 +2758,31 @@ on receiveCompensationEvent(event):
         }
 
         async function resetSagas6() {
-            const btn = document.getElementById("saga6-reset-btn");
+            const btn = document.getElementById("saga7-reset-btn");
             btn.disabled = true;
             try {
-                const res = await fetch(bookingUrl(7, "/dashboard/api/saga6-reset"), { method: "POST" });
+                const res = await fetch(bookingUrl(7, "/dashboard/api/saga7-reset"), { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
-                showSaga6Result("Store geleert");
+                showSaga7Result("Store geleert");
             } catch (e) {
-                showError("Saga6-Reset: " + e.message);
+                showError("Saga7-Reset: " + e.message);
             } finally {
                 btn.disabled = false;
-                fetchSaga6State();
+                fetchSaga7State();
             }
         }
 
-        function showSaga6Result(text) {
-            document.getElementById("saga6-result").textContent = text;
+        function showSaga7Result(text) {
+            document.getElementById("saga7-result").textContent = text;
         }
 
-        async function triggerSaga6() {
-            const btn = document.getElementById("saga6-trigger-btn");
+        async function triggerSaga7() {
+            const btn = document.getElementById("saga7-trigger-btn");
             btn.disabled = true;
-            showSaga6Result("Saga läuft …");
+            showSaga7Result("Saga läuft …");
             const t0 = performance.now();
             try {
-                const res = await fetch(bookingUrl(7, "/dashboard/api/saga6-trigger"), { method: "POST" });
+                const res = await fetch(bookingUrl(7, "/dashboard/api/saga7-trigger"), { method: "POST" });
                 const ms = Math.round(performance.now() - t0);
                 let detail = "";
                 try {
@@ -2795,12 +2795,12 @@ on receiveCompensationEvent(event):
                         detail = body.error;
                     }
                 } catch (_) {}
-                showSaga6Result(`Saga: ${res.status} in ${ms} ms${detail ? " — " + detail : ""}`);
+                showSaga7Result(`Saga: ${res.status} in ${ms} ms${detail ? " — " + detail : ""}`);
             } catch (e) {
-                showSaga6Result("Saga: Fehler — " + e.message);
+                showSaga7Result("Saga: Fehler — " + e.message);
             } finally {
                 btn.disabled = false;
-                fetchSaga6State();
+                fetchSaga7State();
             }
         }
 
@@ -3375,13 +3375,13 @@ on receiveCompensationEvent(event):
         fetchCircuitState();
         scheduleBulkheadPoll();
         fetchSagaState();
-        fetchSaga6State();
+        fetchSaga7State();
         // Häufiges Polling: macht den "zuletzt gerufen"-Wechsel und das
         // Erscheinen neuer Replicas (nach Scale-Up) schnell sichtbar.
         setInterval(fetchServices, 600);
         setInterval(fetchCircuitState, 1000);
         setInterval(fetchSagaState, 1000);
-        setInterval(fetchSaga6State, 1000);
+        setInterval(fetchSaga7State, 1000);
         refreshCustomAvailability();
         setInterval(refreshCustomAvailability, 5000);
     </script>
