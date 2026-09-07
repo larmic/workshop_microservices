@@ -838,6 +838,10 @@
             color: #fff;
             box-shadow: 0 2px 8px rgba(115,72,225,0.35);
         }
+        /* Design-Session ohne Code (Story 2): gestrichelt, damit sichtbar ist,
+           dass hier nichts deployt wird. */
+        .stepper-node.design { border-style: dashed; }
+        .stepper-node.design.active { border-style: solid; }
         .stepper-connector {
             width: 1.2rem;
             height: 2px;
@@ -1358,17 +1362,19 @@
             <div class="stepper-nodes" id="stepper-nodes">
                 <button type="button" class="stepper-node" data-story-node="1" onclick="showStory(1)">1</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="3" onclick="showStory(3)">2</button>
+                <button type="button" class="stepper-node design" data-story-node="2" onclick="showStory(2)" title="Design-Session am Flipchart, kein Code">2</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="4" onclick="showStory(4)">3</button>
+                <button type="button" class="stepper-node" data-story-node="3" onclick="showStory(3)">3</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="5" onclick="showStory(5)">4</button>
+                <button type="button" class="stepper-node" data-story-node="4" onclick="showStory(4)">4</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">5</button>
+                <button type="button" class="stepper-node" data-story-node="5" onclick="showStory(5)">5</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="7" onclick="showStory(7)">6</button>
+                <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">6</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="8" onclick="showStory(8)">7</button>
+                <button type="button" class="stepper-node" data-story-node="7" onclick="showStory(7)">7</button>
+                <span class="stepper-connector"></span>
+                <button type="button" class="stepper-node" data-story-node="8" onclick="showStory(8)">8</button>
             </div>
             <button type="button" class="stepper-nav-btn" id="stepper-next" onclick="goNextStory()">
                 <span>Weiter</span><span>&rarr;</span>
@@ -2135,7 +2141,7 @@ on receiveCompensationEvent(event):
 
         // callRest führt einen REST-Call gegen das Dashboard-Backend aus
         // und rendert HTTP-Status, Duration und Response-Body unterhalb
-        // des klickenden Buttons. Wird von den Story-1/2/3-Buttons genutzt.
+        // des klickenden Buttons. Wird von den Story-1/3/4-Buttons genutzt.
         async function callRest(btn, method, path, idPrefix, body) {
             const statusEl = document.getElementById(idPrefix + "-status");
             const bodyEl = document.getElementById(idPrefix + "-body");
@@ -3002,6 +3008,8 @@ on receiveCompensationEvent(event):
         const STORY_META = {
             1: { title: "Story 1: Der erste cloud-native Booking-Service",
                  subtitle: "Health-Check, externe Konfiguration &mdash; ein Build, viele Umgebungen." },
+            2: { title: "Story 2: Design-Session: REST vs. RESTful",
+                 subtitle: "Am Flipchart statt im Editor: eine API für Storno und Umbuchung entwerfen. Kein Code, kein Deployment." },
             3: { title: "Story 3: Services dynamisch finden",
                  subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
             4: { title: "Story 4: Wenn der Flug ausfällt",
@@ -3015,8 +3023,11 @@ on receiveCompensationEvent(event):
             8: { title: "Story 8: Den roten Faden im Log",
                  subtitle: "Distributed Tracing: Geschäftsvorgänge über Service-Grenzen hinweg verfolgen." },
         };
-        const STORY_COUNT = 7;
-        const STORY_KEY = "workshop-dashboard.currentStory";
+        const STORY_COUNT = 8;
+        // Key-Version v2 seit der Umnummerierung 2026-09 (Stories 2..7 wurden 3..8):
+        // ein gespeicherter Wert aus der alten Zählung würde sonst auf der falschen
+        // Story landen.
+        const STORY_KEY = "workshop-dashboard.currentStory.v2";
 
         function readInitialStory() {
             const saved = parseInt(localStorage.getItem(STORY_KEY), 10);

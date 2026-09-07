@@ -32,6 +32,10 @@ gepusht.
 | Booking Reference Story 3 | `/api/booking-ref-story3/**` | [openapi.yaml](booking/story3/api/openapi.yaml)  |
 | Booking Custom            | `/api/booking-custom/**`     | [openapi.yaml](booking/custom/src/main/resources/openapi.yaml) |
 
+Die weiteren Referenz-Stories folgen demselben Muster (`/api/booking-ref-story4/**`
+bis `/api/booking-ref-story8/**`). Story 2 ist eine Design-Session am Flipchart und
+hat weder Code noch Service noch Port.
+
 Alle Services sind über den Traefik Reverse Proxy auf Port 80 erreichbar:
 
 ```bash
@@ -58,7 +62,7 @@ curl http://localhost/api/booking-custom/booking/offers
 |--------------------------------|-------------------------------------------------|
 | `docker-compose.yml`           | Basis-Services (Flight, Hotel, Car)              |
 | `docker-compose.infra.yml`     | Infrastruktur (Traefik, Consul, Swagger UI)      |
-| `docker-compose.reference.yml` | Referenzlösungen (Booking Reference Story 1…7)   |
+| `docker-compose.reference.yml` | Referenzlösungen (Booking Reference Story 1, 3…8) |
 | `docker-compose.custom.yml`    | Custom-Lösung des Teilnehmers (Booking Custom)   |
 
 ## Quickstart

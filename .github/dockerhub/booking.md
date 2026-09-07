@@ -21,6 +21,11 @@ Die Story-Auswahl erfolgt **explizit über den Tag** (kein `latest`):
 | `story8`  | Distributed Tracing                                                   |
 | `custom`  | Beispiel-Custom-Lösung in Kotlin/Ktor (Story 1, alternative Sprache)  |
 
+**Nummerierung seit 2026-09:** Story 2 ist eine Design-Session ohne Image, die
+früheren Stories 2 bis 7 heißen seitdem 3 bis 8. Ältere Anleitungen meinen mit
+`storyN` (N ≥ 2) den heutigen Tag `story(N+1)`. Lokal gecachte Images bitte neu
+ziehen.
+
 Pull-Beispiel:
 
 ```bash

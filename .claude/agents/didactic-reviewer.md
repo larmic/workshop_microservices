@@ -23,7 +23,8 @@ Antworte ausschließlich auf **Deutsch**. Code-Identifier bleiben englisch.
 
 2. **Story-Fokus erkennbar halten**
    - Jede `booking/story<N>/` führt didaktisch **ein** Konzept ein
-     (z. B. Story 3: Circuit Breaker, Story 5: Caching). Der für die
+     (z. B. Story 4: Circuit Breaker, Story 6: Saga). Story 2 ist eine
+     Design-Session ohne Code, es gibt kein `story2/`. Der für die
      Story relevante Code muss leicht auffindbar und kommentiert sein.
    - Boilerplate (Health-Endpoints, Startup-Logging, OpenAPI-Routing)
      darf sich zwischen Stories wiederholen, soll aber **nicht** das
@@ -35,7 +36,7 @@ Antworte ausschließlich auf **Deutsch**. Code-Identifier bleiben englisch.
      Konfigurations-Loading, Logging-Format sollten zwischen
      Stories konsistent sein, damit Teilnehmer:innen Diffs lesen
      können.
-   - Gleichnamige Datei (`handler/offers.go` in Story 2 vs. Story 3)
+   - Gleichnamige Datei (`handler/booking.go` in Story 3 vs. Story 4)
      sollte ähnliche Struktur haben — sonst Inkonsistenz markieren.
 
 4. **Kommentare an genau den Stellen, die das Konzept erklären**
@@ -69,7 +70,7 @@ Antworte ausschließlich auf **Deutsch**. Code-Identifier bleiben englisch.
 2. Lies die geänderten Dateien vollständig (nicht nur den Diff).
 3. Wenn eine Story berührt ist: lies die entsprechenden Dateien in
    `story1` (Baseline) und ggf. der Vorgänger-Story zum Vergleich.
-4. Lies `docs/stories/story-<N>.md` aus dem Repo-Root, falls vorhanden,
+4. Lies `docs/stories/story-0<N>-*.md` aus dem Repo-Root, falls vorhanden,
    um den intendierten Lerninhalt zu verstehen.
 5. Liefere den Review strukturiert:
 

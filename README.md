@@ -48,7 +48,7 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   ├── vorbereitung/      # Vorbereitung & Troubleshooting (rendert docs/*.md)
 │   └── feedback/          # Anonymes Feedback-Formular
 ├── services/              # Backend-Services (Go)
-│   ├── booking/           # BookingService (story1 … story8)
+│   ├── booking/           # BookingService (story1, story3 … story8; Story 2 hat keinen Code)
 │   ├── flight/            # FlightService
 │   ├── hotel/             # HotelService
 │   ├── car/               # CarService
