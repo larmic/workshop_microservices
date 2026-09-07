@@ -1,423 +1,286 @@
-# Workshop-Fragen: Bulkhead (Story 4)
+# Workshop-Fragen: Circuit Breaker (Story 4)
 
-Provokante Fragen zum Bulkhead-Pattern und zu seiner Wechselwirkung mit
-dem Circuit Breaker aus Story 3. Ziel: das Pattern als gezielte
-Antwort auf ein konkretes Problem (Ressourcen-Erschöpfung) verstehen,
-nicht als „CB+Bulkhead = doppelt sicher".
-
----
-
-## Frage 1 — Was bringt Bulkhead, was Circuit Breaker nicht schon kann?
-
-**Frage:** Wir haben in Story 3 schon einen Circuit Breaker. Der schaltet
-ab, wenn ein Backend krank ist. Wozu jetzt noch ein Bulkhead?
-
-**Antwort:** Die beiden Patterns lösen verschiedene Probleme:
-
-- **Circuit Breaker** = "Backend ist krank, ich versuche es eine Weile
-  gar nicht mehr." Reaktion auf **Fehler-Rate**.
-- **Bulkhead** = "Ich verbrenne maximal N gleichzeitige Threads/Slots
-  für dieses Backend, egal wie viel Last reinkommt." Reaktion auf
-  **Ressourcen-Druck**, nicht auf Fehler.
-
-Klassisches Killer-Szenario, das **nur Bulkhead** löst: Hotel antwortet
-in 2 s — fehlerfrei, der CB bleibt CLOSED. Trotzdem laufen unter Last
-beliebig viele Threads in Hotel-Calls auf, der Booking-Service hat keine
-Threads mehr für Flight oder Car frei. Der CB sieht keinen Grund zu
-reagieren. Bulkhead hingegen kappt nach 10 parallelen Hotel-Calls und
-lässt Flight/Car ungestört durch.
-
-```
-                 ┌────────────────────┐
-   Last  ─────►  │  Booking-Service   │
-                 │                    │
-                 │  ┌──Bulkhead Hotel ─┴─►  Hotel
-                 │  │     (max 10)
-                 │  ├──Bulkhead Flight ──►  Flight
-                 │  │     (max 10)
-                 │  └──Bulkhead Car ───►   Car
-                 │        (max 10)
-                 └────────────────────┘
-```
+Provokante Fragen rund um den Circuit Breaker. Ziel: das Pattern nicht
+als magische Resilienz-Box akzeptieren, sondern verstehen, **welche
+Annahmen** drin stecken — und wo sie kippen.
 
 ---
 
-## Frage 2 — Werden bei einem Burst von 20 die Backends auch wirklich nur mit 10 gleichzeitigen Aufrufen belastet?
+## Frage 1 — Wir öffnen den Circuit nach 5 aufeinanderfolgenden Fehlern. Wo kommt diese Zahl her?
 
-**Frage:** Wenn ich 20 parallele Aufrufe gegen `/booking/offers` schicke
-und der Bulkhead `maxConcurrent=10` hat — wie viele Aufrufe sehen
-Flight, Hotel und Car wirklich?
+**Frage:** Akzeptanzkriterium der Story sagt „nach 5 aufeinanderfolgenden
+Fehlern". Warum 5? Wäre 3 nicht sicherer, oder 20 stabiler?
 
-**Antwort:** Maximal 10 gleichzeitig — pro Backend. Genau das ist der
-Sinn des Patterns. Die anderen 10 werden im Booking-Service abgewiesen,
-bevor sie das Backend überhaupt erreichen, und der Aufrufer bekommt
-einen Fallback (leeres Array). Der Backend-Service wird also vor Last
-geschützt — er sieht von den 20 Client-Requests nur die ersten 10 als
-echte Anfragen.
+**Antwort:** Die ehrliche Antwort: **niemand weiß es genau, ohne die
+Last und das Backend zu kennen.** 5 ist eine sinnvolle Default-Zahl,
+aber sie steht im Spannungsfeld zwischen:
 
-Wichtig: das Limit ist **gleichzeitig**, nicht **insgesamt**. Wenn ein
-Slot frei wird (Call ist fertig), darf der nächste rein.
+- **Zu klein (z.B. 1):** Ein einzelner zufälliger Fehler (Netz-Glitch,
+  GC-Pause, transientes 5xx) öffnet den Circuit. Wir verlieren das
+  Backend für 30 s, obwohl alles in Ordnung ist. → **False positives**.
+- **Zu groß (z.B. 50):** Bei 100 req/s und einem komplett toten Backend
+  brennen wir 50 Fehler-Calls in <1 s durch, jeder mit 3 s Timeout — der
+  Booking-Service hängt parallel an 50 Threads, bevor der CB überhaupt
+  reagiert. → **Bulkhead lässt grüßen** (Story 5).
+
+```
+Schwellenwert vs. Reaktionszeit / Robustheit:
+
+  klein  ──┬───────────────────────────┬──  groß
+           │                           │
+       reaktiv,                    robust,
+       aber flackernd              aber langsam
+       bei Netz-Jitter             bei echten Ausfällen
+```
+
+**Andere Implementierungen** (Resilience4j) nutzen statt „N
+aufeinanderfolgende Fehler" eine **Failure-Rate über ein Sliding
+Window** (z.B. „>50 % der letzten 100 Calls"). Das ist robuster gegen
+intermittierende Fehler — aber komplexer und braucht Last, um überhaupt
+zu reagieren.
+
+**Spicy Take-away:** Die 5 ist eine **Designentscheidung**, kein
+Naturgesetz. In Produktion gehört der Wert ans aktuelle Last- und
+Failure-Profil getuned, nicht ins erste Code-Beispiel kopiert.
 
 ---
 
-## Frage 3 — Warum sind nach einem Burst von 20 mit allen Backends auf "langsam" auf Hotel z.B. nur 7 rejected, nicht 10?
+## Frage 2 — Im HALF_OPEN-State lassen wir genau einen Probe-Call durch. Warum nicht alle?
 
-**Frage:** Erwartung wäre `calls=20, rejected=10`. Tatsächlich: `calls=20,
-rejected=7`. Warum ist die Zahl unsauber?
+**Frage:** Nach 30 s öffnet der CB für einen einzigen Test-Call. Warum
+nicht einfach wieder normal aufmachen und schauen, was passiert?
 
-**Antwort:** Wegen der **sequenziellen Aufruf-Reihenfolge** (Flight →
-Hotel → Car) und Timing-Jitter. Skizze:
-
-```
-t=0      ┌─ 20 Goroutinen treffen FLIGHT-Bulkhead
-         ├─► 10 bekommen Slot   ──► Flight läuft 2 s
-         └─► 10 abgewiesen      ──► gehen sofort zu HOTEL
-
-t≈0      die 10 abgewiesenen treffen HOTEL-Bulkhead
-         └─► alle 10 bekommen Slot ──► Hotel läuft 2 s
-                                        (Hotel jetzt voll: 10/10)
-
-t≈2000   Flight-Slots werden frei.
-         Die 10 erfolgreichen Flight-Goroutinen wollen jetzt zu HOTEL.
-         GLEICHZEITIG werden die ersten Hotel-Slots frei (laufen seit t=0).
-
-         Race im 50–200 ms breiten Zeitfenster:
-           ─►  3 Goroutinen erwischen einen frei werdenden Slot
-           ─►  7 Goroutinen kommen zu früh, Pool noch voll → REJECTED
-```
-
-Bei **Flight** ist die Zahl sauber `rejected=10`, weil dort alle 20 zur
-gleichen Zeit (t=0) ankommen — keine Streuung, klare Kante.
-
-**Take-away:** Bulkhead garantiert nur die obere Schranke "max 10
-parallel". Die genaue Anzahl der Rejects ist timing-abhängig und in
-realen Systemen nie deterministisch.
-
-**Wenn man eine saubere Demo will:** nur **Hotel** auf langsam stellen
-(Flight/Car normal). Dann sind alle 20 Goroutinen praktisch zeitgleich
-bei Hotel und du siehst stabil `rejected ≈ 10`.
-
-### Beobachtung über viele Bursts hinweg
-
-Bei wiederholten Bursts (z.B. 42 Bursts à 20 = 840 Calls je Service)
-zeigt sich der Effekt sehr deutlich als **Kaskade**:
+**Antwort:** Weil ein **Probe-Storm** das Backend gleich wieder
+umlegen würde. Szenario:
 
 ```
-   flight:   in flight 0/10   calls 840   rejected 341   (~40 %)
-   hotel:    in flight 0/10   calls 840   rejected 189   (~22 %)
-   car:      in flight 0/10   calls 840   rejected   8   (~ 1 %)
+t=0    Backend kippt unter 1000 req/s
+t=0    CB OPEN → 30 s Pause
+t=30s  CB HALF_OPEN
+       │
+       │  ohne Probe-Lock:
+       │   ─►  alle 1000 wartenden Requests laufen los
+       │   ─►  Backend-Wiederanlauf wird sofort wieder erschlagen
+       │
+       │  mit Probe-Lock (atomare CompareAndSwap auf einen Slot):
+       │   ─►  genau 1 Probe-Call erreicht das Backend
+       │   ─►  alle anderen werden mit "in_flight"-Reject abgekürzt
+       │   ─►  Backend hat Atemraum für die Antwort
+       │   ─►  Erfolgreich? → CLOSED, Fehler? → OPEN für weitere 30 s
 ```
 
-Mit jedem Service in der Aufrufkette **sinkt die Reject-Rate**. Das
-ist kein Zufall, das ist die Konsequenz des Patterns:
-
-- **Flight** sieht den Burst in voller Wucht. 20 Goroutinen schlagen
-  zeitgleich auf, 10 bekommen einen Slot, 10 werden sofort abgewiesen.
-- **Hotel** sieht denselben Burst — aber **zeitlich entzerrt**.
-  Die 10 von Flight abgewiesenen Goroutinen sind sofort da, die 10
-  erfolgreichen kommen 50–200 ms später nach. Hotel hat nur einen Teil
-  der Last gleichzeitig zu schultern.
-- **Car** sieht das, was vom Burst übrig ist — fast geglättet. Die
-  Streuung ist groß genug, dass meist genug Slots frei sind.
-
-**Take-away in einer Zeile:** Eine Bulkhead-Kette ist gleichzeitig
-ein **Traffic-Shaper**. Jede Stufe schützt nicht nur sich selbst,
-sondern auch alle nachgelagerten Services vor ungeglätteten Bursts —
-ein kostenloser Nebeneffekt, der in Produktion oft die spürbarste
-Wirkung hat.
-
-**Spicy:** Wer im Aggregator nur das letzte Backend (Car) instrumentiert
-und „die Bulkheads funktionieren ja, fast keine Rejects" beobachtet,
-hat den Punkt verpasst — Car ist nicht ungestresst, weil sein Bulkhead
-gut konfiguriert ist, sondern weil Flight und Hotel die Last vorher
-aufgefangen haben.
-
----
-
-## Frage 4 — Wenn der Bulkhead einen Aufruf abweist, läuft die Anfrage trotzdem zu Hotel und Car weiter. Ist das Teil des Bulkhead-Patterns?
-
-**Frage:** Ein Bulkhead-Reject auf Flight führt nicht zum Abbruch der
-gesamten Anfrage — es geht weiter zu Hotel und Car. Ist das, was
-Bulkhead macht?
-
-**Antwort:** **Nein.** Streng genommen sind das zwei orthogonale Dinge:
-
-1. **Was Bulkhead macht:** "Pool ist voll → sofort ablehnen, kein
-   Queueing." Punkt. Was der Aufrufer mit der Ablehnung tut, ist nicht
-   Sache des Patterns.
-2. **Was unser Code zusätzlich macht:** Fail-Soft im
-   `/booking/offers`-Handler. Bei einem Fehler (egal ob CB-Open,
-   Bulkhead-Full oder echter Backend-Fehler) wird ein leeres Array
-   zurückgegeben und das nächste Backend trotzdem aufgerufen. Diese
-   Logik existiert seit Story 3 für den Circuit Breaker — wir haben den
-   Bulkhead-Reject einfach in dieselbe Behandlung einsortiert.
-
-```
-fetchOffersWithBHCB(...)
-   │
-   └─► bh.Execute        ─► Bulkhead voll? → ErrBulkheadFull
-          │                                          │
-          └─► cb.Execute    ─► CB OPEN? → ErrCircuitOpen
-                 │                                   │
-                 └─► HTTP-Call                       │
-                       ↓                             ↓
-                       err? ────────► markFallback() + emptyJSONArray
-                                       (── Strategie des Aggregators ──)
-```
-
-Im Schreibpfad (`POST /booking/bookings`) ist die Strategie eine andere:
-**Fail-Fast** — wenn ein CB OPEN ist oder ein Call fehlschlägt, bricht
-die ganze Buchung ab. Eine Teilbuchung wäre für den Kunden schlimmer als
-ein 503.
-
-**Take-away:** Bulkhead ist ein **Mechanismus**. Was nach einem Reject
-passiert (Fail-Soft, Fail-Fast, Retry mit anderem Backend, …), ist eine
-**Designentscheidung des Aufrufers** — die hängt davon ab, ob die
-Operation idempotent ist, ob Teilergebnisse sinnvoll sind, usw.
-
----
-
-## Frage 5 — Im Dashboard sehe ich, dass der Circuit Breaker auf OPEN geht, während der Bulkhead reagiert. Ist das richtig so?
-
-**Frage:** Wenn ich einen Burst mit langsamem Backend mache, wird
-manchmal auch der CB OPEN — gleichzeitig mit Bulkhead-Rejects. Beeinflusst
-der Bulkhead den CB?
-
-**Antwort:** **Nein, der Bulkhead beeinflusst den CB nicht** — und das
-ist Absicht. Im Code:
+Im Code (`circuitbreaker.go`) macht das genau eine atomic-Bool:
 
 ```go
-err := bh.Execute(ctx, func(ctx context.Context) error {
-    return cb.Execute(ctx, func(ctx context.Context) error {
-        // echter Backend-Call
-    })
-})
+if cb.probeInFlight.CompareAndSwap(false, true) {
+    // genau einer kommt rein
+}
 ```
 
-Wenn der Bulkhead voll ist, gibt er sofort `ErrBulkheadFull` zurück —
-**ohne** `cb.Execute` aufzurufen. Der CB sieht von dem Reject nichts,
-seine Counter (`failureCount`, `totalCalls`) bleiben sauber.
-
-**Begründung:**
-
-- Ein Bulkhead-Reject sagt "ich schütze mich selbst", nicht "das Backend
-  ist krank". Würden wir das als Failure ans CB melden, würde der CB
-  irgendwann fälschlich auf OPEN gehen — obwohl das Backend in Wahrheit
-  gesund antwortet. Wir würden uns selbst die Tür zumachen.
-- Beide Patterns sind unabhängig: CB = Backend-Gesundheit. Bulkhead =
-  Eigenschutz vor Ressourcen-Erschöpfung.
-
-**Wenn der CB im Demo trotzdem OPEN ist, sind die wahrscheinlichen
-Ursachen:**
-
-1. **Latenz > 3000 ms** im Chaos-Slider → der `httpClient.Timeout` von
-   3 s schlägt zu → das ist ein echter Failure (Timeout) → nach 5
-   Timeouts geht der CB auf OPEN.
-2. Backend stand im Modus **"Fehler"** statt "Langsam" → 500 zurück →
-   echte Failures → CB öffnet nach 5.
-3. **Reste aus einem vorherigen Lauf**: der CB bleibt nach OPEN noch
-   30 s offen, danach HALF_OPEN. Er räumt sich nicht durch einen Reset
-   des Bulkheads auf.
-
-Kontrollierte Reproduktion:
-
-| Latenz | Bulkhead reagiert? | CB reagiert?                         |
-|--------|--------------------|--------------------------------------|
-| 2000 ms | ja (bei Burst)    | nein — Backend antwortet rechtzeitig |
-| 3500 ms | ja                | ja — `httpClient`-Timeout = Failure  |
-
-**Take-away:** CB und Bulkhead sind **komplementär, nicht alternativ**.
-Sie können gleichzeitig feuern — und das ist gut so, weil sie auf
-verschiedene Symptome reagieren.
+**Spicy Take-away:** Das HALF_OPEN-Detail ist der unterschätzte Teil
+des Patterns. Eine naive Implementierung („ist Wartezeit abgelaufen?
+Dann CLOSED") trägt zur **Cascading-Failure** bei, statt sie zu
+verhindern. Genau hier trennt sich Library-Qualität von schnell
+selbstgeschriebenem Code.
 
 ---
 
-## Frage 6 — Warum stellt der Bulkhead Anfragen nicht in eine Schlange, sondern lehnt sofort ab?
+## Frage 3 — Was zählt überhaupt als „Fehler"? Eine 404 ist doch kein Backend-Problem.
 
-**Frage:** Wäre es nicht freundlicher, wartende Aufrufe in eine kurze
-Queue zu stellen, statt sie sofort mit Fallback abzufertigen?
+**Frage:** Unser CB zählt jeden Fehler. Aber: ein `404 Not Found` ist
+kein Defekt des Backends — der Aufrufer hat eine ID benutzt, die nicht
+existiert. Sollte das den CB öffnen?
 
-**Antwort:** Eine begrenzte Queue wäre eine Variante (siehe
-Resilience4j: `maxWaitDuration`). In unserer Implementierung haben wir
-**bewusst nicht gequeued**, aus zwei Gründen:
+**Antwort:** **Nein**, und das ist eine häufige Falle. Eine grobe
+Klassifizierung:
 
-1. **Queueing tarnt das Problem.** Wenn der Bulkhead voll ist, ist das
-   Backend bereits am Limit. Eine Queue verschiebt das Problem nur in
-   die Zukunft und erhöht die End-to-End-Latency. Beim Workshop sieht
-   man am sofortigen Reject klar: "wir sind über der Kapazität".
-2. **Backpressure-Signal nach oben.** Ein sofortiger Reject (mit 503
-   bzw. Fallback) sagt dem Aufrufer: "lass mich in Ruhe, ich bin voll."
-   Eine Queue absorbiert das Signal und kaschiert es.
+| HTTP-Status   | CB-relevant? | Begründung                                    |
+|---------------|--------------|-----------------------------------------------|
+| **5xx**       | ja           | Server-Fehler — Backend ist krank             |
+| **Timeout**   | ja           | Backend hängt — symptomatisch für Überlast    |
+| **Conn-Refused** | ja        | Backend nicht erreichbar                      |
+| **4xx (außer 429)** | nein   | Client-Fehler — der Aufrufer ist schuld       |
+| **429 Too Many** | jein      | Backend ist überlastet — diskutabel           |
 
-**Take-away:** Queue oder kein Queue ist eine bewusste Entscheidung.
-Default für die Demo: **kein Queue**, sofort sichtbar im Counter
-`rejected`.
+In unserem Workshop-Code ist die Logik **bewusst grob**: alles, was
+`error != nil` zurückgibt, zählt als Fehler. Im
+`fetchJSON`/`postJSON`-Helper:
+
+```go
+if resp.StatusCode >= 400 {
+    return nil, fmt.Errorf("backend returned %d: %s", ...)
+}
+```
+
+Das heißt: aktuell **würde ein 404 den CB triggern**. Für die Demo
+egal, in Produktion wäre das ein Bug.
+
+**Spicy Take-away:** „Fehler" ist nicht binär. Wer den CB nur an
+`error != nil` hängt, baut ihm ein zu sensibles Frühwarnsystem. Reale
+Implementierungen (Resilience4j: `recordExceptions` /
+`ignoreExceptions`) machen genau hier eine bewusste Klassifikation.
 
 ---
 
-## Frage 7 — Wir haben `maxConcurrent=10` hartkodiert. Wo kommt diese Zahl her?
+## Frage 4 — Bei OPEN liefern wir `flights: []` statt einer Fehlermeldung. Täuschen wir den User?
 
-**Frage:** Warum ausgerechnet 10? Wäre 5 sicherer? Oder 100, damit weniger
-abgewiesen wird?
+**Frage:** Wenn Flight ausfällt, sieht der User „keine Flüge verfügbar".
+Tatsächlich ist nur unser Backend kaputt. Ist das ehrlich?
 
-**Antwort:** 10 ist eine **Workshop-Default-Zahl**, die fürs Demo gut
-funktioniert (20er-Burst → klar sichtbarer Effekt). In Produktion
-orientiert man die Zahl an konkreten Begrenzungen weiter unten:
+**Antwort:** Streng genommen: **nein, das ist ein UX-Antipattern.** Der
+User kann nicht zwischen „es gibt keine Flüge auf dieser Strecke" und
+„unser System hat ein Problem" unterscheiden — und macht im
+Zweifelsfall eine schlechte Buchungs-Entscheidung („dann fahre ich
+halt nur Hotel + Auto, ohne Flug").
 
-- **Connection-Pool des HTTP-Clients.** Wenn der Booking-Service nur
-  20 gleichzeitige Verbindungen zu Hotel halten kann, ist
-  `maxConcurrent > 20` sinnlos — die Calls würden auf der TCP-Schicht
-  sowieso warten.
-- **Thread-Pool des Backends.** Hotel kann z.B. 50 Anfragen parallel
-  bedienen. Wenn 5 Booking-Replicas mit `maxConcurrent=20` darauf
-  zugreifen, sind das schon 100 — Hotel kippt.
-  **Faustregel:** `Booking-Replicas × maxConcurrent ≤ Backend-Kapazität`.
-- **Latenz × Throughput-Ziel.** Little's Law: `concurrency = latency
-  × throughput`. Bei 50 ms Antwortzeit und 200 req/s Ziel ist die
-  nötige Concurrency = 10. Mehr ist Verschwendung, weniger
-  würgt die Last.
+Ehrlichere Varianten:
 
-```
-   maxConcurrent zu klein:     unnötige Rejects, Backend hat noch Luft
-   maxConcurrent zu groß:      schützt nichts mehr, Bulkhead wird zur Folklore
-   genau richtig:              max Last, die Backend + Pool sicher tragen
-```
+1. **Teilantwort mit Hinweis-Feld.** JSON enthält `flights: []` plus
+   `unavailable: ["flight"]` oder `errors: [{ service: "flight",
+   reason: "temporarily unavailable" }]`. UI kann eine
+   Ersatznachricht anzeigen.
+2. **Aussagekräftige Header.** Wir setzen schon `X-Circuit-Open:
+   flight` — die UI könnte das auswerten und anzeigen.
+3. **Stale-while-revalidate.** Letztes erfolgreiches Ergebnis cachen
+   und im Fallback ausliefern, mit Hinweis „Daten von vor 2 Min".
 
-**Spicy Take-away:** Wer `maxConcurrent` aus dem Bauch heraus setzt
-(„10 klingt gut"), hat den Bulkhead nicht implementiert, sondern
-dekoriert. Das Limit gehört aus **gemessener Backend-Kapazität**
-abgeleitet, nicht aus Beispiel-Code übernommen.
+Der Workshop-Code ist die einfachste Variante (leeres Array, keine
+Erklärung) — bewusst, weil's um das Pattern geht, nicht um perfekte
+UX. **In Produktion gehört das aufgehübscht.**
 
----
-
-## Frage 8 — Bulkhead schützt den Aufrufer vor sich selbst. Aber wer schützt das Backend?
-
-**Frage:** Wenn Booking-Service 5 Replicas hat, jede mit
-`maxConcurrent=10` für Hotel, dann darf Hotel gleichzeitig 50 Calls
-sehen. Ein Bulkhead pro Client schützt das Backend nicht wirklich, oder?
-
-**Antwort:** **Korrekt.** Client-side Bulkhead schützt **den Client**,
-nicht das Backend. Beispiel:
-
-```
-   Booking-Replica A (BH 10) ──┐
-   Booking-Replica B (BH 10) ──┤
-   Booking-Replica C (BH 10) ──┼───►  Hotel sieht bis zu 50 parallel
-   Booking-Replica D (BH 10) ──┤
-   Booking-Replica E (BH 10) ──┘
-
-   Hotel bekommt davon NICHTS mit, dass es Bulkheads gibt.
-   Wenn Hotel intern nur 30 Threads hat, wird's bei 50 eng.
-```
-
-Komplementäre Patterns auf der Backend-Seite:
-
-1. **Server-side Rate Limiting** — Hotel selbst lehnt nach 30
-   gleichzeitigen Calls ab. Schützt Hotel vor jedem Aufrufer (auch vor
-   böswilligen).
-2. **API-Gateway / Service Mesh** — zentraler Punkt, an dem über alle
-   Aufrufer hinweg ein Limit greift.
-3. **Backpressure / 429 + Retry-After** — Hotel kommuniziert
-   Überlast aktiv, Aufrufer reagieren darauf.
-
-**Spicy Take-away:** Bulkhead allein ist eine **halbierte Lösung**.
-Sie macht den eigenen Service stabil, aber das geschützte Backend
-braucht ergänzende Mechanismen. Wer nur den Client schützt und glaubt,
-das Backend sei auch gerettet, hat das Pattern falsch verstanden.
+**Spicy Take-away:** Resilience-Patterns sind **nicht ehrlich von
+selbst.** Sie liefern dem Aufrufer eine Antwort, die wie Erfolg
+aussieht. Wer das nicht durch UX und Header transparent macht, baut
+gut funktionierende Systeme, in denen der Mensch falsche Entscheidungen
+trifft.
 
 ---
 
-## Frage 9 — Brauche ich Bulkhead überhaupt, wenn der Server non-blocking ist?
+## Frage 5 — Wir warten 30 Sekunden, bevor wir's noch mal probieren. Wo kommt diese Zahl her — und ist sie sinnvoll?
 
-**Frage:** In meinem Stack ist I/O non-blocking (Go-Goroutinen, Spring
-WebFlux, Node.js, …). Threads werden bei langläufigen Backend-Calls
-nicht blockiert, sondern an die Runtime zurückgegeben. Wenn das so ist,
-reicht doch ein Rate Limit am Eingang. Brauche ich da überhaupt noch
-einen Bulkhead pro Downstream?
+**Frage:** Akzeptanzkriterium: 30 s in OPEN. Aber:
+- wenn das Backend in 1 s wieder gesund ist, blockieren wir 29 s
+  unnötig
+- wenn es 5 min braucht, hämmern wir alle 30 s erneut drauf
 
-**Antwort:** Doch, und zwar aus zwei unabhängigen Gründen.
+Was ist die richtige Wartezeit?
 
-### Grund 1: Der Engpass wandert, er verschwindet nicht
+**Antwort:** Es gibt keine. **30 s ist ein Kompromiss**, der für den
+typischen Fall „Container restartet, Service ist in 10–20 s wieder
+oben" funktioniert. Daneben gibt es zwei smarter:
 
-Non-blocking macht *Threads* billig, aber nicht *alle* Ressourcen.
-Pro in-flight Call belegt bleibt, völlig unabhängig vom
-Threading-Modell:
-
-- **Connection-Pool-Slot** im HTTP-Client. In Go:
-  `http.Transport.MaxConnsPerHost`. In Reactor-Netty: 500 Connections
-  default. Wenn Hotel langsam ist und 500 Slots belegt, kommen Flight-
-  und Car-Calls nicht mehr durch, obwohl die Runtime „Threads frei"
-  meldet. Der Pool ist *shared*.
-- **Memory.** Jeder in-flight Call hält Request- und Response-Buffer,
-  Context, Cancellation-Channel, deserialisierte DTOs. 50.000
-  gleichzeitig offene Calls sind realer Heap-Verbrauch, GC-Pausen, im
-  Extremfall OOM. „Goroutine ist nur 4 KB Stack" stimmt, ist aber nicht
-  das Problem.
-- **File-Descriptors / Sockets.** OS-Limit pro Prozess (`ulimit -n`).
-  Bei langer Latenz × hoher Rate gehen FDs aus, bevor irgendwer Threads
-  zählt.
-
-**Little's Law gilt unabhängig vom Threading-Modell:**
+- **Exponential Backoff:** Erste Wartezeit z.B. 5 s, dann 10 s, 20 s,
+  40 s, 80 s, gedeckelt bei 5 min. Wenn das Backend tot bleibt,
+  hämmern wir es nicht jede Minute. Sobald ein Probe erfolgreich ist,
+  Reset auf 5 s.
+- **Adaptive Wartezeit:** Wartezeit am letzten erfolgreichen
+  Antwort-RTT orientieren — Backend, das normal in 50 ms antwortet,
+  darf nach 1 s wieder probiert werden; eines mit 3 s RTT erst nach
+  30 s.
 
 ```
-   L  =  λ  ×  W
-   │     │     └─ Verweildauer (Latenz pro Call)
-   │     └─ Ankunftsrate (Requests/s)
-   └─ gleichzeitig offene Calls (Concurrency)
+   Konstante Wartezeit (Workshop):
+       OPEN ── 30s ── HALF_OPEN ── fail ── OPEN ── 30s ── HALF_OPEN ──
+       (gleich gefährlich, egal wie tot das Backend ist)
+
+   Exponential Backoff:
+       OPEN ── 5s ── HALF_OPEN ── fail ── OPEN ── 10s ── HALF_OPEN ── fail
+       ── OPEN ── 20s ── … (das tote Backend bekommt zunehmend Ruhe)
 ```
 
-Rate Limit drosselt `λ`. Wenn `W` hochschießt (Backend wird langsam),
-wächst `L` linear bei *gleicher* Eingangsrate. Rate Limit sieht das
-nicht. Bulkhead limitiert `L` direkt.
+**Spicy Take-away:** Eine fixe Wartezeit ist die **schlechteste der
+guten Optionen**. Sie ist einfach zu implementieren und reicht für die
+Demo. Echte Resilience-Libraries (Resilience4j, Polly) liefern
+Backoff-Strategien out of the box — sich darauf nicht zu verlassen,
+ist ein Symptom für „CB selbst gebaut".
 
-### Grund 2: Rate Limit kennt keine Downstreams
+---
 
-Ein Rate Limit am API-Gateway sagt: „maximal 100 req/s." Es weiß
-nicht, *welcher* Downstream gerade hängt. Wenn Hotel überlastet ist,
-müsstest du mit Rate Limit allein **alle** Requests drosseln,
-auch die, die Hotel gar nicht brauchen.
+## Frage 6 — Der CB-Zustand lebt im Speicher. Was passiert beim Restart des Booking-Service?
 
-Bulkhead pro Downstream ist da chirurgischer:
+**Frage:** Wenn ich den Booking-Service neu starte, ist sein CB-Status
+wieder CLOSED — auch wenn das Hotel-Backend gerade tot ist. Ist das
+nicht gefährlich?
+
+**Antwort:** Ja, in der Tendenz schon. Was passiert nach einem Restart:
 
 ```
-   Booking
-     │
-     ├─ Bulkhead Hotel  (10/10 voll)   → Hotel-Calls reject
-     ├─ Bulkhead Flight (3/10 frei)    → Flight-Calls gehen durch
-     └─ Bulkhead Car    (1/10 frei)    → Car-Calls gehen durch
+t=0    Booking-Service startet (CB: CLOSED)
+t=1    Erster Aufruf gegen totes Hotel → Fehler 1/5
+t=2..5 vier weitere Aufrufe → Fehler 5/5 → CB OPEN
+       (in der Zwischenzeit haben 5 Aufrufer 3 s gewartet)
+t=…    Normaler Betrieb
 ```
 
-Das ist **selective shedding**: Last wird dort weggeworfen, wo das
-Problem sitzt, nicht pauschal vorne am Eingang.
+In den ersten Sekunden nach Restart ist der Service also „blind" und
+verbraucht 5 Aufrufe lang Threads, Connections und Wartezeit auf der
+Aufruferseite, bevor er reagiert. Das skaliert übel:
 
-### Take-away
+- **Bei mehreren Replicas** macht jede für sich diese Lernphase.
+- **Bei Rolling Deploy** sind temporär alle Replicas in der Lernphase
+  gleichzeitig.
 
-- Non-blocking ändert die *Form* der Ressourcen-Erschöpfung, nicht die
-  *Tatsache*.
-- Rate Limit ist ein **Eingangs-** und **Aggregats-**Schutz: gegen Flut
-  von außen, ohne Downstream-Wissen.
-- Bulkhead ist ein **Isolations-** und **Selektiv-Schutz**: pro
-  Downstream, mit Wissen welcher Backend-Slot gerade dicht ist.
+Lösungsansätze, von „simpel" bis „aufwendig":
 
-In reaktiven Stacks ist Bulkhead nicht zufällig weiter empfohlen.
-Resilience4j hat dafür den `SemaphoreBulkhead` (im Gegensatz zum
-klassischen `ThreadPoolBulkhead`). Spring WebFlux + Reactor-Doku
-verweisen explizit darauf, dass non-blocking *keine* Lastlimitierung
-ersetzt.
+1. **Längere Timeouts beim ersten Aufruf hinnehmen** und die paar
+   Sekunden verschmerzen. Default unseres Workshops.
+2. **Initial Probe beim Service-Start.** Vor dem ersten Real-Traffic
+   einen Probe-Call gegen jedes Backend, damit der CB schon bei Start
+   einen aktuellen Wert hat.
+3. **CB-State in einer Shared Cache (Redis o.ä.).** Dann sehen alle
+   Replicas die gleiche Sicht auf jedes Backend. Aufwand hoch,
+   Konsistenz-Probleme inklusive.
+4. **Service Mesh (z.B. Envoy).** Der Sidecar hält den CB-State, der
+   App-Restart hat keinen Einfluss.
 
-**Spicy:** „Non-blocking spart mir Bulkhead" ist Wunschdenken aus der
-Trainings-Folie. In Produktion ist meistens der Connection-Pool das
-erste, was bei einem hängenden Downstream knapp wird, nicht die Threads.
+**Spicy Take-away:** Lokale CB-Statistik ist **per Definition
+ephemerer Zustand**. Wer das vergisst, hat nach jedem Deploy ein paar
+Sekunden Blind-Phase, die im Monitoring als Latency-Spike auftaucht
+und niemand kann erklären, woher.
+
+---
+
+## Frage 7 — Wir haben drei CBs (Flight, Hotel, Car). Warum nicht einen pro Endpoint? Oder einen für alles?
+
+**Frage:** Granularität: pro Backend? Pro Endpoint? Pro Aufruf? Wo ist
+der richtige Schnitt?
+
+**Antwort:** Es gibt drei Stufen mit jeweils anderen Trade-offs:
+
+| Granularität           | Beispiel                          | Vorteil                              | Nachteil                                |
+|------------------------|-----------------------------------|--------------------------------------|-----------------------------------------|
+| **Global (ein CB)**    | „backend"                         | trivial einfach                      | ein kranker Service kappt alle Backends |
+| **Pro Service**        | Flight / Hotel / Car (unsere Wahl)| isoliert Ausfall pro Service         | innerhalb des Service kein Schutz       |
+| **Pro Endpoint**       | `flight.search` / `flight.book`   | sehr feingranular                    | viele CBs, schwer überblickbar          |
+
+```
+   Global:                Pro Service:           Pro Endpoint:
+   ┌──[CB]──┐             ┌─[CB]── Flight        ┌─[CB1]── Flight.search
+   │        ├──Flight     │                      │
+   │   App  ├──Hotel      App ─[CB]── Hotel      App ─[CB2]── Flight.book
+   │        ├──Car        │                      │
+   └────────┘             └─[CB]── Car           └─[CB3]── Hotel.search …
+```
+
+**Pro Service** ist die übliche Default-Wahl, weil ein „kranker"
+Service oft alle seine Endpoints betrifft (Connection-Pool tot,
+Container down). Pro Endpoint lohnt sich, wenn ein Service mehrere sehr
+unterschiedliche Workloads hat (z.B. „lese" vs. „schreibe", einer
+schnell, einer langsam).
+
+**Spicy Take-away:** Granularität ist eine **Designentscheidung,
+keine Pattern-Eigenschaft.** Der Default „pro Service" ist meist
+richtig, aber wer einen langsamen `book`-Endpoint hat und einen
+schnellen `search`, fasst die zusammen — und kappt search, weil book
+unter Last steht.
 
 ---
 
 ## Sammelthemen für die Diskussion
 
-- Wie würdet ihr `maxConcurrent` in einer realen Anwendung festlegen?
-  (Hint: es geht um Thread-Pool-Größe / Connection-Pool-Größe der
-  abhängigen Ressourcen, nicht um eine geratene Magic-Number.)
-- Wann wäre es sinnvoll, dass ein Bulkhead-Reject **doch** als
-  CB-Failure gewertet wird? (Hint: praktisch nie — aber Diskussion über
-  Edge-Cases wie "ich kenne die Backend-Kapazität exakt".)
-- Was wäre die Saga-Lösung für `/booking/bookings`, wenn Hotel mitten in
-  der Buchung den Bulkhead-Reject bekommt? (Brücke zu Story 5.)
+- Welcher Schwellenwert ist bei euch konfiguriert (oder eben nicht)?
+  Wer hat ihn gesetzt — und nach welcher Begründung?
+- Habt ihr einen CB, der im OPEN-State hängen geblieben ist? Was war
+  die Ursache — kaputtes Backend oder zu aggressives Tuning?
+- Wer schaut sich bei euch CB-Metriken an? Sind sie im Standard-
+  Dashboard, oder muss man sie suchen?

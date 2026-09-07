@@ -44,8 +44,8 @@ type Saga struct {
 }
 
 // Store hält Sagas in-memory. Nach Crash sind sie weg — eine echte
-// Recovery braucht eine persistente Ablage (siehe docs/questions/story5.md,
-// Frage 5 zu Monitoring und Story 5 AK „Saga-Status persistieren").
+// Recovery braucht eine persistente Ablage (siehe docs/questions/story6.md,
+// Frage 5 zu Monitoring und Story 6 AK „Saga-Status persistieren").
 // Für den Workshop reicht in-memory.
 type Store struct {
 	mu    sync.RWMutex

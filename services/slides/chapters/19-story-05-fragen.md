@@ -1,4 +1,4 @@
-## Story 4 &mdash; Recap
+## Story 5 &mdash; Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
@@ -6,7 +6,7 @@
 
 <div class="factor fragment">
 <h3><span class="numeral">1</span> Wozu, wenn es CB gibt?</h3>
-<p>Wir haben in Story 3 schon einen Circuit Breaker. Was bringt Bulkhead, was der CB <span class="hl">nicht</span> kann?</p>
+<p>Wir haben in Story 4 schon einen Circuit Breaker. Was bringt Bulkhead, was der CB <span class="hl">nicht</span> kann?</p>
 <code>slow &ne; failure</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Beide Patterns l&ouml;sen verschiedene Probleme. <strong>CB</strong>: &bdquo;Backend ist krank, ich versuch's gar nicht mehr&ldquo; &mdash; Reaktion auf Fehler-Rate. <strong>Bulkhead</strong>: &bdquo;Ich verbrenne maximal N Slots f&uuml;r dieses Backend, egal wie viel Last reinkommt&ldquo; &mdash; Reaktion auf Ressourcen-Druck. Killer-Szenario, das nur Bulkhead l&ouml;st: Hotel antwortet in 2&nbsp;s fehlerfrei &mdash; CB bleibt CLOSED, aber unter Last laufen alle Threads in Hotel-Calls auf, Flight und Car kommen nicht durch. Bulkhead kappt nach 10 parallelen Hotel-Calls und l&auml;sst die anderen ungest&ouml;rt.<br><strong>Spicy:</strong> &bdquo;Wir haben doch schon einen CB&ldquo; ist die Standard-Falle &mdash; CB sieht Fehler, nicht Latenz. Wer beides nicht trennt, baut sich falsche Sicherheit.</aside>
 </div>
@@ -52,5 +52,5 @@
 </div>
 
 <aside class="notes">
-Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story4.md</code>.
+Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story5.md</code>.
 </aside>

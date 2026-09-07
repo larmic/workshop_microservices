@@ -1,6 +1,6 @@
 # Circuit Breaker — Workshop-Notizen
 
-> Trainer-Notizen für Story 3. Reihenfolge folgt einer typischen Slide-Sequenz; jeder Abschnitt hat einen kleinen Hinweis, was an der Tafel/auf der Folie passieren sollte.
+> Trainer-Notizen für Story 4. Reihenfolge folgt einer typischen Slide-Sequenz; jeder Abschnitt hat einen kleinen Hinweis, was an der Tafel/auf der Folie passieren sollte.
 
 ## 1. Worum geht es?
 
@@ -10,7 +10,7 @@
 
 **Die Lösung:** A merkt sich, dass B kaputt ist, und kürzt zukünftige Calls sofort ab. So bleibt A schnell und gesund, auch wenn B unten ist. Nach einer Wartezeit testet A, ob B wieder da ist.
 
-> 🎯 *Demo-Einstieg:* Im Workshop-Stack Flight auf "Fehler" stellen, ohne CB (Story 2) auf `/booking/offers` curlen — jeder Call dauert 3s. Mit CB (Story 3) das gleiche — nach den ersten 5 Fehlern sind die Calls instant.
+> 🎯 *Demo-Einstieg:* Im Workshop-Stack Flight auf "Fehler" stellen, ohne CB (Story 3) auf `/booking/offers` curlen — jeder Call dauert 3s. Mit CB (Story 4) das gleiche — nach den ersten 5 Fehlern sind die Calls instant.
 
 ---
 
@@ -148,13 +148,13 @@ fun open() {
 
 > ⚠️ Der `probeInFlight`-Flip muss **atomar** passieren (Compare-and-Set / Mutex). Sonst rutschen unter Last mehrere Aufrufe gleichzeitig als „Probe" durch — der Probe-Storm ist genau das, was HALF_OPEN verhindern soll.
 
-> 🎯 *Folie:* Pseudocode kurz zeigen, dann auf den echten Code in `services/booking/story3/circuitbreaker/circuitbreaker.go` verweisen — exakt diese Logik in ~80 Zeilen Go.
+> 🎯 *Folie:* Pseudocode kurz zeigen, dann auf den echten Code in `services/booking/story4/circuitbreaker/circuitbreaker.go` verweisen — exakt diese Logik in ~80 Zeilen Go.
 
 ---
 
 ## 5. Wo CB einsetzen — und wo nicht
 
-Das ist der **wichtigste pädagogische Übergang** der Story 3.
+Das ist der **wichtigste pädagogische Übergang** der Story 4.
 
 ### Lese-Operationen (GET) — Idealfall
 
@@ -162,7 +162,7 @@ Das ist der **wichtigste pädagogische Übergang** der Story 3.
 - Mit CB: Antwort enthält Hotels + Cars, `flights: []`, Header `X-Fallback: flight`. Der Nutzer sieht *etwas* — der Browse-Screen funktioniert.
 - Ohne CB: ganzer Request scheitert mit 500. Schwarzes Loch.
 
-**Graceful Degradation passt perfekt zu GET.** Workshop-Teilnehmer sollen das selbst sehen: Backend deaktivieren, in Story 2 vs. Story 3 testen.
+**Graceful Degradation passt perfekt zu GET.** Workshop-Teilnehmer sollen das selbst sehen: Backend deaktivieren, in Story 3 vs. Story 4 testen.
 
 ### Schreib-Operationen (POST) — knifflig
 
@@ -170,10 +170,10 @@ Bei `POST /booking/bookings` will man Flug + Hotel + Auto buchen. Wenn der Fligh
 
 Drei Stufen:
 1. **Naive Graceful Degradation** (was wir initial hatten): `flight: null`, der Kunde wundert sich warum er kein Flug-Ticket hat aber ein Hotelzimmer und einen Mietwagen. **Schlechte UX.**
-2. **Fail-Fast** (was Story 3 jetzt macht): wenn ein CB OPEN ist, sofort `503 Service Unavailable`. Wenn mid-call ein Service kippt, abbrechen. Bessere UX, aber: was ist mit den schon erfolgten Sub-Buchungen? Die bleiben **als Leiche im System**.
-3. **Saga-Pattern** (Story 5): explizite Compensation. Schlägt der Auto-Call fehl, wird Hotel und Flug aktiv per `DELETE` zurückgerollt. Echte Atomicity über Service-Grenzen.
+2. **Fail-Fast** (was Story 4 jetzt macht): wenn ein CB OPEN ist, sofort `503 Service Unavailable`. Wenn mid-call ein Service kippt, abbrechen. Bessere UX, aber: was ist mit den schon erfolgten Sub-Buchungen? Die bleiben **als Leiche im System**.
+3. **Saga-Pattern** (Story 6): explizite Compensation. Schlägt der Auto-Call fehl, wird Hotel und Flug aktiv per `DELETE` zurückgerollt. Echte Atomicity über Service-Grenzen.
 
-> 🎯 *Diese drei Stufen sind die Brücke zu Story 5*. Im Workshop laut sagen: "Der Circuit Breaker schützt eure Services. Atomicity über mehrere Services ist ein **anderes** Problem — und die Lösung heißt Saga."
+> 🎯 *Diese drei Stufen sind die Brücke zu Story 6*. Im Workshop laut sagen: "Der Circuit Breaker schützt eure Services. Atomicity über mehrere Services ist ein **anderes** Problem — und die Lösung heißt Saga."
 
 > ⚠️ **Häufiger Denkfehler:** "Wir machen einfach Retry" reicht nicht. Retry ohne Idempotency-Key kann zu Doppelbuchungen führen. Retry ohne CB lässt das geschwächte Backend nicht atmen. Beides zusammen ist kombinierbar — aber Saga ist die saubere Lösung für alles-oder-nichts.
 
@@ -233,7 +233,7 @@ Zum Abschluss, wenn Zeit bleibt:
 
 1. **Wie testet ihr den CB?** Tipp: Chaos Engineering — Toxiproxy, Gremlin, oder unser Dashboard mit Chaos-Buttons. Realistische Szenarien (5xx, Latenz, Drops) sind Pflicht.
 2. **Wie bekommt der Operator mit, dass ein CB OPEN ist?** Metriken (Prometheus), Alerts. Im Reference-Code: Logs + Dashboard. In Produktion: pro CB einen Counter `circuit_state{name=...,state=OPEN}` exportieren.
-3. **Was, wenn euer eigener Service der "schwache" ist?** CB ist *outbound*. Inbound ist Bulkhead/Rate-Limiting (Story 4) oder Backpressure.
+3. **Was, wenn euer eigener Service der "schwache" ist?** CB ist *outbound*. Inbound ist Bulkhead/Rate-Limiting (Story 5) oder Backpressure.
 4. **Granularität: pro Service oder pro Endpoint?** Im Reference-Code pro Service. Aber: was, wenn `/flights` gut antwortet aber `/bookings` kaputt ist? Diskutieren.
 5. **Per-Instance vs. per-Service:** Mit dem Dashboard kann man genau einer von drei Replicas auf "Fehler" stellen. Diskussionspunkt: Random-Load-Balancing trifft die kaputte Instanz nur in 1/3 der Fälle — der CB öffnet evtl. gar nicht. Ist das ein Bug oder ein Feature?
 
@@ -243,10 +243,10 @@ Zum Abschluss, wenn Zeit bleibt:
 
 | Was | Pfad |
 |---|---|
-| CB-State-Machine | `services/booking/story3/circuitbreaker/circuitbreaker.go` |
-| Drei CBs verdrahten | `services/booking/story3/main.go` |
-| GET (Graceful Degradation) | `services/booking/story3/handler/booking.go` (`BookingOffersHandler`, `fetchOffersWithCB`) |
-| POST (Fail-Fast + Saga-Hook) | `services/booking/story3/handler/booking.go` (`CreateBookingHandler`) |
-| Admin-Endpunkte | `services/booking/story3/handler/admin.go` (`/admin/circuit-state`, `/admin/circuit-events`) |
+| CB-State-Machine | `services/booking/story4/circuitbreaker/circuitbreaker.go` |
+| Drei CBs verdrahten | `services/booking/story4/main.go` |
+| GET (Graceful Degradation) | `services/booking/story4/handler/booking.go` (`BookingOffersHandler`, `fetchOffersWithCB`) |
+| POST (Fail-Fast + Saga-Hook) | `services/booking/story4/handler/booking.go` (`CreateBookingHandler`) |
+| Admin-Endpunkte | `services/booking/story4/handler/admin.go` (`/admin/circuit-state`, `/admin/circuit-events`) |
 | Chaos-Steuerung Backend | `services/shared/chaos/chaos.go` |
 | Dashboard-Visualisierung | `services/dashboard/static/index.html` + `services/dashboard/handler/{chaos,circuit}.go` |

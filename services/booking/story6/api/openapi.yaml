@@ -96,7 +96,7 @@ paths:
         **Kein Retry:** Eine fehlgeschlagene Kompensation wird im
         Step-Status als `COMPENSATION_FAILED` markiert. Die Saga geht
         trotzdem auf `FAILED`. Persistenter Retry und Recovery nach
-        Crash sind Bonus-Punkte (siehe `docs/questions/story5.md`).
+        Crash sind Bonus-Punkte (siehe `docs/questions/story6.md`).
       operationId: createBooking
       tags:
         - booking
@@ -272,7 +272,7 @@ components:
         service:
           type: string
           description: Identifier of the booking story service
-          example: booking-5
+          example: booking-6
         consulUrl:
           type: string
           description: URL of the Consul service registry

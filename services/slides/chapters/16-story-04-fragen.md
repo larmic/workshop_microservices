@@ -1,4 +1,4 @@
-## Story 3 &mdash; Recap
+## Story 4 &mdash; Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
@@ -51,5 +51,5 @@
 </div>
 
 <aside class="notes">
-Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story3.md</code>.
+Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story4.md</code>.
 </aside>

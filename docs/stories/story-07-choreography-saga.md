@@ -1,13 +1,13 @@
-# Story 6: Die Saga wird leise – Kompensation via Events
+# Story 7: Die Saga wird leise – Kompensation via Events
 
 **Thema:** Event-Driven Architecture, Choreography-Saga
 **Zeitrahmen:** ca. 60 Minuten
 
 ## Kontext
 
-In Story 5 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron `DELETE /bookings/{id}` gegen jeden zuvor erfolgreich aufgerufenen Backend-Service auf, wartet auf jede Antwort und behandelt Fehler in seinem eigenen Code. Damit ist Booking nicht nur Orchestrator des Happy Paths, sondern auch Single Point of Responsibility für jede Stornierung. Skaliert ein Backend träge oder ist es kurz nicht erreichbar, blockiert Booking — und wird selbst zum Bottleneck.
+In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron `DELETE /bookings/{id}` gegen jeden zuvor erfolgreich aufgerufenen Backend-Service auf, wartet auf jede Antwort und behandelt Fehler in seinem eigenen Code. Damit ist Booking nicht nur Orchestrator des Happy Paths, sondern auch Single Point of Responsibility für jede Stornierung. Skaliert ein Backend träge oder ist es kurz nicht erreichbar, blockiert Booking — und wird selbst zum Bottleneck.
 
-Fachlich ist die Stornierung aber Aufgabe des jeweiligen Backends: Wer eine Buchung anlegen kann, muss sie auch zurücknehmen können — ohne dass ein Orchestrator daneben steht. Lösung: Booking publiziert ein **Event** („Kompensation erforderlich"), die Backend-Services abonnieren und reagieren eigenständig. Wir wechseln damit von **Orchestration** (Story 5) zu **Choreography** — derselbe fachliche Ablauf, andere Verantwortungsverteilung.
+Fachlich ist die Stornierung aber Aufgabe des jeweiligen Backends: Wer eine Buchung anlegen kann, muss sie auch zurücknehmen können — ohne dass ein Orchestrator daneben steht. Lösung: Booking publiziert ein **Event** („Kompensation erforderlich"), die Backend-Services abonnieren und reagieren eigenständig. Wir wechseln damit von **Orchestration** (Story 6) zu **Choreography** — derselbe fachliche Ablauf, andere Verantwortungsverteilung.
 
 ## User Story
 
@@ -21,7 +21,7 @@ damit **der Booking-Service nicht für deren Verfügbarkeit haften muss und die 
 - [ ] Flight-, Hotel- und Car-Service nehmen das Event entgegen, antworten **sofort mit `202 Accepted`** und führen die Stornierung asynchron in einer Goroutine / Worker-Task aus (fire-and-forget aus Sicht des Senders)
 - [ ] Booking setzt den Step nach erfolgreichem Event-Dispatch auf `COMPENSATED` und die Saga direkt auf `FAILED`. Booking erwartet **kein Reply** und wartet **nicht** auf den fachlichen Rollback
 - [ ] Das Konzept der Idempotenz wird gezeigt: `eventId` wird pro Event eindeutig erzeugt und mitgesendet (persistente Speicherung im Backend ist Bonus)
-- [ ] Der Unterschied zwischen Orchestration (Story 5) und Choreography (Story 6) wird im Code-Aufbau erkennbar und in der README des Booking-Service kurz reflektiert
+- [ ] Der Unterschied zwischen Orchestration (Story 6) und Choreography (Story 7) wird im Code-Aufbau erkennbar und in der README des Booking-Service kurz reflektiert
 
 ## Akzeptanzkriterien (Bonus, Production-Reife)
 
@@ -31,7 +31,7 @@ Diese Punkte sind bewusst nicht Pflicht. Sie sind das, was die Schmalspur-Varian
 - [ ] Booking konsumiert die Reply-Events und führt den Saga-Status nach (`COMPENSATING` → `FAILED` oder `COMPENSATION_INCOMPLETE`)
 - [ ] Timeout-Erkennung im Booking-Service: Bleibt ein erwartetes Reply nach X Sekunden aus, wird die Saga als `STUCK` markiert und ein Alarm-Log geschrieben
 - [ ] Persistente Idempotenz: doppelt zugestellte Events werden über die `eventId` im Backend erkannt und ignoriert (Dedup-Tabelle pro `eventId`)
-- [ ] Feature-Flag zur Laufzeit zwischen synchroner Kompensation (Story 5) und asynchroner Kompensation (Story 6)
+- [ ] Feature-Flag zur Laufzeit zwischen synchroner Kompensation (Story 6) und asynchroner Kompensation (Story 7)
 
 ## Technische Hinweise
 
@@ -62,12 +62,12 @@ Diese Punkte sind bewusst nicht Pflicht. Sie sind das, was die Schmalspur-Varian
 ## Diskussions-Anker
 
 - Warum nutzen wir Webhooks statt Kafka/RabbitMQ? Was würde sich ändern?
-- Was passiert, wenn ein Reply-Event nie ankommt? (Anschluss an Story 5, Frage 5 zu Saga-Beobachtbarkeit)
+- Was passiert, wenn ein Reply-Event nie ankommt? (Anschluss an Story 6, Frage 5 zu Saga-Beobachtbarkeit)
 - Wo wandert das Saga-Wissen jetzt hin — und wann wird Choreography zum verteilten Monolithen?
-- Welcher Teil der Story-5-Implementierung fällt komplett weg, welcher bleibt unverändert?
+- Welcher Teil der Story-6-Implementierung fällt komplett weg, welcher bleibt unverändert?
 
 ## Bonus (optional)
 
 - **Dead-Letter-Behandlung:** Was passiert mit Events, die nach N Versuchen nicht zugestellt werden konnten?
-- **Mischbetrieb über Feature-Flag:** Booking kann zur Laufzeit zwischen synchroner Kompensation (Story 5) und asynchroner Kompensation (Story 6) umschalten — schöner Showcase im Workshop
+- **Mischbetrieb über Feature-Flag:** Booking kann zur Laufzeit zwischen synchroner Kompensation (Story 6) und asynchroner Kompensation (Story 7) umschalten — schöner Showcase im Workshop
 - **Auch der Happy Path über Events:** Nicht nur Kompensation, sondern auch das Forward-Booking als Event-Choreography — zeigt, wie weit man Choreography treiben kann

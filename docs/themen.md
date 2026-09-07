@@ -21,19 +21,19 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 5 | Diskussion: „MS = Monolithen mit Netzwerkproblemen" | 30 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 6a | Hands-on: Story 1 (Cloud-native Setup) | 90 Min |
-| 6b | Hands-on: Story 2 (Service Discovery) | 60 Min |
+| 6b | Hands-on: Story 3 (Service Discovery) | 60 Min |
 
 ### Tag 2 (≈ 8 h inkl. Pausen)
 
 | Block | Thema | Zeit |
 |-------|-------|------|
-| 6c | Hands-on: Story 3 (Circuit Breaker) | 60 Min |
-| 6d | Hands-on: Story 4 (Bulkhead) | 60 Min |
-| 6e | Hands-on: Story 5 (Saga, Orchestration) | 60 Min |
+| 6c | Hands-on: Story 4 (Circuit Breaker) | 60 Min |
+| 6d | Hands-on: Story 5 (Bulkhead) | 60 Min |
+| 6e | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
-| 6f | Hands-on: Story 6 (Choreography-Saga) | 60 Min |
+| 6f | Hands-on: Story 7 (Choreography-Saga) | 60 Min |
 | 7 | Vortrag & Diskussion: CQRS | 30 Min |
-| 8 | Hands-on: Story 7 (Distributed Tracing) | 60 Min |
+| 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
 | 9 | Diskussion: BFF | 20 Min |
 | 10 | Diskussion: Downtimeless Deployment | 20 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
@@ -124,11 +124,11 @@ These aufwerfen und mit der Gruppe sezieren.
 
 **Diskussions-Anker:** Welche Probleme hätte man im Monolithen auch? Welche entstehen erst durch das Netzwerk?
 
-**Überleitung:** Deshalb dreht sich der praktische Teil (Stories 1–6, 10) stark um Kommunikation und Resilienz.
+**Überleitung:** Deshalb dreht sich der praktische Teil (Stories 1–7, 10) stark um Kommunikation und Resilienz.
 
 ---
 
-## 6. Hands-on: Stories 1–6
+## 6. Hands-on: Stories 1–7
 
 Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion.
 
@@ -136,23 +136,23 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Lernpointe: 12 Factor in der Praxis, Health-Checks, externe Konfiguration
 - Recap-Frage: Welche Faktoren sind in eurer Umsetzung wirklich erfüllt?
 
-### 6b. Story 2 — [Services dynamisch finden](stories/story-02-service-discovery.md) (60 Min)
+### 6b. Story 3 — [Services dynamisch finden](stories/story-03-service-discovery.md) (60 Min)
 - Lernpointe: Service Discovery mit Consul ersetzt hartkodierte URLs
 - Recap-Frage: Was passiert, wenn Consul kurz weg ist?
 
-### 6c. Story 3 — [Wenn der Flug ausfällt](stories/story-03-circuit-breaker.md) (60 Min)
+### 6c. Story 4 — [Wenn der Flug ausfällt](stories/story-04-circuit-breaker.md) (60 Min)
 - Lernpointe: Circuit Breaker, graceful Degradation
 - Recap-Frage: Was ist ein gutes Default-Verhalten im „Open"-State?
 
-### 6d. Story 4 — [Isolation ist Stärke](stories/story-04-bulkhead.md) (60 Min)
+### 6d. Story 5 — [Isolation ist Stärke](stories/story-05-bulkhead.md) (60 Min)
 - Lernpointe: Ressourcen-Isolation, getrennte Thread-Pools / Connection-Pools
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?
 
-### 6e. Story 5 — [Alles oder nichts – aber richtig](stories/story-05-saga.md) (60 Min)
+### 6e. Story 6 — [Alles oder nichts – aber richtig](stories/story-06-saga.md) (60 Min)
 - Lernpointe: Orchestration-Saga mit synchroner Kompensation
 - Recap-Frage: Wer kennt das Endergebnis bei dieser Variante?
 
-### 6f. Story 6 — [Die Saga wird leise](stories/story-06-choreography-saga.md) (60 Min)
+### 6f. Story 7 — [Die Saga wird leise](stories/story-07-choreography-saga.md) (60 Min)
 - Lernpointe: Choreography-Saga via Events, Wissen verteilt sich
 - Recap-Frage: Wann Orchestration, wann Choreography?
 
@@ -207,10 +207,10 @@ Zwischen dem Schreibvorgang (Saga fertig) und dem Auftauchen im Read-Model liege
 
 ---
 
-## 8. Hands-on: Story 7 — [Den roten Faden im Log](stories/story-07-tracing.md) (60 Min)
+## 8. Hands-on: Story 8 — [Den roten Faden im Log](stories/story-08-tracing.md) (60 Min)
 
 - Lernpointe: Distributed Tracing macht Geschäftsvorgänge über Service-Grenzen hinweg sichtbar
-- Recap-Frage: Wo hätte euch Tracing schon in Stories 3–6 geholfen?
+- Recap-Frage: Wo hätte euch Tracing schon in Stories 4–7 geholfen?
 
 ---
 

@@ -37,7 +37,7 @@ on receiveCompensationEvent(event):
 </pre>
 
 Note:
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 7 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
+- Identischer Pseudo-Code findet sich im Dashboard unter Story 8 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
 - Vier Knackpunkte hervorheben:
   - <strong>parse() strikt halten</strong> &mdash; Format <code>version-trace-span-flags</code> mit festen L&auml;ngen, Nur-Nullen verwerfen, h&ouml;here Versionen <em>abw&auml;rtskompatibel ignorieren</em> (nur <code>00</code> verstehen, alles andere als ung&uuml;ltig behandeln).
   - <strong>Pro Hop neue Span-ID</strong>, aber <em>gleiche</em> Trace-ID &mdash; das ist der Trick, der den Vorgang als zusammenh&auml;ngende Kette identifizierbar macht.

@@ -1,4 +1,4 @@
-## Story 5
+## Story 6
 
 <p class="subtitle">Alles oder nichts &mdash; aber richtig <span class="time-badge">&asymp; 60 min</span></p>
 
@@ -37,9 +37,9 @@ Als <em>Kunde</em> m&ouml;chte ich <em>eine Komplettbuchung (Flug + Hotel + Miet
 </div>
 
 Note:
-- Hook: &bdquo;Resilience-Patterns aus Story 3 und 4 helfen <em>einem</em> Aufruf. Aber sobald ich mehrere zusammenh&auml;ngende Schritte habe (Flug + Hotel + Auto) und einer kippt, brauche ich etwas anderes.&ldquo; Klassisches Beispiel: Flight gebucht, Hotel sagt nein. Was tun mit dem Flug?
-- Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 5 &rarr; &bdquo;Story lesen&ldquo;.
-- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story5/</code> (Go, sequenzielle Saga in ca. 100 Zeilen).
+- Hook: &bdquo;Resilience-Patterns aus Story 4 und 5 helfen <em>einem</em> Aufruf. Aber sobald ich mehrere zusammenh&auml;ngende Schritte habe (Flug + Hotel + Auto) und einer kippt, brauche ich etwas anderes.&ldquo; Klassisches Beispiel: Flight gebucht, Hotel sagt nein. Was tun mit dem Flug?
+- Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 6 &rarr; &bdquo;Story lesen&ldquo;.
+- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story6/</code> (Go, sequenzielle Saga in ca. 100 Zeilen).
 - Im Workshop bewusst <strong>nur ein Versuch</strong> f&uuml;r die Kompensation, kein Retry, kein persistenter Status &mdash; das macht das Pattern sichtbar, ohne den 60-Min-Slot zu sprengen. Persistenz + Retry sind explizite Diskussionspunkte im Recap (Fragen 1, 2, 7).
 - Demo-Drehbuch: Dashboard &rarr; Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code> &mdash; in der Saga-Karte ist sichtbar: Flight BOOKED &rarr; Hotel FAILED &rarr; status COMPENSATING &rarr; Flight COMPENSATED &rarr; status FAILED. Anschlie&szlig;end Hotel zur&uuml;ck auf normal, neue Buchung &mdash; alles gr&uuml;n.
-- Time-Box 60 min inkl. Demo. Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-05-saga.md</code>.
+- Time-Box 60 min inkl. Demo. Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-06-saga.md</code>.

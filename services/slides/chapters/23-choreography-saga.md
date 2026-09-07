@@ -7,10 +7,10 @@
 <div class="factor-row">
 
 <div class="factor fragment">
-<h3>Problem aus Story 5</h3>
+<h3>Problem aus Story 6</h3>
 <p>Booking tr&auml;gt allein die Storno-Verantwortung &mdash; und h&auml;ngt synchron am kaputten Backend.</p>
 <code>Booking = SPoF</code>
-<aside class="notes">Story 5 hatte Booking als Orchestrator: <code>DELETE</code> gegen jeden Backend-Service, eigene Retry-Schleife, eigener Saga-State, eigene Antwort zum Kunden. Wenn Hotel kurz weg ist, blockt Booking. Wenn der <code>DELETE</code>-Call in 5xx l&auml;uft, hat Booking die Wahl: weiterh&auml;ngen, eskalieren, Pivot. Alle Last liegt bei Booking. Es ist Aggregator <em>und</em> Stornier-Stelle in einem.</aside>
+<aside class="notes">Story 6 hatte Booking als Orchestrator: <code>DELETE</code> gegen jeden Backend-Service, eigene Retry-Schleife, eigener Saga-State, eigene Antwort zum Kunden. Wenn Hotel kurz weg ist, blockt Booking. Wenn der <code>DELETE</code>-Call in 5xx l&auml;uft, hat Booking die Wahl: weiterh&auml;ngen, eskalieren, Pivot. Alle Last liegt bei Booking. Es ist Aggregator <em>und</em> Stornier-Stelle in einem.</aside>
 </div>
 
 <div class="factor fragment">
@@ -63,8 +63,8 @@
 <span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
-- Hook direkt aus Story 5: &bdquo;Erinnert ihr euch an die Saga-Frage 1 &mdash; was, wenn der <code>DELETE</code> selbst in 5xx l&auml;uft? Story 5 lie&szlig; es scheitern. Story 6 schiebt das Problem ins Backend &mdash; und reisst damit ein neues auf, das wir gleich besprechen.&ldquo;
+- Hook direkt aus Story 6: &bdquo;Erinnert ihr euch an die Saga-Frage 1 &mdash; was, wenn der <code>DELETE</code> selbst in 5xx l&auml;uft? Story 6 lie&szlig; es scheitern. Story 7 schiebt das Problem ins Backend &mdash; und reisst damit ein neues auf, das wir gleich besprechen.&ldquo;
 - Wichtiger Framing-Punkt: Choreography ist <em>kein neues Pattern</em>, sondern eine andere Verantwortungsverteilung f&uuml;r dieselbe Saga. Forward bleibt sync (in unserer Variante), Kompensation wandert auf Events.
-- Karten-Reihenfolge bewusst: Problem (Story 5) &rarr; L&ouml;sungsidee (Verantwortung verlagern, Event statt RPC) &rarr; ehrliches Caveat (Booking bleibt verantwortlich) &rarr; Trade-off (verteiltes Wissen).
+- Karten-Reihenfolge bewusst: Problem (Story 6) &rarr; L&ouml;sungsidee (Verantwortung verlagern, Event statt RPC) &rarr; ehrliches Caveat (Booking bleibt verantwortlich) &rarr; Trade-off (verteiltes Wissen).
 - Wer was wo nutzt: Kafka als Log-orientierter Broker (Persistenz, Replay), RabbitMQ als klassischer Queue-Broker, NATS als leichtgewichtige Alternative, AWS SNS+SQS / GCP Pub/Sub als managed. Outbox-Pattern ist kein Broker, sondern die Br&uuml;cke vom App-State zum Broker &mdash; Pflicht-Lekt&uuml;re.
 - Im Workshop nutzen wir <strong>keinen</strong> echten Broker, sondern HTTP-Webhooks. Das ist eine bewusste Vereinfachung &mdash; die n&auml;chste Folie zeigt, wo unsere Variante an ihre strukturellen Grenzen st&ouml;sst.

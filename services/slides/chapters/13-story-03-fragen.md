@@ -1,4 +1,4 @@
-## Story 2 &mdash; Recap
+## Story 3 &mdash; Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
@@ -22,14 +22,14 @@
 <h3><span class="numeral">3</span> Was passiert beim STOP?</h3>
 <p>Beim Start melden sich die Services an. Beim `docker stop` &mdash; verschwindet der Eintrag <span class="hl">sofort</span>?</p>
 <code>10&ndash;30 s Traffic ins Leere</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Nein. Ohne Graceful Shutdown bleibt der Eintrag, bis der Health-Check nach mehreren Misses ausschl&auml;gt &mdash; typisch 10&ndash;30 s, in denen Traffic auf eine tote Instanz l&auml;uft (Connection-Refused). L&ouml;sungen: <strong>Graceful Shutdown</strong> mit aktivem `deregister`, schnellerer Health-Check-Intervall (kostet Last), <strong>Out-of-Service-Mode</strong> (keine neuen Requests, laufende beenden, dann Stop).<br><strong>Spicy:</strong> Service Discovery ist immer <strong>eventually consistent</strong>. Es gibt <strong>immer</strong> ein Zeitfenster, in dem Aufrufer auf tote Endpoints sto&szlig;en &mdash; genau einer der Gr&uuml;nde, warum wir in Story 3 / 4 Resilience-Patterns brauchen.</aside>
+<aside class="notes"><strong>Meine Antwort:</strong> Nein. Ohne Graceful Shutdown bleibt der Eintrag, bis der Health-Check nach mehreren Misses ausschl&auml;gt &mdash; typisch 10&ndash;30 s, in denen Traffic auf eine tote Instanz l&auml;uft (Connection-Refused). L&ouml;sungen: <strong>Graceful Shutdown</strong> mit aktivem `deregister`, schnellerer Health-Check-Intervall (kostet Last), <strong>Out-of-Service-Mode</strong> (keine neuen Requests, laufende beenden, dann Stop).<br><strong>Spicy:</strong> Service Discovery ist immer <strong>eventually consistent</strong>. Es gibt <strong>immer</strong> ein Zeitfenster, in dem Aufrufer auf tote Endpoints sto&szlig;en &mdash; genau einer der Gr&uuml;nde, warum wir in Story 4 / 5 Resilience-Patterns brauchen.</aside>
 </div>
 
 <div class="factor fragment">
 <h3><span class="numeral">4</span> Registriert &ne; gesund</h3>
 <p>Consul nimmt 200 als Beweis. Doch der Check kann <span class="hl">l&uuml;gen</span> &ndash; und selbst ein ehrlicher ist im Moment des Calls l&auml;ngst veraltet. Wer sch&uuml;tzt den Aufrufer?</p>
 <code>gepr&uuml;fte URL &ne; laufender Call</code>
-<aside class="notes"><strong>Zwei Wege, dasselbe Problem.</strong> (1) <strong>Der Check l&uuml;gt</strong> (inhaltlich falsch): <code>/health</code> sagt 200, der Service ist aber faktisch tot &ndash; Zombie (HTTP lebt, Worker-Pool tot), Backend-Abh&auml;ngigkeit weg (DB nicht erreichbar), oder langsame Degradation (P99 von 50 ms auf 5 s). Gegenmittel: der <em>richtige</em> Check (TCP &rarr; HTTP &rarr; Probe-Logik &rarr; Synthetic). (2) <strong>Der Check ist veraltet</strong> (zeitlich falsch): selbst ein ehrlicher Check ist Sekunden alt; der Service kann genau zwischen zwei Checks ausfallen oder unter Last wegbrechen (siehe STOP-Fenster, Frage 3). Bessere Checks verkleinern Weg 1, Weg 2 bleibt <strong>prinzipiell</strong>. Beide enden gleich: <strong>registriert garantiert nicht gesund im Moment des Calls.</strong><br><strong>&Uuml;berleitung zu Story 3:</strong> Auf Discovery-Ebene ist das nicht l&ouml;sbar &ndash; der <strong>Aufrufer selbst</strong> muss sich sch&uuml;tzen: Circuit Breaker, Timeout, Fallback (Teilbuchung Hotel + Mietwagen ohne Flug).<br><strong>Knackig:</strong> &bdquo;Discovery sagt dir, wo der Service <em>war</em>. Nicht, ob er noch da ist, wenn du anrufst.&ldquo;</aside>
+<aside class="notes"><strong>Zwei Wege, dasselbe Problem.</strong> (1) <strong>Der Check l&uuml;gt</strong> (inhaltlich falsch): <code>/health</code> sagt 200, der Service ist aber faktisch tot &ndash; Zombie (HTTP lebt, Worker-Pool tot), Backend-Abh&auml;ngigkeit weg (DB nicht erreichbar), oder langsame Degradation (P99 von 50 ms auf 5 s). Gegenmittel: der <em>richtige</em> Check (TCP &rarr; HTTP &rarr; Probe-Logik &rarr; Synthetic). (2) <strong>Der Check ist veraltet</strong> (zeitlich falsch): selbst ein ehrlicher Check ist Sekunden alt; der Service kann genau zwischen zwei Checks ausfallen oder unter Last wegbrechen (siehe STOP-Fenster, Frage 3). Bessere Checks verkleinern Weg 1, Weg 2 bleibt <strong>prinzipiell</strong>. Beide enden gleich: <strong>registriert garantiert nicht gesund im Moment des Calls.</strong><br><strong>&Uuml;berleitung zu Story 4:</strong> Auf Discovery-Ebene ist das nicht l&ouml;sbar &ndash; der <strong>Aufrufer selbst</strong> muss sich sch&uuml;tzen: Circuit Breaker, Timeout, Fallback (Teilbuchung Hotel + Mietwagen ohne Flug).<br><strong>Knackig:</strong> &bdquo;Discovery sagt dir, wo der Service <em>war</em>. Nicht, ob er noch da ist, wenn du anrufst.&ldquo;</aside>
 </div>
 
 <span class="show-all fragment" aria-hidden="true"></span>
@@ -37,5 +37,5 @@
 </div>
 
 <aside class="notes">
-Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story2.md</code>.
+Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story3.md</code>.
 </aside>

@@ -3,24 +3,30 @@ package main
 import (
 	_ "embed"
 	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"time"
 
-	"github.com/team-neusta-skills/workshop_microservices/booking/story5/bulkhead"
-	"github.com/team-neusta-skills/workshop_microservices/booking/story5/circuitbreaker"
-	"github.com/team-neusta-skills/workshop_microservices/booking/story5/handler"
+	"github.com/team-neusta-skills/workshop_microservices/booking/story8/bulkhead"
+	"github.com/team-neusta-skills/workshop_microservices/booking/story8/circuitbreaker"
+	"github.com/team-neusta-skills/workshop_microservices/booking/story8/handler"
+	"github.com/team-neusta-skills/workshop_microservices/booking/story8/saga"
 	"github.com/team-neusta-skills/workshop_microservices/shared/consul"
 	"github.com/team-neusta-skills/workshop_microservices/shared/env"
 	sharedhandler "github.com/team-neusta-skills/workshop_microservices/shared/handler"
 	"github.com/team-neusta-skills/workshop_microservices/shared/middleware"
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 //go:embed api/openapi.yaml
 var openapiSpec []byte
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+
 	config := handler.Config{
-		Service:   "booking-5",
+		Service:   "booking-8",
 		ConsulURL: env.GetEnv("CONSUL_URL", "http://localhost:8500"),
 		Timeout:   3000,
 	}
@@ -56,12 +62,17 @@ func main() {
 		Car:    bulkhead.New(bhConfig("car")),
 	}
 
+	sagaStore := saga.NewStore()
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /health", sharedhandler.HealthHandler)
 	mux.HandleFunc("GET /info", sharedhandler.InfoHandler(config))
 	mux.HandleFunc("GET /booking/offers", handler.BookingOffersHandler(resolver, httpClient, breakers, bulkheads))
-	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, breakers))
+	mux.HandleFunc("POST /booking/bookings", handler.CreateBookingHandler(resolver, httpClient, breakers, sagaStore))
+	mux.HandleFunc("GET /booking/bookings/{id}", handler.GetSagaStatusHandler(sagaStore))
+	mux.HandleFunc("GET /admin/sagas", handler.ListSagasHandler(sagaStore))
+	mux.HandleFunc("POST /admin/sagas-reset", handler.ResetSagasHandler(sagaStore))
 	mux.HandleFunc("GET /openapi", sharedhandler.OpenapiHandler(openapiSpec))
 	mux.HandleFunc("GET /admin/circuit-state", handler.CircuitStateHandler(breakers))
 	mux.HandleFunc("GET /admin/circuit-events", handler.CircuitEventsHandler(breakers))
@@ -69,7 +80,7 @@ func main() {
 	mux.HandleFunc("POST /admin/bulkhead-reset", handler.BulkheadResetHandler(bulkheads))
 
 	log.Println("BookingService starting on port 8080...")
-	if err := http.ListenAndServe(":8080", middleware.CORSMiddleware(mux)); err != nil {
+	if err := http.ListenAndServe(":8080", middleware.CORSMiddleware(tracing.Middleware(mux))); err != nil {
 		log.Fatal(err)
 	}
 }

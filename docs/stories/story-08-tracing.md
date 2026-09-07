@@ -1,4 +1,4 @@
-# Story 7: Den roten Faden im Log
+# Story 8: Den roten Faden im Log
 
 **Thema:** Distributed Tracing
 **Zeitrahmen:** ca. 60 Minuten
@@ -11,7 +11,7 @@ Buchungen — aber niemand kann ein POST `/booking/bookings` über alle
 beteiligten Services hinweg als **eine zusammenhängende Operation**
 verfolgen. Korrelation passiert heute nur über Timestamps und Augenmaß.
 Das wird mit jeder zusätzlichen Komponente schmerzhafter — und spätestens
-bei der Saga aus Story 5/6 (eine Operation, bis zu sechs HTTP-Calls über
+bei der Saga aus Story 6/7 (eine Operation, bis zu sechs HTTP-Calls über
 drei Backend-Services) wird Debugging zur Detektivarbeit.
 
 Eine **Trace-ID** pro eingehender Anfrage, die durch alle nachgelagerten
@@ -24,7 +24,7 @@ einer Buchung.
 Entry-Point. Flight, Hotel und Car sind **passive Trace-Empfänger** —
 sie verlängern einen eintreffenden `traceparent`-Header, erzeugen aber
 **niemals selbst** einen neuen. Dadurch entsteht der "rote Faden" erst,
-sobald Story 7 ihn im Booking-Service zieht; in Stories 1–6 (ohne
+sobald Story 8 ihn im Booking-Service zieht; in Stories 1–7 (ohne
 Tracing-Propagation) bleiben die Logs von Flight/Hotel/Car ohne
 `trace_id` — der Kontrast macht den Effekt sichtbar. Dieses Muster
 spiegelt auch die reale Welt wider: Trace-Initiierung gehört an den
@@ -46,7 +46,7 @@ analysieren kann, ohne Logs nach Zeitstempeln zusammenzupuzzeln**.
   (W3C Trace Context: `traceparent`)
 - [ ] Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call
   weitergereicht (Flight, Hotel, Car und deren Kompensation)
-- [ ] Auch über die **asynchronen Compensation-Events** aus Story 6 wird
+- [ ] Auch über die **asynchronen Compensation-Events** aus Story 7 wird
   der Trace-Kontext mitgeführt (als Event-Property), sodass die
   Stornierungs-Logzeile dieselbe Trace-ID trägt wie die ursprüngliche
   Buchung
@@ -64,7 +64,7 @@ analysieren kann, ohne Logs nach Zeitstempeln zusammenzupuzzeln**.
   ist heute das Default-Wire-Format. Der `traceparent`-Header trägt
   Version + Trace-ID + Span-ID + Flags und ist nur 55 Zeichen lang.
 - **Selbst bauen für den Workshop:** Parsing, Generierung und Propagation
-  sind in ca. 100 Zeilen Code abgehandelt — analog zu Story 3/4 lernt
+  sind in ca. 100 Zeilen Code abgehandelt — analog zu Story 4/5 lernt
   man den Mechanismus dadurch wirklich. Eine fertige Library (z.B.
   OpenTelemetry) würde den Lerneffekt verstecken und ist außerdem stark
   Sprach- und Tool-abhängig.
@@ -87,7 +87,7 @@ analysieren kann, ohne Logs nach Zeitstempeln zusammenzupuzzeln**.
   ```
   Mit derselben Trace-ID in allen Logzeilen wird der Vorgang sofort
   sichtbar.
-- **Async-Grenze (Story 6):** Bei Choreography muss die Trace-ID
+- **Async-Grenze (Story 7):** Bei Choreography muss die Trace-ID
   **explizit als Property** auf das Event mitwandern — der HTTP-Header
   geht beim Übergang in die Worker-Goroutine verloren. Im Event-Body
   z.B. ein Feld `"traceparent": "00-..."`.
@@ -121,13 +121,13 @@ analysieren kann, ohne Logs nach Zeitstempeln zusammenzupuzzeln**.
 
 - **Story 1 (Logs):** Logs werden mit Trace-IDs angereichert — die
   „eine Logzeile pro Aktion"-Praxis bekommt damit ihren roten Faden.
-- **Story 3/4 (CB, Bulkhead):** Reaktionszeiten und Reject-Rates pro
+- **Story 4/5 (CB, Bulkhead):** Reaktionszeiten und Reject-Rates pro
   Backend werden im Trace sichtbar — kein Rätselraten mehr, ob ein
   langsamer Request vom CB, vom Bulkhead oder vom Backend selbst kommt.
-- **Story 5 (Saga):** Erst mit Tracing sieht man die Saga als
+- **Story 6 (Saga):** Erst mit Tracing sieht man die Saga als
   zusammenhängende Operation, nicht als Fragmente in mehreren
   Service-Logs.
-- **Story 6 (Choreography-Saga):** Tracing über asynchrone Events ist
+- **Story 7 (Choreography-Saga):** Tracing über asynchrone Events ist
   nicht-trivial — die Trace-ID muss als Property auf das Event
   mitwandern, sonst zerfällt der Vorgang an der Bus-Grenze. Genau dieser
-  Fall wird in Story 7 implementiert.
+  Fall wird in Story 8 implementiert.

@@ -1,286 +1,289 @@
-# Workshop-Fragen: Circuit Breaker (Story 3)
+# Workshop-Fragen: Service Discovery (Story 3)
 
-Provokante Fragen rund um den Circuit Breaker. Ziel: das Pattern nicht
-als magische Resilienz-Box akzeptieren, sondern verstehen, **welche
-Annahmen** drin stecken — und wo sie kippen.
-
----
-
-## Frage 1 — Wir öffnen den Circuit nach 5 aufeinanderfolgenden Fehlern. Wo kommt diese Zahl her?
-
-**Frage:** Akzeptanzkriterium der Story sagt „nach 5 aufeinanderfolgenden
-Fehlern". Warum 5? Wäre 3 nicht sicherer, oder 20 stabiler?
-
-**Antwort:** Die ehrliche Antwort: **niemand weiß es genau, ohne die
-Last und das Backend zu kennen.** 5 ist eine sinnvolle Default-Zahl,
-aber sie steht im Spannungsfeld zwischen:
-
-- **Zu klein (z.B. 1):** Ein einzelner zufälliger Fehler (Netz-Glitch,
-  GC-Pause, transientes 5xx) öffnet den Circuit. Wir verlieren das
-  Backend für 30 s, obwohl alles in Ordnung ist. → **False positives**.
-- **Zu groß (z.B. 50):** Bei 100 req/s und einem komplett toten Backend
-  brennen wir 50 Fehler-Calls in <1 s durch, jeder mit 3 s Timeout — der
-  Booking-Service hängt parallel an 50 Threads, bevor der CB überhaupt
-  reagiert. → **Bulkhead lässt grüßen** (Story 4).
-
-```
-Schwellenwert vs. Reaktionszeit / Robustheit:
-
-  klein  ──┬───────────────────────────┬──  groß
-           │                           │
-       reaktiv,                    robust,
-       aber flackernd              aber langsam
-       bei Netz-Jitter             bei echten Ausfällen
-```
-
-**Andere Implementierungen** (Resilience4j) nutzen statt „N
-aufeinanderfolgende Fehler" eine **Failure-Rate über ein Sliding
-Window** (z.B. „>50 % der letzten 100 Calls"). Das ist robuster gegen
-intermittierende Fehler — aber komplexer und braucht Last, um überhaupt
-zu reagieren.
-
-**Spicy Take-away:** Die 5 ist eine **Designentscheidung**, kein
-Naturgesetz. In Produktion gehört der Wert ans aktuelle Last- und
-Failure-Profil getuned, nicht ins erste Code-Beispiel kopiert.
+Provokante Fragen rund um Consul, Self-Registration und Client-Side
+Load Balancing. Die Story löst ein konkretes Problem (statische URLs
+in der Config), führt aber **drei neue Probleme** ein — und genau
+darüber sollte der Workshop sprechen.
 
 ---
 
-## Frage 2 — Im HALF_OPEN-State lassen wir genau einen Probe-Call durch. Warum nicht alle?
+## Frage 1 — Wir haben jetzt eine Service Registry. Ist das nicht ein neuer Single Point of Failure?
 
-**Frage:** Nach 30 s öffnet der CB für einen einzigen Test-Call. Warum
-nicht einfach wieder normal aufmachen und schauen, was passiert?
+**Frage:** In Story 1 war die Backend-URL hartkodiert in der ENV. Doof,
+aber zumindest unabhängig. Jetzt fragen wir bei jedem Aufruf Consul.
+Was passiert, wenn Consul kippt — fällt dann unser ganzes System?
 
-**Antwort:** Weil ein **Probe-Storm** das Backend gleich wieder
-umlegen würde. Szenario:
+**Antwort:** Ja, **wenn man es naiv implementiert**. Genau so haben wir
+es im Workshop gebaut: jeder Aufruf geht zuerst gegen Consul, und wenn
+Consul nicht antwortet, fällt der ganze Booking-Service.
 
 ```
-t=0    Backend kippt unter 1000 req/s
-t=0    CB OPEN → 30 s Pause
-t=30s  CB HALF_OPEN
-       │
-       │  ohne Probe-Lock:
-       │   ─►  alle 1000 wartenden Requests laufen los
-       │   ─►  Backend-Wiederanlauf wird sofort wieder erschlagen
-       │
-       │  mit Probe-Lock (atomare CompareAndSwap auf einen Slot):
-       │   ─►  genau 1 Probe-Call erreicht das Backend
-       │   ─►  alle anderen werden mit "in_flight"-Reject abgekürzt
-       │   ─►  Backend hat Atemraum für die Antwort
-       │   ─►  Erfolgreich? → CLOSED, Fehler? → OPEN für weitere 30 s
+Workshop-Stand (naiv):
+   /booking/offers ──► Consul (ResolveServiceURL)
+                       │
+                       ├─► OK ──► Backend
+                       └─► Fehler ──► 500 zurück, kein Fallback
 ```
 
-Im Code (`circuitbreaker.go`) macht das genau eine atomic-Bool:
+In Produktion baut man das **mehrstufig**:
 
-```go
-if cb.probeInFlight.CompareAndSwap(false, true) {
-    // genau einer kommt rein
-}
-```
+1. **Lokaler Cache der Service-Locations.** Letzten erfolgreich
+   aufgelösten Endpoint behalten und benutzen, wenn Consul kurz weg ist.
+2. **Consul-Agent pro Node.** Statt mit dem zentralen Server zu reden,
+   spricht jeder Service mit einem lokalen Agent. Der Agent puffert.
+3. **TTL für Cache-Einträge.** Damit ausgefallene Instanzen nicht
+   ewig im Cache stehen.
 
-**Spicy Take-away:** Das HALF_OPEN-Detail ist der unterschätzte Teil
-des Patterns. Eine naive Implementierung („ist Wartezeit abgelaufen?
-Dann CLOSED") trägt zur **Cascading-Failure** bei, statt sie zu
-verhindern. Genau hier trennt sich Library-Qualität von schnell
-selbstgeschriebenem Code.
+**Spicy Take-away:** Service Discovery löst das Problem statischer
+URLs — und schafft sich dadurch eine neue zentrale Komponente, die
+hochverfügbar sein muss. Wer Consul / Eureka / etcd „mal eben"
+einführt, ohne über deren Resilienz nachzudenken, hat das Problem
+nur verschoben, nicht gelöst.
 
 ---
 
-## Frage 3 — Was zählt überhaupt als „Fehler"? Eine 404 ist doch kein Backend-Problem.
+## Frage 2 — Self-Registration setzt voraus, dass der Service seine eigene Adresse kennt. Ist das nicht ein Bruch von Twelve-Factor?
 
-**Frage:** Unser CB zählt jeden Fehler. Aber: ein `404 Not Found` ist
-kein Defekt des Backends — der Aufrufer hat eine ID benutzt, die nicht
-existiert. Sollte das den CB öffnen?
+**Frage:** In Story 1 war's noch sauber: der Service kümmert sich um
+sich selbst, externe Konfiguration kommt von außen. Jetzt soll der
+Service plötzlich seine eigene IP/Port kennen und sich aktiv bei
+Consul anmelden. Ist das nicht eine Regression?
 
-**Antwort:** **Nein**, und das ist eine häufige Falle. Eine grobe
-Klassifizierung:
+**Antwort:** Halb. Es gibt zwei Self-Registration-Modelle:
 
-| HTTP-Status   | CB-relevant? | Begründung                                    |
-|---------------|--------------|-----------------------------------------------|
-| **5xx**       | ja           | Server-Fehler — Backend ist krank             |
-| **Timeout**   | ja           | Backend hängt — symptomatisch für Überlast    |
-| **Conn-Refused** | ja        | Backend nicht erreichbar                      |
-| **4xx (außer 429)** | nein   | Client-Fehler — der Aufrufer ist schuld       |
-| **429 Too Many** | jein      | Backend ist überlastet — diskutabel           |
+| Modell                 | Wer registriert?            | Vorteil                        | Nachteil                       |
+|------------------------|-----------------------------|--------------------------------|--------------------------------|
+| **Im Service-Code**    | Der Service selbst (z.B. `register-on-startup`) | Funktioniert ohne Plattform | Service kennt seine Umgebung  |
+| **Sidecar / Plattform**| Container-Runtime (z.B. K8s Service / Consul-Connect) | Service ist umgebungsneutral | Setzt Plattform voraus        |
 
-In unserem Workshop-Code ist die Logik **bewusst grob**: alles, was
-`error != nil` zurückgibt, zählt als Fehler. Im
-`fetchJSON`/`postJSON`-Helper:
+Im Workshop nutzen wir Variante 1: Flight/Hotel/Car melden sich beim
+Start aktiv an. Das ist okay für Demos, aber in einer Container-
+Plattform wie Kubernetes ist Variante 2 (Sidecar) sauberer:
 
-```go
-if resp.StatusCode >= 400 {
-    return nil, fmt.Errorf("backend returned %d: %s", ...)
-}
+```
+Ohne Sidecar (Workshop-Stil):
+   ┌─────────────┐     "Hi Consul, ich bin
+   │ Flight-App  │      flight-service auf 10.0.0.5:8080,
+   └─────┬───────┘      hier mein Health-Check"
+         │
+         ▼
+      Consul
+
+Mit Sidecar (Plattform-Stil):
+   ┌──────────────┐ ┌────────────┐
+   │ Flight-App   │ │  Sidecar   │ ◄── überwacht App,
+   │ kennt nur    │◄┤  (registry │     registriert sich,
+   │ localhost    │ │   client)  │     deregistriert beim Stop
+   └──────────────┘ └─────┬──────┘
+                          ▼
+                       Consul
 ```
 
-Das heißt: aktuell **würde ein 404 den CB triggern**. Für die Demo
-egal, in Produktion wäre das ein Bug.
-
-**Spicy Take-away:** „Fehler" ist nicht binär. Wer den CB nur an
-`error != nil` hängt, baut ihm ein zu sensibles Frühwarnsystem. Reale
-Implementierungen (Resilience4j: `recordExceptions` /
-`ignoreExceptions`) machen genau hier eine bewusste Klassifikation.
+**Spicy Take-away:** Self-Registration im Code ist die schnellere
+Lösung, aber sie verteilt Plattform-Wissen in jeden Service. Das ist
+in Ordnung für 5 Services, wird zur Hölle bei 50. Der Branchen-Trend
+geht klar zu „Plattform übernimmt das" (Service Mesh, K8s Services).
 
 ---
 
-## Frage 4 — Bei OPEN liefern wir `flights: []` statt einer Fehlermeldung. Täuschen wir den User?
+## Frage 3 — Wir machen Client-Side Load Balancing. Warum gibt es dann überhaupt Service Mesh — oder brauchen wir am Ende beides?
 
-**Frage:** Wenn Flight ausfällt, sieht der User „keine Flüge verfügbar".
-Tatsächlich ist nur unser Backend kaputt. Ist das ehrlich?
+**Frage:** Unser Resolver wählt zufällig eine gesunde Instanz. Das ist
+einfach und funktioniert. Warum baut die halbe Branche stattdessen
+Service Mesh mit Envoy / Istio / Linkerd? Und ist das überhaupt ein
+Gegensatz?
 
-**Antwort:** Streng genommen: **nein, das ist ein UX-Antipattern.** Der
-User kann nicht zwischen „es gibt keine Flüge auf dieser Strecke" und
-„unser System hat ein Problem" unterscheiden — und macht im
-Zweifelsfall eine schlechte Buchungs-Entscheidung („dann fahre ich
-halt nur Hotel + Auto, ohne Flug").
+**Antwort:** „Client-Side LB vs. Service Mesh" ist eine **falsche
+Dichotomie**. Ein Service Mesh **macht** Client-Side LB — nur eben
+im Sidecar statt im App-Prozess. Man muss zwei Achsen sauber trennen:
 
-Ehrlichere Varianten:
+| Achse | Optionen |
+|-------|----------|
+| **Wer entscheidet?** (Topologie der Auswahl) | Client-Side (Aufrufer wählt) ↔ Server-Side (zentraler LB/Proxy davor wählt) |
+| **Wo läuft der Code?** (Deployment) | Library im App-Prozess ↔ Sidecar-Prozess ↔ Plattform-Service |
 
-1. **Teilantwort mit Hinweis-Feld.** JSON enthält `flights: []` plus
-   `unavailable: ["flight"]` oder `errors: [{ service: "flight",
-   reason: "temporarily unavailable" }]`. UI kann eine
-   Ersatznachricht anzeigen.
-2. **Aussagekräftige Header.** Wir setzen schon `X-Circuit-Open:
-   flight` — die UI könnte das auswerten und anzeigen.
-3. **Stale-while-revalidate.** Letztes erfolgreiches Ergebnis cachen
-   und im Fallback ausliefern, mit Hinweis „Daten von vor 2 Min".
+Client-Side LB gibt es als Library (Spring Cloud LoadBalancer, Netflix
+Ribbon, unser Workshop-Resolver), als reinen Sidecar (Envoy ohne
+Mesh-Drumherum) und implizit in Plattformen (`kube-proxy` lokal pro
+Knoten). „Client-Side" ist also eine **Entscheidungs-Topologie**, keine
+**Deployment-Topologie**.
 
-Der Workshop-Code ist die einfachste Variante (leeres Array, keine
-Erklärung) — bewusst, weil's um das Pattern geht, nicht um perfekte
-UX. **In Produktion gehört das aufgehübscht.**
+Damit entkräftet sich auch der naive Reflex „Library schlecht, Sidecar
+gut, also Mesh". Sobald die LB-Logik in einem **reinen LB-Sidecar**
+sitzt, ist das Sprach-Stack-Argument schon erledigt — dafür braucht
+man noch kein Mesh.
 
-**Spicy Take-away:** Resilience-Patterns sind **nicht ehrlich von
-selbst.** Sie liefern dem Aufrufer eine Antwort, die wie Erfolg
-aussieht. Wer das nicht durch UX und Header transparent macht, baut
-gut funktionierende Systeme, in denen der Mensch falsche Entscheidungen
-trifft.
+### Was unterscheidet ein Mesh wirklich?
+
+Service Mesh ist nicht „Sidecar statt Library", sondern **Sidecar
+plus deutlich mehr als nur LB**:
+
+1. **L7-Resilience eingebaut** — Retry, Timeout, Circuit Breaker,
+   Outlier Detection, Rate Limit. Stories 4 / 5 / 6 bauen wir im
+   Workshop in der App; ein Mesh nimmt das ab.
+2. **mTLS by default** zwischen allen Services — Zero-Trust, ohne
+   dass die App Zertifikate sieht.
+3. **Zentrale Control Plane** — eine YAML/CRD-Änderung, alle Sidecars
+   ziehen nach. Retry-Verhalten ändern = kein Redeploy.
+4. **Traffic-Splitting** für Canary / Blue-Green / A-B — die Antwort
+   auf Frage 5.
+5. **Einheitliche Observability** — jeder Hop emittiert dieselben
+   Metriken / Traces aus demselben Layer.
+
+### Brauchen wir beides?
+
+Das ist keine Oder-Frage: **Mesh enthält Service Discovery.** Die
+Control Plane muss wissen, welche Endpoints es gibt — in K8s übernimmt
+das der API-Server, mit Consul Connect übernimmt das Consul selbst,
+in standalone Envoy ein xDS-Server.
+
+Die ehrliche Schichtung:
+
+| Stufe | Was steckt drin | Wer betreibt |
+|-------|-----------------|--------------|
+| **1. Nur Discovery** (Workshop) | Registry + Resolver-Library | App-Team |
+| **2. Discovery + LB-Sidecar** | Wie 1, aber Auflösung im Sidecar | App-Team + Plattform |
+| **3. Service Mesh** | Discovery + LB + Retry/CB/Timeout + mTLS + Routing + Observability | Plattform-Team |
+
+Stufe 2 ist ein oft übersehener Mittelweg — sinnvoll bei
+polyglotter Landschaft ohne den vollen Mesh-Betrieb.
+
+```
+Stufe 1 (Workshop):
+   App ──► (eigene Resolver-Library) ──► Backend
+
+Stufe 2 (LB-Sidecar):
+   App ──► Sidecar (Envoy als LB) ──► Backend
+            ↑ nur LB + Discovery
+
+Stufe 3 (Mesh):
+   App ──► Sidecar (Envoy) ──► Sidecar (Envoy) ──► App
+            ↑ LB, CB, Retry,    ↑ LB, CB, Retry,
+              mTLS, Tracing,      mTLS, Tracing,
+              Authz, Routing      Authz, Routing
+   ▲ alle gesteuert von einer zentralen Control Plane
+```
+
+**Spicy Take-away:** Die echte Frage ist nicht „Mesh ja/nein", sondern
+„**brauchen wir mTLS, Traffic-Splitting und L7-Resilience wirklich
+überall, oder reicht Stufe 1 oder 2?**". Wer die Frage nicht stellt
+und direkt zu Istio greift, hat sechs Monate später einen Sidecar-
+Wildwuchs und kein Team, das den Mesh sauber operiert. Linkerd ist
+schlanker, Consul Connect die Variante für Nicht-K8s-Welten — und ein
+LB-Sidecar ohne Mesh ist ein legitimer Mittelweg.
 
 ---
 
-## Frage 5 — Wir warten 30 Sekunden, bevor wir's noch mal probieren. Wo kommt diese Zahl her — und ist sie sinnvoll?
+## Frage 4 — Consul prüft mit einem Health-Check, ob der Service gesund ist. Was, wenn der Service lügt?
 
-**Frage:** Akzeptanzkriterium: 30 s in OPEN. Aber:
-- wenn das Backend in 1 s wieder gesund ist, blockieren wir 29 s
-  unnötig
-- wenn es 5 min braucht, hämmern wir alle 30 s erneut drauf
+**Frage:** Unser `/health` aus Story 1 gibt einfach 200 zurück. Consul
+nimmt das als Beweis, dass der Service gesund ist. Was passiert, wenn
+der Service kaputt ist, aber `/health` trotzdem 200 sagt?
 
-Was ist die richtige Wartezeit?
+**Antwort:** Dann routet Consul munter Traffic auf eine kaputte
+Instanz. Consul ist **keine Wahrheits-Instanz**, sondern nur ein
+Endpoint-Indexer. Drei typische Failure-Modes:
 
-**Antwort:** Es gibt keine. **30 s ist ein Kompromiss**, der für den
-typischen Fall „Container restartet, Service ist in 10–20 s wieder
-oben" funktioniert. Daneben gibt es zwei smarter:
+1. **Zombie-Service.** HTTP-Server lebt, Worker-Pool ist tot, jeder
+   Request hängt 30 s. Health-Check sagt OK, weil er nur einen
+   leichtgewichtigen Endpoint trifft.
+2. **Backend-Abhängigkeit weg.** Service kann technisch antworten,
+   aber er kommt nicht mehr an seine Datenbank. Health-Check würde
+   das nur erkennen, wenn er die DB mitprüft.
+3. **Langsame Degradation.** P99-Latenz steigt von 50 ms auf 5 s,
+   Service ist „technisch" gesund, faktisch unbrauchbar.
 
-- **Exponential Backoff:** Erste Wartezeit z.B. 5 s, dann 10 s, 20 s,
-  40 s, 80 s, gedeckelt bei 5 min. Wenn das Backend tot bleibt,
-  hämmern wir es nicht jede Minute. Sobald ein Probe erfolgreich ist,
-  Reset auf 5 s.
-- **Adaptive Wartezeit:** Wartezeit am letzten erfolgreichen
-  Antwort-RTT orientieren — Backend, das normal in 50 ms antwortet,
-  darf nach 1 s wieder probiert werden; eines mit 3 s RTT erst nach
-  30 s.
+In jedem Fall hilft euch Consul nicht — es muss der **richtige
+Check** angeschlossen sein. Optionen, in steigender Schärfe:
 
-```
-   Konstante Wartezeit (Workshop):
-       OPEN ── 30s ── HALF_OPEN ── fail ── OPEN ── 30s ── HALF_OPEN ──
-       (gleich gefährlich, egal wie tot das Backend ist)
+- TCP-Ping (lebt der Port?) → schwächster Check
+- HTTP-Get auf `/health` → unser Workshop-Default
+- HTTP-Get mit echter Probe-Logik (Schema-Read auf DB, etc.)
+- Externe Synthetic-Checks (echter Booking-Roundtrip alle 30 s)
 
-   Exponential Backoff:
-       OPEN ── 5s ── HALF_OPEN ── fail ── OPEN ── 10s ── HALF_OPEN ── fail
-       ── OPEN ── 20s ── … (das tote Backend bekommt zunehmend Ruhe)
-```
-
-**Spicy Take-away:** Eine fixe Wartezeit ist die **schlechteste der
-guten Optionen**. Sie ist einfach zu implementieren und reicht für die
-Demo. Echte Resilience-Libraries (Resilience4j, Polly) liefern
-Backoff-Strategien out of the box — sich darauf nicht zu verlassen,
-ist ein Symptom für „CB selbst gebaut".
+**Spicy Take-away:** Service Discovery ist **so gut wie der
+schlechteste Health-Check, der ihr darin pflegt**. Ein Flight-Service,
+der lügt, ist schlimmer als gar keine Service Registry — weil ihr
+euch in Sicherheit wiegt.
 
 ---
 
-## Frage 6 — Der CB-Zustand lebt im Speicher. Was passiert beim Restart des Booking-Service?
+## Frage 5 — Mit logischen Namen wie `flight-service` — wie deploye ich eine neue Version, ohne dass alle Anfragen sofort drauf gehen?
 
-**Frage:** Wenn ich den Booking-Service neu starte, ist sein CB-Status
-wieder CLOSED — auch wenn das Hotel-Backend gerade tot ist. Ist das
-nicht gefährlich?
+**Frage:** Im Booking-Service steht „löse `flight-service` auf". Wenn
+ich jetzt eine neue Version v2 deployen will und erst mal nur 5 % des
+Traffics darauf schicken möchte (Canary) — wie?
 
-**Antwort:** Ja, in der Tendenz schon. Was passiert nach einem Restart:
+**Antwort:** Mit unserem aktuellen Stand: **gar nicht.** Wir haben
+einen logischen Namen und eine zufällige Auswahl unter allen gesunden
+Instanzen. Sobald ich `flight-service-v2` zusätzlich registriere,
+bekommt es **sofort den gleichen Traffic-Anteil** wie v1.
 
-```
-t=0    Booking-Service startet (CB: CLOSED)
-t=1    Erster Aufruf gegen totes Hotel → Fehler 1/5
-t=2..5 vier weitere Aufrufe → Fehler 5/5 → CB OPEN
-       (in der Zwischenzeit haben 5 Aufrufer 3 s gewartet)
-t=…    Normaler Betrieb
-```
+Lösungsoptionen, jeweils mit Komplexität:
 
-In den ersten Sekunden nach Restart ist der Service also „blind" und
-verbraucht 5 Aufrufe lang Threads, Connections und Wartezeit auf der
-Aufruferseite, bevor er reagiert. Das skaliert übel:
+1. **Tags / Metadaten in Consul.** v1 trägt `version=1`, v2 trägt
+   `version=2`. Resolver liest Tag und gewichtet. Funktioniert, aber
+   muss in jedem Client gebaut werden.
+2. **Separate logische Namen** (`flight-service-v1`, `flight-service-v2`).
+   Sauberer, aber jetzt muss der Aufrufer wissen, welche Version er
+   will — Versionierung leakt nach oben.
+3. **Service Mesh / API-Gateway.** Traffic-Splitting wird zentral
+   konfiguriert (z.B. `90 % → v1, 10 % → v2`), die Aufrufer wissen
+   davon nichts. → Brücke zum Thema Downtimeless Deployment.
 
-- **Bei mehreren Replicas** macht jede für sich diese Lernphase.
-- **Bei Rolling Deploy** sind temporär alle Replicas in der Lernphase
-  gleichzeitig.
-
-Lösungsansätze, von „simpel" bis „aufwendig":
-
-1. **Längere Timeouts beim ersten Aufruf hinnehmen** und die paar
-   Sekunden verschmerzen. Default unseres Workshops.
-2. **Initial Probe beim Service-Start.** Vor dem ersten Real-Traffic
-   einen Probe-Call gegen jedes Backend, damit der CB schon bei Start
-   einen aktuellen Wert hat.
-3. **CB-State in einer Shared Cache (Redis o.ä.).** Dann sehen alle
-   Replicas die gleiche Sicht auf jedes Backend. Aufwand hoch,
-   Konsistenz-Probleme inklusive.
-4. **Service Mesh (z.B. Envoy).** Der Sidecar hält den CB-State, der
-   App-Restart hat keinen Einfluss.
-
-**Spicy Take-away:** Lokale CB-Statistik ist **per Definition
-ephemerer Zustand**. Wer das vergisst, hat nach jedem Deploy ein paar
-Sekunden Blind-Phase, die im Monitoring als Latency-Spike auftaucht
-und niemand kann erklären, woher.
+**Spicy Take-away:** Service Discovery löst „wo läuft das?", nicht
+„welche Version will ich?". Sobald ihr Canary / Blue-Green / A/B-Tests
+braucht, kommt eine zweite Schicht ins Spiel. Wer das nicht im Modell
+hat, debuggt später Tage daran, warum 5 % der User „komische Fehler"
+sehen.
 
 ---
 
-## Frage 7 — Wir haben drei CBs (Flight, Hotel, Car). Warum nicht einen pro Endpoint? Oder einen für alles?
+## Frage 6 — Die Backend-Services registrieren sich beim Start in Consul. Was passiert beim STOP?
 
-**Frage:** Granularität: pro Backend? Pro Endpoint? Pro Aufruf? Wo ist
-der richtige Schnitt?
+**Frage:** Beim Start melden sich Flight/Hotel/Car bei Consul an. Was
+passiert beim Beenden? Verschwindet der Eintrag?
 
-**Antwort:** Es gibt drei Stufen mit jeweils anderen Trade-offs:
+**Antwort:** Im Workshop-Code: **nein, nicht aktiv.** Wenn ein Container
+einfach gestoppt wird (`docker stop`, `kubectl delete`), bleibt der
+Eintrag in Consul stehen, bis dessen TTL abläuft oder der
+Health-Check nach mehreren Misses ausschlägt.
 
-| Granularität           | Beispiel                          | Vorteil                              | Nachteil                                |
-|------------------------|-----------------------------------|--------------------------------------|-----------------------------------------|
-| **Global (ein CB)**    | „backend"                         | trivial einfach                      | ein kranker Service kappt alle Backends |
-| **Pro Service**        | Flight / Hotel / Car (unsere Wahl)| isoliert Ausfall pro Service         | innerhalb des Service kein Schutz       |
-| **Pro Endpoint**       | `flight.search` / `flight.book`   | sehr feingranular                    | viele CBs, schwer überblickbar          |
+Das hat ein konkretes Symptom:
 
 ```
-   Global:                Pro Service:           Pro Endpoint:
-   ┌──[CB]──┐             ┌─[CB]── Flight        ┌─[CB1]── Flight.search
-   │        ├──Flight     │                      │
-   │   App  ├──Hotel      App ─[CB]── Hotel      App ─[CB2]── Flight.book
-   │        ├──Car        │                      │
-   └────────┘             └─[CB]── Car           └─[CB3]── Hotel.search …
+t=0     Hotel-Instanz wird gestoppt
+t=0     Eintrag in Consul ist noch DA, Health-Check läuft, aber
+        Hotel antwortet nicht mehr
+t=0..n  Booking-Service löst hotel-service auf, wählt zufällig die
+        TOTE Instanz, Aufruf läuft in den Connection-Refused
+t=n     Consul markiert Instanz nach n fehlgeschlagenen Checks als
+        unhealthy → wird aus Resolver-Ergebnis entfernt
 ```
 
-**Pro Service** ist die übliche Default-Wahl, weil ein „kranker"
-Service oft alle seine Endpoints betrifft (Connection-Pool tot,
-Container down). Pro Endpoint lohnt sich, wenn ein Service mehrere sehr
-unterschiedliche Workloads hat (z.B. „lese" vs. „schreibe", einer
-schnell, einer langsam).
+Bis dahin (typisch 10–30 s) läuft Traffic ins Leere. Lösungen:
 
-**Spicy Take-away:** Granularität ist eine **Designentscheidung,
-keine Pattern-Eigenschaft.** Der Default „pro Service" ist meist
-richtig, aber wer einen langsamen `book`-Endpoint hat und einen
-schnellen `search`, fasst die zusammen — und kappt search, weil book
-unter Last steht.
+1. **Graceful Shutdown** im Service: vor dem Stop aktiv bei Consul
+   `deregister` rufen. Dann ist der Eintrag sofort weg.
+2. **Schneller Health-Check-Intervall** in Consul (z.B. 1 s statt 10 s).
+   Senkt Erkennungszeit, kostet Last.
+3. **Out-of-Service-Mode**: Service nimmt für ein paar Sekunden keine
+   neuen Requests mehr an, beendet laufende, dann erst Stop. Damit
+   verlieren wir während des Deploys keine Anfragen.
+
+**Spicy Take-away:** Service Discovery ist immer ein **eventually-
+consistent** System. Es gibt **immer** ein Zeitfenster, in dem Aufrufer
+auf tote Endpoints stoßen. Das ist genau einer der Gründe, warum wir
+in Story 4 / 5 Resilience-Patterns brauchen — sie überbrücken dieses
+Fenster, ohne dass der User es spürt.
 
 ---
 
 ## Sammelthemen für die Diskussion
 
-- Welcher Schwellenwert ist bei euch konfiguriert (oder eben nicht)?
-  Wer hat ihn gesetzt — und nach welcher Begründung?
-- Habt ihr einen CB, der im OPEN-State hängen geblieben ist? Was war
-  die Ursache — kaputtes Backend oder zu aggressives Tuning?
-- Wer schaut sich bei euch CB-Metriken an? Sind sie im Standard-
-  Dashboard, oder muss man sie suchen?
+- Welche Service Registry / Discovery nutzt ihr? Wie hochverfügbar ist
+  die wirklich (Mehrheit reicht? RAFT? Multi-Region)?
+- Wer ist bei euch verantwortlich, wenn ein Service in der Registry
+  „fehlt" — App-Team oder Plattform-Team?
+- Habt ihr schon mal erlebt, dass ein toter Service über Stunden in der
+  Registry blieb? Was war die Ursache?

@@ -41,13 +41,13 @@
 </pre>
 
 Note:
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 6 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
-- <strong>Diff zu Story 5: genau zwei Zeilen.</strong> <code>POST .../events/compensation</code> statt <code>DELETE</code>, plus Kommentar <code>// dispatched, kein Reply</code>. Der Rest (STATE, try, catch) ist Wort f&uuml;r Wort identisch. Visuell darauf zeigen.
+- Identischer Pseudo-Code findet sich im Dashboard unter Story 7 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
+- <strong>Diff zu Story 6: genau zwei Zeilen.</strong> <code>POST .../events/compensation</code> statt <code>DELETE</code>, plus Kommentar <code>// dispatched, kein Reply</code>. Der Rest (STATE, try, catch) ist Wort f&uuml;r Wort identisch. Visuell darauf zeigen.
 - Knackpunkte hervorheben:
-  - <strong>Forward bleibt synchron</strong>. Der <code>try</code>-Block ist 1:1 Story 5. Nur die Kompensation l&auml;uft &uuml;ber Events. Im Workshop bewusst, um den Vergleich sauber zu halten.
-  - <strong>reverse(booked)</strong>: identisch zu Story 5, gleiche fachliche Reihenfolge-Annahme. In der Schmalspur wartet Booking zwar nicht, aber das Event soll trotzdem in der erwarteten Storno-Reihenfolge rausgehen.
+  - <strong>Forward bleibt synchron</strong>. Der <code>try</code>-Block ist 1:1 Story 6. Nur die Kompensation l&auml;uft &uuml;ber Events. Im Workshop bewusst, um den Vergleich sauber zu halten.
+  - <strong>reverse(booked)</strong>: identisch zu Story 6, gleiche fachliche Reihenfolge-Annahme. In der Schmalspur wartet Booking zwar nicht, aber das Event soll trotzdem in der erwarteten Storno-Reihenfolge rausgehen.
   - <strong>eventId</strong> ist der Dedup-Key. Konzept zeigen, persistente Speicherung im Workshop bewusst weggelassen. In Produktion w&auml;re das Pflicht (at-least-once-Bus, Webhook-Retry).
   - <strong><code>mark step COMPENSATED</code> hei&szlig;t hier nur: Event ist raus.</strong> Nicht: Backend hat fachlich storniert. Saga geht direkt auf <code>FAILED</code>, der Kunde bekommt seine Antwort. Was, wenn der POST fehlschl&auml;gt oder der Rollback im Backend kaputt geht? Booking sieht nichts. Genau dieser Punkt wird in Recap-Frage 1 diskutiert.
   - <strong>Backend antwortet sofort 202 Accepted</strong> und macht den Rollback in einer Goroutine. Aus Sicht des Senders fire-and-forget.
-- Reference-Code: <code>services/booking/story6/</code>. Forward-Pfad wie Story 5, Compensation-Pfad via Webhook-POST ohne Reply.
-- Diskussions-Anker: Was passiert, wenn der <code>POST</code> selbst fehlschl&auml;gt? In Story 5 h&auml;tte Booking es synchron gemerkt. In Story 6 (Schmalspur) sieht Booking nichts. Reply-Events, Timeout und <code>STUCK</code>-Detection sind der n&auml;chste Schritt zur Production-Reife, im Workshop als Bonus / Diskussion.
+- Reference-Code: <code>services/booking/story7/</code>. Forward-Pfad wie Story 6, Compensation-Pfad via Webhook-POST ohne Reply.
+- Diskussions-Anker: Was passiert, wenn der <code>POST</code> selbst fehlschl&auml;gt? In Story 6 h&auml;tte Booking es synchron gemerkt. In Story 7 (Schmalspur) sieht Booking nichts. Reply-Events, Timeout und <code>STUCK</code>-Detection sind der n&auml;chste Schritt zur Production-Reife, im Workshop als Bonus / Diskussion.

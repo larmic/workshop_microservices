@@ -1,4 +1,4 @@
-## Story 3
+## Story 4
 
 <p class="subtitle">Wenn der Flug ausf&auml;llt <span class="time-badge">&asymp; 60 min</span></p>
 
@@ -37,11 +37,11 @@ Als <em>Kunde</em> m&ouml;chte ich <em>auch bei Ausfall des Flugbuchungssystems 
 </div>
 
 Note:
-- Hook: &bdquo;Story 2 hat uns geholfen, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben &mdash; und er antwortet nicht.&ldquo;
-- Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 3 &rarr; &bdquo;Story lesen&ldquo;.
-- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story3/</code> (Go, selbstgebauter CB &ndash; ca. 80 Zeilen).
+- Hook: &bdquo;Story 3 hat uns geholfen, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben &mdash; und er antwortet nicht.&ldquo;
+- Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 4 &rarr; &bdquo;Story lesen&ldquo;.
+- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story4/</code> (Go, selbstgebauter CB &ndash; ca. 80 Zeilen).
 - Drei separate CBs (Flight / Hotel / Car) statt einem globalen &mdash; isoliert Ausf&auml;lle pro Backend. Granularit&auml;t kommt im Recap (Frage 7) zur&uuml;ck.
 - Demo-Tipp: Dashboard &ouml;ffnet die Chaos-Schalter pro Service / pro Replica. Flight auf &bdquo;Fehler&ldquo; &rarr; nach 5 Calls geht der CB OPEN &rarr; Antwort enth&auml;lt sofort <code>flights: []</code> und Header <code>X-Circuit-Open: flight</code>. Zur&uuml;ck auf &bdquo;Normal&ldquo; &rarr; nach 30 s schliesst der Breaker &uuml;ber HALF_OPEN.
 - Resilience-Libraries: Resilience4j (Java), Polly (.NET), Spring Cloud Circuit Breaker, MicroProfile Fault Tolerance, gobreaker. Selber bauen ist Workshop-Didaktik &mdash; in Produktion <em>nimmt</em> man die Library.
-- Time-Box 60 min inkl. Demo. Dashboard <code>http://localhost</code> zeigt den Story-3-Modus inkl. Spickzettel mit Pseudo-Code.
-- Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-03-circuit-breaker.md</code>.
+- Time-Box 60 min inkl. Demo. Dashboard <code>http://localhost</code> zeigt den Story-4-Modus inkl. Spickzettel mit Pseudo-Code.
+- Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-04-circuit-breaker.md</code>.

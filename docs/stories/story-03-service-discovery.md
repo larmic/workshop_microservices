@@ -1,4 +1,4 @@
-# Story 2: Services dynamisch finden
+# Story 3: Services dynamisch finden
 
 > Der Booking-Service aus Story 1 läuft – aber die Backend-URLs in der Konfiguration werden zum Problem. Jedes Mal, wenn der Hotel-Service neu deployed wird, ändert sich der Port. Und wenn wir zwei Instanzen vom Flight-Service hochfahren wollen, weiß unser Booking-Service davon erstmal nichts.
 >

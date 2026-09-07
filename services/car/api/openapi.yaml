@@ -115,7 +115,7 @@ paths:
         findet keine Persistenz statt — die Stornierung wird ausschließlich
         geloggt. Der Endpoint ist idempotent: auch unbekannte oder bereits
         stornierte IDs liefern 204 No Content. Damit eignet er sich als
-        Kompensations-Schritt in einer Saga (siehe Story 5).
+        Kompensations-Schritt in einer Saga (siehe Story 6).
       operationId: cancelBooking
       parameters:
         - name: id
@@ -130,13 +130,13 @@ paths:
 
   /events/compensation:
     post:
-      summary: Kompensations-Event entgegennehmen (Story 6)
+      summary: Kompensations-Event entgegennehmen (Story 7)
       description: |
         Nimmt ein `CompensationRequested`-Event vom Booking-Service entgegen
         und antwortet **sofort mit 202 Accepted**. Die eigentliche Stornierung
         läuft asynchron in einer Goroutine — der Sender wartet nicht auf das
-        Ergebnis (fire & forget). Genutzt in der Choreography-Saga von Story 6,
-        im Gegensatz zum synchronen `DELETE /bookings/{id}` aus Story 5.
+        Ergebnis (fire & forget). Genutzt in der Choreography-Saga von Story 7,
+        im Gegensatz zum synchronen `DELETE /bookings/{id}` aus Story 6.
       operationId: receiveCompensationEvent
       requestBody:
         required: true

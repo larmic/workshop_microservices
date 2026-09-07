@@ -1,4 +1,4 @@
-## Story 5 &mdash; Recap
+## Story 6 &mdash; Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
@@ -21,8 +21,8 @@
 <div class="factor fragment">
 <h3><span class="numeral">3</span> Eventing statt sync?</h3>
 <p>Booking macht synchrones <code>DELETE</code>. W&auml;re ein <span class="hl"><code>CancelBooking</code>-Event</span> nicht nat&uuml;rlicher?</p>
-<code>Story 6 wartet</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Doch &mdash; genau das ist der Sprung von <strong>Orchestration &uuml;ber sync HTTP</strong> (Story 5) zu <strong>Event-getriebener Saga</strong> (Story 6, Choreography). Eventing verschiebt Retry-Logik in den Broker, Hotel-Ausfall wird zur Queue-Pufferung, Booking-Crash mitten drin kostet keine Recovery. <em>Aber:</em> Booking ist <em>nicht</em> fertig nach &bdquo;Event raus&ldquo;. Der Kunde will eine Antwort &mdash; Hotel publiziert <code>BookingCancelled</code> zur&uuml;ck, Booking konsumiert das Reply-Event, Saga-Status wird nachgef&uuml;hrt, Timeout-Erkennung f&uuml;r ausbleibende Replies bleibt n&ouml;tig.<br><strong>Spicy:</strong> Eventing ist die robustere Architektur &mdash; aber sie <em>verschiebt</em> die Komplexit&auml;t, sie eliminiert sie nicht. Die Verantwortung f&uuml;r die Ausf&uuml;hrung wandert zu Hotel; die Verantwortung f&uuml;r den Gesamtstatus gegen&uuml;ber dem Kunden bleibt bei Booking.</aside>
+<code>Story 7 wartet</code>
+<aside class="notes"><strong>Meine Antwort:</strong> Doch &mdash; genau das ist der Sprung von <strong>Orchestration &uuml;ber sync HTTP</strong> (Story 6) zu <strong>Event-getriebener Saga</strong> (Story 7, Choreography). Eventing verschiebt Retry-Logik in den Broker, Hotel-Ausfall wird zur Queue-Pufferung, Booking-Crash mitten drin kostet keine Recovery. <em>Aber:</em> Booking ist <em>nicht</em> fertig nach &bdquo;Event raus&ldquo;. Der Kunde will eine Antwort &mdash; Hotel publiziert <code>BookingCancelled</code> zur&uuml;ck, Booking konsumiert das Reply-Event, Saga-Status wird nachgef&uuml;hrt, Timeout-Erkennung f&uuml;r ausbleibende Replies bleibt n&ouml;tig.<br><strong>Spicy:</strong> Eventing ist die robustere Architektur &mdash; aber sie <em>verschiebt</em> die Komplexit&auml;t, sie eliminiert sie nicht. Die Verantwortung f&uuml;r die Ausf&uuml;hrung wandert zu Hotel; die Verantwortung f&uuml;r den Gesamtstatus gegen&uuml;ber dem Kunden bleibt bei Booking.</aside>
 </div>
 
 <div class="factor fragment">
@@ -43,7 +43,7 @@
 <h3><span class="numeral">6</span> Wer ist Owner?</h3>
 <p>Hotel / Flight / Car wissen <span class="hl">nichts</span> von der Saga. Richtig so?</p>
 <code>Wissen zentral</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Bei Orchestration-Saga genau richtig &mdash; und das ist ein Kernargument f&uuml;r Orchestration. Booking als Orchestrator wei&szlig; Reihenfolge, Fortschritt, was kompensiert werden muss, aktuellen Status. Hotel / Flight / Car bleiben dumm und einfach: sie kennen ihre lokalen Transaktionen, sonst nichts. Vorteile: Backends k&ouml;nnen in <em>anderen</em> Sagen mitspielen ohne Code-&Auml;nderung; ein Bug in der Saga-Logik steckt an <strong>einer</strong> Stelle, nicht in dreien; ein neues Backend (z.&nbsp;B. &bdquo;Mietboot&ldquo;) kommt ohne Anpassung der Bestehenden hinzu.<br><strong>Spicy:</strong> Orchestration konzentriert das Wissen. Choreography (Story 6) verteilt es. Beides ist legitim, aber <em>Wissen verteilen ohne Plan</em> f&uuml;hrt zu &bdquo;verteiltem Monolith&ldquo; &mdash; der schlimmsten beider Welten.</aside>
+<aside class="notes"><strong>Meine Antwort:</strong> Bei Orchestration-Saga genau richtig &mdash; und das ist ein Kernargument f&uuml;r Orchestration. Booking als Orchestrator wei&szlig; Reihenfolge, Fortschritt, was kompensiert werden muss, aktuellen Status. Hotel / Flight / Car bleiben dumm und einfach: sie kennen ihre lokalen Transaktionen, sonst nichts. Vorteile: Backends k&ouml;nnen in <em>anderen</em> Sagen mitspielen ohne Code-&Auml;nderung; ein Bug in der Saga-Logik steckt an <strong>einer</strong> Stelle, nicht in dreien; ein neues Backend (z.&nbsp;B. &bdquo;Mietboot&ldquo;) kommt ohne Anpassung der Bestehenden hinzu.<br><strong>Spicy:</strong> Orchestration konzentriert das Wissen. Choreography (Story 7) verteilt es. Beides ist legitim, aber <em>Wissen verteilen ohne Plan</em> f&uuml;hrt zu &bdquo;verteiltem Monolith&ldquo; &mdash; der schlimmsten beider Welten.</aside>
 </div>
 
 <div class="factor fragment">
@@ -58,5 +58,5 @@
 </div>
 
 <aside class="notes">
-Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story5.md</code>.
+Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story6.md</code>.
 </aside>

@@ -1,4 +1,4 @@
-## Story 6 &mdash; Recap
+## Story 7 &mdash; Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
@@ -8,7 +8,7 @@
 <h3><span class="numeral">1</span> Event-POST schl&auml;gt fehl</h3>
 <p>Booking publiziert per HTTP-POST. Hotel ist <span class="hl">down</span> &mdash; Connection-Refused. Was nun?</p>
 <code>Event ist weg</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Aktuell genau <em>nichts</em>. Der Fehler wird geloggt, der Step trotzdem als <code>COMPENSATED</code> markiert, die Saga geht auf <code>FAILED</code>, der Kunde bekommt seine Antwort. Bewusst die fragilste m&ouml;gliche Variante &mdash; sie zeigt das Problem von Eventing-ohne-Broker unverstellt: <em>Booking sagt &bdquo;Event ist raus&ldquo;, Realit&auml;t: Event wurde nie empfangen.</em> Lehrbuch-Antworten: <strong>Retry mit Backoff</strong> (transiente H&auml;nger), <strong>Outbox-Pattern</strong> (Event in derselben DB-TX wie der Saga-State, Worker publiziert), <strong>Dead-Letter-Queue</strong> (Operator entscheidet manuell), <strong>at-least-once-Bus</strong> (Broker garantiert Zustellung).<br><strong>Spicy:</strong> Eventing eliminiert das &bdquo;Backend kurz weg&ldquo;-Problem nicht &mdash; es verschiebt es. In Story 5 hat Booking den Schmerz gesp&uuml;rt. In Story 6 sieht Booking gar nichts. Wer Choreography ernst meint, f&auml;ngt nicht beim Event-Versand an, sondern bei der <em>Durability des Events</em>.</aside>
+<aside class="notes"><strong>Meine Antwort:</strong> Aktuell genau <em>nichts</em>. Der Fehler wird geloggt, der Step trotzdem als <code>COMPENSATED</code> markiert, die Saga geht auf <code>FAILED</code>, der Kunde bekommt seine Antwort. Bewusst die fragilste m&ouml;gliche Variante &mdash; sie zeigt das Problem von Eventing-ohne-Broker unverstellt: <em>Booking sagt &bdquo;Event ist raus&ldquo;, Realit&auml;t: Event wurde nie empfangen.</em> Lehrbuch-Antworten: <strong>Retry mit Backoff</strong> (transiente H&auml;nger), <strong>Outbox-Pattern</strong> (Event in derselben DB-TX wie der Saga-State, Worker publiziert), <strong>Dead-Letter-Queue</strong> (Operator entscheidet manuell), <strong>at-least-once-Bus</strong> (Broker garantiert Zustellung).<br><strong>Spicy:</strong> Eventing eliminiert das &bdquo;Backend kurz weg&ldquo;-Problem nicht &mdash; es verschiebt es. In Story 6 hat Booking den Schmerz gesp&uuml;rt. In Story 7 sieht Booking gar nichts. Wer Choreography ernst meint, f&auml;ngt nicht beim Event-Versand an, sondern bei der <em>Durability des Events</em>.</aside>
 </div>
 
 <div class="factor fragment">
@@ -29,7 +29,7 @@
 <h3><span class="numeral">4</span> Wo wandert das Wissen?</h3>
 <p>Saga-Logik ist jetzt verteilt &mdash; wann wird Choreography zum <span class="hl">verteilten Monolith</span>?</p>
 <code>Bug-Lokalisierung</code>
-<aside class="notes"><strong>Meine Antwort:</strong> In Story 5 lag das Saga-Wissen an einer Stelle (Booking). In Story 6 reagiert <em>jeder</em> Service auf Events anderer &mdash; ein Bug in der Saga-Logik kann jetzt &uuml;berall sitzen. Choreography wird zum <em>verteilten Monolith</em>, wenn (1) niemand mehr wei&szlig;, wer auf welches Event wie reagiert, (2) Event-Vertr&auml;ge nicht versioniert / dokumentiert sind, (3) eine &Auml;nderung in einem Service drei andere mitziehen muss. Gegenma&szlig;nahmen: zentraler Event-Katalog, Schema-Registry, klare Ownership pro Event-Typ, Visualisierung der Event-Fl&uuml;sse.<br><strong>Spicy:</strong> Orchestration konzentriert das Wissen, Choreography verteilt es. Beides ist legitim &mdash; aber <em>Wissen verteilen ohne Plan</em> f&uuml;hrt zum verteilten Monolith. Das ist die schlimmste beider Welten: lose gekoppelt zur Laufzeit, fest gekoppelt zur Build-Zeit.</aside>
+<aside class="notes"><strong>Meine Antwort:</strong> In Story 6 lag das Saga-Wissen an einer Stelle (Booking). In Story 7 reagiert <em>jeder</em> Service auf Events anderer &mdash; ein Bug in der Saga-Logik kann jetzt &uuml;berall sitzen. Choreography wird zum <em>verteilten Monolith</em>, wenn (1) niemand mehr wei&szlig;, wer auf welches Event wie reagiert, (2) Event-Vertr&auml;ge nicht versioniert / dokumentiert sind, (3) eine &Auml;nderung in einem Service drei andere mitziehen muss. Gegenma&szlig;nahmen: zentraler Event-Katalog, Schema-Registry, klare Ownership pro Event-Typ, Visualisierung der Event-Fl&uuml;sse.<br><strong>Spicy:</strong> Orchestration konzentriert das Wissen, Choreography verteilt es. Beides ist legitim &mdash; aber <em>Wissen verteilen ohne Plan</em> f&uuml;hrt zum verteilten Monolith. Das ist die schlimmste beider Welten: lose gekoppelt zur Laufzeit, fest gekoppelt zur Build-Zeit.</aside>
 </div>
 
 <div class="factor fragment">
@@ -44,5 +44,5 @@
 </div>
 
 <aside class="notes">
-Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story6.md</code>.
+Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story7.md</code>.
 </aside>

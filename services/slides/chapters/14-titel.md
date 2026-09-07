@@ -5,6 +5,6 @@
 <p class="subtitle">Wenn der Flug ausf&auml;llt</p>
 
 Note:
-- Hook: &bdquo;In Story 2 haben wir gelernt, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben &mdash; und er antwortet nicht.&ldquo;
-- Demo-Vorschau: Im Dashboard Flight auf &bdquo;Fehler&ldquo; stellen, dann ein paar Requests gegen <code>/booking/offers</code> &mdash; jeder h&auml;ngt 3 s im Timeout. Mit Circuit Breaker in Story 3: nach den ersten f&uuml;nf Fehlern instant Fallback.
+- Hook: &bdquo;In Story 3 haben wir gelernt, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben &mdash; und er antwortet nicht.&ldquo;
+- Demo-Vorschau: Im Dashboard Flight auf &bdquo;Fehler&ldquo; stellen, dann ein paar Requests gegen <code>/booking/offers</code> &mdash; jeder h&auml;ngt 3 s im Timeout. Mit Circuit Breaker in Story 4: nach den ersten f&uuml;nf Fehlern instant Fallback.
 - &Uuml;bergang zur Karten-Slide: &bdquo;F&uuml;nf Bausteine, die den Kollaps verhindern.&ldquo;

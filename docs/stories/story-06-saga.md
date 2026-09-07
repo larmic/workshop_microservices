@@ -1,4 +1,4 @@
-# Story 5: Alles oder nichts - aber richtig
+# Story 6: Alles oder nichts - aber richtig
 
 **Thema:** Saga Pattern
 **Zeitrahmen:** ca. 60 Minuten
@@ -40,5 +40,5 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 
 - Implementiere parallele Ausführung unabhängiger Schritte
 - Füge Timeout-Handling hinzu (Was passiert, wenn ein Service nicht antwortet?)
-- Kompensation mit Retry-Logik durchführen (Kompensation darf nicht fehlschlagen) — siehe Diskussionsfragen 1, 2 und 5 in `docs/questions/story5.md`
-- Saga-Status persistieren (für Recovery nach Absturz) — kein Saga-spezifisches Thema, sondern generelle Orchestrator-Robustheit, siehe Diskussionsfrage 7 in `docs/questions/story5.md`
+- Kompensation mit Retry-Logik durchführen (Kompensation darf nicht fehlschlagen) — siehe Diskussionsfragen 1, 2 und 5 in `docs/questions/story6.md`
+- Saga-Status persistieren (für Recovery nach Absturz) — kein Saga-spezifisches Thema, sondern generelle Orchestrator-Robustheit, siehe Diskussionsfrage 7 in `docs/questions/story6.md`

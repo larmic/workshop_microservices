@@ -51,8 +51,8 @@
 
 Note:
 - Linke Spalte = Lifecycle der Instanz (anmelden / abmelden). Rechte Spalte = das, was der Caller bei jedem Request tut (resolvieren + downstream rufen).
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 2 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
+- Identischer Pseudo-Code findet sich im Dashboard unter Story 3 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
 - `?passing=true` ist der Knackpunkt: ohne den Filter bekommt ihr auch unhealthy Instanzen zur&uuml;ck. Health-Check ist nur dann wertvoll, wenn der Client ihn auch respektiert.
 - `DeregisterCriticalServiceAfter: 1m` &mdash; Consul r&auml;umt tote Eintr&auml;ge selbst weg, falls der Shutdown-Hook nicht durchkommt (Kill -9, OOM, etc.). Wichtig f&uuml;r Selbstheilung.
-- Im Reference-Image (`booking/story2/`) ist genau das implementiert: siehe `services/shared/consul/register.go` und `resolver.go`.
+- Im Reference-Image (`booking/story3/`) ist genau das implementiert: siehe `services/shared/consul/register.go` und `resolver.go`.
 - Trade-off besprechen: vor jedem Call resolvieren = stets aktuell, aber Last auf Consul. Alternative: Cache mit Watch / TTL.

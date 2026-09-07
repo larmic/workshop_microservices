@@ -48,14 +48,14 @@ Jeder Service registriert sich beim Start bei Consul mit einer **eindeutigen Ser
 - **Health Checks**: Regelmaessige Pruefung des `/health`-Endpoints (alle 10s)
 - **UI**: Visuelle Darstellung unter `http://localhost:8500`
 
-**Wichtig**: Traefik nutzt Consul in diesem Setup **nicht** fuer Service Discovery. Traefik verwendet den `file`-Provider (statische Konfiguration), nicht den `consul`-Provider. Consul dient hier primaer als Informationsquelle und wird von Booking Story 2 aktiv genutzt.
+**Wichtig**: Traefik nutzt Consul in diesem Setup **nicht** fuer Service Discovery. Traefik verwendet den `file`-Provider (statische Konfiguration), nicht den `consul`-Provider. Consul dient hier primaer als Informationsquelle und wird von Booking Story 3 aktiv genutzt.
 
-### 4. Booking Story 2 (Consul-basierte Discovery)
+### 4. Booking Story 3 (Consul-basierte Discovery)
 
-Im Gegensatz zu Booking Story 1 (hardcodierte URLs) nutzt Story 2 den `consul.Resolver`, um zur Laufzeit eine gesunde Service-Instanz zu finden:
+Im Gegensatz zu Booking Story 1 (hardcodierte URLs) nutzt Story 3 den `consul.Resolver`, um zur Laufzeit eine gesunde Service-Instanz zu finden:
 
 ```
-Booking Story 2
+Booking Story 3
     |   consul.ResolveServiceURL("car-service")
     v
 Consul API (/v1/health/service/car-service?passing=true)
@@ -71,7 +71,7 @@ Zufaellige Auswahl einer Instanz -> direkter HTTP-Call
 | **Traefik**      | Routing (Pfad -> Service-Hostname)      | Nein, nur den Hostnamen   |
 | **Docker DNS**   | Namensaufloesung + Round-Robin          | Ja, alle laufenden Container |
 | **Consul**       | Service Registry + Health Checks        | Ja, alle registrierten Instanzen |
-| **Booking Story 2** | Service Discovery via Consul        | Ja, waehlt zufaellige gesunde Instanz |
+| **Booking Story 3** | Service Discovery via Consul        | Ja, waehlt zufaellige gesunde Instanz |
 
 ## Ausprobieren
 

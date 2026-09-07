@@ -81,7 +81,7 @@ Bei unDraw die Primärfarbe auf `#7348E1` setzen — fügt sich nahtlos in die S
 
 ## Sonstige offene Punkte
 
-- [ ] **`docs/questions/story7.md`** anlegen — die anderen Stories haben eine eigene Fragen-Datei, Story 7 (Tracing) nicht. Aktuell sind die Recap-Notes aus `docs/instructions/distributed-tracing.md` (Abschnitt 9 + 10) synthetisiert. Wenn ihr die Diskussion ähnlich tief wie bei Stories 1–6 vorbereiten wollt, lohnt sich eine eigene Datei.
+- [ ] **`docs/questions/story8.md`** anlegen — die anderen Stories haben eine eigene Fragen-Datei, Story 8 (Tracing) nicht. Aktuell sind die Recap-Notes aus `docs/instructions/distributed-tracing.md` (Abschnitt 9 + 10) synthetisiert. Wenn ihr die Diskussion ähnlich tief wie bei Stories 1–7 vorbereiten wollt, lohnt sich eine eigene Datei.
 - [ ] **Sprecher-Notizen Story 1 Recap** prüfen — wurden im finalen Polish-Pass auf 6 Boxen erweitert. Falls Zeit knapp, eine der neuen Boxen (Config oder OpenAPI) ggf. wieder rausnehmen.
 - [ ] **Foto vom Trainer** für Kapitel 1 / Closing — falls gewünscht persönliche Note.
 

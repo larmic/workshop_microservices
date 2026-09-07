@@ -79,7 +79,7 @@ Symptom: `docker compose up` bricht ab mit `bind: address already in use` (oder
 | 8080 | Traefik-Dashboard |
 | 8500 | Consul |
 | 8084 | Swagger UI (direkt) |
-| 8085 bis 8091 | Booking-Referenz Story 1 bis 7 (direkt) |
+| 8085 bis 8091 | Booking-Referenz Story 1 bis 8 (direkt) |
 | 8099 | Booking-Custom (direkt, an Traefik vorbei) |
 
 Belegung finden:

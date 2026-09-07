@@ -64,7 +64,7 @@
 <span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
-- Hook: &bdquo;In Story 5 und 6 hattet ihr eine Buchung, die durch vier Service-Logs gewandert ist. Wer konnte einen einzelnen Vorgang sauber rekonstruieren?&ldquo; Antwort meistens: Timestamps zusammenpuzzeln, viel Augenma&szlig;. Dann der Effekt sp&auml;ter in der Demo: <code>docker compose logs | grep &lt;trace-id&gt;</code> &mdash; alles in einem Block.
+- Hook: &bdquo;In Story 6 und 7 hattet ihr eine Buchung, die durch vier Service-Logs gewandert ist. Wer konnte einen einzelnen Vorgang sauber rekonstruieren?&ldquo; Antwort meistens: Timestamps zusammenpuzzeln, viel Augenma&szlig;. Dann der Effekt sp&auml;ter in der Demo: <code>docker compose logs | grep &lt;trace-id&gt;</code> &mdash; alles in einem Block.
 - Karten-Reihenfolge bewusst: erst die <em>Begriffe</em>, dann das <em>Wire-Format</em>, zuletzt die <em>Cost-Frage</em>. Mechanik (Propagation, Logging, Async-Grenze) kommt auf der n&auml;chsten Folie als Pseudo-Code.
 - Trace vs. Span explizit trennen: <em>Trace</em> ist der &bdquo;rote Faden&ldquo;, <em>Span</em> ist ein einzelnes Wegst&uuml;ck, <em>Hop</em> ist der &Uuml;bergang. Wir bauen im Workshop nur Trace-Korrelation &mdash; den Span-Baum baut OpenTelemetry, daf&uuml;r ist die n&auml;chste Folie der &Uuml;bergang.
 - Wer was wo nutzt: <strong>OpenTelemetry</strong> ist de-facto-Standard, vendor-neutraler OTLP-Export. <strong>Jaeger</strong> klassisch lokal/CNCF, Storage skaliert nicht trivial. <strong>Grafana Tempo</strong> g&uuml;nstig (Objekt-Storage), integriert mit Loki/Mimir. SaaS-L&ouml;sungen (Datadog, Honeycomb, Dynatrace, New Relic) komfortabel, aber Pricing-Themen.

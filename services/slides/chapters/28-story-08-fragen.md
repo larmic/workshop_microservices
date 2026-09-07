@@ -1,4 +1,4 @@
-## Story 7 &mdash; Recap
+## Story 8 &mdash; Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
@@ -27,7 +27,7 @@
 
 <div class="factor fragment">
 <h3><span class="numeral">4</span> Async-Grenze</h3>
-<p>Bei den Compensation-Events aus Story 6: der HTTP-Header ist <span class="hl">weg</span>. Wie kommt der Trace mit?</p>
+<p>Bei den Compensation-Events aus Story 7: der HTTP-Header ist <span class="hl">weg</span>. Wie kommt der Trace mit?</p>
 <code>traceparent als Property</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Der Trace-Kontext muss <em>aktiv</em> als Event-Property mitwandern. Beim Konsumenten parsen, in den Worker-Goroutine-Kontext legen, mit dem Logger fortf&uuml;hren. Bei echten Brokern (Kafka / RabbitMQ / SNS-SQS): in die <strong>Message-Header</strong>, nicht in den Payload &mdash; sonst muss jeder Consumer das Payload-Schema kennen, nur um den Trace zu propagieren. In unserer Webhook-Variante ist der Trace im Event-Body, weil wir keine Header haben.<br><strong>Spicy:</strong> Async-Tracing ist die unausgesprochene Pflicht jeder Eventing-Architektur. Wer nur HTTP-Header propagiert und Events als &bdquo;ist halt async&ldquo; behandelt, hat einen Trace, der genau da abreisst, wo es spannend wird &mdash; an der Bus-Grenze.</aside>
 </div>
@@ -58,5 +58,5 @@
 </div>
 
 <aside class="notes">
-Diese Diskussionspunkte basieren auf <code>docs/instructions/distributed-tracing.md</code> (Abschnitte 10 und 9). Eine eigene <code>docs/questions/story7.md</code> existiert (bisher) nicht.
+Diese Diskussionspunkte basieren auf <code>docs/instructions/distributed-tracing.md</code> (Abschnitte 10 und 9). Eine eigene <code>docs/questions/story8.md</code> existiert (bisher) nicht.
 </aside>
