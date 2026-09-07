@@ -307,6 +307,91 @@
     margin: 0;
 }
 
+/* ---------------------------------------------------------------------- */
+/* Vergleichstabelle (.compare): Zeilenlabel + „Damals" gedämpft + „Heute"  */
+/* mit Lime-Akzenten. Erster Einsatz: 04 „Brauchen wir Microservices?"     */
+/* ---------------------------------------------------------------------- */
+
+.reveal .compare {
+    display: grid;
+    grid-template-columns: 150px 1fr 1fr;
+    column-gap: 40px;
+    align-items: baseline;
+}
+
+.reveal .compare > div {
+    padding: 14px 0;
+    border-bottom: 1px solid #E4E0F5;
+    min-width: 0;
+}
+
+.reveal .compare-head {
+    color: var(--box-border);
+    font-size: 16px;
+    font-weight: 700;
+    padding-top: 0 !important;
+}
+
+/* Label-Spalte ohne Trennlinien, die Linien gehören nur zu den Inhaltsspalten. */
+.reveal .compare > div.compare-label,
+.reveal .compare > div.compare-head:first-child {
+    color: #8880AE;
+    font-size: 17px;
+    border-bottom: none;
+}
+
+.reveal .compare-old {
+    color: #6F6A8A;
+    font-size: 22px;
+}
+
+.reveal .compare-new {
+    color: var(--slide-text);
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.reveal .compare-new .hl {
+    font-weight: 700;
+    padding: 0.05em 0.3em;
+    border-radius: 6px;
+}
+
+/* Spezifischer als `.reveal .compare > div`, sonst bleibt die Linie stehen. */
+.reveal .compare > div.compare-note {
+    color: #8880AE;
+    font-size: 16px;
+    border-bottom: none;
+}
+
+/* Fußzeile unter der Tabelle: Fazit links, Merksatz rechts */
+.reveal .compare-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    margin-top: 40px;
+}
+
+.reveal .compare-foot p {
+    font-size: 20px;
+    line-height: 1.4;
+    margin: 0;
+    color: var(--slide-text);
+}
+
+/* Merksatz / Punchline auf Lime, Navy-Text (Design-Doku: „Callout-Lime") */
+.reveal .callout {
+    flex: none;
+    background: var(--highlight);
+    color: var(--slide-text);
+    border-radius: 14px;
+    padding: 18px 28px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
 /* Code */
 .reveal pre {
     box-shadow: 0 2px 8px rgba(10, 3, 73, 0.15);
