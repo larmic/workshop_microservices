@@ -380,6 +380,73 @@
     color: var(--slide-text);
 }
 
+/* ---------------------------------------------------------------------- */
+/* Timeline „Der Weg zu Microservices" (05): Straße mit Jahres-Punkten,     */
+/* Architekturen oben (Violett), Technologien unten (Navy). Inline-SVG,    */
+/* x-Achse maßstäblich 1990–2022.                                          */
+/* ---------------------------------------------------------------------- */
+
+.reveal .timeline {
+    width: 100%;
+}
+
+.reveal .timeline svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.reveal .timeline .tl-road {
+    fill: none;
+    stroke: var(--box-bg);
+    stroke-width: 26;
+    stroke-linecap: round;
+}
+
+.reveal .timeline .tl-dash {
+    fill: none;
+    stroke: var(--highlight);
+    stroke-width: 4;
+    stroke-dasharray: 22 18;
+    stroke-linecap: round;
+}
+
+.reveal .timeline .tl-tick {
+    stroke: #D9D1F4;
+    stroke-width: 2;
+}
+
+.reveal .timeline .tl-dot {
+    fill: var(--box-bg);
+    stroke: #fff;
+    stroke-width: 3;
+}
+
+.reveal .timeline .tl-year {
+    font-family: var(--r-code-font);
+    font-size: 15px;
+    fill: #fff;
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+/* text-anchor bewusst nicht per CSS: die Regel würde die text-anchor-Attribute
+   im SVG überschreiben, die für Randbeschriftungen start/end brauchen. */
+.reveal .timeline .tl-arch {
+    font-family: var(--font-body);
+    font-size: 22px;
+    font-weight: 700;
+    fill: var(--box-border);
+}
+
+.reveal .timeline .tl-tech {
+    font-family: var(--font-body);
+    font-size: 19px;
+    font-weight: 400;
+    fill: var(--slide-text);
+}
+
 /* Merksatz / Punchline auf Lime, Navy-Text (Design-Doku: „Callout-Lime") */
 .reveal .callout {
     flex: none;
@@ -648,15 +715,6 @@
 .reveal .intro ul.speaker-links a:hover {
     color: var(--r-link-color-hover);
     border-bottom-color: var(--r-link-color-hover);
-}
-
-.reveal img.journey-image {
-    display: block;
-    margin: 1rem auto 0;
-    max-width: 95%;
-    max-height: 78vh;
-    width: auto;
-    height: auto;
 }
 
 /* Setup-Box (Vorbereitung): der Code wird abgetippt, also bewusst groß und
