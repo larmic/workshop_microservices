@@ -16,15 +16,18 @@
  *   <!-- .slide: data-background-color="#ffffff" -->   weiße Slide (Default)
  */
 
-/* Poppins (SIL OFL 1.1), Subset latin, siehe assets/fonts/README.md */
-@font-face { font-family: "Poppins"; font-style: normal; font-weight: 400; font-display: swap; src: url("./assets/fonts/poppins-400.woff2") format("woff2"); }
-@font-face { font-family: "Poppins"; font-style: italic; font-weight: 400; font-display: swap; src: url("./assets/fonts/poppins-400-italic.woff2") format("woff2"); }
-@font-face { font-family: "Poppins"; font-style: normal; font-weight: 500; font-display: swap; src: url("./assets/fonts/poppins-500.woff2") format("woff2"); }
-@font-face { font-family: "Poppins"; font-style: normal; font-weight: 600; font-display: swap; src: url("./assets/fonts/poppins-600.woff2") format("woff2"); }
-@font-face { font-family: "Poppins"; font-style: normal; font-weight: 700; font-display: swap; src: url("./assets/fonts/poppins-700.woff2") format("woff2"); }
-@font-face { font-family: "Poppins"; font-style: normal; font-weight: 800; font-display: swap; src: url("./assets/fonts/poppins-800.woff2") format("woff2"); }
+/* Poppins (SIL OFL 1.1), Subset latin, siehe assets/fonts/README.md.
+   font-display: block statt swap: Chrome positioniert SVG-Text (Timeline) falsch,
+   wenn die Schrift nach dem ersten Layout nachgeladen wird. Die Dateien liegen
+   lokal, die Wartezeit ist praktisch null. */
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 400; font-display: block; src: url("./assets/fonts/poppins-400.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: italic; font-weight: 400; font-display: block; src: url("./assets/fonts/poppins-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 500; font-display: block; src: url("./assets/fonts/poppins-500.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 600; font-display: block; src: url("./assets/fonts/poppins-600.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 700; font-display: block; src: url("./assets/fonts/poppins-700.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-style: normal; font-weight: 800; font-display: block; src: url("./assets/fonts/poppins-800.woff2") format("woff2"); }
 /* Sacramento (SIL OFL 1.1): verbundene Schreibschrift, nur für den „roten Faden" auf der Feedback-Folie */
-@font-face { font-family: "Sacramento"; font-style: normal; font-weight: 400; font-display: swap; src: url("./assets/fonts/sacramento-400.woff2") format("woff2"); }
+@font-face { font-family: "Sacramento"; font-style: normal; font-weight: 400; font-display: block; src: url("./assets/fonts/sacramento-400.woff2") format("woff2"); }
 
 :root {
     --slide-bg: #ffffff;
@@ -435,7 +438,7 @@
    im SVG überschreiben, die für Randbeschriftungen start/end brauchen. */
 .reveal .timeline .tl-arch {
     font-family: var(--font-body);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     fill: var(--box-border);
 }
