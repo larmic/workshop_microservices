@@ -1,8 +1,9 @@
-<!-- .slide: data-background-image="./assets/tracing.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Distributed Tracing
 
 <p class="subtitle">W3C Trace Context in Pseudo-Code</p>
+
+<div class="cols dense">
+<div>
 
 <pre class="cheatsheet"><span class="cmd">// W3C Trace Context: 00-&lt;trace-id-32hex&gt;-&lt;span-id-16hex&gt;-&lt;flags-2hex&gt;</span>
 
@@ -22,8 +23,12 @@ on outgoingRequest(ctx, req):
 <span class="cmd">// Logging: jede Zeile bekommt trace_id als Feld</span>
 log.info("forward step done",
   trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")
+</pre>
 
-<span class="cmd">// Async-Grenze: Trace-ID als Event-Property mitschicken</span>
+</div>
+<div>
+
+<pre class="cheatsheet"><span class="cmd">// Async-Grenze: Trace-ID als Event-Property mitschicken</span>
 event = {
   eventId, sagaId, bookingId,
   traceparent: ctx.tc.toHeader()    // damit der Konsument den Trace fortf&uuml;hrt
@@ -35,6 +40,9 @@ on receiveCompensationEvent(event):
   asyncCtx = bgCtx.with(tc)
   go process(asyncCtx, event)       // Logs der Goroutine tragen die trace_id
 </pre>
+
+</div>
+</div>
 
 Note:
 - Identischer Pseudo-Code findet sich im Dashboard unter Story 8 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.

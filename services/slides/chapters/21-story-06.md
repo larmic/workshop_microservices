@@ -1,6 +1,6 @@
-## Story 6
+<!-- .slide: data-story="6" -->
 
-<p class="subtitle">Alles oder nichts &mdash; aber richtig <span class="time-badge">&asymp; 60 min</span></p>
+## Alles oder nichts &mdash; aber richtig <span class="time-badge">&asymp; 60 min</span>
 
 <div class="cols">
 <div>

@@ -1,10 +1,8 @@
-<!-- .slide: data-background-image="./assets/circuitbreaker.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Circuit Breaker kann mehr
 
 <p class="subtitle">&hellip; als wir hier nutzen</p>
 
-<div class="box">
+<div class="list-cols">
 
 - **Rate-basierte Ausl&ouml;sung** &mdash; Fehler<em>quote</em> &uuml;ber Sliding Window (z.&nbsp;B. &gt;&nbsp;50&nbsp;% bei min. 10&nbsp;Calls) statt fixer Z&auml;hler
 - **Slow-Call Detection** &mdash; Aufrufe &uuml;ber X&nbsp;ms gelten als Fehler, auch wenn sie HTTP&nbsp;200 liefern

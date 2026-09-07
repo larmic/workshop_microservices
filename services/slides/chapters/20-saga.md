@@ -1,8 +1,8 @@
-<!-- .slide: data-background-image="./assets/saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Saga
 
 <p class="subtitle">Alles oder nichts &mdash; aber richtig</p>
+
+<img class="pattern-image" src="./assets/saga.png" alt=""/>
 
 <div class="factor-row">
 
@@ -60,8 +60,6 @@
 </div>
 
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
 - Hook: &bdquo;In Story 4 haben wir bei POST Fail-Fast gemacht &mdash; wenn ein CB OPEN ist, ganzen Buchungsversuch abbrechen. Aber: was, wenn der Flug schon gebucht ist und <em>dann</em> kippt das Hotel?&ldquo; Demo: Flight normal, Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code> &mdash; im Dashboard ist sichtbar, wie Flight gebucht und dann kompensiert wird.

@@ -1,10 +1,8 @@
-<!-- .slide: data-background-image="./assets/saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Saga kann mehr
 
 <p class="subtitle">&hellip; als wir hier nutzen</p>
 
-<div class="box">
+<div class="list-cols">
 
 - **Idempotente Kompensation** &mdash; <code>DELETE /bookings/{id}</code> liefert 2xx auch bei unbekannter ID. Idempotenz schl&auml;gt Ehrlichkeit.
 - **Retry mit Backoff** &mdash; Kompensation bei transienten Fehlern wiederholen, ohne Doppel-Storno.

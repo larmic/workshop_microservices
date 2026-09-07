@@ -1,10 +1,8 @@
-<!-- .slide: data-background-image="./assets/service_discovery.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Consul kann mehr
 
 <p class="subtitle">&hellip; als wir hier nutzen</p>
 
-<div class="box">
+<div class="list-cols">
 
 - **Key-Value Store** &mdash; gemeinsamer Konfigurations-Speicher f&uuml;r alle Services
 - **Service Mesh** &mdash; verschl&uuml;sselt Service-zu-Service-Verkehr automatisch

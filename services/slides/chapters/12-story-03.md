@@ -1,6 +1,6 @@
-## Story 3
+<!-- .slide: data-story="3" -->
 
-<p class="subtitle">Services finden sich selbst <span class="time-badge">&asymp; 60 min</span></p>
+## Services finden sich selbst <span class="time-badge">&asymp; 60 min</span>
 
 <div class="cols">
 <div>

@@ -1,8 +1,10 @@
-## Story 7 &mdash; Recap
+<!-- .slide: data-story="7" -->
+
+## Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
-<div class="recap-grid">
+<div class="recap-grid cols-3">
 
 <div class="factor fragment">
 <h3><span class="numeral">1</span> Event-POST schl&auml;gt fehl</h3>
@@ -38,8 +40,6 @@
 <code>at-least-once + idempotent</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Streng genommen nein &mdash; nicht ohne globale Koordination, die in verteilten Systemen praktisch unbezahlbar ist. Die <em>praktische N&auml;herung</em> ist: <strong>at-least-once beim Sender</strong> (Broker garantiert &bdquo;mindestens einmal&ldquo;) + <strong>Idempotenz beim Empf&auml;nger</strong> (Dedup-Key, mehrfache Zustellung wird ignoriert). Effektives Ergebnis: jedes Event genau einmal wirksam, auch wenn es technisch mehrfach geschickt wird. Kafka und einige andere Broker bieten zwar Exactly-once-Semantik an &mdash; sie ist aber teuer (Transaktional-IDs, Idempotenz-Producer, viel Koordination) und l&ouml;st nur einen Teil des Problems (Producer &rarr; Broker), nicht den Empf&auml;nger-seitigen Teil.<br><strong>Spicy:</strong> &bdquo;Exactly-once&ldquo; ist Marketing. Was du wirklich willst, ist <em>at-least-once delivery + idempotent processing</em>. Das ist nicht hipper, aber tats&auml;chlich machbar.</aside>
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 

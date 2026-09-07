@@ -1,8 +1,10 @@
-## Story 5 &mdash; Recap
+<!-- .slide: data-story="5" -->
+
+## Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
-<div class="recap-grid">
+<div class="recap-grid cols-3">
 
 <div class="factor fragment">
 <h3><span class="numeral">1</span> Wozu, wenn es CB gibt?</h3>
@@ -37,7 +39,7 @@
 <h3><span class="numeral">5</span> Warum 10?</h3>
 <p>Wir haben <code>maxConcurrent=10</code> hartkodiert. Wo kommt die Zahl her &mdash; <span class="hl">w&auml;re 5 sicherer, 100 freundlicher</span>?</p>
 <code>L = &lambda; &times; W</code>
-<aside class="notes"><strong>Meine Antwort:</strong> 10 ist eine Workshop-Default-Zahl, die fürs Demo gut funktioniert. In Produktion orientiert man die Zahl an drei Faktoren: <strong>(1) Connection-Pool</strong> des HTTP-Clients (mehr Slots als verf&uuml;gbare Connections sind sinnlos), <strong>(2) Backend-Kapazit&auml;t</strong> (Faustregel: <em>Replicas &times; maxConcurrent &le; Backend-Kapazit&auml;t</em>), <strong>(3) Little's Law</strong>: <code>concurrency = throughput &times; latency</code>. Bei 50&nbsp;ms RTT und 200&nbsp;req/s Ziel &rarr; 10. Bei 500&nbsp;ms RTT und gleichem Throughput &rarr; 100. <strong>Kontraintuitiv:</strong> langsamere Backends brauchen <em>mehr</em> Slots, nicht weniger.<br><strong>Spicy:</strong> Wer <code>maxConcurrent</code> aus dem Bauch heraus setzt (&bdquo;10 klingt gut&ldquo;), hat den Bulkhead nicht implementiert, sondern dekoriert. Das Limit geh&ouml;rt aus gemessener Backend-Kapazit&auml;t abgeleitet, nicht aus Beispiel-Code &uuml;bernommen.</aside>
+<aside class="notes"><strong>Meine Antwort:</strong> 10 ist eine Workshop-Default-Zahl, die f&uuml;rs Demo gut funktioniert. In Produktion orientiert man die Zahl an drei Faktoren: <strong>(1) Connection-Pool</strong> des HTTP-Clients (mehr Slots als verf&uuml;gbare Connections sind sinnlos), <strong>(2) Backend-Kapazit&auml;t</strong> (Faustregel: <em>Replicas &times; maxConcurrent &le; Backend-Kapazit&auml;t</em>), <strong>(3) Little's Law</strong>: <code>concurrency = throughput &times; latency</code>. Bei 50&nbsp;ms RTT und 200&nbsp;req/s Ziel &rarr; 10. Bei 500&nbsp;ms RTT und gleichem Throughput &rarr; 100. <strong>Kontraintuitiv:</strong> langsamere Backends brauchen <em>mehr</em> Slots, nicht weniger.<br><strong>Spicy:</strong> Wer <code>maxConcurrent</code> aus dem Bauch heraus setzt (&bdquo;10 klingt gut&ldquo;), hat den Bulkhead nicht implementiert, sondern dekoriert. Das Limit geh&ouml;rt aus gemessener Backend-Kapazit&auml;t abgeleitet, nicht aus Beispiel-Code &uuml;bernommen.</aside>
 </div>
 
 <div class="factor fragment">
@@ -46,8 +48,6 @@
 <code>Inbound &ne; Outbound</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Client-side Bulkhead sch&uuml;tzt <em>den Client</em>, nicht das Backend. Bei 5 Booking-Replicas &agrave; <code>maxConcurrent=10</code> kann Hotel bis zu 50 gleichzeitige Calls sehen &mdash; und Hotel wei&szlig; davon nichts. Komplement&auml;re Patterns auf der <em>Backend</em>-Seite: (1) <strong>Server-side Rate Limiting</strong> (Hotel lehnt nach N Calls ab &mdash; sch&uuml;tzt vor jedem Aufrufer), (2) <strong>API-Gateway / Service Mesh</strong> (zentraler Punkt &uuml;ber alle Aufrufer hinweg), (3) <strong>Backpressure</strong>: <code>429 + Retry-After</code> &mdash; Hotel kommuniziert &Uuml;berlast aktiv.<br><strong>Spicy:</strong> Bulkhead allein ist eine halbierte L&ouml;sung. Sie macht den eigenen Service stabil &mdash; aber das gesch&uuml;tzte Backend braucht erg&auml;nzende Mechanismen. Wer nur den Client sch&uuml;tzt und glaubt, das Backend sei auch gerettet, hat das Pattern falsch verstanden.</aside>
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 

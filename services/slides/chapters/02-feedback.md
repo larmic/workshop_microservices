@@ -1,6 +1,6 @@
 ## Feedback
 
-<p class="quote">Frische Eindrücke sind die wertvollsten — und die flüchtigsten.</p>
+<p class="quote">Frische Eindr&uuml;cke sind die wertvollsten &mdash; und die fl&uuml;chtigsten.</p>
 
 <div class="cols">
 <div>
@@ -12,7 +12,7 @@
 - Passt der Zeitrahmen?
 - Passen die Beispiele?
 - Ist das Dashboard eine gute Idee?
-- Was fällt euch sonst auf?
+- Was f&auml;llt euch sonst auf?
 
 </div>
 

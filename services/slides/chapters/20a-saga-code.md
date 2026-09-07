@@ -1,8 +1,9 @@
-<!-- .slide: data-background-image="./assets/saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Saga
 
 <p class="subtitle">Orchestrator in Pseudo-Code</p>
+
+<div class="cols">
+<div>
 
 <pre class="cheatsheet"><span class="cmd">STATE:</span>
   saga   = { id, status: PENDING, steps: [] }
@@ -21,8 +22,12 @@
   saga.steps.push({ svc: "car",    status: BOOKED })
 
   saga.status = COMPLETED
+</pre>
 
-<span class="cmd">catch error at step X:</span>
+</div>
+<div>
+
+<pre class="cheatsheet"><span class="cmd">catch error at step X:</span>
   saga.status   = COMPENSATING
   saga.failedAt = X
   for b in reverse(booked):
@@ -30,6 +35,9 @@
     mark step COMPENSATED
   saga.status = FAILED
 </pre>
+
+</div>
+</div>
 
 Note:
 - Identischer Pseudo-Code findet sich im Dashboard unter Story 6 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.

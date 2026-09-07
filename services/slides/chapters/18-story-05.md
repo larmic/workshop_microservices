@@ -1,6 +1,6 @@
-## Story 5
+<!-- .slide: data-story="5" -->
 
-<p class="subtitle">Isolation ist St&auml;rke <span class="time-badge">&asymp; 60 min</span></p>
+## Isolation ist St&auml;rke <span class="time-badge">&asymp; 60 min</span>
 
 <div class="cols">
 <div>

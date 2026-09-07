@@ -1,8 +1,8 @@
-<!-- .slide: data-background-image="./assets/tracing.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Distributed Tracing
 
 <p class="subtitle">Den roten Faden im Log</p>
+
+<img class="pattern-image" src="./assets/tracing.png" alt=""/>
 
 <div class="factor-row">
 
@@ -60,8 +60,6 @@
 </div>
 
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
 - Hook: &bdquo;In Story 6 und 7 hattet ihr eine Buchung, die durch vier Service-Logs gewandert ist. Wer konnte einen einzelnen Vorgang sauber rekonstruieren?&ldquo; Antwort meistens: Timestamps zusammenpuzzeln, viel Augenma&szlig;. Dann der Effekt sp&auml;ter in der Demo: <code>docker compose logs | grep &lt;trace-id&gt;</code> &mdash; alles in einem Block.

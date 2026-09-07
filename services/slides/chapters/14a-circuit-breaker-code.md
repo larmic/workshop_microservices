@@ -1,5 +1,3 @@
-<!-- .slide: data-background-image="./assets/circuitbreaker.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Circuit Breaker
 
 <p class="subtitle">Die State-Machine in Pseudo-Code</p>

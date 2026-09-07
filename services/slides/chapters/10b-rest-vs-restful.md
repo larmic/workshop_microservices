@@ -48,8 +48,6 @@
 
 </div>
 
-<span class="show-all fragment" aria-hidden="true"></span>
-
 Note:
 - Zeitbox 10 bis 12 Minuten. Nicht in HATEOAS-Diskussionen abbiegen, die Teilnehmenden sollen gleich selbst denken.
 - Pro Karte ein Satz und das Gegenbeispiel. Die Anekdoten (Google Web Accelerator, Stripe) f&uuml;r das Quiz aufsparen.

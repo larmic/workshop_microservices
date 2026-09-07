@@ -1,6 +1,6 @@
-## Story 8
+<!-- .slide: data-story="8" -->
 
-<p class="subtitle">Den roten Faden im Log <span class="time-badge">&asymp; 60 min</span></p>
+## Den roten Faden im Log <span class="time-badge">&asymp; 60 min</span>
 
 <div class="cols">
 <div>

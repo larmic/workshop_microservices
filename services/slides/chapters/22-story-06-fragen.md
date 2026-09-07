@@ -1,8 +1,10 @@
-## Story 6 &mdash; Recap
+<!-- .slide: data-story="6" -->
+
+## Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
-<div class="recap-grid">
+<div class="recap-grid cols-4">
 
 <div class="factor fragment">
 <h3><span class="numeral">1</span> Kompensation scheitert</h3>
@@ -52,8 +54,6 @@
 <code>Crash-Recovery</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Wichtige Klarstellung: <strong>Persistenz ist kein Saga-spezifisches Thema</strong>. Jeder mehrstufige Prozess, der im RAM l&auml;uft, ist beim Crash weg. Saga macht das Problem nur <em>sichtbarer</em>, weil die Schritte externe Seiteneffekte (gebuchte Fl&uuml;ge, gestartete Zahlungen) hinterlassen. Spektrum f&uuml;r durable State: Relationale DB, Document Store, Event Log, Embedded SQLite, KV-Store (Consul KV ist im Stack), <strong>Workflow Engine</strong> (Temporal / Camunda &mdash; dreht das Modell um: Engine l&ouml;st Recovery f&uuml;r dich).<br><strong>Spicy:</strong> In Produktion ist die wichtigere Frage selten &bdquo;brauche ich eine DB?&ldquo;, sondern &bdquo;<em>schreibe ich die Orchestrator-Mechanik selbst, oder nutze ich Temporal?</em>&ldquo; &mdash; letzteres untersch&auml;tzen Teams regelm&auml;&szlig;ig und schreiben dann monatelang das, was Temporal seit Jahren in Produktion l&ouml;st.</aside>
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 

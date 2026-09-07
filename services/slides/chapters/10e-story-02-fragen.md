@@ -1,4 +1,6 @@
-## Story 2 &mdash; Recap
+<!-- .slide: data-story="2" -->
+
+## Recap
 
 <p class="subtitle">Was bleibt von der Design-Session</p>
 
@@ -31,8 +33,6 @@
 <code>Abweichen mit Grund</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Ja, bewusst. Ein Knopf f&uuml;rs Dashboard, kein Fachobjekt, ein einziger Aufrufer, kein Retry-Problem, klar unter <code>/admin/</code> abgesetzt. Genau diese Begr&uuml;ndung sollen die Teams f&uuml;r ihre eigenen Ausnahmen liefern k&ouml;nnen. Grauzonen wie <code>POST /flights/search</code> (Filter zu lang f&uuml;r die URL) sind ebenso vertretbar, wenn dokumentiert ist, dass der Aufruf keine Seiteneffekte hat.<br><strong>Spicy:</strong> Ein Fehler ist nicht die Abweichung, sondern die Abweichung, die niemand begr&uuml;nden kann. Kommt im Recap der Bulkhead-Story (Story 5) wieder, wenn der Reset-Knopf zum ersten Mal gedr&uuml;ckt wird.</aside>
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 

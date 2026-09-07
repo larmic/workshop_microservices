@@ -1,4 +1,6 @@
-## Story 1 &mdash; Recap
+<!-- .slide: data-story="1" -->
+
+## Recap
 
 <p class="subtitle">Zwei Fragen nach der Umsetzung</p>
 
@@ -17,8 +19,6 @@
 <code>down &ne; umgezogen</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Zwei v&ouml;llig verschiedene Ursachen &mdash; und beide sind in Story 1 ungel&ouml;st:<br><strong>1. Der Dienst ist down</strong> (Absturz, Deploy, &Uuml;berlast). Der Aufruf l&auml;uft in den Fehler oder Timeout, der Booking-Service reicht ihn ungebremst durch. Das ist ein <strong>Resilience</strong>-Thema &mdash; Timeout, Retry, Circuit Breaker, Fallback. Kommt in <strong>Stories 4&ndash;6</strong>.<br><strong>2. Der Dienst ist umgezogen</strong> &mdash; neue URL, neuer Port, andere Instanz. Unsere <code>FLIGHT_SERVICE_URL</code> zeigt jetzt ins Leere. Jede Adress&auml;nderung erzwingt ein Re-Deployment des Booking-Service. Bei mehreren Backends &times; mehreren Aufrufern wird das zur Pflege-H&ouml;lle. Genau hier setzt <strong>Story 3 &mdash; Service Discovery</strong> an: Services registrieren sich selbst (Consul), gefunden wird &uuml;ber den <em>logischen Namen</em>, nicht &uuml;ber eine hartkodierte URL.<br><strong>Spicy:</strong> &bdquo;Steht doch in der ENV&ldquo; funktioniert, bis der dritte Service umzieht und niemand mehr wei&szlig;, welche URL noch stimmt &mdash; ausprobiert wird im Zweifel auf Prod.</aside>
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 

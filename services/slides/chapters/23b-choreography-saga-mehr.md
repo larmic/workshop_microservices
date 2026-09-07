@@ -1,10 +1,8 @@
-<!-- .slide: data-background-image="./assets/choreography_saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Eventing braucht einen Broker
 
 <p class="subtitle">&hellip; was unsere Webhook-Variante nicht kann</p>
 
-<div class="box">
+<div class="list-cols">
 
 - **Persistenz** &mdash; Event auf Disk, &uuml;berlebt Sender- und Empf&auml;nger-Crash
 - **Redelivery / at-least-once** &mdash; Broker garantiert Zustellung; HTTP-POST tut das nicht

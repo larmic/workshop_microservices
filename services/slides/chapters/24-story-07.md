@@ -1,6 +1,6 @@
-## Story 7
+<!-- .slide: data-story="7" -->
 
-<p class="subtitle">Die Saga wird leise <span class="time-badge">&asymp; 60 min</span></p>
+## Die Saga wird leise <span class="time-badge">&asymp; 60 min</span>
 
 <div class="cols">
 <div>

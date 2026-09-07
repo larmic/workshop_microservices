@@ -1,19 +1,23 @@
-<!-- .slide: data-background-image="./assets/zusammenfassung.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Die Reise &mdash; acht Stories
 
 <p class="subtitle">Was bleibt</p>
 
+<div class="cols summary">
+<div>
+
 | Story | | Take-away |
 |---|---|---|
-| **1** | Fundament | Health + Config + Stateless. Der Rest baut darauf. |
-| **2** | REST vs. RESTful | Ressourcen statt Verben. Status-Codes sind Infrastruktur. |
-| **3** | Service Discovery | Logische Namen statt URLs. In K8s oft redundant. |
-| **4** | Circuit Breaker | Schnell scheitern statt im Timeout h&auml;ngen. |
-| **5** | Bulkhead | Pool pro Downstream. Async &ne; Bulkhead. |
-| **6** | Saga | Kompensation muss letztlich gelingen. |
-| **7** | Choreography | Eventing eliminiert nichts &mdash; es verschiebt. |
-| **8** | Tracing | Trace-ID nur am Entry-Point. Span pro Hop. |
+| <span class="story-pill">1</span> | Fundament | Health + Config + Stateless. Der Rest baut darauf. |
+| <span class="story-pill">2</span> | REST vs. RESTful | Ressourcen statt Verben. Status-Codes sind Infrastruktur. |
+| <span class="story-pill">3</span> | Service Discovery | Logische Namen statt URLs. In K8s oft redundant. |
+| <span class="story-pill">4</span> | Circuit Breaker | Schnell scheitern statt im Timeout h&auml;ngen. |
+| <span class="story-pill">5</span> | Bulkhead | Pool pro Downstream. Async &ne; Bulkhead. |
+| <span class="story-pill">6</span> | Saga | Kompensation muss letztlich gelingen. |
+| <span class="story-pill">7</span> | Choreography | Eventing eliminiert nichts &mdash; es verschiebt. |
+| <span class="story-pill">8</span> | Tracing | Trace-ID nur am Entry-Point. Span pro Hop. |
+
+</div>
+<div>
 
 <div class="box">
 
@@ -23,6 +27,9 @@
 - **Resilience im Aufrufer, Schutz im Aufgerufenen.** Wer das vermischt, sch&uuml;tzt nichts.
 - **Eventing eliminiert keine Komplexit&auml;t &mdash; es verschiebt sie.** Wer Choreography ohne durable Messaging baut, baut sich einen schlechten Broker.
 
+</div>
+
+</div>
 </div>
 
 Note:

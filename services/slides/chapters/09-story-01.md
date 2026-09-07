@@ -1,6 +1,6 @@
-## Story 1
+<!-- .slide: data-story="1" -->
 
-<p class="subtitle">Erst lauff&auml;hig, dann smart <span class="time-badge">&asymp; 90 min</span></p>
+## Erst lauff&auml;hig, dann smart <span class="time-badge">&asymp; 90 min</span>
 
 <div class="cols">
 <div>
@@ -32,6 +32,13 @@ Als <em>Betriebsteam</em> m&ouml;chte ich einen Service, der <em>in beliebigen U
 - `Dockerfile` im Service-Verzeichnis baut ein lauff&auml;higes Image (Service lauscht auf Port `8080`)
 - Pfad zum Service in `services/.env` als `CUSTOM_BOOKING_PATH` eingetragen, sodass `make docker-up-hub` den Service mitbaut
 - `GET /booking/offers` aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse
+
+</div>
+
+</div>
+<div>
+
+<div class="story-card">
 
 #### Setup-Hinweis (einmalig)
 

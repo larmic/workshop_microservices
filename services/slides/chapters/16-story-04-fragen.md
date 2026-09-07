@@ -1,8 +1,10 @@
-## Story 4 &mdash; Recap
+<!-- .slide: data-story="4" -->
+
+## Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
-<div class="recap-grid">
+<div class="recap-grid cols-3">
 
 <div class="factor fragment">
 <h3><span class="numeral">1</span> Was z&auml;hlt als Fehler?</h3>
@@ -45,8 +47,6 @@
 <code>Flight / Hotel / Car</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Drei Stufen mit unterschiedlichen Trade-offs. <strong>Global</strong> (ein CB f&uuml;r alle Backends): trivial, aber ein kranker Service kappt alle. <strong>Pro Service</strong> (unsere Wahl): isoliert Ausf&auml;lle, aber innerhalb des Service kein Schutz. <strong>Pro Endpoint</strong>: sehr feingranular, aber viele CBs zu pflegen. Pro-Service ist die &uuml;bliche Default-Wahl &mdash; ein &bdquo;kranker&ldquo; Service betrifft meist alle Endpoints (Connection-Pool tot, Container down). Pro-Endpoint lohnt sich, wenn ein Service sehr unterschiedliche Workloads hat (schnell <code>search</code> vs. langsam <code>book</code>).<br><strong>Spicy:</strong> Granularit&auml;t ist eine Designentscheidung, keine Pattern-Eigenschaft. Wer einen langsamen <code>book</code>-Endpoint hat und einen schnellen <code>search</code>, fasst die zusammen &mdash; und kappt <code>search</code>, weil <code>book</code> unter Last steht.</aside>
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 

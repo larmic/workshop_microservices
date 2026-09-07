@@ -1,10 +1,8 @@
-<!-- .slide: data-background-image="./assets/tracing.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Tracing kann mehr
 
 <p class="subtitle">&hellip; als wir hier nutzen</p>
 
-<div class="box">
+<div class="list-cols">
 
 - **Vollwertiger Span-Baum** &mdash; Parent/Child-Verkn&uuml;pfung pro Hop, Span-Dauer pro Schritt, Wartezeit zwischen Spans
 - **OpenTelemetry SDK** &mdash; Auto-Instrumentation f&uuml;r HTTP-Clients, DB-Treiber, Message-Broker

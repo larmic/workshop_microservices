@@ -7,9 +7,9 @@
 
 ### Problem
 
-1. Apps liefen auf dem Laptop, explodierten in Prod &mdash; <em>„Bei mir läuft's!"</em>
-2. Neue Entwickler:innen brauchen Tage für ein lauffähiges Setup
-3. Config-Werte (Passwörter, API-Keys) direkt im Code
+1. Apps liefen auf dem Laptop, explodierten in Prod &mdash; <em>&bdquo;Bei mir l&auml;uft's!&ldquo;</em>
+2. Neue Entwickler:innen brauchen Tage f&uuml;r ein lauff&auml;higes Setup
+3. Config-Werte (Passw&ouml;rter, API-Keys) direkt im Code
 
 </div>
 <div class="fragment">
@@ -17,7 +17,7 @@
 ### Ziel
 
 1. Sammlung von Best Practices
-2. Unabhängig von Sprache &amp; Framework
+2. Unabh&auml;ngig von Sprache &amp; Framework
 
 </div>
 </div>

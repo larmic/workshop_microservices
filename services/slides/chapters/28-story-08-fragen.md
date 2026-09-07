@@ -1,8 +1,10 @@
-## Story 8 &mdash; Recap
+<!-- .slide: data-story="8" -->
+
+## Recap
 
 <p class="subtitle">Fragen nach der Umsetzung</p>
 
-<div class="recap-grid">
+<div class="recap-grid cols-4">
 
 <div class="factor fragment">
 <h3><span class="numeral">1</span> Trace vs. Span</h3>
@@ -52,8 +54,6 @@
 <code>One-Click-Korrelation</code>
 <aside class="notes"><strong>Meine Antwort:</strong> Das ist das eigentliche Versprechen moderner Observability-Plattformen: ein langsamer Endpunkt &rarr; RED-Metrik zeigt P99-Spike &rarr; ein Klick auf das <em>Exemplar</em> &rarr; konkreter Trace &rarr; in der Trace-Span auf &bdquo;Logs&ldquo; &rarr; alle Logs derselben Trace-ID. Wer diese Kette nicht hat, wechselt drei Tools pro Frage &mdash; und meist verliert man eine Verkn&uuml;pfung an einer der &Uuml;berg&auml;nge. Konkrete Stacks, die das k&ouml;nnen: Grafana (Loki + Tempo + Mimir + Exemplars), Datadog, Honeycomb, Dynatrace.<br><strong>Spicy:</strong> &bdquo;Wir haben Tracing&ldquo; ist nicht dasselbe wie &bdquo;wir nutzen Tracing&ldquo;. Wer im Trace-Tool landet und dann manuell in Kibana die <code>trace_id</code> per Copy-Paste eingibt, hat die Korrelation noch vor sich.</aside>
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 

@@ -1,3 +1,5 @@
+<!-- .slide: class="hero" -->
+
 ## REST vs. RESTful
 
 <p class="subtitle">HTTP benutzen ist nicht dasselbe wie HTTP richtig benutzen</p>

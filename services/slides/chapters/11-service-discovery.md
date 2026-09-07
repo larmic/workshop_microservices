@@ -1,8 +1,8 @@
-<!-- .slide: data-background-image="./assets/service_discovery.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Service Discovery
 
 <p class="subtitle">Services finden sich &uuml;ber Namen &mdash; nicht &uuml;ber URLs</p>
+
+<img class="pattern-image" src="./assets/service_discovery.png" alt=""/>
 
 <div class="factor-row">
 
@@ -51,8 +51,6 @@
 </div>
 
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
 - Hook: &bdquo;Im Monolithen kennen sich Module &uuml;ber Funktionsaufrufe. Im verteilten System kennen sich Services &uuml;ber &hellip; was eigentlich?&ldquo; Statische URLs (Story 1) funktionieren genau so lange, bis ihr skaliert, deployt oder eine Instanz ausf&auml;llt.

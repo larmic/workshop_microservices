@@ -1,6 +1,6 @@
-## Story 2
+<!-- .slide: data-story="2" -->
 
-<p class="subtitle">Design-Session: REST vs. RESTful <span class="time-badge">&asymp; 55 min</span></p>
+## Design-Session: REST vs. RESTful <span class="time-badge">&asymp; 55 min</span>
 
 <div class="cols">
 <div>

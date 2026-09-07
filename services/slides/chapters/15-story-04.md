@@ -1,6 +1,6 @@
-## Story 4
+<!-- .slide: data-story="4" -->
 
-<p class="subtitle">Wenn der Flug ausf&auml;llt <span class="time-badge">&asymp; 60 min</span></p>
+## Wenn der Flug ausf&auml;llt <span class="time-badge">&asymp; 60 min</span>
 
 <div class="cols">
 <div>

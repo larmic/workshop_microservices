@@ -1,8 +1,8 @@
-<!-- .slide: data-background-image="./assets/circuitbreaker.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Circuit Breaker
 
 <p class="subtitle">Wenn der Flug ausf&auml;llt</p>
+
+<img class="pattern-image" src="./assets/circuitbreaker.png" alt=""/>
 
 <div class="factor-row">
 
@@ -54,8 +54,6 @@
 </div>
 
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
 - Hook: &bdquo;In Story 3 haben wir die Services gefunden. Was passiert, wenn einer von ihnen kaputt ist?&ldquo; Demo-Einstieg: Flight im Dashboard auf &bdquo;Fehler&ldquo; stellen, ohne CB curlen &mdash; jeder Aufruf wartet 3 s. Mit CB &mdash; nach 5 Fehlern instant.

@@ -1,4 +1,4 @@
-<!-- .slide: data-background-image="./assets/service_discovery.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.40" data-background-repeat="no-repeat" -->
+<!-- .slide: class="hero" data-background-image="./assets/service_discovery.png" data-background-size="45% auto" data-background-position="right 6% center" data-background-repeat="no-repeat" -->
 
 ## Service Discovery
 

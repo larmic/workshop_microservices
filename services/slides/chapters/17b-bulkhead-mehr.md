@@ -1,10 +1,8 @@
-<!-- .slide: data-background-image="./assets/bulkhead.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Bulkhead kann mehr
 
 <p class="subtitle">&hellip; als wir hier nutzen</p>
 
-<div class="box">
+<div class="list-cols">
 
 - **ThreadPool-Bulkhead** &mdash; eigener Pool inkl. echtem Timeout (Hystrix-Stil) statt nur Semaphore-Z&auml;hler
 - **Wait + Timeout** &mdash; kurz warten statt sofort Fail-Fast (<code>maxWaitDuration</code>) f&uuml;r kleine Bursts

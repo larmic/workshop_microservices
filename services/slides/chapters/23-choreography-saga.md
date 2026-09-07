@@ -1,8 +1,8 @@
-<!-- .slide: data-background-image="./assets/choreography_saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Choreography-Saga
 
 <p class="subtitle">Die Saga wird leise</p>
+
+<img class="pattern-image" src="./assets/choreography_saga.png" alt=""/>
 
 <div class="factor-row">
 
@@ -59,8 +59,6 @@
 </div>
 
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
 - Hook direkt aus Story 6: &bdquo;Erinnert ihr euch an die Saga-Frage 1 &mdash; was, wenn der <code>DELETE</code> selbst in 5xx l&auml;uft? Story 6 lie&szlig; es scheitern. Story 7 schiebt das Problem ins Backend &mdash; und reisst damit ein neues auf, das wir gleich besprechen.&ldquo;

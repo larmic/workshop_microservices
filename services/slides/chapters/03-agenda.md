@@ -7,16 +7,16 @@
 
 - Intro &amp; 12-Faktor
 - Setup-Check (Vorbereitung)
-- Story 1 &mdash; <em>Fundament</em>
+- <span class="story-pill">Story 1</span> &mdash; <em>Fundament</em>
 
 </div>
 <div>
 
 ### Tag 2 &mdash; Vormittag
 
-- Story 5 &mdash; <em>Bulkhead</em>
-- Story 6 &mdash; <em>Saga</em>
-- Story 7 &mdash; <em>Choreography</em>
+- <span class="story-pill">Story 5</span> &mdash; <em>Bulkhead</em>
+- <span class="story-pill">Story 6</span> &mdash; <em>Saga</em>
+- <span class="story-pill">Story 7</span> &mdash; <em>Choreography</em>
 
 </div>
 </div>
@@ -28,16 +28,16 @@
 
 ### Tag 1 &mdash; Nachmittag
 
-- Story 2 &mdash; <em>Design-Session: REST vs. RESTful</em>
-- Story 3 &mdash; <em>Service Discovery</em>
-- Story 4 &mdash; <em>Circuit Breaker</em>
+- <span class="story-pill">Story 2</span> &mdash; <em>Design-Session: REST vs. RESTful</em>
+- <span class="story-pill">Story 3</span> &mdash; <em>Service Discovery</em>
+- <span class="story-pill">Story 4</span> &mdash; <em>Circuit Breaker</em>
 
 </div>
 <div>
 
 ### Tag 2 &mdash; Nachmittag
 
-- Story 8 &mdash; <em>Tracing</em>
+- <span class="story-pill">Story 8</span> &mdash; <em>Tracing</em>
 - Closing &amp; Diskussion
 
 </div>

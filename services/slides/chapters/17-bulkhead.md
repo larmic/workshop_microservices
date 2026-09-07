@@ -1,8 +1,8 @@
-<!-- .slide: data-background-image="./assets/bulkhead.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
-
 ## Bulkhead
 
 <p class="subtitle">Schotten im Schiff</p>
+
+<img class="pattern-image" src="./assets/bulkhead.png" alt=""/>
 
 <div class="factor-row">
 
@@ -57,8 +57,6 @@
 </div>
 
 </div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
 - Hook: &bdquo;Story 4 hat uns gegen <em>kaputte</em> Backends geh&auml;rtet. Aber was, wenn ein Backend gar nicht kaputt ist &mdash; nur langsam? Der CB bleibt CLOSED, weil 200 zur&uuml;ckkommt &mdash; und der Booking-Service ger&auml;t trotzdem ins Stocken.&ldquo;
