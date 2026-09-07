@@ -16,13 +16,13 @@ Palette-Synchronisation nicht teil.
 
 | Rolle | RGB | Hex | Verwendung |
 |---|---|---|---|
-| Primär-Dunkel | `rgb( 10,   3,  73)` | `#0A0349` | Box-Hintergrund (Slides), Header / Headings / Card-Akzent (Dashboard) |
-| Primär-Violett | `rgb(115,  72, 225)` | `#7348E1` | Box-Rahmen, Links, Buttons, Tab-Aktiv, Progress, Highlights im UI |
-| Highlight (Akzent) | `rgb(211, 248, 113)` | `#D3F871` | `.hl` / `<mark>` auf Slides |
-| Welle (Slides) | `rgb(238, 231, 251)` | `#EEE7FB` | Dekorative Welle am unteren Slide-Rand |
+| Primär-Dunkel (Ink) | `rgb( 10,   3,  73)` | `#0A0349` | Text und Titel (Slides), Merksatz-Box und Code-Grund (Slides), Story-Pille und aktiver Stepper-Knoten (beide), Header / Headings (Dashboard) |
+| Primär-Violett | `rgb(115,  72, 225)` | `#7348E1` | Subtitle, Linien, Links, Abschnittslabels der Story-Karte (Slides); Links, Buttons, Tab-Aktiv, Progress (Dashboard) |
+| Highlight (Lime) | `rgb(211, 248, 113)` | `#D3F871` | Text der Story-Pille (beide), Time-Badge und `.hl` (Slides) |
+| Lavendel | `rgb(238, 231, 251)` | `#EEE7FB` | Kartengrund (Slides `.card`/`.factor`/`.story-card`, Dashboard `details.story-info`), Welle am unteren Slide-Rand |
 | Page-Hintergrund (Dashboard) | — | `#f0f2f5` | Body |
 | Slide-Hintergrund | — | `#ffffff` | Standard-Slide |
-| Slide-Text | — | `#000000` | Standard-Textfarbe auf Slides |
+| Slide-Text | — | `#0A0349` | Standard-Textfarbe auf Slides (identisch mit Ink) |
 | Text (Dashboard) | — | `#333` | Standard |
 | Text gedämpft | — | `#555` / `#888` / `#aaa` | Sekundär / Tertiär |
 

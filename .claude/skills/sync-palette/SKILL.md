@@ -12,12 +12,17 @@ synchron gehalten werden (siehe `services/CLAUDE.md`).
 
 ## Referenz-Palette
 
-| Rolle              | RGB                  | Hex       |
-|--------------------|----------------------|-----------|
-| Primär-Dunkel      | `rgb(10, 3, 73)`     | `#0A0349` |
-| Primär-Violett     | `rgb(115, 72, 225)`  | `#7348E1` |
-| Highlight (Akzent) | `rgb(211, 248, 113)` | `#D3F871` |
-| Welle (Slides)     | `rgb(238, 231, 251)` | `#EEE7FB` |
+| Rolle                       | RGB                  | Hex       |
+|-----------------------------|----------------------|-----------|
+| Primär-Dunkel (Ink)         | `rgb(10, 3, 73)`     | `#0A0349` |
+| Primär-Violett              | `rgb(115, 72, 225)`  | `#7348E1` |
+| Highlight (Lime)            | `rgb(211, 248, 113)` | `#D3F871` |
+| Lavendel (Welle, Kartengrund) | `rgb(238, 231, 251)` | `#EEE7FB` |
+
+Seit dem Slide-Redesign 2026-09 ist Lavendel auch der Kartengrund (Slides
+`.card`/`.factor`/`.story-card`, Dashboard `details.story-info`) und Lime der
+Text des Story-Markers (`.story-pill`, aktiver Stepper-Knoten). Beide müssen
+in beiden Quellen vorkommen.
 
 ## Ablauf
 
@@ -40,6 +45,18 @@ synchron gehalten werden (siehe `services/CLAUDE.md`).
      ob sie in die Tabelle in `services/CLAUDE.md` aufgenommen werden müssen.
 5. Schlage konkrete Edits vor (alte → neue Zeile), führe sie aber nicht ohne
    Rückfrage aus.
+6. **Story-Pille synchron halten:** Beide Dateien enthalten einen CSS-Block
+   zwischen `/* @sync story-pill begin` und `/* @sync story-pill end */`
+   (`.story-pill`, Story-Marker auf Folien und im Dashboard-Stepper). Extrahiere
+   beide Blöcke, normalisiere Whitespace und Einrückung und vergleiche sie
+   Deklaration für Deklaration. Jede Abweichung ist ein Fehler, nicht nur ein
+   Hinweis. Kommandozeilen-Kurzform vom Repo-Root:
+   ```bash
+   diff <(sed -n '/@sync story-pill begin/,/@sync story-pill end/p' services/slides/theme.css | sed 's/^ *//') \
+        <(sed -n '/@sync story-pill begin/,/@sync story-pill end/p' services/dashboard/static/index.html | sed 's/^ *//')
+   ```
+   Nur die Kommentarzeilen selbst dürfen sich unterscheiden (sie verweisen
+   jeweils auf die andere Datei).
 
 ## Status-Farben (Dashboard-only, nicht in theme.css)
 

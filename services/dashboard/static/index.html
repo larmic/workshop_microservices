@@ -832,12 +832,30 @@
             font-family: inherit;
         }
         .stepper-node:hover { border-color: #7348E1; color: #7348E1; }
+        /* Aktiver Knoten trägt die Story-Marker-Farben der Slides (Ink mit Lime). */
         .stepper-node.active {
-            background: #7348E1;
-            border-color: #7348E1;
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(115,72,225,0.35);
+            background: #0A0349;
+            border-color: #0A0349;
+            color: #D3F871;
+            box-shadow: 0 2px 8px rgba(10,3,73,0.35);
         }
+        /* @sync story-pill begin — textgleich in services/slides/theme.css */
+        .story-pill {
+            display: inline-block;
+            background: #0A0349;
+            color: #D3F871;
+            font-weight: 800;
+            font-size: 14px;
+            line-height: 1;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 999px;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        /* @sync story-pill end */
+        .stepper-headline h2 .story-pill { margin-right: 0.6rem; }
         /* Design-Session ohne Code (Story 2): gestrichelt, damit sichtbar ist,
            dass hier nichts deployt wird. */
         .stepper-node.design { border-style: dashed; }
@@ -872,13 +890,14 @@
             flex-wrap: wrap;
             margin-bottom: 1.25rem;
         }
+        /* Story-Karte: dieselbe Lavendel-Karte wie auf den Folien (theme.css .story-card) */
         details.story-info,
         details.story-cheatsheet,
         details.story-setup {
             flex: 1 1 320px;
-            background: #f5f6f8;
-            border: 1px solid #e1e5ec;
-            border-radius: 8px;
+            background: #EEE7FB;
+            border: 1px solid rgba(115,72,225,0.28);
+            border-radius: 12px;
             padding: 0;
         }
         details.story-info summary,
@@ -932,11 +951,11 @@
         }
         .story-info-body h4,
         .story-setup-body h4 {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888;
+            font-size: 0.75rem;
+            color: #7348E1;
             font-weight: 700;
+            border-bottom: 1px solid rgba(115,72,225,0.28);
+            padding-bottom: 2px;
             margin: 0.75rem 0 0.3rem;
         }
         .story-info-body p, .story-info-body ul, .story-info-body ol,
@@ -3086,7 +3105,9 @@ on receiveCompensationEvent(event):
             document.getElementById("stepper-next").disabled = (n === STORY_COUNT);
             const meta = STORY_META[n];
             if (meta) {
-                document.getElementById("stepper-title").innerHTML    = meta.title;
+                // Story-Nummer als Pille (wie auf den Folien), der Titel ohne das Präfix "Story N:"
+                document.getElementById("stepper-title").innerHTML    =
+                    '<span class="story-pill">Story ' + n + '</span>' + meta.title.replace(/^Story \d+:\s*/, "");
                 document.getElementById("stepper-subtitle").innerHTML = meta.subtitle;
             }
         }

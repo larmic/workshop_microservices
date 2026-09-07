@@ -15,9 +15,9 @@
 - `26-tracing.md` &mdash; Paket-Sendung (`assets/tracing.png`)
 - `29-zusammenfassung.md` &mdash; Journey-Map (`assets/zusammenfassung.png`)
 
-Pro Pattern-Block gibt es jetzt:
-- Eine **Hero-Slide** an Position 0 des Vertikal-Stacks (`{n}-titel.md`) — nur Titel + Subtitle + Bild bei **Opacity 0.40** (Bild ist klar erkennbar, dominiert aber nicht).
-- Die **Karten-Slide** + alle **Sub-Slides** mit demselben Bild als **Watermark bei Opacity 0.18** (factor-row und chips überlagern die subtile Bild-Textur).
+Pro Pattern-Block gibt es jetzt (Stand Redesign 2026-09):
+- Eine **Hero-Slide** an Position 0 des Vertikal-Stacks (`{n}-titel.md`, `class="hero"`): Titel links, Bild rechts in voller Deckkraft (`data-background-size="45% auto"`, `data-background-position="right 6% center"`).
+- Die **Karten-Slide** trägt dasselbe Bild als kleines Thumbnail oben rechts (`<img class="pattern-image" src="./assets/…png" alt=""/>` direkt nach dem Subtitle). Alle Sub-Slides (Code, "kann mehr") bleiben ohne Bild, damit Karten und Code auf ruhigem Grund stehen.
 
 ---
 
@@ -43,13 +43,13 @@ Zielbild: eine ordentliche Regalwand mit beschrifteten Schubladen (Ressourcen) n
 Flat vector illustration, 16:9, white background (#FFFFFF). Left half: a tidy wall of labeled drawers and shelves in deep indigo (#0A0349) outlines with soft purple (#7348E1) accents, each drawer with a small blank label tag, evoking well-organized resources. Right half: a loose, chaotic pile of paper notes and curved arrows in the same indigo, slightly tilted, evoking ad-hoc remote procedure calls. A thin vertical divider between both halves. A few tiny lime-green (#D3F871) status dots on the drawers. Subtle background shapes in very light lavender (#EEE7FB). Clean geometric shapes, generous whitespace, in the style of undraw.co illustrations. Negative prompt: text, letters, words, people, faces, photorealistic, 3D render, gradients on the background, clutter in the center.
 ```
 
-Einbinden als Hero-Slide (Variante A, Opacity 0.40) ganz oben in `10a-titel.md`:
+Einbinden als Hero-Slide ganz oben in `10a-titel.md` (ersetzt die heutige Zeile `<!-- .slide: class="hero" -->`):
 
 ```markdown
-<!-- .slide: data-background-image="./assets/rest_vs_restful.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.40" data-background-repeat="no-repeat" -->
+<!-- .slide: class="hero" data-background-image="./assets/rest_vs_restful.png" data-background-size="45% auto" data-background-position="right 6% center" data-background-repeat="no-repeat" -->
 ```
 
-Optional dasselbe Bild als Watermark (Opacity 0.18) in `10b-rest-vs-restful.md` und `10c-rest-vs-restful-beispiele.md`.
+Dazu in `10b-rest-vs-restful.md` nach dem Subtitle das Thumbnail: `<img class="pattern-image" src="./assets/rest_vs_restful.png" alt=""/>`.
 
 ---
 
@@ -65,17 +65,17 @@ Optional dasselbe Bild als Watermark (Opacity 0.18) in `10b-rest-vs-restful.md` 
 1. Bild als PNG mit weißem (oder transparentem) Hintergrund ablegen unter `services/slides/assets/`. Empfohlene Namen: `tracing-waterfall.png`, `choreography.png`, `journey-map.png`.
 2. Im jeweiligen Slide-Markdown einbinden &mdash; **zwei Varianten**:
 
-   **Variante A &mdash; als Watermark-Hintergrund** (wie auf den anderen Pattern-Slides). Ganz oben in der Datei als Slide-Kommentar:
+   **Variante A &mdash; Hero-Bild rechts** (Titelfolie eines Pattern-Blocks). Ganz oben in der Datei als Slide-Kommentar:
    ```markdown
-   <!-- .slide: data-background-image="./assets/choreography.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+   <!-- .slide: class="hero" data-background-image="./assets/choreography.png" data-background-size="45% auto" data-background-position="right 6% center" data-background-repeat="no-repeat" -->
    ```
-   Opacity bei Bedarf anpassen: `0.10`&ndash;`0.15` für sehr dezente Textur, `0.20`&ndash;`0.30` für klarer sichtbare Bilder. Geeignet für `choreography.png` (analoges Pattern wie Bulkhead/Saga).
+   Auf der zugehörigen Karten-Slide dasselbe Bild als Thumbnail: `<img class="pattern-image" src="./assets/choreography.png" alt=""/>` nach dem Subtitle. Wasserzeichen hinter Inhalt gibt es seit dem Redesign nicht mehr.
 
    **Variante B &mdash; als sichtbares Bild im Slide** (für UI-Mockups oder Hero-Bilder am Closing). Im Markdown an passender Stelle:
    ```html
    <img class="dashboard-image" src="./assets/tracing-waterfall.png" alt="..."/>
    ```
-   Geeignet für `tracing-waterfall.png` (UI-Mockup mit Detail-Inhalt, der bei niedriger Opacity unleserlich würde) und `journey-map.png` (Closing-Highlight, soll sichtbar sein).
+   Geeignet für `tracing-waterfall.png` (UI-Mockup mit Detail-Inhalt) und `journey-map.png` (Closing-Highlight, soll sichtbar sein).
 
 ---
 
