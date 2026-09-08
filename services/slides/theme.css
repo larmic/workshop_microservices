@@ -511,12 +511,17 @@
     color: #5B4E93;
 }
 
-/* Titel mit Lime-Markierung: Marker-Strich hinter der unteren Hälfte der
-   Buchstaben (wie im Musterdeck), damit er nicht in die Kicker-Zeile ragt. */
+/* Titel mit Lime-Markierung als Pinselstrich (gleiche Form wie .callout).
+   inline-block mit line-height 1, damit die Form nur die Buchstaben umschließt
+   und nicht in die Kicker-Zeile ragt. */
 .reveal .page h2 .hl {
-    background: linear-gradient(transparent 42%, var(--highlight) 42%, var(--highlight) 96%, transparent 96%);
-    padding: 0 0.1em;
+    display: inline-block;
+    line-height: 1;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
+    padding: 0.04em 0.16em 0.06em;
+    margin: 0 -0.04em;
     border-radius: 0;
+    transform: rotate(-0.6deg);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -556,6 +561,16 @@
     margin: 0 0 8px;
     text-align: left;
     color: var(--slide-text);
+}
+
+/* Markiertes Wort in der Frage als Pinselstrich, wie die Lime-Kästen */
+.reveal .numlist h3 .hl {
+    display: inline-block;
+    line-height: 1.1;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
+    padding: 0.02em 0.28em 0.06em;
+    border-radius: 0;
+    transform: rotate(-0.8deg);
 }
 
 .reveal .numlist p {
@@ -730,13 +745,16 @@
     fill: var(--slide-text);
 }
 
-/* Merksatz / Punchline auf Lime, Navy-Text (Design-Doku: „Callout-Lime") */
+/* Merksatz / Punchline auf Lime, Navy-Text, als Pinselstrich (SVG-Form, dehnt
+   sich mit dem Text; Farbe im SVG = --highlight #D3F871). Gleiche Form wie der
+   Feedback-Zettel, damit alle Lime-Kästen im Deck eine Handschrift haben. */
 .reveal .callout {
     flex: none;
-    background: var(--highlight);
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
     color: var(--slide-text);
-    border-radius: 14px;
-    padding: 18px 28px;
+    border-radius: 0;
+    transform: rotate(-0.4deg);
+    padding: 18px 32px;
     font-size: 24px;
     font-weight: 700;
     line-height: 1.25;
@@ -1283,11 +1301,13 @@
     min-width: 0;
 }
 
-/* Der Lime-Zettel: leicht gedreht, damit er wie angeheftet wirkt */
+/* Der Lime-Zettel: leicht gedreht, als Pinselstrich mit unregelmäßigen Kanten
+   (SVG-Form, dehnt sich mit dem Text). Bewusst nur hier; die .callout-Kästen
+   bleiben geometrisch. Farbe im SVG = --highlight #D3F871. */
 .reveal .fb-sticky {
-    background: var(--highlight);
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
     color: #1B2A03;
-    border-radius: 18px;
+    border-radius: 0;
     padding: 24px 30px 26px;
     transform: rotate(-0.7deg);
     font-size: 38px;
@@ -1313,14 +1333,21 @@
     margin-top: 28px;
 }
 
+/* Pillen als Lavendel-Pinselstriche, abwechselnd gespiegelt */
 .reveal .fb-pills span {
     font-size: 22px;
     font-weight: 500;
-    background: #F4F2FD;
-    border: 1px solid #E4E0F5;
-    border-radius: 999px;
-    padding: 12px 22px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23EEE7FB' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+    padding: 12px 26px;
     white-space: nowrap;
+    transform: rotate(-0.5deg);
+}
+
+.reveal .fb-pills span:nth-child(even) {
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23EEE7FB' d='M 1194 26 C 1140 4 1060 12 960 9 S 580 2 240 11 S 50 4 6 24 C -4 58 2 102 12 132 S 200 146 420 139 S 880 152 1176 140 C 1194 118 1200 62 1194 26 Z'/></svg>") center / 100% 100% no-repeat;
+    transform: rotate(0.6deg);
 }
 
 .reveal .fb-scan {
@@ -1329,6 +1356,7 @@
     text-align: center;
 }
 
+/* QR-Karte bleibt geometrisch (dunkle, abgerundete Karte), damit der Code ruhig steht */
 .reveal a.fb-qr {
     display: block;
     background: var(--box-bg);
