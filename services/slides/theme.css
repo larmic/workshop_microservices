@@ -714,6 +714,61 @@
     color: #5B4E93;
     max-width: 30em;
 }
+
+/* Recap-Variante (Story-Recaps): violettes Label über der Frage, Frage in
+   Regular mit Code-Chip und Pinsel-Markierung, rechts ein Lime-Merksatz als
+   Mono-Pille, der per Klick erscheint. */
+.reveal .numlist.recap .numlist-row {
+    grid-template-columns: 110px 1fr auto;
+    align-items: center;
+    column-gap: 32px;
+    padding: 22px 0;
+}
+
+.reveal .numlist.recap p.numlist-label {
+    color: var(--box-border);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0 0 10px;
+    max-width: none;
+}
+
+.reveal .numlist.recap h3 {
+    font-weight: 400;
+    font-size: 27px;
+    line-height: 1.35;
+    margin: 0;
+    max-width: 24em;
+}
+
+.reveal .numlist.recap h3 code {
+    background: var(--wave);
+    color: var(--box-bg);
+    font-size: 0.8em;
+    padding: 0.1em 0.4em;
+    border-radius: 6px;
+}
+
+.reveal .numlist.recap h3 .hl {
+    display: inline-block;
+    line-height: 1.1;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
+    padding: 0.02em 0.3em 0.05em;
+    border-radius: 0;
+    transform: rotate(-0.8deg);
+}
+
+.reveal .numlist.recap code.numlist-pill {
+    background: var(--highlight);
+    color: var(--slide-text);
+    font-family: var(--r-code-font);
+    font-size: 16px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    white-space: nowrap;
+    align-self: center;
+}
 .reveal .cards-3 .card p  { font-size: 18px; line-height: 1.4; flex: none; }
 
 /* Karten als "custom fragment": von Anfang an sichtbar, per Klick wechselt der
