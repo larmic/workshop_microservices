@@ -289,6 +289,28 @@
     margin: 0 0 18px;
 }
 
+/* Markiertes Wort in der Unterzeile als Pinselstrich */
+.reveal .page .subtitle .hl {
+    display: inline-block;
+    line-height: 1.1;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
+    padding: 0.02em 0.3em 0.05em;
+    border-radius: 0;
+    transform: rotate(-0.7deg);
+}
+
+/* Zeit-Badge rechts neben dem Titel (Story-Folien): Lavendel-Pille */
+.reveal .page-head .badge {
+    flex: none;
+    background: var(--wave);
+    color: var(--box-border);
+    font-size: 18px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    margin-top: 10px;
+}
+
 /* Titelzeile mit Merksatz rechts (z. B. „Diese fünf baut ihr gleich in Story 1.") */
 .reveal .page-head {
     display: flex;
@@ -407,6 +429,118 @@
 .reveal .agenda-lunch code {
     margin-left: auto;
     color: #6F6A8A;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Story-Folie (.story): User-Story-Karte links, zwei Spalten mit Lime-     */
+/* Bullets und Code-Chips, Fußnote mit Trennlinie. Erster Einsatz: 09.      */
+/* ---------------------------------------------------------------------- */
+
+.reveal .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr 1fr;
+    gap: 44px;
+    align-items: start;
+}
+
+.reveal dl.story-user {
+    background: var(--wave);
+    border-radius: 16px;
+    padding: 22px 28px;
+    margin: 0;
+    text-align: left;
+}
+
+.reveal .story-user dt {
+    color: var(--box-border);
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+
+.reveal .story-user dd {
+    font-size: 18px;
+    line-height: 1.35;
+    margin: 0 0 14px;
+    color: var(--slide-text);
+}
+
+.reveal .story-user dd:last-child {
+    margin-bottom: 0;
+}
+
+.reveal .story-list {
+    text-align: left;
+}
+
+.reveal .story-list h4 {
+    color: var(--box-border);
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    text-align: left;
+}
+
+.reveal .story-list h4 + ul + h4 {
+    margin-top: 22px;
+}
+
+.reveal .story-list ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.reveal .story-list li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 17px;
+    line-height: 1.4;
+    margin: 0 0 8px;
+    color: var(--slide-text);
+}
+
+.reveal .story-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--highlight);
+}
+
+.reveal .story-list code,
+.reveal .story-foot code {
+    background: var(--wave);
+    color: var(--box-bg);
+    font-size: 0.85em;
+    padding: 0.1em 0.45em;
+    border-radius: 5px;
+}
+
+.reveal .story-list a {
+    color: var(--box-border);
+    border-bottom: 1px solid var(--box-border);
+}
+
+.reveal .story-foot {
+    border-top: 1px solid #E4E0F5;
+    margin-top: 18px;
+    padding-top: 12px;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #5B4E93;
+}
+
+.reveal .story-foot strong {
+    display: block;
+    color: var(--box-border);
+    font-weight: 700;
+    margin-bottom: 2px;
 }
 
 /* ---------------------------------------------------------------------- */
