@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">Quiz &middot; 2 von 4</p>
+<p class="kicker">Quiz &middot; 2 von 5</p>
 
 ## RESTful oder nicht?
 
@@ -22,4 +22,4 @@ Note:
 - Erwartung: viele sagen &bdquo;RESTful, Pfad und Methode stimmen doch&ldquo;. Wer &bdquo;nein&ldquo; sagt, hat die zweite Zeile gelesen.
 - 404 bedeutet: die Ressource existiert nicht. Die Sammlung <code>bookings</code> von Kunde 7 existiert, sie ist nur leer. Leere Sammlung = <code>200</code> mit leerem Array. 404 w&auml;re richtig, wenn Kunde 7 selbst nicht existiert.
 - Wem tut das weh? Clients, die bei 404 den Pfad f&uuml;r falsch halten und Fallbacks ziehen, Monitoring mit Fehlerrate, Caches, die &bdquo;nicht vorhanden&ldquo; merken.
-- Br&uuml;cke zu Regel 5: Status-Codes sind Vertrag mit der Infrastruktur, keine Kosmetik.
+- Br&uuml;cke zu Regel 6: Status-Codes sind Vertrag mit der Infrastruktur, keine Kosmetik.

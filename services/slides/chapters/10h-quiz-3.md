@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">Quiz &middot; 3 von 4</p>
+<p class="kicker">Quiz &middot; 3 von 5</p>
 
 ## RESTful oder nicht?
 

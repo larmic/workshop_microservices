@@ -616,6 +616,126 @@
 }
 
 /* ---------------------------------------------------------------------- */
+/* Dunkle Aussage-Folie (.page.dark): Kicker in Lime, große weiße Aussage   */
+/* mit Lime-Akzentwort. Erster Einsatz: 10a REST vs. RESTful               */
+/* ---------------------------------------------------------------------- */
+
+.reveal .page.dark {
+    color: #fff;
+}
+
+.reveal .page.dark .kicker {
+    color: var(--highlight);
+}
+
+.reveal .page.dark .kicker::before {
+    background: var(--highlight);
+}
+
+.reveal .statement {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-align: left;
+    max-width: 19em;
+    margin: 0;
+}
+
+.reveal .statement .accent {
+    color: var(--highlight);
+}
+
+/* Graue Randnotiz rechts in der Titelzeile (z. B. „Hypermedia lassen wir bewusst weg.") */
+.reveal .page-head .hint {
+    flex: none;
+    font-size: 16px;
+    color: #8880AE;
+    margin-top: 22px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Sechs Regeln (.rules): Beispielzeile in voller Breite, darunter drei    */
+/* Gruppen (Methode, Pfad, Antwort) als Fragmente mit nummerierten Regeln   */
+/* ---------------------------------------------------------------------- */
+
+.reveal .page .page-body.rules-body {
+    margin: 0 0 auto;
+}
+
+.reveal .quiz-code.wide {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 21px;
+    padding: 16px 30px;
+}
+
+.reveal .rules {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 40px;
+    margin-top: 26px;
+    text-align: left;
+}
+
+.reveal .rules-group h4 {
+    color: var(--box-border);
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    text-align: left;
+}
+
+.reveal .rule + .rule {
+    margin-top: 12px;
+}
+
+.reveal .rule h5 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--slide-text);
+    margin: 0 0 4px;
+    text-align: left;
+}
+
+.reveal .rule .num {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background: var(--box-bg);
+    color: var(--highlight);
+    font-family: var(--r-code-font);
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reveal .rule p {
+    font-size: 15px;
+    line-height: 1.35;
+    color: #5B4E93;
+    margin: 0 0 6px;
+}
+
+.reveal .rule code {
+    display: inline-block;
+    background: var(--wave);
+    color: #4d27a8;
+    font-size: 12.5px;
+    padding: 3px 9px;
+    border-radius: 5px;
+}
+
+/* ---------------------------------------------------------------------- */
 /* Karten (.cards/.card): Lavendel-Flächen im Raster, Titel mit optionaler  */
 /* Nummer, Beschreibung, Beispielzeile. .dim blendet aus, .pick hebt hervor. */
 /* Erster Einsatz: 06 (drei Schmerzen), 06a/06b (zwölf Faktoren)             */
@@ -1403,12 +1523,6 @@
 
 .reveal .factor-row > .factor:nth-child(5) {
     grid-column: 4 / span 2;
-}
-
-/* Sechs Karten (z. B. REST vs. RESTful): 3 + 3 statt 3 + 2. */
-.reveal .factor-row.six > .factor:nth-child(4),
-.reveal .factor-row.six > .factor:nth-child(5) {
-    grid-column: span 2;
 }
 
 /* "Am Markt"-Block: immer sichtbar, damit die Framework-Übersicht auch im

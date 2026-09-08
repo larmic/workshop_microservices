@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">Quiz &middot; 4 von 4</p>
+<p class="kicker">Quiz &middot; 4 von 5</p>
 
 ## RESTful oder nicht?
 
@@ -23,4 +23,5 @@ Note:
 - Entscheidungsfrage an die Teams: Muss der Storno-Grund mit? Dann braucht ihr eine Ressource, die ihn tr&auml;gt. DELETE hat daf&uuml;r keinen Platz, und die Buchung &bdquo;verschwindet&ldquo;, bis der Kundenservice fragt, wer das war.
 - Nachfragen: &bdquo;Was ist beim zweiten POST?&ldquo; <code>409 Conflict</code> (schon storniert) oder Idempotency-Key im Header, mit dem der Server die Wiederholung erkennt und die erste Antwort noch einmal liefert. So arbeitet Stripe bei R&uuml;ckerstattungen (<code>POST /v1/refunds</code>).
 - Dritte Variante, falls sie auf einem Flipchart steht: <code>PATCH</code> auf den Status. Vertretbar, versteckt aber die Zustandsmaschine im Body.
+- &Uuml;berleitung: &bdquo;Eine letzte, zum Auflockern.&ldquo;
 - Br&uuml;cke nach vorn: In Story 6 (Saga) kommt der Storno als Kompensation zur&uuml;ck. Dort ruft der Orchestrator <code>DELETE /bookings/{id}</code> an den Backends auf, und dann z&auml;hlt die Idempotenz.
