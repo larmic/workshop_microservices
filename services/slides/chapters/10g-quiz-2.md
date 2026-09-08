@@ -1,24 +1,25 @@
-## Quiz 2/3
+<div class="page">
 
-<p class="subtitle">RESTful oder nicht?</p>
+<p class="kicker">Quiz &middot; 2 von 4</p>
 
-<div class="box">
+## RESTful oder nicht?
 
-### <code>POST /booking/bookings/4711/cancellation</code>
+<div class="page-body quiz">
 
+<div class="quiz-code"><span class="m">GET</span> /booking/customers/7/bookings?status=confirmed<br><span class="dim">&rarr; 404 Not Found</span></div>
+
+<div class="quiz-answer fragment">
+<div class="callout">Nicht RESTful</div>
+<p>Kunde 7 hat gerade keine best&auml;tigte Buchung. Die Sammlung ist leer, nicht weg. Richtig ist <code>200 OK</code> mit <code>[]</code>. Ein <code>404</code> sagt dem Client, dass es diesen Pfad nicht gibt, und der sucht dann an der falschen Stelle.</p>
+<code class="quiz-take">leer &ne; weg</code>
 </div>
 
-<div class="box fragment">
-
-<strong>RESTful.</strong> <em>cancellation</em> ist ein Substantiv, also eine Ressource. Der Client legt eine Stornierung an: <code>201 Created</code>, sp&auml;ter per <code>GET</code> nachlesbar (Grund, Zeitpunkt, Geb&uuml;hr).
-
-Oft besser als ein nacktes <code>DELETE</code>, weil die Buchung als Historie bleibt.
+</div>
 
 </div>
 
 Note:
-- Erwartung: viele sagen &bdquo;nein, da steht doch eine Aktion drin&ldquo;. Genau das ist die Pointe: nicht jedes Wort, das nach Handlung klingt, ist ein Verb. Stornierung ist ein Fachobjekt.
-- Nachfragen: &bdquo;Was ist beim zweiten POST?&ldquo; Antwort: <code>409 Conflict</code> (schon storniert) oder Idempotency-Key im Header. POST ist nicht idempotent, der Server muss das abfangen.
-- Anker aus dem Netz: Stripe modelliert R&uuml;ckerstattungen genauso als eigene Ressource (<code>POST /v1/refunds</code>), mit Idempotency-Key.
-- Bezug zur Flipchart-Aufgabe: diese Variante haben meist ein oder zwei Teams gebaut. Aufgreifen und loben, sie l&ouml;st die Anforderung &bdquo;Grund nachvollziehbar&ldquo; am sauberesten.
-- Br&uuml;cke nach vorn: In Story 6 (Saga) kommt der Storno als Kompensation zur&uuml;ck. Dort ruft der Orchestrator <code>DELETE /bookings/{id}</code> an den Backends auf, und dann z&auml;hlt die Idempotenz.
+- Erwartung: viele sagen &bdquo;RESTful, Pfad und Methode stimmen doch&ldquo;. Wer &bdquo;nein&ldquo; sagt, hat die zweite Zeile gelesen.
+- 404 bedeutet: die Ressource existiert nicht. Die Sammlung <code>bookings</code> von Kunde 7 existiert, sie ist nur leer. Leere Sammlung = <code>200</code> mit leerem Array. 404 w&auml;re richtig, wenn Kunde 7 selbst nicht existiert.
+- Wem tut das weh? Clients, die bei 404 den Pfad f&uuml;r falsch halten und Fallbacks ziehen, Monitoring mit Fehlerrate, Caches, die &bdquo;nicht vorhanden&ldquo; merken.
+- Br&uuml;cke zu Regel 5: Status-Codes sind Vertrag mit der Infrastruktur, keine Kosmetik.

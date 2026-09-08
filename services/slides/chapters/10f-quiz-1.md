@@ -1,24 +1,25 @@
-## Quiz 1/3
+<div class="page">
 
-<p class="subtitle">RESTful oder nicht?</p>
+<p class="kicker">Quiz &middot; 1 von 4</p>
 
-<div class="box">
+## RESTful oder nicht?
 
-### <code>GET /booking/cancelBooking?id=4711</code>
+<div class="page-body quiz">
 
+<div class="quiz-code"><span class="m">GET</span> /booking/offers?from=BRE&amp;to=LIS&amp;date=2026-05-14</div>
+
+<div class="quiz-answer fragment">
+<div class="callout">RESTful</div>
+<p><code>offers</code> ist ein Substantiv, GET ver&auml;ndert nichts, und die Auswahl steht in Query-Parametern statt in eigenen Endpoints. Genau das meint &bdquo;Sub-Ressourcen und Filter&ldquo;, Regel 6 von der Regel-Folie eben. Und genau das habt ihr in Story 1 schon gebaut.</p>
+<code class="quiz-take">Filter &ne; Endpoint</code>
 </div>
 
-<div class="box fragment">
-
-<strong>Nicht RESTful.</strong> Verb im Pfad, Identit&auml;t als Query-Parameter, und ein GET mit Seiteneffekt.
-
-Besser: <code>DELETE /booking/bookings/4711</code> oder <code>POST /booking/bookings/4711/cancellation</code>
+</div>
 
 </div>
 
 Note:
-- Ablauf: Endpoint zeigen, Handzeichen &bdquo;RESTful?&ldquo; abfragen, eine Person aus der Minderheit begr&uuml;nden lassen, dann Fragment aufl&ouml;sen.
-- Erwartung: fast alle sagen &bdquo;nicht RESTful&ldquo;. Das ist der Aufw&auml;rmer, damit die Regeln sitzen.
-- Anekdote: 2005 hat der Google Web Accelerator Links auf Webseiten vorgeladen, um Seiten schneller zu machen. Bei der 37signals-Anwendung Backpack waren &bdquo;L&ouml;schen&ldquo;-Links einfache GET-Links. Der Prefetcher hat Nutzern ihre Daten gel&ouml;scht, ohne dass jemand geklickt hatte. Seitdem ist &bdquo;GET ver&auml;ndert nichts&ldquo; Selbstschutz, keine Stilfrage.
-- Drei Fehler in einer Zeile benennen: Verb (<code>cancelBooking</code>), Identit&auml;t als Query statt Pfad, Seiteneffekt per GET.
-- &Uuml;berleitung: &bdquo;Das war leicht. Jetzt wird es gemeiner.&ldquo;
+- Ablauf f&uuml;r alle drei: Endpoint zeigen, Handzeichen &bdquo;RESTful?&ldquo; abfragen, eine Person aus der Minderheit begr&uuml;nden lassen, dann Fragment aufl&ouml;sen.
+- Erwartung: einige sagen &bdquo;nicht RESTful&ldquo;, weil Query-Parameter nach RPC aussehen. Pointe: Filter auf eine Sammlung sind genau der Zweck von Query-Parametern (Regel 6, Sub-Ressourcen und Filter). Eigene Endpoints pro Filterkombination w&auml;ren das Anti-Pattern.
+- Bezug: <code>GET /booking/offers</code> ist der Aggregations-Endpoint aus Story 1. Die Filter sind hier hinzugedacht, das Prinzip ist dasselbe.
+- &Uuml;berleitung: &bdquo;Das war der Einstieg. Jetzt der Status-Code.&ldquo;

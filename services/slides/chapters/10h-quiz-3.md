@@ -1,28 +1,27 @@
-## Quiz 3/3
+<div class="page">
 
-<p class="subtitle">RESTful oder nicht?</p>
+<p class="kicker">Quiz &middot; 3 von 4</p>
 
-<div class="box">
+## RESTful oder nicht?
 
-### <code>POST /booking/bookings</code>
+<div class="page-body quiz">
 
-<pre><code>&rarr; 200 OK
-{ "status": "error", "message": "hotel not available" }</code></pre>
+<div class="quiz-code"><span class="m">GET</span> /booking/cancelBooking?id=4711</div>
 
+<div class="quiz-answer fragment">
+<div class="callout">Nicht RESTful</div>
+<p>Verb im Pfad, Identit&auml;t als Query-Parameter, und ein GET, das etwas ver&auml;ndert: drei Regeln auf einmal. Wie es stattdessen aussieht, habt ihr gerade selbst entworfen.</p>
+<code class="quiz-take">Aktion &ne; Pfad</code>
 </div>
 
-<div class="box fragment">
-
-<strong>Nicht RESTful.</strong> Methode und Pfad stimmen, aber der Status-Code l&uuml;gt: HTTP sagt Erfolg, der Body sagt Fehler.
-
-Richtig: <code>409 Conflict</code> oder <code>422 Unprocessable Content</code>, Details im Body. Status-Codes sind Infrastruktur, keine Kosmetik.
+</div>
 
 </div>
 
 Note:
-- Erwartung: die meisten sagen &bdquo;ja, sieht sauber aus&ldquo;. Wer &bdquo;nein&ldquo; sagt, hat die zweite Zeile gelesen.
-- Wem tut das weh? Allen, die den Body nicht lesen: Load Balancer und Health-Checks (Service bleibt im Pool), Monitoring (Fehlerrate 0 %), Retry-Logik (kein Retry), Caches (Fehler wird gecacht) und der Circuit Breaker aus Story 4, der Erfolge z&auml;hlt und nie &ouml;ffnet.
-- Welcher Code? 404 Buchung existiert nicht, 409 Konflikt (schon storniert, Doppelbuchung), 422 fachlich abgelehnt (Hotel nicht verf&uuml;gbar), 503 Backend nicht erreichbar. Diskutieren, ob 409 oder 422 hier besser passt, beides ist vertretbar.
-- Das ist die beste Br&uuml;cke in Kapitel 2: Resilience-Patterns funktionieren nur, wenn die Fehler sichtbar sind.
-- Reserve, falls Zeit bleibt: <code>POST /flights/search</code> (Grauzone), <code>PUT</code> mit Teil-Objekt, <code>POST /admin/bulkhead-reset</code> aus unserer eigenen Referenz (bewusst RPC-artig, ein Aufrufer, unter <code>/admin/</code>). Alle in <code>docs/instructions/rest-vs-restful.md</code>, Abschnitt 7.
-- Quelle f&uuml;r Nachleser: Martin Fowler, &bdquo;Richardson Maturity Model&ldquo;.
+- Erwartung: fast alle sagen &bdquo;nicht RESTful&ldquo;. Drei Fehler in einer Zeile benennen lassen: Verb (<code>cancelBooking</code>), Identit&auml;t als Query statt Pfad, Seiteneffekt per GET.
+- Anekdote: 2005 hat der Google Web Accelerator Links auf Webseiten vorgeladen, um Seiten schneller zu machen. Bei der 37signals-Anwendung Backpack waren &bdquo;L&ouml;schen&ldquo;-Links einfache GET-Links. Der Prefetcher hat Nutzern ihre Daten gel&ouml;scht, ohne dass jemand geklickt hatte. Seitdem ist &bdquo;GET ver&auml;ndert nichts&ldquo; Selbstschutz, keine Stilfrage.
+- Auf die Flipcharts zeigen: <code>DELETE /booking/bookings/4711</code> oder <code>POST /booking/bookings/4711/cancellation</code>, je nachdem, ob der Grund mit soll.
+- Br&uuml;cke nach vorn: In Story 3 baut ihr <code>POST /booking/bookings</code>. Nehmt die Regeln mit. In Story 6 (Saga) kommt der Storno als Kompensation zur&uuml;ck, dann z&auml;hlt die Idempotenz.
+- &Uuml;berleitung: &bdquo;Und wie sieht es richtig aus? Zwei Varianten, beide von euren Flipcharts.&ldquo;
+- Reserve, falls Zeit bleibt: <code>POST /flights/search</code> (Grauzone), <code>PUT</code> mit Teil-Objekt, <code>POST /admin/bulkhead-reset</code> aus unserer Referenz (bewusst RPC-artig). Alle in <code>docs/instructions/rest-vs-restful.md</code>, Abschnitt 7. Vollst&auml;ndige Antworten zur Design-Session: <code>docs/questions/story2.md</code>.
