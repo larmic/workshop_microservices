@@ -1,26 +1,49 @@
-<!-- .slide: data-background-image="./assets/service_discovery.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
+
+<p class="kicker">Bewusst weggelassen</p>
 
 ## Consul kann mehr
 
-<p class="subtitle">&hellip; als wir hier nutzen</p>
+<div class="page-body">
 
-<div class="box">
+<div class="cards cards-3 compact">
+<div class="card">
+<h3>Key-Value Store</h3>
+<p>Gemeinsamer Konfigurations-Speicher f&uuml;r alle Services.</p>
+</div>
+<div class="card">
+<h3>Service Mesh</h3>
+<p>Verschl&uuml;sselt den Verkehr zwischen Services automatisch.</p>
+</div>
+<div class="card">
+<h3>DNS-Interface</h3>
+<p>Aufl&ouml;sung per <code>flight-service.service.consul</code>.</p>
+</div>
+<div class="card">
+<h3>Sidecar-Proxy</h3>
+<p>Ein Proxy pro Service, ohne Zutun des Codes.</p>
+</div>
+<div class="card">
+<h3>Intentions</h3>
+<p>Hinterlegen, wer welchen Service aufrufen darf.</p>
+</div>
+<div class="card">
+<h3>Multi-Datacenter</h3>
+<p>Mehrere Rechenzentren zu einer Service-Sicht verbinden.</p>
+</div>
+</div>
 
-- **Key-Value Store** &mdash; gemeinsamer Konfigurations-Speicher f&uuml;r alle Services
-- **Service Mesh** &mdash; verschl&uuml;sselt Service-zu-Service-Verkehr automatisch
-- **DNS-Interface** &mdash; Services per `flight-service.service.consul` finden
-- **Sidecar-Proxy** &mdash; automatischer Proxy zwischen Service und Client
-- **Intentions (Firewallersatz)** &mdash; hinterlegen, wer welchen Service aufrufen darf
-- **Multi-Datacenter** &mdash; mehrere Rechenzentren zu einer Service-Sicht verbinden
-- ...
+<div class="foot">
+<div class="callout">Wir nutzen bewusst nur die HTTP-Registry.</div>
+</div>
 
 </div>
 
-<p class="quote">Im Workshop nutzen wir bewusst <span class="hl">nur die HTTP-Registry</span>.</p>
+</div>
 
 Note:
-- Diskussions-Anker: Wer betreibt Consul wirklich? Meist ein Platform-/DevOps-Team &mdash; nicht das App-Team. Die Registry selbst ist ein Single Point of Failure, wenn man sie nicht clustered (3 oder 5 Server).
-- Service Mesh: lohnt sich, wenn ihr mTLS &uuml;berall braucht (Compliance, Zero-Trust). Kostet Komplexit&auml;t (Sidecar pro Pod) und Latenz.
-- K8s-Welt: dort macht **CoreDNS + Service/Endpoints** die HTTP-Schicht; **Istio / Linkerd** machen den Mesh-Teil. Consul ist eher dann attraktiv, wenn ihr K8s und Nicht-K8s-Workloads gemischt habt.
-- KV-Store: praktisch, aber nicht missbrauchen &mdash; kein Ersatz f&uuml;r eine echte Datenbank. Eher: Feature-Flags, Config-Snippets, dynamische Routing-Regeln.
-- Take-away: Service Discovery ist die <em>erste</em> Funktion einer Plattform-Ebene wie Consul &mdash; nicht die einzige.
+- Diskussions-Anker: Wer betreibt Consul wirklich? Meist ein Platform- oder DevOps-Team, nicht das App-Team. Die Registry selbst ist ein Single Point of Failure, wenn man sie nicht clustert (3 oder 5 Server).
+- Service Mesh lohnt sich, wenn ihr mTLS &uuml;berall braucht (Compliance, Zero Trust). Kostet Komplexit&auml;t (Sidecar pro Pod) und Latenz.
+- Kubernetes-Welt: dort machen CoreDNS plus Service/Endpoints die HTTP-Schicht, Istio oder Linkerd den Mesh-Teil. Consul ist eher dann attraktiv, wenn ihr Kubernetes- und Nicht-Kubernetes-Workloads gemischt habt.
+- KV-Store: praktisch, aber kein Ersatz f&uuml;r eine Datenbank. Eher Feature-Flags, Config-Snippets, dynamische Routing-Regeln.
+- Take-away: Service Discovery ist die <em>erste</em> Funktion einer Plattform-Ebene wie Consul, nicht die einzige.

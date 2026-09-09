@@ -1,61 +1,61 @@
-<!-- .slide: data-background-image="./assets/service_discovery.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
 
-## Service Discovery
+<p class="kicker">Service Discovery</p>
 
-<p class="subtitle">Services finden sich &uuml;ber Namen &mdash; nicht &uuml;ber URLs</p>
+<div class="page-head">
 
-<div class="factor-row">
+## Was die Registry leistet
 
-<div class="factor fragment">
+<img class="head-figure" src="./assets/service-discovery.svg" alt=""/>
+</div>
+
+<div class="page-body">
+
+<div class="cards cards-3 violet compact">
+<div class="card">
 <h3>Logische Namen</h3>
-<p>Code ruft <code>flights-service</code> &mdash; nicht <code>10.0.0.5:8080</code>.</p>
-<aside class="notes">Statt fester IPs/URLs gibt es einen logischen Namen, hinter dem 1..n Instanzen stehen. Genau das, was DNS f&uuml;r Hosts macht &mdash; nur dynamischer und mit Health-Wissen.</aside>
+<p>Der Code ruft <code>flight-service</code>, nicht <code>10.0.0.5:8080</code>.</p>
 </div>
-
-<div class="factor fragment">
-<h3>Registry</h3>
-<p>Single Source of Truth: Services melden sich an und ab.</p>
-<aside class="notes">Beim Start registriert sich der Service (Name, Adresse, Port, Tags). Beim sauberen Stop deregistriert er sich. Wer wissen will, wo der Service l&auml;uft, fragt die Registry &mdash; nicht die Wiki-Seite.</aside>
+<div class="card">
+<h3>Ein Verzeichnis</h3>
+<p>Services melden sich beim Start an und beim Herunterfahren wieder ab.</p>
 </div>
-
-<div class="factor fragment">
+<div class="card">
 <h3>Health Checks</h3>
-<p>Ungesunde Instanzen fliegen automatisch raus.</p>
-<aside class="notes">Registry pollt (oder bekommt Heartbeats) und entfernt kranke Instanzen aus dem Pool. Caller bekommt nur &bdquo;lebende&ldquo; Adressen zur&uuml;ck. Vorteil: Failover ohne manuelles Eingreifen.</aside>
+<p>Wer den Check nicht besteht, wird nicht mehr ausgeliefert.</p>
 </div>
-
-<div class="factor fragment">
+<div class="card">
 <h3>Dynamische Topologie</h3>
-<p>Adressen &auml;ndern sich, Code nicht &mdash; kein <code>/etc/hosts</code>, keine URL-Liste.</p>
-<aside class="notes">In Container-Welten ist die Topologie kein statisches Bild mehr: Skalieren = neue Instanz, Crash = neue IP, Rolling Deploy = alte raus / neue rein. Service Discovery folgt automatisch. Was sie abl&ouml;st: <code>/etc/hosts</code>-Pflege, hardcoded <code>BOOKING_URL=...</code> Env-Vars, Excel-Listen im Ops-Wiki.</aside>
+<p>Adressen &auml;ndern sich, der Code nicht. Kein <code>/etc/hosts</code>, keine URL-Liste.</p>
+</div>
+<div class="card">
+<h3>Client- oder Server-Side</h3>
+<p>Der Aufrufer l&ouml;st selbst auf, oder ein Load Balancer tut es f&uuml;r ihn.</p>
+<p class="muted">Wir bauen die erste Variante.</p>
+</div>
 </div>
 
-<div class="factor fragment">
-<h3>Client- vs. Server-Side</h3>
-<p>Resolver beim Caller &mdash; oder Load Balancer fragt die Registry.</p>
-<aside class="notes">Client-Side: jeder Service hat einen Resolver und w&auml;hlt selbst (was wir im Workshop bauen). Server-Side: ein Load Balancer / API-Gateway davor fragt die Registry (Traefik, AWS ALB + Cloud Map, &hellip;). Trade-off: Client-Side spart einen Hop, Server-Side ist sprach-agnostisch.</aside>
+<div class="market">
+<h4>Am Markt</h4>
+<div class="pills">
+<span class="pill brand">HashiCorp Consul</span>
+<span class="pill">Kubernetes / CoreDNS</span>
+<span class="pill">Netflix Eureka</span>
+<span class="pill">AWS Cloud Map</span>
+<span class="pill">Apache Zookeeper</span>
 </div>
-
-</div>
-
-<div class="market-row">
-
-### Am Markt
-
-<div class="chip-row">
-  <span class="chip brand">HashiCorp Consul</span>
-  <span class="chip">Netflix Eureka</span>
-  <span class="chip">Apache Zookeeper</span>
-  <span class="chip">AWS Cloud Map</span>
-  <span class="chip">Spring Cloud Discovery</span>
 </div>
 
 </div>
 
-<span class="show-all fragment" aria-hidden="true"></span>
+</div>
 
 Note:
 - Hook: &bdquo;Im Monolithen kennen sich Module &uuml;ber Funktionsaufrufe. Im verteilten System kennen sich Services &uuml;ber &hellip; was eigentlich?&ldquo; Statische URLs (Story 1) funktionieren genau so lange, bis ihr skaliert, deployt oder eine Instanz ausf&auml;llt.
-- Karten-Reihenfolge bewusst: erst das Konzept (Name), dann das Werkzeug (Registry + Health), dann der Payoff (dynamische Topologie), zuletzt die Geschmacks-Frage (Client vs. Server).
-- Wer was wo nutzt: Eureka stark in Spring-Welt, etcd unter der Haube von Kubernetes, Consul polyglot. In K8s selten extra Service Discovery &mdash; Service + CoreDNS reicht meist.
+- <strong>Logische Namen:</strong> Hinter dem Namen stehen 1 bis n Instanzen. Das, was DNS f&uuml;r Hosts macht, nur dynamischer und mit Health-Wissen.
+- <strong>Verzeichnis:</strong> Beim Start registriert sich der Service (Name, Adresse, Port, Tags), beim sauberen Stop deregistriert er sich. Wer wissen will, wo der Service l&auml;uft, fragt die Registry, nicht die Wiki-Seite.
+- <strong>Health Checks:</strong> Die Registry pollt oder bekommt Heartbeats und nimmt kranke Instanzen aus dem Pool. Der Aufrufer bekommt nur lebende Adressen. Failover ohne manuelles Eingreifen.
+- <strong>Dynamische Topologie:</strong> Skalieren = neue Instanz, Crash = neue IP, Rolling Deploy = alte raus, neue rein. Abgel&ouml;st werden <code>/etc/hosts</code>-Pflege, hartkodierte <code>BOOKING_URL</code>-Variablen und Excel-Listen im Ops-Wiki.
+- <strong>Client- oder Server-Side:</strong> Client-Side hat jeder Service einen Resolver und w&auml;hlt selbst (bauen wir). Server-Side fragt ein Load Balancer oder Gateway die Registry (Traefik, AWS ALB mit Cloud Map). Client-Side spart einen Hop, Server-Side ist sprachunabh&auml;ngig.
+- Am Markt: Eureka stark in der Spring-Welt, etcd unter der Haube von Kubernetes, Consul polyglott. In Kubernetes reicht meist Service plus CoreDNS, eine extra Registry ist dort selten.
 - &Uuml;berleitung: Wir schauen jetzt konkret auf Consul, weil wir es im Workshop benutzen.
