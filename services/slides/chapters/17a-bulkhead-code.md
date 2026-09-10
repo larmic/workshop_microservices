@@ -1,34 +1,30 @@
-<!-- .slide: data-background-image="./assets/bulkhead.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
 
-## Bulkhead
+<p class="kicker">Bulkhead</p>
 
-<p class="subtitle">Semaphore in Pseudo-Code</p>
+## Sieben Zeilen
 
-<pre class="cheatsheet"><span class="cmd">STATE:</span>
-  max      = { flight: 5, hotel: 5, car: 5 }   // pro Service
-  inProgress = { flight: 0, hotel: 0, car: 0 }
-  rejected = { flight: 0, hotel: 0, car: 0 }
+<p class="subtitle">Deshalb tippen wir sie heute nicht ab.</p>
 
-<span class="cmd">call(service):</span>
-  if inProgress[service] &gt;= max[service]:
-    rejected[service]++
-    return 503                              // sofort ablehnen
-  inProgress[service]++
-  try:
-    return service.invoke()
-  finally:
-    inProgress[service]--
+<div class="page-body codebody">
 
-<span class="cmd">// Aggregator (Booking) ruft alle drei parallel auf:</span>
-//   ein langsamer Hotel f&uuml;llt nur seinen Pool,
-//   Flight + Car liefern weiter normal.
-</pre>
+<div class="codeblock fit">
+<div class="k">call(service):</div>
+<div>  if inProgress[service] &ge; max[service]:</div>
+<div>    rejected[service]++</div>
+<div>    return 503</div>
+<div>  inProgress[service]++</div>
+<div>  try:     return service.invoke()</div>
+<div>  finally: inProgress[service]--</div>
+</div>
+
+<p class="codenote">Die einzige interessante Stelle ist <code>max</code>. Woher kommt die Zahl?</p>
+
+</div>
+
+</div>
 
 Note:
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 5 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
-- Drei Knackpunkte hervorheben:
-  - <strong>Check &amp; Increment m&uuml;ssen atomar</strong> sein (Mutex / Compare-and-Set / Semaphore-Primitive). Sonst rutschen unter Last mehr Calls durch als erlaubt &mdash; die Isolation ist dahin.
-  - <strong>release() im finally</strong> &mdash; vergessen hei&szlig;t Slot-Lecks, der Pool f&uuml;llt sich &uuml;ber die Zeit, der Bulkhead &ouml;ffnet nie wieder.
-  - <strong>Ein Bulkhead pro Downstream</strong>. Ein gemeinsamer Pool h&auml;tte das Pattern ad absurdum gef&uuml;hrt.
-- Reference-Code: <code>services/booking/story5/bulkhead/bulkhead.go</code> &mdash; ca. 60 Zeilen Go mit <code>chan struct{}</code> als Semaphore.
-- Diskussions-Anker: Sollte ein Bulkhead-Reject als CB-Failure z&auml;hlen? (Antwort im Recap: nein &mdash; CB und Bulkhead sind komplement&auml;r und unabh&auml;ngig.)
+- Drei Knackpunkte, falls jemand nachbaut: Check und Increment m&uuml;ssen atomar sein (Mutex, Compare-and-Set, Semaphore), sonst rutschen unter Last mehr Calls durch als erlaubt. Das Decrement geh&ouml;rt ins finally, sonst leckt der Pool und &ouml;ffnet nie wieder. Ein Bulkhead pro Downstream, nie ein gemeinsamer.
+- Referenz: <code>services/booking/story5/bulkhead/bulkhead.go</code>, etwa 60 Zeilen Go mit <code>chan struct{}</code> als Semaphore. Im Dashboard unter Story 5 l&auml;sst sich die Referenz gegen langsame Backends treiben (Burst-Knopf).
+- &Uuml;berleitung: &bdquo;Die Zahl kl&auml;ren wir jetzt. Nicht am Rechner, sondern mit Bechern und Chips.&ldquo;

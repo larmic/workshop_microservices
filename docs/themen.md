@@ -150,8 +150,9 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Lernpointe: Circuit Breaker, graceful Degradation
 - Recap-Frage: Was ist ein gutes Default-Verhalten im „Open"-State?
 
-### 6e. Story 5 — [Isolation ist Stärke](stories/story-05-bulkhead.md) (60 Min)
-- Lernpointe: Ressourcen-Isolation, getrennte Thread-Pools / Connection-Pools
+### 6e. Story 5 — [Der geteilte Pool](stories/story-05-bulkhead.md) (60 Min)
+- Übung statt Code: 25 Minuten Spiel mit Bechern und Chips (ein Pool für alle, dann ein Pool pro Backend), 20 Minuten Little's Law („Warum ausgerechnet zehn?"), Recap mit fünf Fragen plus Bonus zu non-blocking
+- Lernpointe: Ressourcen-Isolation pro Downstream; die Größe des Pools ist die eigentliche Arbeit
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?
 - Rückgriff auf Story 2: `POST /admin/bulkhead-reset` ist bewusst RPC-artig (Dashboard-Knopf, ein Aufrufer). Abweichen mit Grund
 

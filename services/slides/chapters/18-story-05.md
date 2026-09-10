@@ -1,45 +1,50 @@
-## Story 5
+<div class="page">
 
-<p class="subtitle">Isolation ist St&auml;rke <span class="time-badge">&asymp; 60 min</span></p>
+<p class="kicker">Story 5 &middot; &Uuml;bung</p>
 
-<div class="cols">
-<div>
+<div class="page-head">
 
-<div class="story-card">
+## Der geteilte Pool
 
-#### Kontext
+<span class="badge">&asymp; 25 min</span>
+</div>
 
-Wenn ein Backend-Service extrem langsam antwortet, k&ouml;nnen alle Threads / Connections des Booking-Service in diesem einen Service stecken bleiben. Aufrufe an die anderen Backends sind dann ebenfalls betroffen &mdash; obwohl sie gesund sind. Das Bulkhead-Pattern isoliert die Ressourcen pro Downstream.
+<p class="subtitle">Ihr seid die Requests. Der Becher ist der Pool.</p>
 
-#### User Story
+<div class="page-body">
 
-Als <em>Betriebsteam</em> m&ouml;chte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeintr&auml;chtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.
-
+<div class="steps">
+<div class="steps-col">
+<h4>Aufbau</h4>
+<ol>
+<li>Zehn Chips in einem Becher, der Pool des Booking-Service.</li>
+<li>Drei Leute sind Flight, Hotel und Car.</li>
+<li>Alle anderen sind Requests und stellen sich an.</li>
+<li>Wer bedient werden will, braucht einen Chip. Zur&uuml;ck gibt es ihn erst, wenn das Backend fertig ist.</li>
+<li>Flight und Car antworten sofort. Hotel braucht zwanzig Sekunden.</li>
+</ol>
+</div>
+<div class="steps-col">
+<h4>Ablauf</h4>
+<ol>
+<li>Jedes Team schreibt vorher auf: Was passiert, wenn ein Drittel der Requests zu Hotel will?</li>
+<li><strong>Runde 1:</strong> ein Becher f&uuml;r alle drei Backends.</li>
+<li><strong>Runde 2:</strong> drei Becher mit vier, drei und drei Chips.</li>
+<li>Karten aufdecken, vergleichen.</li>
+</ol>
+</div>
 </div>
 
 </div>
-<div>
 
-<div class="story-card">
-
-#### Akzeptanzkriterien
-
-- Eigener Pool pro Backend (Flight, Hotel, Car); Gr&ouml;&szlig;e konfigurierbar
-- Bei vollem Pool: <strong>sofortige</strong> Ablehnung (kein Queueing) mit <code>503</code>
-- Langsamer Hotel-Service blockiert <em>nicht</em> die Aufrufe an Flight oder Car
-- Aufruf-Timeout konfiguriert (max. <code>3&nbsp;s</code>)
-- Metriken &uuml;ber Pool-Auslastung verf&uuml;gbar (in-flight, calls, rejected)
-- Funktioniert <em>zusammen</em> mit dem Circuit Breaker aus Story 4
-
-</div>
-
-</div>
 </div>
 
 Note:
-- Hook: &bdquo;Story 4 hat uns gegen <em>kaputte</em> Backends geh&auml;rtet. Heute geht's um die nervigere Variante: das Backend antwortet, nur eben sehr, sehr langsam. Kein Fehler &mdash; und trotzdem rei&szlig;t es alles mit.&ldquo;
-- Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 5 &rarr; &bdquo;Story lesen&ldquo;.
-- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story5/</code> (Go, Semaphore via <code>chan struct{}</code>).
-- Drei separate Bulkheads (Flight / Hotel / Car) &mdash; gleiche Granularit&auml;t wie beim CB aus Story 4. Im Code stehen Bulkhead und CB als Decorator hintereinander: <code>bh.Execute &rarr; cb.Execute &rarr; httpCall</code>.
-- Demo-Drehbuch: Dashboard &rarr; Hotel auf &bdquo;Langsam (2&nbsp;s)&ldquo; stellen, dann <code>POST /admin/burst</code> dr&uuml;cken &mdash; 20 parallele Requests. Hotel-Bulkhead zeigt rejected &asymp;&nbsp;10, Flight und Car laufen praktisch ungest&ouml;rt. <em>Recap-Hook</em>: bei genauer Beobachtung sind Flight-Rejects sauber, Hotel-Rejects unsauber &mdash; warum?
-- Time-Box 60 min inkl. Demo. Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-05-bulkhead.md</code>.
+- Hook: &bdquo;Story 4 hat uns gegen kaputte Backends geh&auml;rtet. Heute die nervigere Variante: Das Backend antwortet, nur sehr, sehr langsam. Kein Fehler, und trotzdem rei&szlig;t es alles mit.&ldquo; Heute wird nicht programmiert, sondern gespielt.
+- Material: ein gro&szlig;er Becher, drei kleine Becher, zehn Chips (M&uuml;nzen, Pokerchips, Zettel), Karteikarten f&uuml;r die Vorhersagen, eine Uhr mit Sekunden.
+- Rollen: Flight und Car geben den Chip sofort zur&uuml;ck. Hotel z&auml;hlt laut bis zwanzig und h&auml;lt den Chip solange. Requests, die keinen Chip bekommen, gehen mit &bdquo;503&ldquo; zur&uuml;ck ans Ende der Schlange.
+- Erwartung Runde 1: Nach wenigen Sekunden liegen alle zehn Chips bei Hotel. Flight- und Car-Requests scheitern, obwohl beide sofort antworten k&ouml;nnten. Das ist der Kern des Patterns, sichtbar in einer Minute.
+- Erwartung Runde 2: Hotel-Requests scheitern weiter (drei Chips reichen nicht), Flight und Car laufen ungest&ouml;rt. Genau das haben die Karten vorher meist nicht vorhergesagt.
+- Wiedererkennung: Die &Uuml;bung steht im Dashboard unter Story 5, &bdquo;Story lesen&ldquo;. Das Bulkhead-Panel darunter zeigt die Referenz-Implementierung, wenn ihr das Echte sehen wollt: Hotel auf langsam stellen, Burst dr&uuml;cken.
+- Weiter nach unten: Warum ausgerechnet zehn?
+- Vollst&auml;ndige Beschreibung: <code>docs/stories/story-05-bulkhead.md</code>.

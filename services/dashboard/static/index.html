@@ -1368,7 +1368,7 @@
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="4" onclick="showStory(4)">4</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="5" onclick="showStory(5)">5</button>
+                <button type="button" class="stepper-node design" data-story-node="5" onclick="showStory(5)" title="Übung mit Bechern und Chips, kein Code">5</button>
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">6</button>
                 <span class="stepper-connector"></span>
@@ -1667,56 +1667,42 @@ call(service):
 
         </section>
 
+        <!-- Story 5: Übung mit Bechern und Chips statt Code. Story-Karte zeigt die
+             Übung; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
         <section class="story-section" data-story="5" hidden>
             <div class="story-helpers" data-story-helpers="5">
-                <details class="story-info">
-                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                <details class="story-info" open>
+                    <summary>Story lesen <span class="badge">User Story + Übung</span></summary>
                     <div class="story-info-body">
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Requests, der Becher ist der Pool. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
-                        <p>Wenn Hotel extrem langsam antwortet, blockieren seine Calls alle Threads des Booking-Service &mdash; Flight-Calls verhungern, obwohl Flight gesund ist. Das <em>Bulkhead-Pattern</em> isoliert die Ressourcen: jeder Backend-Service bekommt seinen eigenen Slot-Pool. Voller Pool → sofort 503 ablehnen statt queuen.</p>
+                        <p>Wenn Hotel extrem langsam antwortet, blockieren seine Calls alle Slots des Booking-Service. Flight-Calls verhungern, obwohl Flight gesund ist. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
                         <h4>User Story</h4>
-                        <p>Als <em>Betriebsteam</em> möchte ich <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere beeinträchtigen</em>, damit <em>ein langsamer Service nicht das gesamte System blockiert</em>.</p>
-                        <h4>Akzeptanzkriterien</h4>
-                        <ul>
-                            <li>Jeder Backend-Service hat einen eigenen Slot-Pool (Semaphor oder Thread-Pool)</li>
-                            <li><code>maxConcurrentCalls</code> pro Service konfigurierbar</li>
-                            <li>Bei erschöpftem Pool: sofortige Ablehnung, kein Queueing</li>
-                            <li>Abgelehnte Anfragen liefern <code>503 Service Unavailable</code></li>
-                            <li>Metriken über Pool-Auslastung sind verfügbar (in-flight, total, rejected)</li>
-                        </ul>
-                    </div>
-                </details>
-                <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
-                    <div class="story-cheatsheet-body">
-<pre>max      = { flight: 5, hotel: 5, car: 5 }   // pro Service
-inProgress = { flight: 0, hotel: 0, car: 0 }
-rejected = { flight: 0, hotel: 0, car: 0 }
-
-call(service):
-  if inProgress[service] >= max[service]:
-    rejected[service]++
-    return 503                              // sofort ablehnen
-  inProgress[service]++
-  try:
-    return service.invoke()
-  finally:
-    inProgress[service]--
-
-// Aggregator (Booking) ruft alle drei parallel auf:
-//   ein langsamer Hotel füllt nur seinen Pool,
-//   Flight + Car liefern weiter normal.</pre>
+                        <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere beeinträchtigen</em>, damit <em>ein langsamer Service nicht das gesamte System blockiert</em>.</p>
+                        <h4>Aufbau (Der geteilte Pool, ca. 25 Minuten)</h4>
+                        <ol>
+                            <li>Zehn Chips in einem Becher, der Pool des Booking-Service.</li>
+                            <li>Drei Leute sind Flight, Hotel und Car.</li>
+                            <li>Alle anderen sind Requests und stellen sich an.</li>
+                            <li>Wer bedient werden will, braucht einen Chip. Zurück gibt es ihn erst, wenn das Backend fertig ist.</li>
+                            <li>Flight und Car antworten sofort. Hotel braucht zwanzig Sekunden.</li>
+                        </ol>
+                        <h4>Ablauf</h4>
+                        <ol>
+                            <li>Jedes Team schreibt vorher auf: Was passiert, wenn ein Drittel der Requests zu Hotel will?</li>
+                            <li><strong>Runde 1:</strong> ein Becher für alle drei Backends.</li>
+                            <li><strong>Runde 2:</strong> drei Becher mit vier, drei und drei Chips.</li>
+                            <li>Karten aufdecken, vergleichen.</li>
+                        </ol>
+                        <h4>Warum ausgerechnet zehn? (ca. 20 Minuten)</h4>
+                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Bei 20 Hotel-Aufrufen pro Sekunde: 50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, ein 3-Sekunden-Timeout ergibt 60. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
+                        <p>Vollständige Beschreibung: <code>docs/stories/story-05-bulkhead.md</code>. Referenz-Implementierung: <code>services/booking/story5/</code>.</p>
                     </div>
                 </details>
             </div>
-        <div class="source-toggle" data-source-toggle="5">
-            <span class="source-toggle-label">Service-Quelle</span>
-            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(5,'reference')">Reference</button>
-            <button class="source-btn" data-mode="custom" onclick="setBookingMode(5,'custom')">Custom</button>
-        </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Bulkhead (Booking Story 5)</h2>
+                <h2>Bulkhead-Demo (Referenz Story 5)</h2>
                 <button class="panel-reset-btn" id="bh-reset-btn" onclick="resetBulkheadStats()" title="Bulkhead-Counters zurücksetzen">Reset</button>
             </div>
             <div class="rest-actions">
@@ -3046,8 +3032,8 @@ on receiveCompensationEvent(event):
                  subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
             4: { title: "Story 4: Wenn der Flug ausfällt",
                  subtitle: "Circuit Breaker: nach wiederholten Fehlern abschalten und graceful degradieren." },
-            5: { title: "Story 5: Isolation ist Stärke",
-                 subtitle: "Bulkhead-Pattern: pro Backend-Service ein eigener Slot-Pool, sofortige Ablehnung statt Queue." },
+            5: { title: "Story 5: Der geteilte Pool",
+                 subtitle: "Bulkhead als Übung: Ihr seid die Requests, der Becher ist der Pool. Danach rechnen wir, warum ausgerechnet zehn." },
             6: { title: "Story 6: Alles oder nichts — aber richtig",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             7: { title: "Story 7: Die Saga wird leise — Kompensation via Events",

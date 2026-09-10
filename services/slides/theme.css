@@ -164,6 +164,12 @@
     color: var(--box-border);
 }
 
+/* reveal.js reset.css setzt font-weight: inherit; Fettdruck explizit zurückholen */
+.reveal strong,
+.reveal b {
+    font-weight: 700;
+}
+
 /* Highlight / Akzentuierung */
 .reveal .hl,
 .reveal mark {
@@ -861,6 +867,192 @@
     color: #5B4E93;
     margin: 20px 0 0;
     max-width: 34em;
+}
+
+/* Code-Block nur so breit wie der Inhalt (kurze Snippets) */
+.reveal .codeblock.fit {
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    padding-right: 44px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Übungsfolie (.steps): zwei nummerierte Spalten (Aufbau, Ablauf)         */
+/* ---------------------------------------------------------------------- */
+
+.reveal .steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    text-align: left;
+}
+
+.reveal .steps h4 {
+    color: var(--box-border);
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    text-align: left;
+}
+
+.reveal .steps ol {
+    display: block;
+    list-style: none;
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+}
+
+.reveal .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 34px;
+    font-size: 18px;
+    line-height: 1.4;
+    margin: 0 0 12px;
+    color: var(--slide-text);
+}
+
+.reveal .steps li::before {
+    content: counter(step) ".";
+    position: absolute;
+    left: 0;
+    color: var(--box-border);
+    font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Little's Law (.littles): Formel-Chip, Erklärung, Vierspalten-Tabelle    */
+/* mit Fragezeichen, die per Klick den Ergebnissen weichen                 */
+/* ---------------------------------------------------------------------- */
+
+.reveal .page .page-body.littles {
+    margin: 0 0 auto;
+}
+
+.reveal .formula {
+    display: inline-block;
+    background: var(--wave);
+    color: var(--slide-text);
+    font-family: var(--r-code-font);
+    font-size: 28px;
+    padding: 14px 26px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+}
+
+.reveal .formula .v {
+    color: var(--box-border);
+}
+
+.reveal .formula-text {
+    text-align: left;
+    font-size: 17px;
+    line-height: 1.45;
+    color: #5B4E93;
+    margin: 0 0 22px;
+    max-width: 52em;
+}
+
+.reveal .ltable {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 40px;
+    text-align: left;
+}
+
+.reveal .ltable > div {
+    padding: 12px 0;
+    border-bottom: 1px solid #E4E0F5;
+    font-size: 20px;
+    color: var(--slide-text);
+}
+
+.reveal .ltable .ltable-head {
+    color: var(--box-border);
+    font-size: 15px;
+    font-weight: 700;
+    padding: 0 0 8px;
+}
+
+.reveal .ltable code {
+    background: none;
+    padding: 0;
+    color: var(--slide-text);
+    font-size: 19px;
+}
+
+.reveal .ltable code.q {
+    color: #B9B1DC;
+}
+
+/* Überlagerung zweier Zustände: das Fragment blendet den einen aus, den anderen ein */
+.reveal .swap {
+    display: grid;
+}
+
+.reveal .swap > * {
+    grid-area: 1 / 1;
+}
+
+.reveal .swap-foot {
+    margin-top: 28px;
+}
+
+.reveal .swap-foot .ask {
+    text-align: left;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--box-border);
+    margin: 0;
+    max-width: 34em;
+}
+
+.reveal .swap-foot .ask strong {
+    color: var(--box-border);
+    font-weight: 700;
+}
+
+.reveal .swap-foot .callout {
+    justify-self: start;
+    align-self: start;
+}
+
+/* Recap mit fünf Fragen: noch etwas enger */
+.reveal .numlist.recap.compact.dense .numlist-row {
+    padding: 10px 0;
+}
+
+/* Bonus-Folie: Platzhalter-Karten mit Fragezeichen, dann die echten */
+.reveal .cards.ghost .card {
+    background: none;
+    border: 2px dashed #D9D1F4;
+    color: #D9D1F4;
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 40px;
+    align-items: center;
+    justify-content: center;
+    min-height: 130px;
+}
+
+.reveal .page .page-body.bonus {
+    margin: 0 0 auto;
+}
+
+.reveal .bonus-text {
+    text-align: left;
+    font-size: 18px;
+    line-height: 1.45;
+    color: #5B4E93;
+    margin: 22px 0 0;
+    max-width: 48em;
+}
+
+.reveal .bonus .foot {
+    margin-top: 18px;
+    justify-content: flex-start;
 }
 
 /* ---------------------------------------------------------------------- */

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 230" role="img" aria-label="Schiffsrumpf mit fünf Schotten; das zweite Abteil ist geflutet, die anderen bleiben trocken">
+  <!-- Wellen links und rechts -->
+  <path d="M 8 78 C 22 66, 36 66, 50 78 S 78 90, 92 78" fill="none" stroke="#B4A9E6" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 508 78 C 522 66, 536 66, 550 78 S 578 90, 592 78" fill="none" stroke="#B4A9E6" stroke-width="4" stroke-linecap="round"/>
+  <!-- geflutetes Abteil -->
+  <clipPath id="hull"><path d="M 60 22 L 540 22 L 490 208 L 110 208 Z"/></clipPath>
+  <g clip-path="url(#hull)">
+    <path d="M 156 92 C 176 82, 196 102, 216 92 S 246 84, 252 92 L 252 210 L 156 210 Z" fill="#6E63A8"/>
+  </g>
+  <!-- Rumpf -->
+  <path d="M 60 22 L 540 22 L 490 208 L 110 208 Z" fill="none" stroke="#B4A9E6" stroke-width="5" stroke-linejoin="round"/>
+  <!-- Schotten -->
+  <line x1="156" y1="22" x2="156" y2="208" stroke="#B4A9E6" stroke-width="4"/>
+  <line x1="252" y1="22" x2="252" y2="208" stroke="#B4A9E6" stroke-width="4"/>
+  <line x1="348" y1="22" x2="348" y2="208" stroke="#B4A9E6" stroke-width="4"/>
+  <line x1="444" y1="22" x2="444" y2="208" stroke="#B4A9E6" stroke-width="4"/>
+  <!-- Status-Punkte -->
+  <circle cx="108" cy="56" r="11" fill="#D3F871"/>
+  <circle cx="204" cy="56" r="11" fill="#4B3F86"/>
+  <circle cx="300" cy="56" r="11" fill="#D3F871"/>
+  <circle cx="396" cy="56" r="11" fill="#D3F871"/>
+  <circle cx="492" cy="56" r="11" fill="#D3F871"/>
+</svg>
