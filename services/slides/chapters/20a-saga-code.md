@@ -1,41 +1,38 @@
-<!-- .slide: data-background-image="./assets/saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
 
-## Saga
+<p class="kicker">Saga</p>
 
-<p class="subtitle">Orchestrator in Pseudo-Code</p>
+## Der Orchestrator
 
-<pre class="cheatsheet"><span class="cmd">STATE:</span>
-  saga   = { id, status: PENDING, steps: [] }
-  booked = []                                    // f&uuml;r Rollback
+<p class="subtitle">In Pseudo-Code, wie im Spickzettel.</p>
 
-<span class="cmd">try:</span>
-  flight = POST flight/bookings { ... }
-  booked.push({ svc: "flight", id: flight.id })
-  saga.steps.push({ svc: "flight", status: BOOKED })
+<div class="page-body codebody">
 
-  hotel = POST hotel/bookings { ... }
-  booked.push({ svc: "hotel",  id: hotel.id })
-  saga.steps.push({ svc: "hotel",  status: BOOKED })
+<div class="codeblock">
+<div class="k">book(request):</div>
+<div>  saga = { status: <span class="hi">PENDING</span>, booked: [] }</div>
+<div class="gap">  try:</div>
+<div>    for svc in [flight, hotel, car]:</div>
+<div>      id = POST svc/bookings                 <span class="dim">// Forward</span></div>
+<div>      saga.booked.push({ svc, id })</div>
+<div>    saga.status = <span class="hi">COMPLETED</span></div>
+<div class="gap">  catch error at step X:</div>
+<div>    saga.status = <span class="hi">COMPENSATING</span></div>
+<div>    for b in <span class="hi">reverse</span>(saga.booked):</div>
+<div>      DELETE b.svc/bookings/{b.id}           <span class="dim">// Kompensation, ein Versuch</span></div>
+<div>    saga.status = <span class="hi">FAILED</span></div>
+</div>
 
-  car = POST car/bookings { ... }
-  saga.steps.push({ svc: "car",    status: BOOKED })
+<p class="codenote">R&uuml;ckw&auml;rts, genau einmal, ohne Netz. Was das kostet, kl&auml;ren wir im Recap.</p>
 
-  saga.status = COMPLETED
+</div>
 
-<span class="cmd">catch error at step X:</span>
-  saga.status   = COMPENSATING
-  saga.failedAt = X
-  for b in reverse(booked):
-    DELETE b.svc/bookings/{b.id}              // Kompensation
-    mark step COMPENSATED
-  saga.status = FAILED
-</pre>
+</div>
 
 Note:
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 6 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
-- Drei Knackpunkte hervorheben:
-  - <strong>reverse(booked)</strong> &mdash; Kompensation in umgekehrter Reihenfolge. Sonst kompensiert man Schritte, die nie ausgef&uuml;hrt wurden, oder verletzt fachliche Reihenfolge-Annahmen (Auto kann nur storniert werden, wenn Hotel noch existiert).
-  - <strong>booked als Snapshot</strong> statt aus <code>saga.steps</code> ableiten &mdash; entkoppelt &bdquo;was wurde gebucht&ldquo; vom Saga-Logging. Falls eine Status-Update-Operation fehlschl&auml;gt, ist der Rollback-Pfad immer noch korrekt.
-  - <strong>DELETE muss idempotent sein</strong> &mdash; bei Retry darf der Service nicht erschrecken (siehe Recap-Frage 4).
-- Reference-Code: <code>services/booking/story6/saga/</code> &mdash; identische Logik in ca. 100 Zeilen Go.
-- Diskussions-Anker: Was, wenn der <code>DELETE</code> selbst in 5xx l&auml;uft? Im Workshop genau <em>einen</em> Versuch, ansonsten <code>FAILED</code>. Produktion braucht Retry mit Backoff (siehe Recap-Frage 1+2). Brille von dem Code aufsetzen: in den Schritten <code>saga.steps.push</code> liegt der State; ohne Persistenz ist alles weg, wenn Booking abst&uuml;rzt &mdash; siehe Recap-Frage 7.
+- Derselbe Ablauf steht ausf&uuml;hrlicher im Dashboard unter Story 6, &bdquo;Spickzettel&ldquo;. Wiedererkennung gewollt, hier auf das Skelett gek&uuml;rzt.
+- Drei Knackpunkte: <strong>reverse(booked)</strong>, die Kompensation l&auml;uft in umgekehrter Reihenfolge, sonst verletzt man fachliche Reihenfolge-Annahmen. <strong>booked als eigene Liste</strong>, nur was wirklich gebucht wurde, wird kompensiert; Car wird nach dem Hotel-Fehler gar nicht angefasst. <strong>DELETE muss idempotent sein</strong>, bei einem Retry darf das Backend nicht erschrecken, Recap-Frage 3.
+- Was hier bewusst fehlt und in Produktion dazugeh&ouml;rt: <strong>Retry mit Backoff</strong> f&uuml;r die Kompensation (transiente Fehler aussitzen, ohne Doppel-Storno). <strong>Persistenter Saga-Log</strong> f&uuml;r Crash-Recovery (Postgres, SQLite, Consul KV). <strong>Workflow Engines</strong> wie Temporal oder Camunda drehen das Modell um: Die Engine persistiert jeden Schritt, retryt, startet nach Crash neu. <strong>Pivot zur fachlichen Alternative</strong>: Gutschein statt Storno, wenn der Flug schon abgehoben ist. <strong>Observability</strong>: Status-Counter, Compensation-Erfolgsrate, Saga-ID in jedem Span.
+- Diskussions-Anker: Was, wenn der <code>DELETE</code> selbst in 5xx l&auml;uft? Im Workshop genau ein Versuch, dann <code>FAILED</code>. Das ist die erste Recap-Frage.
+- Referenz: <code>services/booking/story6/saga/</code>, dieselbe Logik in etwa 100 Zeilen Go.
+- &Uuml;berleitung: &bdquo;Im Workshop bewusst die einfachste Variante: synchron, in-memory, ein Versuch. Jetzt baut ihr sie.&ldquo;

@@ -1,71 +1,66 @@
-<!-- .slide: data-background-image="./assets/saga.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
 
-## Saga
+<p class="kicker">Saga</p>
 
-<p class="subtitle">Alles oder nichts &mdash; aber richtig</p>
+<div class="page-head">
 
-<div class="factor-row">
+## Vorw&auml;rts, und notfalls zur&uuml;ck
 
-<div class="factor fragment">
+<img class="head-figure" src="./assets/saga.svg" alt=""/>
+</div>
+
+<div class="page-body">
+
+<div class="cards cards-3 violet compact">
+<div class="card">
 <h3>Lokale Transaktionen</h3>
-<p>Jeder Service hat seine eigene Transaktion &mdash; <strong>kein</strong> 2PC &uuml;ber Service-Grenzen.</p>
+<p>Jeder Service committet nur bei sich. Kein Two-Phase-Commit &uuml;ber Service-Grenzen.</p>
 <code>ACID nur lokal</code>
-<aside class="notes">Klassische DB-Transaktionen funktionieren nicht &uuml;ber Service-Grenzen. Zwei-Phasen-Commit ist theoretisch m&ouml;glich, praktisch in modernen Microservice-Stacks tot &mdash; zu fragil, zu langsam, sperrt Ressourcen. Stattdessen: eine Kette lokaler Transaktionen, jeder Service committed lokal, das Gesamtergebnis ist eventually consistent.</aside>
 </div>
-
-<div class="factor fragment">
+<div class="card">
 <h3>Forward + Kompensation</h3>
-<p>Pro Schritt zwei Operationen: <code>book</code> und <code>cancel</code>.</p>
+<p>Pro Schritt zwei Operationen: buchen, und das fachliche Gegenst&uuml;ck dazu.</p>
 <code>POST &harr; DELETE</code>
-<aside class="notes">Der zentrale Saga-Trick: f&uuml;r jeden Vorw&auml;rts-Schritt eine semantisch inverse Operation. Wichtig: das ist nicht zwingend ein technisches Rollback &mdash; oft eine fachliche Gegenbuchung (Refund, Gutschein, Storno). Saga macht eine starke Annahme: Forward-Steps d&uuml;rfen scheitern, Kompensationen <em>m&uuml;ssen letztlich gelingen</em>. Ohne diese Annahme bricht das Konstrukt zusammen.</aside>
 </div>
-
-<div class="factor fragment">
+<div class="card">
 <h3>Orchestrator</h3>
-<p>Zentraler Koordinator steuert den Ablauf. Wissen liegt an <em>einer</em> Stelle.</p>
+<p>Booking kennt Reihenfolge und Fortschritt. Die Backends bleiben dumm.</p>
 <code>Booking wei&szlig; alles</code>
-<aside class="notes">Booking kennt: Reihenfolge der Schritte, was wurde schon aufgerufen, was muss kompensiert werden, aktueller Saga-Status. Hotel / Flight / Car bleiben <em>dumm und einfach</em> &mdash; sie kennen nur ihre eigenen lokalen Transaktionen. Vorteil: ein Bug in der Saga-Logik steckt an <em>einer</em> Stelle. Alternative ist Choreography (Story 7) &mdash; verteiltes Saga-Wissen &uuml;ber Events.</aside>
 </div>
-
-<div class="factor fragment">
+<div class="card">
 <h3>Saga-Status</h3>
-<p><code>PENDING</code> &rarr; <code>COMPLETED</code> oder <code>COMPENSATING</code> &rarr; <code>FAILED</code>.</p>
-<code>idempotent by design</code>
-<aside class="notes">Der Status ist die Lebensader der Saga. Pflicht: <strong>idempotente Endpoints</strong> &mdash; mehrfacher <code>DELETE</code> derselben Buchung liefert dasselbe Ergebnis, ohne Fehler. In Produktion muss der Status persistent sein, sonst stirbt die Saga mit dem Prozess. Im Workshop bewusst in-memory, weil 60-Min-Slot &mdash; daf&uuml;r aber explizit besprochen (siehe Recap-Frage 7).</aside>
+<p>Jede Saga hat einen Zustand, und der ist abfragbar.</p>
+<code>PENDING &rarr; COMPLETED | FAILED</code>
 </div>
-
-<div class="factor fragment">
+<div class="card">
 <h3>Eventual Consistency</h3>
-<p>Zwischenzust&auml;nde sind <em>sichtbar</em>. Kompensation muss <span class="hl">letztlich</span> gelingen.</p>
+<p>Zwischenzust&auml;nde sind sichtbar. Die Kompensation muss letztlich gelingen.</p>
 <code>nicht atomar</code>
-<aside class="notes">Wer Saga benutzt, gibt Atomicity auf. F&uuml;r kurze Momente ist Flug gebucht, Hotel nicht. Wer das nicht durchdenkt (UI / E-Mail / Reporting), zeigt dem Kunden inkonsistente Daten. Akzeptiere das &mdash; oder w&auml;hle ein anderes Pattern (zentrale DB, eine Datenbank pro Booking-Replica, &hellip;). Saga ist kein magisches Allheilmittel, sondern ein bewusstes Trade-off zwischen Konsistenz und Verteilung.</aside>
+</div>
+</div>
+
+<div class="market">
+<h4>Am Markt</h4>
+<div class="pills">
+<span class="pill brand">Temporal</span>
+<span class="pill">Cadence</span>
+<span class="pill">Camunda 8</span>
+<span class="pill">Axon Framework</span>
+<span class="pill">AWS Step Functions</span>
+<span class="pill">Eventuate Tram</span>
+</div>
 </div>
 
 </div>
 
-<div class="market-row">
-
-### Am Markt
-
-<div class="chip-row">
-  <span class="chip brand">Temporal</span>
-  <span class="chip">Cadence</span>
-  <span class="chip">Camunda 8 (Zeebe)</span>
-  <span class="chip">Axon Framework</span>
-  <span class="chip">MicroProfile LRA</span>
-  <span class="chip">AWS Step Functions</span>
-  <span class="chip">Eventuate Tram Saga</span>
-  <span class="chip">MassTransit Saga</span>
-  <span class="chip">NServiceBus Saga</span>
 </div>
-
-</div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 Note:
-- Hook: &bdquo;In Story 4 haben wir bei POST Fail-Fast gemacht &mdash; wenn ein CB OPEN ist, ganzen Buchungsversuch abbrechen. Aber: was, wenn der Flug schon gebucht ist und <em>dann</em> kippt das Hotel?&ldquo; Demo: Flight normal, Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code> &mdash; im Dashboard ist sichtbar, wie Flight gebucht und dann kompensiert wird.
-- Karten-Reihenfolge bewusst: erst die Abgrenzung gegen ACID (Lokale Transaktionen), dann die Mechanik (Forward + Kompensation, Orchestrator, Status), zuletzt das ehrliche Trade-off (Eventual Consistency).
-- Wer was wo nutzt: <strong>Temporal / Cadence</strong> sind heute Branchen-Standard f&uuml;r &bdquo;Saga as Code&ldquo; &mdash; Engine k&uuml;mmert sich um State, Retry, Recovery. <strong>Camunda 8</strong> stark in BPMN-orientierten Enterprise-Umgebungen. <strong>AWS Step Functions</strong> als managed Variante. <strong>Eventuate / MassTransit / NServiceBus</strong> sind Saga-Libraries im jeweiligen .NET-/Java-Stack.
-- Wichtigster Take-away f&uuml;r die Brain Bridge: Saga ist <em>nicht</em> Eventing. Saga kann sync HTTP sein (Story 6) oder asynchron &uuml;ber Events laufen (Choreography, Story 7). Das eine ist das Pattern, das andere die Transport-Wahl.
-- &Uuml;berleitung: Wir schauen uns die Mechanik konkret an &mdash; in genau der Form, wie sie im Dashboard-Spickzettel und im Story-6-Code steckt.
+- <strong>Lokale Transaktionen:</strong> Klassische DB-Transaktionen enden an der Service-Grenze. Two-Phase-Commit w&auml;re theoretisch m&ouml;glich, ist in Microservice-Stacks aber praktisch tot: fragil, langsam, sperrt Ressourcen. Stattdessen eine Kette lokaler Transaktionen, das Gesamtergebnis ist eventually consistent.
+- <strong>Forward + Kompensation:</strong> Der zentrale Trick: F&uuml;r jeden Vorw&auml;rts-Schritt eine semantisch inverse Operation. Das ist nicht zwingend ein technisches Rollback, oft eine fachliche Gegenbuchung: Refund, Gutschein, Storno. Starke Annahme: Forward darf scheitern, Kompensation <em>muss</em> letztlich gelingen.
+- <strong>Orchestrator:</strong> Booking kennt Reihenfolge, was schon aufgerufen wurde, was kompensiert werden muss, aktuellen Status. Hotel, Flight, Car kennen nur ihre eigene lokale Transaktion. Vorteil: Ein Bug in der Saga-Logik steckt an einer Stelle. Die Alternative, Choreography, kommt in Story 7.
+- <strong>Saga-Status:</strong> <code>PENDING</code>, dann <code>COMPLETED</code>, oder bei Fehler <code>COMPENSATING</code> und <code>FAILED</code>. In Produktion muss der Status persistent sein, sonst stirbt die Saga mit dem Prozess. Im Workshop bewusst in-memory, Recap-Frage 5.
+- <strong>Eventual Consistency:</strong> Wer Saga nutzt, gibt Atomicity auf. F&uuml;r kurze Momente ist der Flug gebucht und das Hotel nicht. Wer das nicht durchdenkt (UI, E-Mail, Reporting), zeigt dem Kunden inkonsistente Daten. Saga ist ein bewusster Trade-off, kein Allheilmittel.
+- Am Markt: Temporal und Cadence sind heute der Standard f&uuml;r &bdquo;Saga as Code&ldquo;, die Engine &uuml;bernimmt State, Retry und Recovery. Camunda 8 in BPMN-orientierten Enterprise-Umgebungen, AWS Step Functions als Managed-Variante, Axon und Eventuate Tram als Saga-Libraries im Java-Stack. MassTransit und NServiceBus das Gegenst&uuml;ck in .NET.
+- Take-away: Saga ist <em>nicht</em> Eventing. Saga kann synchron &uuml;ber HTTP laufen (Story 6) oder asynchron &uuml;ber Events (Story 7). Das eine ist das Pattern, das andere die Transportwahl.
+- &Uuml;berleitung: &bdquo;Die Mechanik passt auf eine Folie.&ldquo;
