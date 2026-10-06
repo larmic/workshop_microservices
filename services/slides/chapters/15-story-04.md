@@ -1,47 +1,58 @@
-## Story 4
+<div class="page">
 
-<p class="subtitle">Wenn der Flug ausf&auml;llt <span class="time-badge">&asymp; 60 min</span></p>
+<p class="kicker">Story 4</p>
 
-<div class="cols">
-<div>
+<div class="page-head">
 
-<div class="story-card">
+## Wenn der Flug ausf&auml;llt
 
-#### Kontext
+<span class="badge">&asymp; 60 min</span>
+</div>
 
-Der Flight-Service ist zeitweise nicht erreichbar (Netzwerkprobleme, &Uuml;berlast, Deployment). Der Booking-Service soll in diesem Fall nicht ebenfalls ausfallen, sondern <em>graceful degradieren</em> und dem Nutzer eine sinnvolle Alternative bieten.
+<p class="subtitle">Flight ist weg. Hotel und Mietwagen buchen wir <span class="hl">trotzdem</span>.</p>
 
-#### User Story
+<div class="story page-body">
 
-Als <em>Kunde</em> m&ouml;chte ich <em>auch bei Ausfall des Flugbuchungssystems eine Teilbuchung (Hotel + Mietwagen) durchf&uuml;hren k&ouml;nnen</em>, damit <em>meine Reiseplanung nicht komplett blockiert wird</em>.
-
+<div class="story-grid">
+<dl class="story-user">
+<dt>Als</dt>
+<dd>Kunde</dd>
+<dt>m&ouml;chte ich</dt>
+<dd>auch bei Ausfall des Flugbuchungssystems Hotel und Mietwagen buchen k&ouml;nnen,</dd>
+<dt>damit</dt>
+<dd>meine Reiseplanung nicht komplett blockiert wird.</dd>
+</dl>
+<div class="story-list">
+<h4>Der Breaker</h4>
+<ul>
+<li>Je ein Circuit Breaker um jeden Backend-Aufruf: Flight, Hotel, Car</li>
+<li>Nach <code>5</code> aufeinanderfolgenden Fehlern &ouml;ffnet er</li>
+<li>Nach 30 Sekunden wechselt er in <code>HALF_OPEN</code>, ein Probe-Call geht durch</li>
+<li>Aufruf-Timeout konfiguriert, maximal drei Sekunden</li>
+</ul>
+</div>
+<div class="story-list">
+<h4>Der Fallback</h4>
+<ul>
+<li>Bei offenem Circuit l&auml;uft ein Fallback, etwa <code>flights: []</code></li>
+<li>Der Header <code>X-Circuit-Open</code> macht es dem Client sichtbar</li>
+</ul>
+<h4>Sichtbarkeit</h4>
+<ul>
+<li>Circuit-Status &uuml;ber einen Admin-Endpoint abfragbar</li>
+<li>Zustandswechsel werden geloggt</li>
+</ul>
+</div>
 </div>
 
 </div>
-<div>
 
-<div class="story-card">
-
-#### Akzeptanzkriterien
-
-- Je ein Circuit Breaker um <em>jeden</em> Backend-Aufruf (Flight, Hotel, Car); nach <code>5</code> aufeinanderfolgenden Fehlern &ouml;ffnet er
-- Bei offenem Circuit l&auml;uft ein Fallback (z.&nbsp;B. <code>flights: []</code> mit Header <code>X-Circuit-Open</code>)
-- Nach <code>30&nbsp;s</code> wechselt der Breaker in <code>HALF_OPEN</code> und l&auml;sst einen Probe-Call durch
-- Aufruf-Timeout konfiguriert (max. <code>3&nbsp;s</code>)
-- Aktueller Circuit-Status &uuml;ber einen Admin-Endpoint abfragbar
-- Zustands&auml;nderungen werden geloggt
-
-</div>
-
-</div>
 </div>
 
 Note:
-- Hook: &bdquo;Story 3 hat uns geholfen, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben &mdash; und er antwortet nicht.&ldquo;
-- Wiedererkennung: dieselbe Karte (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 4 &rarr; &bdquo;Story lesen&ldquo;.
-- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story4/</code> (Go, selbstgebauter CB &ndash; ca. 80 Zeilen).
-- Drei separate CBs (Flight / Hotel / Car) statt einem globalen &mdash; isoliert Ausf&auml;lle pro Backend. Granularit&auml;t kommt im Recap (Frage 7) zur&uuml;ck.
-- Demo-Tipp: Dashboard &ouml;ffnet die Chaos-Schalter pro Service / pro Replica. Flight auf &bdquo;Fehler&ldquo; &rarr; nach 5 Calls geht der CB OPEN &rarr; Antwort enth&auml;lt sofort <code>flights: []</code> und Header <code>X-Circuit-Open: flight</code>. Zur&uuml;ck auf &bdquo;Normal&ldquo; &rarr; nach 30 s schliesst der Breaker &uuml;ber HALF_OPEN.
-- Resilience-Libraries: Resilience4j (Java), Polly (.NET), Spring Cloud Circuit Breaker, MicroProfile Fault Tolerance, gobreaker. Selber bauen ist Workshop-Didaktik &mdash; in Produktion <em>nimmt</em> man die Library.
-- Time-Box 60 min inkl. Demo. Dashboard <code>http://localhost</code> zeigt den Story-4-Modus inkl. Spickzettel mit Pseudo-Code.
-- Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-04-circuit-breaker.md</code>.
+- Hook: &bdquo;Story 3 hat uns geholfen, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben, und er antwortet nicht.&ldquo;
+- Wiedererkennung: dieselbe Story (Kontext, User Story, Akzeptanzkriterien) im Dashboard unter Story 4, &bdquo;Story lesen&ldquo;.
+- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story4/</code> (Go, selbstgebauter CB, etwa 80 Zeilen). Selber bauen ist Workshop-Didaktik, in Produktion nimmt man die Library.
+- Drei separate CBs statt einem globalen, das isoliert Ausf&auml;lle pro Backend. Granularit&auml;t kommt im Recap zur&uuml;ck.
+- Demo-Drehbuch: Dashboard &ouml;ffnet die Chaos-Schalter pro Service und pro Replica. Flight auf &bdquo;Fehler&ldquo;, nach 5 Calls geht der CB auf OPEN, die Antwort enth&auml;lt sofort <code>flights: []</code> und den Header <code>X-Circuit-Open: flight</code>. Zur&uuml;ck auf &bdquo;Normal&ldquo;, nach 30 s schliesst der Breaker &uuml;ber HALF_OPEN.
+- Time-Box 60 min inklusive Demo. Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-04-circuit-breaker.md</code>.

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" role="img" aria-label="Sicherungskasten mit fünf Schutzschaltern; der zweite ist ausgelöst und steht unten">
+  <rect x="30" y="30" width="540" height="240" rx="18" fill="none" stroke="#B4A9E6" stroke-width="5"/>
+  <g>
+    <rect x="70"  y="70" width="76" height="160" rx="12" fill="#3A2E72"/>
+    <rect x="178" y="70" width="76" height="160" rx="12" fill="#5A2B4E"/>
+    <rect x="286" y="70" width="76" height="160" rx="12" fill="#3A2E72"/>
+    <rect x="394" y="70" width="76" height="160" rx="12" fill="#3A2E72"/>
+    <rect x="502" y="70" width="40" height="160" rx="12" fill="#3A2E72" opacity="0.5"/>
+  </g>
+  <!-- Status-Lampen -->
+  <circle cx="108" cy="96" r="9" fill="#D3F871"/>
+  <circle cx="216" cy="96" r="9" fill="#C2405C"/>
+  <circle cx="324" cy="96" r="9" fill="#D3F871"/>
+  <circle cx="432" cy="96" r="9" fill="#D3F871"/>
+  <!-- Kipphebel: oben = CLOSED, der zweite unten = OPEN -->
+  <rect x="92"  y="120" width="32" height="60" rx="8" fill="#B4A9E6"/>
+  <rect x="200" y="160" width="32" height="60" rx="8" fill="#B4A9E6"/>
+  <rect x="308" y="120" width="32" height="60" rx="8" fill="#B4A9E6"/>
+  <rect x="416" y="120" width="32" height="60" rx="8" fill="#B4A9E6"/>
+</svg>

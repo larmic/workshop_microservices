@@ -1,36 +1,36 @@
-<!-- .slide: data-background-image="./assets/circuitbreaker.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
 
-## Circuit Breaker
+<p class="kicker">Circuit Breaker</p>
 
-<p class="subtitle">Die State-Machine in Pseudo-Code</p>
+## Die State-Machine
 
-<pre class="cheatsheet"><span class="cmd">STATE:</span>
-  state     = CLOSED   // CLOSED | OPEN | HALF_OPEN
-  failures  = 0
-  openUntil = 0
+<p class="subtitle">In Pseudo-Code, wie im Spickzettel.</p>
 
-<span class="cmd">call(service):</span>
-  if state == OPEN and now &lt; openUntil:
-    return fallback()                     // short-circuit
-  if state == OPEN and now &gt;= openUntil:
-    state = HALF_OPEN                     // probe slot frei
+<div class="page-body codebody">
 
-  try service.invoke(timeout = 3s):
-    success &rarr; failures = 0
-              state    = CLOSED
-              return result
-    failure &rarr; failures++
-              if failures &gt;= 5:
-                state     = OPEN
-                openUntil = now + 30s
-              return fallback()
-</pre>
+<div class="codeblock">
+<div class="k">call(service):</div>
+<div>  if state == OPEN and now &lt; openUntil:</div>
+<div>    return fallback()                    <span class="dim">// short-circuit</span></div>
+<div>  if state == OPEN and now &ge; openUntil:</div>
+<div>    state = HALF_OPEN                    <span class="dim">// ein Probe-Slot frei</span></div>
+<div class="gap">  try service.invoke(<span class="hi">timeout = 3s</span>):</div>
+<div>    success &rarr; failures = 0; state = CLOSED</div>
+<div>    failure &rarr; failures++</div>
+<div>              if failures &ge; <span class="hi">5</span>: state = OPEN, openUntil = now + <span class="hi">30s</span></div>
+<div>              return fallback()</div>
+</div>
+
+<p class="codenote">Drei Zahlen, die den Breaker ausmachen: Timeout, Schwelle, Wartezeit. Alle drei sind Entscheidungen, keine Konstanten.</p>
+
+</div>
+
+</div>
 
 Note:
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 4 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
-- Drei Knackpunkte hervorheben:
-  - <strong>Timeout im Aufruf selbst</strong> (3 s) &mdash; ohne den bringt der CB nichts, weil er nie als &bdquo;failure&ldquo; getriggert wird.
-  - <strong>failures &gt;= 5</strong> &mdash; count-basiert. Reicht im Workshop, in Produktion oft rate-basiert &uuml;ber Sliding Window.
-  - <strong>HALF_OPEN ohne Probe-Schutz</strong> &mdash; in der Skizze l&auml;sst <em>jeder</em> Aufruf nach Ablauf die Probe durch. Im echten Code muss das atomar gegen Probe-Storm gesch&uuml;tzt sein.
-- Real Code: <code>services/booking/story4/circuitbreaker/circuitbreaker.go</code> &mdash; ca. 80 Zeilen Go.
-- Diskussions-Anker: Was z&auml;hlt als <em>failure</em>? HTTP 5xx ja, Timeout ja, Connection refused ja &mdash; aber HTTP 4xx? (Antwort: nein, der Aufrufer hat Mist gemacht, Backend ist gesund.)
+- Identischer Pseudo-Code steht im Dashboard unter Story 4, &bdquo;Spickzettel&ldquo;. Wiedererkennung gewollt.
+- <strong>Timeout im Aufruf selbst</strong> (3 s): Ohne ihn bringt der CB nichts, weil ein h&auml;ngender Call nie als Fehler z&auml;hlt.
+- <strong>Schwelle 5</strong>: count-basiert, reicht im Workshop. In Produktion meist rate-basiert &uuml;ber ein Sliding Window, sonst &ouml;ffnen bei hohem Durchsatz f&uuml;nf Fehler in 100 ms den Breaker, obwohl 99,99 Prozent der Requests gesund waren.
+- <strong>Wartezeit 30 s</strong>: Danach HALF_OPEN. In der Skizze l&auml;sst jeder Aufruf nach Ablauf die Probe durch. Im echten Code muss das atomar gegen den Probe-Storm gesch&uuml;tzt sein, Recap-Frage 4.
+- Was die Referenz zus&auml;tzlich hat, hier bewusst weggelassen: Slow-Call-Detection (langsam gilt als kaputt, auch bei 200), Exception-Klassifizierung (nur 5xx z&auml;hlt, 4xx nicht), Metriken pro Zustandswechsel, Decorator-Kette Retry, CB, Timeout, Fallback. Resilience4j macht aus alldem eine Annotation.
+- Referenz: <code>services/booking/story4/circuitbreaker/circuitbreaker.go</code>, etwa 80 Zeilen Go.
