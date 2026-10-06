@@ -31,9 +31,9 @@ Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 
 | Block | Thema | Zeit |
 |-------|-------|------|
-| 6e | Hands-on: Story 5 (Bulkhead) | 60 Min |
+| 6e | Übung: Story 5 (Bulkhead, Becher und Chips statt Code) | 60 Min |
 | 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
-| 6g | Hands-on: Story 7 (Choreography-Saga) | 60 Min |
+| 6g | Rollenspiel: Story 7 (Choreography-Saga, Zettel statt Code) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 7 | Vortrag & Diskussion: CQRS | 30 Min |
 | 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
@@ -161,7 +161,8 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Recap-Frage: Wer kennt das Endergebnis bei dieser Variante?
 
 ### 6g. Story 7 — [Die Saga wird leise](stories/story-07-choreography-saga.md) (60 Min)
-- Lernpointe: Choreography-Saga via Events, Wissen verteilt sich
+- Rollenspiel statt Code: 25 Minuten dieselbe Saga zweimal spielen (Orchestration, dann Choreography mit Zetteln auf einem Tisch), 20 Minuten drei Störungen (Empfänger weg, Event doppelt, kein Reply), Recap mit vier Fragen plus Bonus zum Broker
+- Lernpointe: Choreography verteilt Verantwortung und Wissen; ohne haltbares Messaging wird das Problem nur leiser
 - Recap-Frage: Wann Orchestration, wann Choreography?
 
 ---

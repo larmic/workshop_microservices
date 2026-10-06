@@ -1,48 +1,59 @@
-## Story 7 &mdash; Recap
+<div class="page">
 
-<p class="subtitle">Fragen nach der Umsetzung</p>
+<p class="kicker">Story 7 &middot; Recap</p>
 
-<div class="recap-grid">
+<div class="page-head">
 
-<div class="factor fragment">
-<h3><span class="numeral">1</span> Event-POST schl&auml;gt fehl</h3>
-<p>Booking publiziert per HTTP-POST. Hotel ist <span class="hl">down</span> &mdash; Connection-Refused. Was nun?</p>
-<code>Event ist weg</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Aktuell genau <em>nichts</em>. Der Fehler wird geloggt, der Step trotzdem als <code>COMPENSATED</code> markiert, die Saga geht auf <code>FAILED</code>, der Kunde bekommt seine Antwort. Bewusst die fragilste m&ouml;gliche Variante &mdash; sie zeigt das Problem von Eventing-ohne-Broker unverstellt: <em>Booking sagt &bdquo;Event ist raus&ldquo;, Realit&auml;t: Event wurde nie empfangen.</em> Lehrbuch-Antworten: <strong>Retry mit Backoff</strong> (transiente H&auml;nger), <strong>Outbox-Pattern</strong> (Event in derselben DB-TX wie der Saga-State, Worker publiziert), <strong>Dead-Letter-Queue</strong> (Operator entscheidet manuell), <strong>at-least-once-Bus</strong> (Broker garantiert Zustellung).<br><strong>Spicy:</strong> Eventing eliminiert das &bdquo;Backend kurz weg&ldquo;-Problem nicht &mdash; es verschiebt es. In Story 6 hat Booking den Schmerz gesp&uuml;rt. In Story 7 sieht Booking gar nichts. Wer Choreography ernst meint, f&auml;ngt nicht beim Event-Versand an, sondern bei der <em>Durability des Events</em>.</aside>
+## Vier Fragen an euch
+
+<span class="badge">Bonus zu 03 &darr;</span>
 </div>
 
-<div class="factor fragment">
-<h3><span class="numeral">2</span> Idempotenz bei Events</h3>
-<p>At-least-once ist Standard. Unser Backend tut nichts au&szlig;er <span class="hl">loggen</span> &mdash; was, wenn es echten State &auml;ndert?</p>
-<code>eventId als Dedup-Key</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Unsere Workshop-Variante ist <em>idempotent durch Zustandslosigkeit</em> &mdash; das Backend loggt nur. In Produktion ist das die Ausnahme. Doppelte Zustellung passiert bei (1) POST &rarr; 200 verloren &rarr; Sender retryt &rarr; Backend bekommt das Event zweimal, (2) Broker liefert nach Consumer-Crash erneut, (3) Outbox-Worker crasht zwischen Send und Markieren. Ohne Dedup-Logik: <em>Refund zweimal aufs Konto, Lager-Reservierung doppelt freigegeben, Inkasso-Stop mehrfach</em>. Standard-Mechanismus: <code>eventId</code> in einer kleinen Tabelle merken, Wiederholungen ignorieren &mdash; in derselben Transaktion wie die Business-Logik.<br><strong>Spicy:</strong> Idempotenz ist nicht &bdquo;nice to have&ldquo; &mdash; sie ist das, was einen Event-Handler von einem Random-Number-Generator unter Last unterscheidet. Wer Events publiziert, muss davon ausgehen, dass sie mehrfach ankommen. Wer das ignoriert, hat einen Bug, der erst unter Last zuschl&auml;gt.</aside>
+<div class="page-body">
+
+<div class="numlist recap compact">
+<div class="numlist-row">
+<div class="numlist-num">01</div>
+<div>
+<p class="numlist-label">Der Zettel kommt nie an</p>
+<h3>Booking schickt per HTTP-POST, Hotel ist down. Wo ist das Event <span class="hl">jetzt</span>?</h3>
+</div>
+<code class="numlist-pill fragment" data-fragment-index="1">Event ist weg</code>
+</div>
+<div class="numlist-row">
+<div class="numlist-num">02</div>
+<div>
+<p class="numlist-label">Der Zettel kommt zweimal</p>
+<h3>At-least-once ist Standard. Was, wenn das Backend echten State <span class="hl">&auml;ndert</span>?</h3>
+</div>
+<code class="numlist-pill fragment" data-fragment-index="1">eventId als Dedup-Key</code>
+</div>
+<div class="numlist-row">
+<div class="numlist-num">03</div>
+<div>
+<p class="numlist-label">Webhooks reichen doch</p>
+<h3>Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS <span class="hl">&uuml;berhaupt</span>?</h3>
+</div>
+<code class="numlist-pill fragment" data-fragment-index="1">durable messaging</code>
+</div>
+<div class="numlist-row">
+<div class="numlist-num">04</div>
+<div>
+<p class="numlist-label">Wo ist das Wissen hin?</p>
+<h3>Jeder reagiert auf Events der anderen. Wann wird das zum <span class="hl">verteilten Monolithen</span>?</h3>
+</div>
+<code class="numlist-pill fragment" data-fragment-index="1">Orchestration &ne; Choreography</code>
+</div>
 </div>
 
-<div class="factor fragment">
-<h3><span class="numeral">3</span> Brauchen wir einen Broker?</h3>
-<p>Webhooks sind einfach und kosten keine Infra. Wozu Kafka / RabbitMQ / NATS &uuml;berhaupt?</p>
-<code>durable messaging</code>
-<aside class="notes"><strong>Meine Antwort:</strong> F&uuml;r genau die Dinge, die unsere Variante <em>strukturell nicht leisten kann</em>: <strong>Persistenz</strong>, <strong>Redelivery</strong>, <strong>Fan-out</strong>, <strong>Backpressure</strong>, <strong>Dead-Letter</strong>, <strong>Consumer-Crash-Recovery</strong>, <strong>Ordering</strong>, <strong>Replay</strong>, <strong>Entkopplung in der Zeit</strong>. Webhook gewinnt nur in einer Disziplin: Infrastruktur-Aufwand &mdash; und genau auf diesen Punkt fallen Teams herein.<br><strong>Spicy:</strong> Choreography ohne Broker ist eine p&auml;dagogische &Uuml;bung. Die Architekturidee ist richtig &mdash; aber sie braucht durable Messaging, sonst wird sie zur Verbesserung der schlechten Art: &bdquo;Es f&uuml;hlt sich lockerer gekoppelt an, ist aber stiller im Fehlerfall.&ldquo; Wer Broker scheut, baut sich einen &mdash; meist schlechter als das fertige Werkzeug.</aside>
 </div>
-
-<div class="factor fragment">
-<h3><span class="numeral">4</span> Wo wandert das Wissen?</h3>
-<p>Saga-Logik ist jetzt verteilt &mdash; wann wird Choreography zum <span class="hl">verteilten Monolith</span>?</p>
-<code>Bug-Lokalisierung</code>
-<aside class="notes"><strong>Meine Antwort:</strong> In Story 6 lag das Saga-Wissen an einer Stelle (Booking). In Story 7 reagiert <em>jeder</em> Service auf Events anderer &mdash; ein Bug in der Saga-Logik kann jetzt &uuml;berall sitzen. Choreography wird zum <em>verteilten Monolith</em>, wenn (1) niemand mehr wei&szlig;, wer auf welches Event wie reagiert, (2) Event-Vertr&auml;ge nicht versioniert / dokumentiert sind, (3) eine &Auml;nderung in einem Service drei andere mitziehen muss. Gegenma&szlig;nahmen: zentraler Event-Katalog, Schema-Registry, klare Ownership pro Event-Typ, Visualisierung der Event-Fl&uuml;sse.<br><strong>Spicy:</strong> Orchestration konzentriert das Wissen, Choreography verteilt es. Beides ist legitim &mdash; aber <em>Wissen verteilen ohne Plan</em> f&uuml;hrt zum verteilten Monolith. Das ist die schlimmste beider Welten: lose gekoppelt zur Laufzeit, fest gekoppelt zur Build-Zeit.</aside>
-</div>
-
-<div class="factor fragment">
-<h3><span class="numeral">5</span> Exactly-once?</h3>
-<p>Kann man &uuml;berhaupt garantieren, dass ein Event genau einmal verarbeitet wird?</p>
-<code>at-least-once + idempotent</code>
-<aside class="notes"><strong>Meine Antwort:</strong> Streng genommen nein &mdash; nicht ohne globale Koordination, die in verteilten Systemen praktisch unbezahlbar ist. Die <em>praktische N&auml;herung</em> ist: <strong>at-least-once beim Sender</strong> (Broker garantiert &bdquo;mindestens einmal&ldquo;) + <strong>Idempotenz beim Empf&auml;nger</strong> (Dedup-Key, mehrfache Zustellung wird ignoriert). Effektives Ergebnis: jedes Event genau einmal wirksam, auch wenn es technisch mehrfach geschickt wird. Kafka und einige andere Broker bieten zwar Exactly-once-Semantik an &mdash; sie ist aber teuer (Transaktional-IDs, Idempotenz-Producer, viel Koordination) und l&ouml;st nur einen Teil des Problems (Producer &rarr; Broker), nicht den Empf&auml;nger-seitigen Teil.<br><strong>Spicy:</strong> &bdquo;Exactly-once&ldquo; ist Marketing. Was du wirklich willst, ist <em>at-least-once delivery + idempotent processing</em>. Das ist nicht hipper, aber tats&auml;chlich machbar.</aside>
-</div>
-
-<span class="show-all fragment" aria-hidden="true"></span>
 
 </div>
 
-<aside class="notes">
-Vollst&auml;ndige Antworten und weitere Anekdoten: <code>docs/questions/story7.md</code>.
-</aside>
+Note:
+- Alle vier Fragen stehen sofort da, erst diskutieren lassen. Ein Klick blendet rechts die Merks&auml;tze ein. Frage 03 hat eine Bonus-Folie darunter.
+- <strong>Zettel kommt nie an, meine Antwort:</strong> In der Webhook-Referenz passiert genau nichts. Der Fehler wird geloggt, der Step trotzdem als <code>COMPENSATED</code> markiert, die Saga geht auf <code>FAILED</code>, der Kunde bekommt seine Antwort. Booking sagt &bdquo;Event ist raus&ldquo;, in Wahrheit wurde es nie empfangen. Lehrbuch-Antworten: Retry mit Backoff, Outbox-Pattern (Event in derselben Transaktion wie der Saga-State, ein Worker publiziert), Dead-Letter-Queue, ein Broker mit at-least-once. <strong>Spicy:</strong> Eventing eliminiert das &bdquo;Backend kurz weg&ldquo;-Problem nicht, es verschiebt es. In Story 6 hat Booking den Schmerz gesp&uuml;rt. In Story 7 sieht Booking gar nichts.
+- <strong>Zettel kommt zweimal, meine Antwort:</strong> Unsere Referenz ist idempotent durch Zustandslosigkeit, das Backend loggt nur. In Produktion ist das die Ausnahme. Doppelte Zustellung passiert, wenn die Antwort auf den POST verloren geht und der Sender wiederholt, wenn der Broker nach einem Consumer-Crash erneut liefert, wenn der Outbox-Worker zwischen Senden und Markieren abst&uuml;rzt. Ohne Dedup: R&uuml;ckerstattung zweimal, Reservierung doppelt freigegeben. Standard: <code>eventId</code> in einer kleinen Tabelle merken, in derselben Transaktion wie die Fachlogik. <strong>Spicy:</strong> Wer Events publiziert, muss davon ausgehen, dass sie mehrfach ankommen. Wer das ignoriert, hat einen Bug, der erst unter Last zuschl&auml;gt.
+- <strong>Webhooks reichen doch, meine Antwort:</strong> F&uuml;r genau die Dinge, die der Webhook strukturell nicht kann: Persistenz, Redelivery, Fan-out, Backpressure, Dead-Letter, Consumer-Crash-Recovery, Ordering, Replay, Entkopplung in der Zeit. Webhook gewinnt nur beim Infrastruktur-Aufwand, und genau darauf fallen Teams herein. Details auf der Bonus-Folie.
+- <strong>Wo ist das Wissen hin, meine Antwort:</strong> In Story 6 lag das Saga-Wissen bei Booking. In Story 7 reagiert jeder Service auf Events anderer, ein Bug kann &uuml;berall sitzen. Zum verteilten Monolithen wird es, wenn niemand mehr wei&szlig;, wer auf welches Event wie reagiert, wenn Event-Vertr&auml;ge nicht versioniert sind, wenn eine &Auml;nderung drei andere Services mitzieht. Gegenmittel: Event-Katalog, Schema-Registry, klare Ownership pro Event-Typ. <strong>Spicy:</strong> Beides ist legitim. Wissen verteilen ohne Plan ergibt die schlimmste beider Welten: lose gekoppelt zur Laufzeit, fest gekoppelt zur Build-Zeit.
+- Die fr&uuml;here f&uuml;nfte Frage (Exactly-once) ist in die Bonus-Folie gewandert. Vollst&auml;ndige Antworten: <code>docs/questions/story7.md</code>.

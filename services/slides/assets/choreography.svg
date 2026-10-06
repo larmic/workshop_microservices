@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" role="img" aria-label="Ein Broker in der Mitte, vier Services drumherum; Booking wirft ein Event ein, die Backends holen es sich ab, keine direkte Verbindung zwischen ihnen">
+  <!-- Broker -->
+  <rect x="235" y="110" width="130" height="80" rx="14" fill="none" stroke="#B4A9E6" stroke-width="5"/>
+  <rect x="258" y="134" width="84" height="12" rx="6" fill="#D3F871"/>
+  <rect x="258" y="156" width="56" height="12" rx="6" fill="#6E63A8"/>
+  <!-- Booking links -->
+  <rect x="30" y="118" width="110" height="64" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4"/>
+  <rect x="50" y="140" width="70" height="10" rx="5" fill="#6E63A8"/>
+  <rect x="50" y="158" width="46" height="10" rx="5" fill="#6E63A8"/>
+  <!-- Event von Booking in den Broker -->
+  <path d="M 146 150 L 222 150" fill="none" stroke="#D3F871" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 212 141 L 226 150 L 212 159 Z" fill="#D3F871"/>
+  <!-- drei Backends rechts -->
+  <rect x="460" y="36" width="110" height="56" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4"/>
+  <rect x="478" y="56" width="60" height="10" rx="5" fill="#6E63A8"/>
+  <circle cx="551" cy="52" r="7" fill="#D3F871"/>
+  <rect x="460" y="122" width="110" height="56" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4"/>
+  <rect x="478" y="142" width="60" height="10" rx="5" fill="#6E63A8"/>
+  <circle cx="551" cy="138" r="7" fill="#D3F871"/>
+  <rect x="460" y="208" width="110" height="56" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4" stroke-dasharray="10 8"/>
+  <rect x="478" y="228" width="60" height="10" rx="5" fill="#4B3F86"/>
+  <circle cx="551" cy="224" r="7" fill="#4B3F86"/>
+  <!-- Backends ziehen aus dem Broker -->
+  <path d="M 372 136 C 410 136, 420 64, 452 64" fill="none" stroke="#B4A9E6" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 372 150 L 452 150" fill="none" stroke="#B4A9E6" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 372 164 C 410 164, 420 236, 452 236" fill="none" stroke="#B4A9E6" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 8"/>
+  <!-- liegengebliebenes Event im Broker für das dritte Backend -->
+  <rect x="318" y="156" width="24" height="12" rx="6" fill="#D3F871"/>
+</svg>

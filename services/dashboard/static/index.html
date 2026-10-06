@@ -1372,7 +1372,7 @@
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">6</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="7" onclick="showStory(7)">7</button>
+                <button type="button" class="stepper-node design" data-story-node="7" onclick="showStory(7)" title="Rollenspiel mit Zetteln, kein Code">7</button>
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="8" onclick="showStory(8)">8</button>
             </div>
@@ -1833,73 +1833,46 @@ catch error at step X:
         </div>
         </section>
 
+        <!-- Story 7: Rollenspiel statt Code. Story-Karte zeigt die Übung; das
+             Saga-Panel darunter bleibt als Demo der Webhook-Referenz. -->
         <section class="story-section" data-story="7" hidden>
             <div class="story-helpers" data-story-helpers="7">
-                <details class="story-info">
-                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                <details class="story-info" open>
+                    <summary>Story lesen <span class="badge">User Story + Übung</span></summary>
                     <div class="story-info-body">
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Services, der Broker ist ein Tisch mit Zetteln. Das Saga-Panel darunter zeigt anschließend die Referenz-Implementierung mit Webhook-Events.</p>
                         <h4>Kontext</h4>
-                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Backend-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Lösung: Booking publiziert ein <em>Event</em>, die Backends abonnieren und reagieren eigenständig &mdash; wir wechseln von <em>Orchestration</em> zu <em>Choreography</em>.</p>
+                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Backend-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking publiziert deshalb ein <em>Event</em>, die Backends reagieren eigenständig. Wir wechseln von <em>Orchestration</em> zu <em>Choreography</em>: derselbe Ablauf, andere Verantwortungsverteilung.</p>
                         <h4>User Story</h4>
                         <p>Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Backend-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
-                        <h4>Akzeptanzkriterien</h4>
+                        <h4>Aufbau (Die Saga wird leise, ca. 25 Minuten)</h4>
+                        <ol>
+                            <li>Vier Leute sind Booking, Flight, Hotel und Car. Eine Person ist der Kunde.</li>
+                            <li>Ein Tisch in der Mitte ist der Broker. Events sind Zettel, die dort abgelegt werden.</li>
+                            <li>Jedes Backend hat einen Stapel Buchungskarten, die es ausstellen und wieder einziehen kann.</li>
+                            <li>Der Kunde bucht eine Reise: Flug, Hotel, Mietwagen. Hotel lehnt jede zweite Buchung ab.</li>
+                            <li>Alle anderen beobachten und notieren, wer wann was wusste.</li>
+                        </ol>
+                        <h4>Ablauf</h4>
+                        <ol>
+                            <li><strong>Runde 1, Orchestration:</strong> Booking ruft die Backends nacheinander an. Scheitert Hotel, ruft Booking Flight an und lässt stornieren.</li>
+                            <li><strong>Runde 2, Choreography:</strong> Booking legt nur einen Zettel <code>CompensationRequested</code> auf den Tisch und antwortet dem Kunden. Flight holt ihn sich und zieht die Karte ein.</li>
+                            <li>Vergleichen: Wer hat gewartet? Wer wusste am Ende, ob storniert wurde?</li>
+                        </ol>
+                        <h4>Drei Störungen (ca. 20 Minuten)</h4>
+                        <p>Runde 2 noch einmal, jedes Mal mit einem Haken. Vorher festlegen: Was passiert, wenn der Tisch ein Blatt Papier ist? Was, wenn er ein Postfach mit Quittung ist?</p>
                         <ul>
-                            <li>Booking publiziert bei Fehlschlag ein <code>CompensationRequested</code>-Event (statt synchron <code>DELETE</code>)</li>
-                            <li>Flight/Hotel/Car nehmen das Event entgegen, antworten sofort <code>202 Accepted</code> und kompensieren asynchron</li>
-                            <li>Booking setzt den Step nach Event-Dispatch auf <code>COMPENSATED</code>, die Saga auf <code>FAILED</code></li>
-                            <li>Idempotenz: <code>eventId</code> wird mitgesendet (persistente Speicherung ist Bonus)</li>
-                            <li><em>Bonus</em>: Reply-Events, Timeout-Erkennung, <code>STUCK</code>-Status (siehe Recap-Fragen)</li>
+                            <li><strong>Flight ist nicht da:</strong> Flight verlässt den Raum, bevor der Zettel liegt. Booking hat dem Kunden schon geantwortet. Wer merkt es, wann?</li>
+                            <li><strong>Der Zettel kommt zweimal:</strong> Booking legt zur Sicherheit einen zweiten hin. Flight findet beide. Wie oft wird storniert?</li>
+                            <li><strong>Niemand sagt Bescheid:</strong> Flight hat storniert. Der Kunde fragt Booking: „Ist mein Flug jetzt weg?" Was antwortet Booking?</li>
                         </ul>
-                    </div>
-                </details>
-                <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
-                    <div class="story-cheatsheet-body">
-<pre>STATE:
-  saga   = { id, status: PENDING, steps: [] }
-  booked = []                                    // für Rollback
-
-try:
-  flight = POST flight/bookings { ... }
-  booked.push({ svc: "flight", id: flight.id })
-  saga.steps.push({ svc: "flight", status: BOOKED })
-
-  hotel = POST hotel/bookings { ... }
-  booked.push({ svc: "hotel",  id: hotel.id })
-  saga.steps.push({ svc: "hotel",  status: BOOKED })
-
-  car = POST car/bookings { ... }
-  saga.steps.push({ svc: "car",    status: BOOKED })
-
-  saga.status = COMPLETED
-
-catch error at step X:
-  saga.status   = COMPENSATING
-  saga.failedAt = X
-  for b in reverse(booked):
-    POST b.svc/events/compensation             // statt DELETE: Event
-      { eventId, sagaId, bookingId: b.id }
-    mark step COMPENSATED                      // dispatched, kein Reply
-  saga.status = FAILED
-  // Booking weiß NICHT, ob der fachliche Rollback geklappt hat.
-  // Reply, Timeout, STUCK siehe Recap-Frage 1 + 3 (Bonus).
-
-// Backend (flight / hotel / car):
-on POST /events/compensation:
-  validate(eventId, sagaId, bookingId)
-  respond 202 Accepted
-  async: rollback(bookingId)</pre>
+                        <p>Vollständige Beschreibung: <code>docs/stories/story-07-choreography-saga.md</code>. Referenz-Implementierung: <code>services/booking/story7/</code>.</p>
                     </div>
                 </details>
             </div>
-        <div class="source-toggle" data-source-toggle="7">
-            <span class="source-toggle-label">Service-Quelle</span>
-            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(7,'reference')">Reference</button>
-            <button class="source-btn" data-mode="custom" onclick="setBookingMode(7,'custom')">Custom</button>
-        </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Choreography-Saga (Booking Story 7)</h2>
+                <h2>Choreography-Demo (Referenz Story 7)</h2>
                 <button class="panel-reset-btn" id="saga7-reset-btn" onclick="resetSagas6()" title="Saga-Store leeren">Reset</button>
             </div>
             <div class="rest-actions">
@@ -3036,8 +3009,8 @@ on receiveCompensationEvent(event):
                  subtitle: "Bulkhead als Übung: Ihr seid die Requests, der Becher ist der Pool. Danach rechnen wir, warum ausgerechnet zehn." },
             6: { title: "Story 6: Alles oder nichts — aber richtig",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
-            7: { title: "Story 7: Die Saga wird leise — Kompensation via Events",
-                 subtitle: "Choreography-Saga: Kompensation wandert vom Booking-Service in die Backends, ausgelöst durch Events." },
+            7: { title: "Story 7: Die Saga wird leise",
+                 subtitle: "Choreography als Rollenspiel: Ihr seid die Services, der Broker ist ein Tisch mit Zetteln. Danach drei Störungen." },
             8: { title: "Story 8: Den roten Faden im Log",
                  subtitle: "Distributed Tracing: Geschäftsvorgänge über Service-Grenzen hinweg verfolgen." },
         };
