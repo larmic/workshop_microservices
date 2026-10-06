@@ -61,16 +61,18 @@ Runde 2 noch einmal, jedes Mal mit einem Haken. Vor jeder Störung festlegen: Wa
 | **Der Zettel kommt zweimal.** Booking ist unsicher und legt einen zweiten hin. Flight findet beide. | Flight storniert zweimal. Bei einer Rückerstattung wäre das Geld zweimal weg. | Jeder Zettel trägt eine Nummer (`eventId`), Flight merkt sich bearbeitete Nummern (Idempotenz). |
 | **Niemand sagt Bescheid.** Flight hat storniert. Der Kunde fragt Booking: „Ist mein Flug jetzt weg?" | Booking kann nur sagen: „Ich habe einen Zettel hingelegt." | Flight legt einen Antwortzettel `BookingCancelled` hin, Booking wartet darauf mit Timeout (Reply-Pattern, `STUCK`-Status). |
 
+Auflösung in Spielsprache: Das Postfach hält den Zettel fest und liefert ihn nach, auch doppelt (Persistenz, Redelivery). Deshalb trägt jeder Zettel eine Nummer, wer sie schon kennt, legt ihn weg (`eventId` als Dedup-Key, Idempotenz). Wer eine Antwort braucht, wartet auf einen Antwortzettel (Reply-Event, Timeout, `STUCK`).
+
 Merksatz: Eventing macht das Problem nicht kleiner. Es macht es leiser.
 
 ---
 
 ## Recap: Vier Fragen
 
-1. Der Zettel kommt nie an. Booking schickt per HTTP-POST, Hotel ist down. Wo ist das Event jetzt?
-2. Der Zettel kommt zweimal. At-least-once ist Standard. Was, wenn das Backend echten State ändert?
+1. Ohne Broker: Der Zettel kommt nie an. Booking schickt das Event per HTTP-POST, Hotel ist down. Wo ist das Event jetzt?
+2. Mit Broker: Der Zettel kommt zweimal. Der Broker liefert, bis das Backend bestätigt. Stirbt es dazwischen, kommt das Event noch einmal. Was, wenn das Backend echten State ändert?
 3. Webhooks reichen doch. Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS überhaupt?
-4. Wo ist das Wissen hin? Jeder reagiert auf Events der anderen. Wann wird das zum verteilten Monolithen?
+4. Brauchen wir überhaupt einen Dirigenten? Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf Hotel. Wer merkt es, wenn Hotel das nicht weiß? (Faustregel nach Chris Richardson, *Microservices Patterns*: Choreographie für einfache Sagas ohne Reihenfolge, Orchestrierung sobald es einen Ablauf gibt.)
 
 Bonus zu Frage 3: Was ein Broker kann, was ein Webhook nicht kann. Behalten (Persistenz, Redelivery, Replay), Verteilen (Fan-out, Backpressure, Ordering), Scheitern lassen (Dead-Letter-Queue). Exactly-once gibt es trotzdem nicht, die praktische Näherung ist at-least-once plus Idempotenz.
 

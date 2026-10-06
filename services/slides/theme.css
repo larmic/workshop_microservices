@@ -1027,6 +1027,17 @@
     align-self: start;
 }
 
+/* Fragment mit Erklärung plus Merksatz: beides linksbündig untereinander */
+.reveal .swap-foot > .fragment .ask {
+    color: var(--slide-text);
+    font-size: 19px;
+    margin-bottom: 18px;
+}
+
+.reveal .swap-foot > .fragment .callout {
+    display: inline-block;
+}
+
 /* Recap mit fünf Fragen: noch etwas enger */
 .reveal .numlist.recap.compact.dense .numlist-row {
     padding: 10px 0;

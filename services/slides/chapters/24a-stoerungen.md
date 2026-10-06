@@ -33,7 +33,10 @@
 
 <div class="swap swap-foot">
 <p class="ask fragment fade-out" data-fragment-index="1">Vor jeder St&ouml;rung festlegen: Was passiert, wenn der Tisch ein <strong>Blatt Papier</strong> ist? Was, wenn er ein <strong>Postfach mit Quittung</strong> ist?</p>
-<div class="callout fragment" data-fragment-index="1">Eventing macht das Problem nicht kleiner. Es macht es leiser.</div>
+<div class="fragment" data-fragment-index="1">
+<p class="ask">Das Postfach h&auml;lt den Zettel fest und liefert ihn nach, auch doppelt. Deshalb tr&auml;gt jeder Zettel eine <strong>Nummer</strong>: Wer sie schon kennt, legt ihn weg. Und wer eine Antwort braucht, wartet auf einen <strong>Antwortzettel</strong>.</p>
+<div class="callout">Eventing macht das Problem nicht kleiner. Es macht es leiser.</div>
+</div>
 </div>
 
 </div>
@@ -45,4 +48,4 @@ Note:
 - <strong>Flight ist nicht da:</strong> Beim Blatt Papier liegt der Zettel ewig, niemand merkt es, der Flug bleibt gebucht. Booking hat l&auml;ngst &bdquo;storniert&ldquo; gemeldet. Beim Postfach bleibt der Zettel sicher liegen, Flight holt ihn beim Zur&uuml;ckkommen ab. Das ist Persistenz und Redelivery. Beim Webhook-POST unserer Referenz ist der Zettel einfach weg (Connection refused), Recap-Frage 1.
 - <strong>Der Zettel kommt zweimal:</strong> Flight storniert zweimal. Bei einer Stornierung ist das harmlos, bei einer R&uuml;ckerstattung nicht. Gegenmittel: Jeder Zettel tr&auml;gt eine Nummer (<code>eventId</code>), Flight merkt sich bearbeitete Nummern. At-least-once plus Idempotenz, Recap-Frage 2.
 - <strong>Niemand sagt Bescheid:</strong> Booking kann nur sagen: &bdquo;Ich habe einen Zettel hingelegt.&ldquo; Ob Flight ihn verarbeitet hat, wei&szlig; Booking nicht. L&ouml;sung: Flight legt einen Antwortzettel <code>BookingCancelled</code> hin, Booking wartet darauf mit Timeout. Das ist das Reply-Pattern aus dem Bonus der Story, und der Grund, warum die Saga einen <code>STUCK</code>-Status braucht.
-- Klick: der Merksatz. In Story 6 hat Booking den Schmerz gesp&uuml;rt und konnte reagieren. In Story 7 sieht Booking nichts. Wer Choreography ernst meint, f&auml;ngt nicht beim Event-Versand an, sondern bei der Haltbarkeit des Events.
+- Klick: die drei Antworten in Spielsprache (Postfach = Persistenz und Redelivery, Nummer = <code>eventId</code> als Dedup-Key, Antwortzettel = Reply-Event) und der Merksatz. In Story 6 hat Booking den Schmerz gesp&uuml;rt und konnte reagieren. In Story 7 sieht Booking nichts. Wer Choreography ernst meint, f&auml;ngt nicht beim Event-Versand an, sondern bei der Haltbarkeit des Events.
