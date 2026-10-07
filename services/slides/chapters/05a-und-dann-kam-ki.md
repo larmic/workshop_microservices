@@ -144,6 +144,3 @@
 
 </div>
 
-Note:
-- Lacher-Einschub, nicht ernst gemeint: die Stra&szlig;e von der Folie davor, nach links geschoben, und ab 2025 zerfasert sie.
-- Vibe Coding: Patterns, Sprachen und Architektur laufen irgendwie. Kurz stehen lassen, dann weiter.
