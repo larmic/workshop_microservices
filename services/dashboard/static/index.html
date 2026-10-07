@@ -1413,31 +1413,32 @@
                     <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
 <pre>ENV:
-  FLIGHT_URL=http://flight:8080
-  HOTEL_URL=http://hotel:8080
-  CAR_URL=http://car:8080
+  FLIGHT_SERVICE_URL=http://flight:8080
+  HOTEL_SERVICE_URL=http://hotel:8080
+  CAR_SERVICE_URL=http://car:8080
 
 GET /health  → 200 OK
-GET /info    → { config: { flightURL, hotelURL, carURL } }
+GET /info    → { config: { flightServiceUrl, hotelServiceUrl, carServiceUrl } }
 GET /openapi → OpenAPI-Spec (text/yaml)
 
 GET /booking/offers
-  → GET FLIGHT_URL/flights
-  → GET HOTEL_URL/hotels
-  → GET CAR_URL/cars
+  → GET FLIGHT_SERVICE_URL/flights
+  → GET HOTEL_SERVICE_URL/hotels
+  → GET CAR_SERVICE_URL/cars
   → { flights, hotels, cars }
   // Fehler? Dürfen durchschlagen — kein Error-Handling.</pre>
                     </div>
                 </details>
                 <details class="story-setup">
-                    <summary>Setup (einmalig) <span class="badge">Dockerfile + .env</span></summary>
+                    <summary>Einklinken (einmalig) <span class="badge">Hausaufgabe + .env</span></summary>
                     <div class="story-setup-body">
-                        <h4>Einmal pro Workshop</h4>
+                        <h4>Aus der Hausaufgabe</h4>
+                        <p>Mini-Service mit <code>GET /health</code>, <code>Dockerfile</code>, Port <code>8080</code>: siehe <a href="https://larmic.github.io/workshop_microservices/vorbereitung/" target="_blank" rel="noopener">Vorbereitung</a>. Wer das noch nicht hat, holt es jetzt nach.</p>
+                        <h4>Jetzt im Workshop</h4>
                         <ul>
-                            <li><code>Dockerfile</code> im Service-Verzeichnis, Service lauscht auf Port <code>8080</code></li>
-                            <li><code>CUSTOM_BOOKING_PATH</code> in <code>services/.env</code> zeigt auf dieses Verzeichnis</li>
+                            <li><code>CUSTOM_BOOKING_PATH</code> in <code>services/.env</code> zeigt auf dein Service-Verzeichnis, danach <code>make docker-up-hub</code></li>
                             <li>Backend-URLs (<code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code>, <code>CONSUL_URL</code>) kommen automatisch aus <code>docker-compose.custom.yml</code>, nicht selbst setzen</li>
-                            <li>Details: <code>docs/vorbereitung.md</code> Abschnitt 5</li>
+                            <li>Details: <code>docs/custom-setup.md</code></li>
                         </ul>
                     </div>
                 </details>

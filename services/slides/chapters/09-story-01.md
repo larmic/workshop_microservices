@@ -59,5 +59,5 @@ Note:
 - Sprache und Framework sind frei (Go, Java, Quarkus, Node, &hellip;). Die Referenz unter `services/booking/story1/` ist nur ein Go-Beispiel.
 - Kein Error-Handling in Story 1, das ist Absicht. Wir bauen das Skelett; Resilienz kommt in Stories 4 bis 6.
 - Der Setup-Hinweis unten steht absichtlich nur hier in Story 1. Ab Story 3 erweitern wir denselben Service iterativ, das Custom-Setup bleibt unver&auml;ndert.
-- Time-Box 90 min inkl. Setup. Dashboard `http://localhost` zeigt den Story-1-Modus inkl. Spickzettel mit Pseudo-Code.
+- Time-Box 90 min. Das Grundger&uuml;st (Mini-Service, Dockerfile, Port 8080) war Hausaufgabe, im Workshop wird nur noch per <code>CUSTOM_BOOKING_PATH</code> eingeklinkt. Dashboard `http://localhost` zeigt den Story-1-Modus inkl. Spickzettel mit Pseudo-Code.
 - Vollst&auml;ndige Aufgabenbeschreibung: `docs/stories/story-01-cloud-native-booking-service.md`.
