@@ -36,7 +36,3 @@
 </div>
 
 </div>
-
-Note:
-- Eigener Praxisbericht aus TN Skills: mit Microservices gestartet, heute ein Modulith mit vier Dom&auml;nen. Die Tabelle liest sich von links (damals) nach rechts (heute).
-- Kernbotschaft steht rechts unten im Lime-Kasten: Der Workshop zeigt das Wie, nicht das Ob. Die Frage &bdquo;brauchen wir das?&ldquo; muss jedes Team selbst beantworten.
