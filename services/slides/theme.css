@@ -713,6 +713,14 @@
     font-size: 15px;
 }
 
+/* Quelle unter einer Aussage ohne Grafik, wie Musterdeck S. 12 (Conway) */
+.reveal .page.dark .page-body > p.source {
+    text-align: left;
+    font-size: 20px;
+    color: #E4E0F5;
+    margin: 36px 0 0;
+}
+
 .reveal .split-figure {
     position: relative;
     display: flex;

@@ -1,32 +1,56 @@
-<!-- .slide: data-background-image="./assets/zusammenfassung.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
 
-## Die Reise &mdash; acht Stories
+<p class="kicker">Zwei Tage, drei Kapitel</p>
 
-<p class="subtitle">Was bleibt</p>
+## Acht Stories, acht S&auml;tze
 
-| Story | | Take-away |
-|---|---|---|
-| **1** | Fundament | Health + Config + Stateless. Der Rest baut darauf. |
-| **2** | REST vs. RESTful | Ressourcen statt Verben. Status-Codes sind Infrastruktur. |
-| **3** | Service Discovery | Logische Namen statt URLs. In K8s oft redundant. |
-| **4** | Circuit Breaker | Schnell scheitern statt im Timeout h&auml;ngen. |
-| **5** | Bulkhead | Pool pro Downstream. Async &ne; Bulkhead. |
-| **6** | Saga | Kompensation muss letztlich gelingen. |
-| **7** | Choreography | Eventing eliminiert nichts &mdash; es verschiebt. |
-| **8** | Tracing | Trace-ID nur am Entry-Point. Span pro Hop. |
+<div class="page-body">
 
-<div class="box">
+<div class="cards cards-4 violet">
+<div class="card">
+<h3><span class="num">01</span> Fundament</h3>
+<p>Health, Config, Stateless. Der Rest baut darauf.</p>
+</div>
+<div class="card">
+<h3><span class="num">02</span> REST vs. RESTful</h3>
+<p>Ressourcen statt Verben. Status-Codes sind Infrastruktur.</p>
+</div>
+<div class="card">
+<h3><span class="num">03</span> Service Discovery</h3>
+<p>Logische Namen statt URLs. In Kubernetes oft schon eingebaut.</p>
+</div>
+<div class="card">
+<h3><span class="num">04</span> Circuit Breaker</h3>
+<p>Schnell scheitern statt im Timeout h&auml;ngen.</p>
+</div>
+<div class="card">
+<h3><span class="num">05</span> Bulkhead</h3>
+<p>Ein Pool pro Downstream. Langsam ist nicht kaputt.</p>
+</div>
+<div class="card">
+<h3><span class="num">06</span> Saga</h3>
+<p>Die Kompensation muss letztlich gelingen.</p>
+</div>
+<div class="card">
+<h3><span class="num">07</span> Choreography</h3>
+<p>Eventing macht das Problem nicht kleiner. Es macht es leiser.</p>
+</div>
+<div class="card">
+<h3><span class="num">08</span> Tracing</h3>
+<p>Trace-ID nur am Entry-Point. Eine Span pro Hop.</p>
+</div>
+</div>
 
-### Wenn ihr drei Dinge mitnehmt
+<div class="foot">
+<div class="callout">Jedes Pattern ist eine Antwort auf ein konkretes Problem. Nicht auf Mode.</div>
+</div>
 
-- **Microservices sind ein Werkzeug, kein Ziel.** Conway's Law ist der einzige zwingend gute Grund.
-- **Resilience im Aufrufer, Schutz im Aufgerufenen.** Wer das vermischt, sch&uuml;tzt nichts.
-- **Eventing eliminiert keine Komplexit&auml;t &mdash; es verschiebt sie.** Wer Choreography ohne durable Messaging baut, baut sich einen schlechten Broker.
+</div>
 
 </div>
 
 Note:
-- Die Tabelle ist der &bdquo;rote Faden&ldquo;: eine Zeile pro Story, eine Zeile Take-away. Wenn die Teilnehmer das Bild in zwei Wochen noch vor Augen haben, war der Workshop wirkungsvoll.
-- Die drei Box-Punkte sind die Quintessenz &mdash; das, was in Architektur-Reviews z&auml;hlt.
-- Provokation als Schlusspunkt: &bdquo;Welche dieser acht w&uuml;rdet ihr in eurem Projekt sofort einf&uuml;hren &mdash; welche nicht, weil ihr sie nicht braucht?&ldquo;
-- Optional vorlesen: &bdquo;Im Workshop habt ihr gesehen, dass jedes Pattern eine konkrete Antwort auf ein konkretes Problem ist. Das Anti-Pattern ist nicht &bdquo;wir benutzen das falsche&ldquo; &mdash; sondern &bdquo;wir benutzen alles, weil's modern ist&ldquo;.&ldquo;
+- Die acht Karten sind der rote Faden: eine Karte pro Story, ein Satz pro Karte. Wenn die Teilnehmenden das Bild in zwei Wochen noch vor Augen haben, war der Workshop wirkungsvoll.
+- Provokation: &bdquo;Welche dieser acht w&uuml;rdet ihr in eurem Projekt sofort einf&uuml;hren? Welche nicht, weil ihr sie nicht braucht?&ldquo;
+- Optional vorlesen: &bdquo;Das Anti-Pattern ist nicht &sbquo;wir benutzen das falsche&lsquo;, sondern &sbquo;wir benutzen alles, weil es modern ist&lsquo;.&ldquo;
+- Recap-Fragen aus <code>docs/themen.md</code>: Was nehmt ihr aus den zwei Tagen mit? Welche Patterns w&uuml;rdet ihr morgen in eurer Architektur ansprechen?

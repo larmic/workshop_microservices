@@ -1,47 +1,38 @@
-<!-- .slide: data-background-image="./assets/tracing.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.18" data-background-repeat="no-repeat" -->
+<div class="page">
 
-## Distributed Tracing
+<p class="kicker">Distributed Tracing</p>
 
-<p class="subtitle">W3C Trace Context in Pseudo-Code</p>
+## Vier Stellen im Code
 
-<pre class="cheatsheet"><span class="cmd">// W3C Trace Context: 00-&lt;trace-id-32hex&gt;-&lt;span-id-16hex&gt;-&lt;flags-2hex&gt;</span>
+<p class="subtitle">In Pseudo-Code, wie im Spickzettel.</p>
 
-<span class="cmd">// Server-Middleware: eingehenden Header &uuml;bernehmen oder neu erzeugen</span>
-on incomingRequest(req):
-  tc = parse(req.header("traceparent")) ?: generateNew()
-  res.header("traceparent") = tc.toHeader()    // zur&uuml;ck zum Client
-  ctx = ctx.with(tc)
-  next(req.withContext(ctx))
+<div class="page-body codebody">
 
-<span class="cmd">// Client-Inject: pro ausgehendem Hop neue Span-ID, gleiche Trace-ID</span>
-on outgoingRequest(ctx, req):
-  tc = ctx.get(TraceContext)
-  hop = tc.copy(spanId = randomSpanId())
-  req.setHeader("traceparent", hop.toHeader())
+<div class="codeblock">
+<div class="k">on incomingRequest(req):                       <span class="dim">// 1 Entry-Point: Booking</span></div>
+<div>  tc  = parse(req.header("traceparent")) ?: <span class="hi">generateNew()</span></div>
+<div>  ctx = ctx.with(tc)</div>
+<div class="gap k">on outgoingRequest(ctx, req):                  <span class="dim">// 2 pro Hop</span></div>
+<div>  hop = ctx.tc.copy(spanId = <span class="hi">randomSpanId()</span>)  <span class="dim">// neue Span, gleiche Trace</span></div>
+<div>  req.setHeader("traceparent", hop.toHeader())</div>
+<div class="gap k">log.info("flight booked", <span class="hi">trace_id</span>: ctx.tc.traceId)   <span class="dim">// 3 jede Zeile</span></div>
+<div class="gap k">event = { eventId, sagaId, <span class="hi">traceparent</span>: ctx.tc.toHeader() }   <span class="dim">// 4 Async-Grenze</span></div>
+<div>on receiveEvent(event):</div>
+<div>  ctx = bgCtx.with(parse(event.traceparent) ?: generateNew())</div>
+</div>
 
-<span class="cmd">// Logging: jede Zeile bekommt trace_id als Feld</span>
-log.info("forward step done",
-  trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")
+<p class="codenote">Erzeugen, weiterreichen, loggen, &uuml;ber den Bus retten. Hundert Zeilen, keine Library.</p>
 
-<span class="cmd">// Async-Grenze: Trace-ID als Event-Property mitschicken</span>
-event = {
-  eventId, sagaId, bookingId,
-  traceparent: ctx.tc.toHeader()    // damit der Konsument den Trace fortf&uuml;hrt
-}
-publish(event)
+</div>
 
-on receiveCompensationEvent(event):
-  tc = parse(event.traceparent) ?: generateNew()
-  asyncCtx = bgCtx.with(tc)
-  go process(asyncCtx, event)       // Logs der Goroutine tragen die trace_id
-</pre>
+</div>
 
 Note:
-- Identischer Pseudo-Code findet sich im Dashboard unter Story 8 &rarr; &bdquo;Spickzettel&ldquo;. Wiedererkennungseffekt gewollt.
-- Vier Knackpunkte hervorheben:
-  - <strong>parse() strikt halten</strong> &mdash; Format <code>version-trace-span-flags</code> mit festen L&auml;ngen, Nur-Nullen verwerfen, h&ouml;here Versionen <em>abw&auml;rtskompatibel ignorieren</em> (nur <code>00</code> verstehen, alles andere als ung&uuml;ltig behandeln).
-  - <strong>Pro Hop neue Span-ID</strong>, aber <em>gleiche</em> Trace-ID &mdash; das ist der Trick, der den Vorgang als zusammenh&auml;ngende Kette identifizierbar macht.
-  - <strong>Logger im Kontext</strong> &mdash; einmal an den Request-Logger h&auml;ngen, dann taucht <code>trace_id</code> ohne Format-String in jeder Zeile auf.
-  - <strong>Async-Grenze</strong> &mdash; HTTP-Header geht beim &Uuml;bergang in eine Worker-Goroutine verloren, deshalb <code>traceparent</code> aktiv als Event-Property weitergeben.
-- Reference-Code: <code>services/shared/tracing/tracing.go</code> &mdash; ca. 100 Zeilen Go mit strenger Format-Validierung.
-- Diskussions-Anker: Was, wenn der Aufrufer einen <em>vergifteten</em> Header schickt? Antwort: strikt parsen, im Zweifel <code>generateNew()</code>. Niemals einen ung&uuml;ltigen Trace fortf&uuml;hren.
+- Ausf&uuml;hrlicher steht derselbe Pseudo-Code im Dashboard unter Story 8, &bdquo;Spickzettel&ldquo;. Wiedererkennung gewollt.
+- <strong>1 Entry-Point:</strong> Nur Booking erzeugt einen Trace, falls keiner reinkommt. Flight, Hotel, Car &uuml;bernehmen einen vorhandenen Header und erzeugen <em>niemals</em> selbst einen. Zwei Middlewares in der Referenz: <code>Middleware</code> (erzeugt) und <code>Propagate</code> (&uuml;bernimmt nur). Sonst zerf&auml;llt der Trace genau an der Stelle, wo ein Downstream &bdquo;sicherheitshalber&ldquo; eine neue ID w&uuml;rfelt.
+- <strong>2 pro Hop:</strong> Neue Span-ID, gleiche Trace-ID. Die neue Span erscheint im Booking-Log <em>nicht</em>, sie steht nur im Outbound-Header. Erst Flight sieht sie, weil seine Middleware sie aus dem Header zieht. Ein Beispiel-Trace durch den Stack: Booking loggt mit Span <code>a1a1&hellip;</code>, setzt f&uuml;r Flight <code>b7ad&hellip;</code> in den Header, Flight loggt mit <code>b7ad&hellip;</code>. Trace-ID &uuml;berall <code>0af7&hellip;319c</code>. <code>grep 0af7</code> gibt den Vorgang, <code>grep b7ad</code> nur den Flight-Anteil.
+- <strong>3 jede Zeile:</strong> Nicht der ganze Header, sondern <code>trace_id</code> und <code>span_id</code> als getrennte Felder im strukturierten Log. Einmal an den Request-Logger h&auml;ngen, dann steht die ID ohne Format-String in jeder Zeile. Filter mit <code>jq</code> werden trivial.
+- <strong>4 Async-Grenze:</strong> Der HTTP-Header geht beim &Uuml;bergang in die Worker-Goroutine verloren, deshalb wandert <code>traceparent</code> aktiv als Event-Property mit. Bei echten Brokern geh&ouml;rt er in die Message-Header, nicht in den Payload.
+- <strong>parse() strikt halten:</strong> Feste L&auml;ngen pr&uuml;fen, Nur-Nullen verwerfen, unbekannte Versionen als ung&uuml;ltig behandeln. Ein vergifteter Header f&uuml;hrt zu <code>generateNew()</code>, nie zu einem fortgef&uuml;hrten Unsinn.
+- Referenz: <code>services/shared/tracing/tracing.go</code>, etwa 100 Zeilen Go mit strenger Format-Validierung und Tests.
+- &Uuml;berleitung: &bdquo;Jetzt zieht ihr den Faden selbst.&ldquo;

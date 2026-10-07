@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" role="img" aria-label="Vier Service-Logs nebeneinander, eine Linie in Lime zieht sich als roter Faden durch alle vier">
+  <!-- vier Logs: Booking, Flight, Hotel, Car -->
+  <rect x="30"  y="40" width="115" height="220" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4"/>
+  <rect x="175" y="40" width="115" height="220" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4"/>
+  <rect x="320" y="40" width="115" height="220" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4"/>
+  <rect x="465" y="40" width="115" height="220" rx="12" fill="none" stroke="#B4A9E6" stroke-width="4"/>
+  <!-- Logzeilen, grau -->
+  <g fill="#4B3F86">
+    <rect x="48" y="72"  width="70" height="8" rx="4"/>
+    <rect x="48" y="128" width="56" height="8" rx="4"/>
+    <rect x="48" y="156" width="78" height="8" rx="4"/>
+    <rect x="48" y="184" width="50" height="8" rx="4"/>
+    <rect x="48" y="212" width="66" height="8" rx="4"/>
+    <rect x="193" y="72"  width="60" height="8" rx="4"/>
+    <rect x="193" y="100" width="76" height="8" rx="4"/>
+    <rect x="193" y="156" width="52" height="8" rx="4"/>
+    <rect x="193" y="184" width="70" height="8" rx="4"/>
+    <rect x="193" y="212" width="58" height="8" rx="4"/>
+    <rect x="338" y="100" width="64" height="8" rx="4"/>
+    <rect x="338" y="128" width="78" height="8" rx="4"/>
+    <rect x="338" y="156" width="56" height="8" rx="4"/>
+    <rect x="338" y="184" width="72" height="8" rx="4"/>
+    <rect x="338" y="212" width="48" height="8" rx="4"/>
+    <rect x="483" y="72"  width="66" height="8" rx="4"/>
+    <rect x="483" y="100" width="54" height="8" rx="4"/>
+    <rect x="483" y="128" width="74" height="8" rx="4"/>
+    <rect x="483" y="156" width="60" height="8" rx="4"/>
+    <rect x="483" y="212" width="70" height="8" rx="4"/>
+  </g>
+  <!-- der Faden: je eine Zeile pro Log, verbunden -->
+  <path d="M 48 104 L 127 104 C 160 104, 160 132, 193 132 L 272 132 C 305 132, 305 76, 338 76 L 417 76 C 450 76, 450 188, 483 188 L 562 188" fill="none" stroke="#D3F871" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="48" cy="104" r="9" fill="#D3F871"/>
+</svg>

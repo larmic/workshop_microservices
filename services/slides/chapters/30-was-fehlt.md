@@ -1,41 +1,45 @@
+<div class="page">
+
+<p class="kicker">Zwei Tage reichen nicht f&uuml;r alles</p>
+
 ## Was wir nicht angeschaut haben
 
-<p class="subtitle">&hellip; und warum</p>
+<p class="subtitle">Jedes Thema verdient einen eigenen Tag.</p>
 
-<div class="cols">
-<div>
+<div class="page-body">
 
-### Themen f&uuml;r eigene Termine
-
-- **Service-Schnitt** &mdash; DDD, Event Storming, Bounded Contexts
-- **Authn / Authz** &mdash; OAuth, OIDC, Session-Propagation &uuml;ber Service-Grenzen
-- **Versionierung** &mdash; API-Vertr&auml;ge, Breaking Changes
-- **Polyglot Persistence** &mdash; eine DB pro Service, Sync dazwischen
-- **CQRS / Event Sourcing** &mdash; Lese- und Schreibmodell trennen
-- **Observability** als Disziplin &mdash; RED-Metriken, SLOs, Alerts
+<div class="cards cards-3 violet compact">
+<div class="card">
+<h3>Service-Schnitt</h3>
+<p>Wo h&ouml;rt ein Service auf? DDD, Event Storming, Bounded Contexts.</p>
+</div>
+<div class="card">
+<h3>Authn / Authz</h3>
+<p>OAuth, OIDC, Identit&auml;t &uuml;ber Service-Grenzen weiterreichen.</p>
+</div>
+<div class="card">
+<h3>Versionierung</h3>
+<p>API-Vertr&auml;ge, Breaking Changes, zwei Versionen parallel betreiben.</p>
+</div>
+<div class="card">
+<h3>Polyglot Persistence</h3>
+<p>Eine Datenbank pro Service, und wie die Daten zwischen ihnen wandern.</p>
+</div>
+<div class="card">
+<h3>CQRS / Event Sourcing</h3>
+<p>Lese- und Schreibmodell trennen. Events als Quelle der Wahrheit.</p>
+</div>
+<div class="card">
+<h3>Observability als Disziplin</h3>
+<p>RED-Metriken, SLOs, Alerts. Tracing war erst der Anfang.</p>
+</div>
+</div>
 
 </div>
-<div>
 
-### Conway's Law
-
-<div class="box">
-
-*&bdquo;Any organization that designs a system will produce a design whose structure is a copy of the organization's communication structure.&ldquo;*
-
-&mdash; Melvin Conway, 1967
-
-</div>
-
-<p class="quote">Wer Microservices ohne passende Team-Struktur baut, baut einen <span class="hl">verteilten Monolithen</span>.</p>
-
-</div>
 </div>
 
 Note:
-- Linke Liste: jeder Punkt verdient seinen eigenen Tag. Wir hatten zwei. Br&uuml;cke zu Folgeterminen / weiterf&uuml;hrenden Workshops.
-- Conway's Law als Schluss-Ohrwurm: die wichtigste Erkenntnis hat nichts mit Tech zu tun. Architektur folgt Organisation, nicht umgekehrt.
-- Diskussions-Provokation: &bdquo;Wer von euch hat ein Team, das genau einem Service entspricht?&ldquo; &mdash; meist Schweigen, dann interessante Antworten.
-- Mit der Erinnerung an den Slide &bdquo;Brauchen wir Microservices?&ldquo; vom Anfang schlie&szlig;en: TN Skills hat <em>vom</em> Microservice-Setup zur&uuml;ck zum Modulith ger&uuml;ckt &mdash; gleiches Produkt, 5 statt 14 Leute, h&ouml;here Velocity. Das ist kein Versagen, das ist gesunde Architektur-Entscheidung.
-- Repo-Link / Kontakt f&uuml;r Follow-up: <code>github.com/larmic/workshop_microservices</code> &mdash; Stories, Code, Diskussion in GitHub Discussions.
-- Letzte Frage in den Raum: &bdquo;Was nehmt ihr morgen in euer eigenes Projekt mit?&ldquo;
+- Jeder Punkt verdient seinen eigenen Tag. Wir hatten zwei. Br&uuml;cke zu Folgeterminen und weiterf&uuml;hrenden Workshops.
+- Service-Schnitt ist der h&auml;ufigste Wunsch aus dem Feedback. Falls die Gruppe ihn nennt: Kandidat f&uuml;r eine 30-Minuten-&Uuml;bung am ersten Tag beim n&auml;chsten Durchlauf.
+- Repo-Link und Kontakt f&uuml;r Follow-up: <code>github.com/larmic/workshop_microservices</code>, Stories, Code, Diskussion in GitHub Discussions.
