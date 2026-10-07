@@ -41,9 +41,3 @@
 
 </div>
 
-Note:
-- Diskussions-Anker: Wer betreibt Consul wirklich? Meist ein Platform- oder DevOps-Team, nicht das App-Team. Die Registry selbst ist ein Single Point of Failure, wenn man sie nicht clustert (3 oder 5 Server).
-- Service Mesh lohnt sich, wenn ihr mTLS &uuml;berall braucht (Compliance, Zero Trust). Kostet Komplexit&auml;t (Sidecar pro Pod) und Latenz.
-- Kubernetes-Welt: dort machen CoreDNS plus Service/Endpoints die HTTP-Schicht, Istio oder Linkerd den Mesh-Teil. Consul ist eher dann attraktiv, wenn ihr Kubernetes- und Nicht-Kubernetes-Workloads gemischt habt.
-- KV-Store: praktisch, aber kein Ersatz f&uuml;r eine Datenbank. Eher Feature-Flags, Config-Snippets, dynamische Routing-Regeln.
-- Take-away: Service Discovery ist die <em>erste</em> Funktion einer Plattform-Ebene wie Consul, nicht die einzige.

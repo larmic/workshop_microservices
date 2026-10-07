@@ -28,10 +28,3 @@
 
 </div>
 
-Note:
-- Drei Aufrufe: Lifecycle der Instanz (anmelden, abmelden) und das, was der Aufrufer bei jedem Request tut (aufl&ouml;sen). Danach normaler HTTP-Call an <code>http://{Address}:{Port}</code>.
-- Die zwei markierten Zahlen: <code>Interval: 10s</code> ist der Takt des Health-Checks, <code>DeregisterCriticalServiceAfter: 1m</code> die Frist, nach der Consul eine tote Instanz selbst entfernt, falls der Shutdown-Hook nicht durchkommt (kill -9, OOM). Zwischen Ausfall und Entfernen l&auml;uft Verkehr ins Leere. Kleinere Werte = schnellere Heilung, mehr Last auf Consul.
-- <code>?passing=true</code> ist der Knackpunkt: ohne den Filter kommen auch ungesunde Instanzen zur&uuml;ck. Der Health-Check ist nur wertvoll, wenn der Client ihn respektiert.
-- Identischer Pseudo-Code inklusive <code>resolve(name)</code> und der Schleife &uuml;ber Flight, Hotel, Car steht im Dashboard unter Story 3, &bdquo;Spickzettel&ldquo;. Wiedererkennung gewollt.
-- Im Referenz-Image (<code>booking/story3/</code>) ist genau das implementiert: <code>services/shared/consul/register.go</code> und <code>resolver.go</code>.
-- Trade-off: vor jedem Call aufl&ouml;sen ist stets aktuell, kostet aber Last auf Consul. Alternative: Cache mit Watch oder TTL.

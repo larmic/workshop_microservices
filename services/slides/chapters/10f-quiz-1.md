@@ -18,8 +18,3 @@
 
 </div>
 
-Note:
-- Ablauf f&uuml;r alle drei: Endpoint zeigen, Handzeichen &bdquo;RESTful?&ldquo; abfragen, eine Person aus der Minderheit begr&uuml;nden lassen, dann Fragment aufl&ouml;sen.
-- Erwartung: einige sagen &bdquo;nicht RESTful&ldquo;, weil Query-Parameter nach RPC aussehen. Pointe: Filter auf eine Sammlung sind genau der Zweck von Query-Parametern (Regel 5, Sub-Ressourcen und Filter). Eigene Endpoints pro Filterkombination w&auml;ren das Anti-Pattern.
-- Bezug: <code>GET /booking/offers</code> ist der Aggregations-Endpoint aus Story 1. Die Filter sind hier hinzugedacht, das Prinzip ist dasselbe.
-- &Uuml;berleitung: &bdquo;Das war der Einstieg. Jetzt der Status-Code.&ldquo;
