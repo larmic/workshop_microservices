@@ -1526,16 +1526,16 @@
 .reveal .timeline .tl-road {
     fill: none;
     stroke: var(--box-bg);
-    stroke-width: 26;
-    stroke-linecap: round;
+    stroke-width: 84;        /* breit genug, dass die Figuren mit drauf stehen */
+    stroke-linecap: butt;    /* flache Enden, die Straße läuft aus der Folie */
 }
 
 .reveal .timeline .tl-dash {
     fill: none;
     stroke: var(--highlight);
-    stroke-width: 4;
-    stroke-dasharray: 22 18;
-    stroke-linecap: round;
+    stroke-width: 9;
+    stroke-dasharray: 34 26;
+    stroke-linecap: butt;
 }
 
 .reveal .timeline .tl-tick {
@@ -1543,10 +1543,9 @@
     stroke-width: 2;
 }
 
-.reveal .timeline .tl-dot {
+/* Fahne mit Jahreszahl am Mast */
+.reveal .timeline .tl-flag {
     fill: var(--box-bg);
-    stroke: #fff;
-    stroke-width: 3;
 }
 
 .reveal .timeline .tl-year {
