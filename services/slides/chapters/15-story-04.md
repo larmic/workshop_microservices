@@ -49,10 +49,3 @@
 
 </div>
 
-Note:
-- Hook: &bdquo;Story 3 hat uns geholfen, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben, und er antwortet nicht.&ldquo;
-- Wiedererkennung: dieselbe Story (Kontext, User Story, Akzeptanzkriterien) im Dashboard unter Story 4, &bdquo;Story lesen&ldquo;.
-- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story4/</code> (Go, selbstgebauter CB, etwa 80 Zeilen). Selber bauen ist Workshop-Didaktik, in Produktion nimmt man die Library.
-- Drei separate CBs statt einem globalen, das isoliert Ausf&auml;lle pro Backend. Granularit&auml;t kommt im Recap zur&uuml;ck.
-- Demo-Drehbuch: Dashboard &ouml;ffnet die Chaos-Schalter pro Service und pro Replica. Flight auf &bdquo;Fehler&ldquo;, nach 5 Calls geht der CB auf OPEN, die Antwort enth&auml;lt sofort <code>flights: []</code> und den Header <code>X-Circuit-Open: flight</code>. Zur&uuml;ck auf &bdquo;Normal&ldquo;, nach 30 s schliesst der Breaker &uuml;ber HALF_OPEN.
-- Time-Box 60 min inklusive Demo. Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-04-circuit-breaker.md</code>.
