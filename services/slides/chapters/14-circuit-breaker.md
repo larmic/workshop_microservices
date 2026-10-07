@@ -32,14 +32,14 @@
 </div>
 <div class="card">
 <h3>Outbound, nicht Inbound</h3>
-<p>Sch&uuml;tzt den Aufrufer, nicht den Aufgerufenen.</p>
+<p>F&uuml;r Calls, die ihr macht. Nicht f&uuml;r Calls, die ihr bekommt.</p>
 </div>
 </div>
 
 <div class="market">
 <h4>Am Markt</h4>
 <div class="pills">
-<span class="pill brand">Resilience4j</span>
+<span class="pill">Resilience4j</span>
 <span class="pill">Polly</span>
 <span class="pill">Spring Cloud Circuit Breaker</span>
 <span class="pill">gobreaker</span>
@@ -52,10 +52,7 @@
 </div>
 
 Note:
-- <strong>Schutzschalter:</strong> Analogie zum Sicherungsautomaten. Statt zu hoffen, dass das Backend sich erholt, kappt der Aufrufer den Stromkreis selbst. Das schont beide Seiten: Das kaputte Backend bekommt Luft, der Aufrufer h&auml;ngt nicht mehr in Timeouts.
-- <strong>Drei Zust&auml;nde:</strong> CLOSED heisst alles l&auml;uft, durchwinken. OPEN heisst sofort Fallback, keine Anfrage geht raus. HALF_OPEN heisst ein einzelner Probe-Call testet, ob das Backend wieder lebt. Erfolg f&uuml;hrt zu CLOSED, Fehler zur&uuml;ck nach OPEN.
-- <strong>Schnell scheitern:</strong> Ohne CB stauen sich Requests, Threads und Connections gehen aus, der Aufrufer wird selbst langsam und reisst seine Aufrufer mit. Der CB bricht die Kette.
-- <strong>Fallback:</strong> Der CB entscheidet nicht, was passiert, wenn er feuert. Das ist Fachlogik. Bei <code>GET /booking/offers</code> reicht oft <code>flights: []</code> mit Hinweis. Bei Schreib-Operationen knifflig, siehe Saga in Story 6.
-- <strong>Outbound:</strong> Klassischer Denkfehler: &bdquo;Wir setzen einen CB vor unseren Service, damit er nicht &uuml;berlastet.&ldquo; Daf&uuml;r gibt es Bulkhead und Rate Limiting. Der CB ist immer ausgehend.
-- Am Markt: Resilience4j ist Standard im Java-Umfeld, Spring Cloud Circuit Breaker ein Wrapper darum. Polly im .NET-Lager, gobreaker f&uuml;r Go. Envoy und Istio machen dasselbe im Service Mesh, ohne Anwendungscode. Hystrix nur erw&auml;hnen, wenn jemand fragt: End-of-Life, aber in Bestandsanwendungen noch verbreitet.
-- &Uuml;berleitung: &bdquo;Die Mechanik passt auf eine Folie.&ldquo;
+- <strong>Outbound hei&szlig;t:</strong> Der Schalter geh&ouml;rt vor die Calls, die euer Service macht. Nicht vor die, die er bekommt.
+- <strong>Er sch&uuml;tzt trotzdem beide Seiten:</strong> Der Aufrufer bindet keine Threads mehr in Timeouts. Das Backend bekommt keine Anfragen mehr und kann sich erholen.
+- <strong>Warum beim Aufrufer:</strong> Ein totes oder &uuml;berlastetes Backend kann sich nicht selbst abschalten. Nur der Aufrufer sieht Timeouts und Fehler, nur er kann aufh&ouml;ren.
+- <strong>Der Denkfehler:</strong> &bdquo;Wir setzen einen CB vor unseren Service, damit er nicht &uuml;berlastet.&ldquo; Das ist Rate Limiting oder Bulkhead (Story 5), kein Circuit Breaker.

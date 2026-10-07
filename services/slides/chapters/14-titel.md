@@ -17,8 +17,3 @@
 
 </div>
 
-Note:
-- Hook: &bdquo;In Story 3 haben wir gelernt, Services zu <em>finden</em>. Heute kl&auml;ren wir, was passiert, wenn wir einen gefunden haben, und er antwortet nicht.&ldquo;
-- Die Grafik: ein Sicherungskasten, vier Automaten oben (CLOSED), der zweite ist gefallen (OPEN). Genau das macht der Aufrufer f&uuml;r jedes Backend einzeln.
-- Nygard, Release It! (2007): Der Circuit Breaker ist das bekannteste seiner Stabilit&auml;tspatterns. Grundgedanke: Ein Aufrufer, der einen kaputten Partner weiter anruft, verbrennt seine eigenen Threads und reisst seine eigenen Aufrufer mit.
-- Demo-Vorschau: Im Dashboard Flight auf &bdquo;Fehler&ldquo; stellen, ein paar Requests gegen <code>/booking/offers</code>, jeder h&auml;ngt 3 s im Timeout. Mit Circuit Breaker in Story 4: nach den ersten f&uuml;nf Fehlern sofort Fallback.
