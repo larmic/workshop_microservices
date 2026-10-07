@@ -111,7 +111,3 @@ Note:
 - Vorher: Mainframes
 - SOA: wenige, gro&szlig;e Services
 - Microservices: feingranular, eine Aufgabe, ein Service
-- 2014: Docker 1.0 erscheint, gRPC folgt 2015 (steht mit am 2014er-Punkt).
-- SCS: Self Contained System
-- REST + JSON ist der heutige Default. Was &bdquo;RESTful&ldquo; wirklich hei&szlig;t und warum das mehr als Stil ist, kommt in Story 2 (Design-Session) auf den Tisch.
-- Realit&auml;tscheck: Network Latency | Deployment Hell | Debugging Horror
