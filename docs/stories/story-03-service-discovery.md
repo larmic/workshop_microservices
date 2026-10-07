@@ -35,7 +35,6 @@ Ein Booking-Service, der:
   - `hotel-service`
   - `car-service`
 - Backend-Services über den Consul Resolver dynamisch auflösen
-- Handler in eigenes `handler`-Package extrahieren
 
 ### 3. Buchung durchführen
 - Design-Regeln aus [Story 2](story-02-api-design-session.md) anwenden: Ressource `bookings`, `POST` erzeugt eine neue Buchung und antwortet mit `201 Created`, Fehler kommen als Status-Code, nicht als `200` mit Fehler-Body

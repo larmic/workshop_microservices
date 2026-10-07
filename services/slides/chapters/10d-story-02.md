@@ -47,9 +47,4 @@
 </div>
 
 Note:
-- Hook: &bdquo;Beim letzten Mal hat ein Prefetcher &uuml;ber einen GET-Link Buchungen storniert. Das soll uns nicht noch einmal passieren.&ldquo;
-- Wiedererkennung: dieselbe Story im Dashboard unter Story 2, &bdquo;Story lesen&ldquo;. Dort gibt es bewusst keinen Spickzettel, keine Buttons und keinen Service.
-- Time-Box: 3 Minuten Aufgabe stellen, 20 Minuten Teamarbeit (das Badge oben), dann je Team 2 Minuten Vorstellung, anschlie&szlig;end das Quiz. Der ganze Block dauert etwa 55 Minuten.
-- Spaltenk&ouml;pfe der Tabelle vorab auf die Flipcharts zeichnen, das spart f&uuml;nf Minuten.
-- W&auml;hrend der Teamarbeit herumgehen und nur Fragen stellen: &bdquo;Was passiert beim zweiten Aufruf?&ldquo;, &bdquo;Welcher Code, wenn das Hotel ablehnt?&ldquo;
-- Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-02-api-design-session.md</code>. Trainer-Hinweis mit L&ouml;sungsraum: <code>docs/instructions/rest-vs-restful.md</code>.
+- Beim Herumgehen fragen: Was antwortet eure API, wenn ein Backend beim Storno oder Umbuchen scheitert, etwa das Hotel ablehnt oder gar nicht antwortet? Ein 5xx kann immer passieren und geh&ouml;rt nicht in die API-Doku. Darauf achten, dass niemand ein 200 mit Fehler-Body in die Tabelle schreibt.

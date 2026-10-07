@@ -52,12 +52,3 @@
 
 </div>
 
-Note:
-- Hook: &bdquo;Story 1 hatte URLs in ENV-Variablen. Was passiert, wenn Flight umzieht? Re-Deploy. Was passiert, wenn ihr Flight skaliert? Ein Backend bekommt allen Traffic.&ldquo;
-- Wiedererkennung: dieselbe Story (Kontext / User Story / Akzeptanzkriterien) im Dashboard unter Story 3, &bdquo;Story lesen&ldquo;.
-- Br&uuml;cke zu Story 2: <code>POST /booking/bookings</code> ist der erste schreibende Endpoint. Die Regeln vom Flipchart gelten, siehe Fu&szlig;zeile. Kurz fragen, wer sie schon eingebaut hat.
-- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story3/</code> (Go).
-- Self-Registration im Code: Flight, Hotel und Car melden sich beim Start aktiv an. Trade-off zu Sidecar oder plattformbasierter Registrierung diskutieren wir im Recap.
-- Client-Side Load Balancing: Der Resolver bekommt eine Liste und w&auml;hlt eine Instanz zuf&auml;llig. Keine Load-Balancer-Magie n&ouml;tig.
-- Time-Box 60 min. Dashboard <code>http://localhost</code> zeigt den Story-3-Modus inklusive Spickzettel.
-- Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-03-service-discovery.md</code>.
