@@ -6,17 +6,18 @@
 
 ## Sechs Regeln
 
-<span class="hint fragment" data-fragment-index="3">Hypermedia lassen wir bewusst weg.</span>
+<span class="hint hint-late">Hypermedia lassen wir bewusst weg.</span>
 </div>
 
 <p class="subtitle">&hellip; die Betriebsprobleme verhindern.</p>
 
 <div class="page-body rules-body">
 
-<div class="quiz-code wide"><span class="m">DELETE</span> /customers/7/bookings/4711 &nbsp;&nbsp;<span class="dim">&rarr; 204 No Content</span></div>
+<div class="quiz-code wide"><span class="ex ex-m">DELETE</span> <span class="ex ex-p">/customers/7/bookings/4711</span> &nbsp;&nbsp;<span class="ex ex-a">&rarr; 204 No Content</span></div>
 
 <div class="rules">
-<div class="rules-group fragment" data-fragment-index="1">
+<div class="rules-group fragment" data-fragment-index="1" data-notes="Frage in die Runde: Wir loggen jeden GET-Aufruf und schreiben ihn in eine Datenbank. Ist das schon ein Verstoß gegen „GET ohne Seiteneffekte“?
+Antwort: Nein. Die Regel meint die Ressource, nicht den Server. GET darf Logs, Zähler und Caches füllen, solange der Client danach denselben Zustand sieht. Verboten ist, was die Ressource ändert oder fachlich etwas auslöst.">
 <h4>Die Methode sagt, was passiert</h4>
 <div class="rule">
 <h5><span class="num">1</span> Tr&auml;gt die Semantik</h5>
@@ -47,7 +48,13 @@
 <code>/customers/7/bookings?status=confirmed</code>
 </div>
 </div>
-<div class="rules-group fragment" data-fragment-index="3">
+<div class="rules-group fragment" data-fragment-index="3" data-notes="Nur der Status-Code zählt, zum Beispiel für:
+- Load Balancer: nimmt eine Instanz bei 5xx aus der Rotation
+- Retry-Logik: wiederholt bei 503
+- Circuit Breaker (Story 4): zählt Fehler
+- Monitoring: alarmiert auf Fehlerraten
+- Caches: speichern nur 200
+Ein 200 mit Fehler im Body sieht keiner davon.">
 <h4>Die Antwort sagt, wie es ausging</h4>
 <div class="rule">
 <h5><span class="num">6</span> Status-Codes statt Fehler-Body</h5>
@@ -61,11 +68,3 @@
 
 </div>
 
-Note:
-- Zeitbox 10 bis 12 Minuten. Die Beispielzeile oben ist der rote Faden: eine Anfrage, an der alle sechs Regeln sichtbar werden. Drei Klicks: Methode, Pfad, Antwort.
-- <strong>Methode.</strong> Regel 1: Die Methode ist der Vertrag mit der Infrastruktur. Proxies, Caches und Clients entscheiden anhand der Methode: darf ich cachen, wiederholen, vorladen? Wer alles per POST macht, nimmt der Infrastruktur jede Information. Regel 2: Idempotent hei&szlig;t, mehrfach ausf&uuml;hren ergibt denselben Zustand wie einmal. Bei instabilem Netz wei&szlig; der Client nicht, ob die erste Anfrage ankam. Ein idempotenter Endpoint darf wiederholt werden, ein POST ohne Idempotency-Key bucht doppelt. Kern der Flipchart-Aufgabe, kommt in Story 6 (Kompensation) zur&uuml;ck. Regel 3: 2005, Google Web Accelerator, 37signals Backpack: L&ouml;schen-Links als GET, der Prefetcher l&ouml;schte Daten. Seitdem gilt: GET ver&auml;ndert nichts. Anekdote f&uuml;rs Quiz aufsparen.
-- <strong>Pfad.</strong> Regel 4: REST ist ein Architekturstil (Fielding, 2000), RESTful hei&szlig;t im Alltag: HTTP so nutzen, wie es gemeint ist. Die meisten &bdquo;REST-APIs&ldquo; sind RPC &uuml;ber HTTP mit JSON. Wer <code>/cancelBooking</code> schreibt, hat die Ressource noch nicht gefunden. Regel 5: Hierarchie im Pfad statt <code>/getBookingsForCustomer?id=7</code>; Filter, Sortierung und Paging in Query-Parameter.
-- <strong>Antwort.</strong> Regel 6: Load Balancer, Monitoring, Retry-Logik, Circuit Breaker (Story 4) und Caches sehen nur den Status-Code. <code>200 OK</code> mit <code>{ "status": "error" }</code> ist ein gr&uuml;nes Dashboard vor einem kaputten Service. 404 existiert nicht, 409 Konflikt, 422 fachlich abgelehnt, 503 Backend weg. Details in den Body.
-- Hypermedia (HATEOAS) und das Richardson Maturity Model nur als Ausblick nennen: Level 2, Ressourcen plus Verben, ist das realistische Ziel f&uuml;r die meisten Teams. Nicht abbiegen, die Teilnehmenden sollen gleich selbst denken.
-- &Uuml;berleitung zur Story-Folie: &bdquo;Jetzt ihr. Storno und Umbuchung, am Flipchart, in Teams.&ldquo;
-- Trainer-Hinweis: <code>docs/instructions/rest-vs-restful.md</code>, Abschnitt 2.

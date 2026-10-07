@@ -1115,6 +1115,29 @@
     text-align: left;
 }
 
+/* Die Beispielzeile markiert den Teil, dessen Gruppe gerade aufgedeckt wurde
+   (Reveal setzt .current-fragment auf das zuletzt gezeigte Fragment). Der
+   Hypermedia-Hinweis erscheint mit der dritten Gruppe. */
+.reveal .quiz-code .ex {
+    color: #EDE9FB;
+    transition: color 0.3s;
+}
+
+.reveal .rules-body:has(.rules-group:nth-child(1).current-fragment) .ex-m,
+.reveal .rules-body:has(.rules-group:nth-child(2).current-fragment) .ex-p,
+.reveal .rules-body:has(.rules-group:nth-child(3).current-fragment) .ex-a {
+    color: var(--highlight);
+}
+
+.reveal .page-head .hint.hint-late {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.reveal .page:has(.rules-group:nth-child(3).visible) .hint.hint-late {
+    opacity: 1;
+}
+
 .reveal .rule + .rule {
     margin-top: 12px;
 }
