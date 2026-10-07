@@ -39,7 +39,7 @@ Nur als Ausblick, nicht im Workshop vertiefen: HATEOAS (Links in Antworten) und 
 | Aufgabe stellen | 3 Min | Szenario (Abschnitt 4), Teams zu 3 bis 4 Personen, ein Flipchart pro Team |
 | Teamarbeit | 20 Min | Endpoint-Tabelle: Methode, Pfad, Request-Kern, Antwort und Status-Code, idempotent ja/nein, Begründung |
 | Vorstellung und Vergleich | 8 bis 10 Min | Je Team 2 Minuten, Trainer sammelt die Varianten nebeneinander (Abschnitt 5) |
-| Quiz "RESTful oder nicht?" | 8 bis 10 Min | Drei Endpoints, Handzeichen, Auflösung (Abschnitt 7) |
+| Quiz "RESTful oder nicht?" | 10 bis 12 Min | Fünf Endpoints, Handzeichen, Auflösung (Abschnitt 7) |
 | Brücke | 2 Min | "In Story 3 baut ihr `POST /booking/bookings`. Nehmt die Regeln mit." |
 
 **Material:** Ein Flipchart oder eine Whiteboard-Fläche pro Team, dicke Stifte, die Endpoint-Tabelle als Vorlage (Spaltenköpfe vorzeichnen spart fünf Minuten). Remote: ein Miro- oder Excalidraw-Board pro Team.
@@ -105,7 +105,7 @@ Moderationshinweis: Hier gibt es keine eindeutig richtige Antwort. Wichtig ist, 
 
 ## 7. Quiz "RESTful oder nicht?"
 
-Drei Endpoints, feste Reihenfolge, Dramaturgie: eindeutiges Nein, trügerisches Ja, trügerisches Nein. Pro Beispiel: Endpoint zeigen, Handzeichen abfragen, eine Person aus der Minderheit begründen lassen, dann auflösen (Fragment auf der Folie). Slides: `10f-quiz-1.md` bis `10h-quiz-3.md`.
+Fünf Endpoints, feste Reihenfolge, Dramaturgie: eindeutiges Nein, trügerisches Ja, trügerisches Nein, dann ein Paar zum Vergleichen und eine Auflockerung zum Schluss. Pro Beispiel: Endpoint zeigen, Handzeichen abfragen, eine Person aus der Minderheit begründen lassen, dann auflösen (Fragment auf der Folie). Slides: `10f-quiz-1.md` bis `10j-quiz-5.md`.
 
 ### Quiz 1 · Eindeutig nicht RESTful
 
@@ -132,6 +132,24 @@ POST /booking/bookings
 ```
 
 Erwartung: die meisten sagen "ja, sauber". Auflösung: Methode und Pfad stimmen, der Status-Code lügt. HTTP sagt Erfolg, der Body sagt Fehler. Load Balancer, Monitoring, Retries und der Circuit Breaker aus Story 4 sehen nur die 200 und halten den Service für gesund. Richtig: `409 Conflict` oder `422 Unprocessable Content` mit dem Fehler im Body. Beste Brücke in die Resilience-Themen: Status-Codes sind Infrastruktur, keine Kosmetik.
+
+### Quiz 4 · Beides RESTful
+
+```
+DELETE /booking/bookings/4711
+POST /booking/bookings/4711/cancellation
+```
+
+Erwartung: die Hälfte sagt "nur DELETE, POST hat eine Aktion im Pfad". Auflösung: beides RESTful. DELETE ist idempotent, braucht keinen Body, die Buchung ist danach weg. POST legt die Stornierung als eigene Ressource an, mit Grund, Zeitpunkt und Gebühr, später per GET nachlesbar, die Buchung bleibt als Historie. Entscheidungsfrage an die Teams: Muss der Storno-Grund mit? Dann braucht es eine Ressource, die ihn trägt. Preis des POST: der zweite Aufruf braucht `409 Conflict` oder einen Idempotency-Key. Merksatz: stornieren ist nicht löschen. Brücke zu Story 6: dort ruft der Orchestrator als Kompensation `DELETE /bookings/{id}` an den Backends auf, und dann zählt die Idempotenz.
+
+### Quiz 5 · Auflockerung
+
+```
+POST /booking/bookings
+→ 418 I'm a teapot
+```
+
+Erwartung: Lacher. Auflösung: nicht RESTful. Der Code existiert seit dem Aprilscherz-RFC 2324 (1998) und ist seit der "Save 418"-Kampagne 2017 offiziell reserviert. Nur bedeutet er für Load Balancer, Monitoring und Circuit Breaker nichts. Ein Status-Code ist eine Handlungsanweisung an die Infrastruktur: wiederholen, aufgeben, cachen. Richtig je nach Fall: 409, 422, 503. Merksatz: witzig ist kein Vertrag. Überleitung: "In Story 3 baut ihr `POST /booking/bookings` selbst, mit einem Status-Code, der etwas bedeutet."
 
 ### Reserve (falls Zeit bleibt oder ein Team genau das gebaut hat)
 

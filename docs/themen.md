@@ -139,7 +139,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 
 ### 6b. Story 2 — [Design-Session: REST vs. RESTful](stories/story-02-api-design-session.md) (55 Min)
 - Lernpointe: HTTP benutzen ist nicht dasselbe wie HTTP richtig benutzen. Ressourcen statt Verben, Idempotenz macht Retries sicher, Status-Codes sind Infrastruktur
-- Ablauf: 10 Min Theorie, 20 Min Teamarbeit am Flipchart (Storno und Umbuchung), Vorstellung, Quiz "RESTful oder nicht?" mit drei Endpoints
+- Ablauf: 10 Min Theorie, 20 Min Teamarbeit am Flipchart (Storno und Umbuchung), Vorstellung, Quiz "RESTful oder nicht?" mit fünf Endpoints
 - Recap-Frage: Was passiert, wenn der Client euren Storno zweimal schickt?
 - Trainer-Hinweis: [instructions/rest-vs-restful.md](instructions/rest-vs-restful.md), Fragen: [questions/story2.md](questions/story2.md)
 

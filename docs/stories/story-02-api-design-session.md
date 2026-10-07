@@ -57,7 +57,7 @@ Leitfragen für die Teamarbeit:
 
 - Jedes Team stellt seine Tabelle in zwei Minuten vor
 - Der Trainer sammelt die Varianten nebeneinander und moderiert die Trade-offs
-- Anschließend Quiz im Plenum: drei Endpoints, Handzeichen, "RESTful oder nicht?"
+- Anschließend Quiz im Plenum: fünf Endpoints, Handzeichen, "RESTful oder nicht?"
 
 ### 4. Brücke zu Story 3
 
