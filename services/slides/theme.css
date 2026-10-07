@@ -1548,6 +1548,15 @@
     fill: var(--box-bg);
 }
 
+/* Steinbruch (05a): Beschriftung auf den Felsbrocken */
+.reveal .timeline .tl-stones text {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    fill: #fff;
+    stroke: none;
+}
+
 .reveal .timeline .tl-year {
     font-family: var(--r-code-font);
     font-size: 15px;
