@@ -50,4 +50,3 @@ Note:
 - <strong>Fallback:</strong> Ja, schon beim ersten Fehler. Die leere Liste kommt bei jedem gescheiterten Call. Der CB &auml;ndert nur das Wie: CLOSED kostet bis 3 s, OPEN antwortet sofort mit <code>X-Circuit-Open</code>.
 - <strong>Probe-Storm:</strong> Sonst legen alle Wartenden das erholende Backend sofort wieder um. Ein atomarer Slot l&auml;sst genau einen durch.
 - <strong>Replicas:</strong> Nein, Zustand bleibt instanzlokal. B erreicht Flight vielleicht problemlos. Folge: Nach Neustart ist alles CLOSED, die ersten f&uuml;nf Calls kosten wieder 3 s.
-- Reserve: Retry und CB nicht naiv kombinieren. Granularit&auml;t pro Service ist der Default. Lang: <code>docs/questions/story4.md</code>.
