@@ -18,6 +18,7 @@
 <div class="fb-scan">
 <a class="fb-qr" href="https://larmic.github.io/workshop_microservices/feedback/?source=slides" target="_blank"><img src="./assets/qr-code.png" alt="QR-Code zur Feedback-Seite"/></a>
 <p class="fb-url">larmic.github.io<br>/workshop_microservices<br>/feedback</p>
+<p class="fb-star"><svg class="fb-star-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg>Code und Folien liegen auf GitHub. Ein Stern hilft beim Finden.</p>
 </div>
 </div>
 

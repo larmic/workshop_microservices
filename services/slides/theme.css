@@ -2215,3 +2215,23 @@
     color: #5B4E93;
     margin: 16px 0 0;
 }
+
+/* Leise Zeile unter dem QR-Block: Hinweis auf das offene Repo und den Stern.
+   Bewusst gedämpft und klein, damit die Feedback-Fragen das Thema bleiben. */
+.reveal p.fb-star {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #8880AE;
+    margin: 14px 0 0;
+}
+
+.reveal .fb-star-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    fill: var(--highlight);
+    stroke: var(--box-border);
+    stroke-width: 1.5;
+    vertical-align: -2px;
+    margin-right: 6px;
+}
