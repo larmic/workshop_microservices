@@ -31,4 +31,3 @@ Note:
 - These provokant in den Raum stellen: stimmt das? Wo trifft sie zu, wo nicht?
 - Der Kern: Ein Methodenaufruf im Monolithen ist schnell, ehrlich und kommt an. Ein Netzwerkaufruf kann langsam sein, l&uuml;gen (200 trotz Fehler) oder verschwinden. Alles, was danach kommt, ist der Umgang mit diesen drei F&auml;llen.
 - Diskussions-Anker: Welche Probleme h&auml;tte man im Monolithen auch, und welche entstehen erst durch das Netzwerk?
-- Weiter nach unten: die zwei Fragen, die der Workshop beantwortet.
