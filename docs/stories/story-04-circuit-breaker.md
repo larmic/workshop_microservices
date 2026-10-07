@@ -17,7 +17,7 @@ damit **meine Reiseplanung nicht komplett blockiert wird**.
 
 - [ ] Je ein Circuit Breaker ist um jeden Backend-Aufruf (Flight, Hotel, Car) implementiert, jeweils mit eigenem State
 - [ ] Nach 5 aufeinanderfolgenden Fehlern öffnet sich der Circuit
-- [ ] Bei offenem Circuit wird ein Fallback ausgeführt (z.B. "Flugbuchung derzeit nicht verfügbar")
+- [ ] Bei offenem Circuit wird ein Fallback ausgeführt (z.B. `flights: []`), und der Header `X-Circuit-Open` nennt dem Client das betroffene Backend
 - [ ] Der Circuit schließt sich nach 30 Sekunden wieder (Half-Open State)
 - [ ] Der aktuelle Circuit-Status ist über einen Endpoint abfragbar
 - [ ] Timeouts sind konfiguriert (max. 3 Sekunden Wartezeit)

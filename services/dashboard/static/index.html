@@ -1606,7 +1606,7 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
                         <ul>
                             <li>Circuit Breaker um jeden Backend-Aufruf (Flight, Hotel, Car) &mdash; jeweils eigener State</li>
                             <li>Nach 5 aufeinanderfolgenden Fehlern öffnet der Circuit (OPEN)</li>
-                            <li>Bei OPEN sofortiger Fallback (z.&nbsp;B. <code>flights: []</code>)</li>
+                            <li>Bei OPEN sofortiger Fallback (z.&nbsp;B. <code>flights: []</code>), Header <code>X-Circuit-Open</code> nennt das Backend</li>
                             <li>Nach 30 Sekunden Wechsel in HALF_OPEN; ein Probe-Call entscheidet, ob CLOSED oder OPEN</li>
                             <li>Timeout 3 s; Zustandswechsel werden geloggt; Status über Endpoint abfragbar</li>
                         </ul>

@@ -27,10 +27,3 @@
 
 </div>
 
-Note:
-- Identischer Pseudo-Code steht im Dashboard unter Story 4, &bdquo;Spickzettel&ldquo;. Wiedererkennung gewollt.
-- <strong>Timeout im Aufruf selbst</strong> (3 s): Ohne ihn bringt der CB nichts, weil ein h&auml;ngender Call nie als Fehler z&auml;hlt.
-- <strong>Schwelle 5</strong>: count-basiert, reicht im Workshop. In Produktion meist rate-basiert &uuml;ber ein Sliding Window, sonst &ouml;ffnen bei hohem Durchsatz f&uuml;nf Fehler in 100 ms den Breaker, obwohl 99,99 Prozent der Requests gesund waren.
-- <strong>Wartezeit 30 s</strong>: Danach HALF_OPEN. In der Skizze l&auml;sst jeder Aufruf nach Ablauf die Probe durch. Im echten Code muss das atomar gegen den Probe-Storm gesch&uuml;tzt sein, Recap-Frage 4.
-- Was die Referenz zus&auml;tzlich hat, hier bewusst weggelassen: Slow-Call-Detection (langsam gilt als kaputt, auch bei 200), Exception-Klassifizierung (nur 5xx z&auml;hlt, 4xx nicht), Metriken pro Zustandswechsel, Decorator-Kette Retry, CB, Timeout, Fallback. Resilience4j macht aus alldem eine Annotation.
-- Referenz: <code>services/booking/story4/circuitbreaker/circuitbreaker.go</code>, etwa 80 Zeilen Go.

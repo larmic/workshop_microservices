@@ -60,15 +60,23 @@ paths:
     get:
       summary: Combined booking offers
       description: |
-        Calls the Flight, Hotel and Car backend services and returns their
-        combined results. No error handling — the request may fail if a
-        backend service is unavailable.
+        Calls the Flight, Hotel and Car backend services through one circuit
+        breaker per backend and returns their combined results. When a
+        breaker is open, that part of the response is replaced by a fallback
+        (an empty list) and the response carries an X-Circuit-Open header
+        naming the affected backend.
       operationId: getBookingOffers
       tags:
         - booking
       responses:
         "200":
-          description: Combined offers from all backend services
+          description: Combined offers, possibly with fallbacks for open circuits
+          headers:
+            X-Circuit-Open:
+              description: Name of a backend whose circuit is open (repeated per backend)
+              schema:
+                type: string
+                example: flight
           content:
             application/json:
               schema:
