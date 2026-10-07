@@ -11,26 +11,26 @@
 <div class="timeline">
 <svg viewBox="0 0 1180 412" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zeitlinie 1990 bis 2022: Architekturen oben (Monolithen, SOA, Microservices, Modulithen, SCS), Technologien unten (RMI, CORBA, HTTP, SOAP, REST, JSON, Docker, gRPC)">
   <!-- Masten: von der Fahne bis unter die Straße, bei den Technologien weiter bis nach unten -->
-  <line class="tl-tick" x1="70"   y1="52" x2="70"   y2="165"/>
-  <line class="tl-tick" x1="408"  y1="52" x2="408"  y2="249"/>
-  <line class="tl-tick" x1="745"  y1="52" x2="745"  y2="317"/>
-  <line class="tl-tick" x1="1049" y1="52" x2="1049" y2="171"/>
-  <line class="tl-tick" x1="1150" y1="52" x2="1150" y2="134"/>
+  <line class="tl-tick" x1="70"   y1="46" x2="70"   y2="165"/>
+  <line class="tl-tick" x1="408"  y1="46" x2="408"  y2="249"/>
+  <line class="tl-tick" x1="745"  y1="46" x2="745"  y2="317"/>
+  <line class="tl-tick" x1="1049" y1="46" x2="1049" y2="171"/>
+  <line class="tl-tick" x1="1150" y1="46" x2="1150" y2="134"/>
   <line class="tl-tick" x1="70"   y1="165" x2="70"   y2="376"/>
   <line class="tl-tick" x1="408"  y1="249" x2="408"  y2="376"/>
   <line class="tl-tick" x1="745"  y1="317" x2="745"  y2="376"/>
-  <line class="tl-tick" x1="880"  y1="52" x2="880"  y2="376"/>
+  <line class="tl-tick" x1="880"  y1="46" x2="880"  y2="376"/>
   <!-- Straße, x-Achse maßstäblich: 1990 bei x=70, 2022 bei x=1150. Läuft über
        beide Folienränder hinaus (overflow: visible), die Enden sind abgeschnitten. -->
   <path class="tl-road" d="M -140 191 L 0 170 C 260 130, 470 330, 730 318 C 990 306, 1010 120, 1180 135 L 1320 147"/>
   <path class="tl-dash" d="M -140 191 L 0 170 C 260 130, 470 330, 730 318 C 990 306, 1010 120, 1180 135 L 1320 147"/>
   <!-- Fahnen mit der Jahreszahl am Mast, alle in einer Reihe unter den Architekturen -->
-  <rect class="tl-flag" x="70" y="52" width="58" height="26" rx="3"/><text class="tl-year" x="99" y="65">1990</text>
-  <rect class="tl-flag" x="408" y="52" width="58" height="26" rx="3"/><text class="tl-year" x="437" y="65">2000</text>
-  <rect class="tl-flag" x="745" y="52" width="58" height="26" rx="3"/><text class="tl-year" x="774" y="65">2010</text>
-  <rect class="tl-flag" x="880" y="52" width="58" height="26" rx="3"/><text class="tl-year" x="909" y="65">2014</text>
-  <rect class="tl-flag" x="1049" y="52" width="58" height="26" rx="3"/><text class="tl-year" x="1078" y="65">2019</text>
-  <rect class="tl-flag" x="1150" y="52" width="58" height="26" rx="3"/><text class="tl-year" x="1179" y="65">2022</text>
+  <rect class="tl-flag" x="70" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="99" y="63">1990</text>
+  <rect class="tl-flag" x="408" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="437" y="63">2000</text>
+  <rect class="tl-flag" x="745" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="774" y="63">2010</text>
+  <rect class="tl-flag" x="880" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="909" y="63">2014</text>
+  <rect class="tl-flag" x="1049" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="1078" y="63">2019</text>
+  <rect class="tl-flag" x="1150" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="1179" y="63">2022</text>
   <!-- Figuren auf der Straße, auf dem Jahrespunkt, aufrecht und in genau einer
        Farbe; Struktur entsteht durch Lücken, in denen die Straße durchscheint.
        Lokal um (0,0) gezeichnet, Position in transform. -->
@@ -59,6 +59,12 @@
       <rect x="20" y="-16" width="12" height="12" rx="2.5"/><rect x="-24" y="2" width="12" height="12" rx="2.5"/>
       <rect x="0" y="-4" width="12" height="12" rx="2.5"/><rect x="-16" y="18" width="12" height="12" rx="2.5"/>
       <rect x="8" y="16" width="12" height="12" rx="2.5"/>
+    </g>
+    <!-- Risse vom Straßenrand zwischen 2010 und 2014: am Rand breit, nach innen spitz -->
+    <g fill="#ffffff" stroke="none">
+      <path d="M 800 361 L 810 361 L 806 349 L 810 341 L 805 333 L 803 325 L 800 334 L 803 342 L 799 350 Z"/>
+      <path d="M 837 253 L 848 253 L 844 264 L 848 272 L 842 284 L 839 273 L 841 265 Z"/>
+      <path d="M 858 339 L 869 339 L 865 329 L 868 322 L 863 311 L 860 322 L 861 330 Z"/>
     </g>
     <!-- 2014: Services auf dem Container -->
     <g transform="translate(880 285)">
