@@ -40,8 +40,3 @@
 </div>
 
 </div>
-
-Note:
-- Vier Halbtage, nur die Mittagspause hat eine Uhrzeit. Alles andere nach Tempo der Gruppe; die Zeitleiste mit Bl&ouml;cken und Minuten steht in <code>docs/themen.md</code>, Abschnitt 0.
-- Tag 1 Vormittag: Motivation, Weg zu Microservices, 12-Faktor, Monolithen-These, Story 1. Tag 1 Nachmittag: Story 2 (REST vs. RESTful, Design-Session ohne Code), Story 3, Story 4. Tag 2 Vormittag: Story 5, 6, 7. Tag 2 Nachmittag: CQRS, Story 8, BFF, Downtimeless Deployment, Abschluss.
-- Story 2 ist die einzige Story ohne Code: Flipchart statt Editor, ca. 55 Minuten. Kurz ank&uuml;ndigen, damit niemand nach dem Repo-Ordner sucht.
