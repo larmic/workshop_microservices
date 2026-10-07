@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 364 364" role="img" aria-label="Ein Block, in vier Teile zersägt; in den Fugen laufen Verbindungen, eine davon ist gestört">
+  <!-- der Monolith, in vier Stücke geschnitten: runde Außenecken, scharfe
+       Schnittkanten, die Fugen sind das Netzwerk. Ein Stück, dreimal gedreht. -->
+  <defs>
+    <path id="piece" d="M 40 1.5 H 155.5 Q 161.5 1.5 161.5 7.5 V 155.5 Q 161.5 161.5 155.5 161.5 H 7.5 Q 1.5 161.5 1.5 155.5 V 40 Q 1.5 1.5 40 1.5 Z"/>
+  </defs>
+  <g fill="#EEE7FB" stroke="#D9D1F4" stroke-width="3">
+    <use href="#piece"/>
+    <use href="#piece" transform="rotate(90 182 182)"/>
+    <use href="#piece" transform="rotate(180 182 182)"/>
+    <use href="#piece" transform="rotate(270 182 182)"/>
+  </g>
+  <!-- Verbindungen in den Fugen -->
+  <g fill="none" stroke="#B4A9E6" stroke-width="5" stroke-linecap="round">
+    <line x1="162" y1="82"  x2="202" y2="82"/>
+    <line x1="82"  y1="162" x2="82"  y2="202"/>
+    <line x1="162" y1="282" x2="202" y2="282"/>
+  </g>
+  <g fill="#B4A9E6">
+    <circle cx="162" cy="82"  r="7"/><circle cx="202" cy="82"  r="7"/>
+    <circle cx="82"  cy="162" r="7"/><circle cx="82"  cy="202" r="7"/>
+    <circle cx="162" cy="282" r="7"/><circle cx="202" cy="282" r="7"/>
+  </g>
+  <!-- eine Verbindung hat Netzwerkprobleme -->
+  <polyline points="282,162 268,172 298,180 266,190 296,198 282,202" fill="none" stroke="#D3F871" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="282" cy="162" r="7" fill="#D3F871"/>
+  <circle cx="282" cy="202" r="7" fill="#D3F871"/>
+</svg>

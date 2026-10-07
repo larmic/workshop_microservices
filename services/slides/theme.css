@@ -1767,10 +1767,25 @@
 /* ---------------------------------------------------------------------- */
 
 .reveal .intro {
+    position: relative;
     width: 92%;
     margin: 0 auto;
     text-align: left;
     color: var(--slide-text);
+}
+
+/* Wasserzeichen rechts: ein Monolith, in vier Teile zersägt, in den Fugen die
+   Verbindungen, eine davon gestört (assets/monolith.svg). Sitzt in der freien
+   rechten Hälfte, mittig zur Höhe des Textblocks. */
+.reveal .intro img.intro-figure {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 340px;
+    height: auto;
+    margin: 0;
+    transform: translateY(-50%) rotate(-4deg);
+    pointer-events: none;
 }
 
 .reveal .intro h1.intro-title {

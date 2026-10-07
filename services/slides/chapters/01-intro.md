@@ -2,6 +2,8 @@
 
 <div class="intro">
 
+<img class="intro-figure" src="./assets/monolith.svg" alt="" aria-hidden="true"/>
+
 <h1 class="intro-title">Microservices</h1>
 <p class="intro-claim">&hellip; sind auch nur Monolithen mit Netzwerkproblemen</p>
 
