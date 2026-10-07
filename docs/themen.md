@@ -74,6 +74,7 @@ Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-
 
 ## 3. Vortrag: Bedingungen an einen Microservice — 12 Factor App (30 Min)
 
+- Einordnung vorweg: 12-Factor ist cloud-native und breiter als Microservices. Die zwölf Regeln sind die Eintrittskarte, notwendig, aber nicht hinreichend. Das Microservices-Spezifische (Service-Schnitt, unabhängige Deploybarkeit, Resilienz) liefern die Kapitel 2 und 3.
 - 12 Faktoren kurz durchgehen, jeweils mit Praxisbezug zum Booking-Service
 - Alle zwölf stehen auf einer Folie; ein Klick hebt die drei hervor, die Story 1 konkret umsetzt:
   - **Config** (III): Backend-URLs aus Umgebungsvariablen, `/info`-Endpoint zeigt die aktive Konfiguration

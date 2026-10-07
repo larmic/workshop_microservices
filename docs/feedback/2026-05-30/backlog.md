@@ -66,7 +66,7 @@ den größten Hebel, A (Quick-Wins) ist schnell erledigt.
 
 ## B · Slides- und Inhalts-Klärungen (Pattern-Verständnis)
 
-- [ ] **B1 · 12-Factor zu Microservices verbrücken** · Priorität: Hoch
+- [x] **B1 · 12-Factor zu Microservices verbrücken** · Priorität: Hoch (umgesetzt 2026-10-07: Callout auf Folie 06, Einordnung in themen.md)
   In `services/slides/chapters/06-12-faktor-app.md`, `docs/themen.md:72-82` und
   `docs/stories/story-01-cloud-native-booking-service.md` klarstellen: 12-Factor ist
   cloud-native und breiter als Microservices, notwendig aber nicht hinreichend.

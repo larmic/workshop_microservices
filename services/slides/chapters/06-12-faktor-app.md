@@ -22,8 +22,8 @@
 </div>
 
 <div class="foot">
-<p>Kein neues Framework, keine Bibliothek. Nur zw&ouml;lf Regeln.</p>
-<div class="callout">Unabh&auml;ngig von Sprache und Framework.</div>
+<p>Zw&ouml;lf Regeln f&uuml;r jede Cloud-App, egal in welcher Sprache. Microservices brauchen sie alle, und dazu Schnitt, Deploybarkeit, Resilienz.</p>
+<div class="callout">Notwendig, aber nicht hinreichend.</div>
 </div>
 
 </div>
@@ -31,5 +31,5 @@
 </div>
 
 Note:
-- Drei Schmerzen aus dem Heroku-Alltag 2011, die jede:r kennt. Die zw&ouml;lf Faktoren sind die Antwort darauf, nicht mehr.
-- Betonen: keine Technologie-Entscheidung, sondern Arbeitsregeln. Gelten f&uuml;r Go genauso wie f&uuml;r Kotlin oder PHP.
+- Eigentlich f&uuml;r Cloud-Apps entwickelt.
+- Drei Schmerzen aus dem Heroku-Alltag 2011, die jede:r kennt.
