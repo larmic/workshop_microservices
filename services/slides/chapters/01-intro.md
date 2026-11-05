@@ -27,3 +27,9 @@
 </div>
 
 </div>
+
+Note:
+- <strong>Begr&uuml;&szlig;ung:</strong> Willkommen bei &bdquo;Microservices richtig gemacht&ldquo;. Kurz zu mir: Rolle, und warum mich das Thema umtreibt.
+- <strong>Untertitel:</strong> Die Provokation ist Absicht. Nur stehen lassen, wir kl&auml;ren sie sp&auml;ter in der Diskussion.
+- <strong>Vorstellungsrunde:</strong> Name, Rolle, eine Erwartung. Erwartungen aufs Flipchart, am Ende gleichen wir ab.
+- <strong>&Uuml;berleitung:</strong> Bevor es losgeht, kurz zum Feedback.

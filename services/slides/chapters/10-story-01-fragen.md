@@ -30,5 +30,7 @@
 </div>
 
 Note:
-- <strong>Health-Check:</strong> Unser <code>/health</code> ist eher <strong>Liveness</strong>, der Prozess lebt. <strong>Readiness</strong> ist mehr: pr&uuml;ft, ob die Abh&auml;ngigkeiten erreichbar sind (Consul, Backends, DB, Broker). Healthy ist nicht dasselbe wie Useful.
+- <strong>Health-Check:</strong> Unser <code>/health</code> ist eher <strong>Liveness</strong>, der Prozess lebt. <strong>Readiness</strong> fragt: Kann diese Instanz jetzt bedienen? Eigene Ressourcen wie Warm-up, eigene DB und Pool, nicht die Downstream-Services. Wer Flight in die Readiness nimmt, schaltet bei einem Flight-Ausfall den ganzen Booking-Service ab. Healthy ist nicht dasselbe wie Useful.
+- <strong>Backend weg:</strong> Zwei F&auml;lle. <strong>Umgezogen</strong> (neue IP, Skalierung): Die feste URL aus der Env-Variable zeigt ins Leere, das l&ouml;st Story 3. <strong>Wirklich kaputt:</strong> Jede Anfrage h&auml;ngt im Timeout, das l&ouml;st Story 4. Heute f&auml;ngt es niemand auf, mit Absicht.
 - Weitere Aspekte (Logging, Config, OpenAPI, Error-Handling) bei Bedarf: <code>docs/questions/story1.md</code>.
+- <strong>&Uuml;berleitung:</strong> Unser Service antwortet per HTTP. Aber benutzen wir HTTP auch richtig?

@@ -17,3 +17,9 @@
 
 </div>
 
+
+Note:
+- <strong>Frage in die Runde:</strong> &bdquo;Wer hatte schon mal einen Threadpool voller h&auml;ngender Calls?&ldquo; Kurz Erfahrungen sammeln.
+- <strong>Monolith-Check:</strong> Ein Methodenaufruf im selben Prozess h&auml;ngt nicht am Netz. &Uuml;ber das Netzwerk kann jeder Call bis zum Timeout h&auml;ngen und bindet so lange einen Thread. Das entsteht erst durch die Verteilung.
+- <strong>Quelle:</strong> Das Pattern stammt aus Michael Nygards <em>Release It!</em> (2007). Die f&uuml;nf Fehler sind unsere Referenz-Einstellung, keine Norm.
+- <strong>Weiter:</strong> Wie der Schalter genau arbeitet.

@@ -27,3 +27,9 @@
 
 </div>
 
+Note:
+- <strong>Kernbotschaft:</strong> Das tippen wir nicht ab, wir spielen es gleich. Strichliste = <code>failures</code>, Schild = <code>state</code>, Karte = <code>fallback()</code>.
+- <strong>Drei Zahlen:</strong> 3 s, 5 in Folge, 30 s. Jede h&auml;ngt am Backend und an eurem Budget.
+- <strong>Reset bei Erfolg:</strong> Jeder Erfolg setzt auf null. Darum &bdquo;in Folge&ldquo;, siehe Runde 3a.
+- <strong>Probe-Slot:</strong> In HALF_OPEN darf genau ein Call durch, alle anderen bekommen sofort den Fallback. Scheitert die Probe, sofort wieder OPEN f&uuml;r 30 s. Steht nicht ausgeschrieben auf der Folie, die Referenz l&ouml;st es mit CompareAndSwap.
+- Referenz: <code>services/booking/story4/circuitbreaker/circuitbreaker.go</code>. Weiter: Rollen verteilen.

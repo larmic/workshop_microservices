@@ -17,3 +17,8 @@
 
 </div>
 
+
+Note:
+- <strong>Tag 2:</strong> Gestern war Flight tot, und der Schalter hat geholfen. Heute ist Hotel nur langsam, und der Schalter merkt nichts.
+- <strong>Frage:</strong> &bdquo;Was ist schlimmer: ein Backend, das sofort 500 liefert, oder eins, das 20 s braucht?&ldquo; Kurz abstimmen lassen. Das schnelle 500 gibt den Slot sofort zur&uuml;ck, das langsame h&auml;lt ihn fest, bis der Pool leer ist.
+- <strong>Weiter:</strong> Wie ein Schiff das l&ouml;st: Schotten.

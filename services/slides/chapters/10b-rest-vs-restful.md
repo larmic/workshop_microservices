@@ -35,7 +35,9 @@ Antwort: Nein. Die Regel meint die Ressource, nicht den Server. GET darf Logs, Z
 <code>GET /bookings/1/cancel &rarr; niemals</code>
 </div>
 </div>
-<div class="rules-group fragment" data-fragment-index="2">
+<div class="rules-group fragment" data-fragment-index="2" data-notes="- <strong>Ressourcen statt Verben:</strong> Die Aktion steckt schon in der Methode. Wer Verben in den Pfad schreibt, baut RPC &uuml;ber HTTP.
+- <strong>Pfad vs. Query:</strong> Der Pfad sagt, wem etwas geh&ouml;rt (Kunde 7), die Query, welche davon ich will (best&auml;tigte).
+- <strong>Warum das z&auml;hlt:</strong> Einheitliche Pfade machen Routing, Logs und Berechtigungen pro Ressource einfach.">
 <h4>Der Pfad sagt, woran</h4>
 <div class="rule">
 <h5><span class="num">4</span> Ressourcen statt Verben</h5>
@@ -53,8 +55,9 @@ Antwort: Nein. Die Regel meint die Ressource, nicht den Server. GET darf Logs, Z
 - Retry-Logik: wiederholt bei 503
 - Circuit Breaker (Story 4): zählt Fehler
 - Monitoring: alarmiert auf Fehlerraten
-- Caches: speichern nur 200
-Ein 200 mit Fehler im Body sieht keiner davon.">
+- Caches: speichern auch 404 oder 301, und leider auch den 200 mit Fehler drin
+Ein 200 mit Fehler im Body sieht keiner davon.
+Überleitung: Jetzt wendet ihr die Regeln selbst an, Storno und Umbuchung am Flipchart.">
 <h4>Die Antwort sagt, wie es ausging</h4>
 <div class="rule">
 <h5><span class="num">6</span> Status-Codes statt Fehler-Body</h5>
@@ -68,3 +71,8 @@ Ein 200 mit Fehler im Body sieht keiner davon.">
 
 </div>
 
+Note:
+- <strong>Kernbotschaft:</strong> Sechs Regeln, jede verhindert ein Betriebsproblem. Das ist kein Stilthema.
+- <strong>Das Beispiel oben:</strong> Ein Aufruf beantwortet drei Fragen: Die Methode sagt, was passiert, der Pfad, woran, der Status-Code, wie es ausging. Genau so bauen sich die drei Gruppen auf.
+- <strong>Hypermedia:</strong> REST nach Fielding verlangt auch Links in den Antworten. Unser Ziel ist Richardson Level 2: Ressourcen plus HTTP-Methoden.
+- <strong>Mechanik:</strong> Gruppe f&uuml;r Gruppe aufdecken, insgesamt 10 bis 12 Minuten.

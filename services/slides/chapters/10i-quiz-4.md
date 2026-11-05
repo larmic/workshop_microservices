@@ -18,3 +18,9 @@
 
 </div>
 
+Note:
+- <strong>Mechanik:</strong> Daumen wie gehabt, eine Stimme aus der Minderheit begr&uuml;nden lassen, dann aufl&ouml;sen.
+- <strong>Erwartung:</strong> Viele sagen &bdquo;nur DELETE, im POST steckt eine Aktion&ldquo;. Aber <code>cancellation</code> ist ein Substantiv, also eine Ressource.
+- <strong>Entscheidungsfrage:</strong> Muss der Storno-Grund mit? Dann braucht es eine Ressource, die ihn tr&auml;gt. Direkter Bezug zu eurem Flipchart.
+- <strong>Ausblick Story 6:</strong> Die Kompensation ruft <code>DELETE /bookings/{id}</code> auf. Das ist kein Kunden-Storno: Die Reservierung wird zur&uuml;ckgenommen, bevor die Kundin sie best&auml;tigt bekommt. Dann z&auml;hlt die Idempotenz. F&uuml;r den Storno einer fertigen Reise bleibt <code>POST &hellip;/cancellation</code> richtig.
+- <strong>Weiter:</strong> Letztes Quiz, ein Status-Code.

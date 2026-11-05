@@ -18,3 +18,8 @@
 
 </div>
 
+Note:
+- <strong>Mechanik (gilt f&uuml;r alle f&uuml;nf):</strong> Daumen hoch = RESTful, runter = nicht, seitlich = kommt drauf an. Eine Stimme aus der Minderheit begr&uuml;nden lassen, dann aufl&ouml;sen.
+- <strong>Kernbotschaft:</strong> Substantiv, GET ohne Seiteneffekt, Auswahl &uuml;ber Query-Parameter. Kein eigener Endpoint pro Route oder Datum.
+- <strong>Bezug:</strong> Den Endpoint kennt ihr aus Story 1 (dort noch ohne Query-Parameter), Regel 5 auf der Regel-Folie.
+- <strong>&Uuml;berleitung:</strong> Das war zum Aufw&auml;rmen. Beim n&auml;chsten sieht die URL genauso sauber aus, achtet auf die Antwort.

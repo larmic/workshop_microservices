@@ -18,3 +18,8 @@
 
 </div>
 
+Note:
+- <strong>Mechanik:</strong> Daumen wie gehabt, eine Stimme aus der Minderheit begr&uuml;nden lassen, dann aufl&ouml;sen.
+- <strong>Kernbotschaft:</strong> Kunde 7 existiert, hat nur gerade keine best&auml;tigte Buchung. Ein Filter ohne Treffer liefert <code>200 OK</code> mit <code>[]</code>.
+- <strong>Der Punkt:</strong> Gibt es Kunde 7 nicht, ist <code>404</code> richtig. Genau diese Unterscheidung zwischen leer und weg ist die Pointe.
+- <strong>&Uuml;berleitung:</strong> Jetzt zu den Verben: Was darf ein GET?
