@@ -18,7 +18,7 @@
 </div>
 
 Note:
-- Hook: &bdquo;In Story 6 und 7 hattet ihr eine Buchung, die durch vier Service-Logs gewandert ist. Wer von euch konnte einen einzelnen Vorgang sauber rekonstruieren? Eben: Timestamps und Augenma&szlig;.&ldquo;
+- Hook: &bdquo;In Story 6 ist eure Buchung durch vier Service-Logs gewandert. Wer von euch konnte einen einzelnen Vorgang sauber rekonstruieren? Eben: Timestamps und Augenma&szlig;.&ldquo;
 - Die Grafik: vier Logs, Booking, Flight, Hotel, Car. Die Lime-Linie ist der Faden: in jedem Log genau die Zeile, die zu dieser einen Buchung geh&ouml;rt.
 - W3C Trace Context: Bis etwa 2020 hatte jedes Tracing-&Ouml;kosystem sein eigenes Header-Format (Zipkin <code>X-B3-*</code>, Jaeger <code>uber-trace-id</code>, Datadog <code>x-datadog-*</code>). Der Standard vereint das, heute Default in OpenTelemetry und allen modernen SDKs.
 - Demo-Vorschau: Dieselbe Buchung mit Trace-ID, <code>docker compose logs | grep &lt;trace-id&gt;</code> zeigt den ganzen Vorgang in einem Block, &uuml;ber alle vier Services hinweg.

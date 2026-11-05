@@ -85,7 +85,7 @@ Client ──► Booking
 1. **Trace-ID T** — einmalig, falls kein `traceparent` reinkommt (Browser/curl-Fall).
 2. **Span-ID S0** — initiale Span im Booking-Context. **Mit dieser ID loggt Booking während der ganzen Anfrage.**
 3. **Span-IDs S1, S2, S3** — pro Outbound-Call zu Flight, Hotel, Car. Diese leben **nur im Outbound-Header**, nicht im Booking-Log.
-4. **`traceparent` als Event-Property** — beim async Publish in Story 7/8 (siehe Abschnitt 4).
+4. **`traceparent` als Event-Property** — nur beim async Publish (Referenz Story 8, für Teilnehmende ein Bonus, siehe Abschnitt 4).
 
 **Flight / Hotel / Car** (Downstream): erstellen **nichts** für eingehende Requests.
 - `Propagate`-Middleware übernimmt den eintreffenden `traceparent` in den Request-Context.
@@ -158,7 +158,7 @@ Reference-Implementierung: `services/shared/tracing/tracing.go` (~100 Zeilen).
 
 ## 4. Tracing über Async-Grenzen
 
-Bei der Choreography-Saga (Story 7) reicht der HTTP-Header nicht mehr — der Trace-Kontext muss **als Property auf dem Event** mitwandern:
+Bei Events reicht der HTTP-Header nicht mehr (im Workshop: Recap-Frage 04 mit dem Zettel aus dem Story-7-Rollenspiel und der Event-Bonus in Story 8) — der Trace-Kontext muss **als Property auf dem Event** mitwandern:
 
 ```json
 {
@@ -275,5 +275,5 @@ Für den Workshop-Bonus: **Jaeger All-in-One** ist die kürzeste Strecke zur ers
 | Tests | `services/shared/tracing/tracing_test.go` |
 | Server-Middleware verdrahten | `services/booking/story8/main.go`, `services/{flight,hotel,car}/main.go` |
 | Outbound-Inject + strukturierte Logs | `services/booking/story8/handler/booking.go` |
-| Trace-Kontext in Compensation-Events | `services/booking/story8/saga/*.go`, `services/{flight,hotel,car}/handler/compensation.go` |
+| Trace-Kontext in Compensation-Events | `services/booking/story8/handler/booking.go` (`compensateSingle`), `services/{flight,hotel,car}/handler/*.go` (`CompensationEventHandler`, `contextFromEvent`) |
 | Backend-Handler nutzen Trace-Logger | `services/{flight,hotel,car}/handler/*.go` |

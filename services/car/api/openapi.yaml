@@ -106,6 +106,10 @@ paths:
                 $ref: '#/components/schemas/Booking'
         '400':
           description: Ungültige Anfrage
+        '409':
+          description: |
+            Mietwagen nicht verfügbar. Reserviert für die carId `C9`, damit
+            Story 8 verlässlich eine Kompensation auslösen kann.
 
   /bookings/{id}:
     delete:

@@ -31,6 +31,11 @@ type Booking struct {
 	Status       string `json:"status"`
 }
 
+// unavailableCarID ist für Story 8 reserviert: Eine Buchung mit dieser
+// carId scheitert fachlich mit 409 und löst so verlässlich die
+// Kompensation der Saga aus. Das Dashboard schickt sonst überall C1.
+const unavailableCarID = "C9"
+
 var cars = []Car{
 	{ID: "C1", Model: "Ford Mustang (New York)", Price: 95, Currency: "USD", Unit: "day"},
 	{ID: "C2", Model: "Mini Cooper (London)", Price: 65, Currency: "GBP", Unit: "day"},
@@ -49,6 +54,16 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 	var req BookingRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.CarID == unavailableCarID {
+		tracing.Logger(r.Context()).Warn("car not available",
+			"host", hostname(),
+			"carId", req.CarID,
+			"customer", req.CustomerName,
+		)
+		http.Error(w, "car not available", http.StatusConflict)
 		return
 	}
 

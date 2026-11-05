@@ -9,6 +9,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 const defaultLatencyMs = 2000
@@ -126,6 +128,9 @@ func (c *Chaos) Middleware(next http.Handler) http.Handler {
 		case Slow:
 			time.Sleep(time.Duration(s.LatencyMs) * time.Millisecond)
 		case Fail:
+			// Loggen, bevor wir abbrechen: Sonst fehlt genau der Fehlerfall
+			// im Trace (Story 8).
+			tracing.Logger(r.Context()).Warn("request failed by chaos", "method", r.Method, "path", r.URL.Path)
 			http.Error(w, "service intentionally failing (chaos)", http.StatusInternalServerError)
 			return
 		}

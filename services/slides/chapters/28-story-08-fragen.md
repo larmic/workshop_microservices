@@ -34,8 +34,8 @@
 <div class="numlist-row">
 <div class="numlist-num">04</div>
 <div>
-<p class="numlist-label">Die Async-Grenze</p>
-<h3>Beim Compensation-Event ist der HTTP-Header <span class="hl">weg</span>. Wie kommt der Trace mit?</h3>
+<p class="numlist-label">Die Zettel-Grenze</p>
+<h3>Im Story-7-Rollenspiel lag ein Zettel auf dem Tisch. Der hat keinen HTTP-<span class="hl">Header</span>. Wie kommt der Trace mit?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">traceparent als Property</code>
 </div>
@@ -62,4 +62,4 @@ Note:
 - <strong>OpenTelemetry, meine Antwort:</strong> Parsing und Propagation sind in 100 Zeilen erledigt, lehrreich und sprachneutral. Span-Lifecycle, Auto-Instrumentation f&uuml;r HTTP-Clients, DB-Treiber und Broker, Sampling, OTLP-Export an beliebige Backends: Das ist die Arbeit, die niemand neu bauen will. Im Workshop selbst bauen, in Produktion OpenTelemetry. <strong>Spicy:</strong> Wer in Produktion Tracing selbst schreibt, bezahlt mit Lebenszeit f&uuml;r Multi-Propagator-Support, Tail-based Sampling und Exemplars, die das Team nie zur&uuml;ckbekommt.
 - <strong>Reserve, Sampling:</strong> Head-based (etwa 1 Prozent) entscheidet am Eingang, einfach, aber Fehler-Traces gehen verloren. Tail-based entscheidet am Ende, Fehler und langsame Traces bleiben immer, Backend muss puffern. Pragmatischer Default: head-based plus always-on bei Fehlern. Ohne Plan: 100 Prozent, und das Tracing kostet mehr als der Stack. 0,01 Prozent, und beim Kundenproblem fehlt genau sein Trace.
 - <strong>Reserve, Korrelation:</strong> Logs, Traces und Metriken im selben Tool? P99-Spike in der RED-Metrik, Klick aufs Exemplar, konkreter Trace, Klick auf &bdquo;Logs&ldquo;, alle Zeilen derselben Trace-ID. Wer die Kette nicht hat, wechselt drei Tools pro Frage. Grafana (Loki, Tempo, Mimir), Datadog, Honeycomb k&ouml;nnen das.
-- Grundlage: <code>docs/instructions/distributed-tracing.md</code>, Abschnitte 9 und 10. Eine eigene <code>docs/questions/story8.md</code> gibt es bisher nicht.
+- Grundlage: <code>docs/instructions/distributed-tracing.md</code>, Abschnitte 9 und 10. Ausf&uuml;hrlich: <code>docs/questions/story8.md</code>.

@@ -7,6 +7,7 @@ Diese Vorbereitung ist **Pflicht** und wird **vor** dem Workshop-Termin erledigt
 - **Git**
 - **Docker** inkl. Docker Compose (harte Voraussetzung, ohne läuft die Workshop-Umgebung nicht)
 - **IDE / Editor** nach Wahl
+- **jq** (empfohlen für Story 8, zum Filtern der JSON-Logs; ohne jq geht es auch mit `grep`)
 - Eigene Sprache/Framework deiner Wahl, in der du den Booking-Service umsetzen möchtest (Java/Spring Boot, Quarkus, Go, Node.js, ...)
 - Du kannst in deiner Sprache ein neues Projekt aufsetzen, das einen HTTP-Endpoint bereitstellt und per Dockerfile ein Image baut. Genau das ist die Pflicht-Hausaufgabe in Aufgabe 1, im Workshop selbst üben wir es nicht.
 

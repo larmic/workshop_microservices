@@ -3,7 +3,10 @@
 ## Was diese Story zeigt
 
 Story 8 baut auf der Choreography-Saga aus Story 7 auf und ergänzt sie um
-**Distributed Tracing**. Alle vier Services (Booking, Flight, Hotel, Car)
+**Distributed Tracing**. Die Referenz zeigt damit mehr, als die
+Teilnehmenden brauchen: Ihre Story 8 setzt auf dem eigenen
+Story-6-Service auf (synchrone Saga, Kompensation per `DELETE`), Events
+sind dort ein Bonus. Alle vier Services (Booking, Flight, Hotel, Car)
 verteilen einen gemeinsamen Trace-Kontext nach W3C-Trace-Context-Standard
 und schreiben die Trace-ID in jede strukturierte Logzeile.
 

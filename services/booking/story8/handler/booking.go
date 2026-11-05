@@ -98,7 +98,8 @@ func BookingOffersHandler(resolver *consul.Resolver, client *http.Client, breake
 
 // CreateBookingHandler orchestriert eine Saga über Flight → Hotel → Car.
 // Schlägt ein Forward-Step fehl, werden die bereits gebuchten Schritte in
-// umgekehrter Reihenfolge kompensiert (DELETE /bookings/{id}). Der
+// umgekehrter Reihenfolge kompensiert (Compensation-Event per
+// POST /events/compensation, traceparent als Property). Der
 // Saga-Status wird im Store gehalten und ist über
 // GET /booking/bookings/{id} abrufbar.
 func CreateBookingHandler(resolver *consul.Resolver, client *http.Client, breakers Breakers, store *saga.Store) http.HandlerFunc {

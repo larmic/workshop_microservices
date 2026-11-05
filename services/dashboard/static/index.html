@@ -311,6 +311,25 @@
             margin: 0 0 0.9rem 0;
             line-height: 1.5;
         }
+        .trace-detective {
+            margin-top: 1rem;
+            padding: 0.7rem 1rem;
+            background: #f5f7fb;
+            border: 1px dashed #d0d7e2;
+            border-radius: 8px;
+            font-size: 0.82rem;
+        }
+        .trace-detective summary { cursor: pointer; font-weight: 600; color: #333; }
+        .trace-detective p { margin: 0.6rem 0; line-height: 1.5; }
+        .trace-detective-solve { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+        .trace-detective-solve input {
+            flex: 1;
+            font-family: ui-monospace, "SF Mono", Monaco, monospace;
+            font-size: 0.78rem;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid #d0d7e2;
+            border-radius: 6px;
+        }
         .trace-result {
             margin-top: 1rem;
             padding: 0.9rem 1rem;
@@ -1900,8 +1919,8 @@ catch error at step X:
                             ihre lokalen Buchungen &mdash; aber niemand kann ein <code>POST /booking/bookings</code> über
                             alle Services hinweg als <em>eine zusammenhängende Operation</em> verfolgen. Korrelation
                             passiert heute nur über Timestamps und Augenmaß. Mit jeder zusätzlichen Komponente wird das
-                            schmerzhafter, spätestens bei der Saga aus Story 6/7 (bis zu sechs HTTP-Calls über drei
-                            Backends).
+                            schmerzhafter, spätestens bei eurer Saga aus Story 6 (bis zu fünf HTTP-Calls über drei
+                            Backends: drei Forward, zwei DELETE).
                         </p>
                         <p>
                             Eine <strong>Trace-ID</strong> pro eingehender Anfrage, die durch alle nachgelagerten Aufrufe
@@ -1916,20 +1935,29 @@ catch error at step X:
                             nach Zeitstempeln zusammenzupuzzeln</em>.
                         </p>
                         <h4>Akzeptanzkriterien</h4>
+                        <p>Ausgangspunkt ist euer Booking-Service aus Story 6: Saga Flight &rarr; Hotel &rarr; Car,
+                            Kompensation per <code>DELETE /bookings/{id}</code>. Events, Circuit Breaker oder Bulkhead
+                            braucht ihr nicht.</p>
                         <ul>
                             <li>Bei jedem eingehenden Request am Booking-Service wird ein Trace-Kontext erzeugt oder aus dem
                                 Header übernommen (W3C Trace Context: <code>traceparent</code>).</li>
-                            <li>Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call weitergereicht (Flight, Hotel, Car
-                                und deren Kompensation).</li>
-                            <li>Auch über die <strong>asynchronen Compensation-Events</strong> aus Story 7 wird der
-                                Trace-Kontext mitgeführt (als Event-Property).</li>
-                            <li>Jede Logzeile aller Services enthält die Trace-ID, sodass
-                                <code>docker compose logs | grep &lt;trace-id&gt;</code> den vollständigen Ablauf zeigt
-                                &mdash; Forward-Buchung und etwaige Kompensation.</li>
+                            <li>Die Response trägt den effektiven <code>traceparent</code> zurück. Das Panel unten liest die
+                                Trace-ID daraus.</li>
+                            <li>Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call weitergereicht: Forward
+                                (<code>POST /bookings</code>) und Kompensation (<code>DELETE /bookings/{id}</code>).</li>
+                            <li>Jede Logzeile eures Booking-Service enthält die Trace-ID. Flight, Hotel und Car übernehmen
+                                einen eintreffenden <code>traceparent</code> schon und loggen ihn.</li>
                             <li>Logs sind strukturiert (JSON), damit <code>trace_id</code> ein eigenes Feld ist.</li>
+                            <li>Der Filter aus dem Panel zeigt den vollständigen Ablauf einer Buchung, Forward
+                                <strong>und</strong> Kompensation. Eine Kompensation löst ihr mit „Buchung mit kaputtem
+                                Mietwagen“ aus.</li>
                             <li>Die OpenAPI-Dokumentation des Booking-Services beschreibt den
                                 <code>traceparent</code>-Header.</li>
                         </ul>
+                        <p><strong>Story 6 nicht fertig?</strong> Die Kriterien gelten für die Calls, die ihr habt,
+                            mindestens einer. Die Kompensation zeigt der Trainer an der Referenz.</p>
+                        <p><strong>Bonus:</strong> Detektiv-Runde unten im Panel, oder die Kompensation als Event wie in der
+                            Story-7-Referenz (Spickzettel).</p>
                     </div>
                 </details>
                 <details class="story-cheatsheet">
@@ -1950,11 +1978,16 @@ on outgoingRequest(ctx, req):
   hop = tc.copy(spanId = randomSpanId())
   req.setHeader("traceparent", hop.toHeader())
 
+// Kompensation: derselbe Inject, auch beim DELETE
+compensate(ctx, step):
+  outgoingRequest(ctx, DELETE step.url + "/bookings/" + step.bookingId)
+
 // Logging: jede Zeile bekommt trace_id als Feld
 log.info("forward step done",
   trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")
 
-// Async-Grenze: Trace-ID als Event-Property mitschicken
+// Bonus (nur bei Kompensation als Event, wie in der Story-7-Referenz):
+// Trace-ID als Event-Property mitschicken
 event = {
   eventId, sagaId, bookingId,
   traceparent: ctx.tc.toHeader()    // damit der Konsument den Trace fortführt
@@ -1980,7 +2013,7 @@ on receiveCompensationEvent(event):
             <p class="story8-hint">Nach jedem Call zeigt die Anzeige unten die <code>trace_id</code> aus dem <code>traceparent</code>-Response-Header und liefert einen kopierbaren Filter-Befehl. Damit l&auml;sst sich der komplette Vorgang &uuml;ber alle vier Services hinweg in den Compose-Logs rekonstruieren.</p>
             <div class="rest-actions">
                 <div class="rest-row">
-                    <button class="rest-btn" onclick="callTracing7(this, 'GET', '/booking/offers', 's8-offers')">
+                    <button class="rest-btn" onclick="callTracing8(this, 'GET', '/booking/offers', 's8-offers')">
                         <span class="method-chip get">GET</span>
                         <span class="rest-path">/booking/offers</span>
                         <span class="rest-arrow">&rarr;</span>
@@ -1993,7 +2026,7 @@ on receiveCompensationEvent(event):
                     </button>
                 </div>
                 <div class="rest-row">
-                    <button class="rest-btn" onclick="callTracing7(this, 'POST', '/booking/bookings', 's8-booking-auto', SAMPLE_BOOKING_BODY)">
+                    <button class="rest-btn" onclick="callTracing8(this, 'POST', '/booking/bookings', 's8-booking-auto', SAMPLE_BOOKING_BODY)">
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
@@ -2002,7 +2035,7 @@ on receiveCompensationEvent(event):
                     </button>
                 </div>
                 <div class="rest-row">
-                    <button class="rest-btn" onclick="callTracing7(this, 'POST', '/booking/bookings', 's8-booking-custom', SAMPLE_BOOKING_BODY, true)">
+                    <button class="rest-btn" onclick="callTracing8(this, 'POST', '/booking/bookings', 's8-booking-custom', SAMPLE_BOOKING_BODY, true)">
                         <span class="method-chip post">POST</span>
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
@@ -2010,7 +2043,33 @@ on receiveCompensationEvent(event):
                         <span class="rest-btn-sub">Saga starten mit <strong>eigenem traceparent</strong>-Header &mdash; Service &uuml;bernimmt die vorgegebene trace_id (z.B. vom API-Gateway)</span>
                     </button>
                 </div>
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="callTracing8(this, 'POST', '/booking/bookings', 's8-booking-broken', BROKEN_CAR_BOOKING_BODY)">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">/booking/bookings</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="service-chip">booking-ref-story8</span>
+                        <span class="rest-btn-sub">Buchung mit <strong>kaputtem Mietwagen</strong> (<code>carId: C9</code>) &mdash; Car antwortet 409, Flight und Hotel werden kompensiert</span>
+                    </button>
+                </div>
             </div>
+            <details class="trace-detective">
+                <summary>Bonus: Detektiv-Runde &bdquo;Die kaputte Buchung&ldquo;</summary>
+                <p>Rush Hour schickt f&uuml;nf Buchungen gleichzeitig, eine davon scheitert. Findet ihre Trace-ID in den Logs und tragt sie ein. Tipp: Car loggt <code>car not available</code>.</p>
+                <div class="rest-row">
+                    <button class="rest-btn" onclick="startRushHour(this)">
+                        <span class="method-chip post">POST</span>
+                        <span class="rest-path">5&times; /booking/bookings</span>
+                        <span class="rest-arrow">&rarr;</span>
+                        <span class="rest-btn-sub">Rush Hour starten</span>
+                    </button>
+                </div>
+                <div class="trace-detective-solve">
+                    <input id="s8-detective-input" type="text" placeholder="trace_id (32 Hex-Zeichen)" autocomplete="off">
+                    <button class="rest-btn" onclick="checkDetective()"><span class="rest-btn-sub">Pr&uuml;fen</span></button>
+                </div>
+                <p id="s8-detective-status"></p>
+            </details>
             <div class="trace-result" id="s8-result" hidden>
                 <div class="trace-result-line"><strong>Status:</strong> <span id="s8-result-status"></span></div>
                 <div class="trace-result-line"><strong>trace_id:</strong> <code id="s8-result-traceid">&mdash;</code></div>
@@ -2048,6 +2107,9 @@ on receiveCompensationEvent(event):
             carId: "C1",
             customerName: "Max Mustermann"
         };
+
+        // carId C9 ist im Car-Service reserviert: 409, die Saga kompensiert.
+        const BROKEN_CAR_BOOKING_BODY = { ...SAMPLE_BOOKING_BODY, carId: "C9" };
 
         // Pro Story merken, ob die Referenz oder der Custom-Service angesprochen werden soll.
         const BookingMode = { 1: "reference", 3: "reference", 4: "reference", 5: "reference", 6: "reference", 7: "reference", 8: "reference" };
@@ -2814,12 +2876,60 @@ on receiveCompensationEvent(event):
             statusEl.classList.toggle("err", !ok);
             traceEl.textContent = traceId || "— (kein Header empfangen)";
             cmdEl.textContent = traceId
-                ? `docker compose logs booking-ref-story8 flight hotel car | jq -c 'select(.trace_id=="${traceId}")'`
+                ? `docker compose logs --no-log-prefix ${tracingBookingContainer()} flight hotel car | jq -cR 'fromjson? | select(.trace_id=="${traceId}")'`
                 : "(Filter-Befehl steht erst nach erfolgreichem Call zur Verfügung)";
             respEl.textContent = body || "";
         }
 
-        async function callTracing7(btn, method, path, idPrefix, body, useCustomTrace) {
+        // Compose-Service, dessen Logs der Filter zeigt: Referenz oder eigener Service.
+        function tracingBookingContainer() {
+            return BookingMode[8] === "custom" ? "booking-custom" : "booking-ref-story8";
+        }
+
+        // Detektiv-Runde: Die Trace-ID der gescheiterten Buchung bleibt geheim,
+        // bis die Gruppe sie in den Logs gefunden hat.
+        const detective = { traceId: null, startedAt: null };
+
+        async function startRushHour(btn) {
+            btn.disabled = true;
+            const statusEl = document.getElementById("s8-detective-status");
+            const broken = Math.floor(Math.random() * 5);
+            detective.traceId = null;
+            try {
+                await Promise.all([0, 1, 2, 3, 4].map(async i => {
+                    const traceId = randomHex(16);
+                    const body = i === broken ? BROKEN_CAR_BOOKING_BODY : SAMPLE_BOOKING_BODY;
+                    await fetch(bookingUrl(8, "/api/booking-ref-story8") + "/booking/bookings", {
+                        method: "POST",
+                        headers: { "Accept": "application/json", "Content-Type": "application/json",
+                                   "traceparent": `00-${traceId}-${randomHex(8)}-01` },
+                        body: JSON.stringify(body),
+                    });
+                    if (i === broken) detective.traceId = traceId;
+                }));
+                detective.startedAt = performance.now();
+                statusEl.textContent = "Fünf Buchungen sind durch, eine ist gescheitert. Die Uhr läuft.";
+            } catch (e) {
+                statusEl.textContent = "Fehler — " + e.message;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function checkDetective() {
+            const statusEl = document.getElementById("s8-detective-status");
+            const guess = document.getElementById("s8-detective-input").value.trim().toLowerCase();
+            if (!detective.traceId) {
+                statusEl.textContent = "Erst Rush Hour starten.";
+            } else if (guess === detective.traceId) {
+                const s = Math.round((performance.now() - detective.startedAt) / 1000);
+                statusEl.textContent = `Gefunden, nach ${s} Sekunden. Jetzt mit dieser ID den ganzen Ablauf filtern.`;
+            } else {
+                statusEl.textContent = "Das ist nicht die gescheiterte Buchung.";
+            }
+        }
+
+        async function callTracing8(btn, method, path, idPrefix, body, useCustomTrace) {
             btn.disabled = true;
             const headers = { "Accept": "application/json" };
             if (body) headers["Content-Type"] = "application/json";
