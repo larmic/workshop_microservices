@@ -254,6 +254,9 @@ Resilience4j: `maxWaitDuration`). In unserer Implementierung haben wir
 Default für die Demo: **kein Queue**, sofort sichtbar im Counter
 `rejected`.
 
+**Spicy:** Versteckte Queues sind die Art, wie Systeme langsam und
+unvorhersehbar werden, ohne dass es im Monitoring auffällt.
+
 ---
 
 ## Frage 7 — Wir haben `maxConcurrent=10` hartkodiert. Wo kommt diese Zahl her?
@@ -318,7 +321,9 @@ Komplementäre Patterns auf der Backend-Seite:
    böswilligen).
 2. **API-Gateway / Service Mesh** — zentraler Punkt, an dem über alle
    Aufrufer hinweg ein Limit greift.
-3. **Backpressure / 429 + Retry-After** — Hotel kommuniziert
+3. **Load Shedding** — Hotel wirft bei Überlast selbst Anfragen ab,
+   bevor die eigenen Ressourcen ausgehen, statt alle langsam zu bedienen.
+4. **Backpressure / 429 + Retry-After** — Hotel kommuniziert
    Überlast aktiv, Aufrufer reagieren darauf.
 
 **Spicy Take-away:** Bulkhead allein ist eine **halbierte Lösung**.
@@ -370,6 +375,13 @@ Threading-Modell:
 Rate Limit drosselt `λ`. Wenn `W` hochschießt (Backend wird langsam),
 wächst `L` linear bei *gleicher* Eingangsrate. Rate Limit sieht das
 nicht. Bulkhead limitiert `L` direkt.
+
+Zahlenbeispiel: Das Rate Limit lässt 100 Requests pro Sekunde rein
+(darüber gibt es `429`, typisch am Gateway pro Client). Das Backend
+braucht plötzlich 5 s pro Call. Nach 5 s hängen 100 × 5 = 500 Aufrufe
+gleichzeitig, ohne dass das Rate Limit je angeschlagen hat. Es sieht die
+Eingangsrate, nicht die Verweildauer. Wer Rate Limit hat und sich gegen
+Slow-Downs gewappnet glaubt, verwechselt Durchsatz mit Nebenläufigkeit.
 
 ### Grund 2: Rate Limit kennt keine Downstreams
 

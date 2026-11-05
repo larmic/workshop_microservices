@@ -141,7 +141,7 @@ ehrlicher?
 
 **Antwort:** **Nein** — und der Grund kommt direkt aus der Saga-Mechanik:
 
-1. **Idempotenz ist ein Feature, nicht ein Schönheitsmakel.**
+1. **Wiederholbarkeit ist ein Feature, nicht ein Schönheitsmakel.**
    Saga-Retries dürfen mehrfach denselben Storno absetzen. Jeder Aufruf
    nach dem ersten würde bei `404`-Antwort die Retry-Logik fälschlich
    als „Fehler" interpretieren — obwohl der Effekt längst eingetreten
@@ -168,7 +168,15 @@ ehrlicher?
        retry()    ← klare, einfache Regel
 ```
 
-**Take-away:** Idempotenz schlägt Ehrlichkeit. Ein
+**Wichtig zur Einordnung:** Idempotent im Sinne von HTTP sind *beide*
+Varianten — der Effekt (Buchung ist weg) ist nach dem zweiten `DELETE`
+derselbe, egal ob `204` oder `404` zurückkommt. `204` ist also
+Pragmatik, nicht Idempotenz: Es erspart dem wiederholenden
+Orchestrator nur die Sonderlogik „`404` = eigentlich ok". Am Flipchart
+in Story 2 war `404` deshalb noch vertretbar; erst ein Aufrufer, der
+wiederholt, macht `204` zur besseren Wahl.
+
+**Take-away:** Pragmatik schlägt Ehrlichkeit. Ein
 Kompensations-Endpoint, der „korrekte" 4xx liefert, zwingt jeden
 Aufrufer dazu, die 4xx wieder als „eigentlich ok" zu interpretieren —
 das ist die schlechtere Stelle für die Sonderlogik.

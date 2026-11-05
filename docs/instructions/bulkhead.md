@@ -28,6 +28,8 @@ Bulkhead ist ein **client-seitiges, defensives Pattern**. Geschützt wird:
 > - **Resilienz-Patterns im Aufrufer** (Bulkhead, Circuit Breaker, Timeout, Retry) → defensives Verhalten gegenüber unzuverlässigen Abhängigkeiten.
 > - **Schutz-Patterns im Aufgerufenen** (Rate Limiting, Backpressure, Load Shedding) → Selbstschutz vor Überlast.
 
+**Die gespiegelte Form:** Pools pro Consumer **im Backend** (Nygard, Azure Architecture Center) sind ebenfalls ein Bulkhead — sie schützen dort das Backend vor einem lauten Client. „Outbound, nicht Inbound" auf der Folie gilt für unseren Pool pro Downstream. Die serverseitige Variante gibt es, wir bauen sie im Workshop nur nicht.
+
 ---
 
 ## 3. Async ≠ Bulkhead
@@ -93,6 +95,9 @@ L = λ × W
 | **Thread-Pool** | Eigener Thread-Pool pro Downstream (Hystrix, Resilience4j `ThreadPoolBulkhead`) | Echte Isolation inkl. Timeout, mehr Overhead |
 | **Semaphore** | Zähler begrenzt gleichzeitige Aufrufe (Resilience4j `Bulkhead`, Go `chan struct{}`) | Leichtgewichtig, kein eigenes Timeout-Verhalten |
 | **Prozess/Pod** | Kritische Funktionen in eigene Services/Pods auslagern | Maximale Isolation, hoher Betriebs-Aufwand |
+| **Sidecar/Mesh** | Envoy/Istio begrenzt pro Upstream-Cluster über `max_requests` bzw. `max_connections` | Sprachunabhängig, aber Konfiguration außerhalb des Codes |
+
+**Am Markt:** Resilience4j ist Standard im Java-Umfeld (Semaphore- und ThreadPool-Variante), Polly im .NET-Lager, MicroProfile per `@Bulkhead`-Annotation, go-resiliency für Go.
 
 ---
 
@@ -182,6 +187,8 @@ Request ─▶ Bulkhead ─▶ Timeout ─▶ Circuit Breaker ─▶ Retry ─�
 - **Timeout** begrenzt, wie lange ein einzelner Aufruf hängen darf.
 - **Circuit Breaker** kappt Aufrufe vollständig, wenn der Downstream wiederholt fehlschlägt.
 - **Retry** versucht es bei transienten Fehlern erneut (mit Backoff, idempotent!).
+
+**Bulkhead ≠ Circuit Breaker:** Der CB sagt „Backend ist krank, ich versuche es eine Weile nicht" — Reaktion auf die **Fehlerrate**. Der Bulkhead sagt „ich verbrenne maximal N Slots für dieses Backend" — Reaktion auf **Ressourcen-Druck**. Das Szenario, das nur der Bulkhead löst: Das Backend antwortet **langsam, aber fehlerfrei** — der CB sieht keine Fehler und bleibt geschlossen (Closed).
 
 ---
 

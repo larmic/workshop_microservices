@@ -4,7 +4,12 @@ Fragen zur Recap-Folie 28. Ziel: Tracing nicht als „ID in die Logs
 schreiben" abhaken, sondern verstehen, was der rote Faden leistet, was
 ihm fehlt und wo er reißt. Die Teilnehmenden haben ihren eigenen
 Story-6-Service instrumentiert (synchrone Saga, Kompensation per
-`DELETE`), keine Events.
+`DELETE`), keine Events. Grundlage: `docs/instructions/distributed-tracing.md`,
+Abschnitte 9 und 10.
+
+**Einstieg** (aus `docs/themen.md`): „Wo hätte euch Tracing in Stories 4
+bis 7 schon geholfen?“ Danach die fünf Fragen, erst Daumen-Abstimmung,
+dann der Klick auf die Merksätze.
 
 ---
 
@@ -90,6 +95,10 @@ für HTTP-Clients, DB-Treiber und Broker, Sampling und Export an
 beliebige Backends sind die Arbeit, die niemand neu bauen will. Im
 Workshop selbst bauen, in Produktion OpenTelemetry.
 
+**Spicy:** Wer in Produktion Tracing selbst schreibt, bezahlt mit
+Lebenszeit für Multi-Propagator-Support, Tail-based Sampling und
+Exemplars, die das Team nie zurückbekommt.
+
 ---
 
 ## Reserve
@@ -97,10 +106,14 @@ Workshop selbst bauen, in Produktion OpenTelemetry.
 - **Sampling:** Head-based (etwa 1 Prozent) entscheidet am Eingang,
   Fehler-Traces gehen dabei verloren. Tail-based entscheidet am Ende,
   das Backend muss puffern. Pragmatisch: head-based plus immer bei
-  Fehlern.
+  Fehlern. Ohne Plan droht beides: 100 Prozent, und das Tracing kostet
+  mehr als der Stack. 0,01 Prozent, und beim Kundenproblem fehlt genau
+  sein Trace.
 - **Korrelation:** Metrik-Spike, Exemplar, konkreter Trace, dazu die
   Logs derselben Trace-ID. Wer diese Kette nicht hat, wechselt pro
-  Frage drei Tools.
+  Frage drei Tools. Beispiel: P99-Spike in der RED-Metrik, Klick aufs
+  Exemplar, Klick auf „Logs“. Das können etwa Grafana (Loki, Tempo, Mimir),
+  Datadog und Honeycomb.
 - **Detektiv-Runde:** Wie habt ihr die kaputte Buchung gefunden? Fast
   immer über die Fehlerzeile von Car und dann die `trace_id`. Genau so
   sucht man in Produktion: vom Symptom zur ID, von der ID zum Ablauf.

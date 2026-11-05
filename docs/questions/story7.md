@@ -146,6 +146,39 @@ als das fertige Werkzeug zu nehmen.
 
 ---
 
+## Frage 4 — Brauchen wir überhaupt einen Dirigenten?
+
+**Frage:** Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf
+Hotel, niemand dirigiert. Wer merkt es, wenn Hotel nicht weiß, dass es
+reagieren soll?
+
+**Antwort:** Niemand. Für unsere Buchung ist **Orchestrierung** der
+bessere Weg. Drei Schritte in fester Reihenfolge mit Kompensation sind ein
+Prozess, und den will man an einer Stelle lesen, testen und im Log
+verfolgen. Volle Choreographie verteilt die Reihenfolge auf die Köpfe der
+Services: Jeder muss wissen, auf wen er hört. Fehlt ein Abonnement, bricht
+die Kette, und niemand bekommt einen Fehler — es passiert einfach nichts.
+Das ist der **verteilte Monolith**: lose gekoppelt zur Laufzeit, fest
+gekoppelt im Kopf.
+
+Was wir im Rollenspiel (Runde 2) gespielt haben, ist deshalb der
+sinnvolle Mittelweg: Booking bleibt Dirigent für den Hinweg, die
+Kompensation organisiert jedes Backend selbst.
+
+**Faustregel nach Chris Richardson** (*Microservices Patterns*, 2018,
+Kapitel 4):
+
+| Wann | Was |
+|---|---|
+| einfache Saga, wenige Beteiligte, keine Reihenfolge (Benachrichtigung, Read-Model) | Choreographie |
+| Ablauf mit mehreren Schritten oder Verzweigungen | Orchestrierung, sonst werden die Abhängigkeiten zyklisch und niemand sieht mehr den Prozess |
+
+**Take-away:** Choreographie klingt eleganter, weil kein Service den
+anderen kennt. In Wahrheit kennt jeder jeden, nur steht es nirgends.
+Brücke zu Story 8: Wer merkt es eigentlich, wenn ein Event verloren geht?
+
+---
+
 ## Sammelthemen für die Diskussion
 
 - Wie würdet ihr **Exactly-once** in unserer aktuellen Lösung herstellen?
@@ -160,6 +193,3 @@ als das fertige Werkzeug zu nehmen.
   repariert man das Read-Model? (Hint: Event-Replay; setzt aber
   **persistente** Events voraus, also einen Broker mit Log-Semantik
   wie Kafka.)
-- Wann ist Choreography schlechter als Orchestration? (Hint: Wenn das
-  Saga-Wissen verstreut ist und niemand mehr weiß, wer auf welches Event
-  wie reagiert — der „verteilte Monolith".)

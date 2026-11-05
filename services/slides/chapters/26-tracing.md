@@ -56,11 +56,10 @@
 </div>
 
 Note:
-- <strong>Trace:</strong> Analogie Sendungsverfolgung &uuml;ber mehrere Lieferdienste. Ohne gemeinsame Sendungsnummer wei&szlig; am Ende niemand, wo das Paket steckt. Die Trace-ID bleibt &uuml;ber alle Hops gleich, das ist der ganze Punkt.
-- <strong>Span:</strong> Jede Span hat eine eigene ID und eine Parent-Span-ID. Daraus entsteht ein Baum: oben die eingehende Anfrage am Booking-Service, darunter pro Outbound-Call eine Span. Jaeger, Tempo, Datadog zeigen das als Wasserfall mit Dauer pro Span. Im Workshop bauen wir bewusst nur die Trace-Korrelation, keinen Span-Baum.
-- <strong>Hop:</strong> Pro Hop w&uuml;rfelt unsere Library eine frische Span-ID, die alte wird verworfen. Ein echtes SDK merkt sie sich als Parent, daraus entsteht der Baum. Den bauen wir bewusst nicht, die Trace-ID reicht f&uuml;r den roten Faden.
-- <strong>traceparent:</strong> Vier Felder mit festen L&auml;ngen: version (derzeit immer <code>00</code>), trace-id, parent-id (die Span-ID des Aufrufers), flags. Stolperstein: Nur-Nullen sind ung&uuml;ltig, <code>math/rand</code> mit Default-Seed reicht nicht, immer <code>crypto/rand</code>.
-- <strong>Sampling-Flag:</strong> In Produktion sind Traces teuer (Storage, Netz, Lizenzen), niemand exportiert 100 Prozent. Der Entry-Point entscheidet, alle nachgelagerten Services folgen dem Bit. Strategien (Head-based, Tail-based, Adaptive) als Reserve im Recap.
-- Am Markt: OpenTelemetry ist der De-facto-Standard mit vendor-neutralem OTLP-Export. Jaeger klassisch lokal und CNCF, Storage skaliert nicht trivial. Grafana Tempo g&uuml;nstig auf Objekt-Storage, integriert mit Loki und Mimir. Zipkin der Urahn. Datadog, Honeycomb, Dynatrace als SaaS: komfortabel, Pricing-Thema.
-- Wichtig: Wir bauen die Propagation selbst, etwa 100 Zeilen, kein OpenTelemetry. Der Mechanismus ist sprach- und vendor-neutral, die OTel-SDKs sind es nicht. In Produktion nat&uuml;rlich umgekehrt.
+- <strong>Trace:</strong> Sendungsverfolgung &uuml;ber mehrere Lieferdienste. Die Trace-ID bleibt &uuml;berall gleich.
+- <strong>Span:</strong> Eigene ID plus Parent ergibt im SDK den Wasserfall. Wir bauen keinen Span-Baum.
+- <strong>Hop:</strong> Pro Hop eine frische Span-ID als parent-id in den Header. Der Empf&auml;nger sieht sie als Parent.
+- <strong>traceparent:</strong> parent-id ist die Span-ID dieses Aufrufs. Nur-Nullen ung&uuml;ltig, <code>crypto/rand</code>: IDs sollen unvorhersagbar sein.
+- <strong>Sampling-Flag:</strong> Der Entry-Point entscheidet, alle anderen folgen dem Bit.
+- Am Markt: OpenTelemetry ist Standard, dazu Jaeger, Tempo, SaaS. Wir bauen die Propagation selbst, etwa 100 Zeilen.
 - &Uuml;berleitung: &bdquo;Vier Stellen im Code, mehr ist es nicht.&ldquo;

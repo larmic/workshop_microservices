@@ -17,7 +17,7 @@
 | Begriff | Bedeutung |
 |---|---|
 | **Trace** | Ein kompletter Geschäftsvorgang über alle Services hinweg. Eine **Trace-ID** (16 Byte / 32 hex), die für alle Hops identisch bleibt. |
-| **Span** | Ein einzelner Arbeitsabschnitt im Trace — HTTP-Call, DB-Query, Funktionsausführung. Eigene **Span-ID** (8 Byte / 16 hex). |
+| **Span** | Ein einzelner Arbeitsabschnitt im Trace — HTTP-Call, DB-Query, Funktionsausführung. Eigene **Span-ID** (8 Byte / 16 hex). Mit der Parent-Span-ID entsteht ein Baum, den Jaeger, Tempo oder Datadog als Wasserfall mit Dauer pro Span zeigen. Im Workshop bauen wir bewusst nur die Trace-Korrelation, keinen Span-Baum. |
 | **Hop** | Service-zu-Service-Übergang. Pro Hop **neue Span-ID**, **gleiche Trace-ID**. |
 | **`traceparent`** | Der W3C-Header. Vier Felder mit festen Längen, sprach- und vendor-neutral. |
 | **Sampling-Flag** | Bit 0 in `flags`. „Soll dieser Trace exportiert werden?" — Cost-Control. Propagiert über alle Hops. |
@@ -35,10 +35,10 @@ traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
 |---|---|---|
 | `version` | 2 hex | Aktuell immer `00`. Höhere Versionen müssen abwärtskompatibel ignoriert werden. |
 | `trace-id` | 32 hex | 16 Byte zufällig. **Bleibt über alle Hops gleich.** Darf nicht nur Nullen sein. |
-| `parent-id` (Span-ID) | 16 hex | 8 Byte zufällig. **Pro Hop neu**. Aus Empfänger-Sicht: Span, die ihn aufruft. |
+| `parent-id` (Span-ID) | 16 hex | 8 Byte zufällig. **Pro Hop neu**, der Aufrufer würfelt sie und schreibt sie in den Header: die Span-ID dieses Aufrufs. Aus Empfänger-Sicht: sein Parent. |
 | `flags` | 2 hex | Bitmaske. Bit 0 = „sampled". |
 
-> ⚠️ Nur-Nullen-Trace oder -Span sind **ungültig**. `crypto/rand` benutzen, nicht `math/rand` mit Default-Seed.
+> ⚠️ Nur-Nullen-Trace oder -Span sind **ungültig**. `crypto/rand` benutzen, nicht `math/rand` mit Default-Seed: IDs sollen nicht vorhersagbar sein, und gleich geseedete Instanzen würfeln sonst dieselben IDs.
 
 Optional: `tracestate` für Vendor-spezifische Daten — im Workshop nicht relevant.
 
@@ -231,13 +231,15 @@ JSON-Output macht das spätere Filtern mit `jq` trivial.
 
 | Tool | Typ | Stärken |
 |---|---|---|
-| **Jaeger** | OSS | Klassiker, einfach lokal, CNCF-Projekt |
-| **Grafana Tempo** | OSS | Sehr günstig (Object-Storage), Grafana-Integration |
+| **Jaeger** | OSS | Klassiker, einfach lokal, CNCF-Projekt. Storage skaliert nicht trivial |
+| **Grafana Tempo** | OSS | Sehr günstig (Object-Storage), Grafana-Integration mit Loki und Mimir |
 | **Zipkin** | OSS | Älter, schlank |
 | **Datadog APM** | SaaS | Reife UI, Logs+Traces+Metrics korreliert |
 | **Honeycomb** | SaaS | High-cardinality Queries |
 | **Elastic APM** | OSS/SaaS | ELK-Integration |
 | **AWS X-Ray** | SaaS | Nahtlos in AWS |
+
+SaaS-Backends (Datadog, Honeycomb, Dynatrace) sind komfortabel, das Pricing wird schnell zum Thema.
 
 Für den Workshop-Bonus: **Jaeger All-in-One** ist die kürzeste Strecke zur ersten Trace-UI.
 
@@ -251,6 +253,8 @@ Für den Workshop-Bonus: **Jaeger All-in-One** ist die kürzeste Strecke zur ers
 | **Tail-based** | Nach Trace-Ende | + Fehler/Slow immer behalten / − Backend muss buffern |
 | **Adaptive** | Dynamisch | + folgt Last / − komplex zu betreiben |
 | **Always-on für Errors / Slow** | Per Heuristik | + beste Sichtbarkeit / − braucht Tail-based-Stack |
+
+Traces kosten Storage, Netz und Lizenzen, niemand exportiert 100 %. Bei Head-based entscheidet der Entry-Point über das Sampling-Bit, alle nachgelagerten Services folgen ihm.
 
 > 💬 *Diskussionsfrage:* Wer im Workshop nutzt Tracing produktiv? Wie hoch ist eure Sampling-Rate?
 

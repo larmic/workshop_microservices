@@ -56,11 +56,11 @@
 </div>
 
 Note:
-- <strong>Lokale Transaktionen:</strong> Klassische DB-Transaktionen enden an der Service-Grenze. Two-Phase-Commit w&auml;re theoretisch m&ouml;glich, ist in Microservice-Stacks aber praktisch tot: fragil, langsam, sperrt Ressourcen. Stattdessen eine Kette lokaler Transaktionen, das Gesamtergebnis ist eventually consistent.
-- <strong>Forward + Kompensation:</strong> Der zentrale Trick: F&uuml;r jeden Vorw&auml;rts-Schritt eine semantisch inverse Operation. Das ist nicht zwingend ein technisches Rollback, oft eine fachliche Gegenbuchung: Refund, Gutschein, Storno. Starke Annahme: Forward darf scheitern, Kompensation <em>muss</em> letztlich gelingen.
-- <strong>Orchestrator:</strong> Booking kennt Reihenfolge, was schon aufgerufen wurde, was kompensiert werden muss, aktuellen Status. Hotel, Flight, Car kennen nur ihre eigene lokale Transaktion. Vorteil: Ein Bug in der Saga-Logik steckt an einer Stelle. Die Alternative, Choreography, kommt in Story 7.
-- <strong>Saga-Status:</strong> <code>PENDING</code>, dann <code>COMPLETED</code>, oder bei Fehler <code>COMPENSATING</code> und <code>FAILED</code>. In Produktion muss der Status persistent sein, sonst stirbt die Saga mit dem Prozess. Im Workshop bewusst in-memory, Recap-Frage 5.
-- <strong>Eventual Consistency:</strong> Wer Saga nutzt, gibt Atomicity auf. F&uuml;r kurze Momente ist der Flug gebucht und das Hotel nicht. Wer das nicht durchdenkt (UI, E-Mail, Reporting), zeigt dem Kunden inkonsistente Daten. Saga ist ein bewusster Trade-off, kein Allheilmittel.
-- Am Markt: Temporal und Cadence sind heute der Standard f&uuml;r &bdquo;Saga as Code&ldquo;, die Engine &uuml;bernimmt State, Retry und Recovery. Camunda 8 in BPMN-orientierten Enterprise-Umgebungen, AWS Step Functions als Managed-Variante, Axon und Eventuate Tram als Saga-Libraries im Java-Stack. MassTransit und NServiceBus das Gegenst&uuml;ck in .NET.
-- Take-away: Saga ist <em>nicht</em> Eventing. Saga kann synchron &uuml;ber HTTP laufen (Story 6) oder asynchron &uuml;ber Events (Story 7). Das eine ist das Pattern, das andere die Transportwahl.
+- <strong>Lokal:</strong> 2PC ist praktisch tot: fragil, langsam, sperrt. Geteilte DB = geteiltes Schema = gemeinsames Deployment = verteilter Monolith. Im Workshop in-memory, bewusst reduziert.
+- <strong>Kompensation:</strong> Fachliche Gegenbuchung (Storno, Gutschein), kein technisches Rollback. Forward darf scheitern, Kompensation <em>muss</em> gelingen.
+- <strong>Orchestrator:</strong> Saga-Logik an einer Stelle. Choreography kommt in Story 7.
+- <strong>Status:</strong> Bei Fehler <code>COMPENSATING</code>, dann <code>FAILED</code>. Produktiv persistent (Recap 5).
+- <strong>Eventual Consistency:</strong> Flug gebucht, Hotel noch nicht. UI und E-Mail m&uuml;ssen das aushalten.
+- Markt: Temporal, Cadence; .NET: MassTransit, NServiceBus.
+- Saga ist nicht Eventing: sync/async ist Transportwahl.
 - &Uuml;berleitung: &bdquo;Die Mechanik passt auf eine Folie.&ldquo;

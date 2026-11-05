@@ -56,11 +56,11 @@
 </div>
 
 Note:
-- Hook direkt aus Story 6: &bdquo;Erinnert ihr euch an die Saga-Frage, was passiert, wenn der <code>DELETE</code> selbst in 5xx l&auml;uft? Story 6 lie&szlig; es scheitern. Story 7 schiebt das Problem ins Backend, und rei&szlig;t damit ein neues auf.&ldquo;
-- <strong>Problem aus Story 6:</strong> Booking war Orchestrator: <code>DELETE</code> gegen jedes Backend, eigene Retry-Schleife, eigener Saga-State, eigene Antwort zum Kunden. Wenn Hotel kurz weg ist, blockt Booking. Es ist Aggregator und Stornierstelle in einem.
-- <strong>Verantwortung verlagern:</strong> Hotel kennt seinen Buchungsbestand, seine Storno-Sonderregeln, seine eigenen Abh&auml;ngigkeiten. Diese Logik bei Booking zu zentralisieren ist eine k&uuml;nstliche Schicht zwischen Hotel und sich selbst.
-- <strong>Event statt Aufruf:</strong> Statt synchron auf jede Antwort zu warten, schickt Booking einen Hinweis: &bdquo;Diese Buchung soll storniert werden.&ldquo; Das Backend nimmt ihn entgegen, best&auml;tigt sofort und macht den Rollback asynchron.
-- <strong>Booking bleibt verantwortlich:</strong> Der h&auml;ufigste Denkfehler: &bdquo;Event raus, Booking ist fertig.&ldquo; Der Kunde bekommt seine Antwort, aber Booking wei&szlig; nicht, ob der Rollback im Backend geklappt hat. Reply-Events, Timeout-Erkennung und ein <code>STUCK</code>-Status w&auml;ren der n&auml;chste Schritt. Kommt im Spiel als St&ouml;rung dran.
-- <strong>Trade-off:</strong> Orchestration konzentriert das Saga-Wissen an einer Stelle. Choreography verteilt es: Ein Bug in der Saga-Logik kann jetzt in jedem Service sitzen. Ohne klare Event-Vertr&auml;ge entsteht der verteilte Monolith, die schlimmste beider Welten.
-- Am Markt: Kafka als Log-orientierter Broker (Persistenz, Replay), RabbitMQ als klassischer Queue-Broker, NATS als leichtgewichtige Alternative, SNS plus SQS und Pub/Sub als Managed-Varianten. Das Outbox-Pattern ist kein Broker, sondern die Br&uuml;cke vom Datenbank-State zum Broker, Pflichtlekt&uuml;re.
-- &Uuml;berleitung: &bdquo;Wie sich das anf&uuml;hlt, wenn niemand mehr dirigiert, spielen wir jetzt durch.&ldquo;
+- Hook: Recap 6/01: Was, wenn der <code>DELETE</code> in 5xx l&auml;uft?
+- <strong>Problem:</strong> Booking orchestriert alles allein. Ist Hotel weg, blockt Booking.
+- <strong>Verlagern:</strong> Hotel kennt seine Storno-Regeln selbst.
+- <strong>Event:</strong> Backend best&auml;tigt sofort, storniert asynchron.
+- <strong>Haftbar:</strong> Booking wei&szlig; nicht, ob der Rollback klappte. L&ouml;sung (Reply-Events, <code>STUCK</code>) kommt im Spiel als St&ouml;rung.
+- <strong>Trade-off:</strong> Saga-Wissen in jedem Service. Ohne Event-Vertr&auml;ge droht der verteilte Monolith.
+- <strong>Ehrlich:</strong> <code>CompensationRequested</code> ist ein Command, Booking entscheidet, wer storniert. Echte Choreografie: <code>TripBookingFailed</code>, jedes Backend entscheidet selbst.
+- &Uuml;berleitung: &bdquo;Wie sich das anf&uuml;hlt, wenn Booking nur Zettel hinlegt, spielen wir jetzt durch.&ldquo;
