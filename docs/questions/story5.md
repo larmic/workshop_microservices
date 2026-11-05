@@ -51,9 +51,10 @@ Flight, Hotel und Car wirklich?
 **Antwort:** Maximal 10 gleichzeitig — pro Backend. Genau das ist der
 Sinn des Patterns. Die anderen 10 werden im Booking-Service abgewiesen,
 bevor sie das Backend überhaupt erreichen, und der Aufrufer bekommt
-einen Fallback (leeres Array). Der Backend-Service wird also vor Last
-geschützt — er sieht von den 20 Client-Requests nur die ersten 10 als
-echte Anfragen.
+einen Fallback (leeres Array). Nebeneffekt: Das Backend sieht von
+dieser Instanz höchstens 10 gleichzeitige Calls. Ein Schutz für das
+Backend ist das nicht, bei mehreren Replicas addiert es sich (Frage 8).
+Geschützt wird der Booking-Service.
 
 Wichtig: das Limit ist **gleichzeitig**, nicht **insgesamt**. Wenn ein
 Slot frei wird (Call ist fertig), darf der nächste rein.

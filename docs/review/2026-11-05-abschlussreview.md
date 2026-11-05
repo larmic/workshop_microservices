@@ -28,16 +28,18 @@
 
 ## 2. Top 10 Maßnahmen mit größtem Hebel
 
-1. **Schlussbotschaft 29a zum Bulkhead korrigieren.** `29a-drei-dinge.md:20-21` ordnet den Bulkhead dem Aufgerufenen zu und widerspricht damit 17-bulkhead, Recap 05 und der eigenen Note. Sieben Reviewer haben das unabhängig gefunden. Fünf Minuten Aufwand (Formulierung siehe 4.0).
-2. **CQRS, BFF und Deployment entscheiden.** `03-agenda.md:36`, `25-story-07-fragen.md:58` und `30-was-fehlt.md:28-31` widersprechen sich, dazu sind 70 Minuten ohne Folie verplant. Entweder drei Diskussionsfolien bzw. eine Architektur-Kata bauen oder Agenda, Note und themen.md bereinigen.
-3. **Story-4-Rollenspiel an die Referenz angleichen.** In `15-story-04.md:28-32` fehlen der Fallback bei jedem Fehler, das Wegwischen der Strichliste bei Erfolg, die richtige Erwartung für Runde 3 sowie Nachschub und Rundenuhr. Sonst widerspricht das Spiel Recap 02 und der Demo.
-4. **Story 8 von Story 7 entkoppeln.** Das Event-Kriterium in `27-story-08.md:30` und `docs/stories/story-08-tracing.md:47-50` als optional markieren und den Hook in `26-titel.md:21` umschreiben.
-5. **Recap-Notes zu Story 5 bis 8 auf höchstens 150 Wörter kürzen** (`19`, `22`, `25`, `28-*-fragen.md`), Karten-Notes auf höchstens 100. Vorlage sind 13 und 16. Die Tiefe wandert nach `docs/questions`.
-6. **Fehlende Notes ergänzen:** `12-story-03.md`, `14a`, `13a`, `05a`, `01` bis `04`, Quiz `10f` bis `10j` sowie Frage 2 in `10-story-01-fragen.md`.
-7. **Mechanik von Story 5 und Story 7 reparieren.** Story 5 bekommt Request-Karten statt Personen (`18-story-05.md:20-32`). Story 7 wird zur Leiter Zuruf → Korb → Antwortzettel (`24-story-07.md:31`, `24a-stoerungen.md`).
-8. **Tag 1 vormittags aktivieren.** Live-Chaos-Opener nach 04, Design-Übung „Schneidet die Reiseplattform“ statt eines Teils von Block 5, Zeitbudget realistisch planen (`docs/themen.md:15-28`: es fehlen 45 Minuten, und es gibt keine Kaffeepause).
-9. **Story-Box im Dashboard umbauen und Story-Art und Zeit sichtbar machen** (Dashboard `868-958`, `STORY_META 2982-2999`), dazu ein einheitliches Vokabular Hands-on / Design-Session / Rollenspiel (siehe Abschnitt 5).
-10. **Fachliche Angriffsflächen schließen:** Readiness prüft keine Backends (`10-story-01-fragen.md:33`), Story 7 ist keine echte Choreografie (`23-titel.md:9`), Consul-Deregistrierung bei `docker stop` (`13-story-03-fragen.md:30`), Probe-Slot im CB-Pseudocode (`14a:15-17`), parent-id im traceparent (`26-tracing.md`-Note), Pill „Idempotenz > Ehrlichkeit“ (`22:32`).
+Status: `[ ]` offen, `[~]` in Arbeit, `[x]` erledigt. Erledigte Punkte bekommen den Commit-Hash dahinter.
+
+- [x] **1. Schlussbotschaft 29a zum Bulkhead korrigieren.** `29a-drei-dinge.md:20-21` ordnet den Bulkhead dem Aufgerufenen zu und widerspricht damit 17-bulkhead, Recap 05 und der eigenen Note. Sieben Reviewer haben das unabhängig gefunden. Fünf Minuten Aufwand (Formulierung siehe 4.0). **Umgesetzt** mit eigener Formulierung („sitzen vor dem Call … Keins ersetzt das andere“), Überschrift beibehalten. Mitkorrigiert: Notes 14:58, 17:61, 19:65/67, `docs/instructions/circuitbreaker.md:236`, `docs/questions/story5.md` Frage 2. Dashboard nicht betroffen.
+- [ ] **2. CQRS, BFF und Deployment entscheiden.** `03-agenda.md:36`, `25-story-07-fragen.md:58` und `30-was-fehlt.md:28-31` widersprechen sich, dazu sind 70 Minuten ohne Folie verplant. Entweder drei Diskussionsfolien bzw. eine Architektur-Kata bauen oder Agenda, Note und themen.md bereinigen.
+- [ ] **3. Story-4-Rollenspiel an die Referenz angleichen.** In `15-story-04.md:28-32` fehlen der Fallback bei jedem Fehler, das Wegwischen der Strichliste bei Erfolg, die richtige Erwartung für Runde 3 sowie Nachschub und Rundenuhr. Sonst widerspricht das Spiel Recap 02 und der Demo.
+- [ ] **4. Story 8 von Story 7 entkoppeln.** Das Event-Kriterium in `27-story-08.md:30` und `docs/stories/story-08-tracing.md:47-50` als optional markieren und den Hook in `26-titel.md:21` umschreiben.
+- [ ] **5. Recap-Notes zu Story 5 bis 8 auf höchstens 150 Wörter kürzen** (`19`, `22`, `25`, `28-*-fragen.md`), Karten-Notes auf höchstens 100. Vorlage sind 13 und 16. Die Tiefe wandert nach `docs/questions`.
+- [ ] **6. Fehlende Notes ergänzen:** `12-story-03.md`, `14a`, `13a`, `05a`, `01` bis `04`, Quiz `10f` bis `10j` sowie Frage 2 in `10-story-01-fragen.md`.
+- [ ] **7. Mechanik von Story 5 und Story 7 reparieren.** Story 5 bekommt Request-Karten statt Personen (`18-story-05.md:20-32`). Story 7 wird zur Leiter Zuruf → Korb → Antwortzettel (`24-story-07.md:31`, `24a-stoerungen.md`).
+- [ ] **8. Tag 1 vormittags aktivieren.** Live-Chaos-Opener nach 04, Design-Übung „Schneidet die Reiseplattform“ statt eines Teils von Block 5, Zeitbudget realistisch planen (`docs/themen.md:15-28`: es fehlen 45 Minuten, und es gibt keine Kaffeepause).
+- [ ] **9. Story-Box im Dashboard umbauen und Story-Art und Zeit sichtbar machen** (Dashboard `868-958`, `STORY_META 2982-2999`), dazu ein einheitliches Vokabular Hands-on / Design-Session / Rollenspiel (siehe Abschnitt 5).
+- [ ] **10. Fachliche Angriffsflächen schließen:** Readiness prüft keine Backends (`10-story-01-fragen.md:33`), Story 7 ist keine echte Choreografie (`23-titel.md:9`), Consul-Deregistrierung bei `docker stop` (`13-story-03-fragen.md:30`), Probe-Slot im CB-Pseudocode (`14a:15-17`), parent-id im traceparent (`26-tracing.md`-Note), Pill „Idempotenz > Ehrlichkeit“ (`22:32`).
 
 ---
 

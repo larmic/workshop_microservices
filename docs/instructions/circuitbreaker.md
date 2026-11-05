@@ -233,7 +233,7 @@ Zum Abschluss, wenn Zeit bleibt:
 
 1. **Wie testet ihr den CB?** Tipp: Chaos Engineering — Toxiproxy, Gremlin, oder unser Dashboard mit Chaos-Buttons. Realistische Szenarien (5xx, Latenz, Drops) sind Pflicht.
 2. **Wie bekommt der Operator mit, dass ein CB OPEN ist?** Metriken (Prometheus), Alerts. Im Reference-Code: Logs + Dashboard. In Produktion: pro CB einen Counter `circuit_state{name=...,state=OPEN}` exportieren.
-3. **Was, wenn euer eigener Service der "schwache" ist?** CB ist *outbound*. Inbound ist Bulkhead/Rate-Limiting (Story 5) oder Backpressure.
+3. **Was, wenn euer eigener Service der "schwache" ist?** CB ist *outbound*, genau wie Timeout und Bulkhead (Story 5). Inbound-Schutz für den eigenen Service: Rate Limiting, Load Shedding, Backpressure (`429` + `Retry-After`).
 4. **Granularität: pro Service oder pro Endpoint?** Im Reference-Code pro Service. Aber: was, wenn `/flights` gut antwortet aber `/bookings` kaputt ist? Diskutieren.
 5. **Per-Instance vs. per-Service:** Mit dem Dashboard kann man genau einer von drei Replicas auf "Fehler" stellen. Diskussionspunkt: Random-Load-Balancing trifft die kaputte Instanz nur in 1/3 der Fälle — der CB öffnet evtl. gar nicht. Ist das ein Bug oder ein Feature?
 

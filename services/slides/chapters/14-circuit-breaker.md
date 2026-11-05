@@ -55,4 +55,4 @@ Note:
 - <strong>Outbound hei&szlig;t:</strong> Der Schalter geh&ouml;rt vor die Calls, die euer Service macht. Nicht vor die, die er bekommt.
 - <strong>Er sch&uuml;tzt trotzdem beide Seiten:</strong> Der Aufrufer bindet keine Threads mehr in Timeouts. Das Backend bekommt keine Anfragen mehr und kann sich erholen.
 - <strong>Warum beim Aufrufer:</strong> Ein totes oder &uuml;berlastetes Backend kann sich nicht selbst abschalten. Nur der Aufrufer sieht Timeouts und Fehler, nur er kann aufh&ouml;ren.
-- <strong>Der Denkfehler:</strong> &bdquo;Wir setzen einen CB vor unseren Service, damit er nicht &uuml;berlastet.&ldquo; Das ist Rate Limiting oder Bulkhead (Story 5), kein Circuit Breaker.
+- <strong>Der Denkfehler:</strong> &bdquo;Wir setzen einen CB vor unseren Service, damit er nicht &uuml;berlastet.&ldquo; Das ist Rate Limiting oder Load Shedding im eigenen Service, kein Circuit Breaker. Auch kein Bulkhead, der sitzt ebenfalls im Aufrufer (Story 5).
