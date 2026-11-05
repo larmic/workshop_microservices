@@ -838,8 +838,9 @@
             color: #fff;
             box-shadow: 0 2px 8px rgba(115,72,225,0.35);
         }
-        /* Design-Session ohne Code (Story 2): gestrichelt, damit sichtbar ist,
-           dass hier nichts deployt wird. */
+        /* Stories ohne Code (2 Design-Session, 4, 5, 7 Übungen): gestrichelt,
+           damit sichtbar ist, dass hier nichts deployt wird. Dieselbe Regel
+           tragen die Zeit-Pillen der Slides (.badge.design). */
         .stepper-node.design { border-style: dashed; }
         .stepper-node.design.active { border-style: solid; }
         .stepper-connector {
@@ -1366,7 +1367,7 @@
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="3" onclick="showStory(3)">3</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="4" onclick="showStory(4)">4</button>
+                <button type="button" class="stepper-node design" data-story-node="4" onclick="showStory(4)" title="Rollenspiel mit Schalter und Strichliste, kein Code">4</button>
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node design" data-story-node="5" onclick="showStory(5)" title="Übung mit Bechern und Chips, kein Code">5</button>
                 <span class="stepper-connector"></span>
@@ -1595,55 +1596,36 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
 
         <section class="story-section" data-story="4" hidden>
             <div class="story-helpers" data-story-helpers="4">
-                <details class="story-info">
-                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                <details class="story-info" open>
+                    <summary>Story lesen <span class="badge">User Story + Übung</span></summary>
                     <div class="story-info-body">
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Suchanfragen, Booking hat den Schalter. Das Circuit-Breaker-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
-                        <p>Der Flight-Service ist zeitweise nicht erreichbar (Netzprobleme, Überlast, Deployment). Der Booking-Service soll nicht mitfallen, sondern graceful degradieren: Hotel + Car liefern, Flight elegant ausblenden. Ein <em>Circuit Breaker</em> erkennt wiederholte Fehler, schaltet ab und probiert nach einer Pause vorsichtig wieder zu.</p>
+                        <p>Der Flight-Service ist zeitweise nicht erreichbar (Netzprobleme, Überlast, Deployment). Ohne Schutz wartet der Booking-Service bei jeder Anfrage drei Sekunden auf den Timeout und reißt seine Aufrufer mit. Ein <em>Circuit Breaker</em> zählt die Fehler, schaltet nach fünf ab, antwortet sofort mit einem Fallback und probiert nach einer Pause vorsichtig wieder zu.</p>
                         <h4>User Story</h4>
-                        <p>Als <em>Kunde</em> möchte ich <em>auch bei Ausfall des Flugbuchungssystems eine Teilbuchung (Hotel + Mietwagen) durchführen können</em>, damit <em>meine Reiseplanung nicht komplett blockiert wird</em>.</p>
-                        <h4>Akzeptanzkriterien</h4>
-                        <ul>
-                            <li>Circuit Breaker um jeden Backend-Aufruf (Flight, Hotel, Car) &mdash; jeweils eigener State</li>
-                            <li>Nach 5 aufeinanderfolgenden Fehlern öffnet der Circuit (OPEN)</li>
-                            <li>Bei OPEN sofortiger Fallback (z.&nbsp;B. <code>flights: []</code>), Header <code>X-Circuit-Open</code> nennt das Backend</li>
-                            <li>Nach 30 Sekunden Wechsel in HALF_OPEN; ein Probe-Call entscheidet, ob CLOSED oder OPEN</li>
-                            <li>Timeout 3 s; Zustandswechsel werden geloggt; Status über Endpoint abfragbar</li>
-                        </ul>
-                    </div>
-                </details>
-                <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
-                    <div class="story-cheatsheet-body">
-<pre>state: CLOSED | OPEN | HALF_OPEN
-failures = 0
-openUntil = 0
-
-call(service):
-  if state == OPEN and now < openUntil:
-    return fallback()                        // short-circuit
-  if state == OPEN and now >= openUntil:
-    state = HALF_OPEN                        // probe slot frei
-
-  try service.invoke(timeout = 3s):
-    success → failures = 0
-              state    = CLOSED
-              return result
-    failure → failures++
-              if failures >= 5:
-                state     = OPEN
-                openUntil = now + 30s
-              return fallback()</pre>
+                        <p>Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
+                        <h4>Rollen (ca. 20 Minuten)</h4>
+                        <ol>
+                            <li><strong>Booking</strong> ist eine Person. Sie hat den Schalter: eine Strichliste und ein Schild mit CLOSED, OPEN, HALF_OPEN.</li>
+                            <li><strong>Flight, Hotel, Car</strong> sind drei Leute. Hotel und Car antworten sofort. Flight ist abgestürzt und sagt gar nichts.</li>
+                            <li><strong>Alle anderen</strong> sind Suchanfragen auf <code>GET /booking/offers</code> und stellen sich bei Booking an.</li>
+                        </ol>
+                        <h4>Ablauf</h4>
+                        <ol>
+                            <li><strong>Runde 1, ohne Schalter:</strong> Booking fragt Flight, Flight schweigt, Booking zählt laut bis drei: Timeout. Booking sagt „Fehler", die Anfrage stellt sich hinten wieder an.</li>
+                            <li><strong>Runde 2, mit Schalter:</strong> Jeder Timeout ein Strich auf Bookings Liste. Beim fünften Strich dreht Booking sein Schild auf OPEN.</li>
+                            <li>Ab jetzt fragt Booking Flight gar nicht mehr, nur Hotel und Car, und gibt die Karte aus: Hotel &#10003;, Car &#10003;, <code>flights: []</code>. Die Anfrage setzt sich.</li>
+                            <li>Alle 30 Sekunden dreht Booking auf HALF_OPEN und fragt Flight genau einmal. Schweigt Flight: zurück auf OPEN. Antwortet Flight: CLOSED.</li>
+                            <li><strong>Runde 3, freies Spiel:</strong> Flight entscheidet selbst, wann es antwortet und wann nicht. Booking hält sich nur an seine Regeln.</li>
+                        </ol>
+                        <h4>Und die Buchung?</h4>
+                        <p>Lesen und Schreiben sind zwei Fälle. Was passiert, wenn der Flight-Breaker offen ist und jemand auf Buchen klickt, besprechen wir nach dem Recap, und in Story 6 noch einmal.</p>
+                        <p>Vollständige Beschreibung mit Material zum Nachbauen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-04-circuit-breaker.md" target="_blank" rel="noopener"><code>docs/stories/story-04-circuit-breaker.md</code></a>. Referenz-Implementierung: <code>services/booking/story4/</code>.</p>
                     </div>
                 </details>
             </div>
-        <div class="source-toggle" data-source-toggle="4">
-            <span class="source-toggle-label">Service-Quelle</span>
-            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(4,'reference')">Reference</button>
-            <button class="source-btn" data-mode="custom" onclick="setBookingMode(4,'custom')">Custom</button>
-        </div>
         <div class="cb-section">
-            <h2>Circuit Breaker (Booking Story 4)</h2>
+            <h2>Circuit-Breaker-Demo (Referenz Story 4)</h2>
             <div class="rest-actions">
                 <div class="rest-row">
                     <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-ref-story4/offers', 's4-offers')">
@@ -3005,7 +2987,7 @@ on receiveCompensationEvent(event):
             3: { title: "Story 3: Services dynamisch finden",
                  subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
             4: { title: "Story 4: Wenn der Flug ausfällt",
-                 subtitle: "Circuit Breaker: nach wiederholten Fehlern abschalten und graceful degradieren." },
+                 subtitle: "Circuit Breaker als Übung: Ihr seid die Suchanfragen, Booking hat den Schalter. Danach die Demo mit der Referenz." },
             5: { title: "Story 5: Der geteilte Pool",
                  subtitle: "Bulkhead als Übung: Ihr seid die Requests, der Becher ist der Pool. Danach rechnen wir, warum ausgerechnet zehn." },
             6: { title: "Story 6: Alles oder nichts — aber richtig",

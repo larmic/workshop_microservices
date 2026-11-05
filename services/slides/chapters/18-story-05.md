@@ -6,7 +6,7 @@
 
 ## Der geteilte Pool
 
-<span class="badge">&asymp; 25 min</span>
+<span class="badge design">&asymp; 25 min</span>
 </div>
 
 <p class="subtitle">Ihr seid die Requests. Der Becher ist der Pool.</p>

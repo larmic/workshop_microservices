@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">Story 8</p>
+<p class="kicker">Story 8 &middot; Hands-on</p>
 
 <div class="page-head">
 

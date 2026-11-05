@@ -317,6 +317,15 @@
     margin-top: 10px;
 }
 
+/* Story ohne Code (Design-Session, Übung): gestrichelt, wie der Stepper-Knoten
+   im Dashboard. Padding um die Randbreite kleiner, damit die Pille gleich hoch
+   bleibt und die Titelzeile zwischen den Stories nicht springt. */
+.reveal .page-head .badge.design {
+    background: #fff;
+    border: 2px dashed var(--box-border);
+    padding: 6px 16px;
+}
+
 /* Titelzeile mit Merksatz rechts (z. B. „Diese fünf baut ihr gleich in Story 1.") */
 .reveal .page-head {
     display: flex;

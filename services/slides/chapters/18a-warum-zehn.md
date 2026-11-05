@@ -6,7 +6,7 @@
 
 ## Warum ausgerechnet zehn?
 
-<span class="badge">&asymp; 20 min</span>
+<span class="badge design">&asymp; 20 min</span>
 </div>
 
 <div class="page-body littles">

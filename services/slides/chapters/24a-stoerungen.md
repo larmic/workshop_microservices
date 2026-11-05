@@ -6,7 +6,7 @@
 
 ## Drei St&ouml;rungen
 
-<span class="badge">&asymp; 20 min</span>
+<span class="badge design">&asymp; 20 min</span>
 </div>
 
 <p class="subtitle">Runde 2 noch einmal, jedes Mal mit einem Haken.</p>

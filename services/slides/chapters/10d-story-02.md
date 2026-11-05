@@ -1,12 +1,12 @@
 <div class="page">
 
-<p class="kicker">Story 2</p>
+<p class="kicker">Story 2 &middot; Design-Session</p>
 
 <div class="page-head">
 
 ## Erst denken, dann tippen
 
-<span class="badge">20 min Teamarbeit</span>
+<span class="badge design">&asymp; 20 min</span>
 </div>
 
 <p class="subtitle">Storno und Umbuchung am Flipchart. Kein Code, kein Deployment, <span class="hl">kein Port</span>.</p>
