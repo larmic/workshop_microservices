@@ -4,12 +4,17 @@ Provokante Fragen rund um den Circuit Breaker. Ziel: das Pattern nicht
 als magische Resilienz-Box akzeptieren, sondern verstehen, **welche
 Annahmen** drin stecken — und wo sie kippen.
 
+Story 4 ist ein Rollenspiel (Folie 15). Die Recap-Folie 16 nutzt
+Frage 3 (Recap 01), Frage 4 (Recap 02), Frage 2 (Recap 03) und
+Frage 6 (Recap 04). Die übrigen sind Reserve.
+
 ---
 
 ## Frage 1 — Wir öffnen den Circuit nach 5 aufeinanderfolgenden Fehlern. Wo kommt diese Zahl her?
 
-**Frage:** Akzeptanzkriterium der Story sagt „nach 5 aufeinanderfolgenden
-Fehlern". Warum 5? Wäre 3 nicht sicherer, oder 20 stabiler?
+**Frage:** Booking hat im Spiel bis fünf in Folge gezählt, das wacklige
+Flight aus Runde 3a hat den Schalter nie geöffnet. Warum fünf? Wäre 3
+nicht sicherer, oder 20 stabiler?
 
 **Antwort:** Die ehrliche Antwort: **niemand weiß es genau, ohne die
 Last und das Backend zu kennen.** 5 ist eine sinnvolle Default-Zahl,
@@ -45,7 +50,7 @@ Failure-Profil getuned, nicht ins erste Code-Beispiel kopiert.
 
 ---
 
-## Frage 2 — Im HALF_OPEN-State lassen wir genau einen Probe-Call durch. Warum nicht alle?
+## Frage 2 — Im HALF_OPEN-State lassen wir genau einen Probe-Call durch. Warum nicht alle? (Recap 03)
 
 **Frage:** Nach 30 s öffnet der CB für einen einzigen Test-Call. Warum
 nicht einfach wieder normal aufmachen und schauen, was passiert?
@@ -85,7 +90,7 @@ selbstgeschriebenem Code.
 
 ---
 
-## Frage 3 — Was zählt überhaupt als „Fehler"? Eine 404 ist doch kein Backend-Problem.
+## Frage 3 — Was zählt überhaupt als „Fehler"? Eine 404 ist doch kein Backend-Problem. (Recap 01, Runde 3b)
 
 **Frage:** Unser CB zählt jeden Fehler. Aber: ein `404 Not Found` ist
 kein Defekt des Backends — der Aufrufer hat eine ID benutzt, die nicht
@@ -122,7 +127,12 @@ Implementierungen (Resilience4j: `recordExceptions` /
 
 ---
 
-## Frage 4 — Bei OPEN liefern wir `flights: []` statt einer Fehlermeldung. Täuschen wir den User?
+## Frage 4 — Bei jedem Fehler liefern wir `flights: []` statt einer Fehlermeldung. Täuschen wir den User? (Recap 02)
+
+**Vorab, aus dem Spiel:** Der Fallback kommt nicht erst bei OPEN,
+sondern schon beim ersten Fehler (Runde 2). Der Breaker erfindet ihn
+nicht, er spart nur das Warten: CLOSED kostet bis zu 3 s, OPEN
+antwortet sofort und setzt zusätzlich `X-Circuit-Open`.
 
 **Frage:** Wenn Flight ausfällt, sieht der User „keine Flüge verfügbar".
 Tatsächlich ist nur unser Backend kaputt. Ist das ehrlich?
@@ -158,7 +168,7 @@ trifft.
 
 ## Frage 5 — Wir warten 30 Sekunden, bevor wir's noch mal probieren. Wo kommt diese Zahl her — und ist sie sinnvoll?
 
-**Frage:** Akzeptanzkriterium: 30 s in OPEN. Aber:
+**Frage:** Im Spiel hat der Trainer nach 30 s „HALF_OPEN" gerufen. Aber:
 - wenn das Backend in 1 s wieder gesund ist, blockieren wir 29 s
   unnötig
 - wenn es 5 min braucht, hämmern wir alle 30 s erneut drauf
@@ -196,7 +206,7 @@ ist ein Symptom für „CB selbst gebaut".
 
 ---
 
-## Frage 6 — Der CB-Zustand lebt im Speicher. Was passiert beim Restart des Booking-Service?
+## Frage 6 — Der CB-Zustand lebt im Speicher. Was passiert beim Restart des Booking-Service? (Recap 04)
 
 **Frage:** Wenn ich den Booking-Service neu starte, ist sein CB-Status
 wieder CLOSED — auch wenn das Hotel-Backend gerade tot ist. Ist das

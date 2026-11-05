@@ -29,7 +29,7 @@
 <p class="numlist-label">Probe-Storm</p>
 <h3>In <code>HALF_OPEN</code> lassen wir genau einen Call durch. Warum nicht <span class="hl">alle</span>?</h3>
 </div>
-<code class="numlist-pill fragment" data-fragment-index="1">CompareAndSwap</code>
+<code class="numlist-pill fragment" data-fragment-index="1">einer probiert, Rest sofort Karte</code>
 </div>
 <div class="numlist-row">
 <div class="numlist-num">04</div>
@@ -46,7 +46,8 @@
 </div>
 
 Note:
-- <strong>Fehler:</strong> Nein. 404 hei&szlig;t falsche ID, das Backend ist gesund. CB-relevant sind 5xx, Timeout, Connection refused. 4xx nicht, 429 diskutabel. Unser Code z&auml;hlt alles ab 400, in Produktion ein Bug.
-- <strong>Fallback:</strong> Ja, schon beim ersten Fehler. Die leere Liste kommt bei jedem gescheiterten Call. Der CB &auml;ndert nur das Wie: CLOSED kostet bis 3 s, OPEN antwortet sofort mit <code>X-Circuit-Open</code>.
-- <strong>Probe-Storm:</strong> Sonst legen alle Wartenden das erholende Backend sofort wieder um. Ein atomarer Slot l&auml;sst genau einen durch.
-- <strong>Replicas:</strong> Nein, Zustand bleibt instanzlokal. B erreicht Flight vielleicht problemlos. Folge: Nach Neustart ist alles CLOSED, die ersten f&uuml;nf Calls kosten wieder 3 s.
+- <strong>Fehler:</strong> Nein. 404 hei&szlig;t falsche ID, das Backend ist gesund. CB-relevant sind 5xx, Timeout, Connection refused. 4xx nicht, 429 diskutabel. Unser Code z&auml;hlt alles ab 400, in Produktion ein Bug. Im Spiel: Runde 3b.
+- <strong>Fallback:</strong> Wie in Runde 2: Ja, schon beim ersten Fehler. Die leere Liste kommt bei jedem gescheiterten Call. Der CB &auml;ndert nur das Wie: CLOSED kostet bis 3 s, OPEN antwortet sofort mit <code>X-Circuit-Open</code>. Der 5. Call tr&auml;gt nur <code>X-Fallback</code>, <code>X-Circuit-Open</code> kommt ab dem 6.
+- <strong>Probe-Storm:</strong> Sonst legen alle Wartenden das erholende Backend sofort wieder um. Ein atomarer Slot (CompareAndSwap) l&auml;sst genau einen durch. Im Spiel: Wer w&auml;hrend der Probe kam, bekam sofort die Karte.
+- <strong>Replicas (Transfer Booking-2):</strong> Nein, Zustand bleibt instanzlokal. B erreicht Flight vielleicht problemlos. Folge: Nach Neustart ist alles CLOSED, die ersten f&uuml;nf Calls kosten wieder 3 s.
+- Lang: <code>docs/questions/story4.md</code>.

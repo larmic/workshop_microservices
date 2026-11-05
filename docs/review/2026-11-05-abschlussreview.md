@@ -32,7 +32,7 @@ Status: `[ ]` offen, `[~]` in Arbeit, `[x]` erledigt. Erledigte Punkte bekommen 
 
 - [x] **1. Schlussbotschaft 29a zum Bulkhead korrigieren.** `29a-drei-dinge.md:20-21` ordnet den Bulkhead dem Aufgerufenen zu und widerspricht damit 17-bulkhead, Recap 05 und der eigenen Note. Sieben Reviewer haben das unabhängig gefunden. Fünf Minuten Aufwand (Formulierung siehe 4.0). **Umgesetzt** mit eigener Formulierung („sitzen vor dem Call … Keins ersetzt das andere“), Überschrift beibehalten. Mitkorrigiert: Notes 14:58, 17:61, 19:65/67, `docs/instructions/circuitbreaker.md:236`, `docs/questions/story5.md` Frage 2. Dashboard nicht betroffen. (fd162c5)
 - [x] **2. CQRS, BFF und Deployment entscheiden.** `03-agenda.md:36`, `25-story-07-fragen.md:58` und `30-was-fehlt.md:28-31` widersprechen sich, dazu sind 70 Minuten ohne Folie verplant. Entweder drei Diskussionsfolien bzw. eine Architektur-Kata bauen oder Agenda, Note und themen.md bereinigen. **Entschieden: Variante B, ehrlich streichen, ohne neue Folie.** Agenda 03 und Note 25 bereinigt, Blöcke 7, 9 und 10 in `themen.md` aus dem Ablauf genommen und als Reserve markiert, Verweise in `docs/questions/story3`, `story6`, `story7` angepasst. 30-was-fehlt bleibt unverändert. Die 70 freien Minuten bleiben bewusst Puffer (f12cfe0). Nebenbefund (offen): `docs/stories/story-07-choreography-saga.md:125` nennt ein Feature-Flag für den Mischbetrieb sync/async, das es in `services/booking/story7` nicht gibt.
-- [ ] **3. Story-4-Rollenspiel an die Referenz angleichen.** In `15-story-04.md:28-32` fehlen der Fallback bei jedem Fehler, das Wegwischen der Strichliste bei Erfolg, die richtige Erwartung für Runde 3 sowie Nachschub und Rundenuhr. Sonst widerspricht das Spiel Recap 02 und der Demo.
+- [x] **3. Story-4-Rollenspiel an die Referenz angleichen.** In `15-story-04.md:28-32` fehlen der Fallback bei jedem Fehler, das Wegwischen der Strichliste bei Erfolg, die richtige Erwartung für Runde 3 sowie Nachschub und Rundenuhr. Sonst widerspricht das Spiel Recap 02 und der Demo. **Umgesetzt:** Fallback bei jedem Fehler, fünf Fehler in Folge, Erfolg setzt zurück, Nachschub durch sofortiges Wieder-Anstellen, HALF_OPEN mit sofortiger Karte für alle hinter der Probe, Runde 3a (öffnet nie) und 3b (400 zählt bei uns). Folie 15 knapp, Details in Note, Story-Doc und Dashboard. Mitkorrigiert: Recap 16, `questions/story4.md` (Recap-Zuordnung), `instructions/circuitbreaker.md` (3 s, Demo-Einstieg, Client-Abbruch), Dashboard-Label `short-circuits` und Anzeige von `X-Fallback`/`X-Circuit-Open`. Offen als Folgemaßnahme: Chaos-Modus „hängt“ (über dem 3-s-Timeout), damit das Warten auch in der Demo sichtbar wird.
 - [ ] **4. Story 8 von Story 7 entkoppeln.** Das Event-Kriterium in `27-story-08.md:30` und `docs/stories/story-08-tracing.md:47-50` als optional markieren und den Hook in `26-titel.md:21` umschreiben.
 - [ ] **5. Recap-Notes zu Story 5 bis 8 auf höchstens 150 Wörter kürzen** (`19`, `22`, `25`, `28-*-fragen.md`), Karten-Notes auf höchstens 100. Vorlage sind 13 und 16. Die Tiefe wandert nach `docs/questions`.
 - [ ] **6. Fehlende Notes ergänzen:** `12-story-03.md`, `14a`, `13a`, `05a`, `01` bis `04`, Quiz `10f` bis `10j` sowie Frage 2 in `10-story-01-fragen.md`.
@@ -414,7 +414,7 @@ Status: `[ ]` offen, `[~]` in Arbeit, `[x]` erledigt. Erledigte Punkte bekommen 
 - [ ] `22-story-06-fragen.md:32` Pill → „204 ist Pragmatik, nicht Idempotenz“
 - [ ] `26-tracing.md`-Note: parent-id richtig beschreiben
 - [ ] `14a-circuit-breaker-code.md:7` Untertitel → „Die Regeln, nach denen Booking gleich spielt.“ und eine Zeile für den Probe-Slot
-- [ ] `16-story-04-fragen.md:32` Pill → „einer probiert, alle warten“, Note `:49` umformulieren
+- [x] `16-story-04-fragen.md:32` Pill → „einer probiert, Rest sofort Karte“ (der ursprüngliche Vorschlag „alle warten“ war falsch: in HALF_OPEN bekommen die anderen sofort den Fallback), Notes mit Spielbezug (Maßnahme 3)
 - [ ] `09-story-01.md:58` Resilienz-Satz aktualisieren
 - [ ] `27-story-08.md:30` und `story-08-tracing.md:47-50` Event-Kriterium als optional markieren, Hook `26-titel:21` umschreiben
 - [ ] `25-story-07-fragen.md:58` CQRS-Brücke klären (Variante A oder B)
@@ -422,7 +422,7 @@ Status: `[ ]` offen, `[~]` in Arbeit, `[x]` erledigt. Erledigte Punkte bekommen 
 - [ ] Kicker 15, 18, 18a, 24, 24a → „Rollenspiel“, dazu Dashboard `1372`, `2990`, `2992`, `story-05-bulkhead.md:3`
 - [ ] Zeit-Badges `15:9`, `10d:9` auf den Slot umstellen („≈ 60 min <small>davon 20 Spiel</small>“)
 - [ ] `18-story-05.md:32` Becher benennen („Flight 4, Car 3, Hotel 3 Chips“) und die 503-Regel auf die Folie
-- [ ] `15-story-04.md:29-31` Fallback-Satz, Regel „Strichliste wegwischen“, Rundenuhr ergänzen
+- [x] `15-story-04.md:29-31` Fallback-Satz, Regel „Strichliste wegwischen“, Rundenuhr ergänzen (Maßnahme 3)
 - [ ] `24-story-07.md`: „Hotel lehnt in diesem Spiel jede Buchung ab.“, Titel → „Der Tisch ist der Broker“
 - [ ] Notes anlegen: `12-story-03`, `13a`, `05a`, `14-titel`, `17-titel`, `10f` bis `10j`
 - [ ] `10g-quiz-2.md:9` „Kunde 7 existiert“ ergänzen

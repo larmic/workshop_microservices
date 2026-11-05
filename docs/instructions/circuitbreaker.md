@@ -1,16 +1,18 @@
 # Circuit Breaker — Workshop-Notizen
 
 > Trainer-Notizen für Story 4. Reihenfolge folgt einer typischen Slide-Sequenz; jeder Abschnitt hat einen kleinen Hinweis, was an der Tafel/auf der Folie passieren sollte.
+>
+> Story 4 ist seit dem Umbau ein Rollenspiel (Folie 15, Regeln in `docs/stories/story-04-circuit-breaker.md`). Diese Notizen sind der fachliche Hintergrund für Demo und Recap.
 
 ## 1. Worum geht es?
 
 **Die Analogie:** Der Sicherungsautomat im Stromkasten. Wenn zu viel Strom fließt, springt er raus und unterbricht den Stromkreis — bevor das Haus brennt. Nach kurzer Zeit kannst du ihn manuell wieder reinschalten. Der Software-Circuit-Breaker macht dasselbe automatisiert mit Service-Calls.
 
-**Das Problem:** Service A ruft Service B. B ist überlastet/kaputt. A wartet jeweils 30 Sekunden auf Timeout. Die Anfragen stauen sich, A's Threads/Goroutines/Connections gehen aus, A wird ebenfalls langsam, dessen Aufrufer kommen ins Schwitzen — der klassische Cascading-Failure.
+**Das Problem:** Service A ruft Service B. B ist überlastet/kaputt. A wartet jeweils bis zum Timeout (in unserem Stack 3 Sekunden). Die Anfragen stauen sich, A's Threads/Goroutines/Connections gehen aus, A wird ebenfalls langsam, dessen Aufrufer kommen ins Schwitzen — der klassische Cascading-Failure.
 
 **Die Lösung:** A merkt sich, dass B kaputt ist, und kürzt zukünftige Calls sofort ab. So bleibt A schnell und gesund, auch wenn B unten ist. Nach einer Wartezeit testet A, ob B wieder da ist.
 
-> 🎯 *Demo-Einstieg:* Im Workshop-Stack Flight auf "Fehler" stellen, ohne CB (Story 3) auf `/booking/offers` curlen — jeder Call dauert 3s. Mit CB (Story 4) das gleiche — nach den ersten 5 Fehlern sind die Calls instant.
+> 🎯 *Demo-Einstieg:* Im Workshop-Stack Flight auf "Fehler" stellen (sofort ein 500, keine Wartezeit). Ohne CB (Story 3) antwortet `/booking/offers` mit einem Fehler, auch Hotel und Car fehlen. Mit CB (Story 4) kommt immer 200 mit Hotel, Car und `flights: []`, ab dem 6. Call zusätzlich `X-Circuit-Open: flight`. Das Warten aus dem Spiel sieht man in dieser Demo nicht.
 
 ---
 
@@ -93,7 +95,7 @@ Wichtige Diskussion, oft unterschätzt:
 | Timeout | ✅ ja | Backend antwortet nicht in akzeptabler Zeit |
 | Connection refused / DNS-Fehler | ✅ ja | Backend nicht erreichbar |
 | HTTP 4xx | ❌ nein (üblicherweise) | Der Aufrufer hat Mist gemacht — Backend ist gesund |
-| Cancelled durch Client | ❌ nein | Kein Backend-Problem |
+| Cancelled durch Client | ❌ nein | Kein Backend-Problem (unsere Referenz zählt ihn trotzdem mit, über `r.Context()`) |
 
 > 💡 Resilience4j hat dafür einen `recordExceptions` / `ignoreExceptions`-Predicate. Spring Cloud Circuit Breaker analog. Im Workshop-Code: bewusst simpel gehalten, alles ≥ 400 zählt — Diskussionspunkt für die Teilnehmer: "Wo seht ihr das anders?"
 
