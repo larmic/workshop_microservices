@@ -155,7 +155,7 @@ als das fertige Werkzeug zu nehmen.
   wenn wir einen echten Broker hätten? (Hint: der `compensateSingle`-Code
   würde zum `bus.Publish(topic, event)`-Einzeiler. Service-Discovery
   brauchen wir auch nicht mehr — der Broker macht das implizit.)
-- Brücke zum Vortrag **CQRS** (siehe `docs/themen.md`): Wenn wir das
+- Falls jemand nach **CQRS** fragt (Reserve in `docs/themen.md`, Block 7): Wenn wir das
   Read-Model aus Events füttern und ein Event verloren geht — wie
   repariert man das Read-Model? (Hint: Event-Replay; setzt aber
   **persistente** Events voraus, also einen Broker mit Log-Semantik

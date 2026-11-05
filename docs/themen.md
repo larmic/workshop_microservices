@@ -27,7 +27,7 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 
 Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 8 h 10. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten und der Mittagspause; Minuten und Blöcke stehen allein hier.
 
-### Tag 2 (≈ 7 h inkl. Pausen)
+### Tag 2 (≈ 5,5 h inkl. Mittag, der Rest ist Puffer)
 
 | Block | Thema | Zeit |
 |-------|-------|------|
@@ -35,11 +35,10 @@ Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 | 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
 | 6g | Übung: Story 7 (Choreography-Saga, Zettel statt Code) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
-| 7 | Vortrag & Diskussion: CQRS | 30 Min |
 | 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
-| 9 | Diskussion: BFF | 20 Min |
-| 10 | Diskussion: Downtimeless Deployment | 20 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
+
+CQRS (Block 7), BFF (Block 9) und Downtimeless Deployment (Block 10) sind bewusst nicht im Ablauf: Die zwei Tage sind dicht genug, und für eine echte Vertiefung reicht der Platz nicht. Die Skripte bleiben als Reserve, falls eine Gruppe danach fragt oder Zeit übrig ist. Auf der Folie „Was wir bewusst nicht gemacht haben“ stehen CQRS und Versionierung als Ausblick.
 
 ---
 
@@ -125,7 +124,7 @@ These aufwerfen und mit der Gruppe sezieren.
 
 **Diskussions-Anker:** Welche Probleme hätte man im Monolithen auch? Welche entstehen erst durch das Netzwerk?
 
-**Überleitung:** Deshalb dreht sich der praktische Teil (Stories 1 bis 8 und Block 10) stark um Kommunikation und Resilienz.
+**Überleitung:** Deshalb dreht sich der praktische Teil (Stories 1 bis 8) stark um Kommunikation und Resilienz.
 
 ---
 
@@ -171,6 +170,8 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 ---
 
 ## 7. Kurz-Vortrag & Diskussion: CQRS (30 Min)
+
+> **Reserve, nicht im Ablauf.** Nur nutzen, wenn eine Gruppe danach fragt oder Zeit übrig ist.
 
 CQRS (Command Query Responsibility Segregation) heißt schlicht: **Trennung von Command und Query** — Schreib- und Lesemodell werden unabhängig voneinander entworfen und optimiert. Mehr ist erstmal nicht dahinter.
 
@@ -228,6 +229,8 @@ Zwischen dem Schreibvorgang (Saga fertig) und dem Auftauchen im Read-Model liege
 
 ## 9. Kurz-Vortrag & Diskussion: Backends for Frontends (20 Min)
 
+> **Reserve, nicht im Ablauf.** Nur nutzen, wenn eine Gruppe danach fragt oder Zeit übrig ist.
+
 Konzept: **spezialisierte Backends pro Client-Typ** (Web, Mobile, Smart-TV, IoT). Jedes BFF schneidet Daten, Payload-Größe und Latenz auf seinen Client zu.
 
 **Im Workshop bewusst kein Hands-on:** Der Booking-Service erfüllt diese Rolle in unserem Beispiel faktisch schon — er aggregiert Flight, Hotel und Car für einen Web-/Mobile-Client. Eine echte BFF-Aufspaltung wäre konstruiert.
@@ -245,6 +248,8 @@ Konzept: **spezialisierte Backends pro Client-Typ** (Web, Mobile, Smart-TV, IoT)
 ---
 
 ## 10. Kurz-Vortrag & Diskussion: Downtimeless Deployment (20 Min)
+
+> **Reserve, nicht im Ablauf.** Nur nutzen, wenn eine Gruppe danach fragt oder Zeit übrig ist.
 
 Ist Zero-Downtime-Deployment „MS-spezifisch"? — **Nein**, Monolithen haben das gleiche Problem (Blue/Green, Canary). Für MS bekommt es eine eigene Note:
 

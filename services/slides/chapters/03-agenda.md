@@ -33,7 +33,7 @@
 <div class="agenda-slot">
 <p class="agenda-label">Nachmittag</p>
 <h4>Sehen, was passiert</h4>
-<p>Distributed Tracing, dazu CQRS, BFF und Deployment ohne Downtime im Gespr&auml;ch. Und was wir bewusst nicht gemacht haben.</p>
+<p>Distributed Tracing, ein R&uuml;ckblick und was wir bewusst nicht gemacht haben.</p>
 <code>Story 8 + Ausblick</code>
 </div>
 </div>

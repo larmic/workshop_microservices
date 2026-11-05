@@ -125,8 +125,8 @@ bleibt bei Booking.
 verschiebt die Komplexität, sie eliminiert sie nicht. Story 6 zeigt
 die Saga **isoliert** (sync, ein Konzept). Story 7 schaltet das
 Eventing dazu und macht die Kompensation asynchron — das ist die
-**Choreography-Saga**. Das Thema **CQRS** wird im Vortrag separat
-behandelt (siehe `docs/themen.md`): ein Read-Model kann die Event-
+**Choreography-Saga**. Das Thema **CQRS** ist im Workshop nicht im
+Ablauf (Reserve in `docs/themen.md`, Block 7): ein Read-Model kann die Event-
 Infrastruktur aus Story 7 *nutzen*, muss aber nicht — denn CQRS
 ist „Lese- und Schreibmodell trennen", nicht „Events haben". Saga
 und CQRS bleiben sauber getrennte Konzepte.
