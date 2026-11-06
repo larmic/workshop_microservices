@@ -278,16 +278,16 @@ Status: `[ ]` offen, `[~]` in Arbeit, `[x]` erledigt. Erledigte Punkte bekommen 
 - **[hoch] Kein Auffangplan bei Rückstand in Code-Stories.** Die Stories sind kumulativ (`docs/custom-setup.md:7`), die Kotlin-Lösung deckt nur Story 1 ab. **Vorschlag:** Checkpoints `services/booking/custom-checkpoints/story3|story6|story8` oder Git-Tags. Note: „Wer hängt: CUSTOM_BOOKING_PATH auf custom-checkpoints/storyN-1 setzen, make docker-up-hub, dann von dort weiter.“ Auf der Story-6-Folie ein story-foot: „Startpunkt: euer Stand aus Story 3 oder Checkpoint story3“.
 - **[erledigt]** Neuer Chaos-Modus „Hängt“ (`hang`, 10 s, `CHAOS_HANG_MS`), Handler läuft danach trotzdem weiter (Test in `shared/chaos/chaos_test.go`). Demos: Folie 08 optional, Story 4 mit Warten wie im Spiel, Story 6 „Timeout, aber gebucht“. Mitkorrigiert: Backend-Panel bei Story 6 und 7 wieder eingeblendet (eingeklappt), deren Demos brauchen „Fehler“. ~~Das Timeout-Szenario ist im Dashboard nicht zeigbar.~~ „Langsam“ = 2000 ms liegt unter dem 3000-ms-Timeout (`docker-compose.yml:15`, `chaos.go:125-130`), Story 3 hat 5000 ms. **Vorschlag:** Chaos-Modus „Hängt“ (z. B. 10 s) oder Flight-Latenz 4000. Demo mit `curl -w "%{time_total}\n"`. Spielregel bzw. Story-3-Timeout angleichen, `docs/instructions/circuitbreaker.md:13` korrigieren.
 - **[mittel] Setup-Check ohne Folie, Custom-Service nie vorab im Stack getestet.** `vorbereitung.md:15`, `52-56`. **Vorschlag:** Schritt 2b in vorbereitung.md (CUSTOM_BOOKING_PATH setzen, `curl -i http://localhost:8099/health` liefert 200, Custom-Toggle aktiv). Folie „Startklar?“ mit vier Häkchen. Note: „Wer kein grün hat, setzt sich zu jemandem mit grün.“
-- **[mittel] Trainer-Hinweise zum Quiz passen nicht zu den Folien.** `rest-vs-restful.md:30`, `108-152`: falsche Nummerierung, eine nicht existierende Folie 10c, „sechs Prinzipien“ statt zehn Regeln. Abschnitt 7 an 10f bis 10j angleichen. Prüfen, ob Quiz 2 gegen „POST /booking/bookings → 200 OK { "status": "error" }“ getauscht wird, Merksatz „Status-Codes sind Infrastruktur“.
-- **[mittel] Trainer-Hinweise zu CB und Consul veraltet.** `circuitbreaker.md:9`, `157-190` (Coding-Variante, 30 s, „Echte Atomicity“). `service-discovery-consul.md:79`, `140`, `269` sind widersprüchlich. Auf das Rollenspiel umstellen, 3 s, „Saga: kein Alles-oder-nichts, sondern ein definierter Weg zurück“, „Kritisch nach spätestens 10 s, aus der Registry nach 1 Minute“.
+- **[erledigt]** (Maßnahme 10: Abschnitt 7 an 10f bis 10j angeglichen, „sechs Prinzipien“ passt zu „Sechs Regeln“ auf 10b, Quiz 2 bewusst nicht getauscht, steht als Reserve) **Trainer-Hinweise zum Quiz passen nicht zu den Folien.** `rest-vs-restful.md:30`, `108-152`: falsche Nummerierung, eine nicht existierende Folie 10c, „sechs Prinzipien“ statt zehn Regeln. Abschnitt 7 an 10f bis 10j angleichen. Prüfen, ob Quiz 2 gegen „POST /booking/bookings → 200 OK { "status": "error" }“ getauscht wird, Merksatz „Status-Codes sind Infrastruktur“.
+- **[erledigt]** (Maßnahme 3/10: Rollenspiel, 3 s, „definierter Weg zurück“ in `circuitbreaker.md:5`, `:11`, `:176`; Consul `:141`, `:270`) **Trainer-Hinweise zu CB und Consul veraltet.** `circuitbreaker.md:9`, `157-190` (Coding-Variante, 30 s, „Echte Atomicity“). `service-discovery-consul.md:79`, `140`, `269` sind widersprüchlich. Auf das Rollenspiel umstellen, 3 s, „Saga: kein Alles-oder-nichts, sondern ein definierter Weg zurück“, „Kritisch nach spätestens 10 s, aus der Registry nach 1 Minute“.
 - **[niedrig] Keine Trainer-Hinweise für Story 1, 6 und 7.** `docs/instructions/saga.md` und `twelve-factor-health.md` anlegen, danach die Recap-Notes kürzen.
-- **[mittel] Log-Filter in Story 8 bricht.** Das `docker compose logs`-Präfix lässt jq scheitern, ohne die `-f`-Liste fehlen Services. **Vorschlag:** `make trace ID=…` mit `--no-log-prefix` und `jq -cR "fromjson? | select(...)"`, oder `COMPOSE_FILE` in `.env.example`.
+- **[erledigt]** (Maßnahme 4: `--no-log-prefix` und `fromjson?` in `story-08-tracing.md:70` und Dashboard, kein `make trace`) **Log-Filter in Story 8 bricht.** Das `docker compose logs`-Präfix lässt jq scheitern, ohne die `-f`-Liste fehlen Services. **Vorschlag:** `make trace ID=…` mit `--no-log-prefix` und `jq -cR "fromjson? | select(...)"`, oder `COMPOSE_FILE` in `.env.example`.
 - **[mittel] Story 3 enthält zwei Aufgaben, der Recap fragt POST nicht ab.** „Teil A · Resolver (30 min)“ und „Teil B · Buchen (30 min)“. Recap-Frage: „Hotel sagt Nein. Was antwortet euer POST: 201, 200 oder 5xx, und was ist mit dem schon gebuchten Flug?“
 - **[niedrig] Die Umbuchung aus Story 2 verpufft.** Reserve-Frage in 22 oder 25: „Umbuchung ist eine Saga: neuen Flug buchen, alten stornieren. Welche Reihenfolge, und was passiert, wenn das Storno scheitert?“
 - **[mittel] KI-Nutzung ungeregelt, keine Zusatzaufgaben.** Block „Schon fertig?“ auf jeder Hands-on-Folie. Regel auf der Story-1-Folie: „KI ist erlaubt. Bevor ihr Custom auf grün stellt, erklärt ihr eurem Nachbar-Team in zwei Sätzen, was euer Code bei einem Ausfall tut.“ Das schließt auch an 05a an.
 - **[mittel] Kontrast der Quiz-Merksätze.** `theme.css:625-630` (#8880AE ≈ 3,6:1). `.quiz-take` → #5B4E93, mindestens 20px. Ebenso `.muted` und `.compare-note`. `.dim` Opacity 0.28 → 0.45. Am Beamer im Raum prüfen.
 - **[niedrig] Packliste und Druckvorlagen fehlen.** `docs/orga/materialliste.md` (Mengen für 12 Teilnehmende) und Rollenkarten zum Drucken (vorne der Name, hinten zwei bis drei Regeln).
-- **[niedrig] Story-6-Doc nennt Webhook-Callbacks und Choreography.** `story-06-saga.md:27-28`, `:34` → „Ihr baut die Orchestration: Booking ruft nacheinander auf und kompensiert selbst. Die Alternative ohne Dirigent spielen wir in Story 7.“
+- **[erledigt]** (Maßnahme 10, `story-06-saga.md:26`) **Story-6-Doc nennt Webhook-Callbacks und Choreography.** `story-06-saga.md:27-28`, `:34` → „Ihr baut die Orchestration: Booking ruft nacheinander auf und kompensiert selbst. Die Alternative ohne Dirigent spielen wir in Story 7.“
 - **[erledigt]** ~~Feedback „anonym“, aber der Name bleibt gespeichert.~~ Formular: „Anonym, solange du keinen Namen einträgst“, Name wird nicht mehr im Browser gespeichert, alter Wert wird gelöscht. Webhook-Relay bleibt offen. `pages/feedback/index.html:225-376`. Namen nicht persistieren oder nur per Checkbox. Unterzeile: „Anonym, außer du trägst unten einen Namen ein“. Dropdown „Bezieht sich auf“. Für die Discord-Webhooks im ausgelieferten HTML ein Relay mit Rate-Limit vorschalten oder die Webhooks nach jedem Durchlauf rotieren.
 - **[niedrig] Titelfolie ohne offiziellen Namen.** `01-intro.md:7-8`: Kicker „Microservices richtig gemacht“ ergänzen.
 - **[niedrig] Die Ausschreibung verspricht Service-Grenzen.** `docs/orga/intranet.md:13` → „Was passiert, wenn Services ausfallen, langsam werden oder sich widersprechen: Discovery, Circuit Breaker, Bulkhead, Saga, Tracing, hands-on und im Rollenspiel.“ Oder die Schnitt-Übung wirklich einplanen.
@@ -407,38 +407,38 @@ Status: `[ ]` offen, `[~]` in Arbeit, `[x]` erledigt. Erledigte Punkte bekommen 
 
 ## 8. Quick Wins (je unter 15 Minuten)
 
-- [ ] `29a-drei-dinge.md:20-21` Bulkhead-Satz ersetzen, Note `:40` ergänzen
+- [x] `29a-drei-dinge.md:20-21` Bulkhead-Satz ersetzen, Note `:40` ergänzen (erledigt in Maßnahme 1, Note `:40-41`)
 - [x] `19-story-05-fragen.md:37` Pill → „Engpass wandert, verschwindet nicht“ (umgesetzt als „Engpass wandert“, Maßnahme 5)
-- [ ] `10-story-01-fragen.md:33` Readiness-Note korrigieren und Antwort auf Frage 2 ergänzen
-- [ ] `21-story-06.md:54` Retry-Widerspruch auflösen
+- [x] `10-story-01-fragen.md:33` Readiness-Note korrigieren und Antwort auf Frage 2 ergänzen (erledigt in Maßnahme 6 und 10, Note `:33-34`)
+- [x] `21-story-06.md:54` Retry-Widerspruch auflösen (erledigt in Maßnahme 10: „Heute wiederholt niemand. Sobald ein Retry dazukommt …“)
 - [x] `22-story-06-fragen.md:32` Pill → „204 ist Pragmatik, nicht Idempotenz“ (umgesetzt als „204 ist Pragmatik“, Maßnahme 5)
-- [ ] `26-tracing.md`-Note: parent-id richtig beschreiben
-- [ ] `14a-circuit-breaker-code.md:7` Untertitel → „Die Regeln, nach denen Booking gleich spielt.“ und eine Zeile für den Probe-Slot
+- [x] `26-tracing.md`-Note: parent-id richtig beschreiben (erledigt in Maßnahme 4/10, Note `:61-62`)
+- [~] `14a-circuit-breaker-code.md:7` Untertitel → „Die Regeln, nach denen Booking gleich spielt.“ und eine Zeile für den Probe-Slot (Probe-Slot `:17-18` erledigt in Maßnahme 10; offen: Untertitel lautet noch „In Pseudo-Code, wie im Spickzettel.“)
 - [x] `16-story-04-fragen.md:32` Pill → „einer probiert, Rest sofort Karte“ (der ursprüngliche Vorschlag „alle warten“ war falsch: in HALF_OPEN bekommen die anderen sofort den Fallback), Notes mit Spielbezug (Maßnahme 3)
-- [ ] `09-story-01.md:58` Resilienz-Satz aktualisieren
-- [ ] `27-story-08.md:30` und `story-08-tracing.md:47-50` Event-Kriterium als optional markieren, Hook `26-titel:21` umschreiben
-- [ ] `25-story-07-fragen.md:58` CQRS-Brücke klären (Variante A oder B)
-- [ ] `03-agenda.md:36` an die Entscheidung zu CQRS/BFF/Deployment anpassen
+- [ ] `09-story-01.md:58` Resilienz-Satz aktualisieren (offen: jetzt `:60`, noch „Resilienz kommt in Stories 4 bis 6.“)
+- [x] `27-story-08.md:30` und `story-08-tracing.md:47-50` Event-Kriterium als optional markieren, Hook `26-titel:21` umschreiben (erledigt in Maßnahme 4, anders gelöst: Events ganz aus den AKs, nur noch Bonus)
+- [x] `25-story-07-fragen.md:58` CQRS-Brücke klären (Variante A oder B) (erledigt in Maßnahme 2, Variante B: gestrichen)
+- [x] `03-agenda.md:36` an die Entscheidung zu CQRS/BFF/Deployment anpassen (erledigt in Maßnahme 2)
 - [x] Kicker 15, 18, 18a, 24, 24a → „Rollenspiel“, dazu Dashboard `1372`, `2990`, `2992`, `story-05-bulkhead.md:3` (Maßnahme 7; 24a ist jetzt „Nachbereitung“)
-- [ ] Zeit-Badges `15:9`, `10d:9` auf den Slot umstellen („≈ 60 min <small>davon 20 Spiel</small>“)
+- [ ] Zeit-Badges `15:9`, `10d:9` auf den Slot umstellen („≈ 60 min <small>davon 20 Spiel</small>“) (offen: beide zeigen noch „≈ 20 min“)
 - [x] `18-story-05.md:32` Becher benennen („Flight 4, Car 3, Hotel 3 Chips“) und die 503-Regel auf die Folie (Maßnahme 7: überholt, die Referenz kennt keine 503; jetzt Fallback-Karte `hotels: []`, 2 Chips je Backend)
 - [x] `15-story-04.md:29-31` Fallback-Satz, Regel „Strichliste wegwischen“, Rundenuhr ergänzen (Maßnahme 3)
 - [x] `24-story-07.md`: „Hotel lehnt in diesem Spiel jede Buchung ab.“, Titel → „Der Tisch ist der Broker“ (Maßnahme 7: anders gelöst, Car lehnt immer ab, Tisch fällt weg, Titel bleibt)
-- [ ] Notes anlegen: `12-story-03`, `13a`, `05a`, `14-titel`, `17-titel`, `10f` bis `10j`
-- [ ] `10g-quiz-2.md:9` „Kunde 7 existiert“ ergänzen
-- [ ] `13-story-03-fragen.md:30-32` `docker stop` vs. `kill`
-- [ ] `29-zusammenfassung.md:12` Karte 01 → „Health, Config aus der Umgebung, Logs auf stdout.“
-- [ ] `14-titel.md:11`, `17-titel.md:11` → „nach Michael Nygard, Release It! (2007)“
-- [ ] `30a-conway.md` „1968“, `04-praxis` Kicker und Fußzeile präzisieren
-- [ ] `28-story-08-fragen.md:65` TODO-Zeile entfernen, Frage 03 ohne `log.Printf`
-- [ ] `20-titel`, `23-titel`, `26-titel` „Die Grafik“-Bullets kürzen oder streichen
-- [ ] Dashboard: #CCF465 → #D3F871 (`1033`, `1046-1049`, `1074`)
+- [x] Notes anlegen: `12-story-03`, `13a`, `05a`, `14-titel`, `17-titel`, `10f` bis `10j` (erledigt in Maßnahme 6)
+- [~] `10g-quiz-2.md:9` „Kunde 7 existiert“ ergänzen (Note `:23-24` und Auflösung `:13` erledigt; offen: Hinweis in der Frage `:9` selbst fehlt)
+- [x] `13-story-03-fragen.md:30-32` `docker stop` vs. `kill` (erledigt in Maßnahme 10)
+- [ ] `29-zusammenfassung.md:12` Karte 01 → „Health, Config aus der Umgebung, Logs auf stdout.“ (offen: noch „Health, Config, Stateless.“)
+- [x] `14-titel.md:11`, `17-titel.md:11` → „nach Michael Nygard, Release It! (2007)“ (erledigt in Maßnahme 10)
+- [~] `30a-conway.md` „1968“, `04-praxis` Kicker und Fußzeile präzisieren (1968 und Fußzeile „Monolith First, Martin Fowler“ erledigt in Maßnahme 10; offen: Kicker `04:3` und „Fast 3 Teams“ `04:15`, „TN“ nur in der Note erklärt)
+- [~] `28-story-08-fragen.md:65` TODO-Zeile entfernen, Frage 03 ohne `log.Printf` (TODO-Zeile weg, `docs/questions/story8.md` angelegt, Maßnahme 4/5; offen: Frage 03 `:30` nennt noch `log.Printf`)
+- [ ] `20-titel`, `23-titel`, `26-titel` „Die Grafik“-Bullets kürzen oder streichen (offen: alle drei noch in Z. 22)
+- [x] Dashboard: #CCF465 → #D3F871 (`1033`, `1046-1049`, `1074`) (entfällt: #CCF465 bleibt bewusst, das Dashboard-Theme nutzt es für aktive Knoten, jetzt `1216`, `1229-1230`, `1254`)
 - [x] Dashboard: Story-7-Legende `1883` → „STORNO ANGEFORDERT“, Z. 2767 anpassen (Maßnahme 7: „COMPENSATED (gemeldet, nicht geprüft)“)
 - [x] Dashboard: Story-8-Filter mit `svc` je nach Modus (`2812-2814`) (Maßnahme 4, zusätzlich `--no-log-prefix` und `fromjson?`)
-- [ ] Dashboard: Header-h1 → „Microservices richtig gemacht“, Umschalter „Referenz | Mein Service“
-- [ ] Dashboard: `.stepper-connector.done` in `showStory()` setzen
-- [ ] Dashboard: Story 3 Kriterien um „201 Created“ und Brücke zu Story 2 ergänzen
-- [ ] Dashboard: `.story-helpers details[open]{flex-basis:100%;order:-1}` und #888 → #5B4E93
-- [ ] `docs/questions/story5.md:54-56` „schützt Booking, nicht das Backend“
-- [ ] `08b-zwei-fragen.md:38`, `themen.md:119` SAML ersetzen
-- [ ] `story-06-saga.md:27-28`, `:34` Webhook-/Choreography-Hinweis ersetzen (Kritiker-Hinweis, vorher prüfen)
+- [ ] Dashboard: Header-h1 → „Microservices richtig gemacht“, Umschalter „Referenz | Mein Service“ (offen: h1 `1463` noch „Microservices“, Umschalter noch „Reference | Custom“)
+- [ ] Dashboard: `.stepper-connector.done` in `showStory()` setzen (offen: `showStory()` jetzt `3442`)
+- [ ] Dashboard: Story 3 Kriterien um „201 Created“ und Brücke zu Story 2 ergänzen (offen: Folie `12-story-03.md:30`, `:48` hat beides, Dashboard `1779` nicht)
+- [~] Dashboard: `.story-helpers details[open]{flex-basis:100%;order:-1}` und #888 → #5B4E93 (Layout anders gelöst in Maßnahme 9: untereinander in voller Breite, `926-932`; offen: #888 noch 16-mal im Dashboard)
+- [x] `docs/questions/story5.md:54-56` „schützt Booking, nicht das Backend“ (erledigt in Maßnahme 1/10, `:53-59`)
+- [ ] `08b-zwei-fragen.md:38`, `themen.md:119` SAML ersetzen (offen: jetzt `08b:39`, `themen.md:118`)
+- [x] `story-06-saga.md:27-28`, `:34` Webhook-/Choreography-Hinweis ersetzen (Kritiker-Hinweis, vorher prüfen) (erledigt in Maßnahme 10, `:26`)
