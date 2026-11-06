@@ -108,6 +108,7 @@
 </div>
 
 Note:
+- <strong>Handzeichen zum Einstieg:</strong> Wer hat einen Big Ball of Mud gepflegt? Wer hat einen ESB gesehen? Wer ist schon von Microservices zur&uuml;ck zum Modulith? Die H&auml;nde zeigen, wo ihr erz&auml;hlt und wo ihr abk&uuml;rzt.
 - Vorher: Mainframes
 - SOA: wenige, gro&szlig;e Services
 - Microservices: feingranular, eine Aufgabe, ein Service

@@ -81,5 +81,8 @@
 </div>
 
 Note:
-- <strong>VIII Concurrency:</strong> Skalieren hei&szlig;t mehr Prozesse, nicht ein gr&ouml;&szlig;erer Prozess. Statt einer JVM mit 500 Threads und 32 GB Heap laufen mehrere kleine Instanzen nebeneinander (Unix-Prozessmodell, horizontal statt vertikal). Im Workshop: ein zweiter Booking-Container statt mehr RAM f&uuml;r den ersten.
-- <strong>XII Admin Processes:</strong> Einmalige Aufgaben wie DB-Migration, Datenkorrektur oder Cleanup laufen in derselben Umgebung wie die App, mit gleichem Code, gleicher Config, gleichen Dependencies. Nicht von Hand per <code>psql</code> auf der Prod-DB und nicht als separates Admin-Tool mit eigenem Build, das irgendwann inkompatibel wird.
+- <strong>Wette vor dem Klick:</strong> &bdquo;Welche drei davon baut ihr gleich in Story 1?&ldquo; Zwei, drei Tipps sammeln, dann klicken. Nicht alle zw&ouml;lf vorlesen.
+- <strong>III Config:</strong> Ports und Backend-URLs kommen aus Env-Vars. Ein Image, jede Umgebung.
+- <strong>VII Port Binding:</strong> Der Service bringt seinen HTTP-Server selbst mit, kein Tomcat, kein IIS davor.
+- <strong>XI Logs:</strong> Nach stdout schreiben, sammeln macht die Plattform. Darauf baut Story 8 auf.
+- Fragt jemand nach den anderen: VIII Concurrency kommt in Story 3 (zweite Instanz statt mehr RAM).

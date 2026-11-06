@@ -32,6 +32,7 @@
 </div>
 
 Note:
+- <strong>Schnittfrage, 60 Sekunden:</strong> &bdquo;Flug, Hotel, Auto, Booking. W&uuml;rdet ihr so schneiden?&ldquo; Kurz mit dem Nachbarn, dann zwei Antworten aufs Flipchart. Nicht aufl&ouml;sen, der Schnitt ist Thema am Ende (30).
 - Microservices sind ein Werkzeug, kein Ziel. Am Ende der zwei Tage habt ihr eine ehrliche Aufwandseinsch&auml;tzung und damit eine bessere Entscheidungsgrundlage f&uuml;r euer eigenes Projekt.
 - Was on top kommt (Diskussion, kein Hands-on):
   - Service-Schnitt (DDD, Event Storming)
