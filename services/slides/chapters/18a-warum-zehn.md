@@ -38,5 +38,5 @@ Note:
 - Erst festlegen lassen (mehr, weniger, gleich viele), dann rechnen. Die meisten tippen auf &bdquo;weniger&ldquo;, um das Backend zu schonen. Little&rsquo;s Law sagt das Gegenteil.
 - Ein Klick zeigt die Ergebnisse: 1, 10, 60. Bei 3 s Timeout und 20 Aufrufen pro Sekunde h&auml;ngen 60 Aufrufe gleichzeitig. Ein Pool von zehn lehnt dann f&uuml;nf von sechs ab.
 - Die zehn aus dem Code ist eine Workshop-Zahl. In Produktion aus drei Faktoren ableiten: Connection-Pool des HTTP-Clients, Backend-Kapazit&auml;t (Replicas mal maxConcurrent kleiner gleich Kapazit&auml;t) und Little&rsquo;s Law aus gemessener Latenz und Ziel-Durchsatz.
-- Merksatz: Dimensioniert wird auf die normale Latenz. Wer den Pool klein macht, &bdquo;um das Backend zu schonen&ldquo;, lehnt ab, was es h&auml;tte schaffen k&ouml;nnen. L&auml;uft der Pool voll, weil Hotel degradiert, ist das das Signal, kein Grund zum Vergr&ouml;&szlig;ern (Runde 2). Im Spiel 2, im Code 10, gleiche Rechnung.
+- Merksatz: Dimensioniert wird auf die normale Latenz. L&auml;uft der Pool voll, weil Hotel degradiert, ist das das Signal, kein Grund zum Vergr&ouml;&szlig;ern (Runde 2). Auf den Timeout dimensioniert (60), l&auml;uft der Pool nie voll und der Bulkhead greift nie.
 - Spicy: Wer <code>maxConcurrent</code> aus dem Bauch setzt, hat den Bulkhead nicht implementiert, sondern dekoriert.

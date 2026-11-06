@@ -76,7 +76,7 @@ Hardcodierte URLs sind in der Konferenz-Folie schön. Im Betrieb sind sie der h�
 | `Port` | `8080` (intern im Container) | Port auf dem die Instanz lauscht. |
 | `Check.HTTP` | `http://{Address}:{Port}/health` | Endpoint, den Consul für Health-Checks aufruft. |
 | `Check.Interval` | `10s` | Wie oft Consul prüft. Zu kurz = Last + Lärm; zu lang = lange falsche „grün"-Anzeige nach Crash. |
-| `Check.DeregisterCriticalServiceAfter` | (nicht gesetzt im Workshop) | Wenn Health-Check X Minuten lang `critical` ist, automatisch entfernen. Verhindert „Zombie-Einträge" nach Crashes. **Diskussionspunkt!** |
+| `Check.DeregisterCriticalServiceAfter` | `1m` | Wenn der Health-Check so lange `critical` ist, entfernt Consul den Eintrag aus dem Katalog. Nur Aufräumen: Aus `passing=true` ist die Instanz schon nach dem ersten fehlgeschlagenen Check raus. **Diskussionspunkt!** |
 
 > 🎯 *Folie:* Diese Tabelle zeigen und betonen: Es gibt keine universellen Werte. Sie hängen ab von:
 > - Wie schnell muss der Failover sein? (Intervall)
@@ -105,6 +105,7 @@ fun register(consulUrl, service): String {
         "Check"   to mapOf(
             "HTTP"     to "http://${hostname()}:${service.port}/health",
             "Interval" to "10s",
+            "DeregisterCriticalServiceAfter" to "1m",
         ),
     )
 
@@ -137,7 +138,7 @@ fun deregister(consulUrl, serviceId) {
 
 > ⚠️ **Reihenfolge ist entscheidend.** Erst aus Consul raus, *dann* den Server schließen. Sonst fragt ein Caller bei Consul nach, bekommt die sterbende Instanz zurück und läuft in Connection Refused.
 
-> 💡 **Was bei `kill -9`?** Dann läuft `deregister` nicht. Der Eintrag bleibt bis zum nächsten Health-Check (im Workshop bis zu 10s). Lösung: `DeregisterCriticalServiceAfter` mit setzen — Consul räumt selbst auf.
+> 💡 **Was bei `kill -9`?** Dann läuft `deregister` nicht. Der Eintrag bleibt bis zum nächsten Health-Check (im Workshop bis zu 10s). Nach etwa 1 Minute entfernt Consul ihn ganz (`DeregisterCriticalServiceAfter: "1m"`), das ist nur Aufräumen. Das Fenster bis zum Check überbrücken Story 4/5.
 
 ### C) Auflösen mit Client-Side Load Balancing
 
@@ -266,7 +267,7 @@ Discovery wird komplett in einen Sidecar-Proxy ausgelagert. Anwendungscode ruft 
 > Health-Check liefert 200, aber die DB-Verbindung ist noch nicht aufgebaut. Caller bekommt 500. Lösung: `/health` echt implementieren — *Liveness* (Prozess lebt) und *Readiness* (Prozess kann Anfragen bedienen) trennen, nur Readiness an Consul melden.
 
 > ⚠️ **„Zombie-Instanzen"**
-> Container wird mit `kill -9` beendet, Deregister wird übersprungen. Eintrag bleibt minutenlang in Consul, wird als „critical" markiert, aber nicht entfernt. Lösung: `Check.DeregisterCriticalServiceAfter: "1m"` mitschicken — Consul räumt selbst auf.
+> Container wird mit `kill -9` beendet, Deregister wird übersprungen. Ohne `DeregisterCriticalServiceAfter` bleibt der Eintrag unbegrenzt als „critical" im Katalog. Die Referenz schickt `"1m"` mit: kritisch nach spätestens 10 s, aus der Registry nach etwa 1 Minute.
 
 > ⚠️ **„Resolver cached zu lange"**
 > Naiver Cache („einmal aufgelöst, behalten") verzögert Failover dramatisch. Workshop-Code löst pro Request frisch auf — einfach und korrekt, aber bei hohem Traffic Last auf Consul. Pragmatischer Mittelweg: Cache mit kurzer TTL (1–5s) + Consul-Watches für Echtzeit-Updates.

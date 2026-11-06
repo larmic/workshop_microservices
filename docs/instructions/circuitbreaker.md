@@ -173,11 +173,11 @@ Bei `POST /booking/bookings` will man Flug + Hotel + Auto buchen. Wenn der Fligh
 Drei Stufen:
 1. **Naive Graceful Degradation** (was wir initial hatten): `flight: null`, der Kunde wundert sich warum er kein Flug-Ticket hat aber ein Hotelzimmer und einen Mietwagen. **Schlechte UX.**
 2. **Fail-Fast** (was Story 4 jetzt macht): wenn ein CB OPEN ist, sofort `503 Service Unavailable`. Wenn mid-call ein Service kippt, abbrechen. Bessere UX, aber: was ist mit den schon erfolgten Sub-Buchungen? Die bleiben **als Leiche im System**.
-3. **Saga-Pattern** (Story 6): explizite Compensation. Schlägt der Auto-Call fehl, wird Hotel und Flug aktiv per `DELETE` zurückgerollt. Echte Atomicity über Service-Grenzen.
+3. **Saga-Pattern** (Story 6): explizite Compensation. Schlägt der Auto-Call fehl, wird Hotel und Flug aktiv per `DELETE` zurückgerollt. Keine echte Atomicity, sondern ein definierter Weg zurück: Zwischenzustände sind sichtbar, und eine Kompensation kann selbst scheitern.
 
-> 🎯 *Diese drei Stufen sind die Brücke zu Story 6*. Im Workshop laut sagen: "Der Circuit Breaker schützt eure Services. Atomicity über mehrere Services ist ein **anderes** Problem — und die Lösung heißt Saga."
+> 🎯 *Diese drei Stufen sind die Brücke zu Story 6*. Im Workshop laut sagen: "Der Circuit Breaker schützt eure Services. Konsistenz über mehrere Services ist ein **anderes** Problem — und die Antwort heißt Saga."
 
-> ⚠️ **Häufiger Denkfehler:** "Wir machen einfach Retry" reicht nicht. Retry ohne Idempotency-Key kann zu Doppelbuchungen führen. Retry ohne CB lässt das geschwächte Backend nicht atmen. Beides zusammen ist kombinierbar — aber Saga ist die saubere Lösung für alles-oder-nichts.
+> ⚠️ **Häufiger Denkfehler:** "Wir machen einfach Retry" reicht nicht. Retry ohne Idempotency-Key kann zu Doppelbuchungen führen. Retry ohne CB lässt das geschwächte Backend nicht atmen. Beides zusammen ist kombinierbar — aber für „alles oder nichts mehr gebucht“ braucht es die Saga.
 
 ---
 

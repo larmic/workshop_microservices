@@ -32,13 +32,13 @@ wofür OpenTelemetry da ist.
 
 ---
 
-## Frage 2 — Flight, Hotel, Car würfeln nie selbst eine ID. Warum nicht sicherheitshalber? (Recap 02)
+## Frage 2 — Ein Downstream bekommt einen traceparent und würfelt trotzdem eine neue ID. Was passiert? (Recap 02)
 
-**Antwort:** Trace-Initiierung gehört an die Systemgrenze (API-Gateway,
-Public-Service). Würde jedes Backend „sicherheitshalber" eine ID
-erzeugen, starten Aufrufe ohne Header einen eigenen Trace, obwohl sie
-Teil eines größeren Vorgangs sind. Im Tool sieht das nach viel
-Aktivität aus, beim Debuggen sind es tausend Mini-Traces.
+**Antwort:** Der Trace reißt genau dort: Ab diesem Hop tragen die
+Logzeilen eine andere trace_id, grep auf die ursprüngliche ID findet
+nur den Teil davor. Einen Trace zu starten, wenn kein Header kommt, ist
+dagegen legitim, OpenTelemetry macht das in jedem Service. Dass Flight,
+Hotel und Car es per HTTP nicht tun, ist eine Workshop-Entscheidung.
 
 In der Referenz: `tracing.Middleware` erzeugt (Booking),
 `tracing.Propagate` übernimmt nur (Flight, Hotel, Car). Deshalb sind
@@ -105,8 +105,8 @@ Exemplars, die das Team nie zurückbekommt.
 
 - **Sampling:** Head-based (etwa 1 Prozent) entscheidet am Eingang,
   Fehler-Traces gehen dabei verloren. Tail-based entscheidet am Ende,
-  das Backend muss puffern. Pragmatisch: head-based plus immer bei
-  Fehlern. Ohne Plan droht beides: 100 Prozent, und das Tracing kostet
+  das Backend muss puffern. Wer Fehler-Traces immer will, braucht
+  Tail-based (etwa im OTel Collector). Ohne Plan droht beides: 100 Prozent, und das Tracing kostet
   mehr als der Stack. 0,01 Prozent, und beim Kundenproblem fehlt genau
   sein Trace.
 - **Korrelation:** Metrik-Spike, Exemplar, konkreter Trace, dazu die

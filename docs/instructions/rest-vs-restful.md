@@ -18,16 +18,16 @@
 
 | # | Prinzip | Gegenbeispiel | Besser |
 |---|---|---|---|
-| 1 | **Ressourcen statt Verben.** Pfade benennen Dinge, keine Aktionen | `GET /getUser?id=1423` | `GET /users/1423` |
-| 2 | **Die HTTP-Methode trägt die Semantik.** GET liest, POST erzeugt, PUT ersetzt, PATCH ändert teilweise, DELETE entfernt | `POST /users/1423/delete` | `DELETE /users/1423` |
-| 3 | **Idempotenz.** GET, PUT, DELETE dürfen beliebig oft wiederholt werden, POST nicht. Das macht Retries sicher | `POST /bookings/1423/cancel` zweimal geschickt: zweiter Storno schlägt fehl oder storniert doppelt | `DELETE /bookings/1423` zweimal: 204 dann 404 (oder 204), Zustand identisch |
-| 4 | **GET hat keine Seiteneffekte.** Browser-Prefetch, Crawler und Caches dürfen GET jederzeit ausführen | `GET /bookings/1423/cancel` | `DELETE /bookings/1423` oder `POST /bookings/1423/cancellation` |
-| 5 | **Status-Codes statt Fehler-Body.** Die Infrastruktur liest nur den Code | `200 OK` mit `{ "status": "error" }` | `404 Not Found`, `409 Conflict`, `422 Unprocessable Content` mit Fehlerdetails im Body |
-| 6 | **Sub-Ressourcen und Filter statt Sonder-Endpoints.** Zugehörigkeit im Pfad, Auswahl in Query-Parametern | `GET /getBookingsForCustomer?id=7` | `GET /customers/7/bookings?status=confirmed` |
+| 1 | **Die HTTP-Methode trägt die Semantik.** GET liest, POST erzeugt, PUT ersetzt, PATCH ändert teilweise, DELETE entfernt | `POST /users/1423/delete` | `DELETE /users/1423` |
+| 2 | **Idempotenz.** GET, PUT, DELETE dürfen beliebig oft wiederholt werden, POST nicht. Das macht Retries sicher | `POST /bookings/1423/cancel` zweimal geschickt: zweiter Storno schlägt fehl oder storniert doppelt | `DELETE /bookings/1423` zweimal: 204 dann 404 (oder 204), Zustand identisch (welche Antwort ein Orchestrator braucht: Story 6) |
+| 3 | **GET hat keine Seiteneffekte.** Browser-Prefetch, Crawler und Caches dürfen GET jederzeit ausführen | `GET /bookings/1423/cancel` | `DELETE /bookings/1423` oder `POST /bookings/1423/cancellation` |
+| 4 | **Ressourcen statt Verben.** Pfade benennen Dinge, keine Aktionen | `GET /getUser?id=1423` | `GET /users/1423` |
+| 5 | **Sub-Ressourcen und Filter statt Sonder-Endpoints.** Zugehörigkeit im Pfad, Auswahl in Query-Parametern | `GET /getBookingsForCustomer?id=7` | `GET /customers/7/bookings?status=confirmed` |
+| 6 | **Status-Codes statt Fehler-Body.** Die Infrastruktur liest nur den Code | `200 OK` mit `{ "status": "error" }` | `404 Not Found`, `409 Conflict`, `422 Unprocessable Content` mit Fehlerdetails im Body |
 
 Nur als Ausblick, nicht im Workshop vertiefen: HATEOAS (Links in Antworten) und das Richardson Maturity Model (Level 0 bis 3, Martin Fowler). Für die Teilnehmenden ist Level 2 (Ressourcen plus HTTP-Verben) das realistische Ziel.
 
-> 🎯 *Folie:* Die sechs Prinzipien erscheinen als Karten (`10b-rest-vs-restful.md`), die Gegenüberstellung als Tabelle (`10c-rest-vs-restful-beispiele.md`). Zeit: 10 bis 12 Minuten, nicht länger, die Teilnehmenden sollen selbst denken.
+> 🎯 *Folie:* Die sechs Regeln erscheinen in drei Gruppen (Methode, Pfad, Antwort), je Klick eine, unter dem Beispiel `DELETE /customers/7/bookings/4711 → 204` (`10b-rest-vs-restful.md`). Zeit: 10 bis 12 Minuten, nicht länger, die Teilnehmenden sollen selbst denken.
 
 ---
 
@@ -105,33 +105,32 @@ Moderationshinweis: Hier gibt es keine eindeutig richtige Antwort. Wichtig ist, 
 
 ## 7. Quiz "RESTful oder nicht?"
 
-Fünf Endpoints, feste Reihenfolge, Dramaturgie: eindeutiges Nein, trügerisches Ja, trügerisches Nein, dann ein Paar zum Vergleichen und eine Auflockerung zum Schluss. Pro Beispiel: Endpoint zeigen, Handzeichen abfragen, eine Person aus der Minderheit begründen lassen, dann auflösen (Fragment auf der Folie). Slides: `10f-quiz-1.md` bis `10j-quiz-5.md`.
+Fünf Endpoints, feste Reihenfolge, Dramaturgie: Aufwärmen mit Ja, trügerisches Nein, eindeutiges Nein, dann ein Paar zum Vergleichen und eine Auflockerung zum Schluss. Pro Beispiel: Endpoint zeigen, Handzeichen abfragen, eine Person aus der Minderheit begründen lassen, dann auflösen (Fragment auf der Folie). Slides: `10f-quiz-1.md` bis `10j-quiz-5.md`.
 
-### Quiz 1 · Eindeutig nicht RESTful
+### Quiz 1 · Aufwärmen, RESTful
+
+```
+GET /booking/offers?from=BRE&to=LIS&date=2026-05-14
+```
+
+Erwartung: die meisten sagen "ja". Auflösung: RESTful. `offers` ist ein Substantiv, GET verändert nichts, die Auswahl steht in Query-Parametern statt in eigenen Endpoints (Regel 5, Sub-Ressourcen und Filter). Den Endpoint kennen die Teilnehmenden aus Story 1, dort noch ohne Query-Parameter. Merksatz: Filter ≠ Endpoint.
+
+### Quiz 2 · Sieht sauber aus, ist nicht RESTful
+
+```
+GET /booking/customers/7/bookings?status=confirmed
+→ 404 Not Found
+```
+
+Erwartung: viele sagen "ja, sauber". Auflösung: nicht RESTful. Kunde 7 existiert, hat nur gerade keine bestätigte Buchung. Die Sammlung ist leer, nicht weg: richtig ist `200 OK` mit `[]`. Gibt es Kunde 7 nicht, ist `404` richtig. Genau diese Mehrdeutigkeit ist die Pointe: Der Client kann bei einem `404` nicht unterscheiden, ob er falsch fragt oder nur nichts gefunden hat. Merksatz: leer ≠ weg.
+
+### Quiz 3 · Eindeutig nicht RESTful
 
 ```
 GET /booking/cancelBooking?id=4711
 ```
 
-Erwartung: fast alle sagen "nicht RESTful". Auflösung: Verb im Pfad, Identität als Query-Parameter, GET mit Seiteneffekt. Anekdote: 2005 hat der Google Web Accelerator Links auf Webseiten vorgeladen, um Seiten schneller zu machen. Bei der 37signals-Anwendung Backpack waren "Löschen"-Links einfache GET-Links. Der Prefetcher hat Nutzern ihre Daten gelöscht. Seitdem ist "GET verändert nichts" Selbstschutz, keine Stilfrage. Besser: `DELETE /booking/bookings/4711` oder Quiz 2.
-
-### Quiz 2 · Sieht falsch aus, ist RESTful
-
-```
-POST /booking/bookings/4711/cancellation
-```
-
-Erwartung: viele sagen "nein, da steht eine Aktion drin". Auflösung: "cancellation" ist ein Substantiv, also eine Ressource. Der Client legt eine Stornierung an, bekommt `201 Created` und kann sie später per `GET` nachlesen (Grund, Zeitpunkt, Gebühr). Oft besser als ein nacktes DELETE, weil die Buchung als Historie bleibt. Direkter Bezug zur Flipchart-Aufgabe, dort taucht diese Variante fast immer auf. Anker aus dem Netz: Stripe modelliert Rückerstattungen genauso als eigene Ressource (`POST /v1/refunds`).
-
-### Quiz 3 · Sieht richtig aus, ist nicht RESTful
-
-```
-POST /booking/bookings
-→ 200 OK
-{ "status": "error", "message": "hotel not available" }
-```
-
-Erwartung: die meisten sagen "ja, sauber". Auflösung: Methode und Pfad stimmen, der Status-Code lügt. HTTP sagt Erfolg, der Body sagt Fehler. Load Balancer, Monitoring, Retries und der Circuit Breaker aus Story 4 sehen nur die 200 und halten den Service für gesund. Richtig: `409 Conflict` oder `422 Unprocessable Content` mit dem Fehler im Body. Beste Brücke in die Resilience-Themen: Status-Codes sind Infrastruktur, keine Kosmetik.
+Erwartung: fast alle sagen "nicht RESTful". Auflösung: Verb im Pfad, Identität als Query-Parameter, GET mit Seiteneffekt. Anekdote: 2005 hat der Google Web Accelerator Links auf Webseiten vorgeladen, um Seiten schneller zu machen. Bei der 37signals-Anwendung Backpack waren "Löschen"-Links einfache GET-Links. Der Prefetcher hat Nutzern ihre Daten gelöscht. Seitdem ist "GET verändert nichts" Selbstschutz, keine Stilfrage. Besser: `DELETE /booking/bookings/4711` oder Quiz 4.
 
 ### Quiz 4 · Beides RESTful
 
@@ -149,7 +148,7 @@ POST /booking/bookings
 → 418 I'm a teapot
 ```
 
-Erwartung: Lacher. Auflösung: nicht RESTful. Der Code existiert seit dem Aprilscherz-RFC 2324 (1998) und ist seit der "Save 418"-Kampagne 2017 offiziell reserviert. Nur bedeutet er für Load Balancer, Monitoring und Circuit Breaker nichts. Ein Status-Code ist eine Handlungsanweisung an die Infrastruktur: wiederholen, aufgeben, cachen. Richtig je nach Fall: 409, 422, 503. Merksatz: witzig ist kein Vertrag. Überleitung: "In Story 3 baut ihr `POST /booking/bookings` selbst, mit einem Status-Code, der etwas bedeutet."
+Erwartung: Lacher. Auflösung: nicht RESTful. Der Code existiert seit dem Aprilscherz-RFC 2324 (1998) und ist nach der "Save 418"-Kampagne (2017) seit RFC 9110 (2022) reserviert. Die Infrastruktur kennt ihn nicht und liest ihn wie 400: Client-Fehler, nicht wiederholen. Unser Circuit Breaker zählt ihn wie jeden Code ab 400 als Fehler. Was eigentlich schiefging, erfährt niemand. Richtig je nach Fall: 409, 422, 503. Merksatz: witzig ist kein Vertrag. Überleitung: "In Story 3 baut ihr `POST /booking/bookings` selbst, mit einem Status-Code, der etwas bedeutet."
 
 ### Reserve (falls Zeit bleibt oder ein Team genau das gebaut hat)
 
@@ -157,6 +156,8 @@ Erwartung: Lacher. Auflösung: nicht RESTful. Der Code existiert seit dem Aprils
 - `POST /flights/search` mit komplexem Filter-Body (Grauzone: Suche als Ressource vs. `GET /flights?from=BRE&…` mit URL-Längen-Grenze; beides vertretbar, wenn der Aufrufer weiß, dass die POST-Suche keine Seiteneffekte hat und nicht gecacht wird)
 - `PUT /bookings/1423` mit Teil-Objekt (Grauzone: PUT ersetzt ganz, PATCH ändert teilweise; was passiert mit weggelassenen Feldern?)
 - `POST /admin/bulkhead-reset` aus der eigenen Referenz-Implementierung (bewusst RPC-artig fürs Dashboard, Beispiel für "Abweichen mit Grund", siehe Abschnitt 9)
+- `POST /booking/bookings/4711/cancellation` allein (sieht falsch aus, ist RESTful: "cancellation" ist ein Substantiv, der Client legt eine Stornierung an, bekommt `201 Created` und kann sie per `GET` nachlesen; Anker: Stripe `POST /v1/refunds`)
+- `POST /booking/bookings` → `200 OK` mit `{ "status": "error", "message": "hotel not available" }` (sieht richtig aus, ist nicht RESTful: Load Balancer, Monitoring und Circuit Breaker sehen nur die 200; richtig sind `409` oder `422` mit Fehler im Body. Merksatz: Status-Codes sind Infrastruktur)
 - Ein Beispiel direkt von den Flipcharts der Teams
 
 **Quellen für die Folie:** Martin Fowler, "Richardson Maturity Model" (zugänglichster Einstieg). Roy Fielding, "REST APIs must be hypertext-driven" (2008, strengste Lesart). Für das Quiz reicht Fowler.

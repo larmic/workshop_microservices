@@ -11,7 +11,7 @@
 <div class="numlist-num">01</div>
 <div>
 <h3>Microservices sind ein <span class="hl">Werkzeug</span>, kein Ziel.</h3>
-<p>Unabh&auml;ngige Teams sind der einzige zwingend gute Grund. Alles andere geht auch im Modulith.</p>
+<p>Unabh&auml;ngige Teams sind der st&auml;rkste Grund. Alles andere geht auch im Modulith.</p>
 </div>
 </div>
 <div class="numlist-row">
@@ -36,7 +36,7 @@
 
 Note:
 - Die drei S&auml;tze sind die Quintessenz, das, was in Architektur-Reviews z&auml;hlt. Sie spiegeln die zwei Fragen vom Anfang: Was m&uuml;ssen wir tun, und was kostet es?
-- <strong>Werkzeug:</strong> R&uuml;ckgriff auf &bdquo;Brauchen wir Microservices?&ldquo; vom Anfang. TN Skills ist vom Microservice-Setup zur&uuml;ck zum Modulith ger&uuml;ckt: gleiches Produkt, 5 statt 14 Leute, h&ouml;here Velocity. Das ist kein Versagen, das ist eine gesunde Architektur-Entscheidung.
+- <strong>Werkzeug:</strong> R&uuml;ckgriff auf &bdquo;Brauchen wir Microservices?&ldquo; vom Anfang. TN Skills ist vom Microservice-Setup zur&uuml;ck zum Modulith ger&uuml;ckt: gleiches Produkt, 5 statt 14 Leute. Das ist kein Versagen, das ist eine gesunde Architektur-Entscheidung.
 - <strong>Aufrufer und Aufgerufener:</strong> Der h&auml;ufigste Denkfehler aus Story 4 und 5: Ein Pattern soll die falsche Seite sch&uuml;tzen. Timeout, CB und unser Bulkhead pro Downstream sitzen im Aufrufer. Erinnert ans Becher-Spiel: Die Becher standen bei Booking, Hotel wusste nichts davon. Bei f&uuml;nf Replicas mit je zehn Slots sieht Hotel f&uuml;nfzig Calls (Recap 05). Das Backend braucht eigene Grenzen: Rate Limit, Load Shedding, <code>429</code> plus <code>Retry-After</code>.
 - <strong>Falls jemand fragt:</strong> Bulkheads gibt es auch serverseitig, als Pool pro Consumer (Nygard, Azure Bulkhead Pattern). Dieselbe Idee in die andere Richtung, die bauen wir heute nicht.
 - <strong>Verschieben:</strong> Story 7 im Rollenspiel: Der Tisch als Blatt Papier verliert Zettel, das Postfach mit Quittung liefert doppelt. Beides muss jemand behandeln.

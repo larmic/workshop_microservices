@@ -15,7 +15,7 @@ was bei `POST /bookings/4711/cancellation`?
 **Antwort:** Beim `DELETE` nichts Schlimmes. Der erste Aufruf storniert,
 der zweite findet eine bereits stornierte Buchung und antwortet `204`
 (oder `404`, je nach Modell). Der Zustand ist derselbe, die Methode ist
-idempotent, der Retry ist sicher.
+idempotent, der Retry ist sicher. Welche Antwort ein wiederholender Aufrufer braucht, klärt Story 6.
 
 Beim `POST` legt der zweite Aufruf eine zweite Stornierung an, wenn der
 Server nicht aufpasst. Zwei Wege:

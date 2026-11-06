@@ -48,7 +48,7 @@ Einbinden als Hero-Slide (Variante A, Opacity 0.40) ganz oben in `10a-titel.md`:
 <!-- .slide: data-background-image="./assets/rest_vs_restful.png" data-background-size="contain" data-background-position="center" data-background-opacity="0.40" data-background-repeat="no-repeat" -->
 ```
 
-Optional dasselbe Bild als Watermark (Opacity 0.18) in `10b-rest-vs-restful.md` und `10c-rest-vs-restful-beispiele.md`.
+Optional dasselbe Bild als Watermark (Opacity 0.18) in `10b-rest-vs-restful.md`.
 
 ---
 

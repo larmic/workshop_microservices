@@ -29,8 +29,8 @@
 </div>
 <div class="card">
 <h3>traceparent</h3>
-<p>Der W3C-Header. Sprach- und vendor-neutral, immer 55 Zeichen.</p>
-<code>00-&lt;trace 32&gt;-&lt;span 16&gt;-&lt;flags 2&gt;</code>
+<p>Der W3C-Header. Sprach- und vendor-neutral, 55 Zeichen.</p>
+<code>00-&lt;trace 32&gt;-&lt;parent 16&gt;-&lt;flags 2&gt;</code>
 </div>
 <div class="card">
 <h3>Sampling-Flag</h3>

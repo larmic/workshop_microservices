@@ -29,7 +29,7 @@
 </div>
 
 <div class="foot">
-<p>Microservices sind nicht immer die richtige Wahl.<br>Mit einem Monolithen zu starten ist meist die bessere Option.</p>
+<p>Microservices sind nicht immer die richtige Wahl.<br>Mit einem Monolithen zu starten ist oft die bessere Option (Monolith First, Martin Fowler).</p>
 <div class="callout">Dieser Workshop zeigt das Wie, nicht das Ob.</div>
 </div>
 

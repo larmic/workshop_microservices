@@ -23,14 +23,14 @@ einer Buchung.
 
 **Wer initiiert den Trace?** Bewusst nur der Booking-Service als
 Entry-Point. Flight, Hotel und Car sind **passive Trace-Empfänger** —
-sie verlängern einen eintreffenden `traceparent`-Header, erzeugen aber
-**niemals selbst** einen neuen. Dadurch entsteht der "rote Faden" erst,
+sie übernehmen einen eintreffenden `traceparent`-Header und starten per
+HTTP bewusst keinen eigenen. Dadurch entsteht der "rote Faden" erst,
 sobald Story 8 ihn im Booking-Service zieht; in Stories 1–7 (ohne
 Tracing-Propagation) bleiben die Logs von Flight/Hotel/Car ohne
-`trace_id` — der Kontrast macht den Effekt sichtbar. Dieses Muster
-spiegelt auch die reale Welt wider: Trace-Initiierung gehört an den
-Entry-Point (API-Gateway, Public-Service), nicht in jeden
-Downstream-Hop.
+`trace_id` — der Kontrast macht den Effekt sichtbar. Das ist eine
+Workshop-Entscheidung: In OpenTelemetry startet jeder Service ohne
+eingehenden Header einen Trace. Tabu ist nur, einen eingehenden zu
+überschreiben.
 
 Eine Ausnahme gibt es: Kommt ein Compensation-Event ohne
 `traceparent`-Property an, starten die Backends dafür einen neuen

@@ -15,7 +15,7 @@ wirklich „gesund"? Was sagt das überhaupt aus?
 **Antwort:** Praktisch nichts. Unser `/health` sagt nur: "der HTTP-Server
 läuft und kann eine Route bedienen." Er sagt **nicht**:
 
-- ob die Backend-Services Flight/Hotel/Car erreichbar sind,
+- ob die Backend-Services Flight/Hotel/Car erreichbar sind (gehört bewusst nicht hinein, siehe unten),
 - ob der Service überhaupt arbeitsfähig ist (z.B. DB-Connection),
 - ob er nur noch 5 % freie Threads hat und gleich kippt.
 
@@ -26,9 +26,10 @@ In der Cloud-Welt unterscheidet man zwei Arten:
 | **Liveness**  | "Lebt der Prozess noch?"       | Container neu starten              |
 | **Readiness** | "Kann der Prozess Last sehen?" | Aus dem Load-Balancer rausnehmen   |
 
-Unser `/health` ist eher Liveness. Eine Readiness müsste z.B. prüfen,
-ob Consul erreichbar ist (Story 3), ob die Backends antworten (Story 4+),
-usw.
+Unser `/health` ist eher Liveness. Eine Readiness prüft nur, was die
+Instanz selbst braucht: Warm-up, eigene DB, eigenen Connection-Pool.
+Downstream-Services wie Flight/Hotel/Car gehören nicht hinein, gegen
+kranke Backends hilft der Circuit Breaker (Story 4).
 
 **Spicy Take-away:** Ein zu „cleverer" Readiness-Check kann dafür
 sorgen, dass alle Instanzen gleichzeitig aus dem LB fliegen, sobald ein

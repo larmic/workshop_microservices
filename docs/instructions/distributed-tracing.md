@@ -28,12 +28,12 @@
 traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
              │  └────── Trace-ID (32 hex) ─────┘ └Span-ID (16 hex)┘ └Flags
              │
-             └── Version (immer 00)
+             └── Version (aktuell 00)
 ```
 
 | Feld | Länge | Bedeutung |
 |---|---|---|
-| `version` | 2 hex | Aktuell immer `00`. Höhere Versionen müssen abwärtskompatibel ignoriert werden. |
+| `version` | 2 hex | Aktuell `00`. Laut Standard höhere Versionen im 00-Layout lesen, `ff` ist ungültig. Die Referenz akzeptiert vereinfacht nur `00`. |
 | `trace-id` | 32 hex | 16 Byte zufällig. **Bleibt über alle Hops gleich.** Darf nicht nur Nullen sein. |
 | `parent-id` (Span-ID) | 16 hex | 8 Byte zufällig. **Pro Hop neu**, der Aufrufer würfelt sie und schreibt sie in den Header: die Span-ID dieses Aufrufs. Aus Empfänger-Sicht: sein Parent. |
 | `flags` | 2 hex | Bitmaske. Bit 0 = „sampled". |
@@ -90,14 +90,14 @@ Client ──► Booking
 **Flight / Hotel / Car** (Downstream): erstellen **nichts** für eingehende Requests.
 - `Propagate`-Middleware übernimmt den eintreffenden `traceparent` in den Request-Context.
 - Loggen mit der mitgelieferten `trace_id` + `span_id`.
-- **Fehlt der Header → keine `trace_id` im Log**, kein Fallback. Absicht: nur der Entry-Point sät Trace-IDs.
+- **Fehlt der Header → keine `trace_id` im Log**, kein Fallback. Workshop-Entscheidung: per HTTP sät nur der Entry-Point Trace-IDs.
 
 **Wenn ein Downstream selbst weiterruft** (z. B. Flight ruft externen Provider):
 - Pattern identisch: `Propagate` übernimmt eingehenden Kontext, `Client-Inject` erzeugt **neue Span-ID** für den Outbound-Hop.
 - Trace-ID T wandert weiter, Span-ID wird neu (S2 im Diagramm oben).
 - Flight darf in diesem Fall **niemals** eine neue Trace-ID erzeugen — sonst zerfällt der Trace genau dort.
 
-**Faustregel:** Jeder Service, der Aufrufe annimmt und weiterleitet, braucht eine Server-Middleware vom Typ *Propagate*. Eine *Middleware* (die einen neuen Trace bei Bedarf erzeugt) gehört **exklusiv an die Systemgrenze** — API-Gateway oder Public-Service.
+**Faustregel:** Jeder Service, der Aufrufe annimmt und weiterleitet, braucht eine Server-Middleware vom Typ *Propagate*. Im Workshop sitzt die erzeugende *Middleware* nur an der Systemgrenze, damit der Kontrast sichtbar bleibt. OpenTelemetry startet ohne Header in jedem Service einen Trace. Tabu ist nur, einen eingehenden zu überschreiben.
 
 ### Was wird geloggt?
 

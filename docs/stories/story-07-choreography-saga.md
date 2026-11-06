@@ -117,7 +117,7 @@ Nach fünf Klicks ist der Car-Breaker offen. Danach startet 30 Sekunden lang kei
 3. Runde 2 gegen Runde 3: Webhooks reichen doch. Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS überhaupt?
 4. Brauchen wir überhaupt einen Dirigenten? Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf Hotel. Wer merkt es, wenn Hotel das nicht weiß? (Faustregel nach Chris Richardson, *Microservices Patterns*: Choreographie für einfache Sagas ohne Reihenfolge, Orchestrierung sobald es einen Ablauf gibt.)
 
-Bonus zu Frage 3: Was ein Broker kann, was ein Webhook nicht kann. Behalten (Persistenz, Redelivery, Replay), Verteilen (Fan-out, Backpressure, Ordering), Scheitern lassen (Dead-Letter-Queue). Exactly-once gibt es trotzdem nicht, die praktische Näherung ist at-least-once plus Idempotenz.
+Bonus zu Frage 3: Was ein Broker kann, was ein Webhook nicht kann. Behalten (Persistenz, Redelivery, Replay), Verteilen (Fan-out, Backpressure, Ordering), Scheitern lassen (Dead-Letter-Queue). Exactly-once-Zustellung gibt es trotzdem nicht, at-least-once plus Idempotenz ergibt exactly-once-Wirkung.
 
 Antworten und Anekdoten: [questions/story7.md](../questions/story7.md)
 

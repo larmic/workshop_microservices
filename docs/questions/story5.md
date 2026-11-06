@@ -354,10 +354,10 @@ Pro in-flight Call belegt bleibt, völlig unabhängig vom
 Threading-Modell:
 
 - **Connection-Pool-Slot** im HTTP-Client. In Go:
-  `http.Transport.MaxConnsPerHost`. In Reactor-Netty: 500 Connections
-  default. Wenn Hotel langsam ist und 500 Slots belegt, kommen Flight-
-  und Car-Calls nicht mehr durch, obwohl die Runtime „Threads frei"
-  meldet. Der Pool ist *shared*.
+  `http.Transport.MaxConnsPerHost` (per Default unbegrenzt). Reactive
+  Clients haben eigene Pool-Limits. Wenn Hotel langsam ist und den Pool
+  belegt, kommen Flight- und Car-Calls nicht mehr durch, obwohl die
+  Runtime „Threads frei" meldet. Der Pool ist *shared*.
 - **Memory.** Jeder in-flight Call hält Request- und Response-Buffer,
   Context, Cancellation-Channel, deserialisierte DTOs. 50.000
   gleichzeitig offene Calls sind realer Heap-Verbrauch, GC-Pausen, im

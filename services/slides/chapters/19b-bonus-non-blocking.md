@@ -43,7 +43,7 @@
 Note:
 - Kurze Diskussion, keine Vorlesung: Erst raten lassen, was knapp wird, dann per Klick aufdecken.
 - <strong>Speicher:</strong> Request- und Response-Puffer, Kontext, Cancellation. 50.000 offene Aufrufe sind realer Heap-Druck, GC-Pausen, irgendwann OOM.
-- <strong>Dateideskriptoren:</strong> Jede Verbindung belegt einen, eingehend wie ausgehend, plus den Connection-Pool des HTTP-Clients (Go: <code>http.Transport.MaxConnsPerHost</code>, Reactor Netty: 500 Default). Ist das OS-Limit erreicht, nimmt der Service gar nichts mehr an, auch keine Health-Checks.
+- <strong>Dateideskriptoren:</strong> Jede Verbindung belegt einen, eingehend wie ausgehend, plus den Connection-Pool des HTTP-Clients (Go: <code>MaxConnsPerHost</code> ist per Default unbegrenzt). Ist das OS-Limit erreicht, nimmt der Service gar nichts mehr an, auch keine Health-Checks.
 - <strong>Das Backend:</strong> Ohne Grenze im Aufrufer dr&uuml;ckt jede zus&auml;tzliche Anfrage in ein System, das schon schw&auml;chelt. Little&rsquo;s Law gilt unabh&auml;ngig vom Threading-Modell: Steigt die Latenz, steigt die Zahl offener Aufrufe linear, bei gleicher Eingangsrate.
 - Das Zahlenbeispiel: 150 Anfragen pro Sekunde und Instanz mal 3 s Timeout ergibt 450 offene Aufrufe. Laden Nutzer ungeduldig neu, verdreifacht sich die Last, ohne dass mehr Nutzer da sind.
 - Take-away: &bdquo;Non-blocking spart mir den Bulkhead&ldquo; ist Wunschdenken. In reaktiven Stacks (Spring WebFlux, Reactor) sind Bulkheads nicht zuf&auml;llig weiter empfohlen, Resilience4j hat daf&uuml;r den <code>SemaphoreBulkhead</code>. Die Grenze setzt sonst das Betriebssystem, und das fragt nicht, welcher Downstream schuld ist.

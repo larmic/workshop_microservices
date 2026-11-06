@@ -18,8 +18,8 @@
 </div>
 <div class="card">
 <h3>Drei Zust&auml;nde</h3>
-<p>Wechsel anhand Fehlerz&auml;hler. Ein Probe-Call pr&uuml;ft, ob das Backend wieder lebt.</p>
-<code>CLOSED &rarr; OPEN &rarr; HALF_OPEN</code>
+<p>Der Fehlerz&auml;hler schaltet CLOSED auf OPEN. Ein Probe-Call pr&uuml;ft, ob das Backend wieder lebt.</p>
+<code>HALF_OPEN &rarr; CLOSED | OPEN</code>
 </div>
 <div class="card">
 <h3>Schnell scheitern</h3>

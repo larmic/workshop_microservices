@@ -244,27 +244,28 @@ sehen.
 **Frage:** Beim Start melden sich Flight/Hotel/Car bei Consul an. Was
 passiert beim Beenden? Verschwindet der Eintrag?
 
-**Antwort:** Im Workshop-Code: **nein, nicht aktiv.** Wenn ein Container
-einfach gestoppt wird (`docker stop`, `kubectl delete`), bleibt der
-Eintrag in Consul stehen, bis dessen TTL abläuft oder der
-Health-Check nach mehreren Misses ausschlägt.
+**Antwort:** Kommt drauf an, wie. Bei `docker stop` / `kubectl delete`
+(SIGTERM) melden sich Flight/Hotel/Car selbst ab (`flight/main.go`),
+der Eintrag ist sofort weg. Bei `docker kill`, `kill -9` oder Absturz
+läuft kein Deregister: Der Eintrag bleibt in `passing=true`, bis der
+nächste Health-Check fehlschlägt.
 
 Das hat ein konkretes Symptom:
 
 ```
-t=0     Hotel-Instanz wird gestoppt
+t=0     Hotel-Instanz wird gekillt (kill -9)
 t=0     Eintrag in Consul ist noch DA, Health-Check läuft, aber
         Hotel antwortet nicht mehr
 t=0..n  Booking-Service löst hotel-service auf, wählt zufällig die
         TOTE Instanz, Aufruf läuft in den Connection-Refused
-t=n     Consul markiert Instanz nach n fehlgeschlagenen Checks als
-        unhealthy → wird aus Resolver-Ergebnis entfernt
+t≤10s   nächster Check schlägt fehl, Consul markiert die Instanz
+        als critical → wird aus Resolver-Ergebnis entfernt
 ```
 
-Bis dahin (typisch 10–30 s) läuft Traffic ins Leere. Lösungen:
+Bis dahin (im Workshop bis zu 10 s) läuft Traffic ins Leere. Lösungen:
 
-1. **Graceful Shutdown** im Service: vor dem Stop aktiv bei Consul
-   `deregister` rufen. Dann ist der Eintrag sofort weg.
+1. **Graceful Shutdown** (so in der Referenz): vor dem Stop aktiv bei
+   Consul `deregister` rufen. Hilft bei stop, nicht bei kill.
 2. **Schneller Health-Check-Intervall** in Consul (z.B. 1 s statt 10 s).
    Senkt Erkennungszeit, kostet Last.
 3. **Out-of-Service-Mode**: Service nimmt für ein paar Sekunden keine

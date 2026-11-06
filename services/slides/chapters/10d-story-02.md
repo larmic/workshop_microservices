@@ -47,4 +47,4 @@
 </div>
 
 Note:
-- Beim Herumgehen fragen: Was antwortet eure API, wenn ein Backend beim Storno oder Umbuchen scheitert, etwa das Hotel ablehnt oder gar nicht antwortet? Ein 5xx kann immer passieren und geh&ouml;rt nicht in die API-Doku. Darauf achten, dass niemand ein 200 mit Fehler-Body in die Tabelle schreibt.
+- Beim Herumgehen fragen: Was antwortet eure API, wenn ein Backend beim Storno oder Umbuchen scheitert, etwa das Hotel ablehnt oder gar nicht antwortet? Unerwartete 5xx muss man nicht einzeln dokumentieren, einen bewusst gelieferten 503 schon. So macht es unsere Referenz ab Story 4 in der <code>openapi.yaml</code>. Darauf achten, dass niemand ein 200 mit Fehler-Body in die Tabelle schreibt.

@@ -10,7 +10,7 @@ Eine Reisebuchung umfasst Flug, Hotel und Mietwagen. Wenn die Hotelbuchung fehls
 ## User Story
 
 Als **Kunde**
-möchte ich **eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die entweder vollständig erfolgreich ist oder komplett zurückgerollt wird**,
+möchte ich **eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die am Ende entweder vollständig steht oder nichts mehr gebucht ist**,
 damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 
 ## Akzeptanzkriterien
@@ -23,19 +23,16 @@ damit **ich nicht mit einer unvollständigen Buchung dastehe**.
 
 ## Technische Hinweise
 
-- **Saga-Varianten:**
-  - **Choreography:** Services kommunizieren über Events (dezentral)
-  - **Orchestration:** Ein Koordinator steuert den Ablauf (zentral) - empfohlen für diesen Workshop
+- **Orchestration:** Ihr baut sie: Booking ruft nacheinander auf und kompensiert selbst. Das Storno per Event statt per Aufruf spielen wir in Story 7.
 - **Saga-Schritte für Reisebuchung:**
   1. Flug buchen
   2. Hotel buchen
   3. Mietwagen buchen
   - Kompensation: Mietwagen stornieren → Hotel stornieren → Flug stornieren
-- **Webhook-Callbacks:** Services rufen bei Statusänderung einen Callback-URL auf
 - **API-Endpunkte (Backend-Services):**
   - `POST /bookings` - Buchung erstellen
   - `DELETE /bookings/{id}` - Buchung stornieren (Kompensation)
-- **Rückblick auf Story 2:** Die Storno-Diskussion vom Flipchart kommt hier als Kompensation zurück. `DELETE /bookings/{id}` muss idempotent sein, weil der Orchestrator den Aufruf bei Timeout wiederholt (siehe [questions/story2.md](../questions/story2.md), Frage 4)
+- **Rückblick auf Story 2:** Die Storno-Diskussion vom Flipchart kommt hier als Kompensation zurück. `DELETE /bookings/{id}` muss idempotent sein, sobald der Orchestrator wiederholt (Bonus: Retry) oder jemand manuell nachstößt (siehe [questions/story2.md](../questions/story2.md), Frage 4)
 
 ## Bonus (optional)
 

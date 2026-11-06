@@ -22,7 +22,7 @@
 <div class="dim">  &rarr; [ { Service: { Address, Port } }, &hellip; ]</div>
 </div>
 
-<p class="codenote">Diese beiden Zahlen entscheiden, wie lange nach einem Ausfall noch Verkehr ins Leere l&auml;uft.</p>
+<p class="codenote">Das <code>Interval</code> entscheidet, wie lange nach einem Absturz Verkehr ins Leere l&auml;uft. Der zweite Wert r&auml;umt nur auf.</p>
 
 </div>
 

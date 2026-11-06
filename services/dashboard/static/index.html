@@ -1766,7 +1766,7 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
                     <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
-                        <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Backend-Services registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Fällt eine Instanz aus, übernimmt automatisch eine andere.</p>
+                        <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Backend-Services registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Läuft eine zweite Instanz, übernimmt sie, sobald sich die erste abmeldet oder ihr Health-Check fehlschlägt.</p>
                         <h4>User Story</h4>
                         <p>Als <em>Betriebsteam</em> möchte ich <em>Backend-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
@@ -2015,9 +2015,9 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
                     <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
-                        <p>Eine Reise = Flug + Hotel + Mietwagen. Schlägt die Hotelbuchung fehl, nachdem der Flug schon gebucht wurde, muss der Flug storniert werden. DB-Transaktionen funktionieren nicht über Service-Grenzen &mdash; das <em>Saga-Pattern</em> simuliert atomares Verhalten mit expliziten Kompensationsschritten.</p>
+                        <p>Eine Reise = Flug + Hotel + Mietwagen. Schlägt die Hotelbuchung fehl, nachdem der Flug schon gebucht wurde, muss der Flug storniert werden. DB-Transaktionen funktionieren nicht über Service-Grenzen &mdash; das <em>Saga-Pattern</em> ersetzt die fehlende Transaktion durch Kompensationsschritte. Atomar ist das nicht.</p>
                         <h4>User Story</h4>
-                        <p>Als <em>Kunde</em> möchte ich <em>eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die entweder vollständig erfolgreich ist oder komplett zurückgerollt wird</em>, damit <em>ich nicht mit einer unvollständigen Buchung dastehe</em>.</p>
+                        <p>Als <em>Kunde</em> möchte ich <em>eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die am Ende entweder vollständig steht oder nichts mehr gebucht ist</em>, damit <em>ich nicht mit einer unvollständigen Buchung dastehe</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
                             <li>Orchestrierte Saga: Flight &rarr; Hotel &rarr; Car (zentraler Koordinator)</li>

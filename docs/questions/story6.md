@@ -323,7 +323,7 @@ man die Geschäftslogik als Workflow, die Engine kümmert sich um den Rest:
            workflow.Execute(BookHotel)
            workflow.Execute(BookCar)
    Engine: persistiert jeden Schritt, retryt, startet nach Crash neu,
-           garantiert exactly-once-Semantik
+           Activities laufen at-least-once (idempotent bauen)
 ```
 
 **Bezug zum Workshop:** Unser Booking-Service hat **gar keine

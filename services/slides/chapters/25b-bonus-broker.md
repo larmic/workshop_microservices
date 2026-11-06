@@ -33,7 +33,7 @@
 </div>
 </div>
 
-<p class="bonus-text fragment" data-fragment-index="1">Exactly-once gibt es trotzdem nicht. Die praktische N&auml;herung: at-least-once beim Sender, Idempotenz beim Empf&auml;nger.</p>
+<p class="bonus-text fragment" data-fragment-index="1">Exactly-once-Zustellung gibt es trotzdem nicht. At-least-once plus idempotente Verarbeitung ergibt exactly-once-Wirkung.</p>
 
 <div class="foot fragment" data-fragment-index="1">
 <div class="callout">Wer Eventing ohne Broker will, baut sich in zw&ouml;lf Monaten einen schlechten.</div>
@@ -48,6 +48,6 @@ Note:
 - <strong>Behalten:</strong> Persistenz, Redelivery mit at-least-once, Replay vom alten Offset, etwa um ein Read-Model neu aufzubauen. Dazu das Outbox-Pattern als Br&uuml;cke: Saga-State und Event in derselben Datenbank-Transaktion, ein Worker publiziert mit Retry. Sonst gibt es State ohne Event oder Event ohne State.
 - <strong>Verteilen:</strong> Fan-out per Topic, Backpressure durch die Queue, Ordering pro Partition. Ein Webhook kennt genau einen Empf&auml;nger und blockiert, wenn der langsam ist.
 - <strong>Scheitern lassen:</strong> Dead-Letter-Queue als Operator-Inbox. Beim Webhook verschwindet ein nicht zustellbares Event im Log, wenn &uuml;berhaupt.
-- <strong>Exactly-once:</strong> Streng genommen nicht erreichbar ohne globale Koordination. Kafka bietet eine Exactly-once-Semantik an, sie ist teuer (transaktionale Producer, viel Koordination) und deckt nur Producer bis Broker ab, nicht den Empf&auml;nger. Was man wirklich will: at-least-once Delivery plus idempotente Verarbeitung. Nicht hipper, aber machbar.
+- <strong>Exactly-once:</strong> Streng genommen nicht erreichbar ohne globale Koordination. Kafka-EOS (transaktionale Producer) gilt nur innerhalb von Kafka, von Topic zu Topic, nicht f&uuml;r das Storno in Hotels eigener Datenbank. Was man wirklich will: at-least-once Delivery plus idempotente Verarbeitung. Nicht hipper, aber machbar.
 - Das Antipattern: &bdquo;Wir wollen Eventing, aber keinen Broker betreiben.&ldquo; Sechs Monate sp&auml;ter: Outbox-Tabelle, Retry-Worker, Dedup-Logik, Dead-Letter-Inbox, Replay-Skript, alles selbst gebaut. Zw&ouml;lf Monate sp&auml;ter: ein schlechter Broker.
 - Br&uuml;cke zu Story 8: Bei Events wandert der HTTP-Header nicht mit. Die Trace-ID muss als Property ins Event, sonst rei&szlig;t der rote Faden genau an der Stelle, wo es leise wird.
