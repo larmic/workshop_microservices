@@ -379,6 +379,12 @@ mit „cannot compensate". Abhilfen:
 - **Idempotency-Key** im Forward-Request; ein Retry liefert dieselbe
   Buchung zurück statt eine zweite anzulegen.
 
+**Live zeigen:** Im Dashboard Hotel auf „Hängt" stellen (antwortet erst
+nach 10 s), dann `POST /booking/bookings`. Nach 3 s ist die Saga
+`FAILED`, Flight `COMPENSATED`. Rund 7 s später steht im Hotel-Log
+trotzdem `hotel booking confirmed`:
+`docker compose logs --no-log-prefix hotel | grep "booking confirmed"`.
+
 Warum überhaupt **rückwärts** kompensieren? Spätere Schritte können auf
 früheren aufbauen (Mietwagen am Flughafen zur Landezeit). Wer in
 umgekehrter Reihenfolge storniert, verletzt solche fachlichen

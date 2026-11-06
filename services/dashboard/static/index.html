@@ -653,6 +653,7 @@
         .chaos-btn.active.normal   { background: #1d7a3a; color: #fff; border-color: #1d7a3a; }
         .chaos-btn.active.slow     { background: #b8860b; color: #fff; border-color: #b8860b; }
         .chaos-btn.active.fail     { background: #b3261e; color: #fff; border-color: #b3261e; }
+        .chaos-btn.active.hang     { background: #0A0349; color: #fff; border-color: #0A0349; }
         .chaos-btn.mixed { background: #ddd; color: #444; border-color: #aaa; }
 
         .instances-block {
@@ -695,6 +696,7 @@
         .instance-mode.normal { background: #d4f4dd; color: #1d7a3a; }
         .instance-mode.slow   { background: #fff3cd; color: #8a6d00; }
         .instance-mode.fail   { background: #fde0e0; color: #b3261e; }
+        .instance-mode.hang   { background: #EEE7FB; color: #0A0349; }
         .instance-mode.unknown { background: #eee; color: #888; }
 
         /* Highlight: zuletzt bediente Instanz */
@@ -2009,7 +2011,7 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
 
         </section>
 
-        <section class="story-section" data-story="6" data-kind="code" data-backend="hide" hidden>
+        <section class="story-section" data-story="6" data-kind="code" data-backend="demo" hidden>
             <div class="story-helpers" data-story-helpers="6">
                 <details class="story-info" open>
                     <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
@@ -2113,7 +2115,7 @@ booked = []                          // für Rollback</pre>
 
         <!-- Story 7: Rollenspiel statt Code. Story-Karte zeigt das Rollenspiel; das
              Saga-Panel darunter bleibt als Demo der Webhook-Referenz. -->
-        <section class="story-section" data-story="7" data-kind="play" data-backend="hide" hidden>
+        <section class="story-section" data-story="7" data-kind="play" data-backend="demo" hidden>
             <div class="story-helpers" data-story-helpers="7">
                 <details class="story-info" open>
                     <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
@@ -2639,6 +2641,7 @@ on receiveCompensationEvent(event):
                         <button class="chaos-btn normal" id="chaos-${name}-normal">Normal</button>
                         <button class="chaos-btn slow"   id="chaos-${name}-slow">Langsam</button>
                         <button class="chaos-btn fail"   id="chaos-${name}-fail">Fehler</button>
+                        <button class="chaos-btn hang"   id="chaos-${name}-hang" title="Antwortet erst nach dem Client-Timeout und verarbeitet die Anfrage trotzdem">H&auml;ngt</button>
                     </div>
                     <div class="instances-block" id="instances-block-${name}" style="display:none">
                         <div class="instances-heading" id="instances-heading-${name}">Instanzen (0)</div>
@@ -2660,6 +2663,8 @@ on receiveCompensationEvent(event):
                 () => setChaos(name, "slow");
             document.getElementById("chaos-" + name + "-fail").onclick =
                 () => setChaos(name, "fail");
+            document.getElementById("chaos-" + name + "-hang").onclick =
+                () => setChaos(name, "hang");
             return card;
         }
 
@@ -2690,7 +2695,7 @@ on receiveCompensationEvent(event):
             const headingText = "Chaos-Modus" + (aggMode === "mixed" ? " (gemischt)" : "");
             if (heading.textContent !== headingText) heading.textContent = headingText;
 
-            for (const mode of ["normal", "slow", "fail"]) {
+            for (const mode of ["normal", "slow", "fail", "hang"]) {
                 const btn = document.getElementById("chaos-" + s.name + "-" + mode);
                 btn.classList.toggle("active", aggMode === mode);
             }
@@ -2747,7 +2752,8 @@ on receiveCompensationEvent(event):
                 const mode = (inst.chaos && inst.chaos.mode) ? inst.chaos.mode : "unknown";
                 const reachable = inst.reachable ? "" : " (offline)";
                 const latencySuffix = (mode === "slow" && inst.chaos && inst.chaos.latencyMs)
-                    ? ` ${inst.chaos.latencyMs}ms` : "";
+                    ? ` ${inst.chaos.latencyMs}ms`
+                    : (mode === "hang" && inst.chaos && inst.chaos.hangMs) ? ` ${inst.chaos.hangMs}ms` : "";
 
                 // Compose-Name ("services-car-4") bevorzugen; Consul-ID
                 // ("car-service-ed9cda40b84d") als Fallback und Tooltip.
@@ -3445,12 +3451,12 @@ on receiveCompensationEvent(event):
                 if (sn === n) backend = sec.getAttribute("data-backend") || "hide";
             });
             // Backend-Services nur, wo sie etwas bringen: offen (show), eingeklappt
-            // für die Demo nach dem Rollenspiel (demo) oder gar nicht (hide).
+            // für die Demo am Ende der Story (demo) oder gar nicht (hide).
             const panel = document.getElementById("backend-panel");
             panel.hidden = (backend === "hide");
             panel.open = (backend === "show");
             document.getElementById("backend-panel-heading").innerHTML = (backend === "demo")
-                ? "Backend-Services &mdash; Chaos &amp; Scaling f&uuml;r die Demo nach dem Rollenspiel"
+                ? "Backend-Services &mdash; Chaos &amp; Scaling f&uuml;r die Demo"
                 : "Backend-Services &mdash; Chaos &amp; Scaling";
             document.querySelectorAll(".stepper-node").forEach(btn => {
                 const sn = parseInt(btn.getAttribute("data-story-node"), 10);

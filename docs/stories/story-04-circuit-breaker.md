@@ -63,7 +63,7 @@ Bewusste Vereinfachungen: Booking zählt bis drei wie der Story-4-Timeout (Story
 
 ## Teil 2: Die Demo mit der Referenz (ca. 10 Minuten)
 
-Im Dashboard unter Story 4: Flight auf „Fehler" stellen (das ist sofort ein 500, das Warten aus dem Spiel sieht man hier nicht), dann `GET /booking/offers` auslösen. Der Client bekommt immer 200 mit `flights: []` und `X-Fallback: flight`. Der fünfte Call öffnet den Breaker, ab dem sechsten steht zusätzlich `X-Circuit-Open: flight` in der Antwort. Flight zurück auf „Normal": Nach 30 Sekunden geht der Breaker beim nächsten Call auf HALF_OPEN, die erfolgreiche Probe schließt ihn. Drehbuch im Detail weiter unten.
+Im Dashboard unter Story 4: Flight auf „Hängt" stellen (antwortet erst nach 10 s, also nach dem 3-s-Timeout von Booking), dann `GET /booking/offers` auslösen. Die ersten fünf Calls warten je 3 Sekunden, genau wie im Spiel. Schneller geht es mit „Fehler" (sofort ein 500, ohne Warten). Der Client bekommt immer 200 mit `flights: []` und `X-Fallback: flight`. Der fünfte Call öffnet den Breaker, ab dem sechsten steht zusätzlich `X-Circuit-Open: flight` in der Antwort. Flight zurück auf „Normal": Nach 30 Sekunden geht der Breaker beim nächsten Call auf HALF_OPEN, die erfolgreiche Probe schließt ihn. Drehbuch im Detail weiter unten.
 
 ---
 
@@ -121,7 +121,7 @@ Unter `services/booking/story4/` liegt eine vollständige Go-Reference, die alle
 - **Drei separate CBs** für Flight, Hotel und Car. Jeder Backend-Aufruf läuft durch seinen eigenen Breaker; bei jedem Fehler wird der Teilbereich leer zurückgegeben (`flights: []`). Der POST macht fail fast: Ist ein Breaker OPEN, antwortet ein Pre-Check sofort mit 503, ohne etwas zu buchen.
 - **Detailliertes Logging**: jede Zustandsänderung, jede SHORT-CIRCUIT-Entscheidung mit Restzeit, jeder Fehlerzähler-Inkrement und jeder Probe-Versuch wird mit Begründung im Log ausgegeben — so ist im Workshop nachvollziehbar, *warum* der Breaker gerade so handelt.
 - **Dashboard-Visualisierung** (`services/dashboard/`): pro CB eine Karte mit Badge (CLOSED/OPEN/HALF_OPEN), Countdown bis HALF_OPEN, Failure-Counter, Anzahl Short-Circuits. Aktualisierung im 1-Sekunden-Takt.
-- **Chaos-Steuerung**: Backend-Services (Flight, Hotel, Car) bieten `/admin/chaos` mit den Modi `normal`, `slow`, `fail`. Das Dashboard erlaubt das Schalten pro Service oder pro Replica, sodass HALF_OPEN-Recovery live demonstriert werden kann.
+- **Chaos-Steuerung**: Backend-Services (Flight, Hotel, Car) bieten `/admin/chaos` mit den Modi `normal`, `slow` (2 s, unter dem Timeout), `fail` (sofort 500) und `hang` (10 s, über jedem Timeout im Stack). Das Dashboard erlaubt das Schalten pro Service oder pro Replica, sodass HALF_OPEN-Recovery live demonstriert werden kann.
 
 ### Workshop-Drehbuch
 

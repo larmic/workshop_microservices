@@ -33,7 +33,7 @@ Note:
 - Bewusst wie der Spickzettel im Dashboard (Story 6), nur aufs Skelett gek&uuml;rzt.
 - Zeigen: <strong>reverse(booked)</strong>, Kompensation r&uuml;ckw&auml;rts.
 - Zeigen: <strong>booked</strong> als eigene Liste, nur Gebuchtes wird kompensiert. Car wird nach dem Hotel-Fehler gar nicht angefasst.
-- Achtung <strong>Timeout, aber gebucht</strong>: Ergebnis unbekannt, niemand storniert. Abhilfe: Buchungs-ID von Booking oder Idempotency-Key.
+- Achtung <strong>Timeout, aber gebucht</strong>: Ergebnis unbekannt, niemand storniert. Live: Hotel auf &bdquo;H&auml;ngt&ldquo;, nach 3 s ist die Saga <code>FAILED</code>, nach 10 s loggt Hotel trotzdem <code>hotel booking confirmed</code>. Abhilfe: Buchungs-ID von Booking oder Idempotency-Key.
 - <strong>DELETE idempotent</strong>, Recap-Frage 3.
 - Bewusst weggelassen: Retry mit Backoff, persistenter Saga-Log, Workflow Engine, fachlicher Pivot. Details in <code>docs/questions/story6.md</code>.
 - Anker: <code>DELETE</code> l&auml;uft in 5xx? Ein Versuch, dann <code>FAILED</code>. Recap-Frage 1.

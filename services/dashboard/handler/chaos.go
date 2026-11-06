@@ -17,6 +17,7 @@ import (
 type ChaosState struct {
 	Mode      string     `json:"mode"`
 	LatencyMs int        `json:"latencyMs"`
+	HangMs    int        `json:"hangMs,omitempty"`
 	// LastSeenAt: Zeitpunkt des letzten regulären (nicht-whitelisted) Requests
 	// gegen diese Instanz. Vom Backend gepflegt (shared/chaos Middleware).
 	// Optional, weil eine frisch gestartete Instanz noch nichts gesehen hat.

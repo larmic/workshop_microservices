@@ -13,7 +13,12 @@ import (
 	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
-const defaultLatencyMs = 2000
+const (
+	defaultLatencyMs = 2000
+	// Hängen muss länger dauern als jeder Client-Timeout im Stack
+	// (3 s ab Story 4, 5 s in Story 1 und 3), sonst ist es nur langsam.
+	defaultHangMs = 10000
+)
 
 type Mode string
 
@@ -21,11 +26,16 @@ const (
 	Normal Mode = "normal"
 	Slow   Mode = "slow"
 	Fail   Mode = "fail"
+	// Hang antwortet erst nach HangMs, also nach dem Client-Timeout. Die
+	// Anfrage wird danach trotzdem verarbeitet: Der Aufrufer hat aufgegeben,
+	// der Service bucht (Story 6: "Timeout, aber gebucht").
+	Hang Mode = "hang"
 )
 
 type State struct {
 	Mode      Mode `json:"mode"`
 	LatencyMs int  `json:"latencyMs"`
+	HangMs    int  `json:"hangMs"`
 }
 
 // Snapshot ist das, was über GET /admin/chaos nach außen geht. Enthält
@@ -45,22 +55,31 @@ type Chaos struct {
 
 func New() *Chaos {
 	mode := Mode(strings.ToLower(os.Getenv("CHAOS_DEFAULT_MODE")))
-	if mode != Slow && mode != Fail {
+	if !mode.valid() {
 		mode = Normal
 	}
-	return &Chaos{state: State{Mode: mode, LatencyMs: latencyFromEnv()}}
+	return &Chaos{state: State{
+		Mode:      mode,
+		LatencyMs: msFromEnv("CHAOS_LATENCY_MS", defaultLatencyMs),
+		HangMs:    msFromEnv("CHAOS_HANG_MS", defaultHangMs),
+	}}
 }
 
-// latencyFromEnv liest die Slow-Latenz aus CHAOS_LATENCY_MS (z. B. via docker-compose).
-// Fix für die Lebensdauer der Instanz; nicht zur Laufzeit änderbar.
-func latencyFromEnv() int {
-	raw := os.Getenv("CHAOS_LATENCY_MS")
+func (m Mode) valid() bool {
+	return m == Normal || m == Slow || m == Fail || m == Hang
+}
+
+// msFromEnv liest eine Wartezeit in Millisekunden (CHAOS_LATENCY_MS für
+// Slow, CHAOS_HANG_MS für Hang, z. B. via docker-compose). Fix für die
+// Lebensdauer der Instanz; nicht zur Laufzeit änderbar.
+func msFromEnv(key string, fallback int) int {
+	raw := os.Getenv(key)
 	if raw == "" {
-		return defaultLatencyMs
+		return fallback
 	}
 	n, err := strconv.Atoi(raw)
 	if err != nil || n <= 0 {
-		return defaultLatencyMs
+		return fallback
 	}
 	return n
 }
@@ -94,7 +113,7 @@ func (c *Chaos) markSeen(now time.Time) {
 }
 
 func (c *Chaos) SetMode(mode Mode) State {
-	if mode != Normal && mode != Slow && mode != Fail {
+	if !mode.valid() {
 		mode = Normal
 	}
 	c.mu.Lock()
@@ -103,7 +122,7 @@ func (c *Chaos) SetMode(mode Mode) State {
 	c.mu.Unlock()
 
 	hostname, _ := os.Hostname()
-	log.Printf("[%s] Chaos mode set to %s (latency=%dms fix)", hostname, s.Mode, s.LatencyMs)
+	log.Printf("[%s] Chaos mode set to %s (latency=%dms, hang=%dms fix)", hostname, s.Mode, s.LatencyMs, s.HangMs)
 	return s
 }
 
@@ -127,6 +146,11 @@ func (c *Chaos) Middleware(next http.Handler) http.Handler {
 		switch s.Mode {
 		case Slow:
 			time.Sleep(time.Duration(s.LatencyMs) * time.Millisecond)
+		case Hang:
+			// Bewusst ohne Blick auf r.Context(): Auch wenn der Aufrufer
+			// längst abgebrochen hat, läuft der Handler danach normal weiter.
+			time.Sleep(time.Duration(s.HangMs) * time.Millisecond)
+			tracing.Logger(r.Context()).Warn("request answered after hang, caller may have given up", "method", r.Method, "path", r.URL.Path, "hangMs", s.HangMs)
 		case Fail:
 			// Loggen, bevor wir abbrechen: Sonst fehlt genau der Fehlerfall
 			// im Trace (Story 8).

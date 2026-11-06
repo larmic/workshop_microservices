@@ -33,7 +33,8 @@ Note:
   2. Flight auf <strong>Langsam</strong>, nochmal klicken: rund 2 Sekunden warten. Hotel und Auto warten mit.
   3. Wette: &bdquo;Flight auf Fehler. Bekommen wir wenigstens Hotel und Auto?&ldquo;
   4. Flight auf <strong>Fehler</strong>: 500, alles weg. Der Health-Check von Booking bleibt gr&uuml;n.
-  5. Flight zur&uuml;ck auf <strong>Normal</strong>.
+  5. Optional: Flight auf <strong>H&auml;ngt</strong>. F&uuml;nf Sekunden nichts, dann 500. Das ist &bdquo;Kommt nie an&ldquo;.
+  6. Flight zur&uuml;ck auf <strong>Normal</strong>.
 - Zu jeder Karte Daumen hoch oder runter: Gibt es das im Monolithen auch?
 - Kern: Ein Methodenaufruf ist schnell, ehrlich und kommt an. Ein Netzwerkaufruf nicht. Alles danach ist der Umgang mit diesen drei F&auml;llen.
 - L&auml;uft der Stack nicht: Demo weglassen, nur die Daumen-Runde.

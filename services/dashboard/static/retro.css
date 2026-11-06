@@ -284,6 +284,7 @@ body.retro .chaos-btn:hover { border-color: var(--r-muted); }
 body.retro .chaos-btn.active.normal { background: var(--r-green);  color: var(--r-bg); border-color: var(--r-green); }
 body.retro .chaos-btn.active.slow   { background: var(--r-yellow); color: var(--r-bg); border-color: var(--r-yellow); }
 body.retro .chaos-btn.active.fail   { background: var(--r-red);    color: var(--r-bg); border-color: var(--r-red); }
+body.retro .chaos-btn.active.hang   { background: var(--r-magenta); color: var(--r-bg); border-color: var(--r-magenta); }
 body.retro .chaos-btn.mixed { background: var(--r-line); color: var(--r-ink); border-color: var(--r-muted); }
 body.retro .instance-row { border-top: 1px dashed var(--r-line); }
 body.retro .instance-id { color: var(--r-muted); }
@@ -291,6 +292,7 @@ body.retro .instance-mode { border-radius: 0; }
 body.retro .instance-mode.normal  { background: var(--r-bg); color: var(--r-green);  border: 1px solid var(--r-green); }
 body.retro .instance-mode.slow    { background: var(--r-bg); color: var(--r-yellow); border: 1px solid var(--r-yellow); }
 body.retro .instance-mode.fail    { background: var(--r-bg); color: var(--r-red);    border: 1px solid var(--r-red); }
+body.retro .instance-mode.hang    { background: var(--r-bg); color: var(--r-magenta); border: 1px solid var(--r-magenta); }
 body.retro .instance-mode.unknown { background: var(--r-bg); color: var(--r-faint);  border: 1px solid var(--r-faint); }
 body.retro .instance-row.served-recent {
     background: rgba(85, 255, 85, 0.16);
