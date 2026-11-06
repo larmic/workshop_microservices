@@ -42,7 +42,7 @@
 </div>
 
 Note:
-- <strong>Rhythmus:</strong> Jeder Halbtag: kurz Input, dann selbst machen. Nicht alles ist Code: Story 2 ist Design-Session am Flipchart, Story 4, 5 und 7 sind &Uuml;bungen ohne Tastatur (Rollenspiel, Becher, Zettel).
+- <strong>Rhythmus:</strong> Jeder Halbtag: kurz Input, dann selbst machen. Nicht alles ist Code: Story 2 ist Design-Session am Flipchart, Story 4, 5 und 7 sind &Uuml;bungen ohne Tastatur (Rollenspiel, Chips, Zettel).
 - <strong>Roter Faden:</strong> Tag 1 Fundament, dann ein Aufruf, der gefunden und abgesichert wird. Tag 2 mehrere Schritte, die gemeinsam scheitern k&ouml;nnen. Story 8 baut auf eurem Service aus Story 6 auf.
 - <strong>Zeiten:</strong> Richtwerte, Tag 2 hat Puffer. Kaffeepausen nach Bedarf.
 - <strong>Ausblick:</strong> Service-Schnitt, Security, CQRS und Co. lassen wir bewusst weg, dazu am Ende eine Folie.

@@ -23,10 +23,15 @@ Ihr seid die Suchanfragen. Booking hat den Schalter.
 
 ### Material
 
-- Eine Strichliste und ein Schild mit drei Seiten: CLOSED, OPEN, HALF_OPEN
-- Karten „Hotel ✓, Car ✓, flights: []" für die Fallback-Antworten
-- Fünf rote Karten für Runde 3b
+- Eine Strichliste (in Prospekthülle, mit Whiteboard-Marker beschreibbar, damit Booking sie wegwischen kann) und ein Schild mit drei Seiten: CLOSED, OPEN, HALF_OPEN
+- Karten „Hotel ✓ · Car ✓ · flights: []" für die Fallback-Antworten
+- Blaue Karten „Hotel ✓ · Car ✓ · Flight ✓" für erfolgreiche Antworten (geglückte Probe, Runde 3a und 3b)
+- Fünf rote Karten „Datum 31.02." für Runde 3b
+- Ein Korb, in den die Gäste ihre Antwortkarte zurücklegen
+- Ein PROBE-Token (3D-gedruckt oder ein beliebiger Gegenstand), es gibt nur eins
 - Eine Uhr mit Sekundenanzeige (der Trainer ist die Uhr)
+
+Gesamtliste und Druckvorlagen: [`docs/orga/materialliste.md`](../orga/materialliste.md), druckfertig unter <https://larmic.github.io/workshop_microservices/material/>.
 
 Spielbar ab sieben Personen: Booking, Flight, Hotel + Car und mindestens vier Suchanfragen.
 
@@ -34,15 +39,15 @@ Spielbar ab sieben Personen: Booking, Flight, Hotel + Car und mindestens vier Su
 
 1. **Booking** ist eine Person. Sie hat den Schalter: Strichliste, Schild und die Karten. Wartet Booking auf Flight, zählt es laut: eins, zwei, drei, Timeout.
 2. **Flight** folgt den geheimen Ansagen des Trainers. **Hotel und Car** antworten sofort, bei kleiner Gruppe übernimmt eine Person beides.
-3. **Alle anderen** sind Suchanfragen auf `GET /booking/offers`. Wer eine Antwort hat, stellt sich **sofort hinten wieder an**. So bleibt immer jemand in der Schlange, auch für die Probe.
+3. **Alle anderen** sind Suchanfragen auf `GET /booking/offers`. Wer eine Antwort hat, legt die Karte in den Korb und stellt sich **sofort hinten wieder an**. So bleibt immer jemand in der Schlange, auch für die Probe, und Booking nimmt sich aus dem Korb Nachschub, die Karten gehen nie aus.
 
 ### Ablauf
 
 1. **Runde 1, ohne Schalter (wie Story 3):** Flight schweigt. Nach drei Sekunden sagt Booking „500" und fragt Hotel und Car gar nicht erst.
-2. **Runde 2, mit Schalter:** Bei jedem Timeout macht Booking einen Strich, fragt Hotel und Car und gibt die Karte `flights: []`. Nach fünf Strichen **in Folge** ruft Booking „OPEN" und dreht das Schild. Ab dann fragt Booking Flight nicht mehr: Karte sofort, dazu „Circuit open!".
-3. **HALF_OPEN:** 30 Sekunden nach „OPEN" ruft der Trainer „HALF_OPEN". Der nächste Gast ist die Probe, Booking fragt Flight. Wer dahinter steht, bekommt sofort die Karte und „Circuit open!". Bleibt Flight still: Strich, OPEN, die 30 Sekunden laufen neu. Antwortet Flight: Liste wegwischen, CLOSED, volle Angebote.
-4. **Runde 3a, wackliges Flight:** Flight antwortet jedes zweite Mal. Jede Antwort wischt die Liste weg, jeder Timeout gibt Strich und Karte.
-5. **Runde 3b, rote Gäste:** Flight ist gesund. Die nächsten fünf Anfragen bekommen eine rote Karte (kaputtes Datum), Flight sagt darauf sofort „400". Ein Gedankenspiel: Die echte Referenz reicht keine Suchparameter an Flight weiter.
+2. **Runde 2, mit Schalter:** Bei jedem Timeout macht Booking einen Strich, fragt Hotel und Car und gibt die Karte „Hotel ✓ · Car ✓ · flights: []". Nach fünf Strichen **in Folge** ruft Booking „OPEN" und dreht das Schild. Ab dann fragt Booking Flight nicht mehr: Karte sofort, dazu „Circuit open!".
+3. **HALF_OPEN:** 30 Sekunden nach „OPEN" ruft der Trainer „HALF_OPEN". Der nächste Gast ist die Probe: Booking gibt ihm das PROBE-Token und fragt Flight. Nur wer das Token hält, darf zu Flight. Wer dahinter steht, bekommt sofort die Karte und „Circuit open!". Bleibt Flight still: Strich, OPEN, die 30 Sekunden laufen neu. Antwortet Flight: blaue Karte, Liste wegwischen, CLOSED, volle Angebote. Das Token geht in beiden Fällen zurück an Booking.
+4. **Runde 3a, wackliges Flight:** Flight antwortet jedes zweite Mal. Jede Antwort gibt die blaue Karte und wischt die Liste weg, jeder Timeout gibt Strich und Karte.
+5. **Runde 3b, rote Gäste:** Flight ist gesund. Die nächsten fünf Anfragen bekommen eine rote Karte „Datum 31.02." (kaputtes Datum), Flight sagt darauf sofort „400". Ein Gedankenspiel: Die echte Referenz reicht keine Suchparameter an Flight weiter.
 
 Geheimes Briefing für Flight: Runde 1 und 2 schweigen, erste Probe schweigen, zweite antworten. Runde 3a abwechselnd. Runde 3b gesund, auf rote Karten sofort „400".
 

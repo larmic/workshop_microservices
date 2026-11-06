@@ -27,4 +27,4 @@
 Note:
 - Drei Knackpunkte, falls jemand nachbaut: Check und Increment m&uuml;ssen atomar sein (Mutex, Compare-and-Set, Semaphore), sonst rutschen unter Last mehr Calls durch als erlaubt. Das Decrement geh&ouml;rt ins finally, sonst leckt der Pool und &ouml;ffnet nie wieder. Ein Bulkhead pro Downstream, nie ein gemeinsamer.
 - Referenz: <code>services/booking/story5/bulkhead/bulkhead.go</code>, knapp 100 Zeilen Go mit <code>chan struct{}</code> als Semaphore. Im Dashboard unter Story 5 l&auml;sst sich die Referenz gegen langsame Backends treiben (Burst-Knopf).
-- &Uuml;berleitung: &bdquo;Die Zahl kl&auml;ren wir jetzt. Nicht am Rechner, sondern mit Bechern und Chips.&ldquo;
+- &Uuml;berleitung: &bdquo;Die Zahl kl&auml;ren wir jetzt. Nicht am Rechner, sondern mit Chips und Trennw&auml;nden.&ldquo;

@@ -33,6 +33,8 @@ Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich sto
 - Eine Strichliste für Booking
 - Ein Briefing-Kärtchen für Flight (siehe unten)
 
+Gesamtliste und Druckvorlagen: [`docs/orga/materialliste.md`](../orga/materialliste.md), druckfertig unter <https://larmic.github.io/workshop_microservices/material/>.
+
 Spielbar ab sechs Personen: Booking, Hotel, Flight, Car und mindestens zwei Kund:innen. Ab 9 Personen an einem Tisch spielt eine eigene Person den Korb, darunter übernimmt Car. Ab 12 Personen spielen zwei Tische mit eigenen Services und identischer Ansage. Jeder Tisch hat dann mindestens zwei Reisen, das reicht, weil das Briefing auf Reise 2 setzt.
 
 ### Rollen
@@ -80,7 +82,7 @@ Nur Flight bekommt eine Ansage, als Kärtchen, bei zwei Tischen für beide Fligh
 - **Runde 3:** Keiner fehlt, einer hat drei. Der Korb hat den Zettel E4 wiederholt, weil das „quittiert“ fehlte, und Flight hat zweimal storniert (Recap 02). Bei einem Storno ist das harmlos, bei einer Rückerstattung wäre das Geld zweimal weg.
 - **Runde 2 gegen Runde 3:** Ohne Korb geht ein Storno verloren, mit Korb kommt es doppelt. Was ein Broker mehr kann als ein Webhook, ist Recap 03.
 
-Bewusste Vereinfachungen: Im Spiel hat Car keinen Circuit Breaker. In der Referenz streicht niemand etwas durch: Die Backends haben keinen Buchungsbestand und loggen nur `received`, `processing` und `done`. In der Referenz öffnet er nach fünf Fehlschlägen, danach startet 30 Sekunden lang keine Saga. Die Schlange ist ebenfalls vereinfacht, denn die Referenz bedient Anfragen parallel, nur die Schritte innerhalb einer Saga laufen nacheinander. Der Korb (Runde 3) ist nicht die Referenz, sondern die erste Bonus-Stufe.
+Bewusste Vereinfachungen: Im Spiel hat Car keinen Circuit Breaker. In der Referenz öffnet der Car-Breaker nach fünf Fehlschlägen, danach startet 30 Sekunden lang keine Saga. In der Referenz streicht außerdem niemand etwas durch: Die Backends haben keinen Buchungsbestand und loggen nur `received`, `processing` und `done`. Die Schlange ist ebenfalls vereinfacht, denn die Referenz bedient Anfragen parallel, nur die Schritte innerhalb einer Saga laufen nacheinander. Der Korb (Runde 3) ist nicht die Referenz, sondern die erste Bonus-Stufe.
 
 ---
 

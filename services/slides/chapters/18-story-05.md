@@ -26,8 +26,8 @@
 <h4>Ablauf</h4>
 <ol>
 <li><strong>Probelauf:</strong> Hotel ist schnell, drei Takte zum Einspielen.</li>
-<li><strong>Runde 1, ein Becher, sechs Chips:</strong> Wie viele Karten warten nach 20 Takten? <span class="fragment">&rarr; vier, ab Suche 7 wartet jede schon auf Flight</span></li>
-<li><strong>Runde 2, drei Becher, je zwei Chips:</strong> Hotel-Becher leer, sofort <code>hotels: []</code>. Wie viele bekommen Hotels? <span class="fragment">&rarr; sechs, die anderen 14 sofort</span></li>
+<li><strong>Runde 1, ohne W&auml;nde, ein Pool mit sechs Chips:</strong> Wie viele Karten warten nach 20 Takten? <span class="fragment">&rarr; vier, ab Suche 7 wartet jede schon auf Flight</span></li>
+<li><strong>Runde 2, mit W&auml;nden, je zwei Chips:</strong> Hotel-Spalte leer, sofort <code>hotels: []</code>. Wie viele bekommen Hotels? <span class="fragment">&rarr; sechs, die anderen 14 sofort</span></li>
 <li><strong>Schild:</strong> Noch CLOSED? <span class="fragment">&rarr; ja, kein Timeout, Rejects erreichen den Breaker nie</span></li>
 </ol>
 </div>
@@ -38,9 +38,9 @@
 </div>
 
 Note:
-- Hook: &bdquo;Story 4 hatte ein kaputtes Backend. Heute antwortet Hotel, nur sehr langsam.&ldquo; Ab 7 Personen. Erst Handzeichen, dann Fragment. Material, Detailregeln (Reihenfolge im Takt, wer den freien Chip bekommt) und Spickzettel im Doc und im Dashboard. Nach jeder Runde Stapel und Uhr zur&uuml;cksetzen.
+- Hook: &bdquo;Story 4 hatte ein kaputtes Backend. Heute antwortet Hotel, nur sehr langsam.&ldquo; Ab 7 Personen. Erst Handzeichen, dann Fragment. Material (Tablett oder Becher), Detailregeln (Reihenfolge im Takt, wer den freien Chip bekommt) und Spickzettel im Doc. Nach jeder Runde Stapel und Uhr zur&uuml;cksetzen.
 - Gez&auml;hlt wird in Takten, nicht in Sekunden. Ein freier Chip kann im selben Takt mehrere Aufrufe bedienen.
-- R1 (Recap 01): Der gemeinsame Becher ist der Thread-Pool klassischer Server, die Go-Referenz hat keinen. Flight ist gesund und wartet trotzdem. Ehrlich: R1 hat mehr komplette Antworten (10 gegen 4), weil Hotel alle sechs Chips nehmen durfte.
+- R1 (Recap 01): Der Pool ohne W&auml;nde ist der Thread-Pool klassischer Server, die Go-Referenz hat keinen. Flight ist gesund und wartet trotzdem. Ehrlich: R1 hat mehr komplette Antworten (10 gegen 4), weil Hotel alle sechs Chips nehmen durfte.
 - R2 ist die Referenz: Pool je Backend, keine Queue, Client bekommt 200 mit <code>hotels: []</code> und <code>X-Bulkhead-Full</code>.
-- Br&uuml;cke zu 18a: Im Probelauf lag nie mehr als ein Chip bei Hotel, langsam sind es acht. Der leere Becher ist das Signal, kein Grund zum Vergr&ouml;&szlig;ern.
+- Br&uuml;cke zu 18a: Im Probelauf lag nie mehr als ein Chip bei Hotel, langsam sind es acht. Die leere Hotel-Spalte ist das Signal, kein Grund zum Vergr&ouml;&szlig;ern.
 - Demo: Alle Services auf Normal, dann Hotel auf &bdquo;Langsam&ldquo;, Burst. &bdquo;hotel rej&ldquo; zeigt etwa zehn, &bdquo;failed&ldquo; bleibt 0. Danach Hotel zur&uuml;ck. Details: <code>docs/stories/story-05-bulkhead.md</code>.

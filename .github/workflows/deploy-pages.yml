@@ -39,6 +39,7 @@ jobs:
       #   /              → Landing-Page (pages/landing/index.html)
       #   /vorbereitung/ → pages/vorbereitung/ + docs-Markdown (client-seitig gerendert)
       #   /feedback/     → pages/feedback/
+      #   /material/     → pages/material/ (Druckvorlagen Spielmaterial)
       #   /slides/       → services/slides/ + benötigte dashboard-Assets
       #   /assets/       → seitenübergreifende Assets (Footer-Logo)
       - name: Build site layout
@@ -46,6 +47,7 @@ jobs:
           set -euo pipefail
           mkdir -p _site/feedback _site/slides/dashboard _site/vorbereitung/assets _site/assets
           cp -r pages/feedback/. _site/feedback/
+          cp -r pages/material _site/material
           rsync -a --exclude='.DS_Store' --exclude='TODO.md' services/slides/ _site/slides/
           cp services/dashboard/static/icon.png _site/slides/dashboard/icon.png
           cp services/dashboard/static/team-neusta-logo.svg _site/slides/dashboard/team-neusta-logo.svg

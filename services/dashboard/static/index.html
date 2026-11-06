@@ -1567,7 +1567,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="play" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit Bechern, Takt und Uhr, kein Code">5</button>
+                    <button type="button" class="stepper-node" data-kind="play" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit Chips, Trennwänden, Takt und Uhr, kein Code">5</button>
                     <small class="stepper-kind">Spiel</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -1874,15 +1874,15 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
                         <p>Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
                         <h4>Rollen</h4>
                         <ol>
-                            <li><strong>Booking</strong> hat Strichliste, Schild CLOSED / OPEN / HALF_OPEN und Karten <code>flights: []</code>. Warten heißt laut zählen: eins, zwei, drei, Timeout.</li>
+                            <li><strong>Booking</strong> hat Strichliste, Schild CLOSED / OPEN / HALF_OPEN und Karten „Hotel ✓ · Car ✓ · flights: []". Warten heißt laut zählen: eins, zwei, drei, Timeout.</li>
                             <li><strong>Flight</strong> folgt den geheimen Ansagen des Trainers. <strong>Hotel und Car</strong> antworten sofort.</li>
-                            <li><strong>Alle anderen</strong> sind Suchanfragen auf <code>GET /booking/offers</code>. Wer eine Antwort hat, stellt sich sofort hinten wieder an.</li>
+                            <li><strong>Alle anderen</strong> sind Suchanfragen auf <code>GET /booking/offers</code>. Wer eine Antwort hat, legt die Karte in den Korb und stellt sich sofort hinten wieder an.</li>
                         </ol>
                         <h4>Ablauf</h4>
                         <ol>
                             <li><strong>Runde 1, ohne Schalter:</strong> Flight schweigt. Nach drei Sekunden sagt Booking „500" und fragt Hotel und Car gar nicht erst.</li>
-                            <li><strong>Runde 2, mit Schalter:</strong> Bei jedem Timeout macht Booking einen Strich, fragt Hotel und Car und gibt die Karte <code>flights: []</code>. Nach fünf Strichen in Folge ruft Booking „OPEN". Ab dann fragt Booking Flight nicht mehr: Karte sofort, dazu „Circuit open!".</li>
-                            <li><strong>HALF_OPEN:</strong> 30 Sekunden nach „OPEN" ist der nächste Gast die Probe. Wer dahinter steht, bekommt sofort die Karte. Bleibt Flight still: OPEN, die 30 Sekunden laufen neu. Antwortet Flight: Liste wegwischen, CLOSED.</li>
+                            <li><strong>Runde 2, mit Schalter:</strong> Bei jedem Timeout macht Booking einen Strich, fragt Hotel und Car und gibt die Karte „Hotel ✓ · Car ✓ · flights: []". Nach fünf Strichen in Folge ruft Booking „OPEN". Ab dann fragt Booking Flight nicht mehr: Karte sofort, dazu „Circuit open!".</li>
+                            <li><strong>HALF_OPEN:</strong> 30 Sekunden nach „OPEN" ist der nächste Gast die Probe und bekommt das PROBE-Token, nur er darf zu Flight. Wer dahinter steht, bekommt sofort die Karte. Bleibt Flight still: OPEN, die 30 Sekunden laufen neu. Antwortet Flight: Liste wegwischen, CLOSED.</li>
                             <li><strong>Runde 3a, wackliges Flight:</strong> Flight antwortet jedes zweite Mal. Jede Antwort wischt die Liste weg.</li>
                             <li><strong>Runde 3b, rote Gäste:</strong> Flight ist gesund, aber fünf Anfragen haben ein kaputtes Datum. Flight sagt sofort „400".</li>
                         </ol>
@@ -1918,7 +1918,7 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
 
         </section>
 
-        <!-- Story 5: Rollenspiel mit Bechern, Takt und Uhr statt Code. Story-Karte zeigt
+        <!-- Story 5: Rollenspiel mit Chips, Trennwänden, Takt und Uhr statt Code. Story-Karte zeigt
              die Spielregeln; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
         <section class="story-section" data-story="5" data-kind="play" data-backend="demo" hidden>
             <div class="story-helpers" data-story-helpers="5">
@@ -1931,7 +1931,7 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
                         <h4>User Story</h4>
                         <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
                         <h4>Material</h4>
-                        <p>Sechs Chips, ein großer Becher und drei kleine (F, H, C), ein A4-Blatt als Uhr mit den Feldern 1 bis 8, Suchkarten 1 bis 20, 14 Karten <code>hotels: []</code>, Schild und Strichliste aus Story 4. Spielbar ab sieben Personen. Nach jeder Runde Stapel und Uhr zurücksetzen.</p>
+                        <p>Sechs Chips, ein Bulkhead-Tablett (drei Spalten Flight / Hotel / Car mit je zwei Mulden, zwei steckbare Trennwände; alternativ ein großer Becher, dann drei Becher), ein A4-Blatt als Uhr mit den Feldern 1 bis 8, Suchkarten 1 bis 20, 20 Karten <code>hotels: []</code>, Schild und Strichliste aus Story 4. Spielbar ab sieben Personen. Nach jeder Runde Stapel und Uhr zurücksetzen. Druckvorlagen: <a href="https://larmic.github.io/workshop_microservices/material/" target="_blank" rel="noopener">Materialseite</a>.</p>
                         <h4>Rollen</h4>
                         <ol>
                             <li><strong>Takt</strong> zählt laut 1 bis 8, immer wieder, und klatscht, sobald Booking und Hotel „fertig" sagen. Pro Klatscher nimmt die vorderste Suchanfrage die nächste <strong>Suchkarte</strong> vom Stapel (1 bis 20), gibt sie Booking und stellt sich <strong>sofort hinten wieder an</strong>. Stapel leer: Runde vorbei.</li>
@@ -1941,9 +1941,9 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
                         </ol>
                         <h4>Ablauf</h4>
                         <ol>
-                            <li><strong>Probelauf:</strong> ein Becher, sechs Chips, Hotel gibt schon beim nächsten Takt zurück. Drei Takte.</li>
-                            <li><strong>Runde 1, ein Becher, sechs Chips:</strong> Eine Karte von Hotel behält ihren Chip für Car, erst danach geht er an die älteste wartende Karte. Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?</li>
-                            <li><strong>Runde 2, drei Becher F / H / C, je zwei Chips:</strong> Hotel-Becher leer? Sofort <code>hotels: []</code>, weiter zu Car. Wie viele der 20 Suchen bekommen einen Hotel-Chip?</li>
+                            <li><strong>Probelauf:</strong> Tablett ohne Wände, sechs Chips, Hotel gibt schon beim nächsten Takt zurück. Drei Takte.</li>
+                            <li><strong>Runde 1, ohne Wände, ein Pool mit sechs Chips:</strong> Eine Karte von Hotel behält ihren Chip für Car, erst danach geht er an die älteste wartende Karte. Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?</li>
+                            <li><strong>Runde 2, mit Wänden, je zwei Chips für Flight / Hotel / Car:</strong> Hotel-Spalte leer? Sofort <code>hotels: []</code>, weiter zu Car. Wie viele der 20 Suchen bekommen einen Hotel-Chip?</li>
                             <li><strong>Nach Runde 2:</strong> Steht das Schild noch auf CLOSED?</li>
                         </ol>
                         <details class="story-solution">
