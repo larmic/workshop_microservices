@@ -49,7 +49,7 @@
 
 Note:
 - Hook: &bdquo;Resilience-Patterns aus Story 4 und 5 helfen <em>einem</em> Aufruf. Sobald mehrere zusammenh&auml;ngende Schritte im Spiel sind und einer kippt, brauche ich etwas anderes.&ldquo; Flight gebucht, Hotel sagt nein. Was tun mit dem Flug?
-- Wiedererkennung: dieselbe Story (Kontext, User Story, Akzeptanzkriterien) im Dashboard unter Story 6, &bdquo;Story lesen&ldquo;.
+- Wiedererkennung: dieselbe Story (Kontext, User Story, Akzeptanzkriterien) im Dashboard unter Story 6, &bdquo;Aufgabe&ldquo;.
 - Sprache und Framework wieder frei. Referenz unter <code>services/booking/story6/</code> (Go, sequenzielle Saga in etwa 100 Zeilen).
 - R&uuml;ckblick auf Story 2: Der Storno vom Flipchart ist jetzt die Kompensation. &bdquo;Ihr habt damals &uuml;ber DELETE zweimal diskutiert. Genau deshalb muss <code>DELETE /bookings/{id}</code> idempotent sein: Der Orchestrator wiederholt bei Timeout.&ldquo;
 - Im Workshop bewusst <strong>nur ein Versuch</strong> f&uuml;r die Kompensation, kein Retry, kein persistenter Status. Das macht das Pattern sichtbar, ohne den Slot zu sprengen. Persistenz und Retry sind Diskussionspunkte im Recap.

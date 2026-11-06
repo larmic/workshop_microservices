@@ -23,7 +23,7 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 🍽 | Mittagspause | 60 Min |
 | 6b | Design-Session: Story 2 (REST vs. RESTful, Flipchart, kein Code) | 55 Min |
 | 6c | Hands-on: Story 3 (Service Discovery) | 60 Min |
-| 6d | Übung: Story 4 (Circuit Breaker, Rollenspiel statt Code) | 60 Min |
+| 6d | Rollenspiel: Story 4 (Circuit Breaker, Rollenspiel statt Code) | 60 Min |
 
 Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 8 h 10. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten und der Mittagspause; Minuten und Blöcke stehen allein hier.
 
@@ -31,9 +31,9 @@ Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 
 | Block | Thema | Zeit |
 |-------|-------|------|
-| 6e | Übung: Story 5 (Bulkhead, Becher und Chips statt Code) | 60 Min |
+| 6e | Rollenspiel: Story 5 (Bulkhead, Becher und Chips statt Code) | 60 Min |
 | 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
-| 6g | Übung: Story 7 (Choreography-Saga, Rollenspiel statt Code) | 60 Min |
+| 6g | Rollenspiel: Story 7 (Choreography-Saga, Rollenspiel statt Code) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
@@ -147,7 +147,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Recap-Frage: Was passiert, wenn Consul kurz weg ist?
 
 ### 6d. Story 4 — [Wenn der Flug ausfällt](stories/story-04-circuit-breaker.md) (60 Min)
-- Übung statt Code: 20 Minuten Rollenspiel (Booking mit Strichliste und Schild, Flight antwortet nicht, Suchanfragen in der Schlange; Runde 1 ohne, Runde 2 mit Schalter), 10 Minuten Demo mit der Referenz im Dashboard, Recap mit vier Fragen
+- Rollenspiel statt Code: 20 Minuten (Booking mit Strichliste und Schild, Flight antwortet nicht, Suchanfragen in der Schlange; Runde 1 ohne, Runde 2 mit Schalter), 10 Minuten Demo mit der Referenz im Dashboard, Recap mit vier Fragen
 - Lernpointe: Circuit Breaker schützt den Aufrufer und gibt dem Backend Luft, graceful Degradation beim Lesen
 - Nach dem Recap die offene Frage „Und jetzt die Buchung?": Lesen und Schreiben trennen, Antworten (Nein, asynchron, Saga, alternativer Anbieter) nur als Tonspur, Saga kommt in Story 6
 - Letzter Block von Tag 1, bewusst ohne Coding

@@ -831,8 +831,21 @@
         .stepper-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
         .stepper-nodes {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.4rem;
+        }
+        .stepper-step {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        .stepper-kind {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            font-weight: 700;
         }
         .stepper-node {
             width: 36px;
@@ -857,16 +870,38 @@
             color: #fff;
             box-shadow: 0 2px 8px rgba(115,72,225,0.35);
         }
-        /* Stories ohne Code (2 Design-Session, 4, 5, 7 Rollenspiele): gestrichelt,
-           damit sichtbar ist, dass hier nichts deployt wird. Dieselbe Regel
-           tragen die Zeit-Pillen der Slides (.badge.design). */
-        .stepper-node.design { border-style: dashed; }
-        .stepper-node.design.active { border-style: solid; }
+        /* Übungsart am Knoten, auch im aktiven Zustand (der ist highlight-grün,
+           siehe Workshop-Theme): Hands-on durchgezogen, Design-Session gestrichelt
+           (wie .badge.design auf den Slides), Rollenspiel gepunktet, Start dunkel.
+           Die Strichart trägt die Art, damit sie auch ohne Farbe erkennbar ist. */
+        .stepper-node[data-kind="design"] { border-style: dashed; border-color: #7348E1; }
+        .stepper-node[data-kind="play"] { border-style: dotted; border-color: #0A0349; }
+        .stepper-node[data-kind="start"] { border-color: #0A0349; background: #0A0349; color: #CCF465; }
+        .stepper-node[data-kind="design"].active,
+        .stepper-node[data-kind="play"].active,
+        .stepper-node[data-kind="start"].active { border-color: #0A0349; }
         .stepper-connector {
             width: 1.2rem;
             height: 2px;
+            margin-top: 17px;
             background: #d0d7e2;
         }
+        .kind-pill {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border: 1.5px solid #7348E1;
+            border-radius: 999px;
+            background: #7348E1;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .kind-pill[data-kind="design"] { background: #fff; color: #7348E1; border-style: dashed; }
+        .kind-pill[data-kind="play"] { background: #fff; color: #0A0349; border: 2px dotted #0A0349; }
+        .kind-pill[data-kind="start"] { background: #0A0349; color: #D3F871; border-color: #0A0349; }
+        .stepper-headline .kind-pill { margin-bottom: 0.4rem; }
         .stepper-headline {
             text-align: center;
         }
@@ -885,25 +920,24 @@
         }
 
         /* Story-Lernhilfe-Panels */
+        /* Untereinander in voller Breite: erst die Aufgabe, dann der Spickzettel. */
         .story-helpers {
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: stretch;
             gap: 0.6rem;
-            flex-wrap: wrap;
             margin-bottom: 1.25rem;
         }
         details.story-info,
-        details.story-cheatsheet,
-        details.story-setup {
-            flex: 1 1 320px;
+        details.story-cheatsheet {
+            flex: none;
             background: #f5f6f8;
             border: 1px solid #e1e5ec;
             border-radius: 8px;
             padding: 0;
         }
         details.story-info summary,
-        details.story-cheatsheet summary,
-        details.story-setup summary {
+        details.story-cheatsheet summary {
             list-style: none;
             cursor: pointer;
             padding: 0.7rem 1rem;
@@ -916,11 +950,9 @@
             user-select: none;
         }
         details.story-info summary::-webkit-details-marker,
-        details.story-cheatsheet summary::-webkit-details-marker,
-        details.story-setup summary::-webkit-details-marker { display: none; }
+        details.story-cheatsheet summary::-webkit-details-marker { display: none; }
         details.story-info summary::before,
-        details.story-cheatsheet summary::before,
-        details.story-setup summary::before {
+        details.story-cheatsheet summary::before {
             content: "\25B8";
             font-size: 0.7rem;
             color: #666;
@@ -928,13 +960,11 @@
             display: inline-block;
         }
         details[open].story-info summary::before,
-        details[open].story-cheatsheet summary::before,
-        details[open].story-setup summary::before {
+        details[open].story-cheatsheet summary::before {
             transform: rotate(90deg);
         }
         details.story-info summary .badge,
-        details.story-cheatsheet summary .badge,
-        details.story-setup summary .badge {
+        details.story-cheatsheet summary .badge {
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -943,15 +973,13 @@
             margin-left: auto;
         }
         .story-info-body,
-        .story-cheatsheet-body,
-        .story-setup-body {
+        .story-cheatsheet-body {
             padding: 0 1rem 1rem;
             font-size: 0.85rem;
             color: #333;
             line-height: 1.55;
         }
-        .story-info-body h4,
-        .story-setup-body h4 {
+        .story-info-body h4 {
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -959,10 +987,8 @@
             font-weight: 700;
             margin: 0.75rem 0 0.3rem;
         }
-        .story-info-body p, .story-info-body ul, .story-info-body ol,
-        .story-setup-body p, .story-setup-body ul, .story-setup-body ol { margin-bottom: 0.5rem; }
-        .story-info-body ul, .story-info-body ol,
-        .story-setup-body ul, .story-setup-body ol { padding-left: 1.25rem; }
+        .story-info-body p, .story-info-body ul, .story-info-body ol { margin-bottom: 0.5rem; }
+        .story-info-body ul, .story-info-body ol { padding-left: 1.25rem; }
         .story-info-body em { color: #7348E1; font-style: normal; font-weight: 600; }
         /* Auflösung im Story-Text: standardmäßig zu, damit sie nicht vor der Vorhersage sichtbar ist. */
         .story-info-body details.story-solution {
@@ -974,17 +1000,136 @@
         .story-info-body details.story-solution summary { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
         .story-info-body details.story-solution:not([open]) summary::before { transform: none; }
         .story-solution-body { padding: 0 0.75rem 0.5rem; }
-        .story-cheatsheet-body pre {
+        /* Linker Rand in der Art der Story, gleiche Strichart wie am Stepper-Knoten. */
+        .story-section[data-kind="code"] details.story-info { border-left: 4px solid #7348E1; }
+        .story-section[data-kind="design"] details.story-info { border-left: 4px dashed #7348E1; }
+        .story-section[data-kind="play"] details.story-info { border-left: 4px dotted #0A0349; }
+        .story-cheatsheet-body pre,
+        .start-page pre {
             background: #0A0349;
             color: #e0e6f0;
-            padding: 0.9rem 1rem;
+            padding: 0.7rem 0.9rem;
             border-radius: 6px;
             font-family: ui-monospace, "SF Mono", Monaco, monospace;
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             line-height: 1.5;
             overflow-x: auto;
-            white-space: pre;
+            white-space: pre-wrap;
         }
+        /* Spickzettel: nummerierte Schritte, je Überschrift, ein Satz, kurzer Code. */
+        ol.cheat-steps {
+            list-style: none;
+            counter-reset: cheat;
+            padding: 0;
+            margin: 0;
+        }
+        ol.cheat-steps > li {
+            counter-increment: cheat;
+            position: relative;
+            padding: 0 0 0 2.4rem;
+            margin-top: 1rem;
+        }
+        ol.cheat-steps > li:first-child { margin-top: 0.25rem; }
+        ol.cheat-steps > li::before {
+            content: counter(cheat);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 50%;
+            background: #7348E1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        ol.cheat-steps h4 {
+            font-size: 0.95rem;
+            color: #0A0349;
+            font-weight: 700;
+            margin: 0.1rem 0 0.15rem;
+        }
+        ol.cheat-steps p { margin-bottom: 0.4rem; }
+        .story-start-hint { font-size: 0.8rem; color: #555; padding: 0 0.25rem; }
+
+        /* Schritt 0: Startseite */
+        .start-page { margin-bottom: 1.5rem; }
+        .start-lead { text-align: center; color: #333; font-size: 0.95rem; margin-bottom: 0.75rem; }
+        .start-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4rem 1.25rem;
+            font-size: 0.8rem;
+            color: #555;
+            margin-bottom: 1.25rem;
+        }
+        .start-legend .kind-pill { margin-right: 0.3rem; }
+        .start-card {
+            background: #fff;
+            border: 1px solid #e1e5ec;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.55;
+        }
+        .start-card h3 { font-size: 1rem; color: #0A0349; margin-bottom: 0.4rem; }
+        .start-card p, .start-card ul { margin-bottom: 0.5rem; }
+        .start-card ul { padding-left: 1.25rem; }
+        .start-card code { overflow-wrap: anywhere; }
+        .start-card em { color: #7348E1; font-style: normal; font-weight: 600; }
+        .start-homework { border-left: 4px solid #D3F871; margin-bottom: 0.75rem; }
+        ol.start-steps {
+            list-style: none;
+            counter-reset: start;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        ol.start-steps > li { counter-increment: start; border-left: 4px solid #7348E1; }
+        ol.start-steps > li h3::before {
+            content: counter(start);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 0.5rem;
+            border-radius: 50%;
+            background: #7348E1;
+            color: #fff;
+            font-size: 0.8rem;
+        }
+        .start-live { font-weight: 600; }
+        .start-live-status { color: #888; }
+        .start-live-status.ok  { color: #1d7a3a; }
+        .start-live-status.err { color: #b3261e; }
+        .start-warn {
+            background: #fff3cd;
+            color: #8a6d00;
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+        }
+        .start-go { text-align: center; margin-top: 1.25rem; }
+        .start-go-btn {
+            padding: 0.7rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            background: #7348E1;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .start-go-btn:hover { background: #0A0349; }
 
         /* Story-Sections (eine sichtbar pro Zeit) */
         .story-content { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
@@ -1042,7 +1187,11 @@
             padding: 1.5rem 1rem 0;
             border-top: 2px dashed #d0d7e2;
         }
+        .backend-panel[hidden] { display: none; }
         .backend-panel-heading {
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -1051,6 +1200,9 @@
             margin-bottom: 0.9rem;
             text-align: center;
         }
+        .backend-panel-heading::-webkit-details-marker { display: none; }
+        .backend-panel-heading::before { content: "\25B8\00a0"; display: inline-block; transition: transform 0.15s; }
+        .backend-panel[open] > .backend-panel-heading::before { transform: rotate(90deg); }
 
         @media (max-width: 640px) {
             header { flex-direction: column; align-items: flex-start; }
@@ -1077,9 +1229,6 @@
             color: #0A0349;
             box-shadow: 0 2px 10px rgba(204,244,101,0.55);
         }
-
-        /* Highlight-Akzente für aktive Connector-Striche */
-        .stepper-connector.done { background: #7348E1; }
 
         /* Footer */
         .workshop-footer {
@@ -1390,37 +1539,115 @@
                 <span>&larr;</span><span>Zur&uuml;ck</span>
             </button>
             <div class="stepper-nodes" id="stepper-nodes">
-                <button type="button" class="stepper-node" data-story-node="1" onclick="showStory(1)">1</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="start" data-story-node="0" onclick="showStory(0)" title="Einklinken und testen">0</button>
+                    <small class="stepper-kind">Start</small>
+                </span>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node design" data-story-node="2" onclick="showStory(2)" title="Design-Session am Flipchart, kein Code">2</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="1" onclick="showStory(1)">1</button>
+                    <small class="stepper-kind">Code</small>
+                </span>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="3" onclick="showStory(3)">3</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="design" data-story-node="2" onclick="showStory(2)" title="Design-Session am Flipchart, kein Code">2</button>
+                    <small class="stepper-kind">Design</small>
+                </span>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node design" data-story-node="4" onclick="showStory(4)" title="Rollenspiel mit Schalter und Strichliste, kein Code">4</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="3" onclick="showStory(3)">3</button>
+                    <small class="stepper-kind">Code</small>
+                </span>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node design" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit Bechern, Takt und Uhr, kein Code">5</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="play" data-story-node="4" onclick="showStory(4)" title="Rollenspiel mit Schalter und Strichliste, kein Code">4</button>
+                    <small class="stepper-kind">Spiel</small>
+                </span>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">6</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="play" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit Bechern, Takt und Uhr, kein Code">5</button>
+                    <small class="stepper-kind">Spiel</small>
+                </span>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node design" data-story-node="7" onclick="showStory(7)" title="Rollenspiel mit Bechern und Gummibärchen, kein Code">7</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="6" onclick="showStory(6)">6</button>
+                    <small class="stepper-kind">Code</small>
+                </span>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node" data-story-node="8" onclick="showStory(8)">8</button>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="play" data-story-node="7" onclick="showStory(7)" title="Rollenspiel mit Bechern und Gummibärchen, kein Code">7</button>
+                    <small class="stepper-kind">Spiel</small>
+                </span>
+                <span class="stepper-connector"></span>
+                <span class="stepper-step">
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="8" onclick="showStory(8)">8</button>
+                    <small class="stepper-kind">Code</small>
+                </span>
             </div>
             <button type="button" class="stepper-nav-btn" id="stepper-next" onclick="goNextStory()">
                 <span>Weiter</span><span>&rarr;</span>
             </button>
         </div>
         <div class="stepper-headline">
+            <span class="kind-pill" id="stepper-kind" data-kind="code">&nbsp;</span>
             <h2 id="stepper-title">Story</h2>
             <p id="stepper-subtitle">&nbsp;</p>
         </div>
     </nav>
 
     <main class="story-content">
-        <section class="story-section" data-story="1" hidden>
+        <section class="story-section" data-story="0" data-kind="start" data-backend="hide" hidden>
+            <div class="start-page">
+                <p class="start-lead">Zwei Tage, acht Stories und ein Service, den ihr Story f&uuml;r Story erweitert. Diese Seite einmal durchgehen, dann geht es los.</p>
+                <div class="start-legend">
+                    <span><span class="kind-pill" data-kind="code">Hands-on</span> eigener Code</span>
+                    <span><span class="kind-pill" data-kind="design">Design-Session</span> am Flipchart</span>
+                    <span><span class="kind-pill" data-kind="play">Rollenspiel</span> am Tisch, danach die Demo hier</span>
+                </div>
+
+                <div class="start-card start-homework">
+                    <h3>Hausaufgabe erledigt?</h3>
+                    <p>Ihr bringt einen Mini-Service in eurer Sprache mit: <code>GET /health</code> antwortet mit 200, ein <code>Dockerfile</code> baut das Image, der Container lauscht auf Port <code>8080</code>. Den Workshop-Stack habt ihr einmal mit <code>make docker-up-hub</code> gestartet.</p>
+                    <p><a href="https://larmic.github.io/workshop_microservices/vorbereitung/" target="_blank" rel="noopener">Zur Vorbereitung &rarr;</a> Noch nicht fertig? Jetzt nachholen, oder setzt euch zu jemandem, bei dem es l&auml;uft.</p>
+                </div>
+
+                <ol class="start-steps">
+                    <li class="start-card">
+                        <h3>Einklinken</h3>
+                        <ul>
+                            <li>In <code>services/.env</code> den Pfad zu eurem Service eintragen: <code>CUSTOM_BOOKING_PATH=/absoluter/pfad/zu/eurem/service</code></li>
+                            <li>Stack neu starten: Ctrl+C, dann <code>make docker-up-hub</code>. Compose baut euren Service als <code>booking-custom</code> mit.</li>
+                            <li>Die Backend-URLs (<code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code>, <code>CONSUL_URL</code>) bekommt euer Container automatisch. Nicht selbst setzen.</li>
+                        </ul>
+                    </li>
+                    <li class="start-card">
+                        <h3>Testen</h3>
+                        <p class="start-live">Custom-Service: <span class="start-live-status" id="start-custom-status">wird gepr&uuml;ft &hellip;</span></p>
+<pre>curl -i http://localhost:8099/health                # direkt: HTTP/1.1 200
+curl -i http://localhost/api/booking-custom/health  # &uuml;ber das Gateway: 200
+docker logs booking-custom                          # eure Logs, nicht Kotlin/Ktor</pre>
+                        <p class="start-warn"><strong>Achtung:</strong> Ohne eigenen Pfad l&auml;uft hier die mitgelieferte Beispiel-L&ouml;sung (Kotlin/Ktor). Dann ist auch alles gr&uuml;n. Erst die Logs zeigen, ob es wirklich euer Service ist.</p>
+                    </li>
+                    <li class="start-card">
+                        <h3>Weiterarbeiten</h3>
+                        <p>Ab jetzt erweitert ihr genau diesen Service. Nach einer Code-&Auml;nderung nur ihn neu bauen, in einem zweiten Terminal im Ordner <code>services/</code>:</p>
+<pre>docker compose -f docker-compose.yml -f docker-compose.infra.yml \
+  -f docker-compose.reference.yml -f docker-compose.custom.yml \
+  up -d --build booking-custom</pre>
+                        <p>In jeder Story schaltet ihr oben zwischen <em>Reference</em> und <em>Custom</em> um. Details: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/custom-setup.md" target="_blank" rel="noopener"><code>docs/custom-setup.md</code></a></p>
+                    </li>
+                </ol>
+
+                <div class="start-go">
+                    <button type="button" class="start-go-btn" onclick="showStory(1)">Los geht&rsquo;s: Story 1 &rarr;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="story-section" data-story="1" data-kind="code" data-backend="show" hidden>
             <div class="story-helpers" data-story-helpers="1">
-                <details class="story-info">
-                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                <details class="story-info" open>
+                    <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
                         <p>Der erste Booking-Service: läuft auf dem Entwicklerrechner, in der Cloud, auf einem Raspberry Pi &mdash; überall gleich. Mit Health-Check (damit Probleme früh auffallen) und externer Konfiguration (damit ein Build in jeder Umgebung läuft).</p>
@@ -1440,38 +1667,36 @@
                     </div>
                 </details>
                 <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <summary>Spickzettel <span class="badge">3 Schritte &middot; Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
-<pre>ENV:
-  FLIGHT_SERVICE_URL=http://flight:8080
-  HOTEL_SERVICE_URL=http://hotel:8080
-  CAR_SERVICE_URL=http://car:8080
-
-GET /health  → 200 OK
+                        <ol class="cheat-steps">
+                            <li>
+                                <h4>Konfiguration aus der Umgebung</h4>
+                                <p>Backend-URLs als Umgebungsvariablen lesen, nichts im Code verdrahten.</p>
+<pre>FLIGHT_SERVICE_URL=http://flight:8080
+HOTEL_SERVICE_URL=http://hotel:8080
+CAR_SERVICE_URL=http://car:8080</pre>
+                            </li>
+                            <li>
+                                <h4>Health, Info und OpenAPI</h4>
+                                <p>Drei kleine Endpunkte, damit Plattform und Menschen sehen, was l&auml;uft.</p>
+<pre>GET /health  → 200 OK
 GET /info    → { config: { flightServiceUrl, hotelServiceUrl, carServiceUrl } }
-GET /openapi → OpenAPI-Spec (text/yaml)
-
-GET /booking/offers
+GET /openapi → OpenAPI-Spec (text/yaml)</pre>
+                            </li>
+                            <li>
+                                <h4>Angebote aggregieren</h4>
+                                <p>Drei Aufrufe nacheinander, das Ergebnis zusammenbauen. Fehler d&uuml;rfen durchschlagen, kein Error-Handling.</p>
+<pre>GET /booking/offers
   → GET FLIGHT_SERVICE_URL/flights
   → GET HOTEL_SERVICE_URL/hotels
   → GET CAR_SERVICE_URL/cars
-  → { flights, hotels, cars }
-  // Fehler? Dürfen durchschlagen — kein Error-Handling.</pre>
+  → { flights, hotels, cars }</pre>
+                            </li>
+                        </ol>
                     </div>
                 </details>
-                <details class="story-setup">
-                    <summary>Einklinken (einmalig) <span class="badge">Hausaufgabe + .env</span></summary>
-                    <div class="story-setup-body">
-                        <h4>Aus der Hausaufgabe</h4>
-                        <p>Mini-Service mit <code>GET /health</code>, <code>Dockerfile</code>, Port <code>8080</code>: siehe <a href="https://larmic.github.io/workshop_microservices/vorbereitung/" target="_blank" rel="noopener">Vorbereitung</a>. Wer das noch nicht hat, holt es jetzt nach.</p>
-                        <h4>Jetzt im Workshop</h4>
-                        <ul>
-                            <li><code>CUSTOM_BOOKING_PATH</code> in <code>services/.env</code> zeigt auf dein Service-Verzeichnis, danach <code>make docker-up-hub</code></li>
-                            <li>Backend-URLs (<code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code>, <code>CONSUL_URL</code>) kommen automatisch aus <code>docker-compose.custom.yml</code>, nicht selbst setzen</li>
-                            <li>Details: <code>docs/custom-setup.md</code></li>
-                        </ul>
-                    </div>
-                </details>
+                <p class="story-start-hint">Noch nicht eingeklinkt? <a href="#" onclick="showStory(0); return false;">&larr; Start</a> zeigt, wie es geht und wie ihr es testet.</p>
             </div>
         <div class="source-toggle" data-source-toggle="1">
             <span class="source-toggle-label">Service-Quelle</span>
@@ -1505,10 +1730,10 @@ GET /booking/offers
 
         <!-- Story 2: Design-Session ohne Code. Bewusst nur die Story-Karte:
              kein Spickzettel, kein Setup, kein Service-Umschalter, keine Buttons. -->
-        <section class="story-section" data-story="2" hidden>
+        <section class="story-section" data-story="2" data-kind="design" data-backend="hide" hidden>
             <div class="story-helpers" data-story-helpers="2">
                 <details class="story-info" open>
-                    <summary>Story lesen <span class="badge">User Story + Aufgabe</span></summary>
+                    <summary>Aufgabe <span class="badge">User Story + Aufgabe</span></summary>
                     <div class="story-info-body">
                         <p><strong>Diese Story findet am Flipchart statt.</strong> Es gibt keine Referenz-Implementierung, keinen Service und keinen Port. Das Dashboard zeigt hier nur die Aufgabe.</p>
                         <h4>Kontext</h4>
@@ -1535,10 +1760,10 @@ GET /booking/offers
             </div>
         </section>
 
-        <section class="story-section" data-story="3" hidden>
+        <section class="story-section" data-story="3" data-kind="code" data-backend="show" hidden>
             <div class="story-helpers" data-story-helpers="3">
-                <details class="story-info">
-                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                <details class="story-info" open>
+                    <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
                         <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Backend-Services registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Fällt eine Instanz aus, übernimmt automatisch eine andere.</p>
@@ -1555,24 +1780,36 @@ GET /booking/offers
                     </div>
                 </details>
                 <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <summary>Spickzettel <span class="badge">3 Schritte &middot; Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
+                        <ol class="cheat-steps">
+                            <li>
+                                <h4>Instanz bei Consul finden</h4>
+                                <p>Nur gesunde Instanzen abfragen und eine davon zuf&auml;llig w&auml;hlen.</p>
 <pre>resolve(name):
   res = GET consul:8500/v1/health/service/{name}?passing=true
   // res = [ {Service:{Address, Port}}, ... ]
   instance = randomPick(res)
-  return "http://{instance.Address}:{instance.Port}"
-
-GET /booking/offers:
+  return "http://{instance.Address}:{instance.Port}"</pre>
+                            </li>
+                            <li>
+                                <h4>Angebote &uuml;ber den Resolver</h4>
+                                <p>Der Endpunkt aus Story 1, nur ohne feste URLs.</p>
+<pre>GET /booking/offers:
   for svc in [flight-service, hotel-service, car-service]:
     url = resolve(svc)
-    results[svc] = GET url/...
-
-POST /booking/bookings { flightId, hotelId, carId, customerName }:
+    results[svc] = GET url/...</pre>
+                            </li>
+                            <li>
+                                <h4>Buchung orchestrieren</h4>
+                                <p>Neu: eine Buchung &uuml;ber alle drei Services, die API aus Story 2.</p>
+<pre>POST /booking/bookings { flightId, hotelId, carId, customerName }:
   for svc in [flight-service, hotel-service, car-service]:
     url = resolve(svc)
     POST url/bookings
   → { bookingId, customerName, flight, hotel, car }</pre>
+                            </li>
+                        </ol>
                     </div>
                 </details>
             </div>
@@ -1623,17 +1860,17 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
 
         </section>
 
-        <section class="story-section" data-story="4" hidden>
+        <section class="story-section" data-story="4" data-kind="play" data-backend="demo" hidden>
             <div class="story-helpers" data-story-helpers="4">
                 <details class="story-info" open>
-                    <summary>Story lesen <span class="badge">User Story + Rollenspiel</span></summary>
+                    <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
                         <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Suchanfragen, Booking hat den Schalter. Das Circuit-Breaker-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
                         <p>Der Flight-Service ist zeitweise nicht erreichbar (Netzprobleme, Überlast, Deployment). Ohne Schutz wartet der Booking-Service bei jeder Anfrage drei Sekunden auf den Timeout und reißt seine Aufrufer mit. Ein <em>Circuit Breaker</em> zählt die Fehler, schaltet nach fünf Fehlern in Folge ab, antwortet sofort mit einem Fallback und probiert nach einer Pause vorsichtig wieder zu.</p>
                         <h4>User Story</h4>
                         <p>Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
-                        <h4>Rollen (ca. 20 Minuten)</h4>
+                        <h4>Rollen</h4>
                         <ol>
                             <li><strong>Booking</strong> hat Strichliste, Schild CLOSED / OPEN / HALF_OPEN und Karten <code>flights: []</code>. Warten heißt laut zählen: eins, zwei, drei, Timeout.</li>
                             <li><strong>Flight</strong> folgt den geheimen Ansagen des Trainers. <strong>Hotel und Car</strong> antworten sofort.</li>
@@ -1681,10 +1918,10 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
 
         <!-- Story 5: Rollenspiel mit Bechern, Takt und Uhr statt Code. Story-Karte zeigt
              die Spielregeln; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
-        <section class="story-section" data-story="5" hidden>
+        <section class="story-section" data-story="5" data-kind="play" data-backend="demo" hidden>
             <div class="story-helpers" data-story-helpers="5">
                 <details class="story-info" open>
-                    <summary>Story lesen <span class="badge">User Story + Rollenspiel</span></summary>
+                    <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
                         <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Gleiche Schlange, gleiches Schild wie Story 4. Neu: Takt, Chips und ein langsames Hotel. Kein geheimes Briefing. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
@@ -1693,7 +1930,7 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
                         <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
                         <h4>Material</h4>
                         <p>Sechs Chips, ein großer Becher und drei kleine (F, H, C), ein A4-Blatt als Uhr mit den Feldern 1 bis 8, Suchkarten 1 bis 20, 14 Karten <code>hotels: []</code>, Schild und Strichliste aus Story 4. Spielbar ab sieben Personen. Nach jeder Runde Stapel und Uhr zurücksetzen.</p>
-                        <h4>Rollen (Der geteilte Pool, ca. 25 Minuten)</h4>
+                        <h4>Rollen</h4>
                         <ol>
                             <li><strong>Takt</strong> zählt laut 1 bis 8, immer wieder, und klatscht, sobald Booking und Hotel „fertig" sagen. Pro Klatscher nimmt die vorderste Suchanfrage die nächste <strong>Suchkarte</strong> vom Stapel (1 bis 20), gibt sie Booking und stellt sich <strong>sofort hinten wieder an</strong>. Stapel leer: Runde vorbei.</li>
                             <li><strong>Booking</strong> ruft Flight, Hotel und Car nacheinander, jeder Aufruf braucht einen Chip. Wartende Karten liegen in einer Reihe bei Booking. Fertige Suchen auf zwei Stapel: komplett und <code>hotels: []</code>. Timeout zwölf Takte ab Hotel-Aufruf, dann Strich wie in Story 4.</li>
@@ -1772,10 +2009,10 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
 
         </section>
 
-        <section class="story-section" data-story="6" hidden>
+        <section class="story-section" data-story="6" data-kind="code" data-backend="hide" hidden>
             <div class="story-helpers" data-story-helpers="6">
-                <details class="story-info">
-                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                <details class="story-info" open>
+                    <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
                         <p>Eine Reise = Flug + Hotel + Mietwagen. Schlägt die Hotelbuchung fehl, nachdem der Flug schon gebucht wurde, muss der Flug storniert werden. DB-Transaktionen funktionieren nicht über Service-Grenzen &mdash; das <em>Saga-Pattern</em> simuliert atomares Verhalten mit expliziten Kompensationsschritten.</p>
@@ -1792,32 +2029,44 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
                     </div>
                 </details>
                 <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <summary>Spickzettel <span class="badge">3 Schritte &middot; Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
+                        <ol class="cheat-steps">
+                            <li>
+                                <h4>Saga anlegen</h4>
+                                <p>Status und Schritte festhalten, gebuchte IDs f&uuml;r den R&uuml;ckweg merken.</p>
 <pre>saga = { id, status: PENDING, steps: [] }
-booked = []                                    // für Rollback
-
-try:
+booked = []                          // für Rollback</pre>
+                            </li>
+                            <li>
+                                <h4>Vorw&auml;rts buchen</h4>
+                                <p>Schritt f&uuml;r Schritt, jeder erfolgreiche Schritt landet in <code>booked</code>.</p>
+<pre>try:
   flight = POST flight/bookings { ... }
   booked.push({ svc: "flight", id: flight.id })
   saga.steps.push({ svc: "flight", status: BOOKED })
 
   hotel = POST hotel/bookings { ... }
-  booked.push({ svc: "hotel",  id: hotel.id })
-  saga.steps.push({ svc: "hotel",  status: BOOKED })
+  booked.push({ svc: "hotel", id: hotel.id })
+  saga.steps.push({ svc: "hotel", status: BOOKED })
 
   car = POST car/bookings { ... }
-  saga.steps.push({ svc: "car",    status: BOOKED })
+  saga.steps.push({ svc: "car", status: BOOKED })
 
-  saga.status = COMPLETED
-
-catch error at step X:
+  saga.status = COMPLETED</pre>
+                            </li>
+                            <li>
+                                <h4>R&uuml;ckw&auml;rts kompensieren</h4>
+                                <p>Schl&auml;gt ein Schritt fehl, werden die gebuchten in umgekehrter Reihenfolge storniert.</p>
+<pre>catch error at step X:
   saga.status   = COMPENSATING
   saga.failedAt = X
   for b in reverse(booked):
-    DELETE b.svc/bookings/{b.id}              // Kompensation
+    DELETE b.svc/bookings/{b.id}     // Kompensation
     mark step COMPENSATED
   saga.status = FAILED</pre>
+                            </li>
+                        </ol>
                     </div>
                 </details>
             </div>
@@ -1864,10 +2113,10 @@ catch error at step X:
 
         <!-- Story 7: Rollenspiel statt Code. Story-Karte zeigt das Rollenspiel; das
              Saga-Panel darunter bleibt als Demo der Webhook-Referenz. -->
-        <section class="story-section" data-story="7" hidden>
+        <section class="story-section" data-story="7" data-kind="play" data-backend="hide" hidden>
             <div class="story-helpers" data-story-helpers="7">
                 <details class="story-info" open>
-                    <summary>Story lesen <span class="badge">User Story + Rollenspiel</span></summary>
+                    <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
                         <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich storniert wurde. Das Saga-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
@@ -1876,7 +2125,7 @@ catch error at step X:
                         <p>Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Backend-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
                         <h4>Material</h4>
                         <p>Pro Tisch: sechs verdeckte Listen (je drei für Hotel und Flight), ein Becher pro Reise, etwa sieben Gummibärchen pro Reise (Alternative: Büroklammern), ein Korb, pro Reise zwei nummerierte Zettel, eine Strichliste, ein Briefing-Kärtchen für Flight. Ab 12 Personen zwei Tische.</p>
-                        <h4>Rollen (Die Saga wird leise, ca. 25 Minuten)</h4>
+                        <h4>Rollen</h4>
                         <ol>
                             <li><strong>Booking</strong> hat eine Strichliste und bucht eine Reise nach der anderen bei Flight, Hotel und Car. Sagt Car nein, storniert Booking rückwärts, erst Hotel, dann Flight. Danach sagt Booking „storniert“.</li>
                             <li><strong>Hotel und Flight</strong> buchen auf einer verdeckten Liste. Stornieren heißt: an den Fingern bis fünf zählen, durchstreichen, ein Gummibärchen in den Becher der Reise. Jedes Mal, auch wenn die Reise schon durchgestrichen ist. Flight folgt den geheimen Ansagen des Trainers.</li>
@@ -1948,10 +2197,10 @@ catch error at step X:
         </div>
         </section>
 
-        <section class="story-section" data-story="8" hidden>
+        <section class="story-section" data-story="8" data-kind="code" data-backend="hide" hidden>
             <div class="story-helpers" data-story-helpers="8">
-                <details class="story-info">
-                    <summary>Story lesen <span class="badge">User Story + Akzeptanzkriterien</span></summary>
+                <details class="story-info" open>
+                    <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
                         <p>
@@ -2001,43 +2250,51 @@ catch error at step X:
                     </div>
                 </details>
                 <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">Pseudo-Code</span></summary>
+                    <summary>Spickzettel <span class="badge">5 Schritte &middot; Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
-<pre>// W3C Trace Context: 00-&lt;trace-id-32hex&gt;-&lt;span-id-16hex&gt;-&lt;flags-2hex&gt;
-
-// Server-Middleware: eingehenden Header übernehmen oder neu erzeugen
+                        <ol class="cheat-steps">
+                            <li>
+                                <h4>Header &uuml;bernehmen oder erzeugen</h4>
+                                <p>Server-Middleware: eingehenden <code>traceparent</code> lesen, sonst neu erzeugen, und in der Response zur&uuml;ckgeben.</p>
+<pre>// W3C: 00-&lt;trace-id-32hex&gt;-&lt;span-id-16hex&gt;-&lt;flags-2hex&gt;
 on incomingRequest(req):
   tc = parse(req.header("traceparent")) ?: generateNew()
   res.header("traceparent") = tc.toHeader()    // zurück zum Client
   ctx = ctx.with(tc)
-  next(req.withContext(ctx))
-
-// Client-Inject: pro ausgehendem Hop neue Span-ID, gleiche Trace-ID
-on outgoingRequest(ctx, req):
+  next(req.withContext(ctx))</pre>
+                            </li>
+                            <li>
+                                <h4>Header weitergeben</h4>
+                                <p>Pro ausgehendem Aufruf eine neue Span-ID, die Trace-ID bleibt gleich.</p>
+<pre>on outgoingRequest(ctx, req):
   tc = ctx.get(TraceContext)
   hop = tc.copy(spanId = randomSpanId())
-  req.setHeader("traceparent", hop.toHeader())
-
-// Kompensation: derselbe Inject, auch beim DELETE
-compensate(ctx, step):
-  outgoingRequest(ctx, DELETE step.url + "/bookings/" + step.bookingId)
-
-// Logging: jede Zeile bekommt trace_id als Feld
-log.info("forward step done",
-  trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")
-
-// Bonus (nur bei Kompensation als Event, wie in der Story-7-Referenz):
-// Trace-ID als Event-Property mitschicken
-event = {
-  eventId, sagaId, bookingId,
-  traceparent: ctx.tc.toHeader()    // damit der Konsument den Trace fortführt
-}
+  req.setHeader("traceparent", hop.toHeader())</pre>
+                            </li>
+                            <li>
+                                <h4>Auch bei der Kompensation</h4>
+                                <p>Das DELETE ist ein ganz normaler ausgehender Aufruf.</p>
+<pre>compensate(ctx, step):
+  outgoingRequest(ctx, DELETE step.url + "/bookings/" + step.bookingId)</pre>
+                            </li>
+                            <li>
+                                <h4>trace_id in jede Logzeile</h4>
+                                <p>Strukturiert loggen, damit der Filter die Zeilen findet.</p>
+<pre>log.info("forward step done",
+  trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")</pre>
+                            </li>
+                            <li>
+                                <h4>Bonus: Trace im Event</h4>
+                                <p>Nur bei Kompensation als Event wie in der Story-7-Referenz.</p>
+<pre>event = { eventId, sagaId, bookingId,
+          traceparent: ctx.tc.toHeader() }
 publish(event)
 
 on receiveCompensationEvent(event):
   tc = parse(event.traceparent) ?: generateNew()
-  asyncCtx = bgCtx.with(tc)
-  go process(asyncCtx, event)       // Logs der Goroutine tragen die trace_id</pre>
+  go process(bgCtx.with(tc), event)    // Logs tragen die trace_id</pre>
+                            </li>
+                        </ol>
                     </div>
                 </details>
             </div>
@@ -2125,10 +2382,10 @@ on receiveCompensationEvent(event):
         </section>
     </main>
 
-    <aside class="backend-panel">
-        <div class="backend-panel-heading">Backend-Services &mdash; Chaos &amp; Scaling</div>
+    <details class="backend-panel" id="backend-panel" open>
+        <summary class="backend-panel-heading" id="backend-panel-heading">Backend-Services &mdash; Chaos &amp; Scaling</summary>
         <div class="services-grid" id="services"></div>
-    </aside>
+    </details>
 
     <footer class="workshop-footer">
         <div class="footer-author">
@@ -2200,8 +2457,14 @@ on receiveCompensationEvent(event):
             });
             const customLink = document.getElementById("link-booking-custom");
             if (customLink) customLink.hidden = !customAvailable;
+            // Startseite: nur "erreichbar", nicht "euer Service" (siehe Hinweis dort).
+            const startStatus = document.getElementById("start-custom-status");
+            if (startStatus) {
+                startStatus.textContent = customAvailable ? "erreichbar" : "nicht erreichbar";
+                startStatus.className = "start-live-status " + (customAvailable ? "ok" : "err");
+            }
             if (!customAvailable) {
-                for (const n of [1, 2, 3, 4, 5, 6, 7]) {
+                for (const n of Object.keys(BookingMode).map(Number)) {
                     if (BookingMode[n] === "custom") setBookingMode(n, "reference");
                 }
             }
@@ -3134,55 +3397,72 @@ on receiveCompensationEvent(event):
         }
 
         // -------- Story-Stepper-Navigation --------
+        // Titel und Zeit-Pille wie auf den Story-Folien (Kicker, Überschrift, Badge).
+        const KIND_LABEL = { start: "Start", code: "Hands-on", design: "Design-Session", play: "Rollenspiel" };
         const STORY_META = {
-            1: { title: "Story 1: Der erste cloud-native Booking-Service",
-                 subtitle: "Health-Check, externe Konfiguration &mdash; ein Build, viele Umgebungen." },
-            2: { title: "Story 2: Design-Session: REST vs. RESTful",
-                 subtitle: "Am Flipchart statt im Editor: eine API für Storno und Umbuchung entwerfen. Kein Code, kein Deployment." },
-            3: { title: "Story 3: Services dynamisch finden",
+            0: { title: "Willkommen bei &bdquo;Microservices richtig gemacht&ldquo;", kind: "start", pill: "Einklinken und testen",
+                 subtitle: "Hausaufgabe pr&uuml;fen, eigenen Service einklinken, testen. Einmal am Anfang, danach nie wieder." },
+            1: { title: "Story 1: Erst lauff&auml;hig, dann smart", kind: "code", pill: "&asymp; 90 min",
+                 subtitle: "Der erste cloud-native Booking-Service: Health-Check, externe Konfiguration, ein Build f&uuml;r viele Umgebungen." },
+            2: { title: "Story 2: Erst denken, dann tippen", kind: "design", pill: "&asymp; 20 min",
+                 subtitle: "REST vs. RESTful am Flipchart statt im Editor: eine API f&uuml;r Storno und Umbuchung entwerfen. Kein Code, kein Deployment." },
+            3: { title: "Story 3: Services finden sich selbst", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
-            4: { title: "Story 4: Wenn der Flug ausfällt",
+            4: { title: "Story 4: Wenn der Flug ausf&auml;llt", kind: "play", pill: "&asymp; 20 min",
                  subtitle: "Circuit Breaker als Rollenspiel: Ihr seid die Suchanfragen, Booking hat den Schalter. Danach die Demo mit der Referenz." },
-            5: { title: "Story 5: Der geteilte Pool",
+            5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 25 min",
                  subtitle: "Bulkhead als Rollenspiel: Ihr seid die Suchanfragen, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz und die Rechnung, warum ausgerechnet zehn." },
-            6: { title: "Story 6: Alles oder nichts — aber richtig",
+            6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
-            7: { title: "Story 7: Die Saga wird leise",
+            7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 25 min",
                  subtitle: "Choreography als Rollenspiel: Anruf, Zuruf, Korb, mit Kassensturz nach jeder Runde. Danach die Leiter und die Demo mit der Referenz." },
-            8: { title: "Story 8: Den roten Faden im Log",
-                 subtitle: "Distributed Tracing: Geschäftsvorgänge über Service-Grenzen hinweg verfolgen." },
+            8: { title: "Story 8: Den roten Faden im Log", kind: "code", pill: "&asymp; 60 min",
+                 subtitle: "Distributed Tracing: Gesch&auml;ftsvorg&auml;nge &uuml;ber Service-Grenzen hinweg verfolgen." },
         };
         const STORY_COUNT = 8;
-        // Key-Version v2 seit der Umnummerierung 2026-09 (Stories 2..7 wurden 3..8):
-        // ein gespeicherter Wert aus der alten Zählung würde sonst auf der falschen
-        // Story landen.
-        const STORY_KEY = "workshop-dashboard.currentStory.v2";
+        // Key-Version v3 seit Schritt 0 (Start): Wer das Dashboard zum ersten
+        // Mal öffnet, landet auf Start statt auf einer alten Story.
+        const STORY_KEY = "workshop-dashboard.currentStory.v3";
 
         function readInitialStory() {
-            const saved = parseInt(localStorage.getItem(STORY_KEY), 10);
-            if (saved >= 1 && saved <= STORY_COUNT) return saved;
-            return 1;
+            let saved = NaN;
+            try { saved = parseInt(localStorage.getItem(STORY_KEY), 10); } catch (_) {}
+            if (saved >= 0 && saved <= STORY_COUNT) return saved;
+            return 0;
         }
 
         let currentStory = readInitialStory();
 
         function showStory(n) {
-            if (n < 1 || n > STORY_COUNT) return;
+            if (n < 0 || n > STORY_COUNT) return;
             currentStory = n;
             try { localStorage.setItem(STORY_KEY, String(n)); } catch (_) {}
 
+            let backend = "hide";
             document.querySelectorAll(".story-section").forEach(sec => {
                 const sn = parseInt(sec.getAttribute("data-story"), 10);
                 sec.hidden = (sn !== n);
+                if (sn === n) backend = sec.getAttribute("data-backend") || "hide";
             });
+            // Backend-Services nur, wo sie etwas bringen: offen (show), eingeklappt
+            // für die Demo nach dem Rollenspiel (demo) oder gar nicht (hide).
+            const panel = document.getElementById("backend-panel");
+            panel.hidden = (backend === "hide");
+            panel.open = (backend === "show");
+            document.getElementById("backend-panel-heading").innerHTML = (backend === "demo")
+                ? "Backend-Services &mdash; Chaos &amp; Scaling f&uuml;r die Demo nach dem Rollenspiel"
+                : "Backend-Services &mdash; Chaos &amp; Scaling";
             document.querySelectorAll(".stepper-node").forEach(btn => {
                 const sn = parseInt(btn.getAttribute("data-story-node"), 10);
                 btn.classList.toggle("active", sn === n);
             });
-            document.getElementById("stepper-prev").disabled = (n === 1);
+            document.getElementById("stepper-prev").disabled = (n === 0);
             document.getElementById("stepper-next").disabled = (n === STORY_COUNT);
             const meta = STORY_META[n];
             if (meta) {
+                const pill = document.getElementById("stepper-kind");
+                pill.setAttribute("data-kind", meta.kind);
+                pill.innerHTML = KIND_LABEL[meta.kind] + " &middot; " + meta.pill;
                 document.getElementById("stepper-title").innerHTML    = meta.title;
                 document.getElementById("stepper-subtitle").innerHTML = meta.subtitle;
             }
@@ -3195,6 +3475,10 @@ on receiveCompensationEvent(event):
             const t = e.target;
             const tag = t && t.tagName;
             if (tag === "INPUT" || tag === "TEXTAREA" || (t && t.isContentEditable)) return;
+            // Mitten im Konami-Code (↑↑↓↓ schon getippt) nicht blättern, sonst
+            // landet man nach ←→←→ auf einer anderen Story. Dieser Listener läuft
+            // vor dem Konami-Listener und sieht daher den Stand vor der Taste.
+            if (konamiPos >= 4) return;
             if (e.key === "ArrowLeft")  { goPrevStory(); }
             else if (e.key === "ArrowRight") { goNextStory(); }
         });
@@ -3224,7 +3508,7 @@ on receiveCompensationEvent(event):
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    content: `🏴‍☠️  *${ts}*  ·  Jemand hat das Retro-Easteregg im Dashboard entdeckt! (Story ${currentStory})`,
+                    content: `🏴‍☠️  *${ts}*  ·  Jemand hat das Retro-Easteregg im Dashboard entdeckt! (${currentStory === 0 ? "Start" : "Story " + currentStory})`,
                     username: "Booking Island",
                     allowed_mentions: { parse: [] },
                 }),

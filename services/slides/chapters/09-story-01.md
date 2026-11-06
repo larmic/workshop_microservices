@@ -46,7 +46,7 @@
 </div>
 
 <div class="story-foot">
-<strong>Einmalig, und nicht eure Aufgabe:</strong> Die Werte der Backend-URLs liefert <code>docker-compose.custom.yml</code>, ihr lest sie nur, ihr setzt sie nicht. Details in <code>docs/custom-setup.md</code>.
+<strong>Einmalig, und nicht eure Aufgabe:</strong> Die Werte der Backend-URLs liefert <code>docker-compose.custom.yml</code>, ihr lest sie nur, ihr setzt sie nicht. Einklinken und Testen: Dashboard, Schritt 0 &bdquo;Start&ldquo;.
 </div>
 
 </div>
@@ -55,9 +55,9 @@
 
 Note:
 - Hook zum Einsteigen vorlesen: &bdquo;Alle dachten, der Service l&auml;uft, bis ein Kunde anrief und fragte, warum seit drei Stunden nichts mehr geht. Vertrauen ist gut, ein Health-Endpoint ist besser.&ldquo;
-- Wiedererkennung: dieselbe Story (Kontext / User Story / Akzeptanzkriterien) findet ihr im Dashboard unter &bdquo;Story lesen&ldquo;.
+- Wiedererkennung: dieselbe Story (Kontext / User Story / Akzeptanzkriterien) findet ihr im Dashboard unter &bdquo;Aufgabe&ldquo;.
 - Sprache und Framework sind frei (Go, Java, Quarkus, Node, &hellip;). Die Referenz unter `services/booking/story1/` ist nur ein Go-Beispiel.
 - Kein Error-Handling in Story 1, das ist Absicht. Wir bauen das Skelett; Resilienz kommt in Stories 4 bis 6.
-- Der Setup-Hinweis unten steht absichtlich nur hier in Story 1. Ab Story 3 erweitern wir denselben Service iterativ, das Custom-Setup bleibt unver&auml;ndert.
-- Time-Box 90 min. Das Grundger&uuml;st (Mini-Service, Dockerfile, Port 8080) war Hausaufgabe, im Workshop wird nur noch per <code>CUSTOM_BOOKING_PATH</code> eingeklinkt. Dashboard `http://localhost` zeigt den Story-1-Modus inkl. Spickzettel mit Pseudo-Code.
+- Das Grundger&uuml;st (Mini-Service, Dockerfile, Port 8080) war Hausaufgabe. Einklinken und Testen steht im Dashboard unter Schritt 0 &bdquo;Start&ldquo;, dort landen alle beim ersten &Ouml;ffnen. Achtung: Ohne eigenen Pfad l&auml;uft die Kotlin-Beispiell&ouml;sung, dann ist auch alles gr&uuml;n. Erst <code>docker logs booking-custom</code> zeigt, wessen Service l&auml;uft.
+- Ab Story 3 erweitern wir denselben Service, das Setup bleibt unver&auml;ndert. Time-Box 90 min, Spickzettel im Dashboard zugeklappt unter der Aufgabe.
 - Vollst&auml;ndige Aufgabenbeschreibung: `docs/stories/story-01-cloud-native-booking-service.md`.

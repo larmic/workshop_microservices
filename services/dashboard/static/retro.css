@@ -196,7 +196,8 @@ body.retro .rest-response,
 body.retro .trace-result-cmd,
 body.retro .trace-result-body pre,
 body.retro .trace-result-line code,
-body.retro .story-cheatsheet-body pre {
+body.retro .story-cheatsheet-body pre,
+body.retro .start-page pre {
     background: #000;
     color: var(--r-green);
     border: 1px solid var(--r-green);
@@ -389,31 +390,99 @@ body.retro .stepper-node.active {
     box-shadow: 3px 3px 0 #000;
 }
 body.retro .stepper-connector { background: var(--r-line); }
-body.retro .stepper-connector.done { background: var(--r-magenta); }
+/* Übungsart: Strichart wie im hellen Theme, Farbe je Art. Spezifischer als
+   .stepper-node, sonst setzt der Rahmen oben die Strichart zurück. */
+body.retro .stepper-node[data-kind="design"] { border: 2px dashed var(--r-cyan); }
+body.retro .stepper-node[data-kind="play"]   { border: 2px dotted var(--r-yellow); }
+body.retro .stepper-node[data-kind="start"]  { border: 2px solid var(--r-magenta); color: var(--r-magenta); }
+body.retro .stepper-node[data-kind].active   { background: var(--r-green); color: var(--r-bg); }
+body.retro .stepper-kind { color: var(--r-faint); font-family: "RetroText", monospace; font-size: 0.75rem; }
+body.retro .kind-pill {
+    border-radius: 0;
+    background: var(--r-green);
+    border: 2px solid var(--r-green);
+    color: var(--r-bg);
+    font-family: "RetroText", monospace;
+    font-size: 0.9rem;
+}
+body.retro .kind-pill[data-kind="design"] { background: var(--r-bg); border: 2px dashed var(--r-cyan); color: var(--r-cyan); }
+body.retro .kind-pill[data-kind="play"]   { background: var(--r-bg); border: 2px dotted var(--r-yellow); color: var(--r-yellow); }
+body.retro .kind-pill[data-kind="start"]  { background: var(--r-bg); border-color: var(--r-magenta); color: var(--r-magenta); }
 
 /* ===== Story-Lernhilfen & Source-Toggle ===== */
 body.retro details.story-info,
-body.retro details.story-cheatsheet,
-body.retro details.story-setup {
+body.retro details.story-cheatsheet {
     background: var(--r-panel);
     border: 1px solid var(--r-line);
     border-radius: 0;
 }
+body.retro .story-section[data-kind="code"]   details.story-info { border-left: 4px solid var(--r-green); }
+body.retro .story-section[data-kind="design"] details.story-info { border-left: 4px dashed var(--r-cyan); }
+body.retro .story-section[data-kind="play"]   details.story-info { border-left: 4px dotted var(--r-yellow); }
 body.retro details.story-info summary,
-body.retro details.story-cheatsheet summary,
-body.retro details.story-setup summary { color: var(--r-cyan); }
+body.retro details.story-cheatsheet summary { color: var(--r-cyan); }
 body.retro details.story-info summary::before,
-body.retro details.story-cheatsheet summary::before,
-body.retro details.story-setup summary::before { color: var(--r-faint); }
+body.retro details.story-cheatsheet summary::before { color: var(--r-faint); }
 body.retro details.story-info summary .badge,
-body.retro details.story-cheatsheet summary .badge,
-body.retro details.story-setup summary .badge { color: var(--r-faint); }
+body.retro details.story-cheatsheet summary .badge { color: var(--r-faint); }
 body.retro .story-info-body,
-body.retro .story-cheatsheet-body,
-body.retro .story-setup-body { color: var(--r-ink); }
-body.retro .story-info-body h4,
-body.retro .story-setup-body h4 { color: var(--r-faint); }
+body.retro .story-cheatsheet-body { color: var(--r-ink); }
+body.retro .story-info-body h4 { color: var(--r-faint); }
 body.retro .story-info-body em { color: var(--r-green); }
+body.retro .story-info-body details.story-solution {
+    background: var(--r-panel-2);
+    border: 1px dashed var(--r-line);
+    border-radius: 0;
+}
+body.retro ol.cheat-steps > li::before {
+    border-radius: 0;
+    background: var(--r-magenta);
+    color: var(--r-bg);
+    font-family: "PressStart2P", monospace;
+    font-size: 0.6rem;
+}
+body.retro ol.cheat-steps h4 { color: var(--r-yellow); }
+body.retro .story-start-hint { color: var(--r-muted); }
+body.retro .story-start-hint a { color: var(--r-magenta); }
+
+/* ===== Schritt 0: Startseite ===== */
+body.retro .start-lead,
+body.retro .start-legend { color: var(--r-muted); }
+body.retro .start-card {
+    background: var(--r-panel);
+    border: 1px solid var(--r-line);
+    border-radius: 0;
+    color: var(--r-ink);
+}
+body.retro .start-card h3 { color: var(--r-cyan); }
+body.retro .start-card em { color: var(--r-green); }
+body.retro .start-card a { color: var(--r-magenta); }
+body.retro .start-homework { border-left: 4px solid var(--r-yellow); }
+body.retro ol.start-steps > li { border-left: 4px solid var(--r-magenta); }
+body.retro ol.start-steps > li h3::before {
+    border-radius: 0;
+    background: var(--r-magenta);
+    color: var(--r-bg);
+    font-family: "PressStart2P", monospace;
+    font-size: 0.6rem;
+}
+body.retro .start-live-status.ok  { color: var(--r-green); }
+body.retro .start-live-status.err { color: var(--r-red); }
+body.retro .start-warn {
+    background: var(--r-panel-2);
+    color: var(--r-yellow);
+    border: 1px dashed var(--r-yellow);
+    border-radius: 0;
+}
+body.retro .start-go-btn {
+    border-radius: 0;
+    background: var(--r-green);
+    color: var(--r-bg);
+    font-family: "PressStart2P", monospace;
+    font-size: 0.7rem;
+    box-shadow: 3px 3px 0 #000;
+}
+body.retro .start-go-btn:hover { background: var(--r-magenta); }
 body.retro .source-toggle { box-shadow: none !important; padding-left: 0.85rem; }
 body.retro .source-toggle-label { color: var(--r-muted); }
 body.retro .source-btn {
