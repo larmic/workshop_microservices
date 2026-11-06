@@ -9,7 +9,7 @@
 <div class="cards cards-4 violet">
 <div class="card">
 <h3><span class="num">01</span> Fundament</h3>
-<p>Health, Config, Stateless. Der Rest baut darauf.</p>
+<p>Health, Config aus der Umgebung, Logs auf stdout.</p>
 </div>
 <div class="card">
 <h3><span class="num">02</span> REST vs. RESTful</h3>

@@ -6,7 +6,7 @@
 
 ## Der geteilte Pool
 
-<span class="badge design">&asymp; 25 min</span>
+<span class="badge design">&asymp; 60 min <small>davon 25 Spiel</small></span>
 </div>
 
 <p class="subtitle">Gleiche Schlange wie Story 4. Neu: Takt, Chips und ein <span class="hl">langsames</span> Hotel.</p>

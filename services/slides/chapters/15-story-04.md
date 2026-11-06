@@ -6,7 +6,7 @@
 
 ## Wenn der Flug ausf&auml;llt
 
-<span class="badge design">&asymp; 20 min</span>
+<span class="badge design">&asymp; 60 min <small>davon 20 Spiel</small></span>
 </div>
 
 <p class="subtitle">Ihr seid die Suchanfragen. Flight ist krank. Booking hat den <span class="hl">Schalter</span>.</p>

@@ -26,8 +26,8 @@
 <div class="numlist-row">
 <div class="numlist-num">03</div>
 <div>
-<p class="numlist-label">JSON statt Format-String</p>
-<h3>Warum ist <code>log.Printf</code> mit eingebauter Trace-ID nicht <span class="hl">gut genug</span>?</h3>
+<p class="numlist-label">Feld statt Flie&szlig;text</p>
+<h3>Die Trace-ID steht im Logtext. Warum ist das nicht <span class="hl">gut genug</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">trace_id als Feld</code>
 </div>
@@ -57,7 +57,7 @@ Note:
 - Erst diskutieren, dann Daumen-Abstimmung, dann der Klick auf die Merks&auml;tze. Einstieg: &bdquo;Wo h&auml;tte euch Tracing in Stories 4 bis 7 schon geholfen?&ldquo;
 - <strong>Span-Baum:</strong> Eine Span ist ein Wegst&uuml;ck mit eigener ID und Parent-ID, erst das ergibt den Wasserfall in Jaeger. Wir haben nur die Trace-ID. <strong>Spicy:</strong> Logs mit Trace-ID: 80 Prozent Nutzen f&uuml;r 20 Prozent Aufwand.
 - <strong>&Uuml;bernehmen:</strong> Ohne Header darf jeder starten, wie in OTel. Die Backends lassen es weg (<code>Propagate</code>). <strong>Spicy:</strong> Wer &uuml;berschreibt, zerrei&szlig;t den Trace.
-- <strong>Feld statt Text:</strong> Im Format-String wird die ID vergessen. Ein strukturierter Logger h&auml;ngt <code>trace_id</code> einmal als Feld an, danach filtert <code>jq</code>.
+- <strong>Feld statt Text:</strong> Im Flie&szlig;text wird die ID mal vergessen, mal anders geschrieben. Ein strukturierter Logger h&auml;ngt <code>trace_id</code> einmal als Feld an, danach filtert <code>jq</code>.
 - <strong>Zettel-Grenze:</strong> <code>traceparent</code> wandert als Property mit, bei echten Brokern im Message-Header, nicht im Payload. <strong>Spicy:</strong> Sonst rei&szlig;t der Trace an der Bus-Grenze.
 - <strong>OpenTelemetry:</strong> Propagation sind hundert Zeilen. Spans, Auto-Instrumentierung, Sampling und Export baut niemand neu. In Produktion: OTel.
 - Reserve: Sampling, Korrelation, Detektiv-Runde.

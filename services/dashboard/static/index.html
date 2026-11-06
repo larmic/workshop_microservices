@@ -136,7 +136,7 @@
         .cb-empty {
             grid-column: 1 / -1;
             text-align: center;
-            color: #888;
+            color: #5B4E93;
             font-size: 0.875rem;
             padding: 1rem;
         }
@@ -502,7 +502,7 @@
         .saga-step.skipped     {
             background: repeating-linear-gradient(
                 45deg, #f0f0f0, #f0f0f0 4px, #e4e4e4 4px, #e4e4e4 8px);
-            color: #888;
+            color: #666;
             border-color: #ddd;
         }
         /* Split: linke Hälfte grün (gebucht), rechte Hälfte zeigt das spätere Ergebnis */
@@ -546,7 +546,7 @@
         }
         .saga-empty {
             text-align: center;
-            color: #888;
+            color: #5B4E93;
             font-size: 0.875rem;
             padding: 1rem;
         }
@@ -628,7 +628,7 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 600;
             margin-bottom: 0.6rem;
         }
@@ -664,7 +664,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 600;
             margin-bottom: 0.4rem;
         }
@@ -697,7 +697,7 @@
         .instance-mode.slow   { background: #fff3cd; color: #8a6d00; }
         .instance-mode.fail   { background: #fde0e0; color: #b3261e; }
         .instance-mode.hang   { background: #EEE7FB; color: #0A0349; }
-        .instance-mode.unknown { background: #eee; color: #888; }
+        .instance-mode.unknown { background: #eee; color: #666; }
 
         /* Highlight: zuletzt bediente Instanz */
         .instance-row.served-recent {
@@ -786,7 +786,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 700;
             margin: 0.5rem 0 0.5rem;
         }
@@ -846,7 +846,7 @@
             font-size: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 700;
         }
         .stepper-node {
@@ -904,6 +904,7 @@
         .kind-pill[data-kind="play"] { background: #fff; color: #0A0349; border: 2px dotted #0A0349; }
         .kind-pill[data-kind="start"] { background: #0A0349; color: #D3F871; border-color: #0A0349; }
         .stepper-headline .kind-pill { margin-bottom: 0.4rem; }
+        .kind-pill small { font-size: 0.9em; font-weight: 500; }
         .stepper-headline {
             text-align: center;
         }
@@ -970,7 +971,7 @@
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 700;
             margin-left: auto;
         }
@@ -985,7 +986,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 700;
             margin: 0.75rem 0 0.3rem;
         }
@@ -1108,7 +1109,7 @@
             font-size: 0.8rem;
         }
         .start-live { font-weight: 600; }
-        .start-live-status { color: #888; }
+        .start-live-status { color: #5B4E93; }
         .start-live-status.ok  { color: #1d7a3a; }
         .start-live-status.err { color: #b3261e; }
         .start-warn {
@@ -1137,7 +1138,7 @@
         .story-content { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
         .story-section[hidden] { display: none; }
 
-        /* Source-Toggle (Reference vs Custom pro Story) */
+        /* Source-Toggle (Referenz vs. Mein Service pro Story) */
         .source-toggle {
             display: inline-flex;
             align-items: center;
@@ -1197,7 +1198,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 700;
             margin-bottom: 0.9rem;
             text-align: center;
@@ -1325,7 +1326,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: #5B4E93;
             font-weight: 700;
             margin: 0 0 0.6rem;
         }
@@ -1390,7 +1391,7 @@
         }
         .startup-row:last-child { border-bottom: none; }
         .startup-row .startup-name { font-weight: 500; }
-        .startup-row .startup-meta { font-size: 0.75rem; color: #888; }
+        .startup-row .startup-meta { font-size: 0.75rem; color: #5B4E93; }
         .startup-row .startup-icon {
             display: inline-flex;
             align-items: center;
@@ -1460,7 +1461,7 @@
 <body>
     <header>
         <div class="header-title">
-            <h1>Microservices</h1>
+            <h1>Microservices richtig gemacht</h1>
             <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
         </div>
         <div class="header-controls">
@@ -1497,14 +1498,14 @@
                     <a class="link-chip" href="/api/flight/openapi" target="_blank"><span>&#9992;</span> Flight</a>
                     <a class="link-chip" href="/api/hotel/openapi" target="_blank"><span>&#127976;</span> Hotel</a>
                     <a class="link-chip" href="/api/car/openapi" target="_blank"><span>&#128663;</span> Car</a>
-                    <a class="link-chip" href="/api/booking-ref-story1/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 1</a>
-                    <a class="link-chip" href="/api/booking-ref-story3/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 3</a>
-                    <a class="link-chip" href="/api/booking-ref-story4/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 4</a>
-                    <a class="link-chip" href="/api/booking-ref-story5/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 5</a>
-                    <a class="link-chip" href="/api/booking-ref-story6/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 6</a>
-                    <a class="link-chip" href="/api/booking-ref-story7/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 7</a>
-                    <a class="link-chip" href="/api/booking-ref-story8/openapi" target="_blank"><span>&#128214;</span> Booking Reference Story 8</a>
-                    <a class="link-chip" id="link-booking-custom" href="/api/booking-custom/openapi" target="_blank" hidden><span>&#128736;</span> Booking Custom</a>
+                    <a class="link-chip" href="/api/booking-ref-story1/openapi" target="_blank"><span>&#128214;</span> Booking Referenz Story 1</a>
+                    <a class="link-chip" href="/api/booking-ref-story3/openapi" target="_blank"><span>&#128214;</span> Booking Referenz Story 3</a>
+                    <a class="link-chip" href="/api/booking-ref-story4/openapi" target="_blank"><span>&#128214;</span> Booking Referenz Story 4</a>
+                    <a class="link-chip" href="/api/booking-ref-story5/openapi" target="_blank"><span>&#128214;</span> Booking Referenz Story 5</a>
+                    <a class="link-chip" href="/api/booking-ref-story6/openapi" target="_blank"><span>&#128214;</span> Booking Referenz Story 6</a>
+                    <a class="link-chip" href="/api/booking-ref-story7/openapi" target="_blank"><span>&#128214;</span> Booking Referenz Story 7</a>
+                    <a class="link-chip" href="/api/booking-ref-story8/openapi" target="_blank"><span>&#128214;</span> Booking Referenz Story 8</a>
+                    <a class="link-chip" id="link-booking-custom" href="/api/booking-custom/openapi" target="_blank" hidden><span>&#128736;</span> Booking: Mein Service</a>
                 </div>
             </div>
         </div>
@@ -1624,7 +1625,7 @@
                     </li>
                     <li class="start-card">
                         <h3>Testen</h3>
-                        <p class="start-live">Custom-Service: <span class="start-live-status" id="start-custom-status">wird gepr&uuml;ft &hellip;</span></p>
+                        <p class="start-live">Mein Service: <span class="start-live-status" id="start-custom-status">wird gepr&uuml;ft &hellip;</span></p>
 <pre>curl -i http://localhost:8099/health                # direkt: HTTP/1.1 200
 curl -i http://localhost/api/booking-custom/health  # &uuml;ber das Gateway: 200
 docker logs booking-custom                          # eure Logs, nicht Kotlin/Ktor</pre>
@@ -1636,7 +1637,7 @@ docker logs booking-custom                          # eure Logs, nicht Kotlin/Kt
 <pre>docker compose -f docker-compose.yml -f docker-compose.infra.yml \
   -f docker-compose.reference.yml -f docker-compose.custom.yml \
   up -d --build booking-custom</pre>
-                        <p>In jeder Story schaltet ihr oben zwischen <em>Reference</em> und <em>Custom</em> um. Details: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/custom-setup.md" target="_blank" rel="noopener"><code>docs/custom-setup.md</code></a></p>
+                        <p>In jeder Story schaltet ihr oben zwischen <em>Referenz</em> und <em>Mein Service</em> um. Details: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/custom-setup.md" target="_blank" rel="noopener"><code>docs/custom-setup.md</code></a></p>
                     </li>
                 </ol>
 
@@ -1702,8 +1703,8 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
             </div>
         <div class="source-toggle" data-source-toggle="1">
             <span class="source-toggle-label">Service-Quelle</span>
-            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(1,'reference')">Reference</button>
-            <button class="source-btn" data-mode="custom" onclick="setBookingMode(1,'custom')">Custom</button>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(1,'reference')">Referenz</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(1,'custom')">Mein Service</button>
         </div>
         <div class="cb-section">
             <h2>Cloud-Native Booking Service (Story 1)</h2>
@@ -1776,7 +1777,8 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
                             <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul</li>
                             <li>Statische URLs ersetzt durch logische Namen: <code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
                             <li>Bestehender <code>GET /booking/offers</code> aus Story 1 umgebaut, löst Flight/Hotel/Car über den Consul-Resolver auf statt über statische Env-URLs</li>
-                            <li><code>POST /booking/bookings</code> orchestriert die drei Backend-Services und liefert eine aggregierte Buchung</li>
+                            <li><code>POST /booking/bookings</code> orchestriert die drei Backend-Services und antwortet mit <code>201 Created</code> und der aggregierten Buchung</li>
+                            <li>Aus Story 2 mitgenommen: Ressource <code>bookings</code> statt Verb, <code>POST</code> antwortet mit <code>201 Created</code>, Fehler kommen als Status-Code, nicht als <code>200</code> mit Fehler-Body</li>
                             <li>Optional: Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)</li>
                         </ul>
                     </div>
@@ -1817,8 +1819,8 @@ GET /openapi → OpenAPI-Spec (text/yaml)</pre>
             </div>
         <div class="source-toggle" data-source-toggle="3">
             <span class="source-toggle-label">Service-Quelle</span>
-            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(3,'reference')">Reference</button>
-            <button class="source-btn" data-mode="custom" onclick="setBookingMode(3,'custom')">Custom</button>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(3,'reference')">Referenz</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(3,'custom')">Mein Service</button>
         </div>
         <div class="cb-section">
             <h2>Service Discovery via Consul (Story 3)</h2>
@@ -2074,8 +2076,8 @@ booked = []                          // für Rollback</pre>
             </div>
         <div class="source-toggle" data-source-toggle="6">
             <span class="source-toggle-label">Service-Quelle</span>
-            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(6,'reference')">Reference</button>
-            <button class="source-btn" data-mode="custom" onclick="setBookingMode(6,'custom')">Custom</button>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(6,'reference')">Referenz</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(6,'custom')">Mein Service</button>
         </div>
         <div class="cb-section">
             <div class="panel-header">
@@ -2302,8 +2304,8 @@ on receiveCompensationEvent(event):
             </div>
         <div class="source-toggle" data-source-toggle="8">
             <span class="source-toggle-label">Service-Quelle</span>
-            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(8,'reference')">Reference</button>
-            <button class="source-btn" data-mode="custom" onclick="setBookingMode(8,'custom')">Custom</button>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(8,'reference')">Referenz</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(8,'custom')">Mein Service</button>
         </div>
         <div class="cb-section">
             <div class="panel-header">
@@ -2455,7 +2457,7 @@ on receiveCompensationEvent(event):
             customAvailable = await probeCustomAvailable();
             document.querySelectorAll('.source-btn[data-mode="custom"]').forEach(btn => {
                 btn.disabled = !customAvailable;
-                btn.title = customAvailable ? "" : "Custom-Service nicht erreichbar – Setup siehe Vorbereitung";
+                btn.title = customAvailable ? "" : "Eigener Service nicht erreichbar – Setup siehe Vorbereitung";
             });
             const customLink = document.getElementById("link-booking-custom");
             if (customLink) customLink.hidden = !customAvailable;
@@ -2476,7 +2478,7 @@ on receiveCompensationEvent(event):
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll('.source-btn[data-mode="custom"]').forEach(btn => {
                 btn.disabled = true;
-                btn.title = "Custom-Service wird geprüft …";
+                btn.title = "Eigener Service wird geprüft …";
             });
         });
 
@@ -3410,17 +3412,17 @@ on receiveCompensationEvent(event):
                  subtitle: "Hausaufgabe pr&uuml;fen, eigenen Service einklinken, testen. Einmal am Anfang, danach nie wieder." },
             1: { title: "Story 1: Erst lauff&auml;hig, dann smart", kind: "code", pill: "&asymp; 90 min",
                  subtitle: "Der erste cloud-native Booking-Service: Health-Check, externe Konfiguration, ein Build f&uuml;r viele Umgebungen." },
-            2: { title: "Story 2: Erst denken, dann tippen", kind: "design", pill: "&asymp; 20 min",
+            2: { title: "Story 2: Erst denken, dann tippen", kind: "design", pill: "&asymp; 55 min <small>davon 20 Flipchart</small>",
                  subtitle: "REST vs. RESTful am Flipchart statt im Editor: eine API f&uuml;r Storno und Umbuchung entwerfen. Kein Code, kein Deployment." },
             3: { title: "Story 3: Services finden sich selbst", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
-            4: { title: "Story 4: Wenn der Flug ausf&auml;llt", kind: "play", pill: "&asymp; 20 min",
+            4: { title: "Story 4: Wenn der Flug ausf&auml;llt", kind: "play", pill: "&asymp; 60 min <small>davon 20 Spiel</small>",
                  subtitle: "Circuit Breaker als Rollenspiel: Ihr seid die Suchanfragen, Booking hat den Schalter. Danach die Demo mit der Referenz." },
-            5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 25 min",
+            5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
                  subtitle: "Bulkhead als Rollenspiel: Ihr seid die Suchanfragen, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz und die Rechnung, warum ausgerechnet zehn." },
             6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
-            7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 25 min",
+            7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
                  subtitle: "Choreography als Rollenspiel: Anruf, Zuruf, Korb, mit Kassensturz nach jeder Runde. Danach die Leiter und die Demo mit der Referenz." },
             8: { title: "Story 8: Den roten Faden im Log", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Distributed Tracing: Gesch&auml;ftsvorg&auml;nge &uuml;ber Service-Grenzen hinweg verfolgen." },

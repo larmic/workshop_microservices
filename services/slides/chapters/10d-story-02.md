@@ -6,7 +6,7 @@
 
 ## Erst denken, dann tippen
 
-<span class="badge design">&asymp; 20 min</span>
+<span class="badge design">&asymp; 55 min <small>davon 20 Flipchart</small></span>
 </div>
 
 <p class="subtitle">Storno und Umbuchung am Flipchart. Kein Code, kein Deployment, <span class="hl">kein Port</span>.</p>

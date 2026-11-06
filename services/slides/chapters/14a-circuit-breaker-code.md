@@ -4,7 +4,7 @@
 
 ## Die State-Machine
 
-<p class="subtitle">In Pseudo-Code, wie im Spickzettel.</p>
+<p class="subtitle">Die Regeln, nach denen Booking gleich spielt.</p>
 
 <div class="page-body codebody">
 

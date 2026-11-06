@@ -6,7 +6,7 @@
 
 ## Die Saga wird leise
 
-<span class="badge design">&asymp; 25 min</span>
+<span class="badge design">&asymp; 60 min <small>davon 25 Spiel</small></span>
 </div>
 
 <p class="subtitle">Ihr seid die Kund:innen. Car sagt immer nein. Der <span class="hl">Becher</span> zeigt, was wirklich storniert wurde.</p>

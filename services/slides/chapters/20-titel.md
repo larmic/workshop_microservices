@@ -19,6 +19,6 @@
 
 Note:
 - Hook: &bdquo;Stories 4 und 5 sch&uuml;tzen <em>einen</em> Aufruf. Aber sobald ich mehrere Schritte habe und einer kippt mitten drin, brauche ich etwas anderes. Das Hotel sagt nein, der Flug ist schon gebucht. Was nun?&ldquo;
-- Die Grafik: Booking links ruft Flight, Hotel und Car nacheinander auf. Flight ist gebucht, Hotel scheitert, Car wird gar nicht mehr gefragt. Der Lime-Pfeil unten ist die Kompensation: zur&uuml;ck zu Flight, Buchung weg.
+- Grafik: Der Lime-Pfeil ist die Kompensation zur&uuml;ck zu Flight.
 - Garcia-Molina und Salem haben das Pattern 1987 f&uuml;r langlaufende Datenbank-Transaktionen beschrieben, lange vor Microservices. Die Idee: Statt eine lange Transaktion zu sperren, in Teilschritte zerlegen, jeder committet f&uuml;r sich, und f&uuml;r jeden Schritt gibt es eine Kompensation.
 - Demo-Vorschau: Im Dashboard Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code>. Die Saga wandert durch <code>PENDING</code>, <code>COMPENSATING</code>, <code>FAILED</code>, und der schon gebuchte Flug wird sichtbar storniert.

@@ -6,7 +6,7 @@
 
 <div class="page-body quiz">
 
-<div class="quiz-code"><span class="m">GET</span> /booking/customers/7/bookings?status=confirmed<br><span class="dim">&rarr; 404 Not Found</span></div>
+<div class="quiz-code"><span class="dim">// Kunde 7 gibt es</span><br><span class="m">GET</span> /booking/customers/7/bookings?status=confirmed<br><span class="dim">&rarr; 404 Not Found</span></div>
 
 <div class="quiz-answer fragment">
 <div class="callout">Nicht RESTful</div>
@@ -20,6 +20,6 @@
 
 Note:
 - <strong>Mechanik:</strong> Daumen wie gehabt, eine Stimme aus der Minderheit begr&uuml;nden lassen, dann aufl&ouml;sen.
-- <strong>Kernbotschaft:</strong> Kunde 7 existiert, hat nur gerade keine best&auml;tigte Buchung. Ein Filter ohne Treffer liefert <code>200 OK</code> mit <code>[]</code>.
+- <strong>Kernbotschaft:</strong> Kunde 7 existiert (steht im Kommentar), hat nur gerade keine best&auml;tigte Buchung. Ein Filter ohne Treffer liefert <code>200 OK</code> mit <code>[]</code>.
 - <strong>Der Punkt:</strong> Gibt es Kunde 7 nicht, ist <code>404</code> richtig. Genau diese Unterscheidung zwischen leer und weg ist die Pointe.
 - <strong>&Uuml;berleitung:</strong> Jetzt zu den Verben: Was darf ein GET?

@@ -80,7 +80,7 @@ antwortet mit 409, eure Saga storniert Flight und Hotel.
 
 Die Kriterien gelten für die Calls, die ihr habt, mindestens
 `GET /offers` oder ein `POST /bookings` an ein Backend. Die Kompensation
-zeigt der Trainer an der Referenz (Toggle „Reference"). Fehlt der
+zeigt der Trainer an der Referenz (Toggle „Referenz"). Fehlt der
 Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
 
 ## Technische Hinweise

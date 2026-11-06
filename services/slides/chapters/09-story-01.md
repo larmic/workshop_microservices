@@ -57,7 +57,7 @@ Note:
 - Hook zum Einsteigen vorlesen: &bdquo;Alle dachten, der Service l&auml;uft, bis ein Kunde anrief und fragte, warum seit drei Stunden nichts mehr geht. Vertrauen ist gut, ein Health-Endpoint ist besser.&ldquo;
 - Wiedererkennung: dieselbe Story (Kontext / User Story / Akzeptanzkriterien) findet ihr im Dashboard unter &bdquo;Aufgabe&ldquo;.
 - Sprache und Framework sind frei (Go, Java, Quarkus, Node, &hellip;). Die Referenz unter `services/booking/story1/` ist nur ein Go-Beispiel.
-- Kein Error-Handling in Story 1, das ist Absicht. Wir bauen das Skelett; Resilienz kommt in Stories 4 bis 6.
+- Kein Error-Handling in Story 1, das ist Absicht. Wir bauen das Skelett; Resilienz kommt in Story 4 und 5, Konsistenz in 6.
 - Das Grundger&uuml;st (Mini-Service, Dockerfile, Port 8080) war Hausaufgabe. Einklinken und Testen steht im Dashboard unter Schritt 0 &bdquo;Start&ldquo;, dort landen alle beim ersten &Ouml;ffnen. Achtung: Ohne eigenen Pfad l&auml;uft die Kotlin-Beispiell&ouml;sung, dann ist auch alles gr&uuml;n. Erst <code>docker logs booking-custom</code> zeigt, wessen Service l&auml;uft.
 - Ab Story 3 erweitern wir denselben Service, das Setup bleibt unver&auml;ndert. Time-Box 90 min, Spickzettel im Dashboard zugeklappt unter der Aufgabe.
 - Vollst&auml;ndige Aufgabenbeschreibung: `docs/stories/story-01-cloud-native-booking-service.md`.

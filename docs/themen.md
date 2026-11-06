@@ -115,7 +115,7 @@ These aufwerfen und mit der Gruppe sezieren.
 
 **Aber auch on top:**
 - Richtigen Service-Schnitt finden — bei MS unausweichlich, beim Monolithen nicht. DDD und Event Storming sind die Werkzeuge der Wahl
-- Single Sign-On / Auth über Service-Grenzen (OAuth, SAML) — im Monolithen oft gar kein Thema
+- Single Sign-On / Auth über Service-Grenzen (OAuth 2 / OIDC, Token-Weitergabe) — im Monolithen oft gar kein Thema
 - Synchron vs. asynchron entscheiden (HTTP vs. MQ): synchron braucht Verfügbarkeit der Gegenseite, asynchron hat kein direktes Feedback
 - Deployment-Topologie, Versionierung
 - Team-Schnitte (Conway's Law)

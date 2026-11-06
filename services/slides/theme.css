@@ -326,6 +326,12 @@
     padding: 6px 16px;
 }
 
+/* Anteil der Übung im Slot („davon 20 Spiel"): leiser als die Gesamtzeit. */
+.reveal .page-head .badge small {
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
 /* Titelzeile mit Merksatz rechts (z. B. „Diese fünf baut ihr gleich in Story 1.") */
 .reveal .page-head {
     display: flex;
@@ -626,8 +632,8 @@
     display: block;
     background: none;
     padding: 0;
-    color: #8880AE;
-    font-size: 15px;
+    color: #5B4E93;
+    font-size: 20px;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -790,7 +796,7 @@
 }
 
 .reveal .card p.muted {
-    color: #8880AE;
+    color: #5B4E93;
     font-size: 15px;
     margin-top: 2px;
 }
@@ -1451,7 +1457,7 @@
 }
 
 .reveal .slides section .card.fragment.dim.visible {
-    opacity: 0.28;
+    opacity: 0.45;
 }
 
 .reveal .slides section .card.fragment.pick.visible {
@@ -1517,7 +1523,7 @@
 
 /* Spezifischer als `.reveal .compare > div`, sonst bleibt die Linie stehen. */
 .reveal .compare > div.compare-note {
-    color: #8880AE;
+    color: #5B4E93;
     font-size: 16px;
     border-bottom: none;
 }

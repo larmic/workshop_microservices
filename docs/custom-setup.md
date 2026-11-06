@@ -3,7 +3,7 @@
 > **Workshop-Material:** Dieses Dokument nutzen wir gemeinsam im Workshop (ab
 > Story 1). Für die Vorbereitung vorab gilt [vorbereitung.md](vorbereitung.md).
 
-Im Dashboard kannst du pro Story zwischen *Reference* und *Custom* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf.
+Im Dashboard kannst du pro Story zwischen *Referenz* und *Mein Service* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf.
 
 ## Konzept
 
@@ -27,7 +27,7 @@ Stories bauen kumulativ aufeinander auf — ihr erweitert iterativ **einen** Ser
 
 2. **Stack starten** wie in der Vorbereitung: `make docker-up-hub` (Referenz-Images von Docker Hub) oder `make docker-up` (alle Images lokal bauen). Der `booking-custom`-Container ist von Anfang an Teil des Stacks — kein separates Terminal nötig.
 
-3. **Im Dashboard pro Story** zwischen *Reference* und *Custom* umschalten. Der Custom-Toggle ist grau, solange euer Service nicht erreichbar ist.
+3. **Im Dashboard pro Story** zwischen *Referenz* und *Mein Service* umschalten. *Mein Service* ist grau, solange euer Service nicht erreichbar ist.
 
 ## Code-Iteration
 

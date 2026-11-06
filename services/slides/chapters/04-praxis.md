@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">TN Skills: gestartet mit Microservices, heute Modulith</p>
+<p class="kicker">Aus einem Kundenprojekt: gestartet mit Microservices, heute Modulith</p>
 
 ## Brauchen wir Microservices?
 
@@ -12,7 +12,7 @@
 <div class="compare-head">Heute</div>
 
 <div class="compare-label">Struktur</div>
-<div class="compare-old">Fast 3 Teams mit mehreren Services</div>
+<div class="compare-old">Knapp 3 Teams, mehrere Services</div>
 <div class="compare-new"><span class="hl">1 Modulith</span>, 4 Dom&auml;nen</div>
 
 <div class="compare-label">Menschen</div>
@@ -38,7 +38,7 @@
 </div>
 
 Note:
-- <strong>Einordnen:</strong> &bdquo;TN Skills&ldquo; ist das Projekt, nicht &bdquo;Teilnehmende&ldquo;. Aus der Praxis: von knapp drei Teams mit mehreren Services zur&uuml;ck zum Modulith.
+- <strong>Einordnen:</strong> Das Kundenprojekt hei&szlig;t TN Skills: von knapp drei Teams mit mehreren Services zur&uuml;ck zum Modulith.
 - <strong>Erz&auml;hlen:</strong> Kein Aushelfen &uuml;ber Teamgrenzen, jede Pipeline und jedes Deployment will gepflegt werden.
 - <strong>Frage ans Publikum:</strong> &bdquo;Wer hat Microservices wegen der Teams, wer, weil es modern war?&ldquo; Antworten merken, sie kommen am Schluss bei Conway zur&uuml;ck.
 - <strong>Fu&szlig;zeile:</strong> Monolith First (Martin Fowler) ist ein Standpunkt, kein Gesetz. Wir lernen das Wie, das Ob entscheidet ihr im Projekt.

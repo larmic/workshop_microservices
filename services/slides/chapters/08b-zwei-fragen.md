@@ -36,7 +36,7 @@ Note:
 - Microservices sind ein Werkzeug, kein Ziel. Am Ende der zwei Tage habt ihr eine ehrliche Aufwandseinsch&auml;tzung und damit eine bessere Entscheidungsgrundlage f&uuml;r euer eigenes Projekt.
 - Was on top kommt (Diskussion, kein Hands-on):
   - Service-Schnitt (DDD, Event Storming)
-  - Auth &uuml;ber Service-Grenzen (OAuth/SAML)
+  - Auth &uuml;ber Service-Grenzen (OAuth 2 / OIDC, Token-Weitergabe)
   - synchron vs. asynchron
   - Versionierung
   - Team-Schnitte (Conway's Law)

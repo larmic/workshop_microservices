@@ -25,6 +25,7 @@ Palette-Synchronisation nicht teil.
 | Slide-Text | — | `#000000` | Standard-Textfarbe auf Slides |
 | Text (Dashboard) | — | `#333` | Standard |
 | Text gedämpft | — | `#555` / `#888` / `#aaa` | Sekundär / Tertiär |
+| Text gedämpft (Violett) | — | `#5B4E93` | Kleine Labels, Badges, Kicker (Slides: Agenda, Merksätze; Dashboard: statt `#888` für kleinen Text, ≥ 6:1 auf hellem Grund) |
 
 Status-Farben (Dashboard, Circuit-Breaker-Badges etc.):
 
