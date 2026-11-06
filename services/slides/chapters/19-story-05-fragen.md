@@ -60,9 +60,9 @@
 
 Note:
 - Erst diskutieren, dann Klick f&uuml;r die Merks&auml;tze.
-- <strong>Circuit Breaker:</strong> CB reagiert auf Fehler, Bulkhead auf Ressourcen-Druck. Hotel antwortet fehlerfrei in 2 s, der CB bleibt CLOSED, unter Last h&auml;ngt alles in Hotel-Calls. <strong>Spicy:</strong> Der CB sieht Fehler, nicht Latenz.
-- <strong>Rate Limit:</strong> Z&auml;hlt Requests pro Zeit, der Bulkhead gleichzeitige Aufrufe pro Downstream. 100/s bei pl&ouml;tzlich 5 s pro Call hei&szlig;t 500 h&auml;ngende Aufrufe. <strong>Spicy:</strong> Durchsatz ist nicht Nebenl&auml;ufigkeit.
+- <strong>Circuit Breaker:</strong> CB reagiert auf Fehler, Bulkhead auf Ressourcen-Druck. Runde 1: Hotel fehlerfrei, das Schild bleibt CLOSED, trotzdem wartet alles. <strong>Spicy:</strong> Der CB sieht Fehler, nicht Latenz.
+- <strong>Rate Limit:</strong> Z&auml;hlt Requests pro Zeit, der Bulkhead gleichzeitige Aufrufe. Probelauf und Runde 1: gleicher Takt, nur Hotel langsamer. 100/s bei pl&ouml;tzlich 5 s pro Call hei&szlig;t 500 h&auml;ngende Aufrufe. <strong>Spicy:</strong> Durchsatz ist nicht Nebenl&auml;ufigkeit.
 - <strong>Non-blocking:</strong> Threads werden billig, Connection-Pool, Speicher und Sockets nicht. Der Engpass wandert, siehe Bonus-Folie.
-- <strong>Warteschlange:</strong> Pool voll hei&szlig;t Backend am Limit, eine Queue erh&ouml;ht nur die Latenz. Der sofortige Reject ist das Backpressure-Signal, die Queue schluckt es.
+- <strong>Warteschlange:</strong> Runde 1 war die Queue: Jede Suche kam sp&auml;ter. Der sofortige Reject ist das Backpressure-Signal, die Queue schluckt es.
 - <strong>Replicas:</strong> Der Bulkhead im Aufrufer sch&uuml;tzt den Aufrufer, nicht das Backend: Hotel sieht 50 Calls. Das Backend sch&uuml;tzt sich selbst, mit Rate Limit, Load Shedding, <code>429</code> plus <code>Retry-After</code>. <strong>Spicy:</strong> Bulkhead allein ist eine halbe L&ouml;sung.
 - Lang: <code>docs/questions/story5.md</code>

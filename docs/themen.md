@@ -33,7 +33,7 @@ Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 |-------|-------|------|
 | 6e | Übung: Story 5 (Bulkhead, Becher und Chips statt Code) | 60 Min |
 | 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
-| 6g | Übung: Story 7 (Choreography-Saga, Zettel statt Code) | 60 Min |
+| 6g | Übung: Story 7 (Choreography-Saga, Rollenspiel statt Code) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
@@ -153,7 +153,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Letzter Block von Tag 1, bewusst ohne Coding
 
 ### 6e. Story 5 — [Der geteilte Pool](stories/story-05-bulkhead.md) (60 Min)
-- Übung statt Code: 25 Minuten Spiel mit Bechern und Chips (ein Pool für alle, dann ein Pool pro Backend), 20 Minuten Little's Law („Warum ausgerechnet zehn?"), Recap mit fünf Fragen plus Bonus zu non-blocking
+- Rollenspiel statt Code: 25 Minuten Spiel mit Takt, Bechern und Chips (ein Pool für alle, dann ein Pool pro Backend), 10 Minuten Demo mit der Referenz, 15 Minuten Little's Law („Warum ausgerechnet zehn?"), Recap mit fünf Fragen plus Bonus zu non-blocking
 - Lernpointe: Ressourcen-Isolation pro Downstream; die Größe des Pools ist die eigentliche Arbeit
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?
 - Rückgriff auf Story 2: `POST /admin/bulkhead-reset` ist bewusst RPC-artig (Dashboard-Knopf, ein Aufrufer). Abweichen mit Grund
@@ -163,7 +163,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Recap-Frage: Wer kennt das Endergebnis bei dieser Variante?
 
 ### 6g. Story 7 — [Die Saga wird leise](stories/story-07-choreography-saga.md) (60 Min)
-- Rollenspiel statt Code: 25 Minuten dieselbe Saga zweimal spielen (Orchestration, dann Choreography mit Zetteln auf einem Tisch), 20 Minuten drei Störungen (Empfänger weg, Event doppelt, kein Reply), Recap mit vier Fragen plus Bonus zum Broker
+- Rollenspiel statt Code: 10 Minuten Einstieg, dann 25 Minuten Spiel inklusive Nachbereitung: dieselbe Saga in drei Runden (Anruf wie Story 6, Zuruf wie unsere Referenz, Korb als Broker), Kassensturz mit Bechern und Gummibärchen nach jeder Runde, danach „Die Leiter“ (Webhook, Broker, Idempotenz, Reply). 10 Minuten Demo mit der Referenz, 15 Minuten Recap mit vier Fragen plus Bonus zum Broker
 - Lernpointe: Choreography verteilt Verantwortung und Wissen; ohne haltbares Messaging wird das Problem nur leiser
 - Recap-Frage: Wann Orchestration, wann Choreography?
 

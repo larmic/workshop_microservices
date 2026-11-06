@@ -15,15 +15,15 @@
 <div class="numlist-row">
 <div class="numlist-num">01</div>
 <div>
-<p class="numlist-label">Ohne Broker: Der Zettel kommt nie an</p>
-<h3>Booking schickt das Event per HTTP-POST, Hotel ist down. Wo ist das Event <span class="hl">jetzt</span>?</h3>
+<p class="numlist-label">Runde 2: Ein Gummib&auml;rchen fehlt</p>
+<h3>Booking schickt das Storno per HTTP-POST, Flight ist seit der Buchung down. Wo ist das Event <span class="hl">jetzt</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">Event ist weg</code>
 </div>
 <div class="numlist-row">
 <div class="numlist-num">02</div>
 <div>
-<p class="numlist-label">Mit Broker: Der Zettel kommt zweimal</p>
+<p class="numlist-label">Runde 3: Ein Becher hat drei</p>
 <h3>Der Broker liefert, bis das Backend best&auml;tigt. Stirbt es dazwischen, kommt das Event <span class="hl">noch einmal</span>.</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">Nummer merken, Doppeltes ignorieren</code>
@@ -31,7 +31,7 @@
 <div class="numlist-row">
 <div class="numlist-num">03</div>
 <div>
-<p class="numlist-label">Webhooks reichen doch</p>
+<p class="numlist-label">Runde 2 gegen Runde 3: Webhooks reichen doch</p>
 <h3>Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS <span class="hl">&uuml;berhaupt</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">durable messaging</code>
@@ -51,8 +51,8 @@
 </div>
 
 Note:
-- <strong>Nie angekommen:</strong> Die Referenz loggt den Fehler, markiert trotzdem <code>COMPENSATED</code>, das Event ist weg. Abhilfe: Retry, Outbox, Dead-Letter, Broker mit at-least-once. <strong>Spicy:</strong> Eventing verschiebt das Problem, Booking sieht nichts mehr.
+- <strong>Nie angekommen:</strong> Die Referenz loggt <code>dispatch-failed</code>, markiert trotzdem <code>COMPENSATED</code>, das Event ist weg. Abhilfe: Retry, Outbox, Dead-Letter, Broker mit at-least-once. <strong>Spicy:</strong> Eventing verschiebt das Problem, Booking sieht nichts mehr.
 - <strong>Zweimal:</strong> Verursacht der Broker: At-least-once liefert, bis der Empf&auml;nger best&auml;tigt. Standard: <code>eventId</code> merken, in derselben Transaktion wie die Fachlogik. <strong>Spicy:</strong> Wer Events publiziert, muss mit Duplikaten rechnen.
 - <strong>Webhooks reichen:</strong> Persistenz, Redelivery, Fan-out, Backpressure, Replay und Entkopplung in der Zeit liefert nur ein Broker. Webhook spart nur Infrastruktur (Bonus-Folie).
-- <strong>Dirigent:</strong> Niemand, es passiert einfach nichts. Ein Prozess mit fester Reihenfolge und Kompensation geh&ouml;rt an eine Stelle. Choreographie nur f&uuml;r einfache F&auml;lle ohne Reihenfolge (Benachrichtigung, Read-Model). Unser Spiel war der Mittelweg: Booking dirigiert den Hinweg, stornieren tut jedes Backend selbst. <strong>Spicy:</strong> Bei Choreographie kennt jeder jeden, nur steht es nirgends. Br&uuml;cke zu Story 8: Wer merkt es, wenn ein Event verloren geht?
+- <strong>Dirigent:</strong> Niemand, es passiert einfach nichts. Ein Prozess mit fester Reihenfolge und Kompensation geh&ouml;rt an eine Stelle. Choreographie nur f&uuml;r einfache F&auml;lle ohne Reihenfolge (Benachrichtigung, Read-Model). Unsere Referenz ist der Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf. <strong>Spicy:</strong> Bei Choreographie kennt jeder jeden, nur steht es nirgends. Br&uuml;cke zu Story 8: Wer merkt es, wenn ein Event verloren geht?
 - Lang: <code>docs/questions/story7.md</code>.

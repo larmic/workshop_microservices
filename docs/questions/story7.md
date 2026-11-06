@@ -10,22 +10,27 @@ verkaufen, sondern als bewusste Verschiebung der Komplexität.
 
 ## Frage 1 — Was passiert, wenn der Event-POST selbst fehlschlägt?
 
-**Frage:** Booking publiziert `CompensationRequested` per HTTP-POST gegen
-Flight, Hotel, Car. Was, wenn Hotel im selben Moment down ist und der
-POST in einen Connection-Refused oder 5xx läuft? In Story 6 hätte Booking
-diesen Fehler dem Kunden zurückgegeben. Was tun wir in Story 7?
+**Frage:** Booking schickt `CompensationRequested` per HTTP-POST an jedes
+Backend, das schon gebucht hat, rückwärts (erst Hotel, dann Flight). Was,
+wenn Flight seit der Buchung down ist und der POST in einen
+Connection-Refused, einen 5xx oder den 3-s-Timeout läuft? In Story 6 hätte
+Booking diesen Fehler dem Kunden zurückgegeben. Was tun wir in Story 7?
+(Im Spiel: Kassensturz nach Runde 2, Reise 2 hat nur ein Gummibärchen.)
 
-**Antwort:** Aktuell genau **nichts** — der Fehler wird geloggt, der Step
+**Antwort:** Aktuell genau **nichts**. Booking wartet beim Zuruf nur auf
+die Annahme: Die `202 Accepted` ist das „gehört!“ aus dem Spiel. Bleibt sie
+aus, merkt Booking das sogar und loggt `phase=dispatch-failed`. Der Step
 wird trotzdem als `COMPENSATED` markiert, die Saga geht auf `FAILED` und
-der Kunde bekommt seine Antwort. Das ist *bewusst* die fragilste mögliche
-Variante, weil sie das eigentliche Problem von Eventing-ohne-Broker
-unverstellt zeigt:
+der Kunde bekommt seine Antwort. Es gibt genau einen Versuch, kein Retry.
+Das ist *bewusst* die fragilste mögliche Variante, weil sie das
+eigentliche Problem von Eventing-ohne-Broker unverstellt zeigt:
 
 ```
-   Booking sagt: „Event ist raus, ich bin fertig."
+   Booking sagt: „storniert."
+   Log:          dispatch-failed, eine Zeile unter vielen.
    Realität:     Event wurde nie empfangen.
-                 Hotel hat die Buchung noch im Bestand (in echtem System).
-                 Niemand merkt es, bis ein Kunde sich beschwert.
+                 Flight hat die Buchung noch im Bestand (in echtem System).
+                 Niemand schaut hin, bis ein Kunde sich beschwert.
 ```
 
 Die Lehrbuch-Antworten, die ein echtes System braucht:
@@ -39,7 +44,7 @@ Die Lehrbuch-Antworten, die ein echtes System braucht:
 
 **Take-away:** Eventing **eliminiert** das „Backend kurz weg"-Problem
 nicht — es **verschiebt** es. In Story 6 hat Booking den Schmerz gespürt
-und konnte reagieren. In Story 7 sieht Booking gar nichts mehr. Das ist
+und konnte reagieren. In Story 7 steht er nur noch als Strich im Log. Das ist
 das Gegenteil von „resilient", solange wir nichts gegen verlorene Events
 haben. Wer Choreography ernst meint, fängt nicht beim Event-Versand an,
 sondern bei der **Durability des Events**.
@@ -50,10 +55,12 @@ sondern bei der **Durability des Events**.
 
 **Frage:** Unser Backend tut bei `POST /events/compensation` *nichts
 außer loggen*. Welche Konsequenz hätte es, wenn dasselbe Event zweimal
-zugestellt würde? Müssen wir uns überhaupt darum kümmern?
+zugestellt würde? Müssen wir uns überhaupt darum kümmern? (Im Spiel:
+Runde 3, ein Becher hat drei Gummibärchen.)
 
 **Antwort:** In unserer Schmalspur-Variante mit einmaligem `POST`
-**vermutlich nie**. Aber sobald ein echter Broker im Spiel ist, gilt
+**nie**: ein Versuch, kein Retry, also keine Duplikate, aber auch keine
+Nachlieferung. Aber sobald ein echter Broker im Spiel ist, gilt
 **at-least-once** als Standardgarantie — exactly-once ist die Ausnahme
 und teuer. Doppelte Zustellung kann passieren bei:
 
@@ -161,9 +168,10 @@ die Kette, und niemand bekommt einen Fehler — es passiert einfach nichts.
 Das ist der **verteilte Monolith**: lose gekoppelt zur Laufzeit, fest
 gekoppelt im Kopf.
 
-Was wir im Rollenspiel (Runde 2) gespielt haben, ist deshalb der
-sinnvolle Mittelweg: Booking bleibt Dirigent für den Hinweg, die
-Kompensation organisiert jedes Backend selbst.
+Was unsere Referenz macht (im Spiel Runde 2, Zuruf), ist deshalb der
+sinnvolle Mittelweg: Booking dirigiert den Hinweg und entscheidet auch,
+wer ein Storno bekommt, storniert wird per Zuruf. Streng genommen ist
+`CompensationRequested` damit ein Command und keine echte Choreografie.
 
 **Faustregel nach Chris Richardson** (*Microservices Patterns*, 2018,
 Kapitel 4):

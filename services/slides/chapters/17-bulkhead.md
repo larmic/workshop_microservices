@@ -20,7 +20,7 @@
 <div class="card">
 <h3>Fail-Fast</h3>
 <p>Pool voll, also sofort ablehnen. Keine Queue, kein Warten.</p>
-<code>inProgress &ge; max &rarr; 503</code>
+<code>inProgress &ge; max &rarr; fallback()</code>
 </div>
 <div class="card">
 <h3>Nicht Circuit Breaker</h3>

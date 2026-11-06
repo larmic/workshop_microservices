@@ -65,22 +65,26 @@ func BookingOffersProxyHandler(bookingURL string) http.HandlerFunc {
 }
 
 type BurstResult struct {
-	Total      int   `json:"total"`
-	Succeeded  int   `json:"succeeded"`
-	Failed     int   `json:"failed"`
-	DurationMs int64 `json:"durationMs"`
+	Total        int   `json:"total"`
+	Succeeded    int   `json:"succeeded"`
+	Failed       int   `json:"failed"`
+	BulkheadFull int   `json:"bulkheadFull"`
+	DurationMs   int64 `json:"durationMs"`
 }
 
 // BurstHandler feuert N parallele GET /booking/offers gegen den Booking-Service.
 // Ohne paralleles Aufschütten ist der Bulkhead-Effekt im Workshop nicht
 // sichtbar — ein einzelner Aufruf belegt nie mehr als einen Slot.
+// Ein Bulkhead-Reject ist kein Fehler: Booking antwortet mit 200 und leerer
+// Liste. Deshalb zählen wir zusätzlich die Antworten mit X-Bulkhead-Full,
+// sonst zeigt der Burst nur "failed 0".
 func BurstHandler(bookingURL string, parallel int) http.HandlerFunc {
 	client := &http.Client{Timeout: 10 * time.Second}
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
 		defer cancel()
 
-		var succeeded, failed atomic.Int64
+		var succeeded, failed, bulkheadFull atomic.Int64
 		start := time.Now()
 
 		var wg sync.WaitGroup
@@ -100,6 +104,9 @@ func BurstHandler(bookingURL string, parallel int) http.HandlerFunc {
 				}
 				_, _ = io.Copy(io.Discard, resp.Body)
 				_ = resp.Body.Close()
+				if resp.Header.Get("X-Bulkhead-Full") != "" {
+					bulkheadFull.Add(1)
+				}
 				if resp.StatusCode >= 400 {
 					failed.Add(1)
 				} else {
@@ -110,10 +117,11 @@ func BurstHandler(bookingURL string, parallel int) http.HandlerFunc {
 		wg.Wait()
 
 		result := BurstResult{
-			Total:      parallel,
-			Succeeded:  int(succeeded.Load()),
-			Failed:     int(failed.Load()),
-			DurationMs: time.Since(start).Milliseconds(),
+			Total:        parallel,
+			Succeeded:    int(succeeded.Load()),
+			Failed:       int(failed.Load()),
+			BulkheadFull: int(bulkheadFull.Load()),
+			DurationMs:   time.Since(start).Milliseconds(),
 		}
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(result)

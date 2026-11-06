@@ -857,7 +857,7 @@
             color: #fff;
             box-shadow: 0 2px 8px rgba(115,72,225,0.35);
         }
-        /* Stories ohne Code (2 Design-Session, 4, 5, 7 Übungen): gestrichelt,
+        /* Stories ohne Code (2 Design-Session, 4, 5, 7 Rollenspiele): gestrichelt,
            damit sichtbar ist, dass hier nichts deployt wird. Dieselbe Regel
            tragen die Zeit-Pillen der Slides (.badge.design). */
         .stepper-node.design { border-style: dashed; }
@@ -964,6 +964,16 @@
         .story-info-body ul, .story-info-body ol,
         .story-setup-body ul, .story-setup-body ol { padding-left: 1.25rem; }
         .story-info-body em { color: #7348E1; font-style: normal; font-weight: 600; }
+        /* Auflösung im Story-Text: standardmäßig zu, damit sie nicht vor der Vorhersage sichtbar ist. */
+        .story-info-body details.story-solution {
+            margin: 0.75rem 0 0.5rem;
+            background: #fff;
+            border: 1px dashed #d0d6e0;
+            border-radius: 6px;
+        }
+        .story-info-body details.story-solution summary { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+        .story-info-body details.story-solution:not([open]) summary::before { transform: none; }
+        .story-solution-body { padding: 0 0.75rem 0.5rem; }
         .story-cheatsheet-body pre {
             background: #0A0349;
             color: #e0e6f0;
@@ -1388,11 +1398,11 @@
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node design" data-story-node="4" onclick="showStory(4)" title="Rollenspiel mit Schalter und Strichliste, kein Code">4</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node design" data-story-node="5" onclick="showStory(5)" title="Übung mit Bechern und Chips, kein Code">5</button>
+                <button type="button" class="stepper-node design" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit Bechern, Takt und Uhr, kein Code">5</button>
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="6" onclick="showStory(6)">6</button>
                 <span class="stepper-connector"></span>
-                <button type="button" class="stepper-node design" data-story-node="7" onclick="showStory(7)" title="Rollenspiel mit Zetteln, kein Code">7</button>
+                <button type="button" class="stepper-node design" data-story-node="7" onclick="showStory(7)" title="Rollenspiel mit Bechern und Gummibärchen, kein Code">7</button>
                 <span class="stepper-connector"></span>
                 <button type="button" class="stepper-node" data-story-node="8" onclick="showStory(8)">8</button>
             </div>
@@ -1669,36 +1679,53 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
 
         </section>
 
-        <!-- Story 5: Übung mit Bechern und Chips statt Code. Story-Karte zeigt die
-             Übung; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
+        <!-- Story 5: Rollenspiel mit Bechern, Takt und Uhr statt Code. Story-Karte zeigt
+             die Spielregeln; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
         <section class="story-section" data-story="5" hidden>
             <div class="story-helpers" data-story-helpers="5">
                 <details class="story-info" open>
-                    <summary>Story lesen <span class="badge">User Story + Übung</span></summary>
+                    <summary>Story lesen <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Requests, der Becher ist der Pool. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Gleiche Schlange, gleiches Schild wie Story 4. Neu: Takt, Chips und ein langsames Hotel. Kein geheimes Briefing. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
-                        <p>Wenn Hotel extrem langsam antwortet, blockieren seine Calls alle Slots des Booking-Service. Flight-Calls verhungern, obwohl Flight gesund ist. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
+                        <p>Antwortet der Hotel-Service extrem langsam, binden seine Aufrufe die Ressourcen des Booking-Service, in einem klassischen Server den gemeinsamen Thread- oder Connection-Pool. Dann warten auch Anfragen an den Flight-Service, obwohl dieser einwandfrei funktioniert, bis sie beim Aufrufer in den Timeout laufen. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
                         <h4>User Story</h4>
-                        <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere beeinträchtigen</em>, damit <em>ein langsamer Service nicht das gesamte System blockiert</em>.</p>
-                        <h4>Aufbau (Der geteilte Pool, ca. 25 Minuten)</h4>
+                        <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
+                        <h4>Material</h4>
+                        <p>Sechs Chips, ein großer Becher und drei kleine (F, H, C), ein A4-Blatt als Uhr mit den Feldern 1 bis 8, Suchkarten 1 bis 20, 14 Karten <code>hotels: []</code>, Schild und Strichliste aus Story 4. Spielbar ab sieben Personen. Nach jeder Runde Stapel und Uhr zurücksetzen.</p>
+                        <h4>Rollen (Der geteilte Pool, ca. 25 Minuten)</h4>
                         <ol>
-                            <li>Zehn Chips in einem Becher, der Pool des Booking-Service.</li>
-                            <li>Drei Leute sind Flight, Hotel und Car.</li>
-                            <li>Alle anderen sind Requests und stellen sich an.</li>
-                            <li>Wer bedient werden will, braucht einen Chip. Zurück gibt es ihn erst, wenn das Backend fertig ist.</li>
-                            <li>Flight und Car antworten sofort. Hotel braucht zwanzig Sekunden.</li>
+                            <li><strong>Takt</strong> zählt laut 1 bis 8, immer wieder, und klatscht, sobald Booking und Hotel „fertig" sagen. Pro Klatscher nimmt die vorderste Suchanfrage die nächste <strong>Suchkarte</strong> vom Stapel (1 bis 20), gibt sie Booking und stellt sich <strong>sofort hinten wieder an</strong>. Stapel leer: Runde vorbei.</li>
+                            <li><strong>Booking</strong> ruft Flight, Hotel und Car nacheinander, jeder Aufruf braucht einen Chip. Wartende Karten liegen in einer Reihe bei Booking. Fertige Suchen auf zwei Stapel: komplett und <code>hotels: []</code>. Timeout zwölf Takte ab Hotel-Aufruf, dann Strich wie in Story 4.</li>
+                            <li><strong>Hotel</strong> legt Karte und Chip auf das Feld der Uhr (A4, Felder 1 bis 8), das Takt gerade gerufen hat. Kommt die Zahl wieder, gibt Hotel zuerst beides zurück, dann kommt die neue Karte. <strong>Flight + Car</strong> tippen den Chip nur an.</li>
+                            <li><strong>Alle anderen</strong> sind Suchanfragen.</li>
                         </ol>
                         <h4>Ablauf</h4>
                         <ol>
-                            <li>Jedes Team schreibt vorher auf: Was passiert, wenn ein Drittel der Requests zu Hotel will?</li>
-                            <li><strong>Runde 1:</strong> ein Becher für alle drei Backends.</li>
-                            <li><strong>Runde 2:</strong> drei Becher mit vier, drei und drei Chips.</li>
-                            <li>Karten aufdecken, vergleichen.</li>
+                            <li><strong>Probelauf:</strong> ein Becher, sechs Chips, Hotel gibt schon beim nächsten Takt zurück. Drei Takte.</li>
+                            <li><strong>Runde 1, ein Becher, sechs Chips:</strong> Eine Karte von Hotel behält ihren Chip für Car, erst danach geht er an die älteste wartende Karte. Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?</li>
+                            <li><strong>Runde 2, drei Becher F / H / C, je zwei Chips:</strong> Hotel-Becher leer? Sofort <code>hotels: []</code>, weiter zu Car. Wie viele der 20 Suchen bekommen einen Hotel-Chip?</li>
+                            <li><strong>Nach Runde 2:</strong> Steht das Schild noch auf CLOSED?</li>
                         </ol>
-                        <h4>Warum ausgerechnet zehn? (ca. 20 Minuten)</h4>
-                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Bei 20 Hotel-Aufrufen pro Sekunde: 50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, ein 3-Sekunden-Timeout ergibt 60. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
-                        <p>Vollständige Beschreibung: <code>docs/stories/story-05-bulkhead.md</code>. Referenz-Implementierung: <code>services/booking/story5/</code>.</p>
+                        <details class="story-solution">
+                            <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
+                            <div class="story-solution-body">
+                                <ul>
+                                    <li><strong>Runde 1:</strong> vier, ab Suche 7 wartet jede schon auf Flight.</li>
+                                    <li><strong>Runde 2:</strong> sechs, die anderen 14 sofort.</li>
+                                    <li><strong>Nach Runde 2:</strong> ja, acht Takte liegen unter zwölf, und Rejects erreichen den Breaker nie.</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <h4>Warum ausgerechnet zehn? (ca. 15 Minuten)</h4>
+                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Hotel antwortet in 50&nbsp;ms, 500&nbsp;ms oder erst nach dem 3-Sekunden-Timeout. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
+                        <details class="story-solution">
+                            <summary>Die Rechnung <span class="badge">erst nach der Vorhersage</span></summary>
+                            <div class="story-solution-body">
+                                <p>50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, ein 3-Sekunden-Timeout ergibt 60. Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die <strong>normale</strong> Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal. Im Spiel: normal L = 1 Chip, langsam L = 8, Pool 2.</p>
+                            </div>
+                        </details>
+                        <p>Vollständige Beschreibung mit Material, Takt-Protokoll und Maßstab: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-05-bulkhead.md" target="_blank" rel="noopener"><code>docs/stories/story-05-bulkhead.md</code></a>. Referenz-Implementierung: <code>services/booking/story5/</code>.</p>
                     </div>
                 </details>
             </div>
@@ -1724,10 +1751,10 @@ POST /booking/bookings { flightId, hotelId, carId, customerName }:
                 <div class="rest-row">
                     <button class="rest-btn danger" id="bh-burst-btn" onclick="callOffersBurst()">
                         <span class="method-chip post">POST</span>
-                        <span class="rest-path">/admin/burst</span>
+                        <span class="rest-path">Burst: 20 parallele Suchen</span>
                         <span class="rest-arrow">&rarr;</span>
                         <span class="service-chip">booking-ref-story5</span>
-                        <span class="rest-btn-sub">feuert 20 parallele GET /booking/offers &mdash; Bulkhead-Rejects werden sichtbar</span>
+                        <span class="rest-btn-sub">feuert 20 parallele GET /booking/offers &mdash; Antworten mit X-Bulkhead-Full werden gezählt</span>
                     </button>
                 </div>
                 <span class="bh-result" id="bh-result"></span>
@@ -1835,40 +1862,53 @@ catch error at step X:
         </div>
         </section>
 
-        <!-- Story 7: Rollenspiel statt Code. Story-Karte zeigt die Übung; das
+        <!-- Story 7: Rollenspiel statt Code. Story-Karte zeigt das Rollenspiel; das
              Saga-Panel darunter bleibt als Demo der Webhook-Referenz. -->
         <section class="story-section" data-story="7" hidden>
             <div class="story-helpers" data-story-helpers="7">
                 <details class="story-info" open>
-                    <summary>Story lesen <span class="badge">User Story + Übung</span></summary>
+                    <summary>Story lesen <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Services, der Broker ist ein Tisch mit Zetteln. Das Saga-Panel darunter zeigt anschließend die Referenz-Implementierung mit Webhook-Events.</p>
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich storniert wurde. Das Saga-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
-                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Backend-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking publiziert deshalb ein <em>Event</em>, die Backends reagieren eigenständig. Wir wechseln von <em>Orchestration</em> zu <em>Choreography</em>: derselbe Ablauf, andere Verantwortungsverteilung.</p>
+                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Backend-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
                         <h4>User Story</h4>
                         <p>Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Backend-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
-                        <h4>Aufbau (Die Saga wird leise, ca. 25 Minuten)</h4>
+                        <h4>Material</h4>
+                        <p>Pro Tisch: sechs verdeckte Listen (je drei für Hotel und Flight), ein Becher pro Reise, etwa sieben Gummibärchen pro Reise (Alternative: Büroklammern), ein Korb, pro Reise zwei nummerierte Zettel, eine Strichliste, ein Briefing-Kärtchen für Flight. Ab 12 Personen zwei Tische.</p>
+                        <h4>Rollen (Die Saga wird leise, ca. 25 Minuten)</h4>
                         <ol>
-                            <li>Vier Leute sind Booking, Flight, Hotel und Car. Eine Person ist der Kunde.</li>
-                            <li>Ein Tisch in der Mitte ist der Broker. Events sind Zettel, die dort abgelegt werden.</li>
-                            <li>Jedes Backend hat einen Stapel Buchungskarten, die es ausstellen und wieder einziehen kann.</li>
-                            <li>Der Kunde bucht eine Reise: Flug, Hotel, Mietwagen. Hotel lehnt jede zweite Buchung ab.</li>
-                            <li>Alle anderen beobachten und notieren, wer wann was wusste.</li>
+                            <li><strong>Booking</strong> hat eine Strichliste und bucht eine Reise nach der anderen bei Flight, Hotel und Car. Sagt Car nein, storniert Booking rückwärts, erst Hotel, dann Flight. Danach sagt Booking „storniert“.</li>
+                            <li><strong>Hotel und Flight</strong> buchen auf einer verdeckten Liste. Stornieren heißt: an den Fingern bis fünf zählen, durchstreichen, ein Gummibärchen in den Becher der Reise. Jedes Mal, auch wenn die Reise schon durchgestrichen ist. Flight folgt den geheimen Ansagen des Trainers.</li>
+                            <li><strong>Car</strong> hat heute keine Autos und sagt immer „nein“. In Runde 3 ist Car auch der Korb.</li>
+                            <li><strong>Alle anderen</strong> haben je eine Reise. Die Becher stehen nummeriert auf dem Tisch, angestellt wird nach Reisenummer. Die nächste Reise kommt dran, wenn die vorige „storniert“ gehört hat. Storniert niemand mehr und ist der Korb leer: <strong>Kassensturz</strong>, in jeden Becher gehören zwei.</li>
                         </ol>
                         <h4>Ablauf</h4>
                         <ol>
-                            <li><strong>Runde 1, Orchestration:</strong> Booking ruft die Backends nacheinander an. Scheitert Hotel, ruft Booking Flight an und lässt stornieren.</li>
-                            <li><strong>Runde 2, Choreography:</strong> Booking legt nur einen Zettel <code>CompensationRequested</code> auf den Tisch und antwortet dem Kunden. Flight holt ihn sich und zieht die Karte ein.</li>
-                            <li>Vergleichen: Wer hat gewartet? Wer wusste am Ende, ob storniert wurde?</li>
+                            <li><strong>Runde 1, Anruf (wie Story 6):</strong> „Hotel, storniere Reise 1!“ Booking wartet auf „erledigt“, dann dasselbe mit Flight. Wer wartet?</li>
+                            <li><strong>Runde 2, Zuruf (unsere Referenz):</strong> Das Backend ruft sofort „gehört!“ und storniert danach, Booking ruft gleich das nächste Backend. Bleibt es still, zählt Booking laut bis drei, macht einen Strich und meldet trotzdem „storniert“. Stimmt jeder Becher?</li>
+                            <li><strong>Runde 3, Korb:</strong> Booking wirft pro Storno einen Zettel in den Korb und meldet sofort „storniert“. Der Korb liest die Zettel der Reihe nach vor, das Backend storniert und sagt „quittiert“. Fehlt das nach dem Gummibärchen, zählt der Korb laut bis fünf und liest denselben Zettel noch einmal. Stimmt jeder Becher?</li>
                         </ol>
-                        <h4>Drei Störungen (ca. 20 Minuten)</h4>
-                        <p>Runde 2 noch einmal, jedes Mal mit einem Haken. Vorher festlegen: Was passiert, wenn der Tisch ein Blatt Papier ist? Was, wenn er ein Postfach mit Quittung ist?</p>
-                        <ul>
-                            <li><strong>Flight ist nicht da:</strong> Flight verlässt den Raum, bevor der Zettel liegt. Booking hat dem Kunden schon geantwortet. Wer merkt es, wann?</li>
-                            <li><strong>Der Zettel kommt zweimal:</strong> Booking legt zur Sicherheit einen zweiten hin. Flight findet beide. Wie oft wird storniert?</li>
-                            <li><strong>Niemand sagt Bescheid:</strong> Flight hat storniert. Der Kunde fragt Booking: „Ist mein Flug jetzt weg?" Was antwortet Booking?</li>
-                        </ul>
-                        <p>Vollständige Beschreibung: <code>docs/stories/story-07-choreography-saga.md</code>. Referenz-Implementierung: <code>services/booking/story7/</code>.</p>
+                        <details class="story-solution">
+                            <summary>Was passieren sollte <span class="badge">erst nach dem Kassensturz</span></summary>
+                            <div class="story-solution-body">
+                                <ul>
+                                    <li><strong>Runde 1:</strong> die ganze Schlange, aber Booking weiß alles.</li>
+                                    <li><strong>Runde 2:</strong> nein, und Booking hat es sogar gemerkt.</li>
+                                    <li><strong>Runde 3:</strong> keiner fehlt, einer hat drei.</li>
+                                </ul>
+                                <h4>Danach: Die Leiter</h4>
+                                <p>Booking storniert nicht mehr selbst, antwortet aber weiter der Kund:in. Was fehlt, damit jeder Becher stimmt <em>und</em> Booking es weiß?</p>
+                                <ul>
+                                    <li><strong>Zuruf:</strong> Booking wartet nur auf „gehört“. Ist Flight weg, ist das Storno weg. <em>Webhook, unsere Referenz.</em></li>
+                                    <li><strong>Korb:</strong> Der Korb hält den Zettel fest und liest vor, bis quittiert wird. Keiner fehlt, manches kommt doppelt. <em>Broker, at-least-once.</em></li>
+                                    <li><strong>Nummer:</strong> Wer sich die Zettelnummer merkt und sie wiedererkennt, quittiert nur, ohne Gummibärchen. <em>eventId, Idempotenz.</em></li>
+                                    <li><strong>Antwortzettel:</strong> Booking meldet „storniert“ erst, wenn beide Antworten da sind. Sonst zählt Booking bis zehn und meldet <code>STUCK</code>. <em>Reply, Timeout.</em></li>
+                                </ul>
+                                <p>Eventing macht das Problem nicht kleiner. Es macht es leiser.</p>
+                            </div>
+                        </details>
+                        <p>Vollständige Beschreibung mit Material, Briefing und Auflösungen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-07-choreography-saga.md" target="_blank" rel="noopener"><code>docs/stories/story-07-choreography-saga.md</code></a>. Referenz-Implementierung: <code>services/booking/story7/</code>.</p>
                     </div>
                 </details>
             </div>
@@ -1890,7 +1930,7 @@ catch error at step X:
                             <span class="service-chip hotel">hotel</span>
                             &rarr;
                             <span class="service-chip car">car</span>
-                            &mdash; bei Fehler wird die Kompensation als Event an die Backends dispatched (async, fire &amp; forget)</span>
+                            &mdash; bei Fehler ruft Booking den gebuchten Backends das Storno zu (POST, wartet nur auf 202)</span>
                     </button>
                 </div>
                 <span class="bh-result" id="saga7-result"></span>
@@ -1899,7 +1939,7 @@ catch error at step X:
             <div class="saga-legend">
                 <strong>Legende</strong>
                 <span class="saga-step booked"><span class="saga-step-icon">&#10003;</span> BOOKED</span>
-                <span class="saga-step compensated"><span class="saga-step-icon">&#8630;</span> COMPENSATED (dispatched)</span>
+                <span class="saga-step compensated"><span class="saga-step-icon">&#8630;</span> COMPENSATED (gemeldet, nicht geprüft)</span>
                 <span class="saga-step comp-failed"><span class="saga-step-icon">&#10007;</span> KOMP. FEHLER</span>
                 <span class="saga-step failed"><span class="saga-step-icon">&#10007;</span> FAILED</span>
                 <span class="saga-step skipped"><span class="saga-step-icon">&#8212;</span> NICHT AUFGERUFEN</span>
@@ -2574,7 +2614,7 @@ on receiveCompensationEvent(event):
         // recordBulkheadCall berechnet pro Service die Differenz im
         // Bulkhead-Counter (calls / rejected) zwischen Vorher- und
         // Nachher-Snapshot und legt einen neuen Eintrag in der Historie an.
-        function recordBulkheadCall({ before, after, durationMs, totalRequests, succeeded, failed, kind }) {
+        function recordBulkheadCall({ before, after, durationMs, totalRequests, succeeded, failed, bulkheadFull, kind }) {
             if (!before || !after) return;
             const perService = {};
             for (const a of after) {
@@ -2588,7 +2628,7 @@ on receiveCompensationEvent(event):
             }
             bulkheadBursts.unshift({
                 timestamp: new Date().toISOString(),
-                durationMs, totalRequests, succeeded, failed, kind, perService,
+                durationMs, totalRequests, succeeded, failed, bulkheadFull, kind, perService,
             });
             if (bulkheadBursts.length > 10) bulkheadBursts.length = 10;
             renderBulkheadBursts();
@@ -2611,9 +2651,10 @@ on receiveCompensationEvent(event):
                     totalRequests: r.total,
                     succeeded: r.succeeded,
                     failed: r.failed,
+                    bulkheadFull: r.bulkheadFull ?? 0,
                     kind: "Burst",
                 });
-                showBurstResult(`Burst: ${r.total} calls in ${r.durationMs} ms — ${r.succeeded} ok, ${r.failed} fail`);
+                showBurstResult(`Burst: ${r.total} calls in ${r.durationMs} ms — ${r.succeeded} ok, ${r.failed} fail, ${r.bulkheadFull ?? 0} mit X-Bulkhead-Full`);
             } catch (e) {
                 showBurstResult("Burst: Fehler — " + e.message);
             } finally {
@@ -2627,7 +2668,7 @@ on receiveCompensationEvent(event):
             const list = document.getElementById("bh-burst-list");
             if (bulkheadBursts.length === 0) {
                 stats.innerHTML = "";
-                list.innerHTML = '<div class="saga-empty">Noch kein Aufruf — <em>Normaler Aufruf</em> oder <em>Burst (20 parallel)</em> klicken.</div>';
+                list.innerHTML = '<div class="saga-empty">Noch kein Aufruf — <em>Normaler Aufruf</em> oder <em>Burst: 20 parallele Suchen</em> klicken.</div>';
                 return;
             }
             const agg = { flight: 0, hotel: 0, car: 0, totalCalls: 0, totalRej: 0 };
@@ -2672,6 +2713,7 @@ on receiveCompensationEvent(event):
                             <span>vor <strong>${relativeTime(b.timestamp)}</strong></span>
                             <span>Dauer: <strong>${b.durationMs} ms</strong></span>
                             <span>Requests: <strong>${b.succeeded}/${b.totalRequests} ok</strong></span>
+                            ${b.bulkheadFull != null ? `<span>X-Bulkhead-Full: <strong>${b.bulkheadFull}</strong></span>` : ""}
                         </span>
                         <span></span>
                         <div class="saga-steps">${cells.join("")}</div>
@@ -2829,7 +2871,7 @@ on receiveCompensationEvent(event):
                     if (res.ok) {
                         detail = `bookingId=${body.bookingId}`;
                     } else if (body && body.saga) {
-                        detail = `failed at ${body.saga.failedAt} — Kompensation dispatched (async)`;
+                        detail = `failed at ${body.saga.failedAt} — Kompensation gemeldet, Ankunft ungeprüft`;
                     } else if (body && body.error) {
                         detail = body.error;
                     }
@@ -3102,11 +3144,11 @@ on receiveCompensationEvent(event):
             4: { title: "Story 4: Wenn der Flug ausfällt",
                  subtitle: "Circuit Breaker als Rollenspiel: Ihr seid die Suchanfragen, Booking hat den Schalter. Danach die Demo mit der Referenz." },
             5: { title: "Story 5: Der geteilte Pool",
-                 subtitle: "Bulkhead als Übung: Ihr seid die Requests, der Becher ist der Pool. Danach rechnen wir, warum ausgerechnet zehn." },
+                 subtitle: "Bulkhead als Rollenspiel: Ihr seid die Suchanfragen, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz und die Rechnung, warum ausgerechnet zehn." },
             6: { title: "Story 6: Alles oder nichts — aber richtig",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             7: { title: "Story 7: Die Saga wird leise",
-                 subtitle: "Choreography als Rollenspiel: Ihr seid die Services, der Broker ist ein Tisch mit Zetteln. Danach drei Störungen." },
+                 subtitle: "Choreography als Rollenspiel: Anruf, Zuruf, Korb, mit Kassensturz nach jeder Runde. Danach die Leiter und die Demo mit der Referenz." },
             8: { title: "Story 8: Den roten Faden im Log",
                  subtitle: "Distributed Tracing: Geschäftsvorgänge über Service-Grenzen hinweg verfolgen." },
         };

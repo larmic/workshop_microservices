@@ -1,12 +1,12 @@
 <div class="page">
 
-<p class="kicker">Story 5 &middot; &Uuml;bung</p>
+<p class="kicker">Story 5 &middot; Nachbereitung</p>
 
 <div class="page-head">
 
 ## Warum ausgerechnet zehn?
 
-<span class="badge design">&asymp; 20 min</span>
+<span class="badge design">&asymp; 15 min</span>
 </div>
 
 <div class="page-body littles">
@@ -27,7 +27,7 @@
 
 <div class="swap swap-foot">
 <p class="ask fragment fade-out" data-fragment-index="1">Legt euch vorher fest: Braucht ein langsames Backend <strong>mehr</strong>, <strong>weniger</strong> oder <strong>gleich viele</strong> Slots?</p>
-<div class="callout fragment" data-fragment-index="1">Zehnmal langsamer hei&szlig;t zehnmal mehr Slots, bei gleichem Verkehr.</div>
+<div class="callout fragment" data-fragment-index="1">Zehnmal langsamer hei&szlig;t zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die <strong>normale</strong> Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal. Im Spiel: normal L = 1 Chip, langsam L = 8, Pool 2.</div>
 </div>
 
 </div>
@@ -35,8 +35,8 @@
 </div>
 
 Note:
-- Erst festlegen lassen (mehr, weniger, gleich viele), dann rechnen. Die meisten tippen auf &bdquo;weniger&ldquo;, weil ein langsames Backend geschont werden soll. Little&rsquo;s Law sagt das Gegenteil.
+- Erst festlegen lassen (mehr, weniger, gleich viele), dann rechnen. Die meisten tippen auf &bdquo;weniger&ldquo;, um das Backend zu schonen. Little&rsquo;s Law sagt das Gegenteil.
 - Ein Klick zeigt die Ergebnisse: 1, 10, 60. Bei 3 s Timeout und 20 Aufrufen pro Sekunde h&auml;ngen 60 Aufrufe gleichzeitig. Ein Pool von zehn lehnt dann f&uuml;nf von sechs ab.
-- Die zehn aus dem Code ist eine Workshop-Zahl, die f&uuml;rs Demo passt. In Produktion aus drei Faktoren ableiten: Connection-Pool des HTTP-Clients (mehr Slots als Connections sind sinnlos), Backend-Kapazit&auml;t (Replicas mal maxConcurrent kleiner gleich Kapazit&auml;t) und Little&rsquo;s Law aus gemessener Latenz und Ziel-Durchsatz.
-- Kontraintuitiv und der Merksatz der &Uuml;bung: Langsamere Backends brauchen mehr Slots, nicht weniger. Wer den Pool klein macht, &bdquo;um das Backend zu schonen&ldquo;, lehnt ab, was das Backend h&auml;tte schaffen k&ouml;nnen.
+- Die zehn aus dem Code ist eine Workshop-Zahl. In Produktion aus drei Faktoren ableiten: Connection-Pool des HTTP-Clients, Backend-Kapazit&auml;t (Replicas mal maxConcurrent kleiner gleich Kapazit&auml;t) und Little&rsquo;s Law aus gemessener Latenz und Ziel-Durchsatz.
+- Merksatz: Dimensioniert wird auf die normale Latenz. Wer den Pool klein macht, &bdquo;um das Backend zu schonen&ldquo;, lehnt ab, was es h&auml;tte schaffen k&ouml;nnen. L&auml;uft der Pool voll, weil Hotel degradiert, ist das das Signal, kein Grund zum Vergr&ouml;&szlig;ern (Runde 2). Im Spiel 2, im Code 10, gleiche Rechnung.
 - Spicy: Wer <code>maxConcurrent</code> aus dem Bauch setzt, hat den Bulkhead nicht implementiert, sondern dekoriert.

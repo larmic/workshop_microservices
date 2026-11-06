@@ -12,7 +12,7 @@
 <div class="k">call(service):</div>
 <div>  if inProgress[service] &ge; max[service]:</div>
 <div>    rejected[service]++</div>
-<div>    return 503</div>
+<div>    return fallback()   <span class="dim">// [] + X-Bulkhead-Full</span></div>
 <div>  inProgress[service]++</div>
 <div>  try:     return service.invoke()</div>
 <div>  finally: inProgress[service]--</div>

@@ -62,7 +62,7 @@ Wenn der Pool auf 10 begrenzt ist und der 11. Aufruf kommt — drei mögliche St
 
 ## 5. Pool-Sizing — Little's Law
 
-> Kontraintuitiv: **Langsame Services brauchen mehr Slots, nicht weniger.**
+> Kontraintuitiv: **Ein Service mit höherer normaler Latenz braucht mehr Slots, nicht weniger.** Dimensioniert wird auf die normale Latenz. Läuft der Pool voll, weil das Backend gerade degradiert, ist das das Signal (Reject, Fallback, Alarm), kein Grund, den Pool zu vergrößern.
 
 ```
 benötigte Slots = Durchsatz × Latenz
@@ -71,10 +71,10 @@ L = λ × W
 
 **Beispiel bei 50 req/s:**
 
-| Service | Latenz | Slots |
+| Service | normale Latenz | Slots |
 |---|---|---|
-| Flight (schnell) | 20 ms | 1 |
-| Car (langsam) | 500 ms | 25 |
+| Flight | 20 ms | 1 |
+| Car | 500 ms | 25 |
 
 **Heuristik:**
 1. Aus Monitoring (P99-Latenz, Peak-Throughput) rechnen.
@@ -143,7 +143,7 @@ class Bulkhead(val maxConcurrent: Int) {
 ```kotlin
 val flightBulkhead = Bulkhead(maxConcurrent = 10)
 val hotelBulkhead  = Bulkhead(maxConcurrent = 10)
-val carBulkhead    = Bulkhead(maxConcurrent = 25)   // langsamer → mehr Slots
+val carBulkhead    = Bulkhead(maxConcurrent = 25)   // höhere normale Latenz → mehr Slots
 
 fun getOffers(req): Offers {
     val flights = flightBulkhead.call { flightClient.search(req) }

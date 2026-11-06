@@ -44,6 +44,8 @@ lässt Flight/Car ungestört durch.
 
 ## Frage 2 — Werden bei einem Burst von 20 die Backends auch wirklich nur mit 10 gleichzeitigen Aufrufen belastet?
 
+*Nur nach der Dashboard-Demo.*
+
 **Frage:** Wenn ich 20 parallele Aufrufe gegen `/booking/offers` schicke
 und der Bulkhead `maxConcurrent=10` hat — wie viele Aufrufe sehen
 Flight, Hotel und Car wirklich?
@@ -62,6 +64,8 @@ Slot frei wird (Call ist fertig), darf der nächste rein.
 ---
 
 ## Frage 3 — Warum sind nach einem Burst von 20 mit allen Backends auf "langsam" auf Hotel z.B. nur 7 rejected, nicht 10?
+
+*Nur nach der Dashboard-Demo.*
 
 **Frage:** Erwartung wäre `calls=20, rejected=10`. Tatsächlich: `calls=20,
 rejected=7`. Warum ist die Zahl unsauber?
@@ -246,8 +250,8 @@ Resilience4j: `maxWaitDuration`). In unserer Implementierung haben wir
    Backend bereits am Limit. Eine Queue verschiebt das Problem nur in
    die Zukunft und erhöht die End-to-End-Latency. Beim Workshop sieht
    man am sofortigen Reject klar: "wir sind über der Kapazität".
-2. **Backpressure-Signal nach oben.** Ein sofortiger Reject (mit 503
-   bzw. Fallback) sagt dem Aufrufer: "lass mich in Ruhe, ich bin voll."
+2. **Backpressure-Signal nach oben.** Ein sofortiger Reject (mit Fallback,
+   in anderen Systemen auch mit 503) sagt dem Aufrufer: "lass mich in Ruhe, ich bin voll."
    Eine Queue absorbiert das Signal und kaschiert es.
 
 **Take-away:** Queue oder kein Queue ist eine bewusste Entscheidung.

@@ -4,7 +4,7 @@
 
 <div class="page-head">
 
-## Die Saga wird leise
+## Choreografie: Jeder h&ouml;rt zu
 
 <img class="head-figure" src="./assets/choreography.svg" alt=""/>
 </div>
@@ -14,8 +14,8 @@
 <div class="cards cards-3 violet compact">
 <div class="card">
 <h3>Problem aus Story 6</h3>
-<p>Booking tr&auml;gt die Storno-Verantwortung allein und h&auml;ngt am kaputten Backend.</p>
-<code>Booking = SPoF</code>
+<p>Booking storniert selbst, wartet auf jedes Ergebnis und muss jeden Storno-Fehler selbst behandeln.</p>
+<code>Booking haftet f&uuml;r alles</code>
 </div>
 <div class="card">
 <h3>Verantwortung verlagern</h3>
@@ -24,13 +24,13 @@
 </div>
 <div class="card">
 <h3>Event statt Aufruf</h3>
-<p>Booking publiziert ein Event und ist mit dem Befehl fertig.</p>
-<code>fire-and-forget</code>
+<p>Booking meldet das Storno nur noch an. Ausf&uuml;hren muss es das Backend.</p>
+<code>wartet nur auf die Annahme</code>
 </div>
 <div class="card">
 <h3>Booking bleibt haftbar</h3>
-<p>Saga-Status und Kundenantwort bleiben bei Booking. Ob der Rollback gelang, wei&szlig; es nicht.</p>
-<code>Event raus &ne; storniert</code>
+<p>Saga-Status und Kundenantwort bleiben bei Booking, auch wenn es nicht mehr selbst storniert.</p>
+<code>Wer wei&szlig;, ob storniert ist?</code>
 </div>
 <div class="card">
 <h3>Trade-off</h3>
@@ -57,10 +57,8 @@
 
 Note:
 - Hook: Recap 6/01: Was, wenn der <code>DELETE</code> in 5xx l&auml;uft?
-- <strong>Problem:</strong> Booking orchestriert alles allein. Ist Hotel weg, blockt Booking.
+- <strong>Problem:</strong> Booking orchestriert alles allein. Scheitert ein <code>DELETE</code>, muss Booking das selbst ausbaden (<code>COMPENSATION_FAILED</code>).
 - <strong>Verlagern:</strong> Hotel kennt seine Storno-Regeln selbst.
-- <strong>Event:</strong> Backend best&auml;tigt sofort, storniert asynchron.
-- <strong>Haftbar:</strong> Booking wei&szlig; nicht, ob der Rollback klappte. L&ouml;sung (Reply-Events, <code>STUCK</code>) kommt im Spiel als St&ouml;rung.
-- <strong>Trade-off:</strong> Saga-Wissen in jedem Service. Ohne Event-Vertr&auml;ge droht der verteilte Monolith.
-- <strong>Ehrlich:</strong> <code>CompensationRequested</code> ist ein Command, Booking entscheidet, wer storniert. Echte Choreografie: <code>TripBookingFailed</code>, jedes Backend entscheidet selbst.
-- &Uuml;berleitung: &bdquo;Wie sich das anf&uuml;hlt, wenn Booking nur Zettel hinlegt, spielen wir jetzt durch.&ldquo;
+- <strong>Event:</strong> Backend nimmt an (202), storniert danach selbst (in der Referenz: loggt nur). Booking wartet nur auf die Annahme, an der Erreichbarkeit h&auml;ngt es weiter (3-s-Timeout).
+- <strong>Haftbar:</strong> Die Frage auf der Karte offen lassen, das Spiel beantwortet sie. <strong>Trade-off:</strong> Saga-Wissen in jedem Service. Ohne Event-Vertr&auml;ge droht der verteilte Monolith.
+- <strong>Ehrlich:</strong> <code>CompensationRequested</code> ist ein Command, Booking entscheidet, wer storniert. Echte Choreografie: <code>TripBookingFailed</code>, jedes Backend entscheidet selbst. &Uuml;berleitung: &bdquo;Wie sich das anf&uuml;hlt, wenn Booking nur noch zuruft, spielen wir jetzt durch.&ldquo;
