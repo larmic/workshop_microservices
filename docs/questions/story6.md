@@ -164,8 +164,9 @@ ehrlicher?
 
                   Aufrufer-Logik
    ─────────────────────────────────────────────
-   if status != 204:
+   if status >= 400:
        retry()    ← klare, einfache Regel
+                     (booking/story6 versucht nur einmal und setzt FAILED)
 ```
 
 **Wichtig zur Einordnung:** Idempotent im Sinne von HTTP sind *beide*
@@ -175,6 +176,13 @@ Pragmatik, nicht Idempotenz: Es erspart dem wiederholenden
 Orchestrator nur die Sonderlogik „`404` = eigentlich ok". Am Flipchart
 in Story 2 war `404` deshalb noch vertretbar; erst ein Aufrufer, der
 wiederholt, macht `204` zur besseren Wahl.
+
+**Und `200` statt `204`?** Beides ist gelungen, die Regel oben prüft
+nur auf `>= 400`. `200` heißt: Die Antwort beschreibt das Ergebnis, etwa
+das gelöschte Objekt (Stripe). `204` heißt: nichts zu sagen (GitHub, S3).
+`202` heißt nur angenommen, noch nicht erledigt, und ist für eine
+Kompensation kein Erfolg, auf den man sich verlassen kann. Welche
+Variante, legt man einmal in der API-Guideline fest, nicht pro Endpoint.
 
 **Take-away:** Pragmatik schlägt Ehrlichkeit. Ein
 Kompensations-Endpoint, der „korrekte" 4xx liefert, zwingt jeden

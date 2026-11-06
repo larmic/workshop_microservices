@@ -17,6 +17,12 @@ der zweite findet eine bereits stornierte Buchung und antwortet `204`
 (oder `404`, je nach Modell). Der Zustand ist derselbe, die Methode ist
 idempotent, der Retry ist sicher. Welche Antwort ein wiederholender Aufrufer braucht, klärt Story 6.
 
+Ob schon der erste Aufruf `204` oder `200` liefert, ist eine
+Guideline-Entscheidung, keine REST-Frage: ohne Body `204`, mit einer
+Darstellung des Ergebnisses `200`, nur angenommen und noch nicht erledigt
+`202` (RFC 9110, Abschnitt 9.3.5). GitHub antwortet `204`, Stripe `200`
+mit dem gelöschten Objekt. Ein `204` hat nie einen Body.
+
 Beim `POST` legt der zweite Aufruf eine zweite Stornierung an, wenn der
 Server nicht aufpasst. Zwei Wege:
 

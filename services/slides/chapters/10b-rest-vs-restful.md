@@ -74,5 +74,6 @@ Ein 200 mit Fehler im Body sieht keiner davon.
 Note:
 - <strong>Kernbotschaft:</strong> Sechs Regeln, jede verhindert ein Betriebsproblem. Das ist kein Stilthema.
 - <strong>Das Beispiel oben:</strong> Ein Aufruf beantwortet drei Fragen: Die Methode sagt, was passiert, der Pfad, woran, der Status-Code, wie es ausging. Genau so bauen sich die drei Gruppen auf.
+- <strong>Warum 204?</strong> Nichts zu sagen. Mit Body w&auml;re <code>200</code> genauso richtig. Aufl&ouml;sung in Story 6.
 - <strong>Hypermedia:</strong> REST nach Fielding verlangt auch Links in den Antworten. Unser Ziel ist Richardson Level 2: Ressourcen plus HTTP-Methoden.
 - <strong>Mechanik:</strong> Gruppe f&uuml;r Gruppe aufdecken, insgesamt 10 bis 12 Minuten.

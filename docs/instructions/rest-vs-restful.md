@@ -19,7 +19,7 @@
 | # | Prinzip | Gegenbeispiel | Besser |
 |---|---|---|---|
 | 1 | **Die HTTP-Methode trägt die Semantik.** GET liest, POST erzeugt, PUT ersetzt, PATCH ändert teilweise, DELETE entfernt | `POST /users/1423/delete` | `DELETE /users/1423` |
-| 2 | **Idempotenz.** GET, PUT, DELETE dürfen beliebig oft wiederholt werden, POST nicht. Das macht Retries sicher | `POST /bookings/1423/cancel` zweimal geschickt: zweiter Storno schlägt fehl oder storniert doppelt | `DELETE /bookings/1423` zweimal: 204 dann 404 (oder 204), Zustand identisch (welche Antwort ein Orchestrator braucht: Story 6) |
+| 2 | **Idempotenz.** GET, PUT, DELETE dürfen beliebig oft wiederholt werden, POST nicht. Das macht Retries sicher | `POST /bookings/1423/cancel` zweimal geschickt: zweiter Storno schlägt fehl oder storniert doppelt | `DELETE /bookings/1423` zweimal: 204 (oder 200 mit Body) dann 404 (oder 204), Zustand identisch. Idempotenz betrifft den Zustand, nicht den Status-Code (welche Antwort ein Orchestrator braucht: Story 6) |
 | 3 | **GET hat keine Seiteneffekte.** Browser-Prefetch, Crawler und Caches dürfen GET jederzeit ausführen | `GET /bookings/1423/cancel` | `DELETE /bookings/1423` oder `POST /bookings/1423/cancellation` |
 | 4 | **Ressourcen statt Verben.** Pfade benennen Dinge, keine Aktionen | `GET /getUser?id=1423` | `GET /users/1423` |
 | 5 | **Sub-Ressourcen und Filter statt Sonder-Endpoints.** Zugehörigkeit im Pfad, Auswahl in Query-Parametern | `GET /getBookingsForCustomer?id=7` | `GET /customers/7/bookings?status=confirmed` |

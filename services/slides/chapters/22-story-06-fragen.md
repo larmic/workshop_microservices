@@ -11,17 +11,17 @@
 <div class="numlist-num">01</div>
 <div>
 <p class="numlist-label">Die Kompensation scheitert</p>
-<h3>Flug gebucht, Hotel sagt nein, und der Storno l&auml;uft selbst in <span class="hl">5xx</span>. Was nun?</h3>
+<h3>Der Storno l&auml;uft selbst in <span class="hl">5xx</span>, und wir versuchen es nur einmal. Was nun?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">must eventually succeed</code>
 </div>
 <div class="numlist-row">
 <div class="numlist-num">02</div>
 <div>
-<p class="numlist-label">Wir kompensieren genau einmal</p>
-<h3>Beim Fehlschlag einfach <code>FAILED</code>. Verletzen wir damit das <span class="hl">Pattern</span>?</h3>
+<p class="numlist-label">200 oder 204</p>
+<h3>Flug antwortet auf den <code>DELETE</code> mit <code>200</code> und Body, Hotel mit <code>204</code>. Ist die Kompensation <span class="hl">gelungen</span>?</h3>
 </div>
-<code class="numlist-pill fragment" data-fragment-index="1">Monitoring = Retry</code>
+<code class="numlist-pill fragment" data-fragment-index="1">2xx ist 2xx</code>
 </div>
 <div class="numlist-row">
 <div class="numlist-num">03</div>
@@ -55,10 +55,10 @@
 
 Note:
 - Erst diskutieren, dann per Klick die Merks&auml;tze.
-- <strong>Kompensation scheitert:</strong> Forward darf scheitern, Kompensation muss gelingen: Idempotenz, Retry mit Backoff, persistenter Log, Operator-Inbox. <strong>Spicy:</strong> Ohne Plan daf&uuml;r ist es keine Saga, sondern Hoffnung.
-- <strong>Genau einmal:</strong> Formal ja, vertretbar nur als bewusste Entscheidung mit persistiertem Status und Alert auf <code>FAILED</code>. <strong>Spicy:</strong> Ohne Retry im Code muss das Monitoring der Retry sein.
+- <strong>Kompensation scheitert:</strong> Forward darf scheitern, Kompensation muss gelingen: Retry mit Backoff, persistenter Status, Alert auf <code>FAILED</code>. <strong>Spicy:</strong> Ohne Retry im Code muss das Monitoring der Retry sein.
+- <strong>200 oder 204:</strong> Beides gelungen, unser Orchestrator wertet erst ab <code>400</code> als Fehler. Inhalt zur&uuml;ck: 200, nichts zu sagen: 204, noch nicht erledigt: 202. <strong>Spicy:</strong> Einmal in der API-Guideline festlegen, nie pro Endpoint.
 - <strong>204 statt 404:</strong> Nein. Idempotent sind beide Varianten, 204 erspart dem Orchestrator nur die Sonderlogik &bdquo;404 = ok&ldquo;, sobald er wiederholt.
-- <strong>Saga h&auml;ngt:</strong> Logzeilen reichen nicht, n&ouml;tig ist ein Status-Counter mit Alarm bei <code>COMPENSATING &gt; 0</code> &uuml;ber N Minuten. <strong>Spicy:</strong> H&auml;ngende Sagas sind still.
-- <strong>Status im RAM:</strong> Der Flug bleibt gebucht, und niemand wei&szlig; es mehr. Persistenz braucht jeder mehrstufige Prozess, Saga macht es nur sichtbar. <strong>Spicy:</strong> Die echte Frage ist selbst bauen oder Temporal.
+- <strong>Saga h&auml;ngt:</strong> N&ouml;tig ist ein Status-Counter mit Alarm bei <code>COMPENSATING &gt; 0</code> &uuml;ber N Minuten. <strong>Spicy:</strong> H&auml;ngende Sagas sind still.
+- <strong>Status im RAM:</strong> Der Flug bleibt gebucht, und niemand wei&szlig; es mehr. Saga macht fehlende Persistenz nur sichtbar. <strong>Spicy:</strong> Die echte Frage ist selbst bauen oder Temporal.
 - Reserve: Eventing statt sync, Owner.
 - Lang: <code>docs/questions/story6.md</code>.
