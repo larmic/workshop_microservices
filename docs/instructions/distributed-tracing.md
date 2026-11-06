@@ -123,6 +123,8 @@ Effekt:
 - `grep b7ad…3331` → **nur Flight**.
 - `docker compose logs | jq -c 'select(.trace_id=="0af7…319c")'` → sauber gefilterter Live-Stream.
 
+> ℹ️ Vereinfachung: Flight loggt mit `b7ad…3331` als eigener `span_id`. Ein SDK wie OpenTelemetry legt hier einen eigenen Server-Span an, mit `b7ad…3331` als Parent.
+
 ### Der Pseudo-Code dazu
 
 ```kotlin
@@ -152,7 +154,14 @@ fun log(ctx, msg, vararg fields) {
 }
 ```
 
+**`parse()` strikt halten:** Feste Längen prüfen, Nur-Nullen verwerfen. Ein vergifteter Header führt zu `generateNew()` (Entry-Point) bzw. zu keinem Trace (Downstream), nie zu einem fortgeführten Unsinn.
+
 Reference-Implementierung: `services/shared/tracing/tracing.go` (~100 Zeilen).
+
+### Demo-Hinweise (Story 8)
+
+- **Response-Header:** Booking gibt den effektiven `traceparent` in der Response zurück. Das ist Pragmatik für die Demo, ein W3C-Entwurf sieht dafür einen eigenen `traceresponse`-Header vor.
+- **Car-Breaker in der Referenz:** Der 409 auf `carId` `C9` zählt im Car-Breaker als Fehler (`FailureThreshold: 5`). Wer „Buchung mit kaputtem Mietwagen" fünfmal kurz hintereinander klickt, öffnet den Breaker, danach lehnt der Pre-Check jede Buchung sofort mit 503 ab. Kein Bug, sondern Story 4 live, vor der Demo ansagen.
 
 ---
 

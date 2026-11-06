@@ -28,11 +28,11 @@
 </div>
 
 Note:
-- Ausf&uuml;hrlicher steht derselbe Pseudo-Code im Dashboard unter Story 8, &bdquo;Spickzettel&ldquo;. Wiedererkennung gewollt.
-- <strong>1 Entry-Point:</strong> Booking erzeugt einen Trace, falls keiner reinkommt (<code>Middleware</code>). Flight, Hotel, Car &uuml;bernehmen per HTTP nur (<code>Propagate</code>), eine Workshop-Entscheidung f&uuml;r den Kontrast. Beim Event ohne Property starten auch sie einen. OTel startet ohne Header &uuml;berall einen Trace. Verboten ist nur, eine eingehende ID zu &uuml;berschreiben: Dann zerf&auml;llt der Trace genau dort.
-- <strong>2 pro Hop:</strong> Neue Span-ID, gleiche Trace-ID. Die neue Span erscheint im Booking-Log <em>nicht</em>, sie steht nur im Outbound-Header. Erst Flight sieht sie. Ein Beispiel-Trace durch den Stack: Booking loggt mit Span <code>a1a1&hellip;</code>, setzt f&uuml;r Flight <code>b7ad&hellip;</code> in den Header, Flight loggt mit <code>b7ad&hellip;</code> als eigener <code>span_id</code>, eine Vereinfachung: Ein SDK legt hier einen Server-Span mit Parent <code>b7ad</code> an. Trace-ID &uuml;berall <code>0af7&hellip;319c</code>. <code>grep 0af7</code> gibt den Vorgang, <code>grep b7ad</code> nur den Flight-Anteil.
-- <strong>3 jede Zeile:</strong> Nicht der ganze Header, sondern <code>trace_id</code> und <code>span_id</code> als getrennte Felder im strukturierten Log. Einmal an den Request-Logger h&auml;ngen, dann steht die ID ohne Format-String in jeder Zeile. Filter mit <code>jq</code> werden trivial.
-- <strong>4 Async-Grenze:</strong> Der HTTP-Header geht beim &Uuml;bergang in die Worker-Goroutine verloren, deshalb wandert <code>traceparent</code> aktiv als Event-Property mit. Bei echten Brokern geh&ouml;rt er in die Message-Header, nicht in den Payload.
-- <strong>parse() strikt halten:</strong> Feste L&auml;ngen pr&uuml;fen, Nur-Nullen verwerfen. Die Referenz akzeptiert nur Version 00, der Standard liest h&ouml;here Versionen weiter und verwirft nur <code>ff</code>. Ein vergifteter Header f&uuml;hrt zu <code>generateNew()</code>, nie zu einem fortgef&uuml;hrten Unsinn.
-- Referenz: <code>services/shared/tracing/tracing.go</code>, etwa 100 Zeilen Go mit strenger Format-Validierung und Tests.
+- Derselbe Pseudo-Code steht im Dashboard unter Story 8, &bdquo;Spickzettel&ldquo;.
+- <strong>1 Entry-Point:</strong> Booking erzeugt einen Trace, falls keiner kommt (<code>Middleware</code>). Flight, Hotel, Car &uuml;bernehmen per HTTP nur (<code>Propagate</code>), Workshop-Entscheidung. Tabu: eine eingehende ID &uuml;berschreiben.
+- <strong>2 pro Hop:</strong> Neue Span-ID, gleiche Trace-ID. Die neue Span steht nur im Outbound-Header, erst Flight loggt sie. <code>grep 0af7</code> gibt den Vorgang, <code>grep b7ad</code> nur Flight.
+- <strong>3 jede Zeile:</strong> <code>trace_id</code> und <code>span_id</code> als eigene Felder, einmal an den Request-Logger h&auml;ngen.
+- <strong>4 Async-Grenze:</strong> <code>traceparent</code> wandert als Event-Property mit. Bei echten Brokern in die Message-Header.
+- <code>parse()</code> strikt: feste L&auml;ngen, nicht nur Nullen, sonst <code>generateNew()</code>.
+- Referenz: <code>services/shared/tracing/tracing.go</code>, ~100 Zeilen.
 - &Uuml;berleitung: &bdquo;Jetzt zieht ihr den Faden selbst.&ldquo;

@@ -361,6 +361,34 @@ was Temporal seit Jahren in Produktion löst.
 
 ---
 
+## Frage 8 — Timeout beim Forward: gebucht oder nicht?
+
+**Frage:** Der `POST /bookings` gegen Hotel läuft in einen Timeout.
+Booking kompensiert Flight und meldet `FAILED`. Ist jetzt alles sauber?
+
+**Antwort:** Nicht unbedingt. Ein Timeout heißt **Ergebnis unbekannt**,
+nicht „nicht gebucht". Hat Hotel die Buchung doch angelegt, fehlt
+Booking die `bookingId` — dieser Schritt landet nie in der Liste der
+gebuchten Schritte und wird von niemandem storniert. Verwandter Fall in
+der Referenz (`services/booking/story6/handler/booking.go`): Liefert die
+Antwort keine `bookingId`, überspringt die Kompensation diesen Schritt
+mit „cannot compensate". Abhilfen:
+
+- **Booking vergibt die Buchungs-ID** selbst und schickt sie mit; dann
+  kann es auch ohne Antwort per `DELETE` stornieren.
+- **Idempotency-Key** im Forward-Request; ein Retry liefert dieselbe
+  Buchung zurück statt eine zweite anzulegen.
+
+Warum überhaupt **rückwärts** kompensieren? Spätere Schritte können auf
+früheren aufbauen (Mietwagen am Flughafen zur Landezeit). Wer in
+umgekehrter Reihenfolge storniert, verletzt solche fachlichen
+Reihenfolge-Annahmen nicht.
+
+**Take-away:** Kompensieren kann man nur, was man **kennt**. Wer die
+ID erst aus der Antwort erfährt, verliert sie beim Timeout.
+
+---
+
 ## Sammelthemen für die Diskussion
 
 - Welche Schritte einer Reisebuchung sind eigentlich **gar nicht

@@ -222,7 +222,7 @@
 <body>
     <main class="card" role="main">
         <h1>Workshop-Feedback</h1>
-        <p class="sub">Anonym und sofort beim Trainer. Mehrfaches Feedback ist ausdr&uuml;cklich erw&uuml;nscht.</p>
+        <p class="sub">Anonym, solange du keinen Namen eintr&auml;gst. Mit Namen kann ich nachfragen. Mehrfaches Feedback ist ausdr&uuml;cklich erw&uuml;nscht.</p>
 
         <div class="thumb-row" role="radiogroup" aria-label="Bewertung">
             <button type="button" class="thumb" data-thumb="up" id="thumb-up" aria-pressed="false">
@@ -243,7 +243,7 @@
         <textarea id="text" maxlength="2000" rows="5" autofocus placeholder="Was war gut, was nicht? Konkrete Stories oder Stellen helfen am meisten."></textarea>
         <div class="counter"><span id="counter">0</span> / 2000</div>
 
-        <label class="field-label" for="name">Name <span class="optional">(optional, nur f&uuml;r R&uuml;ckfragen)</span></label>
+        <label class="field-label" for="name">Name <span class="optional">(optional, leer lassen f&uuml;r anonymes Feedback)</span></label>
         <input id="name" type="text" maxlength="80" autocomplete="off">
 
         <div class="status" id="status" hidden></div>
@@ -281,7 +281,8 @@
         // Öffentliche URL des Favicons. Discord lädt das Bild serverseitig
         // und cached es als Avatar des Webhook-Posts.
         const AVATAR_URL = new URL("./icon.png", location.href).href;
-        const NAME_STORAGE_KEY = "workshop-feedback:name";
+        // Frühere Versionen haben den Namen im localStorage gespeichert.
+        const LEGACY_NAME_STORAGE_KEY = "workshop-feedback:name";
 
         let thumb = "neutral";
         const $ = (id) => document.getElementById(id);
@@ -363,19 +364,9 @@
         $("thumb-down").addEventListener("click", () => setThumb("down"));
         $("text").addEventListener("input", (e) => { $("counter").textContent = e.target.value.length; });
         $("send-btn").addEventListener("click", submit);
-        // Name aus dem Browser wiederherstellen und bei jeder Änderung sichern.
-        // localStorage statt Cookie: kein Server-Roundtrip, kein Tracking-Konflikt.
-        try {
-            const stored = localStorage.getItem(NAME_STORAGE_KEY);
-            if (stored) $("name").value = stored;
-        } catch (e) { /* Storage nicht verfügbar (Private Mode), egal */ }
-        $("name").addEventListener("input", (e) => {
-            try {
-                const v = e.target.value.trim();
-                if (v) localStorage.setItem(NAME_STORAGE_KEY, v);
-                else localStorage.removeItem(NAME_STORAGE_KEY);
-            } catch (e) { /* ignore */ }
-        });
+        // Der Name wird bewusst nicht gespeichert: jeder Besuch startet anonym.
+        // Einen von früheren Versionen gespeicherten Namen einmalig entfernen.
+        try { localStorage.removeItem(LEGACY_NAME_STORAGE_KEY); } catch (e) { /* Storage nicht verfügbar, egal */ }
         // Cmd/Ctrl+Enter sendet ab, praktisch beim Tippen längerer Texte.
         $("text").addEventListener("keydown", (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submit();

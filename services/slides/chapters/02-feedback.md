@@ -26,7 +26,7 @@
 
 Note:
 - <strong>Jetzt nur anteasern:</strong> QR-Code kurz zeigen, das Formular bleibt den ganzen Workshop offen. Mehrfaches Feedback ist ausdr&uuml;cklich erw&uuml;nscht, gern direkt nach einer Story.
-- <strong>Mechanik:</strong> Daumen plus Freitext, kommt sofort bei mir an. Name ist optional, nur f&uuml;r R&uuml;ckfragen.
+- <strong>Mechanik:</strong> Daumen plus Freitext, kommt sofort bei mir an. Ohne Namen anonym, mit Namen kann ich nachfragen.
 - <strong>Fragen:</strong> Die Pills sind Denkanst&ouml;&szlig;e, kein Fragebogen. Am meisten helfen konkrete Stories oder Stellen.
 - <strong>Am Ende:</strong> Hierher zur&uuml;ck und Zeit zum Ausf&uuml;llen geben, solange die Eindr&uuml;cke frisch sind. GitHub-Stern erw&auml;hnen.
 - <strong>Weiter:</strong> Zur Agenda: Wie sehen die zwei Tage aus?

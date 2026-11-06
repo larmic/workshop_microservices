@@ -30,9 +30,12 @@
 </div>
 
 Note:
-- Derselbe Ablauf steht ausf&uuml;hrlicher im Dashboard unter Story 6, &bdquo;Spickzettel&ldquo;. Wiedererkennung gewollt, hier auf das Skelett gek&uuml;rzt.
-- Drei Knackpunkte: <strong>reverse(booked)</strong>, die Kompensation l&auml;uft in umgekehrter Reihenfolge, sonst verletzt man fachliche Reihenfolge-Annahmen. <strong>booked als eigene Liste</strong>, nur was wirklich gebucht wurde, wird kompensiert; Car wird nach dem Hotel-Fehler gar nicht angefasst. Achtung, <strong>Timeout, aber gebucht</strong>: Timeout beim Forward hei&szlig;t Ergebnis unbekannt. Hat Hotel doch gebucht, storniert das niemand. Abhilfe: Booking vergibt die Buchungs-ID oder schickt einen Idempotency-Key mit. <strong>DELETE muss idempotent sein</strong>, bei einem Retry darf das Backend nicht erschrecken, Recap-Frage 3.
-- Was hier bewusst fehlt und in Produktion dazugeh&ouml;rt: <strong>Retry mit Backoff</strong> f&uuml;r die Kompensation (transiente Fehler aussitzen, ohne Doppel-Storno). <strong>Persistenter Saga-Log</strong> f&uuml;r Crash-Recovery (Postgres, SQLite, Consul KV). <strong>Workflow Engines</strong> wie Temporal oder Camunda drehen das Modell um: Die Engine persistiert jeden Schritt, retryt, startet nach Crash neu. <strong>Pivot zur fachlichen Alternative</strong>: Gutschein statt Storno, wenn der Flug schon abgehoben ist.
-- Diskussions-Anker: Was, wenn der <code>DELETE</code> selbst in 5xx l&auml;uft? Im Workshop genau ein Versuch, dann <code>FAILED</code>. Das ist die erste Recap-Frage.
-- Referenz: <code>services/booking/story6/saga/</code>, dieselbe Logik in etwa 100 Zeilen Go.
-- &Uuml;berleitung: &bdquo;Im Workshop bewusst die einfachste Variante: synchron, in-memory, ein Versuch. Jetzt baut ihr sie.&ldquo;
+- Bewusst wie der Spickzettel im Dashboard (Story 6), nur aufs Skelett gek&uuml;rzt.
+- Zeigen: <strong>reverse(booked)</strong>, Kompensation r&uuml;ckw&auml;rts.
+- Zeigen: <strong>booked</strong> als eigene Liste, nur Gebuchtes wird kompensiert. Car wird nach dem Hotel-Fehler gar nicht angefasst.
+- Achtung <strong>Timeout, aber gebucht</strong>: Ergebnis unbekannt, niemand storniert. Abhilfe: Buchungs-ID von Booking oder Idempotency-Key.
+- <strong>DELETE idempotent</strong>, Recap-Frage 3.
+- Bewusst weggelassen: Retry mit Backoff, persistenter Saga-Log, Workflow Engine, fachlicher Pivot. Details in <code>docs/questions/story6.md</code>.
+- Anker: <code>DELETE</code> l&auml;uft in 5xx? Ein Versuch, dann <code>FAILED</code>. Recap-Frage 1.
+- Referenz: <code>services/booking/story6/saga/</code>, ca. 100 Zeilen Go.
+- &Uuml;berleitung: &bdquo;Bewusst die einfachste Variante: synchron, in-memory, ein Versuch. Jetzt baut ihr sie.&ldquo;
