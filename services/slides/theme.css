@@ -1608,7 +1608,7 @@
 .reveal .timeline .tl-road {
     fill: none;
     stroke: var(--box-bg);
-    stroke-width: 84;        /* breit genug, dass die Figuren mit drauf stehen */
+    stroke-width: 84;        /* breit genug für die Haltepunkte; die Gebäude stehen daneben */
     stroke-linecap: butt;    /* flache Enden, die Straße läuft aus der Folie */
 }
 

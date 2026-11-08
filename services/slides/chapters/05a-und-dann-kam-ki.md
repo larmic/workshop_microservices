@@ -13,8 +13,8 @@
   <!-- Masten -->
   <line class="tl-tick" x1="125" y1="46" x2="125" y2="317"/>
   <line class="tl-tick" x1="260" y1="46" x2="260" y2="376"/>
-  <line class="tl-tick" x1="429" y1="46" x2="429" y2="171"/>
-  <line class="tl-tick" x1="530" y1="46" x2="530" y2="134"/>
+  <line class="tl-tick" x1="429" y1="46" x2="429" y2="320"/>
+  <line class="tl-tick" x1="530" y1="46" x2="530" y2="280"/>
   <line class="tl-tick" x1="800" y1="46" x2="800" y2="376"/>
   <line class="tl-tick" x1="125" y1="317" x2="125" y2="376"/>
   <!-- Straße wie auf der Folie davor, um 620 nach links geschoben; hinter 2025 führt sie
@@ -28,48 +28,14 @@
   <rect class="tl-flag" x="530" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="559" y="63">2022</text>
   <rect class="tl-flag" x="800" y="50" width="58" height="26" rx="3"/><text class="tl-year" x="829" y="63">2025</text>
   <!-- Figuren wie auf der Folie davor -->
-  <g class="tl-figures" fill="#E4DDF8" stroke="none">
-    <!-- 2010: viele kleine Services, dünne Fäden -->
-    <g transform="translate(125 317)">
-      <g fill="none" stroke="#E4DDF8" stroke-width="2">
-        <line x1="-22" y1="-18" x2="4" y2="-22"/><line x1="4" y1="-22" x2="26" y2="-10"/>
-        <line x1="4" y1="-22" x2="6" y2="2"/><line x1="-18" y1="8" x2="-10" y2="24"/>
-        <line x1="-10" y1="24" x2="14" y2="22"/><line x1="26" y1="-10" x2="14" y2="22"/>
-      </g>
-      <rect x="-28" y="-24" width="12" height="12" rx="2.5"/><rect x="-2" y="-28" width="12" height="12" rx="2.5"/>
-      <rect x="20" y="-16" width="12" height="12" rx="2.5"/><rect x="-24" y="2" width="12" height="12" rx="2.5"/>
-      <rect x="0" y="-4" width="12" height="12" rx="2.5"/><rect x="-16" y="18" width="12" height="12" rx="2.5"/>
-      <rect x="8" y="16" width="12" height="12" rx="2.5"/>
-    </g>
-    <!-- 2014: Services auf dem Container -->
-    <g transform="translate(260 285)">
-      <rect x="-30" y="4" width="60" height="22" rx="2"/>
-      <g stroke="#0A0349" stroke-width="2">
-        <line x1="-20" y1="8" x2="-20" y2="22"/><line x1="-10" y1="8" x2="-10" y2="22"/><line x1="0" y1="8" x2="0" y2="22"/><line x1="10" y1="8" x2="10" y2="22"/><line x1="20" y1="8" x2="20" y2="22"/>
-      </g>
-      <rect x="-26" y="-14" width="15" height="15" rx="2.5"/>
-      <rect x="-7"  y="-14" width="15" height="15" rx="2.5"/>
-      <rect x="12"  y="-14" width="15" height="15" rx="2.5"/>
-    </g>
-    <!-- 2019: Modulith, ein Rahmen, innen vier Module -->
-    <g transform="translate(429 171)">
-      <rect x="-26" y="-26" width="52" height="52" rx="8" fill="none" stroke="#E4DDF8" stroke-width="3.5"/>
-      <rect x="-18" y="-18" width="16" height="16" rx="3"/><rect x="2" y="-18" width="16" height="16" rx="3"/>
-      <rect x="-18" y="2" width="16" height="16" rx="3"/><rect x="2" y="2" width="16" height="16" rx="3"/>
-    </g>
-    <!-- 2022: SCS, ein Rahmen mit eigener UI-Leiste oben und zwei Modulen -->
-    <g transform="translate(530 134)">
-      <rect x="-26" y="-26" width="52" height="52" rx="8" fill="none" stroke="#E4DDF8" stroke-width="3.5"/>
-      <rect x="-18" y="-18" width="36" height="8" rx="2.5"/>
-      <rect x="-18" y="-6" width="16" height="24" rx="3"/><rect x="2" y="-6" width="16" height="24" rx="3"/>
-    </g>
-    <!-- Risse vom Straßenrand zwischen 2010 und 2014: am Rand breit, nach innen spitz -->
-    <g fill="#ffffff" stroke="none">
-      <path d="M 180 361 L 190 361 L 186 349 L 190 341 L 185 333 L 183 325 L 180 334 L 183 342 L 179 350 Z"/>
-      <path d="M 217 253 L 228 253 L 224 264 L 228 272 L 222 284 L 219 273 L 221 265 Z"/>
-      <path d="M 238 339 L 249 339 L 245 329 L 248 322 L 243 311 L 240 322 L 241 330 Z"/>
-    </g>
-  </g>
+  <!-- Gebäude neben der Straße, Haltepunkte auf der Straße -->
+  <g fill="#ffffff"><path d="M 180 361 L 190 361 L 186 349 L 190 341 L 185 333 L 183 325 L 180 334 L 183 342 L 179 350 Z"/><path d="M 217 253 L 228 253 L 224 264 L 228 272 L 222 284 L 219 273 L 221 265 Z"/><path d="M 238 339 L 249 339 L 245 329 L 248 322 L 243 311 L 240 322 L 241 330 Z"/></g>
+  <g fill="#D3F871" stroke="#ffffff" stroke-width="4"><circle cx="125" cy="317" r="10"/><circle cx="260" cy="290" r="10"/><circle cx="429" cy="171" r="10"/><circle cx="530" cy="134" r="10"/><circle cx="800" cy="178" r="10"/></g>
+  <g transform="translate(125 262)"><rect x="-6" y="0" width="12" height="16" fill="#E4DDF8"/><rect x="-60" y="-2" width="120" height="6" rx="3" fill="#E4DDF8"/><g transform="translate(-44 -2)"><path d="M-10 0 V-16 L0 -25 L10 -16 V0 Z" fill="#B9A6F2"/><rect x="-3" y="-9" width="6" height="9" fill="#0A0349"/></g><g transform="translate(-22 -2)"><path d="M-10 0 V-16 L0 -25 L10 -16 V0 Z" fill="#D3F871"/><rect x="-3" y="-9" width="6" height="9" fill="#0A0349"/></g><g transform="translate(0 -2)"><path d="M-10 0 V-16 L0 -25 L10 -16 V0 Z" fill="#7348E1"/><rect x="-3" y="-9" width="6" height="9" fill="#ffffff"/></g><g transform="translate(22 -2)"><path d="M-10 0 V-16 L0 -25 L10 -16 V0 Z" fill="#B9A6F2"/><rect x="-3" y="-9" width="6" height="9" fill="#0A0349"/></g><g transform="translate(44 -2)"><path d="M-10 0 V-16 L0 -25 L10 -16 V0 Z" fill="#D3F871"/><rect x="-3" y="-9" width="6" height="9" fill="#0A0349"/></g><g transform="translate(-11 -30)"><path d="M-10 0 V-16 L0 -25 L10 -16 V0 Z" fill="#D3F871"/><rect x="-3" y="-9" width="6" height="9" fill="#0A0349"/></g><g transform="translate(11 -30)"><path d="M-10 0 V-16 L0 -25 L10 -16 V0 Z" fill="#B9A6F2"/><rect x="-3" y="-9" width="6" height="9" fill="#0A0349"/></g></g>
+  <g transform="translate(260 236)"><rect x="-6" y="0" width="12" height="14" fill="#E4DDF8"/><rect x="-42" y="-2" width="84" height="6" rx="3" fill="#E4DDF8"/><rect x="-36" y="-22" width="34" height="20" rx="2" fill="#D3F871"/><rect x="0" y="-22" width="34" height="20" rx="2" fill="#B9A6F2"/><rect x="-36" y="-44" width="34" height="20" rx="2" fill="#7348E1"/><rect x="0" y="-44" width="34" height="20" rx="2" fill="#D3F871"/><rect x="-18" y="-66" width="34" height="20" rx="2" fill="#B9A6F2"/><g stroke="#0A0349" stroke-width="1.5" opacity=".45"><path d="M-30 -19 V-5 M-24 -19 V-5 M-18 -19 V-5 M-12 -19 V-5 M6 -19 V-5 M12 -19 V-5 M18 -19 V-5 M24 -19 V-5 M6 -41 V-27 M12 -41 V-27 M18 -41 V-27 M24 -41 V-27 M-12 -63 V-49 M-6 -63 V-49 M0 -63 V-49 M6 -63 V-49"/></g><g stroke="#ffffff" stroke-width="1.5" opacity=".7"><path d="M-30 -41 V-27 M-24 -41 V-27 M-18 -41 V-27 M-12 -41 V-27"/></g></g>
+  <g transform="translate(429 300)"><rect x="-6" y="-88" width="12" height="30" fill="#E4DDF8"/><rect x="-50" y="-2" width="100" height="6" rx="3" fill="#E4DDF8"/><rect x="-38" y="-54" width="76" height="52" rx="3" fill="#E4DDF8"/><path d="M-44 -54 L0 -74 L44 -54 Z" fill="#7348E1"/><rect x="-32" y="-48" width="30" height="20" rx="2" fill="#D3F871"/><rect x="2" y="-48" width="30" height="20" rx="2" fill="#B9A6F2"/><rect x="-32" y="-24" width="30" height="20" rx="2" fill="#B9A6F2"/><rect x="2" y="-24" width="30" height="20" rx="2" fill="#D3F871"/></g>
+  <g transform="translate(538 262)"><rect x="-14" y="-90" width="12" height="36" fill="#E4DDF8"/><rect x="-52" y="-2" width="104" height="6" rx="3" fill="#E4DDF8"/><g transform="translate(-32 0)"><rect x="-14" y="-40" width="28" height="38" fill="#B9A6F2"/><path d="M-17 -40 L0 -54 L17 -40 Z" fill="#7348E1"/><rect x="-14" y="-40" width="28" height="7" fill="#D3F871"/><rect x="-4" y="-15" width="8" height="13" fill="#0A0349"/></g><g transform="translate(0 0)"><rect x="-14" y="-40" width="28" height="38" fill="#E4DDF8"/><path d="M-17 -40 L0 -54 L17 -40 Z" fill="#7348E1"/><rect x="-14" y="-40" width="28" height="7" fill="#D3F871"/><rect x="-4" y="-15" width="8" height="13" fill="#0A0349"/></g><g transform="translate(32 0)"><rect x="-14" y="-40" width="28" height="38" fill="#B9A6F2"/><path d="M-17 -40 L0 -54 L17 -40 Z" fill="#7348E1"/><rect x="-14" y="-40" width="28" height="7" fill="#D3F871"/><rect x="-4" y="-15" width="8" height="13" fill="#0A0349"/></g></g>
+  <g transform="translate(790 302)"><rect x="-6" y="-80" width="12" height="24" fill="#E4DDF8"/><rect x="-40" y="-2" width="80" height="6" rx="3" fill="#E4DDF8"/><g transform="rotate(-9 -20 -2)"><rect x="-24" y="-44" width="48" height="40" fill="#D3F871"/><path d="M-28 -44 L0 -60 L28 -44 Z" fill="#7348E1"/><rect x="-16" y="-34" width="10" height="9" fill="#0A0349"/><rect x="6" y="-34" width="10" height="9" fill="#0A0349"/><rect x="-5" y="-20" width="10" height="16" fill="#0A0349"/></g><path d="M18 -4 L26 -4 L24 2 L16 2 Z" fill="#0A0349"/><path d="M34 -66 L37 -58 L45 -55 L37 -52 L34 -44 L31 -52 L23 -55 L31 -58 Z" fill="#7348E1"/></g>
   <!-- hinter der KI-Fahne wird die Straße holprig: Risse von beiden Rändern -->
   <g fill="#ffffff" stroke="none">
       <path d="M 848 148 L 857 151 L 848 162 L 848 170 L 840 175 L 838 179 L 839 170 L 843 164 L 844 156 Z"/>
