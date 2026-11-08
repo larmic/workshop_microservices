@@ -697,6 +697,117 @@
     color: #9A93C4;
 }
 
+/* Musterlösung Story 2 (10e): Aufrufe als dunkle Code-Zeile wie im Quiz, */
+/* daneben die Antworten als Chips und die Idempotenz als Marke           */
+.reveal .sol-body {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    text-align: left;
+}
+
+.reveal .sol-group h4 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--box-border);
+}
+
+.reveal .sol-ep {
+    display: grid;
+    grid-template-columns: 470px 1fr auto;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 10px;
+}
+
+.reveal .sol-call {
+    background: var(--box-bg);
+    color: #EDE9FB;
+    font-family: var(--r-code-font);
+    font-size: 18px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.reveal .sol-call * { font-family: var(--r-code-font); }
+.reveal .sol-call .m { color: var(--highlight); font-weight: 700; }
+.reveal .sol-call .dim { color: #9A93C4; }
+
+.reveal .sol-codes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.reveal .sol-codes .sc {
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--wave);
+    color: var(--box-bg);
+    white-space: nowrap;
+}
+
+.reveal .sol-codes .sc.ok { background: var(--highlight); font-weight: 600; }
+.reveal .sol-codes .sc.err { background: var(--box-bg); color: #fff; }
+
+.reveal .sol-idem {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--box-border);
+    border: 2px solid var(--box-border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    white-space: nowrap;
+}
+
+.reveal .sol-idem.no { color: #5B4E93; border-color: #D9D1F4; }
+
+.reveal .sol-why {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #E4E0F5;
+}
+
+.reveal .sol-why div {
+    font-size: 16px;
+    line-height: 1.45;
+    color: #5B4E93;
+    padding-left: 16px;
+    border-left: 4px solid var(--highlight);
+}
+
+.reveal .sol-why strong {
+    display: block;
+    color: var(--box-bg);
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.reveal .sol-why code,
+.reveal .sol-alt code {
+    background: var(--wave);
+    color: var(--box-bg);
+    font-size: 0.9em;
+    padding: 0.05em 0.4em;
+    border-radius: 5px;
+}
+
+.reveal .sol-alt {
+    margin: 0;
+    font-size: 15px;
+    color: #5B4E93;
+}
+
 .reveal .quiz-answer {
     margin-top: 34px;
     text-align: left;
