@@ -64,6 +64,10 @@
       "addLabels": ["automerge"]
     },
     {
+      "matchUpdateTypes": ["pin", "pinDigest"],
+      "minimumReleaseAge": null
+    },
+    {
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "dependencyDashboardCategory": "Manuell prüfen",
