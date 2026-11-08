@@ -39,7 +39,7 @@ Randbedingungen: Der Client (Web und App) hat instabile Netze und wiederholt Anf
 
 ### 2. API am Flipchart entwerfen
 
-Ergebnis ist eine Endpoint-Tabelle mit einer Zeile pro Endpoint:
+Ergebnis sind die Endpoints für Storno und Umbuchung. Die Form ist frei (Tabelle, Skizze, OpenAPI-Schnipsel), je Endpoint gehören dazu Methode und Pfad, Request-Kern, Antwort und Status-Code, Idempotenz und eine Begründung. Als Tabelle sähe das etwa so aus:
 
 | Methode | Pfad | Request (Kern) | Antwort und Status-Code | Idempotent? | Begründung |
 |---|---|---|---|---|---|
@@ -55,7 +55,7 @@ Leitfragen für die Teamarbeit:
 
 ### 3. Vorstellen und vergleichen
 
-- Jedes Team stellt seine Tabelle in zwei Minuten vor
+- Jedes Team stellt seinen Entwurf in zwei Minuten vor
 - Der Trainer sammelt die Varianten nebeneinander und moderiert die Trade-offs
 - Anschließend Quiz im Plenum: fünf Endpoints, Handzeichen, "RESTful oder nicht?"
 

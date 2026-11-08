@@ -37,12 +37,12 @@ Nur als Ausblick, nicht im Workshop vertiefen: HATEOAS (Links in Antworten) und 
 |---|---|---|
 | Theorie-Input | 10 bis 12 Min | Sechs Prinzipien anhand der Kickoff-Beispiele (Abschnitt 2) |
 | Aufgabe stellen | 3 Min | Szenario (Abschnitt 4), Teams zu 3 bis 4 Personen, ein Flipchart pro Team |
-| Teamarbeit | 20 Min | Endpoint-Tabelle: Methode, Pfad, Request-Kern, Antwort und Status-Code, idempotent ja/nein, Begründung |
+| Teamarbeit | 20 Min | Endpoints entwerfen, Form frei: Methode, Pfad, Request-Kern, Antwort und Status-Code, idempotent ja/nein, Begründung |
 | Vorstellung und Vergleich | 8 bis 10 Min | Je Team 2 Minuten, Trainer sammelt die Varianten nebeneinander (Abschnitt 5) |
 | Quiz "RESTful oder nicht?" | 10 bis 12 Min | Fünf Endpoints, Handzeichen, Auflösung (Abschnitt 7) |
 | Brücke | 2 Min | "In Story 3 baut ihr `POST /booking/bookings`. Nehmt die Regeln mit." |
 
-**Material:** Ein Flipchart oder eine Whiteboard-Fläche pro Team, dicke Stifte, die Endpoint-Tabelle als Vorlage (Spaltenköpfe vorzeichnen spart fünf Minuten). Remote: ein Miro- oder Excalidraw-Board pro Team.
+**Material:** Ein Flipchart oder eine Whiteboard-Fläche pro Team, dicke Stifte. Wer mag, zeichnet eine Endpoint-Tabelle als Vorlage vor (spart fünf Minuten), die Form bleibt aber frei. Remote: ein Miro- oder Excalidraw-Board pro Team.
 
 **Teamgröße:** Drei bis vier Personen. Bei zwei Personen fehlt die Reibung, bei fünf redet einer nicht.
 

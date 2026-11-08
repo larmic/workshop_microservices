@@ -34,8 +34,8 @@
 <div class="story-list">
 <h4>Ergebnis</h4>
 <ul>
-<li>Eine Tabelle, eine Zeile pro Endpoint</li>
-<li>Methode und Pfad, Request-Kern, Antwort und Status-Code</li>
+<li>Die Endpoints f&uuml;r Storno und Umbuchung, die Form ist frei</li>
+<li>Je Endpoint: Methode und Pfad, Request-Kern, Antwort und Status-Code</li>
 <li>Idempotent: ja oder nein</li>
 <li>Begr&uuml;ndung, auch f&uuml;r bewusste Abweichungen</li>
 </ul>
@@ -47,4 +47,4 @@
 </div>
 
 Note:
-- Beim Herumgehen fragen: Was antwortet eure API, wenn ein Backend beim Storno oder Umbuchen scheitert, etwa das Hotel ablehnt oder gar nicht antwortet? Unerwartete 5xx muss man nicht einzeln dokumentieren, einen bewusst gelieferten 503 schon. So macht es unsere Referenz ab Story 4 in der <code>openapi.yaml</code>. Darauf achten, dass niemand ein 200 mit Fehler-Body in die Tabelle schreibt.
+- Beim Herumgehen fragen: Was antwortet eure API, wenn ein Backend beim Storno oder Umbuchen scheitert, etwa das Hotel ablehnt oder gar nicht antwortet? Unerwartete 5xx muss man nicht einzeln dokumentieren, einen bewusst gelieferten 503 schon. So macht es unsere Referenz ab Story 4 in der <code>openapi.yaml</code>. Darauf achten, dass niemand ein 200 mit Fehler-Body in den Entwurf schreibt.
