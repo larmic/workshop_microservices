@@ -46,7 +46,7 @@
 </div>
 
 <div class="story-foot">
-<strong>Einmalig, und nicht eure Aufgabe:</strong> Die Werte der Backend-URLs liefert <code>docker-compose.custom.yml</code>, ihr lest sie nur, ihr setzt sie nicht. Einklinken und Testen: Dashboard, Schritt 0 &bdquo;Start&ldquo;.
+<strong>Schon vorbereitet:</strong> <code>docker-compose.custom.yml</code> setzt <code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code> und <code>CAR_SERVICE_URL</code>, ihr lest sie nur aus. Einklinken und Testen: Dashboard, Schritt 0 &bdquo;Start&ldquo;.
 </div>
 
 </div>
@@ -54,7 +54,6 @@
 </div>
 
 Note:
-- Hook zum Einsteigen vorlesen: &bdquo;Alle dachten, der Service l&auml;uft, bis ein Kunde anrief und fragte, warum seit drei Stunden nichts mehr geht. Vertrauen ist gut, ein Health-Endpoint ist besser.&ldquo;
 - Wiedererkennung: dieselbe Story (Kontext / User Story / Akzeptanzkriterien) findet ihr im Dashboard unter &bdquo;Aufgabe&ldquo;.
 - Sprache und Framework sind frei (Go, Java, Quarkus, Node, &hellip;). Die Referenz unter `services/booking/story1/` ist nur ein Go-Beispiel.
 - Kein Error-Handling in Story 1, das ist Absicht. Wir bauen das Skelett; Resilienz kommt in Story 4 und 5, Konsistenz in 6.

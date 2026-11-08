@@ -2308,6 +2308,19 @@
     max-width: 24em;
 }
 
+/* Pointe unter der Unterzeile (08a): Lime-Strich, kursiv, gedämpft */
+.reveal .page.chapter .chapter-quote {
+    font-size: 26px;
+    font-style: italic;
+    line-height: 1.35;
+    color: #B9A6F2;
+    text-align: left;
+    margin: 56px 0 0;
+    padding-left: 22px;
+    border-left: 4px solid var(--highlight);
+    max-width: 30em;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Feedback-Folie (02): Gerüst über .page (Kicker, Titel, Inhalt mittig),  */
 /* Leitfrage als Lime-Zettel, weitere Fragen als Pillen, QR-Code als       */
