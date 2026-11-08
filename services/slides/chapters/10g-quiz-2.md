@@ -6,7 +6,7 @@
 
 <div class="page-body quiz">
 
-<div class="quiz-code"><span class="dim">// Kunde 7 gibt es</span><br><span class="m">GET</span> /booking/customers/7/bookings?status=confirmed<br><span class="dim">&rarr; 404 Not Found</span></div>
+<div class="quiz-code"><span class="dim">// Kunde 7 gibt es, eine best&auml;tigte Buchung hat er aber noch nicht</span><br><span class="m">GET</span> /booking/customers/7/bookings?status=confirmed<br><span class="dim">&rarr; 404 Not Found</span></div>
 
 <div class="quiz-answer fragment">
 <div class="callout">Nicht RESTful</div>
