@@ -17,9 +17,3 @@
 </div>
 
 </div>
-
-Note:
-- <strong>Mechanik:</strong> Daumen wie gehabt. Den Lacher mitnehmen, dann aufl&ouml;sen.
-- <strong>Kernbotschaft:</strong> Status-Codes sind Infrastruktur, kein Freitext. Wer einen Code w&auml;hlt, w&auml;hlt, was Load Balancer, Retry und Alerting damit tun.
-- <strong>Richtig je nach Fall:</strong> <code>409</code> bei Konflikt, <code>422</code> bei fachlich ung&uuml;ltiger Anfrage, <code>503</code>, wenn ein Backend weg ist und ein Retry Sinn ergibt.
-- <strong>&Uuml;berleitung:</strong> In Story 3 baut ihr <code>POST /booking/bookings</code> selbst, mit <code>201</code> und Fehler-Codes, die etwas bedeuten. Vorher die Frage: Wie findet der Booking-Service Flight, Hotel und Car?

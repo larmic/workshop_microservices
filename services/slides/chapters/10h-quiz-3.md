@@ -17,10 +17,3 @@
 </div>
 
 </div>
-
-Note:
-- <strong>Mechanik:</strong> Daumen wie gehabt. Erwartung: fast alle sagen nein. Wer Ja sagt, darf begr&uuml;nden, dann aufl&ouml;sen.
-- <strong>Kern:</strong> Verb im Pfad, ID als Query-Parameter, GET mit Seiteneffekt. Am schwersten wiegt Letzteres.
-- <strong>Anekdote:</strong> 2005 hat der Google Web Accelerator Links vorgeladen. Bei 37signals Backpack waren L&ouml;schen-Links einfache GETs, der Prefetcher hat Nutzern Daten gel&ouml;scht. &bdquo;GET ver&auml;ndert nichts&ldquo; ist Selbstschutz, keine Stilfrage.
-- <strong>Bezug:</strong> Wer hat am Flipchart etwas &Auml;hnliches stehen?
-- <strong>Weiter:</strong> &bdquo;Zwei Varianten, die es besser machen. Welche ist RESTful?&ldquo;
