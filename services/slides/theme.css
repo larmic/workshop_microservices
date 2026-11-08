@@ -1590,7 +1590,7 @@
 }
 
 /* Themen-Wolke (08b): vertieft Frage 01, erscheint per Klick daneben.     */
-/* Wichtige Begriffe (.key) tragen den Lime-Marker, die Größe gewichtet.   */
+/* Kompakter Block: jede Zeile bündig, Schlüsselbegriffe auf Lime.        */
 .reveal .page-body:has(> .topic-cloud) {
     position: relative;
 }
@@ -1600,7 +1600,6 @@
     right: 0;
     top: 0;
     width: 400px;
-    height: 400px;
     background: #F6F2FE;
     border-radius: 16px;
 }
@@ -1608,16 +1607,19 @@
 .reveal .topic-cloud svg.topic-svg {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 .reveal .topic-svg text {
     font-family: var(--font-title);
 }
 
-.reveal .topic-svg .tc-s  { font-weight: 500; fill: #5B4E93; }
-.reveal .topic-svg .tc-s2 { font-weight: 600; fill: var(--slide-text); }
-.reveal .topic-svg .tc-m  { font-weight: 700; fill: var(--box-border); }
+/* Gewichte passen zur Vermessung der Wortbreiten (Zeilen bündig gesetzt) */
+.reveal .topic-svg .tc-a   { font-weight: 600; fill: #5B4E93; }
+.reveal .topic-svg .tc-b   { font-weight: 600; fill: var(--box-border); }
+.reveal .topic-svg .tc-c   { font-weight: 600; fill: var(--slide-text); }
+.reveal .topic-svg .tc-v1  { font-weight: 700; fill: var(--box-border); }
+.reveal .topic-svg .tc-v2  { font-weight: 700; fill: var(--slide-text); }
 .reveal .topic-svg .tc-key { font-weight: 800; fill: var(--box-bg); }
 .reveal .topic-svg .tc-mark { fill: var(--highlight); }
 
