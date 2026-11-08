@@ -41,4 +41,5 @@
 </div>
 
 Note:
+- Zitat sinngem&auml;&szlig;: &bdquo;Startet kein neues Projekt mit Microservices, selbst wenn ihr sicher seid, dass die Anwendung gro&szlig; genug wird, dass es sich lohnt.&ldquo;
 - Monolith First (Martin Fowler) ist ein Standpunkt, kein Gesetz. Wir lernen das Wie, das Ob entscheidet ihr im Projekt.
