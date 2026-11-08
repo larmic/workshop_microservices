@@ -1,0 +1,65 @@
+name: Guard-Gates
+
+# Jeder Pull Request und jeder Push auf main läuft durch dieselben deterministischen
+# Prüfungen – egal, ob ein Mensch oder eine KI den Code geschrieben hat.
+# Ein Schritt pro Gate; die Kommandos stehen in scripts/gates.sh und laufen lokal
+# genauso (scripts/gates.sh bzw. make -C services gates).
+# Bewusst ohne Pfadfilter: Das Gate soll als Pflicht-Check auf jedem PR erscheinen.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: Guard-Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: services/go.mod
+          cache-dependency-path: services/go.mod
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Guard-Gate – Go-Formatierung (gofmt)
+        run: scripts/gates.sh gofmt
+
+      - name: Guard-Gate – Statische Analyse (go vet)
+        run: scripts/gates.sh vet
+
+      - name: Guard-Gate – Architekturregeln (Import-Graph)
+        run: scripts/gates.sh arch
+
+      - name: Guard-Gate – OpenAPI ⇄ Handler
+        run: scripts/gates.sh openapi
+
+      - name: Guard-Gate – Farbpalette Slides ⇄ Dashboard
+        run: scripts/gates.sh palette
+
+      - name: Guard-Gate – Unit-Tests (go test)
+        run: scripts/gates.sh test
+
+      - name: Guard-Gate – Inline-JavaScript (node --check)
+        run: scripts/gates.sh js
+
+      - name: Guard-Gate – HTML (html-validate)
+        run: scripts/gates.sh html
+
+      - name: Guard-Gate – Docker Compose (config -q)
+        run: scripts/gates.sh compose

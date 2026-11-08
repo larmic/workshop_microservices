@@ -1,4 +1,4 @@
-.PHONY: help all build clean run-flight run-hotel run-car run-booking-ref-story1 run-booking-ref-story3 run-booking-ref-story4 run-booking-ref-story5 run-booking-ref-story6 run-booking-ref-story7 run-booking-ref-story8 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-booking-ref-story8 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-down
+.PHONY: help all build clean run-flight run-hotel run-car run-booking-ref-story1 run-booking-ref-story3 run-booking-ref-story4 run-booking-ref-story5 run-booking-ref-story6 run-booking-ref-story7 run-booking-ref-story8 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-booking-ref-story8 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-down gates gates-fast hooks
 
 .DEFAULT_GOAL := help
 
@@ -7,6 +7,15 @@ help: ## Zeigt diese Hilfe an
 	@echo ""
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@echo ""
+
+gates: ## Guard-Gates: alle Prüfungen der Pipeline (gofmt, vet, Architektur, OpenAPI, Palette, Tests, JS, HTML, Compose)
+	../scripts/gates.sh all
+
+gates-fast: ## Guard-Gates: nur die schnellen Prüfungen des pre-commit-Hooks
+	../scripts/gates.sh fast
+
+hooks: ## Aktiviert den Git-Hook .githooks/pre-commit für diesen Klon
+	git config core.hooksPath .githooks
 
 docker-build: docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-booking-ref-story8 docker-build-dashboard ## Baut alle Docker-Images
 

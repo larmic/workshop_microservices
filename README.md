@@ -1,6 +1,7 @@
 # Microservices richtig gemacht
 
 [![Build Go-Services](https://github.com/larmic/workshop_microservices/actions/workflows/build.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/build.yml)
+[![Guard-Gates](https://github.com/larmic/workshop_microservices/actions/workflows/gates.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/gates.yml)
 [![Docker Build & Push Go-Services](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml)
 
 Microservices sind auch nur Monolithen mit Netzwerkproblemen.
@@ -55,10 +56,42 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   ├── dashboard/         # Dashboard-UI
 │   ├── traefik/           # API-Gateway-Konfiguration
 │   ├── shared/            # Gemeinsame Bibliotheken
+│   ├── archtest/          # Guard-Gates als Go-Tests (Architektur, OpenAPI, Farbpalette)
 │   ├── docker-compose.yml # Lokales Setup
 │   └── Makefile
+├── scripts/gates.sh       # Alle Guard-Gates, lokal wie in der Pipeline
+├── .githooks/pre-commit   # Schnelle Guard-Gates vor jedem Commit
 └── README.md
 ```
+
+## Guard-Gates
+
+Die Referenz-Implementierung ist Lehrmaterial: Was hier steht, übernehmen
+Teilnehmende als Vorbild. Deshalb läuft jeder Pull Request und jeder Push auf
+`main` durch dieselben deterministischen Prüfungen, egal ob ein Mensch oder
+eine KI den Code geschrieben hat
+([.github/workflows/gates.yml](.github/workflows/gates.yml), ein Schritt pro Gate).
+
+| Gate | Prüft | Werkzeug |
+| --- | --- | --- |
+| `gofmt` | einheitlich formatierter Go-Code | gofmt |
+| `vet` | typische Fehler im Go-Code | go vet |
+| `arch` | Import-Graph: jede Booking-Story, Flight, Hotel, Car und das Dashboard importieren nur sich selbst und `shared`; `shared` kennt keinen Service | Go-Test in `services/archtest` |
+| `openapi` | jede in `api/openapi.yaml` deklarierte Route ist registriert und umgekehrt; `/health`, `/info`, `/openapi` gibt es überall | Go-Test in `services/archtest` |
+| `palette` | Farbrollen aus `services/CLAUDE.md` sind in `slides/theme.css` und im Dashboard vorhanden | Go-Test in `services/archtest` |
+| `test` | Unit-Tests | go test |
+| `js` | Syntax der Inline-Skripte von Dashboard, Folien und Pages | `node --check` |
+| `html` | gültiges HTML von Dashboard, Folien und Pages | html-validate (Preset `standard`) |
+| `compose` | die Compose-Kombinationen aus `Makefile` und Vorbereitung | `docker compose config -q` |
+
+Lokal laufen alle zusammen mit `scripts/gates.sh` (oder `make -C services gates`),
+einzelne mit `scripts/gates.sh openapi`. Ein Git-Hook (`.githooks/pre-commit`)
+prüft vor jedem Commit die schnellen Gates (gofmt, vet, Architektur, OpenAPI,
+Palette, Inline-JavaScript) in wenigen Sekunden. Aktiviert wird er einmal pro
+Klon mit `git config core.hooksPath .githooks` (oder `make -C services hooks`);
+im Notfall überspringt `git commit --no-verify` ihn. Fehlt lokal ein Werkzeug
+(Go, Node, Docker Compose), überspringen Skript und Hook das Gate mit Hinweis;
+verbindlich ist die Pipeline.
 
 ## Lizenz & Nutzung
 

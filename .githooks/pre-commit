@@ -1,0 +1,10 @@
+#!/bin/sh
+# Guard-Gate vor jedem Commit: die schnellen Prüfungen der Pipeline (wenige Sekunden):
+# gofmt, go vet, Architektur/OpenAPI/Farbpalette (services/archtest), Inline-JavaScript.
+# Unit-Tests, HTML-Validierung und Docker Compose laufen in der Pipeline bzw. lokal
+# mit scripts/gates.sh. Fehlt go oder node, wird das jeweilige Gate übersprungen.
+#
+# Aktivieren (einmal pro Klon): git config core.hooksPath .githooks  (oder: make -C services hooks)
+# Im Notfall überspringen:       git commit --no-verify
+set -e
+exec "$(git rev-parse --show-toplevel)/scripts/gates.sh" fast

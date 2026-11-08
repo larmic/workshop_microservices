@@ -49,3 +49,34 @@ Die User-Stories für die Hands-on-Aufgaben liegen in `docs/stories/`
   - `traefik/`: API-Gateway-Konfiguration
   - `shared/`: gemeinsame Bibliotheken
   - `docker-compose*.yml`, `Makefile`: lokales Setup
+
+## Guard-Gates
+
+```bash
+scripts/gates.sh            # alle Gates in der Reihenfolge der Pipeline (auch: make -C services gates)
+scripts/gates.sh fast       # schnelle Gates wie im pre-commit-Hook
+scripts/gates.sh gofmt      # Guard-Gate: Go-Formatierung (cd services && gofmt -w . behebt es)
+scripts/gates.sh vet        # Guard-Gate: go vet ./...
+scripts/gates.sh arch       # Guard-Gate: Architekturregeln (services/archtest)
+scripts/gates.sh openapi    # Guard-Gate: api/openapi.yaml ⇄ registrierte Routen
+scripts/gates.sh palette    # Guard-Gate: Farbpalette slides/theme.css ⇄ dashboard/static/index.html
+scripts/gates.sh test       # Guard-Gate: go test (ohne archtest)
+scripts/gates.sh js         # Guard-Gate: Syntax der Inline-Skripte (node --check)
+scripts/gates.sh html       # Guard-Gate: html-validate für Dashboard, Folien, Pages
+scripts/gates.sh compose    # Guard-Gate: docker compose config -q für die Makefile-Kombinationen
+# Git-Hook .githooks/pre-commit (aktivieren: git config core.hooksPath .githooks) prüft gofmt, vet, archtest, JS
+```
+
+Alle Gates müssen grün sein; die Pipeline `.github/workflows/gates.yml` führt
+jedes als eigenen Schritt aus. Vor jedem Commit mindestens `scripts/gates.sh fast`
+ausführen, nach Änderungen an Compose-Files, HTML oder Specs `scripts/gates.sh`.
+
+Regeln, die die Gates durchsetzen:
+
+- Jede Booking-Story (`booking/storyN`), `flight`, `hotel`, `car` und
+  `dashboard` importiert nur sich selbst und `shared`; `shared` importiert
+  keinen Service. Neue Stories fallen automatisch unter die Regel.
+- Jede Route in `main.go`/`handler/` steht in `api/openapi.yaml` und umgekehrt,
+  Muster immer mit Methode (`"GET /pfad"`). Neue Routen also immer mit Spec.
+- Farbänderungen an Slides oder Dashboard laufen gegen die Palette in
+  `services/CLAUDE.md` (`voxel.css`, das Easter-Egg-Theme, ist ausgenommen).

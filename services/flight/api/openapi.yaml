@@ -63,27 +63,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Flight'
 
-  /flights/{id}:
-    get:
-      summary: Flugdetails
-      description: Gibt die Details eines bestimmten Fluges zurück
-      operationId: getFlightById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Flugdetails
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Flight'
-        '404':
-          description: Flug nicht gefunden
-
   /bookings:
     post:
       summary: Flug buchen
@@ -149,6 +128,48 @@ paths:
           description: Event entgegengenommen, Verarbeitung läuft asynchron
         '400':
           description: Ungültiges Event (fehlende Pflichtfelder)
+
+  /admin/chaos:
+    get:
+      summary: Chaos-Modus abfragen
+      description: |
+        Gibt den aktuellen Chaos-Modus dieser Instanz zurück. Wird vom
+        Dashboard genutzt, um Fehler gezielt einzustreuen (Resilience-Stories).
+        Admin- und Health-Pfade sind vom Chaos-Modus selbst nie betroffen.
+      operationId: getChaos
+      tags:
+        - admin
+      responses:
+        '200':
+          description: Aktueller Chaos-Zustand der Instanz
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChaosState'
+    post:
+      summary: Chaos-Modus setzen
+      description: |
+        Setzt den Chaos-Modus dieser Instanz: `normal`, `slow` (antwortet
+        verzögert), `fail` (antwortet mit 500) oder `hang` (antwortet erst nach
+        dem Client-Timeout). Unbekannte Werte setzen `normal`.
+      operationId: setChaos
+      tags:
+        - admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChaosRequest'
+      responses:
+        '200':
+          description: Neuer Chaos-Zustand der Instanz
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChaosState'
+        '400':
+          description: Ungültiger Request-Body
 
 components:
   schemas:
@@ -238,3 +259,33 @@ components:
           type: string
           description: ID der zu stornierenden Buchung in diesem Service.
           example: F-7c1a9f
+
+    ChaosRequest:
+      type: object
+      required:
+        - mode
+      properties:
+        mode:
+          type: string
+          enum: [normal, slow, fail, hang]
+          example: fail
+
+    ChaosState:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: [normal, slow, fail, hang]
+          example: normal
+        latencyMs:
+          type: integer
+          description: Verzögerung im Modus `slow` (fest pro Instanz, CHAOS_LATENCY_MS)
+          example: 2000
+        hangMs:
+          type: integer
+          description: Wartezeit im Modus `hang` (fest pro Instanz, CHAOS_HANG_MS)
+          example: 10000
+        lastSeenAt:
+          type: string
+          format: date-time
+          description: Zeitpunkt des letzten regulären Requests an diese Instanz (nur bei GET, fehlt bei frisch gestarteten Instanzen)
