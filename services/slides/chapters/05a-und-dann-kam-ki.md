@@ -112,8 +112,5 @@
 
 
 Note:
-- <strong>Kern:</strong> Mit KI wird Code billig, Architekturentscheidungen nicht. Die Stra&szlig;e wird holprig, die Brocken r&auml;umt kein Agent weg.
+- <strong>Kern:</strong> Mit KI wird Code billig, Architekturentscheidungen nicht.
 - <strong>Provokation:</strong> Ein Agent schreibt euch einen Circuit Breaker in 30 Sekunden. Ob ihr einen braucht, wo er hingeh&ouml;rt und welche Schwellwerte er bekommt, entscheidet er nicht. Genau das &uuml;ben wir die n&auml;chsten zwei Tage.
-- <strong>Frage:</strong> Welcher Brocken liegt in eurem Projekt?
-- <strong>Klammer:</strong> Bei 29a zur&uuml;ckkommen: Welchen der drei S&auml;tze h&auml;tte euch ein Agent gesagt?
-- <strong>Weiter:</strong> Manche Regeln sind &auml;lter als jeder Agent. 2011 hat sie jemand aufgeschrieben.
