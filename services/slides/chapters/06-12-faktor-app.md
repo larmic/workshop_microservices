@@ -22,7 +22,10 @@
 </div>
 
 <div class="foot">
-<p>Zw&ouml;lf Regeln f&uuml;r jede Cloud-App, egal in welcher Sprache. Microservices brauchen sie alle, und dazu Schnitt, Deploybarkeit, Resilienz.</p>
+<figure class="foot-quote">
+<blockquote>Die zw&ouml;lf Faktoren sind Regeln f&uuml;r Cloud-Apps, egal in welcher Sprache. Zu Microservices passen sie trotzdem.</blockquote>
+<figcaption>Nicole Weseloh, One Neusta, im Workshop 2026</figcaption>
+</figure>
 <div class="callout">Notwendig, aber nicht hinreichend.</div>
 </div>
 
@@ -32,4 +35,4 @@
 
 Note:
 - <strong>Erst fragen, dann aufdecken:</strong> Wer hat &bdquo;bei mir l&auml;uft&rsquo;s&ldquo; schon selbst gesagt? Wer hat ein Passwort im Repo gefunden? Die Karten best&auml;tigen dann nur noch.
-- Eigentlich f&uuml;r Cloud-Apps entwickelt.
+- Microservices brauchen alle zw&ouml;lf, und dazu Schnitt, Deploybarkeit und Resilienz. Deshalb: notwendig, aber nicht hinreichend.
