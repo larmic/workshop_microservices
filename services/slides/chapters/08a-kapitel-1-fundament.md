@@ -10,9 +10,3 @@
 </div>
 
 </div>
-
-Note:
-- &Uuml;bergang von &bdquo;Microservices sind Monolithen mit Netzwerkproblemen&ldquo; zu Story 1.
-- Story 1 ist Pflichtprogramm: ohne Health-Check, zustandslosen Prozess und externe Config kommt man gar nicht zum Punkt, wo Resilience &uuml;berhaupt anf&auml;ngt.
-- Erwartung managen: hier gibt es noch keine spannenden Patterns, das kommt in Kapitel 2.
-- Halbe Minute Pause hier, mentaler Marker, Wechsel der Denkrichtung.
