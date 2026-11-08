@@ -34,5 +34,4 @@
 </div>
 
 Note:
-- <strong>Erst fragen, dann aufdecken:</strong> Wer hat &bdquo;bei mir l&auml;uft&rsquo;s&ldquo; schon selbst gesagt? Wer hat ein Passwort im Repo gefunden? Die Karten best&auml;tigen dann nur noch.
-- Microservices brauchen alle zw&ouml;lf, und dazu Schnitt, Deploybarkeit und Resilienz. Deshalb: notwendig, aber nicht hinreichend.
+- Wer kennt diese &bdquo;Probleme&ldquo;?
