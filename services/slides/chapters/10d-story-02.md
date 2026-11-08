@@ -9,7 +9,7 @@
 <span class="badge design">&asymp; 55 min <small>davon 20 Flipchart</small></span>
 </div>
 
-<p class="subtitle">Storno und Umbuchung am Flipchart. Kein Code, kein Deployment, <span class="hl">kein Port</span>.</p>
+<p class="subtitle">Storno und Umbuchung am Flipchart. <span class="hl">Kein Code</span>, kein Deployment, kein Port.</p>
 
 <div class="story page-body">
 
@@ -18,9 +18,9 @@
 <dt>Als</dt>
 <dd>Produktverantwortliche</dd>
 <dt>m&ouml;chte ich</dt>
-<dd>eine API f&uuml;r Storno und Umbuchung, die HTTP so nutzt, wie es gemeint ist,</dd>
+<dd>eine API f&uuml;r Storno und Umbuchung, die sich an die HTTP-Regeln h&auml;lt,</dd>
 <dt>damit</dt>
-<dd>Retries sicher sind, Fehler sichtbar werden und wir sie nicht in drei Monaten umbauen.</dd>
+<dd>Wiederholungen nichts doppelt buchen, Fehler sofort auffallen und die API lange h&auml;lt.</dd>
 </dl>
 <div class="story-list">
 <h4>Aufgabe</h4>
