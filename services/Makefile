@@ -1,4 +1,4 @@
-.PHONY: help all build clean run-flight run-hotel run-car run-booking-ref-story1 run-booking-ref-story3 run-booking-ref-story4 run-booking-ref-story5 run-booking-ref-story6 run-booking-ref-story7 run-booking-ref-story8 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-booking-ref-story8 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-down gates gates-fast hooks
+.PHONY: help all build clean run-flight run-hotel run-car run-booking-ref-story1 run-booking-ref-story3 run-booking-ref-story4 run-booking-ref-story5 run-booking-ref-story6 run-booking-ref-story7 run-booking-ref-story8 run-all test docker-build docker-build-flight docker-build-hotel docker-build-car docker-build-booking-ref-story1 docker-build-booking-ref-story3 docker-build-booking-ref-story4 docker-build-booking-ref-story5 docker-build-booking-ref-story6 docker-build-booking-ref-story7 docker-build-booking-ref-story8 docker-build-dashboard docker-up docker-up-base docker-up-hub docker-rebuild-custom docker-down gates gates-fast hooks
 
 .DEFAULT_GOAL := help
 
@@ -62,3 +62,6 @@ docker-up-hub: ## Zieht Reference-Images aus Docker Hub, baut nur den Custom-Ser
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml pull
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.custom.yml build booking-custom
 	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.custom.yml up
+
+docker-rebuild-custom: ## Baut nach einer Code-Änderung nur den eigenen Service neu und startet ihn, der Rest des Stacks läuft weiter
+	docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.custom.yml up -d --build booking-custom

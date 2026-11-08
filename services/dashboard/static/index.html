@@ -1637,9 +1637,7 @@ docker logs booking-custom                          # kein BEISPIEL-L&Ouml;SUNG-
                     <li class="start-card">
                         <h3>Weiterarbeiten</h3>
                         <p>Ab jetzt erweitert ihr genau diesen Service. Nach einer Code-&Auml;nderung nur ihn neu bauen, in einem zweiten Terminal im Ordner <code>services/</code>:</p>
-<pre>docker compose -f docker-compose.yml -f docker-compose.infra.yml \
-  -f docker-compose.reference.yml -f docker-compose.custom.yml \
-  up -d --build booking-custom</pre>
+<pre>make docker-rebuild-custom</pre>
                         <p>In jeder Story schaltet ihr oben zwischen <em>Referenz</em> und <em>Mein Service</em> um. Details: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/custom-setup.md" target="_blank" rel="noopener"><code>docs/custom-setup.md</code></a></p>
                     </li>
                 </ol>
