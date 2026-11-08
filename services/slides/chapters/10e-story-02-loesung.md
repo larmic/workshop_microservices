@@ -2,12 +2,9 @@
 
 <p class="kicker">Story 2 &middot; Musterl&ouml;sung</p>
 
-<div class="page-head">
-
 ## Eine m&ouml;gliche L&ouml;sung
 
-<span class="hint">Nicht die einzige. Entscheidend ist die Begr&uuml;ndung.</span>
-</div>
+<p class="subtitle">Nicht die einzige. Entscheidend ist die Begr&uuml;ndung.</p>
 
 <div class="page-body sol-body">
 
