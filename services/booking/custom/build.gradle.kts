@@ -38,3 +38,10 @@ tasks.shadowJar {
     archiveVersion.set("")
     mergeServiceFiles()
 }
+
+// Der Wrapper lädt Gradle beim ersten Docker-Build (make docker-up). Im
+// Workshop-WLAN reichen die 10 s Standard-Timeout oft nicht; so bleibt der
+// Wert auch erhalten, wenn Renovate den Wrapper neu erzeugt.
+tasks.wrapper {
+    networkTimeout = 60000
+}
