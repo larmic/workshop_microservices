@@ -23,8 +23,8 @@
 
 <div class="foot">
 <figure class="foot-quote">
-<blockquote>Die zw&ouml;lf Faktoren sind Regeln f&uuml;r Cloud-Apps, egal in welcher Sprache. Zu Microservices passen sie trotzdem.</blockquote>
-<figcaption>Nicole Weseloh, One Neusta, im Workshop 2026</figcaption>
+<blockquote>Kleine Korrektur: Die zw&ouml;lf Faktoren sind eigentlich f&uuml;r Cloud-Apps gedacht. Zu Microservices passen sie aber wunderbar.</blockquote>
+<figcaption>Nicole Weseloh, One Neusta, hat mich 2026 im Workshop freundlich korrigiert</figcaption>
 </figure>
 <div class="callout">Notwendig, aber nicht hinreichend.</div>
 </div>
