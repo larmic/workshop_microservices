@@ -1589,6 +1589,58 @@
     content: "\2014\00a0";
 }
 
+/* Themen-Wolke (08b): erscheint per Klick rechts neben den zwei Fragen.   */
+/* Wichtige Begriffe (.key) tragen den Lime-Marker, die Größe gewichtet.   */
+.reveal .page-body:has(> .topic-cloud) {
+    position: relative;
+}
+
+.reveal .topic-cloud {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 400px;
+    box-sizing: border-box;
+    padding: 20px 22px 24px;
+    background: #F6F2FE;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.reveal .topic-cloud .topic-cloud-label {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #5B4E93;
+}
+
+.reveal .topic-words {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px 14px;
+    line-height: 1.15;
+}
+
+.reveal .topic-words span {
+    font-family: var(--font-title);
+    color: var(--slide-text);
+}
+
+.reveal .topic-words .w-s { font-size: 16px; font-weight: 500; color: #5B4E93; }
+.reveal .topic-words .w-m { font-size: 20px; font-weight: 700; color: var(--box-border); }
+.reveal .topic-words .w-l { font-size: 27px; font-weight: 800; color: var(--slide-text); }
+
+.reveal .topic-words .key {
+    color: var(--box-bg);
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
+    padding: 0.04em 0.28em 0.06em;
+}
+
+.reveal .topic-words .key:nth-child(odd) { transform: rotate(-1.2deg); }
+.reveal .topic-words .key:nth-child(even) { transform: rotate(1deg); }
+
 /* ---------------------------------------------------------------------- */
 /* Timeline „Der Weg zu Microservices" (05): Straße mit Jahres-Punkten,     */
 /* Architekturen oben (Violett), Technologien unten (Navy). Inline-SVG,    */

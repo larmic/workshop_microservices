@@ -23,6 +23,28 @@
 </div>
 </div>
 
+<div class="topic-cloud fragment" aria-label="Weitere Themen, die wir nur besprechen">
+<p class="topic-cloud-label">Und dazu, nur als Thema</p>
+<div class="topic-words">
+<span class="w-s">Logging</span>
+<span class="w-l key">Service-Schnitt</span>
+<span class="w-s">Contract Testing</span>
+<span class="w-m">Auth &uuml;ber Servicegrenzen</span>
+<span class="w-s">Monitoring</span>
+<span class="w-m key">Datenhoheit</span>
+<span class="w-s">Service Mesh</span>
+<span class="w-m">Schnittstellen-Versionierung</span>
+<span class="w-s">Messaging</span>
+<span class="w-l key">Team-Schnitte</span>
+<span class="w-s">API-Gateway &amp; BFF</span>
+<span class="w-m key">Synchron vs. Asynchron</span>
+<span class="w-s">Alerting &amp; SLOs</span>
+<span class="w-s">Security &amp; mTLS</span>
+<span class="w-m key">CI/CD &amp; Deployment</span>
+<span class="w-s">Kosten &amp; Betrieb</span>
+</div>
+</div>
+
 <div class="foot">
 <div class="callout">Die zweite Frage ist die unbequeme.</div>
 </div>
