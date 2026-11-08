@@ -27,6 +27,10 @@ Konami-Code) und nimmt an der Palette-Synchronisation nicht teil.
 | Text gedämpft | — | `#555` / `#888` / `#aaa` | Sekundär / Tertiär |
 | Text gedämpft (Violett) | — | `#5B4E93` | Kleine Labels, Badges, Kicker (Slides: Agenda, Merksätze; Dashboard: statt `#888` für kleinen Text, ≥ 6:1 auf hellem Grund) |
 
+Einzelfarben nur für den Eisberg auf Folie 08b (kein Teil der Palette):
+`#3A1F9E` mittlere Schicht zwischen Violett und Primär-Dunkel, `#E5484D`
+rote Boje am Tiefenmesser.
+
 Status-Farben (Dashboard, Circuit-Breaker-Badges etc.):
 
 | Status | Hintergrund | Text |

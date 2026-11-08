@@ -1590,8 +1590,8 @@
 }
 
 /* Themen-Wolke (08b): vertieft Frage 01, erscheint per Klick daneben.     */
-/* Lückenloses Wort-Mosaik: jede Zelle exakt so groß wie ihr Wort,       */
-/* Schlüsselbegriffe auf Lime, keine Lime-Flächen grenzen aneinander.   */
+/* Eisberg: über Wasser „Microservices“, darunter drei Schichten          */
+/* (Schnitt, Kommunikation, Betrieb) mit Tiefenmesser und roter Boje.     */
 .reveal .page-body:has(> .topic-cloud) {
     position: relative;
 }
@@ -1609,14 +1609,6 @@
     height: auto;
 }
 
-.reveal .topic-svg text { font-family: var(--font-title); }
-.reveal .topic-svg .tc-a { font-weight: 600; fill: #5B4E93; }
-.reveal .topic-svg .tc-b { font-weight: 600; fill: var(--box-border); }
-.reveal .topic-svg .tc-c { font-weight: 600; fill: var(--box-bg); }
-.reveal .topic-svg .tc-v1 { font-weight: 700; fill: var(--box-border); }
-.reveal .topic-svg .tc-v2 { font-weight: 700; fill: var(--box-bg); }
-.reveal .topic-svg .tc-key { font-weight: 800; fill: var(--box-bg); }
-.reveal .topic-svg .tc-mark { fill: var(--highlight); }
 
 /* ---------------------------------------------------------------------- */
 /* Timeline „Der Weg zu Microservices" (05): Straße mit Jahres-Punkten,     */
