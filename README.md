@@ -98,7 +98,9 @@ schiebt sie nur von `main` zu Docker Hub; auf Pull Requests werden sie nur gebau
 Renovate (`.github/renovate.json`) schlägt neue Versionen erst nach drei Tagen
 vor (`minimumReleaseAge`): Kompromittierte Releases werden meist in dieser Zeit
 entdeckt und zurückgezogen. Minor-, Patch- und Digest-Updates mergt Renovate
-automatisch, sobald Guard-Gates und Docker-Build grün sind. Major-Updates und
+automatisch, sobald alle Checks des Pull Requests grün sind (Guard-Gates und,
+wenn betroffen, der Docker-Build; `platformAutomerge: false`, weil GitHubs
+Auto-Merge nur auf Pflicht-Checks warten würde). Major-Updates und
 neue Minor-Versionen von reveal.js (die Folien prüft kein Gate) kommen als Pull
 Request zur Prüfung. GitHub Actions sind auf Commit-SHAs gepinnt.
 

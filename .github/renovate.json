@@ -8,6 +8,7 @@
   "dependencyDashboard": true,
   "minimumReleaseAge": "3 days",
   "internalChecksFilter": "strict",
+  "platformAutomerge": false,
   "customManagers": [
     {
       "customType": "regex",
