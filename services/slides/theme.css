@@ -1589,7 +1589,7 @@
     content: "\2014\00a0";
 }
 
-/* Themen-Wolke (08b): erscheint per Klick rechts neben den zwei Fragen.   */
+/* Themen-Wolke (08b): vertieft Frage 01, erscheint per Klick daneben.     */
 /* Wichtige Begriffe (.key) tragen den Lime-Marker, die Größe gewichtet.   */
 .reveal .page-body:has(> .topic-cloud) {
     position: relative;
@@ -1601,17 +1601,10 @@
     top: 0;
     width: 400px;
     box-sizing: border-box;
-    padding: 20px 22px 24px;
+    padding: 24px 22px;
     background: #F6F2FE;
     border-radius: 16px;
     text-align: center;
-}
-
-.reveal .topic-cloud .topic-cloud-label {
-    margin: 0 0 12px;
-    font-size: 15px;
-    font-weight: 600;
-    color: #5B4E93;
 }
 
 .reveal .topic-words {

@@ -23,8 +23,7 @@
 </div>
 </div>
 
-<div class="topic-cloud fragment" aria-label="Weitere Themen, die wir nur besprechen">
-<p class="topic-cloud-label">Und dazu, nur als Thema</p>
+<div class="topic-cloud fragment" aria-label="Was es au&szlig;erdem braucht, damit es funktioniert">
 <div class="topic-words">
 <span class="w-s">Logging</span>
 <span class="w-l key">Service-Schnitt</span>
