@@ -542,8 +542,8 @@
     border-radius: 5px;
 }
 
-/* Zeitstrahl Hausaufgabe -> Start (0) -> Story 1 (09): erledigte Stationen */
-/* mit Haken, die aktuelle auf Lime                                       */
+/* Zeitstrahl Hausaufgabe -> Start (0) -> Story 1 (08c, 09): erledigte     */
+/* Stationen mit Haken, die aktuelle auf Lime, kommende mit Nummer        */
 .reveal .story-path {
     list-style: none;
     display: flex;
@@ -603,10 +603,16 @@
     color: var(--box-bg);
 }
 
-.reveal .story-path li.now::before {
-    content: "1";
+.reveal .story-path li.now::before,
+.reveal .story-path li.next::before {
+    content: attr(data-n);
     background: var(--box-bg);
     color: var(--highlight);
+}
+
+.reveal .story-path li.next::before {
+    background: var(--wave);
+    color: var(--box-border);
 }
 
 .reveal .story-path .sp-step {

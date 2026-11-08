@@ -6,7 +6,7 @@
 
 <div class="page-body">
 
-<p class="lead">Euer Mini-Service aus der Hausaufgabe wird Teil des Workshop-Stacks.</p>
+<p class="lead">Euer Mini-Service wird Teil des Stacks. Nachlesen: http://localhost, Schritt 0.</p>
 
 <div class="cards cards-3 start-cards">
 <div class="card">
@@ -29,9 +29,11 @@
 </div>
 </div>
 
-<div class="foot">
-<div class="callout">Alles zum Nachlesen: http://localhost, Schritt 0 &bdquo;Start&ldquo;</div>
-</div>
+<ol class="story-path" aria-label="Ablauf">
+<li class="done"><span class="sp-step">Hausaufgabe</span><span class="sp-what"><code>/health</code> &middot; Dockerfile &middot; Port 8080</span></li>
+<li class="now" data-n="0"><span class="sp-step">Start (0)</span><span class="sp-what">einklinken und testen</span></li>
+<li class="next" data-n="1"><span class="sp-step">Story 1</span><span class="sp-what">Logs, Env-Vars, <code>/info</code>, <code>/openapi</code>, Offers</span></li>
+</ol>
 
 </div>
 
