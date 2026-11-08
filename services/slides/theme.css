@@ -545,18 +545,35 @@
 /* Zeitstrahl Hausaufgabe -> Start (0) -> Story 1 (08c, 09): erledigte     */
 /* Stationen mit Haken, die aktuelle auf Lime, kommende mit Nummer        */
 .reveal .story-path {
+    position: relative;
     list-style: none;
     display: flex;
-    gap: 0;
+    justify-content: space-between;
+    gap: 40px;
     margin: 18px 0 0;
     padding: 14px 0 0;
     border-top: 1px solid #E4E0F5;
     text-align: left;
 }
 
+/* Verbindungslinie hinter den Stationen; der weiße Rand jeder Station hält */
+/* sie auf Abstand                                                         */
+.reveal .story-path::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% + 7px);
+    height: 2px;
+    background: #D9D1F4;
+}
+
 .reveal .story-path li {
     position: relative;
-    flex: 1 1 0;
+    z-index: 1;
+    flex: 0 1 auto;
+    background: #fff;
+    box-shadow: 0 0 0 14px #fff;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -565,16 +582,6 @@
     font-size: 15px;
     line-height: 1.35;
     color: #5B4E93;
-}
-
-.reveal .story-path li + li::after {
-    content: "";
-    position: absolute;
-    left: -14px;
-    top: 50%;
-    width: 14px;
-    height: 2px;
-    background: #D9D1F4;
 }
 
 .reveal .story-path li::before {
