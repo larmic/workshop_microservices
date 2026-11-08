@@ -1856,10 +1856,14 @@
     margin: 14px 0 0;
 }
 
+/* Derselbe Marker-Strich wie in Untertiteln und Fragen (.page .subtitle .hl) */
 .reveal .intro .intro-claim .intro-hl {
+    display: inline-block;
+    line-height: 1.1;
     color: var(--box-bg);
-    background: var(--highlight);
-    padding: 0 8px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'><path fill='%23D3F871' d='M6 26 C 60 4, 140 12, 240 9 S 620 2, 960 11 S 1150 4, 1194 24 C 1204 58, 1198 102, 1188 132 S 1000 146, 780 139 S 320 152, 24 140 C 6 118, 0 62, 6 26 Z'/></svg>") center / 100% 100% no-repeat;
+    padding: 0.02em 0.3em 0.05em;
+    transform: rotate(-0.7deg);
 }
 
 .reveal .intro .intro-bottom {
