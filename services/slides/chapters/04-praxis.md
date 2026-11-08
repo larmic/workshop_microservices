@@ -29,7 +29,7 @@
 </div>
 
 <div class="foot">
-<p>Microservices sind nicht immer die richtige Wahl.<br>Mit einem Monolithen zu starten ist oft die bessere Option (Monolith First, Martin Fowler).</p>
+<p>Microservices sind nicht immer die richtige Wahl.<br>Mit einem Monolithen zu starten ist oft die bessere Option (Monolith First, Martin Fowler, 2015).</p>
 <div class="callout">Dieser Workshop zeigt das Wie, nicht das Ob.</div>
 </div>
 
@@ -38,8 +38,4 @@
 </div>
 
 Note:
-- <strong>Einordnen:</strong> Das Kundenprojekt hei&szlig;t TN Skills: von knapp drei Teams mit mehreren Services zur&uuml;ck zum Modulith.
-- <strong>Erz&auml;hlen:</strong> Kein Aushelfen &uuml;ber Teamgrenzen, jede Pipeline und jedes Deployment will gepflegt werden.
-- <strong>Frage ans Publikum:</strong> &bdquo;Wer hat Microservices wegen der Teams, wer, weil es modern war?&ldquo; Antworten merken, sie kommen am Schluss bei Conway zur&uuml;ck.
-- <strong>Fu&szlig;zeile:</strong> Monolith First (Martin Fowler) ist ein Standpunkt, kein Gesetz. Wir lernen das Wie, das Ob entscheidet ihr im Projekt.
-- <strong>&Uuml;berleitung:</strong> Wie sind wir &uuml;berhaupt bei Microservices gelandet? Ein Blick zur&uuml;ck bis 1990.
+- Monolith First (Martin Fowler) ist ein Standpunkt, kein Gesetz. Wir lernen das Wie, das Ob entscheidet ihr im Projekt.
