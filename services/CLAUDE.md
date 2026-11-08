@@ -10,9 +10,9 @@ Single Source of Truth: CSS-Variablen in `slides/theme.css` (`:root`).
 Im Dashboard sind die Werte (historisch) inline in `dashboard/static/index.html`
 hinterlegt — beim Anpassen beide Stellen synchron halten.
 
-Ausnahme: `dashboard/static/retro.css` ist ein bewusst separates Easteregg-Theme
-(SCUMM-Retro-Look, Aktivierung per Konami-Code) und nimmt an der
-Palette-Synchronisation nicht teil.
+Ausnahme: `dashboard/static/voxel.css` ist ein bewusst separates Easteregg-Theme
+(Voxel-Look „Inselwelt“ mit den Tokens von larmic.de, Aktivierung per
+Konami-Code) und nimmt an der Palette-Synchronisation nicht teil.
 
 | Rolle | RGB | Hex | Verwendung |
 |---|---|---|---|

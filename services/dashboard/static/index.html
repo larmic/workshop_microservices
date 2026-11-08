@@ -1455,12 +1455,13 @@
             color: #0A0349;
         }
     </style>
-    <!-- Easteregg: SCUMM-Retro-Theme, aktiviert per Konami-Code (Klasse "retro" auf <body>) -->
-    <link rel="stylesheet" href="/dashboard/retro.css">
+    <!-- Easteregg: Voxel-Theme "Inselwelt", aktiviert per Konami-Code (Klasse "voxel" auf <body>) -->
+    <link rel="stylesheet" href="/dashboard/voxel.css">
 </head>
 <body>
     <header>
         <div class="header-title">
+            <div class="vx-name" aria-hidden="true" hidden><span class="vx-tiles"><b class="hi" style="--i:0">M</b><b class="hi" style="--i:1">I</b><b class="hi" style="--i:2">C</b><b class="hi" style="--i:3">R</b><b class="hi" style="--i:4">O</b><b style="--i:5">S</b><b style="--i:6">E</b><b style="--i:7">R</b><b style="--i:8">V</b><b style="--i:9">I</b><b style="--i:10">C</b><b style="--i:11">E</b><b style="--i:12">S</b></span><span class="vx-sub">richtig gemacht</span></div>
             <h1>Microservices richtig gemacht</h1>
             <p>&hellip; sind auch nur Monolithen mit Netzwerkproblemen.</p>
         </div>
@@ -1596,6 +1597,7 @@
             <h2 id="stepper-title">Story</h2>
             <p id="stepper-subtitle">&nbsp;</p>
         </div>
+        <div class="vx-bubble" id="vx-bubble" role="status" aria-live="polite" hidden></div>
     </nav>
 
     <main class="story-content">
@@ -2394,7 +2396,7 @@ on receiveCompensationEvent(event):
     <footer class="workshop-footer">
         <div class="footer-author">
             <span class="accent">Workshop</span> von <strong>Lars Michaelis</strong>
-            <span class="footer-secret" title="Psst. Dieses Dashboard hat eine geheime Seite. Echte Piraten kennen den ber&uuml;hmtesten Cheat-Code der Videospielgeschichte &middot; er hat schon 1988 in Contra (NES) 30 Leben spendiert.">&#9875;</span>
+            <span class="footer-secret" title="Psst. Unter der Oberfl&auml;che liegt eine zweite Welt. Der ber&uuml;hmteste Cheat-Code der Spielegeschichte baut sie auf &middot; er hat schon 1988 in Contra (NES) 30 Leben spendiert.">&#9935;</span>
         </div>
         <a href="https://www.team-neusta.de/" target="_blank" rel="noopener" aria-label="team neusta">
             <img class="footer-logo" src="/dashboard/team-neusta-logo.svg" alt="team neusta">
@@ -2600,6 +2602,7 @@ on receiveCompensationEvent(event):
                 await fetchInstances(name);
                 render();
                 hideError();
+                if (VOXEL_CHAOS_LINES[mode]) voxelSay(VOXEL_CHAOS_LINES[mode]);
             } catch (e) {
                 showError("Chaos fehlgeschlagen: " + e.message);
             } finally {
@@ -2805,14 +2808,17 @@ on receiveCompensationEvent(event):
                 grid.innerHTML = '<div class="cb-empty">Booking Story 5 nicht erreichbar</div>';
                 return;
             }
+            let anyFull = false;
             grid.innerHTML = bhs.map(bh => {
                 const pct = bh.maxConcurrent > 0
                     ? Math.round((bh.inProgress / bh.maxConcurrent) * 100) : 0;
                 const barClass = pct >= 100 ? "full" : pct >= 70 ? "warn" : "";
+                if (pct >= 100) anyFull = true;
+                // --slots: Anzahl Hotbar-Slots im Voxel-Theme, ohne Theme wirkungslos.
                 return `
                     <div class="cb-card">
                         <div class="cb-card-name">${bh.name}</div>
-                        <div class="bh-bar">
+                        <div class="bh-bar" style="--slots: ${Math.max(1, Math.min(bh.maxConcurrent, 20))}">
                             <div class="bh-bar-fill ${barClass}" style="width: ${Math.min(pct, 100)}%"></div>
                         </div>
                         <div class="cb-card-details">
@@ -2823,6 +2829,7 @@ on receiveCompensationEvent(event):
                     </div>
                 `;
             }).join("");
+            voxelWatch("bulkhead", anyFull ? "full" : "ok", { full: "Inventar voll!" }, 5);
         }
 
         let burstActiveUntil = 0;
@@ -2926,6 +2933,7 @@ on receiveCompensationEvent(event):
                     kind: "Burst",
                 });
                 showBurstResult(`Burst: ${r.total} calls in ${r.durationMs} ms — ${r.succeeded} ok, ${r.failed} fail, ${r.bulkheadFull ?? 0} mit X-Bulkhead-Full`);
+                if ((r.bulkheadFull ?? 0) > 0) voxelSay("Inventar voll!");
             } catch (e) {
                 showBurstResult("Burst: Fehler — " + e.message);
             } finally {
@@ -3008,6 +3016,7 @@ on receiveCompensationEvent(event):
                 grid.innerHTML = '<div class="cb-empty">Booking Story 4 nicht erreichbar</div>';
                 return;
             }
+            for (const cb of cbs) voxelWatch("cb:" + cb.name, cb.state, VOXEL_CB_LINES, 4);
             grid.innerHTML = cbs.map(cb => {
                 const stateClass = cb.state === "CLOSED" ? "closed"
                     : cb.state === "OPEN" ? "open"
@@ -3299,9 +3308,13 @@ on receiveCompensationEvent(event):
                 return;
             }
             const counts = { COMPLETED: 0, FAILED: 0, COMPENSATING: 0, PENDING: 0 };
+            let compensated = 0;
             for (const s of sagas) {
                 if (counts[s.status] !== undefined) counts[s.status]++;
+                if ((s.steps || []).some(st => st.status === "COMPENSATED")) compensated++;
             }
+            voxelWatch(statsId, String(compensated), null, statsId === "saga7-stats" ? 7 : 6,
+                (prev, next) => Number(next) > Number(prev) ? "Alles zurückgebaut." : "");
             stats.innerHTML = `
                 <span class="saga-stat completed">COMPLETED <strong>${counts.COMPLETED}</strong></span>
                 <span class="saga-stat failed">FAILED <strong>${counts.FAILED}</strong></span>
@@ -3464,6 +3477,7 @@ on receiveCompensationEvent(event):
                 const sn = parseInt(btn.getAttribute("data-story-node"), 10);
                 btn.classList.toggle("active", sn === n);
             });
+            document.getElementById("vx-bubble").classList.remove("show");
             document.getElementById("stepper-prev").disabled = (n === 0);
             document.getElementById("stepper-next").disabled = (n === STORY_COUNT);
             const meta = STORY_META[n];
@@ -3491,13 +3505,16 @@ on receiveCompensationEvent(event):
             else if (e.key === "ArrowRight") { goNextStory(); }
         });
 
-        // -------- Easteregg: Konami-Code → SCUMM-Retro-Theme --------
-        const RETRO_KEY = "workshop-dashboard.retroTheme";
-        const RETRO_FOUND_KEY = "workshop-dashboard.retroDiscovered";
+        // -------- Easteregg: Konami-Code → Voxel-Theme "Inselwelt" --------
+        const VOXEL_KEY = "workshop-dashboard.voxelTheme";
+        const VOXEL_FOUND_KEY = "workshop-dashboard.voxelDiscovered";
+        // Schlüssel des Vorgänger-Themes: ein eingeschaltetes Theme bleibt nach
+        // dem Update eingeschaltet, danach wird der alte Schlüssel entfernt.
+        const LEGACY_THEME_KEY = "workshop-dashboard.retroTheme";
         // Wird beim DockerHub-Build (docker.yml) aus dem Repository-Secret
         // DISCORD_EASTEREGG_WEBHOOK_URL eingesetzt. Lokal bleibt der
         // Platzhalter stehen, dann unterbleibt die Benachrichtigung.
-        const RETRO_WEBHOOK_URL = "__DISCORD_EASTEREGG_WEBHOOK_URL__";
+        const VOXEL_WEBHOOK_URL = "__DISCORD_EASTEREGG_WEBHOOK_URL__";
         const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
                         "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
         let konamiPos = 0;
@@ -3505,43 +3522,93 @@ on receiveCompensationEvent(event):
         // Benachrichtigt einmalig pro Browser (localStorage-Flag) den Trainer
         // über die Entdeckung. Bewusst anonym: kein Name, kein Hostname.
         // Fire-and-forget, Fehler werden geschluckt (offline-robust).
-        function notifyRetroDiscovered() {
-            if (RETRO_WEBHOOK_URL.startsWith("__") || !RETRO_WEBHOOK_URL.startsWith("https://")) return;
+        function notifyVoxelDiscovered() {
+            if (VOXEL_WEBHOOK_URL.startsWith("__") || !VOXEL_WEBHOOK_URL.startsWith("https://")) return;
             try {
-                if (localStorage.getItem(RETRO_FOUND_KEY) === "1") return;
-                localStorage.setItem(RETRO_FOUND_KEY, "1");
+                if (localStorage.getItem(VOXEL_FOUND_KEY) === "1") return;
+                localStorage.setItem(VOXEL_FOUND_KEY, "1");
             } catch (_) { return; }
             const ts = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
-            fetch(RETRO_WEBHOOK_URL, {
+            fetch(VOXEL_WEBHOOK_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    content: `🏴‍☠️  *${ts}*  ·  Jemand hat das Retro-Easteregg im Dashboard entdeckt! (${currentStory === 0 ? "Start" : "Story " + currentStory})`,
-                    username: "Booking Island",
+                    content: `🧱  *${ts}*  ·  Jemand hat die Inselwelt im Dashboard freigeschaltet! (${currentStory === 0 ? "Start" : "Story " + currentStory})`,
+                    username: "Inselwelt",
                     allowed_mentions: { parse: [] },
                 }),
             }).catch(() => {});
         }
 
-        function applyRetro(on, animate) {
-            document.body.classList.toggle("retro", on);
-            if (on && animate) {
-                document.body.classList.add("retro-powering");
-                setTimeout(() => document.body.classList.remove("retro-powering"), 500);
-                notifyRetroDiscovered();
-                console.log("%cWillkommen auf Booking Island! 🏴‍☠️ Erneute Eingabe segelt zurück.",
-                    "color:#55FF55;background:#0B0B2E;padding:4px 8px;font-family:monospace;");
+        function voxelActive() { return document.body.classList.contains("voxel"); }
+
+        // Sprechblase neben der Figur: höchstens eine, 4 s sichtbar, nur im Theme.
+        let voxelBubbleTimer = 0;
+        function voxelSay(text) {
+            const el = document.getElementById("vx-bubble");
+            const node = document.querySelector(".stepper-node.active");
+            if (!voxelActive() || !el || !node) return;
+            el.textContent = text;
+            el.classList.remove("flip");
+            const nav = el.parentElement.getBoundingClientRect();
+            const r = node.getBoundingClientRect();
+            let left = r.right - nav.left + 12;
+            if (left + el.offsetWidth > nav.width - 8) {
+                left = Math.max(8, r.left - nav.left - 12 - el.offsetWidth);
+                el.classList.add("flip");
             }
-            try { localStorage.setItem(RETRO_KEY, on ? "1" : "0"); } catch (_) {}
+            el.style.left = left + "px";
+            el.style.top = Math.max(4, r.top - nav.top - el.offsetHeight + 4) + "px";
+            el.classList.add("show");
+            clearTimeout(voxelBubbleTimer);
+            voxelBubbleTimer = setTimeout(() => { el.classList.remove("show"); el.textContent = ""; }, 4000);
+        }
+
+        // Merkt sich pro Schlüssel den letzten Zustand und lässt die Figur bei
+        // einem Wechsel etwas sagen, aber nur in der passenden Story. Der erste
+        // Wert nach dem Laden zählt nicht als Wechsel.
+        const voxelLastState = {};
+        function voxelWatch(key, value, lines, story, pick) {
+            const prev = voxelLastState[key];
+            voxelLastState[key] = value;
+            if (prev === undefined || prev === value || currentStory !== story) return;
+            const text = pick ? pick(prev, value) : (lines && lines[value]);
+            if (text) voxelSay(text);
+        }
+        const VOXEL_CB_LINES = { OPEN: "Schalter ist raus!", HALF_OPEN: "Einer darf testen …", CLOSED: "Läuft wieder." };
+        const VOXEL_CHAOS_LINES = { fail: "Boom.", slow: "Zäh hier.", hang: "…eingefroren?" };
+
+        function applyVoxel(on, animate) {
+            document.body.classList.toggle("voxel", on);
+            document.body.classList.remove("vx-spawn");
+            if (on && animate) {
+                void document.body.offsetWidth; // Animation neu starten
+                document.body.classList.add("vx-spawn");
+                setTimeout(() => document.body.classList.remove("vx-spawn"), 1000);
+                setTimeout(() => voxelSay("Hi! Willkommen auf der Insel."), 950);
+                notifyVoxelDiscovered();
+                console.log("%c🧱 Welt geladen. Erneute Eingabe baut sie wieder ab.",
+                    "color:#1d2838;background:#f0a531;padding:4px 8px;font-family:monospace;");
+            }
+            try { localStorage.setItem(VOXEL_KEY, on ? "1" : "0"); } catch (_) {}
+        }
+
+        function readVoxelSetting() {
+            try {
+                const legacy = localStorage.getItem(LEGACY_THEME_KEY);
+                if (legacy !== null) {
+                    localStorage.removeItem(LEGACY_THEME_KEY);
+                    if (localStorage.getItem(VOXEL_KEY) === null) return legacy === "1";
+                }
+                return localStorage.getItem(VOXEL_KEY) === "1";
+            } catch (_) { return false; }
         }
 
         // Versteckter Hinweis für alle, die in die Konsole schauen
-        console.log("%c⚓ Ahoi! Du schaust hinter die Kulissen?\n" +
-            "Hinter dir! Ein dreiköpfiger Affe! 🙈🙉🙊\n\n" +
-            "Dieses Dashboard hat eine geheime Seite. Echte Piraten kennen den\n" +
-            "berühmtesten Cheat-Code der Videospielgeschichte · er hat schon\n" +
-            "1988 in Contra (NES) 30 Leben spendiert. Tippe ihn einfach hier ein.",
-            "color:#55FF55;background:#0B0B2E;padding:8px 12px;font-family:monospace;line-height:1.6;");
+        console.log("%c⛏ Du gräbst unter der Oberfläche? Hier unten ist nur Erde und Stein.\n" +
+            "Das Dashboard hat eine zweite Welt. Der berühmteste Cheat-Code\n" +
+            "der Spielegeschichte baut sie auf. Tippe ihn einfach hier ein.",
+            "color:#1d2838;background:#f0a531;padding:8px 12px;font-family:monospace;line-height:1.6;");
 
         document.addEventListener("keydown", (e) => {
             const t = e.target;
@@ -3552,7 +3619,7 @@ on receiveCompensationEvent(event):
                       : (key === KONAMI[0] ? 1 : 0);
             if (konamiPos === KONAMI.length) {
                 konamiPos = 0;
-                applyRetro(!document.body.classList.contains("retro"), true);
+                applyVoxel(!voxelActive(), true);
             }
         });
 
@@ -3785,8 +3852,8 @@ on receiveCompensationEvent(event):
         }
 
         showStory(currentStory);
-        // Retro-Theme aus früherer Sitzung wiederherstellen (ohne Power-On-Flash)
-        applyRetro(localStorage.getItem(RETRO_KEY) === "1", false);
+        // Inselwelt aus früherer Sitzung wiederherstellen (ohne Aktivierungs-Animation)
+        applyVoxel(readVoxelSetting(), false);
 
         scheduleStartupSkipButton();
         pollHealthOverview();

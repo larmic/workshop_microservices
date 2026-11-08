@@ -10,7 +10,7 @@ ARG TARGETARCH
 
 RUN go mod download
 
-# Discord-Webhook fürs Retro-Easteregg: wird nur beim CI-Build (docker.yml)
+# Discord-Webhook fürs Inselwelt-Easteregg: wird nur beim CI-Build (docker.yml)
 # aus dem Repository-Secret gesetzt. Ohne Wert bleibt der Platzhalter in
 # index.html stehen und die Benachrichtigung unterbleibt (z.B. lokale Builds).
 ARG DISCORD_EASTEREGG_WEBHOOK_URL=""
