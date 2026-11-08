@@ -542,6 +542,90 @@
     border-radius: 5px;
 }
 
+/* Zeitstrahl Hausaufgabe -> Start (0) -> Story 1 (09): erledigte Stationen */
+/* mit Haken, die aktuelle auf Lime                                       */
+.reveal .story-path {
+    list-style: none;
+    display: flex;
+    gap: 0;
+    margin: 18px 0 0;
+    padding: 14px 0 0;
+    border-top: 1px solid #E4E0F5;
+    text-align: left;
+}
+
+.reveal .story-path li {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 10px 16px 10px 46px;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #5B4E93;
+}
+
+.reveal .story-path li + li::after {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 50%;
+    width: 14px;
+    height: 2px;
+    background: #D9D1F4;
+}
+
+.reveal .story-path li::before {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 24px;
+    text-align: center;
+}
+
+.reveal .story-path li.done::before {
+    content: "\2713";
+    background: var(--wave);
+    color: var(--box-border);
+}
+
+.reveal .story-path li.now {
+    background: var(--highlight);
+    border-radius: 10px;
+    color: var(--box-bg);
+}
+
+.reveal .story-path li.now::before {
+    content: "1";
+    background: var(--box-bg);
+    color: var(--highlight);
+}
+
+.reveal .story-path .sp-step {
+    font-weight: 700;
+    color: var(--box-border);
+}
+
+.reveal .story-path li.now .sp-step { color: var(--box-bg); }
+
+.reveal .story-path code {
+    background: var(--wave);
+    color: var(--box-bg);
+    font-size: 0.85em;
+    padding: 0.05em 0.4em;
+    border-radius: 5px;
+}
+
+.reveal .story-path li.now code { background: rgba(255, 255, 255, 0.55); }
+
 .reveal .story-list a {
     color: var(--box-border);
     border-bottom: 1px solid var(--box-border);

@@ -77,12 +77,11 @@ components:
   schemas:
     HealthResponse:
       type: object
+      description: Body is optional, only the status code 200 counts
       properties:
         status:
           type: string
           example: UP
-      required:
-        - status
 
     InfoResponse:
       type: object
@@ -104,11 +103,9 @@ components:
           type: integer
           example: 5000
       required:
-        - service
         - flightServiceUrl
         - hotelServiceUrl
         - carServiceUrl
-        - timeout
 
     BookingOffers:
       type: object

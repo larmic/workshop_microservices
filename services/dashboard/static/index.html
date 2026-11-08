@@ -1530,7 +1530,7 @@
             <div class="offline-icon">&#9888;</div>
             <h2>Dashboard-Backend nicht erreichbar</h2>
             <p>Das Dashboard versucht laufend, sich zu verbinden.</p>
-            <p>Stelle sicher, dass der Stack läuft: <code>make docker-up</code></p>
+            <p>Stelle sicher, dass der Stack läuft: <code>make docker-up-hub</code></p>
             <div class="startup-actions">
                 <button type="button" class="primary" onclick="retryOffline()">Erneut versuchen</button>
             </div>
@@ -1622,7 +1622,7 @@
                         <ul>
                             <li>In <code>services/.env</code> den Pfad zu eurem Service eintragen: <code>CUSTOM_BOOKING_PATH=/absoluter/pfad/zu/eurem/service</code></li>
                             <li>Stack neu starten: Ctrl+C, dann <code>make docker-up-hub</code>. Compose baut euren Service als <code>booking-custom</code> mit.</li>
-                            <li>Die Backend-URLs (<code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code>, <code>CONSUL_URL</code>) bekommt euer Container automatisch. Nicht selbst setzen.</li>
+                            <li>Die Backend-URLs (<code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code>, ab Story 3 auch <code>CONSUL_URL</code>) bekommt euer Container automatisch. Nicht selbst setzen, in Story 1 lest ihr sie aus.</li>
                         </ul>
                     </li>
                     <li class="start-card">
@@ -1630,8 +1630,9 @@
                         <p class="start-live">Mein Service: <span class="start-live-status" id="start-custom-status">wird gepr&uuml;ft &hellip;</span></p>
 <pre>curl -i http://localhost:8099/health                # direkt: HTTP/1.1 200
 curl -i http://localhost/api/booking-custom/health  # &uuml;ber das Gateway: 200
-docker logs booking-custom                          # eure Logs, nicht Kotlin/Ktor</pre>
-                        <p class="start-warn"><strong>Achtung:</strong> Ohne eigenen Pfad l&auml;uft hier die mitgelieferte Beispiel-L&ouml;sung (Kotlin/Ktor). Dann ist auch alles gr&uuml;n. Erst die Logs zeigen, ob es wirklich euer Service ist.</p>
+docker logs booking-custom                          # kein Ktor-Banner?</pre>
+                        <p class="start-warn"><strong>Achtung:</strong> Ohne eigenen Pfad l&auml;uft hier die mitgelieferte Beispiel-L&ouml;sung (Kotlin/Ktor). Dann ist auch alles gr&uuml;n. Stehen in den Logs Ktor-Ausgaben, l&auml;uft noch die Beispiel-L&ouml;sung. Euer Mini-Service darf stumm sein.</p>
+                        <p>Der Link <em>Booking: Mein Service</em> oben und der Eintrag in Swagger UI zeigen auf <code>/openapi</code>. Die gibt es erst, wenn ihr sie in Story 1 baut.</p>
                     </li>
                     <li class="start-card">
                         <h3>Weiterarbeiten</h3>
@@ -1659,14 +1660,12 @@ docker logs booking-custom                          # eure Logs, nicht Kotlin/Kt
                         <h4>User Story</h4>
                         <p>Als <em>Betriebsteam</em> möchte ich einen Service, der <em>in beliebigen Umgebungen ohne Code-Änderung läuft und sich automatisch überwachen lässt</em>, damit <em>Probleme früh erkannt werden und Deployment-Pfade nicht spezifisch sein müssen</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
+                        <p>Schon da aus Hausaufgabe und Start: <code>GET /health</code> liefert 200, <code>Dockerfile</code>, Port <code>8080</code>, eingeklinkt als <code>booking-custom</code>. Neu sind:</p>
                         <ul>
-                            <li><code>GET /health</code> liefert 200 wenn der Service gesund ist</li>
                             <li>Logs auf stdout</li>
-                            <li>Backend-URLs (Flight/Hotel/Car) konfigurierbar über Umgebungsvariablen</li>
+                            <li>Backend-URLs aus Umgebungsvariablen: <code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code></li>
                             <li><code>GET /info</code> zeigt die aktuelle Konfiguration</li>
                             <li><code>GET /openapi</code> liefert die OpenAPI-Spec aus &mdash; Vorlage: <a href="https://github.com/larmic/workshop_microservices/blob/main/services/booking/story1/api/openapi.yaml" target="_blank"><code>booking/story1/api/openapi.yaml</code></a></li>
-                            <li><code>Dockerfile</code> im Service-Verzeichnis baut ein lauffähiges Image (Service lauscht auf Port <code>8080</code>)</li>
-                            <li>Pfad zum Service in <code>services/.env</code> als <code>CUSTOM_BOOKING_PATH</code> eingetragen, sodass <code>make docker-up-hub</code> den Service mitbaut</li>
                             <li><code>GET /booking/offers</code> aggregiert Flight, Hotel und Car und liefert kombinierte Ergebnisse</li>
                         </ul>
                     </div>
@@ -1683,11 +1682,10 @@ HOTEL_SERVICE_URL=http://hotel:8080
 CAR_SERVICE_URL=http://car:8080</pre>
                             </li>
                             <li>
-                                <h4>Health, Info und OpenAPI</h4>
-                                <p>Drei kleine Endpunkte, damit Plattform und Menschen sehen, was l&auml;uft.</p>
-<pre>GET /health  → 200 OK
-GET /info    → { config: { flightServiceUrl, hotelServiceUrl, carServiceUrl } }
-GET /openapi → OpenAPI-Spec (text/yaml)</pre>
+                                <h4>Info und OpenAPI</h4>
+                                <p>Zwei kleine Endpunkte, damit Plattform und Menschen sehen, was l&auml;uft. <code>/health</code> habt ihr schon.</p>
+<pre>GET /info    → { flightServiceUrl, hotelServiceUrl, carServiceUrl }
+GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             </li>
                             <li>
                                 <h4>Angebote aggregieren</h4>
@@ -2459,7 +2457,7 @@ on receiveCompensationEvent(event):
             customAvailable = await probeCustomAvailable();
             document.querySelectorAll('.source-btn[data-mode="custom"]').forEach(btn => {
                 btn.disabled = !customAvailable;
-                btn.title = customAvailable ? "" : "Eigener Service nicht erreichbar – Setup siehe Vorbereitung";
+                btn.title = customAvailable ? "" : "Eigener Service nicht erreichbar – Setup siehe Start (0)";
             });
             const customLink = document.getElementById("link-booking-custom");
             if (customLink) customLink.hidden = !customAvailable;

@@ -4,7 +4,9 @@
 >
 > Ach ja, und bitte mit einem Health-Check. Wir hatten schon zu oft die Situation, dass alle dachten, der Service läuft einwandfrei – bis ein Kunde anrief und fragte, warum seit drei Stunden nichts mehr geht. Wir möchten den Service später automatisch überwachen lassen, egal auf welcher Plattform er landet. Denn: Vertrauen ist gut, ein Health-Endpoint ist besser.
 
-**Zeitrahmen:** ca. 90 Minuten (das Projekt-Grundgerüst entsteht vorab als Pflicht-Hausaufgabe, siehe [vorbereitung.md](../vorbereitung.md))
+**Zeitrahmen:** ca. 90 Minuten
+
+**Schon da:** Aus der Hausaufgabe ([vorbereitung.md](../vorbereitung.md)) bringt ihr den Mini-Service mit `GET /health` (HTTP 200), `Dockerfile` und Port `8080` mit. Im Dashboard, Schritt 0 „Start“, habt ihr ihn als `booking-custom` eingeklinkt und getestet. Story 1 baut darauf auf.
 
 ## Thema
 
@@ -25,16 +27,18 @@ Ein Booking-Service, der:
 
 ## Aufgaben
 
-### 1. Health-Checks
-- Health-Endpoint (`/health`) → HTTP 200 wenn gesund
+### 1. Betrieb
+- `/health` habt ihr schon, der Statuscode 200 genügt, der Body ist egal
 - Logging auf stdout (nicht in Dateien)
 
 ### 2. Externe Konfiguration
-- URLs der Backend-Services konfigurierbar (Flight, Hotel, Car)
-- Umgebungsvariablen überschreiben Konfiguration
-- Info-Endpoint zeigt aktuelle Config (ohne Secrets)
+- Backend-URLs aus Umgebungsvariablen lesen: `FLIGHT_SERVICE_URL`, `HOTEL_SERVICE_URL`, `CAR_SERVICE_URL` (setzt `docker-compose.custom.yml`, ihr lest sie nur aus)
+- `GET /info` zeigt die aktuelle Konfiguration, mindestens die drei URLs
 
-### 3. Erste Orchestrierung
+### 3. API-Vertrag
+- `GET /openapi` liefert die OpenAPI-Spec aus, Vorlage: [`services/booking/story1/api/openapi.yaml`](../../services/booking/story1/api/openapi.yaml), passend zum eigenen Service anpassen
+
+### 4. Erste Orchestrierung
 - `GET /booking/offers` → ruft Flight-, Hotel- und CarService auf
 - Kombinierte Ergebnisse als JSON zurückgeben
 - Kein Error-Handling nötig (darf fehlschlagen)

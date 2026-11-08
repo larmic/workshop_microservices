@@ -37,7 +37,7 @@ Wenn ihr euren Service-Code geändert habt und nur den Custom-Container neu baue
 docker compose -f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml -f docker-compose.custom.yml up -d --build booking-custom
 ```
 
-Alternativ einfach Ctrl+C im Stack-Terminal und erneut `make docker-up` — durch das Compose-Layer-Caching geht das meist schnell. Alle weiteren Make-Targets seht ihr mit `make help`.
+Alternativ einfach Ctrl+C im Stack-Terminal und erneut `make docker-up-hub` — durch das Compose-Layer-Caching geht das meist schnell. Alle weiteren Make-Targets seht ihr mit `make help`.
 
 ## Interne URLs
 

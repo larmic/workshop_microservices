@@ -106,6 +106,10 @@ func main() {
 			return
 		}
 		_ = resp.Body.Close()
+		if resp.StatusCode != http.StatusOK {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
 		w.WriteHeader(http.StatusOK)
 	})
 	if bookingCustomURL != "" {
