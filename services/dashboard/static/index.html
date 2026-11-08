@@ -1630,8 +1630,8 @@
                         <p class="start-live">Mein Service: <span class="start-live-status" id="start-custom-status">wird gepr&uuml;ft &hellip;</span></p>
 <pre>curl -i http://localhost:8099/health                # direkt: HTTP/1.1 200
 curl -i http://localhost/api/booking-custom/health  # &uuml;ber das Gateway: 200
-docker logs booking-custom                          # kein Ktor-Banner?</pre>
-                        <p class="start-warn"><strong>Achtung:</strong> Ohne eigenen Pfad l&auml;uft hier die mitgelieferte Beispiel-L&ouml;sung (Kotlin/Ktor). Dann ist auch alles gr&uuml;n. Stehen in den Logs Ktor-Ausgaben, l&auml;uft noch die Beispiel-L&ouml;sung. Euer Mini-Service darf stumm sein.</p>
+docker logs booking-custom                          # kein BEISPIEL-L&Ouml;SUNG-Kasten?</pre>
+                        <p class="start-warn"><strong>Achtung:</strong> Ohne eigenen Pfad l&auml;uft hier die mitgelieferte Beispiel-L&ouml;sung (Kotlin/Ktor). Dann ist auch alles gr&uuml;n. Sie meldet sich aber beim Start mit einem gro&szlig;en Kasten &bdquo;BEISPIEL-L&Ouml;SUNG&ldquo; in den Logs. Seht ihr den, ist euer Service noch nicht eingeklinkt.</p>
                         <p>Der Link <em>Booking: Mein Service</em> oben und der Eintrag in Swagger UI zeigen auf <code>/openapi</code>. Die gibt es erst, wenn ihr sie in Story 1 baut.</p>
                     </li>
                     <li class="start-card">

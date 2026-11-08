@@ -1,12 +1,9 @@
 package handler
 
-import (
-	"encoding/json"
-	"net/http"
-)
+import "net/http"
 
+// HealthHandler answers with an empty 200. Platforms and Consul only look at
+// the status code, so a body would just be one more thing to get wrong.
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	//log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"status": "UP"})
+	w.WriteHeader(http.StatusOK)
 }

@@ -19,7 +19,7 @@ indem sie `CUSTOM_BOOKING_PATH` in `.env` auf ihr eigenes Projekt zeigen lassen.
 
 | Endpoint | Beschreibung |
 |---|---|
-| `GET /health` | Healthcheck, antwortet `{"status":"UP"}` |
+| `GET /health` | Healthcheck, antwortet mit leerem HTTP 200 |
 | `GET /info` | Aktuelle Konfiguration als JSON |
 | `GET /openapi` | Eingebettete OpenAPI-Spezifikation (YAML) |
 | `GET /booking/offers` | Ruft Flight-, Hotel- und Car-Service parallel auf und kombiniert die Ergebnisse |

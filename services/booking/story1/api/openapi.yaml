@@ -20,10 +20,6 @@ paths:
       responses:
         "200":
           description: Service is healthy
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HealthResponse"
 
   /info:
     get:
@@ -75,21 +71,9 @@ paths:
 
 components:
   schemas:
-    HealthResponse:
-      type: object
-      description: Body is optional, only the status code 200 counts
-      properties:
-        status:
-          type: string
-          example: UP
-
     InfoResponse:
       type: object
       properties:
-        service:
-          type: string
-          description: Identifier of the booking story service
-          example: booking-1
         flightServiceUrl:
           type: string
           example: http://localhost:8081
@@ -99,9 +83,6 @@ components:
         carServiceUrl:
           type: string
           example: http://localhost:8083
-        timeout:
-          type: integer
-          example: 5000
       required:
         - flightServiceUrl
         - hotelServiceUrl

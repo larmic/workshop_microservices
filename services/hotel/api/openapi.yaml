@@ -17,10 +17,6 @@ paths:
       responses:
         '200':
           description: Service ist gesund
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HealthResponse'
 
   /info:
     get:
@@ -173,13 +169,6 @@ paths:
 
 components:
   schemas:
-    HealthResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          example: UP
-
     InfoResponse:
       type: object
       properties:

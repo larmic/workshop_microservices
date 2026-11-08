@@ -33,7 +33,7 @@ Ein Booking-Service, der:
 
 ### 2. Externe Konfiguration
 - Backend-URLs aus Umgebungsvariablen lesen: `FLIGHT_SERVICE_URL`, `HOTEL_SERVICE_URL`, `CAR_SERVICE_URL` (setzt `docker-compose.custom.yml`, ihr lest sie nur aus)
-- `GET /info` zeigt die aktuelle Konfiguration, mindestens die drei URLs
+- `GET /info` zeigt die aktuelle Konfiguration: die drei URLs
 
 ### 3. API-Vertrag
 - `GET /openapi` liefert die OpenAPI-Spec aus, Vorlage: [`services/booking/story1/api/openapi.yaml`](../../services/booking/story1/api/openapi.yaml), passend zum eigenen Service anpassen

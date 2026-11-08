@@ -17,15 +17,13 @@ var openapiSpec []byte
 
 func main() {
 	config := handler.Config{
-		Service:          "booking-1",
 		FlightServiceURL: env.GetEnv("FLIGHT_SERVICE_URL", "http://localhost:8081"),
 		HotelServiceURL:  env.GetEnv("HOTEL_SERVICE_URL", "http://localhost:8082"),
 		CarServiceURL:    env.GetEnv("CAR_SERVICE_URL", "http://localhost:8083"),
-		Timeout:          5000,
 	}
 
 	httpClient := &http.Client{
-		Timeout: time.Duration(config.Timeout) * time.Millisecond,
+		Timeout: 5 * time.Second,
 	}
 
 	mux := http.NewServeMux()
