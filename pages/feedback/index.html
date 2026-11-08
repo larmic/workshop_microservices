@@ -301,7 +301,7 @@
             el.textContent = msg;
         }
         function sanitize(s) {
-            return s.replaceAll("@", "@​").replaceAll("```", "`​``");
+            return s.replaceAll("@", "@\u200B").replaceAll("```", "`\u200B``");  // \u200B: keine @-Erwähnung, kein Codeblock in Discord
         }
         function formatContent(thumb, text, name, source) {
             const emoji = thumb === "down" ? "\u{1F44E}"

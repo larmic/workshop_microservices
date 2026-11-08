@@ -1,6 +1,7 @@
 #!/bin/sh
 # Guard-Gate vor jedem Commit: die schnellen Prüfungen der Pipeline (wenige Sekunden):
-# gofmt, go vet, Architektur/OpenAPI/Farbpalette (services/archtest), Inline-JavaScript.
+# gofmt, go vet, Architektur/OpenAPI/Farbpalette (services/archtest), Inline-JavaScript,
+# unsichtbare Unicode-Zeichen.
 # Unit-Tests, HTML-Validierung und Docker Compose laufen in der Pipeline bzw. lokal
 # mit scripts/gates.sh. Fehlt go oder node, wird das jeweilige Gate übersprungen.
 #

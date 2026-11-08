@@ -1,6 +1,6 @@
 # TODO &mdash; Slides
 
-> Offene Punkte für den Online-Gang. Aktuell vor allem **Bildmaterial** zur Auflockerung der text­lastigen Slides.
+> Offene Punkte für den Online-Gang. Aktuell vor allem **Bildmaterial** zur Auflockerung der textlastigen Slides.
 
 ---
 

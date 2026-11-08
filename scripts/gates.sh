@@ -8,7 +8,7 @@
 #   scripts/gates.sh fast       die schnellen Gates des pre-commit-Hooks
 #   scripts/gates.sh gofmt vet  einzelne Gates
 #
-# Gates: gofmt vet arch openapi palette test js html compose
+# Gates: gofmt vet arch openapi palette test js unicode html compose
 #
 # Fehlt lokal ein Werkzeug (go, node, docker compose), wird das Gate mit Hinweis
 # übersprungen – die Pipeline ist das verbindliche Gate. In der Pipeline (CI=true)
@@ -74,6 +74,11 @@ gate_js() {
   (cd "$ROOT" && node scripts/check-inline-js.mjs)
 }
 
+gate_unicode() {
+  need node unicode || return 0
+  (cd "$ROOT" && node scripts/check-hidden-unicode.mjs)
+}
+
 gate_html() {
   need npx html || return 0
   # shellcheck disable=SC2086 # HTML_FILES ist bewusst eine Wortliste
@@ -100,11 +105,11 @@ run() {
 requested="$*"
 for arg in "$@"; do
   case "$arg" in
-    all) for g in gofmt vet arch openapi palette test js html compose; do run "$g"; done ;;
-    fast) for g in gofmt vet archtest js; do run "$g"; done ;;
-    gofmt | vet | arch | openapi | palette | archtest | test | js | html | compose) run "$arg" ;;
+    all) for g in gofmt vet arch openapi palette test js unicode html compose; do run "$g"; done ;;
+    fast) for g in gofmt vet archtest js unicode; do run "$g"; done ;;
+    gofmt | vet | arch | openapi | palette | archtest | test | js | unicode | html | compose) run "$arg" ;;
     *)
-      echo "Unbekanntes Gate: $arg (erlaubt: all fast gofmt vet arch openapi palette test js html compose)" >&2
+      echo "Unbekanntes Gate: $arg (erlaubt: all fast gofmt vet arch openapi palette test js unicode html compose)" >&2
       exit 2
       ;;
   esac

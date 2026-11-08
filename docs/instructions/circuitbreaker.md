@@ -186,7 +186,7 @@ Drei Stufen:
 | Aspekt | Selbst | Library |
 |---|---|---|
 | Lerneffekt | ⭐⭐⭐⭐⭐ State-Machine wird verstanden | ⭐⭐ Bleibt Black Box |
-| Korrektheit | Subtile Race-Bugs lauern (Probe-Storm, atomar/Mutex, Goroutine-Lecks) | Kampf­erprobt, von vielen Augen geprüft |
+| Korrektheit | Subtile Race-Bugs lauern (Probe-Storm, atomar/Mutex, Goroutine-Lecks) | Kampferprobt, von vielen Augen geprüft |
 | Features | Was du baust | Sliding Window, Bulkhead-Integration, Metrics, Health-Indicator, Annotations… |
 | Zeilen Code | ~80 (Go) | 0 + ein paar Zeilen Konfiguration |
 

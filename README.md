@@ -80,13 +80,14 @@ eine KI den Code geschrieben hat
 | `palette` | Farbrollen aus `services/CLAUDE.md` sind in `slides/theme.css` und im Dashboard vorhanden | Go-Test in `services/archtest` |
 | `test` | Unit-Tests | go test |
 | `js` | Syntax der Inline-Skripte von Dashboard, Folien und Pages | `node --check` |
+| `unicode` | keine unsichtbaren Unicode-Zeichen (Zero-Width, Bidi, bedingter Trennstrich) in versionierten Textdateien; gewollte als Escape wie `\u200B` | `scripts/check-hidden-unicode.mjs` |
 | `html` | gültiges HTML von Dashboard, Folien und Pages | html-validate (Preset `standard`) |
 | `compose` | die Compose-Kombinationen aus `Makefile` und Vorbereitung | `docker compose config -q` |
 
 Lokal laufen alle zusammen mit `scripts/gates.sh` (oder `make -C services gates`),
 einzelne mit `scripts/gates.sh openapi`. Ein Git-Hook (`.githooks/pre-commit`)
 prüft vor jedem Commit die schnellen Gates (gofmt, vet, Architektur, OpenAPI,
-Palette, Inline-JavaScript) in wenigen Sekunden. Aktiviert wird er einmal pro
+Palette, Inline-JavaScript, unsichtbare Zeichen) in wenigen Sekunden. Aktiviert wird er einmal pro
 Klon mit `git config core.hooksPath .githooks` (oder `make -C services hooks`);
 im Notfall überspringt `git commit --no-verify` ihn. Fehlt lokal ein Werkzeug
 (Go, Node, Docker Compose), überspringen Skript und Hook das Gate mit Hinweis;

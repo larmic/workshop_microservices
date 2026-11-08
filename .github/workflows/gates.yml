@@ -62,6 +62,9 @@ jobs:
       - name: Guard-Gate – Inline-JavaScript (node --check)
         run: scripts/gates.sh js
 
+      - name: Guard-Gate – Unsichtbare Unicode-Zeichen
+        run: scripts/gates.sh unicode
+
       - name: Guard-Gate – HTML (html-validate)
         run: scripts/gates.sh html
 

@@ -62,9 +62,10 @@ scripts/gates.sh openapi    # Guard-Gate: api/openapi.yaml ⇄ registrierte Rout
 scripts/gates.sh palette    # Guard-Gate: Farbpalette slides/theme.css ⇄ dashboard/static/index.html
 scripts/gates.sh test       # Guard-Gate: go test (ohne archtest)
 scripts/gates.sh js         # Guard-Gate: Syntax der Inline-Skripte (node --check)
+scripts/gates.sh unicode    # Guard-Gate: keine unsichtbaren Unicode-Zeichen (gewollte als Escape, z. B. \u200B)
 scripts/gates.sh html       # Guard-Gate: html-validate für Dashboard, Folien, Pages
 scripts/gates.sh compose    # Guard-Gate: docker compose config -q für die Makefile-Kombinationen
-# Git-Hook .githooks/pre-commit (aktivieren: git config core.hooksPath .githooks) prüft gofmt, vet, archtest, JS
+# Git-Hook .githooks/pre-commit (aktivieren: git config core.hooksPath .githooks) prüft gofmt, vet, archtest, JS, Unicode
 ```
 
 Alle Gates müssen grün sein; die Pipeline `.github/workflows/gates.yml` führt
