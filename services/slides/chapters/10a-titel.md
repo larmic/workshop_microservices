@@ -15,4 +15,7 @@
 Note:
 - Wer von euch hat eine REST-API im Projekt?
 - Wer kennt den Unterschied zwischen HTTP, REST und RESTful?
-- <strong>Aufl&ouml;sung:</strong> HTTP ist das Protokoll. REST ist ein Architekturstil (Fielding 2000, mit Hypermedia). RESTful hei&szlig;t bei uns: HTTP-Semantik richtig nutzen, Richardson Level 2. Mehr verlangen wir nicht.
+- <strong>Aufl&ouml;sung:</strong>
+  - <strong>HTTP:</strong> das Protokoll.
+  - <strong>REST:</strong> ein Architekturstil (Fielding 2000, mit Hypermedia).
+  - <strong>RESTful</strong> hei&szlig;t bei uns: HTTP-Semantik richtig nutzen, Richardson Level 2. Mehr verlangen wir nicht.
