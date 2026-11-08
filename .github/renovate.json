@@ -1,9 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
   ],
+  "timezone": "Europe/Berlin",
   "dependencyDashboard": true,
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
   "customManagers": [
     {
       "customType": "regex",
@@ -19,29 +23,58 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/^services/booking/custom/build\\.gradle\\.kts$/",
-        "/^\\.github/workflows/build\\.yml$/"
+        "/^services/booking/custom/build\\.gradle\\.kts$/"
       ],
       "matchStrings": [
-        "jvmToolchain\\((?<currentValue>\\d+)\\)",
-        "java-version:\\s*['\"](?<currentValue>\\d+)['\"]"
+        "jvmToolchain\\((?<currentValue>\\d+)\\)"
       ],
       "depNameTemplate": "java",
       "datasourceTemplate": "java-version"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^scripts/gates\\.sh$/"
+      ],
+      "matchStrings": [
+        "HTML_VALIDATE_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "depNameTemplate": "html-validate",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/gates\\.yml$/"
+      ],
+      "matchStrings": [
+        "node-version:\\s*['\"](?<currentValue>\\d+)['\"]"
+      ],
+      "depNameTemplate": "node",
+      "datasourceTemplate": "node-version",
+      "versioningTemplate": "node"
     }
   ],
   "packageRules": [
     {
-      "matchManagers": ["gomod"],
-      "groupName": "Go dependencies"
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
+      "automerge": true,
+      "dependencyDashboardCategory": "Automerge",
+      "addLabels": ["automerge"]
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "dependencyDashboardCategory": "Manuell prüfen",
+      "addLabels": ["manuell prüfen"]
     },
     {
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions"
     },
     {
-      "matchManagers": ["dockerfile"],
-      "groupName": "Docker base images"
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "groupName": "Docker images"
     },
     {
       "matchManagers": ["gradle", "gradle-wrapper"],
@@ -61,8 +94,16 @@
     {
       "matchManagers": ["custom.regex"],
       "matchPackageNames": ["reveal.js"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "reveal.js"
+      "groupName": "reveal.js",
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["reveal.js"],
+      "matchUpdateTypes": ["minor"],
+      "automerge": false,
+      "dependencyDashboardCategory": "Manuell prüfen",
+      "addLabels": ["manuell prüfen"]
     },
     {
       "matchManagers": ["custom.regex"],

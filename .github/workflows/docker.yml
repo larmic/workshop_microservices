@@ -7,6 +7,13 @@ on:
       - 'services/**'
       # Folien gehören zur Pages-Pipeline (deploy-pages.yml), nicht zum Docker-Build
       - '!services/slides/**'
+  # Auf Pull Requests (auch von Renovate) nur bauen, nicht pushen: So sind
+  # Kotlin/Gradle- und Basis-Image-Updates vor dem Automerge geprüft.
+  pull_request:
+    paths:
+      - 'services/**'
+      - '!services/slides/**'
+      - '.github/workflows/docker.yml'
   workflow_dispatch:
 
 concurrency:
@@ -79,6 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: docker/login-action@v4
+        if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -87,13 +95,13 @@ jobs:
         with:
           context: services
           file: services/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: |
             SERVICE_PATH=flight
             SERVICE_DESC=Workshop Microservices - Flight Service
             SERVICE_PORT=8081
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-flight:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME || 'larmic' }}/workshop-microservices-flight:latest
 
   build-hotel:
     needs: [changes, gates]
@@ -102,6 +110,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: docker/login-action@v4
+        if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -110,13 +119,13 @@ jobs:
         with:
           context: services
           file: services/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: |
             SERVICE_PATH=hotel
             SERVICE_DESC=Workshop Microservices - Hotel Service
             SERVICE_PORT=8082
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-hotel:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME || 'larmic' }}/workshop-microservices-hotel:latest
 
   build-car:
     needs: [changes, gates]
@@ -125,6 +134,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: docker/login-action@v4
+        if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -133,13 +143,13 @@ jobs:
         with:
           context: services
           file: services/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: |
             SERVICE_PATH=car
             SERVICE_DESC=Workshop Microservices - Car Service
             SERVICE_PORT=8083
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-car:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME || 'larmic' }}/workshop-microservices-car:latest
 
   build-booking:
     needs: [changes, gates]
@@ -152,6 +162,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: docker/login-action@v4
+        if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -160,13 +171,13 @@ jobs:
         with:
           context: services
           file: services/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: |
             SERVICE_PATH=booking/story${{ matrix.story }}
             SERVICE_DESC=Workshop Microservices - Booking Service (Story ${{ matrix.story }})
             SERVICE_PORT=8080
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking:story${{ matrix.story }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME || 'larmic' }}/workshop-microservices-booking:story${{ matrix.story }}
 
   build-dashboard:
     needs: [changes, gates]
@@ -177,6 +188,7 @@ jobs:
       # Easteregg-Webhook ist optional: ohne Secret baut das Image trotzdem,
       # die Discord-Benachrichtigung unterbleibt dann einfach.
       - name: Check easteregg webhook secret
+        if: github.event_name != 'pull_request'
         env:
           HOOK: ${{ secrets.DISCORD_EASTEREGG_WEBHOOK_URL }}
         run: |
@@ -184,6 +196,7 @@ jobs:
             echo "::warning::Secret DISCORD_EASTEREGG_WEBHOOK_URL ist nicht gesetzt - das Inselwelt-Easteregg sendet keine Discord-Benachrichtigung."
           fi
       - uses: docker/login-action@v4
+        if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -192,11 +205,11 @@ jobs:
         with:
           context: services
           file: services/dashboard/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: |
-            DISCORD_EASTEREGG_WEBHOOK_URL=${{ secrets.DISCORD_EASTEREGG_WEBHOOK_URL }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-dashboard:latest
+            DISCORD_EASTEREGG_WEBHOOK_URL=${{ github.event_name != 'pull_request' && secrets.DISCORD_EASTEREGG_WEBHOOK_URL || '' }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME || 'larmic' }}/workshop-microservices-dashboard:latest
 
   build-booking-custom:
     needs: [changes, gates]
@@ -205,6 +218,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: docker/login-action@v4
+        if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -213,6 +227,6 @@ jobs:
         with:
           context: services/booking/custom
           file: services/booking/custom/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking:custom
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME || 'larmic' }}/workshop-microservices-booking:custom

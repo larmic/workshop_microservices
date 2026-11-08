@@ -92,6 +92,16 @@ im Notfall überspringt `git commit --no-verify` ihn. Fehlt lokal ein Werkzeug
 (Go, Node, Docker Compose), überspringen Skript und Hook das Gate mit Hinweis;
 verbindlich ist die Pipeline.
 
+Die Docker-Images baut `.github/workflows/docker.yml` erst nach grünen Gates und
+schiebt sie nur von `main` zu Docker Hub; auf Pull Requests werden sie nur gebaut.
+
+Renovate (`.github/renovate.json`) schlägt neue Versionen erst nach drei Tagen
+vor (`minimumReleaseAge`): Kompromittierte Releases werden meist in dieser Zeit
+entdeckt und zurückgezogen. Minor-, Patch- und Digest-Updates mergt Renovate
+automatisch, sobald Guard-Gates und Docker-Build grün sind. Major-Updates und
+neue Minor-Versionen von reveal.js (die Folien prüft kein Gate) kommen als Pull
+Request zur Prüfung. GitHub Actions sind auf Commit-SHAs gepinnt.
+
 ## Lizenz & Nutzung
 
 Dieses Repository ist **source-available, aber nicht klassisch Open Source**. Lesen, klonen und persönliche Nutzung sind ausdrücklich erwünscht — kommerzielle Nutzung erfordert eine separate Vereinbarung.
