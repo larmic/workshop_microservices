@@ -81,8 +81,6 @@
 </div>
 
 Note:
-- <strong>Wette vor dem Klick:</strong> &bdquo;Welche drei davon baut ihr gleich in Story 1?&ldquo; Zwei, drei Tipps sammeln, dann klicken. Nicht alle zw&ouml;lf vorlesen.
 - <strong>III Config:</strong> Ports und Backend-URLs kommen aus Env-Vars. Ein Image, jede Umgebung.
 - <strong>VII Port Binding:</strong> Der Service bringt seinen HTTP-Server selbst mit, kein Tomcat, kein IIS davor.
 - <strong>XI Logs:</strong> Nach stdout schreiben, sammeln macht die Plattform. Darauf baut Story 8 auf.
-- Fragt jemand nach den anderen: VIII Concurrency kommt in Story 3 (zweite Instanz statt mehr RAM).
