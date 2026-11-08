@@ -35,5 +35,5 @@
 </div>
 
 Note:
-- <strong>Vorstellungsrunde:</strong> Jede:r erz&auml;hlt kurz: Wer bin ich, was mache ich, was erwarte ich vom Workshop.
+- <strong>Vorstellungsrunde:</strong> Jeder erz&auml;hlt kurz: Wer bin ich, was mache ich, was erwarte ich vom Workshop.
 - <strong>&Uuml;berleitung:</strong> Bevor es losgeht, kurz zum Feedback.

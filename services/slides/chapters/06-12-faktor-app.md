@@ -33,4 +33,4 @@
 Note:
 - <strong>Erst fragen, dann aufdecken:</strong> Wer hat &bdquo;bei mir l&auml;uft&rsquo;s&ldquo; schon selbst gesagt? Wer hat ein Passwort im Repo gefunden? Die Karten best&auml;tigen dann nur noch.
 - Eigentlich f&uuml;r Cloud-Apps entwickelt.
-- Drei Schmerzen aus dem Heroku-Alltag 2011, die jede:r kennt.
+- Drei Schmerzen aus dem Heroku-Alltag 2011, die jeder kennt.
