@@ -1590,7 +1590,7 @@
 }
 
 /* Themen-Wolke (08b): vertieft Frage 01, erscheint per Klick daneben.     */
-/* Kompakter Block: jede Zeile bündig, Schlüsselbegriffe auf Lime.        */
+/* Wortwolke als Bild, Schlüsselbegriffe auf Lime.                        */
 .reveal .page-body:has(> .topic-cloud) {
     position: relative;
 }
@@ -1600,28 +1600,18 @@
     right: 0;
     top: 0;
     width: 400px;
-    background: #F6F2FE;
     border-radius: 16px;
+    overflow: hidden;
 }
 
-.reveal .topic-cloud svg.topic-svg {
+/* Bild aus assets/topic-cloud.png (erzeugt mit der Python-Bibliothek
+   wordcloud, Poppins, Palettenfarben, dreifache Auflösung). */
+.reveal .topic-cloud img {
     display: block;
     width: 100%;
     height: auto;
+    margin: 0;
 }
-
-.reveal .topic-svg text {
-    font-family: var(--font-title);
-}
-
-/* Gewichte passen zur Vermessung der Wortbreiten (Zeilen bündig gesetzt) */
-.reveal .topic-svg .tc-a   { font-weight: 600; fill: #5B4E93; }
-.reveal .topic-svg .tc-b   { font-weight: 600; fill: var(--box-border); }
-.reveal .topic-svg .tc-c   { font-weight: 600; fill: var(--slide-text); }
-.reveal .topic-svg .tc-v1  { font-weight: 700; fill: var(--box-border); }
-.reveal .topic-svg .tc-v2  { font-weight: 700; fill: var(--slide-text); }
-.reveal .topic-svg .tc-key { font-weight: 800; fill: var(--box-bg); }
-.reveal .topic-svg .tc-mark { fill: var(--highlight); }
 
 /* ---------------------------------------------------------------------- */
 /* Timeline „Der Weg zu Microservices" (05): Straße mit Jahres-Punkten,     */
