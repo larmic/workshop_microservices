@@ -35,7 +35,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '26'
 
       - name: Guard-Gate – Go-Formatierung (gofmt)
         run: scripts/gates.sh gofmt
