@@ -1,29 +1,35 @@
-<!-- .slide: data-background-color="#ffffff" -->
+<!-- .slide: data-background-color="#0A0349" -->
 
 <div class="intro">
 
-<img class="intro-figure" src="./assets/monolith.svg" alt="" aria-hidden="true"/>
-
+<p class="intro-kicker">Microservices richtig gemacht</p>
 <h1 class="intro-title">Microservices</h1>
-<p class="intro-claim">&hellip; sind auch nur Monolithen mit Netzwerkproblemen</p>
+<p class="intro-claim">&hellip; sind auch nur Monolithen mit <span class="intro-hl">Netzwerkproblemen</span></p>
 
+<div class="intro-bottom">
 <div class="speaker">
-  <div class="speaker-name">Lars Michaelis</div>
-  <div class="speaker-role">Software-Architekt</div>
-  <ul class="speaker-links">
-    <li>
-      <svg class="speaker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-      <a href="mailto:l.michaelis@neusta.de">l.michaelis@neusta.de</a>
-    </li>
-    <li>
-      <svg class="speaker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8.34 17H5.67V9.67h2.67V17zM7 8.5a1.55 1.55 0 1 1 0-3.1 1.55 1.55 0 0 1 0 3.1zM18.34 17h-2.67v-3.84c0-.92-.02-2.1-1.28-2.1-1.28 0-1.48 1-1.48 2.03V17h-2.67V9.67h2.56v1h.04c.36-.68 1.24-1.4 2.55-1.4 2.73 0 3.24 1.8 3.24 4.13V17z"/></svg>
-      <a href="https://www.linkedin.com/in/i-am-lars-michaelis" target="_blank" rel="noopener">linkedin.com/in/i-am-lars-michaelis</a>
-    </li>
-    <li>
-      <svg class="speaker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21.58 7.19a2.51 2.51 0 0 0-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42a2.51 2.51 0 0 0-1.77 1.77A26.07 26.07 0 0 0 2 12a26.07 26.07 0 0 0 .42 4.81 2.51 2.51 0 0 0 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42a2.51 2.51 0 0 0 1.77-1.77A26.07 26.07 0 0 0 22 12a26.07 26.07 0 0 0-.42-4.81zM10 15V9l5.2 3L10 15z"/></svg>
-      <a href="https://www.youtube.com/@LarsMichaelis" target="_blank" rel="noopener">youtube.com/@LarsMichaelis</a>
-    </li>
-  </ul>
+<div>
+<div class="speaker-name">Lars Michaelis</div>
+<div class="speaker-role">Software-Architekt</div>
+</div>
+<ul class="speaker-links">
+<li><a href="mailto:l.michaelis@neusta.de">l.michaelis@neusta.de</a></li>
+<li><a href="https://github.com/larmic/workshop_microservices" target="_blank" rel="noopener">github.com/larmic/workshop_microservices</a></li>
+<li><a href="https://www.linkedin.com/in/i-am-lars-michaelis" target="_blank" rel="noopener">linkedin.com/in/i-am-lars-michaelis</a></li>
+<li><a href="https://www.youtube.com/@LarsMichaelis" target="_blank" rel="noopener">youtube.com/@LarsMichaelis</a></li>
+</ul>
+</div>
+<div class="intro-trace" role="img" aria-label="Trace einer Buchung: car lehnt ab, flight wird kompensiert">
+<div class="trace-meta">trace_id 4bf92f3577b34da6 &middot; POST /booking/bookings</div>
+<div class="trace-rows">
+<span>booking</span><div class="trace-bar booking"></div>
+<span>flight</span><div class="trace-bar flight"></div>
+<span>hotel</span><div class="trace-bar hotel"></div>
+<span>car</span><div class="trace-fail"><div class="trace-bar"></div><span>409</span></div>
+<span>flight</span><div class="trace-bar compensate"></div>
+</div>
+<div class="trace-meta">car lehnt ab &rarr; flight wird kompensiert</div>
+</div>
 </div>
 
 </div>
@@ -31,5 +37,6 @@
 Note:
 - <strong>Begr&uuml;&szlig;ung:</strong> Willkommen bei &bdquo;Microservices richtig gemacht&ldquo;. Kurz zu mir: Rolle, und warum mich das Thema umtreibt.
 - <strong>Untertitel:</strong> Die Provokation ist Absicht. Nur stehen lassen, wir kl&auml;ren sie sp&auml;ter in der Diskussion.
+- <strong>Trace rechts:</strong> Nicht erkl&auml;ren, nur ank&uuml;ndigen: &bdquo;So sieht eine Buchung am Ende von Tag 2 aus. Bis dahin wisst ihr, was jeder Balken bedeutet.&ldquo;
 - <strong>Vorstellungsrunde:</strong> Name, Rolle, eine Erwartung. Erwartungen aufs Flipchart, am Ende gleichen wir ab.
 - <strong>&Uuml;berleitung:</strong> Bevor es losgeht, kurz zum Feedback.

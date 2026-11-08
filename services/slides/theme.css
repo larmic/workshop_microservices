@@ -1805,106 +1805,178 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* Intro-Slide: Titel, Claim, Sprecher-Block (nach Musterdeck S. 1)       */
+/* Intro-Slide: dunkler Einstieg mit Titel, Claim, Sprecher und Trace     */
 /*                                                                        */
-/* Linksbündig auf derselben Satzkante wie die Feedback-Folie (.fb, 92%). */
-/* Die Folie bleibt über center: true vertikal mittig; nur Typografie und */
-/* Ausrichtung sind hier folienspezifisch.                                */
+/* Hintergrund per data-background-color="#0A0349". Unten stehen Sprecher */
+/* und eine helle Trace-Karte nebeneinander, gleich hoch: Der Trace nimmt */
+/* die Pointe des Workshops vorweg (car lehnt ab, flight wird kompensiert). */
 /* ---------------------------------------------------------------------- */
 
 .reveal .intro {
-    position: relative;
     width: 92%;
+    height: 540px;           /* so hoch, dass der untere Block über der Welle endet */
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
     text-align: left;
-    color: var(--slide-text);
+    color: #ffffff;
 }
 
-/* Wasserzeichen rechts: ein Monolith, in vier Teile zersägt, in den Fugen die
-   Verbindungen, eine davon gestört (assets/monolith.svg). Sitzt in der freien
-   rechten Hälfte, mittig zur Höhe des Textblocks. */
-.reveal .intro img.intro-figure {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    width: 340px;
-    height: auto;
-    margin: 0;
-    transform: translateY(-50%) rotate(-4deg);
-    pointer-events: none;
+.reveal .intro .intro-kicker {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 14px;
+    color: var(--highlight);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.reveal .intro .intro-kicker::before {
+    content: "";
+    width: 28px;
+    height: 4px;
+    background: var(--highlight);
 }
 
 .reveal .intro h1.intro-title {
+    color: #ffffff;
     text-align: left;
-    font-size: 112px;        /* Display XL, deutlich über den 58px der Inhaltsfolien */
+    font-size: 104px;
     line-height: 0.95;
     letter-spacing: -0.03em;
     margin: 0;
 }
 
 .reveal .intro .intro-claim {
-    color: var(--box-border);   /* Violett wie im Muster */
+    color: #D9D1F4;
     font-size: 30px;
-    font-weight: 500;
-    margin: 12px 0 0;
+    font-weight: 400;
+    line-height: 1.25;
+    margin: 14px 0 0;
+}
+
+.reveal .intro .intro-claim .intro-hl {
+    color: var(--box-bg);
+    background: var(--highlight);
+    padding: 0 8px;
+}
+
+.reveal .intro .intro-bottom {
+    margin-top: auto;
+    height: 228px;
+    display: flex;
+    gap: 56px;
+    align-items: stretch;
 }
 
 .reveal .intro .speaker {
-    margin-top: 64px;
-    padding-left: 18px;
-    border-left: 5px solid var(--highlight);   /* der Lime-Balken */
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 20px;
+    border-left: 4px solid var(--highlight);
 }
 
 .reveal .intro .speaker-name {
     font-family: var(--font-title);
     font-weight: 800;
-    font-size: 28px;
-    line-height: 1.15;
+    font-size: 30px;
+    line-height: 1.2;
 }
 
 .reveal .intro .speaker-role {
-    color: var(--box-border);
-    font-size: 19px;
-    font-weight: 500;
-    margin-top: 2px;
+    color: #B9A6F2;
+    font-size: 20px;
 }
 
 .reveal .intro ul.speaker-links {
     list-style: none;
-    display: block;          /* drei Zeilen untereinander */
-    margin: 14px 0 0;
+    display: block;          /* eine Zeile pro Link */
+    margin: 0;
     padding: 0;
     text-align: left;
 }
 
 .reveal .intro ul.speaker-links li {
-    display: flex;
-    align-items: center;
-    gap: 7px;
     margin: 0;
-    font-size: 15px;
-    line-height: 1.4;
-}
-
-.reveal .intro ul.speaker-links li + li {
-    margin-top: 4px;
-}
-
-.reveal .intro .speaker-icon {
-    width: 15px;
-    height: 15px;
-    fill: var(--box-border);
-    flex-shrink: 0;
+    font-size: 17px;
+    line-height: 1.45;
 }
 
 .reveal .intro ul.speaker-links a {
-    color: var(--slide-text);
-    border-bottom: 1px dotted rgba(115, 72, 225, 0.35);
+    color: #ffffff;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
 }
 
 .reveal .intro ul.speaker-links a:hover {
-    color: var(--r-link-color-hover);
-    border-bottom-color: var(--r-link-color-hover);
+    color: var(--highlight);
+    border-bottom-color: var(--highlight);
+}
+
+/* Trace-Karte: hell auf dem dunklen Grund, Balken wie ein Tracing-Wasserfall */
+.reveal .intro .intro-trace {
+    width: 560px;
+    flex: none;
+    box-sizing: border-box;
+    padding: 18px 22px;
+    background: #F6F2FE;
+    color: var(--box-bg);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.reveal .intro .intro-trace,
+.reveal .intro .intro-trace * {
+    font-family: var(--r-code-font);
+    font-size: 14px;
+}
+
+.reveal .intro .trace-meta {
+    color: #5B4E93;
+}
+
+.reveal .intro .trace-rows {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 7px 14px;
+    align-items: center;
+}
+
+.reveal .intro .trace-bar {
+    height: 20px;
+    border-radius: 3px;
+}
+
+.reveal .intro .trace-bar.booking { background: var(--box-bg); width: 100%; }
+.reveal .intro .trace-bar.flight  { background: var(--box-border); width: 26%; margin-left: 4%; }
+.reveal .intro .trace-bar.hotel   { background: var(--highlight); box-shadow: inset 0 0 0 2px #9ec23a; width: 22%; margin-left: 32%; }
+.reveal .intro .trace-bar.compensate {
+    width: 12%;
+    margin-left: 72%;
+    border: 2px dashed var(--box-border);
+    box-sizing: border-box;
+}
+
+.reveal .intro .trace-fail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 56%;
+}
+
+.reveal .intro .trace-fail .trace-bar {
+    width: 84px;
+    flex: none;
+    background: repeating-linear-gradient(45deg, #FF7A59 0 8px, #ffb8a6 8px 16px);
+}
+
+.reveal .intro .trace-fail span {
+    color: #c2410c;
 }
 
 /* Kompakter Visual-Anker auf Pattern-Hauptfolien (zwischen Subtitle und factor-row). */
