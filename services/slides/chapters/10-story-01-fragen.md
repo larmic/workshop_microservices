@@ -30,7 +30,10 @@
 </div>
 
 Note:
-- <strong>Health-Check:</strong> Unser <code>/health</code> ist eher <strong>Liveness</strong>, der Prozess lebt. <strong>Readiness</strong> fragt: Kann diese Instanz jetzt bedienen? Eigene Ressourcen wie Warm-up, eigene DB und Pool, nicht die Downstream-Services. Wer Flight in die Readiness nimmt, schaltet bei einem Flight-Ausfall den ganzen Booking-Service ab. Healthy ist nicht dasselbe wie Useful.
-- <strong>Backend weg:</strong> Zwei F&auml;lle. <strong>Umgezogen</strong> (neue IP, Skalierung): Die feste URL aus der Env-Variable zeigt ins Leere, das l&ouml;st Story 3. <strong>Wirklich kaputt:</strong> Jede Anfrage h&auml;ngt im Timeout, das l&ouml;st Story 4. Heute f&auml;ngt es niemand auf, mit Absicht.
-- Weitere Aspekte (Logging, Config, OpenAPI, Error-Handling) bei Bedarf: <code>docs/questions/story1.md</code>.
-- <strong>&Uuml;berleitung:</strong> Unser Service antwortet per HTTP. Aber benutzen wir HTTP auch richtig?
+- <strong>Health-Check:</strong> Unser <code>/health</code> ist nur Liveness.
+  - <strong>Liveness:</strong> Lebt der Prozess? Nein, dann neu starten.
+  - <strong>Readiness:</strong> Kann diese Instanz jetzt bedienen? Nur eigene Ressourcen (Warm-up, eigene DB, Pool), nie Flight, Hotel oder Car. Sonst legt ein Flight-Ausfall den ganzen Booking-Service lahm.
+- <strong>Backend weg:</strong> Heute f&auml;ngt das niemand auf, mit Absicht.
+  - <strong>Umgezogen</strong> (neue IP, Skalierung): Die feste URL zeigt ins Leere, das l&ouml;st Story 3.
+  - <strong>Wirklich kaputt:</strong> Jede Anfrage h&auml;ngt im Timeout, das l&ouml;st Story 4.
+- <strong>&Uuml;berleitung:</strong> Wir sprechen HTTP. Aber ist das schon REST oder RESTful? Benutzen wir HTTP richtig?
