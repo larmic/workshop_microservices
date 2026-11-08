@@ -44,7 +44,7 @@ CQRS (Block 7), BFF (Block 9) und Downtimeless Deployment (Block 10) sind bewuss
 
 ## 1. Ankommen & Motivation (30 Min)
 
-- Begrüßung, kurze Vorstellungsrunde
+- Begrüßung
 - Vorstellungsrunde: Wer bin ich, was mache ich, was erwarte ich vom Workshop (nur erzählen, kein Flipchart)
 - Leitfrage: **„Brauchen wir Microservices überhaupt?"**
   - Erst Monolith, MS nur wenn wirklich sinnvoll
