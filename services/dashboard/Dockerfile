@@ -18,7 +18,6 @@ RUN if [ -n "$DISCORD_EASTEREGG_WEBHOOK_URL" ]; then \
         sed -i "s|__DISCORD_EASTEREGG_WEBHOOK_URL__|${DISCORD_EASTEREGG_WEBHOOK_URL}|" dashboard/static/index.html; \
     fi
 
-RUN go test -v ./dashboard/...
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o main ./dashboard
 
 FROM docker:29-cli

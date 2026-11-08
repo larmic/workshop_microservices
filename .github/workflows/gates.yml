@@ -10,12 +10,16 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # docker.yml ruft die Gates vor dem Bauen auf: Ohne grüne Gates kein Image auf Docker Hub.
+  workflow_call:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # Eigenes Präfix: Als workflow_call ist github.workflow der Name des Aufrufers,
+  # ohne Präfix würde die Gruppe mit der von docker.yml kollidieren.
+  group: gates-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

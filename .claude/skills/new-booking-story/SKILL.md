@@ -57,26 +57,9 @@ Kopiere `services/booking/storyP/` komplett nach `services/booking/storyN/` (all
      ```
    - `run-booking-ref-storyN` analog zu den bestehenden `run-*`-Targets
 
-5. **`.github/workflows/build.yml`**
-   - Neuen Job nach `build-booking-ref-storyP` einfuegen, Action-Versionen von den bestehenden Jobs uebernehmen (nicht raten, Renovate haelt sie aktuell):
-     ```yaml
-       build-booking-ref-storyN:
-         name: Build BookingService Reference StoryN
-         runs-on: ubuntu-latest
-         defaults:
-           run:
-             working-directory: services
-         steps:
-           - uses: actions/checkout@<Version wie oben>
-
-           - name: Setup Go
-             uses: actions/setup-go@<Version wie oben>
-             with:
-               go-version-file: services/go.mod
-
-           - name: Build
-             run: go build -v -o bin/booking-ref-storyN ./booking/storyN
-     ```
+5. **Guard-Gates** (kein eigener Build-Job nötig)
+   - `.github/workflows/gates.yml` prüft jedes Paket automatisch: `go vet`, `go test`, Architekturregeln (die neue Story darf nur sich selbst und `shared` importieren) und OpenAPI ⇄ Routen.
+   - Vor dem Commit `scripts/gates.sh` ausführen, alle Gates müssen grün sein.
 
 6. **`.github/workflows/docker.yml`**
    - Pfad-Filter `services/booking/storyN/**` in der `booking`-Filterliste ergaenzen

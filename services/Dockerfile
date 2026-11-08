@@ -10,7 +10,6 @@ ARG TARGETOS
 ARG TARGETARCH
 
 RUN go mod download
-RUN go test -v ./${SERVICE_PATH}/...
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o main ./${SERVICE_PATH}
 
 FROM scratch

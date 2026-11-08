@@ -68,8 +68,12 @@ jobs:
               - 'services/go.mod'
               - 'services/go.sum'
 
+  gates:
+    name: Guard-Gates
+    uses: ./.github/workflows/gates.yml
+
   build-flight:
-    needs: changes
+    needs: [changes, gates]
     if: needs.changes.outputs.flight == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -92,7 +96,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-flight:latest
 
   build-hotel:
-    needs: changes
+    needs: [changes, gates]
     if: needs.changes.outputs.hotel == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -115,7 +119,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-hotel:latest
 
   build-car:
-    needs: changes
+    needs: [changes, gates]
     if: needs.changes.outputs.car == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -138,7 +142,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-car:latest
 
   build-booking:
-    needs: changes
+    needs: [changes, gates]
     if: needs.changes.outputs.booking == 'true'
     runs-on: ubuntu-latest
     strategy:
@@ -165,7 +169,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-booking:story${{ matrix.story }}
 
   build-dashboard:
-    needs: changes
+    needs: [changes, gates]
     if: needs.changes.outputs.dashboard == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -195,7 +199,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/workshop-microservices-dashboard:latest
 
   build-booking-custom:
-    needs: changes
+    needs: [changes, gates]
     if: needs.changes.outputs.booking-custom == 'true'
     runs-on: ubuntu-latest
     steps:

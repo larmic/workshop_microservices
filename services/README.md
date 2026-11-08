@@ -1,6 +1,6 @@
 # Services
 
-[![Build Services](https://github.com/larmic/workshop_microservices/actions/workflows/build.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/build.yml)
+[![Guard-Gates](https://github.com/larmic/workshop_microservices/actions/workflows/gates.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/gates.yml)
 [![Docker Build & Push Go-Services](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml)
 [![Deploy Pages (Feedback + Slides)](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml)
 [![Update Docker Hub descriptions](https://github.com/larmic/workshop_microservices/actions/workflows/dockerhub-description.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/dockerhub-description.yml)
