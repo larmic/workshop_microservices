@@ -29,7 +29,10 @@
 </div>
 
 <div class="foot">
-<p>Microservices sind nicht immer die richtige Wahl.<br>Mit einem Monolithen zu starten ist oft die bessere Option (Monolith First, Martin Fowler, 2015).</p>
+<figure class="foot-quote">
+<blockquote>&hellip; you shouldn&rsquo;t start a new project with microservices, even if you&rsquo;re sure your application will be big enough to make it worthwhile.</blockquote>
+<figcaption>Martin Fowler, <em>MonolithFirst</em>, 2015</figcaption>
+</figure>
 <div class="callout">Dieser Workshop zeigt das Wie, nicht das Ob.</div>
 </div>
 

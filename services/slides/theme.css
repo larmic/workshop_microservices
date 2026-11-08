@@ -1544,6 +1544,50 @@
     color: var(--slide-text);
 }
 
+/* Zitat in der Fußzeile (04): großes Anführungszeichen, kursiv, Quelle darunter */
+.reveal .foot .foot-quote {
+    position: relative;
+    margin: 0;
+    padding-left: 52px;
+    max-width: 640px;
+}
+
+.reveal .foot .foot-quote::before {
+    content: "\201C";
+    position: absolute;
+    left: 0;
+    top: -18px;
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 84px;
+    line-height: 1;
+    color: var(--box-border);
+}
+
+.reveal .foot .foot-quote blockquote {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    font-style: italic;
+    font-size: 21px;
+    line-height: 1.4;
+    color: var(--slide-text);
+}
+
+.reveal .foot .foot-quote figcaption {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #5B4E93;
+}
+
+.reveal .foot .foot-quote figcaption::before {
+    content: "\2014\00a0";
+}
+
 /* ---------------------------------------------------------------------- */
 /* Timeline „Der Weg zu Microservices" (05): Straße mit Jahres-Punkten,     */
 /* Architekturen oben (Violett), Technologien unten (Navy). Inline-SVG,    */
