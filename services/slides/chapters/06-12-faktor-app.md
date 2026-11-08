@@ -24,7 +24,7 @@
 <div class="foot">
 <figure class="foot-quote">
 <blockquote>Kleine Korrektur: Die zw&ouml;lf Faktoren sind eigentlich f&uuml;r Cloud-Apps gedacht. Zu Microservices passen sie aber wunderbar.</blockquote>
-<figcaption>Nicole Weseloh, One Neusta, hat mich 2026 im Workshop freundlich korrigiert</figcaption>
+<figcaption>Nicole Weseloh, One Neusta, im Workshop 2026</figcaption>
 </figure>
 <div class="callout">Notwendig, aber nicht hinreichend.</div>
 </div>
