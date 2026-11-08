@@ -39,9 +39,9 @@ Randbedingungen: Der Client (Web und App) hat instabile Netze und wiederholt Anf
 
 ### 2. API am Flipchart entwerfen
 
-Ergebnis sind die Endpoints für Storno und Umbuchung. Die Form ist frei (Tabelle, Skizze, OpenAPI-Schnipsel), je Endpoint gehören dazu Methode und Pfad, Request-Kern, Antwort und Status-Code, Idempotenz und eine Begründung. Als Tabelle sähe das etwa so aus:
+Ergebnis sind die Endpoints für Storno und Umbuchung. Die Form ist frei (Tabelle, Skizze, OpenAPI-Schnipsel), je Endpoint gehören dazu Methode und Pfad, Request-Kern, Antworten mit Status-Codes, Idempotenz und eine Begründung. Als Tabelle sähe das etwa so aus:
 
-| Methode | Pfad | Request (Kern) | Antwort und Status-Code | Idempotent? | Begründung |
+| Methode | Pfad | Request (Kern) | Antworten und Status-Codes | Idempotent? | Begründung |
 |---|---|---|---|---|---|
 | … | … | … | … | ja / nein | … |
 

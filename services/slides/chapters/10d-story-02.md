@@ -34,8 +34,8 @@
 <div class="story-list">
 <h4>Ergebnis</h4>
 <ul>
-<li>Die Endpoints f&uuml;r Storno und Umbuchung, die Form ist frei</li>
-<li>Je Endpoint: Methode und Pfad, Request-Kern, Antwort und Status-Code</li>
+<li>Die Endpoints f&uuml;r Storno und Umbuchung</li>
+<li>Je Endpoint: Methode und Pfad, Request-Kern, Antworten mit Status-Codes</li>
 <li>Idempotent: ja oder nein</li>
 <li>Begr&uuml;ndung, auch f&uuml;r bewusste Abweichungen</li>
 </ul>
