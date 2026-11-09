@@ -123,6 +123,13 @@
             border-radius: 0 8px 8px 0;
         }
         #content blockquote p { margin: 0.25rem 0; }
+        #content blockquote ul { margin: 0.25rem 0; padding-left: 1.2rem; }
+        /* Kasten mit Titelzeile (> **Titel** + Zeilenumbruch), lime = gut zu wissen */
+        #content blockquote.callout strong.callout-title { display: block; }
+        #content blockquote.callout-lime {
+            border-left-color: var(--highlight);
+            background: rgba(211, 248, 113, 0.15);
+        }
         #content img {
             max-width: 100%;
             height: auto;
@@ -278,6 +285,20 @@
                     a.target = "_blank";
                     a.rel = "noopener";
                 }
+            });
+
+            // Kästen: Steht der fette Titel allein in der ersten Zeile, wird er
+            // zur Titelzeile. "Mehr nicht" und "Gut zu wissen" bekommen den
+            // lime Strich, alle anderen bleiben violett.
+            content.querySelectorAll("blockquote").forEach((q) => {
+                const first = q.querySelector(":scope > p:first-child");
+                const title = first && first.firstElementChild;
+                if (!title || title.tagName !== "STRONG" || first.firstChild !== title) return;
+                const next = title.nextSibling;
+                if (next && !(next.nodeType === Node.TEXT_NODE && next.textContent.startsWith("\n"))) return;
+                q.classList.add("callout");
+                title.classList.add("callout-title");
+                if (/^(Mehr nicht|Gut zu wissen)/.test(title.textContent)) q.classList.add("callout-lime");
             });
 
             // Bilder: lokal mitkopierte assets/ referenzieren, lazy laden

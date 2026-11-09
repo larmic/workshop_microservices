@@ -25,9 +25,14 @@ Akzeptanzkriterien:
 - [ ] Der Container startet, dein Service lauscht darin auf Port `8080`
 - [ ] Der Code liegt in einem Git-Repository, das du im Workshop mit deinem Team teilen kannst
 
-Mehr nicht: Body und Format der Health-Antwort sind egal, ein leeres HTTP 200 genügt. Alles Weitere kommt erst im Workshop.
+> **Mehr nicht**
+> Ein leeres HTTP 200 genügt, Body und Format sind egal. Alles Weitere kommt im Workshop.
 
-Zum Repository: Im Workshop arbeitet ihr in Teams. Jedes Team einigt sich auf einen der mitgebrachten Services und erweitert ihn gemeinsam, die anderen klonen ihn. Wo das Repository liegt, ist egal, solange dein Team darauf zugreifen kann: GitHub, GitLab, Bitbucket oder das Git deiner Firma. Es darf privat sein, wenn du andere einladen kannst. Achte darauf, dass keine Passwörter oder internen Daten darin stehen.
+> **Repository für dein Team**
+> - Im Workshop einigt sich jedes Team auf einen der mitgebrachten Services, die anderen klonen ihn.
+> - Ort egal: GitHub, GitLab, Bitbucket oder das Git deiner Firma.
+> - Privat ist ok, wenn du andere einladen kannst.
+> - Keine Passwörter oder internen Daten.
 
 Smoke-Test:
 
