@@ -112,6 +112,9 @@
         }
         #content th { background: var(--primary-dark); color: #fff; }
         #content tbody tr:nth-child(even) { background: var(--wave); }
+        /* Code-Chips auf lila Flächen weiß, sonst verschwinden sie. */
+        #content tbody tr:nth-child(even) code,
+        #content blockquote code { background: #fff; }
         #content blockquote {
             margin: 1rem 0;
             padding: 0.6rem 1rem;
@@ -126,9 +129,18 @@
             border-radius: 8px;
             border: 1px solid var(--line);
         }
-        #content li:has(> input[type="checkbox"]) { list-style: none; margin-left: -1.2em; }
+        /* Checkbox absolut links, damit Umbrüche unter dem Text weiterlaufen. */
+        #content li:has(> input[type="checkbox"]) {
+            list-style: none;
+            position: relative;
+            margin-left: -1.2em;
+            padding-left: 1.7em;
+        }
         #content li > input[type="checkbox"] {
-            margin-right: 0.5em;
+            position: absolute;
+            left: 0;
+            top: 0.4em;
+            margin: 0;
             accent-color: var(--primary-violet);
         }
 
