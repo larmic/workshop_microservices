@@ -79,6 +79,9 @@ Erfolgreich vorbereitet bist du, wenn:
 - [ ] Das **Dashboard** unter <http://localhost> lädt
 - [ ] Auf der Startseite des Dashboards zeigt **Hausaufgabe prüfen** ein grünes Ergebnis. Das Dashboard findet deinen Container oder dein Image selbst und startet es bei Bedarf kurz.
 
+> **Gut zu wissen**
+> Im Dashboard und im Repo siehst du schon alle Stories und die Referenz-Lösungen. Schau sie dir bitte nicht vorab an: Die Stories lösen wir im Workshop gemeinsam im Team, und das macht ohne Vorwissen deutlich mehr Spaß. Mit der Hausaufgabe und einem grünen Check bist du fertig.
+
 ![Dashboard-Startseite mit dem Button „Hausaufgabe prüfen“](assets/dashboard.png)
 
 > Wenn etwas nicht startet, das Dashboard nicht lädt oder **Hausaufgabe prüfen** rot wird: siehe
@@ -88,9 +91,6 @@ Erfolgreich vorbereitet bist du, wenn:
 ## 3. Bei Problemen
 
 Wenn etwas hakt und [troubleshooting.md](troubleshooting.md) nicht weiterhilft: melde dich **vor** dem Workshop kurz per Mail oder Chat beim Trainer. Am Workshop-Tag selbst bleibt für Setup-Probleme wenig Zeit.
-
-> **Gut zu wissen**
-> Im Dashboard und im Repo siehst du schon alle Stories und die Referenz-Lösungen. Schau sie dir bitte nicht vorab an: Die Stories lösen wir im Workshop gemeinsam im Team, und das macht ohne Vorwissen deutlich mehr Spaß. Mit der Hausaufgabe und einem grünen Check bist du fertig.
 
 ---
 
