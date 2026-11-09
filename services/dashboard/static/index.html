@@ -1122,7 +1122,6 @@
         }
         .hw-done { color: #1d7a3a; }
         .hw-muted { color: #5B4E93; font-size: 0.85rem; }
-        .hw-current { margin-bottom: 0.6rem; }
         .hw-link { background: none; border: none; padding: 0; color: #7348E1; font: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: underline; }
         .hw-list { border: 1px solid #e1e5ec; border-radius: 8px; padding: 0.25rem; margin: 0.4rem 0; }
         .hw-option { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; }
@@ -1653,9 +1652,9 @@
 
                 <div class="start-card start-homework">
                     <h3>Hausaufgabe erledigt? <span class="hw-done" id="hw-done" hidden>&check;</span></h3>
-                    <p>Das Dashboard startet euer Image kurz selbst und ruft <code>GET /health</code> auf. Euer Container muss daf&uuml;r nicht laufen.</p>
-                    <div id="hw-picker"><p class="hw-muted">Images werden geladen &hellip;</p></div>
-                    <button type="button" class="hw-btn" id="hw-btn" onclick="runHomeworkCheck()" hidden>Hausaufgabe pr&uuml;fen</button>
+                    <p>Ein Klick sucht euren Container <code>my-booking-service</code> und ruft <code>GET /health</code> auf. L&auml;uft er nicht, startet das Dashboard ihn oder euer Image kurz selbst.</p>
+                    <div id="hw-picker"></div>
+                    <button type="button" class="hw-btn" id="hw-btn" onclick="runHomeworkCheck()">Hausaufgabe pr&uuml;fen</button>
                     <div class="hw-result" id="hw-result" role="status" aria-live="polite" hidden></div>
                     <p class="hw-help" id="hw-help" hidden><a href="https://larmic.de/workshop_microservices/vorbereitung/" target="_blank" rel="noopener">Zur Vorbereitung &rarr;</a> Noch nicht fertig? Jetzt nachholen, oder setzt euch zu jemandem, bei dem es l&auml;uft.</p>
                 </div>
@@ -2486,7 +2485,9 @@ on receiveCompensationEvent(event):
         // kurz im Compose-Netz und ruft GET /health auf. Ohne Image namens
         // my-booking-service wählt man aus den selbst gebauten Images.
         const HW_IMAGE_KEY = "workshop-dashboard.homeworkImage.v1";
-        const hw = { images: [], selected: null, showAll: false, picking: false };
+        // picked: Die Auswahl ist sichtbar; ein Klick prüft dann das gewählte
+        // Image statt der automatischen Suche nach my-booking-service.
+        const hw = { images: [], selected: null, showAll: false, picked: false };
         function hwEscape(t) {
             return String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
         }
@@ -2500,14 +2501,11 @@ on receiveCompensationEvent(event):
             const months = Math.floor(days / 30);
             return months === 1 ? "vor einem Monat gebaut" : "vor " + months + " Monaten gebaut";
         }
-        function hwSampleHint(img) {
-            return img && img.workshopCode ? ' <span class="hw-muted">(sieht aus wie Code aus dem Workshop-Repo, z. B. die Beispiel-L&ouml;sung)</span>' : "";
-        }
         function hwSetResult(kind, html) {
             const el = document.getElementById("hw-result");
             el.className = "hw-result " + kind;
             el.innerHTML = html;
-            el.hidden = false;
+            el.hidden = !html;
             document.getElementById("hw-help").hidden = kind !== "err" && kind !== "warn";
         }
         function renderHomeworkPicker() {
@@ -2515,21 +2513,14 @@ on receiveCompensationEvent(event):
             const btn = document.getElementById("hw-btn");
             const images = hw.images;
             if (images.length === 0) {
-                picker.innerHTML = '<p>Kein eigenes Image gefunden. Im Ordner eures Service bauen, dann die Seite neu laden:</p><pre>docker build -t my-booking-service .</pre>';
-                btn.hidden = true;
-                document.getElementById("hw-help").hidden = false;
-                return;
-            }
-            btn.hidden = false;
-            const current = images.find(i => i.id === hw.selected);
-            if (current && !hw.picking) {
-                picker.innerHTML = '<p class="hw-current">Image: <code>' + hwEscape(current.name) + '</code>' + hwSampleHint(current) +
-                    ' <button type="button" class="hw-link" onclick="hw.picking = true; renderHomeworkPicker()">anderes w&auml;hlen</button></p>';
+                picker.innerHTML = '<p>Kein laufender Container und kein Image gefunden. Im Ordner eures Service bauen, dann erneut pr&uuml;fen:</p><pre>docker build -t my-booking-service .</pre>';
+                hw.picked = false;
+                btn.textContent = "Erneut prüfen";
                 return;
             }
             const local = images.filter(i => i.builtLocally);
             const shown = hw.showAll || local.length === 0 ? images : local;
-            let html = '<p>Welches Image ist eure Hausaufgabe?</p><div class="hw-list">';
+            let html = '<p>Kein Container und kein Image <code>my-booking-service</code> gefunden. Welches Image ist eure Hausaufgabe?</p><div class="hw-list">';
             for (const img of shown) {
                 html += '<label class="hw-option' + (img.builtLocally ? "" : " pulled") + '"><input type="radio" name="hw-image" value="' + hwEscape(img.id) + '"' +
                     (img.id === hw.selected ? " checked" : "") + ' onchange="hw.selected = this.value"><code>' + hwEscape(img.name) + '</code>' +
@@ -2542,91 +2533,107 @@ on receiveCompensationEvent(event):
                     : '<button type="button" class="hw-link" onclick="hw.showAll = true; renderHomeworkPicker()">alle Images anzeigen (' + images.length + ')</button>';
             }
             picker.innerHTML = html;
+            hw.picked = true;
+            btn.textContent = "Dieses Image prüfen";
         }
         async function loadHomeworkImages() {
             const picker = document.getElementById("hw-picker");
-            if (!picker) return;
-            try {
-                const res = await fetch("/dashboard/api/homework/images");
-                if (res.status === 404) {
-                    picker.innerHTML = '<p>Dieses Dashboard kennt den Check noch nicht. <code>make docker-up-hub</code> zieht das neue Image.</p>';
-                    return;
-                }
-                const data = await res.json();
-                if (!data.dockerAvailable) {
-                    picker.innerHTML = '<p>Das Dashboard kommt hier nicht an Docker heran. Pr&uuml;ft die Hausaufgabe mit dem Smoke-Test aus der Vorbereitung:</p>' +
-                        '<pre>docker run --rm -p 9090:8080 my-booking-service\ncurl -i http://localhost:9090/health   # erwartet: HTTP/1.1 200</pre>';
-                    document.getElementById("hw-help").hidden = false;
-                    return;
-                }
-                hw.images = data.images;
-                let saved = null;
-                try { saved = localStorage.getItem(HW_IMAGE_KEY); } catch (_) {}
-                const ids = hw.images.map(i => i.id);
-                const own = hw.images.filter(i => i.builtLocally && !i.workshopCode);
-                hw.selected = ids.includes(saved) ? saved : (data.preferred || (own[0] || {}).id || null);
-                hw.picking = !(ids.includes(saved) || data.preferred);
-                renderHomeworkPicker();
-            } catch (e) {
-                picker.innerHTML = '<p>Die Pr&uuml;fung ist gerade nicht erreichbar. L&auml;uft der Stack noch? Seite neu laden.</p>';
-            }
-        }
-        const HW_MESSAGES = {
-            "exited": r => "<strong>&cross; Euer Container hat sich " + (r.seconds < 1 ? "sofort" : "nach " + r.seconds + " s") + " beendet (Exit-Code " + r.exitCode + ").</strong>" +
-                (r.exitCode === 0 ? " Startet der Befehl im Image einen Server, der dauerhaft l&auml;uft?" : " Die letzten Log-Zeilen zeigen meist den Grund."),
-            "timeout": r => "<strong>&cross; Nach " + r.seconds + " s keine Antwort auf <code>GET /health</code>.</strong> Lauscht der Service auf Port 8080 und auf 0.0.0.0 (nicht nur localhost)?",
-            "bad-status": r => "<strong>&cross; <code>GET /health</code> antwortet mit " + r.status + " statt 200.</strong> Gibt es die Route genau unter <code>/health</code>?",
-            "start-failed": () => "<strong>&cross; Der Container lie&szlig; sich nicht starten.</strong> Klappt <code>docker run</code> mit dem Image im Terminal?",
-            "unknown-image": () => "<strong>Das Image gibt es nicht mehr.</strong> Seite neu laden und erneut w&auml;hlen.",
-            "docker-error": () => "<strong>Das Dashboard kommt gerade nicht an Docker heran.</strong> Pr&uuml;ft die Hausaufgabe mit dem Smoke-Test aus der Vorbereitung.",
-        };
-        async function runHomeworkCheck() {
-            if (!hw.selected) {
-                hwSetResult("warn", "Bitte zuerst ein Image w&auml;hlen.");
+            const res = await fetch("/dashboard/api/homework/images");
+            const data = await res.json();
+            if (!data.dockerAvailable) {
+                picker.innerHTML = "";
+                hwSetResult("warn", HW_MESSAGES["docker-error"]());
                 return;
             }
+            hw.images = data.images;
+            let saved = null;
+            try { saved = localStorage.getItem(HW_IMAGE_KEY); } catch (_) {}
+            const ids = hw.images.map(i => i.id);
+            const own = hw.images.filter(i => i.builtLocally && !i.workshopCode);
+            hw.selected = ids.includes(saved) ? saved : ((own[0] || {}).id || null);
+            renderHomeworkPicker();
+            return ids.includes(saved);
+        }
+        function hwWhat(r) {
+            if (r.source === "running") return "Euer laufender Container <code>" + hwEscape(r.container) + "</code>";
+            if (r.source === "started") return "Euer Container <code>" + hwEscape(r.container) + "</code> (kurz gestartet)";
+            return "Euer Image <code>" + hwEscape(r.image || "") + "</code>";
+        }
+        function hwWhen(r) {
+            return r.seconds < 1 ? "sofort" : "nach " + r.seconds + " s";
+        }
+        const HW_MESSAGES = {
+            "exited": r => "<strong>&cross; " + hwWhat(r) + " hat sich " + hwWhen(r) + " beendet (Exit-Code " + r.exitCode + ").</strong>" +
+                (r.exitCode === 0 ? " Startet der Befehl im Image einen Server, der dauerhaft l&auml;uft?" : " Die letzten Log-Zeilen zeigen meist den Grund."),
+            "timeout": r => "<strong>&cross; " + hwWhat(r) + ": nach " + r.seconds + " s keine Antwort auf <code>GET /health</code>.</strong> Lauscht der Service auf Port 8080 und auf 0.0.0.0 (nicht nur localhost)?",
+            "bad-status": r => "<strong>&cross; " + hwWhat(r) + ": <code>GET /health</code> antwortet mit " + r.status + " statt 200.</strong> Gibt es die Route genau unter <code>/health</code>?",
+            "start-failed": () => "<strong>&cross; Der Container lie&szlig; sich nicht starten.</strong> Klappt <code>docker run</code> mit dem Image im Terminal?",
+            "unreachable": r => "<strong>&cross; " + hwWhat(r) + " l&auml;uft, ist f&uuml;r das Dashboard aber nicht erreichbar</strong> (z. B. mit <code>--network host</code> gestartet). Stoppt ihn, dann pr&uuml;ft das Dashboard euer Image direkt.",
+            "unknown-image": () => "<strong>Das Image gibt es nicht mehr.</strong> Erneut pr&uuml;fen und neu w&auml;hlen.",
+            "docker-error": () => "Das Dashboard kommt hier nicht an Docker heran. Pr&uuml;ft die Hausaufgabe mit dem Smoke-Test aus der Vorbereitung, Host-Port 9090, weil 8080 Traefik geh&ouml;rt:" +
+                "<pre>docker run --rm -p 9090:8080 my-booking-service\ncurl -i http://localhost:9090/health   # erwartet: HTTP/1.1 200</pre>",
+        };
+        async function runHomeworkCheck() {
             const btn = document.getElementById("hw-btn");
-            const img = hw.images.find(i => i.id === hw.selected);
+            const body = {};
+            if (hw.picked) {
+                if (!hw.selected) {
+                    hwSetResult("warn", "Bitte zuerst ein Image w&auml;hlen.");
+                    return;
+                }
+                body.imageId = hw.selected;
+            }
             btn.disabled = true;
             document.getElementById("hw-done").hidden = true;
             let seconds = 0;
-            btn.textContent = "Pr\u00fcfe \u2026";
-            hwSetResult("run", "Starte <code>" + hwEscape(img ? img.name : "") + "</code>, warte auf <code>/health</code> (bis 45 s) &hellip;");
-            const timer = setInterval(() => { seconds++; btn.textContent = "Pr\u00fcfe \u2026 " + seconds + " s"; }, 1000);
+            btn.textContent = "Prüfe …";
+            hwSetResult("run", "Suche euren Container oder euer Image und warte auf <code>/health</code> (bis 45 s) &hellip;");
+            const timer = setInterval(() => { seconds++; btn.textContent = "Prüfe … " + seconds + " s"; }, 1000);
+            let label = "Erneut prüfen";
             try {
                 const ctrl = new AbortController();
                 const abort = setTimeout(() => ctrl.abort(), 60000);
                 const res = await fetch("/dashboard/api/homework/check", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ imageId: hw.selected }),
+                    body: JSON.stringify(body),
                     signal: ctrl.signal,
                 });
                 clearTimeout(abort);
                 const r = await res.json().catch(() => ({ result: res.status === 404 ? "outdated" : res.status === 403 ? "forbidden" : "docker-error" }));
                 if (r.result === "ok") {
-                    try { localStorage.setItem(HW_IMAGE_KEY, hw.selected); } catch (_) {}
-                    hw.picking = false;
-                    renderHomeworkPicker();
+                    if (body.imageId) {
+                        try { localStorage.setItem(HW_IMAGE_KEY, body.imageId); } catch (_) {}
+                    }
+                    document.getElementById("hw-picker").innerHTML = "";
+                    hw.picked = false;
                     document.getElementById("hw-done").hidden = false;
-                    hwSetResult("ok", "<strong>&check; Hausaufgabe erledigt.</strong> <code>GET /health</code> antwortet " + (r.seconds < 1 ? "sofort" : "nach " + r.seconds + " s") + " mit 200. Vor dem Workshop ist sonst nichts zu tun.");
+                    hwSetResult("ok", "<strong>&check; Hausaufgabe erledigt.</strong> " + hwWhat(r) + " antwortet " + hwWhen(r) + " mit 200 auf <code>GET /health</code>. Vor dem Workshop ist sonst nichts zu tun.");
+                } else if (r.result === "choose") {
+                    hwSetResult("", "");
+                    // Schon einmal erfolgreich gewählt? Dann gleich dieses Image prüfen.
+                    if (await loadHomeworkImages()) setTimeout(runHomeworkCheck, 0);
+                    label = btn.textContent;
                 } else if (r.result === "busy") {
                     hwSetResult("warn", "Ein Check l&auml;uft gerade, bitte kurz warten.");
                 } else if (r.result === "forbidden") {
                     hwSetResult("warn", "Der Check l&auml;uft nur, wenn das Dashboard &uuml;ber <code>http://localhost</code> ge&ouml;ffnet ist.");
                 } else if (r.result === "outdated") {
                     hwSetResult("warn", "Dieses Dashboard kennt den Check noch nicht. <code>make docker-up-hub</code> zieht das neue Image.");
+                } else if (r.result === "docker-error") {
+                    hwSetResult("warn", HW_MESSAGES["docker-error"]());
                 } else {
                     const msg = (HW_MESSAGES[r.result] || HW_MESSAGES["docker-error"])(r);
                     const logs = r.logs ? '<details><summary>Log anzeigen</summary><pre>' + hwEscape(r.logs) + '</pre></details>' : "";
                     hwSetResult("err", msg + logs);
+                    if (hw.picked) label = "Dieses Image prüfen";
                 }
             } catch (e) {
                 hwSetResult("err", "<strong>Keine Antwort vom Dashboard.</strong> L&auml;uft der Stack noch?");
             } finally {
                 clearInterval(timer);
                 btn.disabled = false;
-                btn.textContent = "Erneut pr\u00fcfen";
+                btn.textContent = label;
             }
         }
 
@@ -4063,7 +4070,6 @@ on receiveCompensationEvent(event):
         setInterval(fetchSaga7State, 1000);
         refreshCustomAvailability();
         setInterval(refreshCustomAvailability, 5000);
-        loadHomeworkImages();
     </script>
 </body>
 </html>

@@ -70,16 +70,22 @@ Mögliche Ursachen und Diagnose:
 
 **Geltung:** macOS/Linux/Windows · **Status:** verifiziert
 
-Der Button auf der Startseite startet das gewählte Image kurz als Container
-`workshop-homework-check` im Compose-Netz und ruft `GET /health` auf Port 8080
-auf. Die Meldung nennt die Ursache:
+Der Button auf der Startseite sucht zuerst einen laufenden Container namens
+`my-booking-service` (oder aus diesem Image) und hängt ihn für die Prüfung kurz
+ins Compose-Netz. Gibt es nur einen gestoppten, startet er ihn kurz und stoppt
+ihn danach wieder. Klappt das nicht, etwa weil der Container mit
+`-p 8080:8080` angelegt wurde und Traefik den Port hat, oder gibt es nur das
+Image, prüft er einen Testcontainer `workshop-homework-check` aus dem Image.
+Findet er nichts davon, zeigt er die Image-Auswahl. Geprüft wird immer
+`GET /health` auf Port 8080 im Container. Die Meldung nennt die Ursache:
 
 | Meldung | Ursache und Abhilfe |
 |---|---|
-| Kein eigenes Image gefunden | Im Projektordner `docker build -t my-booking-service .`, dann die Seite neu laden. Images des Workshops (Referenz, Beispiel-Lösung, Traefik, Consul, …) stehen bewusst nicht in der Liste. |
+| Kein laufender Container und kein Image gefunden | Im Projektordner `docker build -t my-booking-service .`, dann erneut prüfen. Images des Workshops (Referenz, Beispiel-Lösung, Traefik, Consul, …) stehen bewusst nicht in der Liste. |
 | Container hat sich beendet | Exit-Code und Log stehen unter der Meldung. Exit-Code 0: Der Start-Befehl startet keinen Server, der dauerhaft läuft. |
 | Keine Antwort auf `GET /health` | Der Service lauscht nicht auf Port 8080 oder nur auf `127.0.0.1`/`localhost`. Auf `0.0.0.0` binden. |
 | Antwortet mit 404 (o. ä.) statt 200 | Die Route heißt nicht genau `/health`. |
+| Läuft, ist aber nicht erreichbar | Der Container wurde mit `--network host` o. ä. gestartet. Stoppen, dann prüft das Dashboard das Image direkt. |
 | Kommt nicht an Docker heran | Podman, rootless Docker oder gesperrter Socket. Dann den Smoke-Test aus der Vorbereitung nutzen, Host-Port z. B. 9090, weil 8080 Traefik gehört. |
 | Nur über `http://localhost` | Der Check antwortet nur Aufrufen über localhost oder eine private IP, damit fremde Webseiten ihn nicht auslösen können. |
 

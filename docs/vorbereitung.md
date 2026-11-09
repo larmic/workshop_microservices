@@ -58,7 +58,7 @@ Erfolgreich vorbereitet bist du, wenn:
 - [ ] Repo geklont, `.env` angelegt
 - [ ] Der Stack läuft ohne Fehler
 - [ ] Das **Dashboard** unter <http://localhost> lädt
-- [ ] Auf der Startseite **Hausaufgabe prüfen** klicken: grün. Das Dashboard startet euer Image dafür kurz selbst, euer Container muss nicht laufen.
+- [ ] Auf der Startseite **Hausaufgabe prüfen** klicken: grün. Das Dashboard findet euren Container oder euer Image und startet es bei Bedarf kurz selbst.
 
 ![Workshop Dashboard](assets/dashboard.png)
 

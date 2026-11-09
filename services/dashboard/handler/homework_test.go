@@ -124,3 +124,41 @@ func TestOriginAllowed(t *testing.T) {
 		}
 	}
 }
+
+func ctr(name, image, config string, running bool, project string) dockerContainer {
+	c := dockerContainer{Name: "/" + name, Image: image}
+	c.Config.Image = config
+	c.State.Running = running
+	if project != "" {
+		c.Config.Labels = map[string]string{"com.docker.compose.project": project}
+	}
+	return c
+}
+
+func TestMatchHomeworkContainers(t *testing.T) {
+	containers := []dockerContainer{
+		ctr("services-booking-custom", "sha256:s", "my-booking-service", true, "services"),
+		ctr(homeworkContainer, "sha256:a", "my-booking-service", true, ""),
+		ctr("old_run", "sha256:a", "my-booking-service:latest", false, ""),
+		ctr("eager_turing", "sha256:a", "my-booking-service", true, ""),
+		ctr("other", "sha256:b", "booking-go:latest", true, ""),
+	}
+
+	running, stopped := matchHomeworkContainers(containers, "", true)
+	if running == nil || running.name() != "eager_turing" {
+		t.Errorf("running = %+v, want eager_turing", running)
+	}
+	if stopped == nil || stopped.name() != "old_run" {
+		t.Errorf("stopped = %+v, want old_run", stopped)
+	}
+
+	running, _ = matchHomeworkContainers(containers, "sha256:b", false)
+	if running == nil || running.name() != "other" {
+		t.Errorf("by image: running = %+v, want other", running)
+	}
+
+	running, stopped = matchHomeworkContainers(containers, "sha256:x", false)
+	if running != nil || stopped != nil {
+		t.Errorf("unknown image should match nothing, got %v %v", running, stopped)
+	}
+}

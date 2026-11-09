@@ -59,14 +59,18 @@ type homeworkCheckRequest struct {
 }
 
 // HomeworkResult: result ist einer von ok, exited, timeout, bad-status,
-// start-failed, unknown-image, docker-error, busy.
+// start-failed, unreachable, unknown-image, choose, docker-error, busy.
+// source sagt, was geprüft wurde: running (laufender Container), started
+// (gestoppter, kurz gestartet) oder test (Testcontainer aus dem Image).
 type HomeworkResult struct {
-	Result   string `json:"result"`
-	Image    string `json:"image,omitempty"`
-	Status   int    `json:"status,omitempty"`
-	ExitCode int    `json:"exitCode,omitempty"`
-	Seconds  int    `json:"seconds"`
-	Logs     string `json:"logs,omitempty"`
+	Result    string `json:"result"`
+	Source    string `json:"source,omitempty"`
+	Container string `json:"container,omitempty"`
+	Image     string `json:"image,omitempty"`
+	Status    int    `json:"status,omitempty"`
+	ExitCode  int    `json:"exitCode,omitempty"`
+	Seconds   int    `json:"seconds"`
+	Logs      string `json:"logs,omitempty"`
 }
 
 // dockerInspectImage ist der Ausschnitt aus `docker image inspect`, den der
@@ -152,12 +156,24 @@ func (h *Homework) ImagesHandler() http.HandlerFunc {
 	}
 }
 
-// CheckHandler startet das gewählte Image und wartet auf GET /health.
+// CheckHandler prüft die Hausaufgabe in dieser Reihenfolge:
+//  1. Läuft ein Container namens my-booking-service (oder aus dem Image)?
+//     Dann diesen prüfen.
+//  2. Gibt es einen gestoppten? Dann ihn starten, prüfen, wieder stoppen.
+//  3. Gibt es das Image? Dann einen Testcontainer daraus prüfen.
+//  4. Sonst "choose": Die Seite zeigt die Image-Auswahl.
+//
+// Mit imageId (nach der Auswahl) gilt dasselbe für das gewählte Image:
+// erst ein laufender Container daraus, sonst ein Testcontainer.
 func (h *Homework) CheckHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req homeworkCheckRequest
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil || !imageIDPattern.MatchString(req.ImageID) {
-			http.Error(w, "imageId fehlt oder ist ungültig", http.StatusBadRequest)
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "ungültiger Body", http.StatusBadRequest)
+			return
+		}
+		if req.ImageID != "" && !imageIDPattern.MatchString(req.ImageID) {
+			http.Error(w, "imageId ist ungültig", http.StatusBadRequest)
 			return
 		}
 		if !h.mu.TryLock() {
@@ -169,33 +185,199 @@ func (h *Homework) CheckHandler() http.HandlerFunc {
 		defer h.mu.Unlock()
 
 		listCtx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
-		images, err := h.candidates(listCtx)
+		images, errImages := h.candidates(listCtx)
+		containers, errContainers := h.containers(listCtx)
 		cancel()
-		if err != nil {
+		if errImages != nil || errContainers != nil {
 			writeJSON(w, HomeworkResult{Result: "docker-error"})
 			return
 		}
+
 		var image *HomeworkImage
-		for i := range images {
-			if images[i].ID == req.ImageID {
-				image = &images[i]
+		if req.ImageID != "" {
+			for i := range images {
+				if images[i].ID == req.ImageID {
+					image = &images[i]
+				}
+			}
+			if image == nil {
+				writeJSON(w, HomeworkResult{Result: "unknown-image"})
+				return
+			}
+		} else {
+			for i := range images {
+				if repoOf(images[i].Name) == homeworkPreferred {
+					image = &images[i]
+				}
 			}
 		}
-		if image == nil {
-			writeJSON(w, HomeworkResult{Result: "unknown-image"})
-			return
-		}
 
-		log.Printf("Homework check: %s", image.Name)
-		res := h.run(r.Context(), image.ID)
-		res.Image = image.Name
+		imageID := ""
+		if image != nil {
+			imageID = image.ID
+		}
+		running, stopped := matchHomeworkContainers(containers, imageID, req.ImageID == "")
+
+		var res HomeworkResult
+		switch {
+		case running != nil:
+			log.Printf("Homework check: running container %s", running.name())
+			res = h.checkExisting(r.Context(), *running, false)
+		case stopped != nil && req.ImageID == "":
+			log.Printf("Homework check: stopped container %s", stopped.name())
+			res = h.checkExisting(r.Context(), *stopped, true)
+		case image != nil:
+			log.Printf("Homework check: test container from %s", image.Name)
+			res = h.run(r.Context(), image.ID)
+			res.Image = image.Name
+		default:
+			res = HomeworkResult{Result: "choose"}
+		}
 		writeJSON(w, res)
 	}
 }
 
+// dockerContainer ist der Ausschnitt aus `docker inspect` für Container.
+type dockerContainer struct {
+	ID     string `json:"Id"`
+	Name   string `json:"Name"`
+	Image  string `json:"Image"`
+	Config struct {
+		Image  string            `json:"Image"`
+		Labels map[string]string `json:"Labels"`
+	} `json:"Config"`
+	State struct {
+		Running bool `json:"Running"`
+	} `json:"State"`
+	NetworkSettings struct {
+		Networks map[string]struct {
+			IPAddress string `json:"IPAddress"`
+		} `json:"Networks"`
+	} `json:"NetworkSettings"`
+}
+
+func (c dockerContainer) name() string { return strings.TrimPrefix(c.Name, "/") }
+
+func (h *Homework) containers(ctx context.Context) ([]dockerContainer, error) {
+	out, err := docker(ctx, "ps", "-aq", "--no-trunc")
+	if err != nil {
+		return nil, err
+	}
+	ids := uniqueFields(out)
+	if len(ids) == 0 {
+		return nil, nil
+	}
+	out, err = docker(ctx, append([]string{"inspect"}, ids...)...)
+	if err != nil {
+		return nil, err
+	}
+	var containers []dockerContainer
+	if err := json.Unmarshal([]byte(out), &containers); err != nil {
+		return nil, err
+	}
+	return containers, nil
+}
+
+// matchHomeworkContainers sucht den Container der Hausaufgabe: aus dem Image
+// imageID oder, wenn byName gesetzt ist, mit Namen bzw. Image
+// my-booking-service. Container des Workshop-Stacks (Compose-Label) und der
+// eigene Testcontainer zählen nie.
+func matchHomeworkContainers(containers []dockerContainer, imageID string, byName bool) (running, stopped *dockerContainer) {
+	for i := range containers {
+		c := &containers[i]
+		if c.Config.Labels["com.docker.compose.project"] != "" || c.name() == homeworkContainer {
+			continue
+		}
+		match := imageID != "" && c.Image == imageID
+		if byName && (c.name() == homeworkPreferred || repoOf(c.Config.Image) == homeworkPreferred) {
+			match = true
+		}
+		if !match {
+			continue
+		}
+		if c.State.Running && running == nil {
+			running = c
+		}
+		if !c.State.Running && stopped == nil {
+			stopped = c
+		}
+	}
+	return running, stopped
+}
+
+// checkExisting prüft einen vorhandenen Container. Er hängt meist im Netz
+// bridge und ist vom Dashboard aus nicht erreichbar, deshalb kommt er kurz
+// zusätzlich ins Compose-Netz. Ein gestoppter wird gestartet und danach
+// wieder gestoppt. Klappt das nicht (z. B. Host-Port 8080 belegt, weil
+// Traefik ihn hat), gibt es einen Testcontainer aus seinem Image.
+func (h *Homework) checkExisting(ctx context.Context, c dockerContainer, wasStopped bool) HomeworkResult {
+	start := time.Now()
+	bg := func() (context.Context, context.CancelFunc) {
+		return context.WithTimeout(context.Background(), 15*time.Second)
+	}
+	fallback := func() HomeworkResult {
+		res := h.run(ctx, c.Image)
+		res.Image = c.Config.Image
+		return res
+	}
+
+	if wasStopped {
+		sctx, cancel := bg()
+		_, err := docker(sctx, "start", c.ID)
+		cancel()
+		if err != nil {
+			return fallback()
+		}
+		defer func() {
+			sctx, cancel := bg()
+			defer cancel()
+			_, _ = docker(sctx, "stop", c.ID)
+		}()
+	}
+
+	netCtx, cancel := bg()
+	network := h.network(netCtx)
+	cancel()
+	if _, ok := c.NetworkSettings.Networks[network]; !ok {
+		cctx, cancel := bg()
+		_, err := docker(cctx, "network", "connect", network, c.ID)
+		cancel()
+		if err != nil {
+			if wasStopped {
+				return fallback()
+			}
+			return HomeworkResult{Result: "unreachable", Container: c.name(), Seconds: int(time.Since(start).Seconds())}
+		}
+		defer func() {
+			dctx, cancel := bg()
+			defer cancel()
+			_, _ = docker(dctx, "network", "disconnect", network, c.ID)
+		}()
+	}
+
+	ictx, cancel := bg()
+	ip, err := docker(ictx, "inspect", "-f", "{{(index .NetworkSettings.Networks \""+network+"\").IPAddress}}", c.ID)
+	cancel()
+	ip = strings.TrimSpace(ip)
+	if err != nil || net.ParseIP(ip) == nil {
+		return HomeworkResult{Result: "unreachable", Container: c.name(), Seconds: int(time.Since(start).Seconds())}
+	}
+
+	budget := 15 * time.Second
+	source := "running"
+	if wasStopped {
+		budget = homeworkBudget
+		source = "started"
+	}
+	res := h.waitHealthy(ctx, c.ID, net.JoinHostPort(ip, "8080"), start, budget)
+	res.Source = source
+	res.Container = c.name()
+	res.Image = c.Config.Image
+	return res
+}
+
 func (h *Homework) run(ctx context.Context, imageID string) HomeworkResult {
 	start := time.Now()
-	seconds := func() int { return int(time.Since(start).Seconds()) }
 
 	// Aufräumen läuft mit eigenem Context, damit ein abgebrochener Request
 	// (Tab zu, Reload) keinen Container stehen lässt.
@@ -216,20 +398,28 @@ func (h *Homework) run(ctx context.Context, imageID string) HomeworkResult {
 		imageID)
 	cancel()
 	if err != nil {
-		return HomeworkResult{Result: "start-failed", Seconds: seconds(), Logs: h.logs()}
+		return HomeworkResult{Result: "start-failed", Source: "test", Seconds: int(time.Since(start).Seconds()), Logs: h.logs(homeworkContainer)}
 	}
+	res := h.waitHealthy(ctx, homeworkContainer, homeworkContainer+":8080", start, homeworkBudget)
+	res.Source = "test"
+	return res
+}
 
-	deadline := start.Add(homeworkBudget)
+// waitHealthy ruft GET /health auf, bis 200 kommt, der Container sich
+// beendet, ein anderer Status 5 s lang bleibt oder das Budget abläuft.
+func (h *Homework) waitHealthy(ctx context.Context, container, hostPort string, start time.Time, budget time.Duration) HomeworkResult {
+	seconds := func() int { return int(time.Since(start).Seconds()) }
+	deadline := start.Add(budget)
 	lastStatus := 0
 	var badSince time.Time
 	for time.Now().Before(deadline) {
 		if ctx.Err() != nil {
 			return HomeworkResult{Result: "timeout", Seconds: seconds()}
 		}
-		if exited, code := h.exited(); exited {
-			return HomeworkResult{Result: "exited", ExitCode: code, Seconds: seconds(), Logs: h.logs()}
+		if exited, code := h.exited(container); exited {
+			return HomeworkResult{Result: "exited", ExitCode: code, Seconds: seconds(), Logs: h.logs(container)}
 		}
-		resp, err := h.probe.Get("http://" + homeworkContainer + ":8080/health")
+		resp, err := h.probe.Get("http://" + hostPort + "/health")
 		if err == nil {
 			_ = resp.Body.Close()
 			if resp.StatusCode == http.StatusOK {
@@ -248,13 +438,13 @@ func (h *Homework) run(ctx context.Context, imageID string) HomeworkResult {
 	if lastStatus != 0 {
 		return HomeworkResult{Result: "bad-status", Status: lastStatus, Seconds: seconds()}
 	}
-	return HomeworkResult{Result: "timeout", Seconds: seconds(), Logs: h.logs()}
+	return HomeworkResult{Result: "timeout", Seconds: seconds(), Logs: h.logs(container)}
 }
 
-func (h *Homework) exited() (bool, int) {
+func (h *Homework) exited(container string) (bool, int) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	out, err := docker(ctx, "inspect", "-f", "{{.State.Status}} {{.State.ExitCode}}", homeworkContainer)
+	out, err := docker(ctx, "inspect", "-f", "{{.State.Status}} {{.State.ExitCode}}", container)
 	if err != nil {
 		return false, 0
 	}
@@ -266,10 +456,10 @@ func (h *Homework) exited() (bool, int) {
 	return status == "exited" || status == "dead", code
 }
 
-func (h *Homework) logs() string {
+func (h *Homework) logs(container string) string {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	cmd := exec.CommandContext(ctx, "docker", "logs", "--tail", "20", homeworkContainer)
+	cmd := exec.CommandContext(ctx, "docker", "logs", "--tail", "20", container)
 	out, _ := cmd.CombinedOutput()
 	return strings.TrimSpace(string(out))
 }
