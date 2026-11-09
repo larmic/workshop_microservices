@@ -1122,6 +1122,7 @@
         }
         .hw-done { color: #1d7a3a; }
         .hw-muted { color: #5B4E93; font-size: 0.85rem; }
+        .hw-note { color: #5B4E93; font-size: 0.85rem; }
         .hw-link { background: none; border: none; padding: 0; color: #7348E1; font: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: underline; }
         .hw-list { border: 1px solid #e1e5ec; border-radius: 8px; padding: 0.25rem; margin: 0.4rem 0; }
         .hw-option { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; }
@@ -1653,6 +1654,7 @@
                 <div class="start-card start-homework">
                     <h3>Hausaufgabe erledigt? <span class="hw-done" id="hw-done" hidden>&check;</span></h3>
                     <p>Ein Klick sucht euren Container <code>my-booking-service</code> und ruft <code>GET /health</code> auf. L&auml;uft er nicht, startet das Dashboard ihn oder euer Image kurz selbst.</p>
+                    <p class="hw-note">Danach bitte noch nicht in die Stories klicken: Die l&ouml;sen wir gemeinsam im Workshop.</p>
                     <div id="hw-picker"></div>
                     <button type="button" class="hw-btn" id="hw-btn" onclick="runHomeworkCheck()">Hausaufgabe pr&uuml;fen</button>
                     <div class="hw-result" id="hw-result" role="status" aria-live="polite" hidden></div>
