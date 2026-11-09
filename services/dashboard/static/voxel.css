@@ -101,7 +101,7 @@ body.voxel .workshop-footer .footer-author .accent {
 }
 body.voxel .feedback-link, body.voxel .rest-btn, body.voxel .bh-btn, body.voxel .source-btn,
 body.voxel .stepper-nav-btn, body.voxel .panel-reset-btn, body.voxel .start-go-btn, body.voxel .btn,
-body.voxel .startup-actions button, body.voxel .trace-detective-solve button {
+body.voxel .startup-actions button, body.voxel .trace-detective-solve button, body.voxel .hw-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -123,14 +123,16 @@ body.voxel .startup-actions button, body.voxel .trace-detective-solve button {
 body.voxel .rest-btn:hover:not(:disabled), body.voxel .bh-btn:hover:not(:disabled),
 body.voxel .stepper-nav-btn:hover:not(:disabled), body.voxel .panel-reset-btn:hover:not(:disabled),
 body.voxel .btn:hover:not(:disabled), body.voxel .startup-actions button:hover,
-body.voxel .start-go-btn:hover, body.voxel .feedback-link:hover, body.voxel .source-btn:hover:not(.active):not(:disabled) {
+body.voxel .start-go-btn:hover, body.voxel .feedback-link:hover, body.voxel .source-btn:hover:not(.active):not(:disabled),
+body.voxel .hw-btn:hover:not(:disabled) {
     background: var(--gold-light);
     color: var(--ink);
     border-color: transparent;
     box-shadow: var(--px4), var(--bevel);
 }
 body.voxel .rest-btn:active:not(:disabled), body.voxel .stepper-nav-btn:active:not(:disabled),
-body.voxel .btn:active:not(:disabled), body.voxel .start-go-btn:active, body.voxel .source-btn:active:not(:disabled) {
+body.voxel .btn:active:not(:disabled), body.voxel .start-go-btn:active, body.voxel .source-btn:active:not(:disabled),
+body.voxel .hw-btn:active:not(:disabled) {
     transform: translateY(3px);
 }
 body.voxel button:focus-visible, body.voxel a:focus-visible, body.voxel summary:focus-visible {
@@ -579,6 +581,27 @@ body.voxel .start-live-status { color: var(--muted); }
 body.voxel .start-warn { border-radius: 0; background: #fff3cd; color: var(--ink); box-shadow: inset 0 0 0 3px var(--gold-dark); padding: 10px 14px; font-size: 15px; }
 body.voxel .start-go { margin-top: 32px; }
 body.voxel .start-go-btn { min-height: 54px; padding: 4px 28px; font-size: 19px; }
+
+/* Hausaufgaben-Check */
+body.voxel .hw-btn { margin-top: 6px; }
+body.voxel .hw-btn:disabled { background: var(--wood-slot); color: var(--muted); opacity: 1; cursor: wait; }
+body.voxel .hw-note, body.voxel .hw-muted { color: var(--muted); font-size: 15px; }
+body.voxel .hw-done { color: var(--green); margin-left: 8px; }
+body.voxel .hw-link { color: var(--ink); font-size: 15px; }
+body.voxel .hw-list { border: 0; border-radius: 0; background: #fff; box-shadow: inset 0 0 0 3px var(--wood-frame); padding: 6px; }
+body.voxel .hw-option { border-radius: 0; }
+body.voxel .hw-option:has(input:checked) { background: var(--gold-light); }
+body.voxel .hw-option .hw-age { color: var(--muted); }
+body.voxel .hw-option input { accent-color: var(--gold-dark); }
+body.voxel .hw-result { border-radius: 0; padding: 10px 14px; font-size: 15px; color: var(--ink); }
+body.voxel .hw-result.run  { background: var(--metal-bg); box-shadow: inset 0 0 0 3px var(--metal-frame); }
+body.voxel .hw-result.ok   { background: #e3f3d8; box-shadow: inset 0 0 0 3px var(--green); }
+body.voxel .hw-result.err  { background: #fbe3e1; box-shadow: inset 0 0 0 3px var(--error); }
+body.voxel .hw-result.warn { background: #fff3cd; box-shadow: inset 0 0 0 3px var(--gold-dark); }
+body.voxel .hw-help { font-size: 15px; }
+body.voxel details.start-later { border: 0; border-radius: 0; background: var(--wood-bg); box-shadow: var(--px3); margin: 3px; padding: 14px 20px; }
+body.voxel details.start-later > summary { font-family: var(--pix); font-size: 17px; color: var(--ink); }
+body.voxel details.start-later > summary span { color: var(--muted); font-family: inherit; }
 
 /* ===== Backend-Services auf Stein ===== */
 body.voxel .backend-panel {
