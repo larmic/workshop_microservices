@@ -277,7 +277,7 @@
 
             // Hash-Anker erst nach dem Rendern anspringen
             if (location.hash) {
-                const target = document.getElementById(location.hash.slice(1));
+                const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
                 if (target) target.scrollIntoView();
             }
         }

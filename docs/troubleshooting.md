@@ -1,20 +1,23 @@
 # Troubleshooting
 
-Häufige Probleme beim Starten der Workshop-Umgebung und wie man sie eingrenzt.
+Häufige Probleme beim Starten der Workshop-Umgebung und wie du sie eingrenzt.
 Voraussetzung und Setup stehen in [vorbereitung.md](vorbereitung.md). Der gesamte
-Zugriff läuft über Traefik auf **Port 80** (`http://localhost`), das
-Traefik-Dashboard auf **Port 8080**.
+Zugriff läuft über Traefik auf **Port 80** (`http://localhost`, dort liegt auch
+das Workshop-Dashboard). Auf **Port 8080** liegt die Admin-Oberfläche von
+Traefik, nicht das Workshop-Dashboard.
 
 Jeder Eintrag ist mit zwei Markern versehen:
 
 - **Geltung:** `macOS/Linux/Windows` (überall) oder `nur Windows/WSL2`
-- **Status:** `verifiziert` (am 2026-06-02 gegen das Repo und lokal auf macOS
-  getestet) oder `berichtet` (aus dem Kickoff-Feedback vom 2026-05-30, unter
-  Windows aufgetreten, hier nicht reproduziert, mit Links zur Eigendiagnose)
+- **Status:** `verifiziert` (gegen das Repo und lokal getestet, Datum und System
+  am Eintrag, ohne Angabe: 2026-06-02 auf macOS), `erwartbar` (aus einer
+  Repo-Änderung abgeleitet, nicht beobachtet) oder `berichtet` (von
+  Teilnehmern eines früheren Termins am 2026-05-30 unter Windows gemeldet, hier
+  nicht nachgestellt, mit Links zur Eigendiagnose)
 
-> Die Windows/WSL2-Einträge sind aus Teilnehmer-Rückmeldungen abgeleitet und noch
-> nicht von uns unter Windows verifiziert. Wer sie unter Windows prüft, möge sie
-> bestätigen oder korrigieren.
+> Die Windows/WSL2-Einträge stammen aus Rückmeldungen von Teilnehmern und sind
+> von uns noch nicht unter Windows geprüft. Wenn du sie bestätigen oder
+> korrigieren kannst, gib dem Trainer kurz Bescheid.
 
 ## Erste Diagnose (immer zuerst)
 
@@ -68,30 +71,43 @@ Mögliche Ursachen und Diagnose:
 
 ## „Hausaufgabe prüfen“ wird rot
 
-**Geltung:** macOS/Linux/Windows · **Status:** verifiziert
+**Geltung:** macOS/Linux/Windows · **Status:** verifiziert (2026-11-09 auf Linux)
 
-Der Button auf der Startseite sucht zuerst einen laufenden Container namens
-`my-booking-service` (oder aus diesem Image) und hängt ihn für die Prüfung kurz
-ins Compose-Netz. Gibt es nur einen gestoppten, startet er ihn kurz und stoppt
-ihn danach wieder. Klappt das nicht, etwa weil der Container mit
-`-p 8080:8080` angelegt wurde und Traefik den Port hat, oder gibt es nur das
-Image, prüft er einen Testcontainer `workshop-homework-check` aus dem Image.
-Findet er nichts davon, zeigt er die Image-Auswahl. Geprüft wird immer
-`GET /health` auf Port 8080 im Container. Die Meldung nennt die Ursache:
+Das Dashboard sucht deine Hausaufgabe in dieser Reihenfolge:
+
+1. Ein laufender Container `my-booking-service` (oder aus diesem Image): Das
+   Dashboard hängt ihn kurz ins Compose-Netz.
+2. Ein gestoppter Container: Das Dashboard startet ihn kurz und stoppt ihn
+   danach wieder.
+3. Das Image `my-booking-service`: Das Dashboard startet einen Testcontainer
+   `workshop-homework-check`. Das passiert auch, wenn Punkt 2 scheitert, etwa
+   weil der Container mit `-p 8080:8080` angelegt wurde und Traefik den Port
+   belegt.
+4. Nichts davon gefunden: Du wählst dein Image aus einer Liste.
+
+Geprüft wird immer `GET /health` auf Port 8080 im Container. Die Meldung nennt
+die Ursache:
 
 | Meldung | Ursache und Abhilfe |
 |---|---|
 | Kein laufender Container und kein Image gefunden | Im Projektordner `docker build -t my-booking-service .`, dann erneut prüfen. Images des Workshops (Referenz, Beispiel-Lösung, Traefik, Consul, …) stehen bewusst nicht in der Liste. |
 | Container hat sich beendet | Exit-Code und Log stehen unter der Meldung. Exit-Code 0: Der Start-Befehl startet keinen Server, der dauerhaft läuft. |
-| Keine Antwort auf `GET /health` | Der Service lauscht nicht auf Port 8080 oder nur auf `127.0.0.1`/`localhost`. Auf `0.0.0.0` binden. |
+| Keine Antwort auf `GET /health` | Der Service lauscht nicht auf Port 8080 oder nur auf `127.0.0.1`/`localhost`. Auf `0.0.0.0` binden. Oder der Start dauert länger als 45 s. |
 | Antwortet mit 404 (o. ä.) statt 200 | Die Route heißt nicht genau `/health`. |
 | Läuft, ist aber nicht erreichbar | Der Container wurde mit `--network host` o. ä. gestartet. Stoppen, dann prüft das Dashboard das Image direkt. |
-| Kommt nicht an Docker heran | Podman, rootless Docker oder gesperrter Socket. Dann den Smoke-Test aus der Vorbereitung nutzen, Host-Port z. B. 9090, weil 8080 Traefik gehört. |
-| Nur über `http://localhost` | Der Check antwortet nur Aufrufen über localhost oder eine private IP, damit fremde Webseiten ihn nicht auslösen können. |
+| Container ließ sich nicht starten | Das Image im Terminal mit `docker run --rm <image>` starten. Die Fehlermeldung dort nennt den Grund. |
+| Image gibt es nicht mehr | Erneut prüfen und das Image neu wählen. |
+| Kommt nicht an Docker heran | Podman, rootless Docker oder gesperrter Socket. Dann von Hand prüfen, mit Host-Port 9090, weil 8080 Traefik gehört: `docker run --rm -p 9090:8080 my-booking-service` und `curl -i http://localhost:9090/health`. |
+| Nur über `http://localhost` | Das Dashboard über `http://localhost` öffnen. Der Check reagiert nur auf Aufrufe über localhost oder eine private IP, damit fremde Webseiten ihn nicht auslösen. |
+| Dashboard kennt den Check noch nicht | Altes Dashboard-Image: `make docker-up-hub` zieht das aktuelle. |
+| Keine Antwort vom Dashboard | Der Stack läuft nicht mehr: `docker compose ps` prüfen, dann `make docker-up-hub`. |
 
-Das eigene Image fehlt in der Liste, ist aber gebaut? „Selbst gebaut“ erkennt
-das Dashboard daran, dass das Image direkt nach dem Bauen getaggt wurde. Ein
-später per `docker tag` umbenanntes Image steht unter „alle Images anzeigen“.
+Neu gebaut und trotzdem rot? Dann prüft das Dashboard vermutlich einen alten,
+gestoppten Container mit dem alten Stand. Mit `docker ps -a` finden, mit
+`docker rm <id>` entfernen, erneut prüfen.
+
+Das eigene Image fehlt in der Liste, ist aber gebaut? Dann steht es unter „alle
+Images anzeigen“, etwa wenn es erst später per `docker tag` benannt wurde.
 
 ## Port belegt (Adresse bereits in Verwendung)
 
@@ -119,8 +135,9 @@ lsof -nP -iTCP:80 -sTCP:LISTEN
 netstat -ano | findstr :80
 ```
 
-Häufigster Kandidat für Port 80 ist ein lokaler Webserver oder ein anderer
-Reverse-Proxy. Den belegenden Prozess beenden oder die Umgebung freiräumen
+Port 8080 belegt? Meist läuft noch der Container aus dem Smoke-Test der
+Vorbereitung: `docker ps`, dann `docker stop <id>`. Häufigster Kandidat für
+Port 80 ist ein lokaler Webserver oder ein anderer Reverse-Proxy. Den belegenden Prozess beenden oder die Umgebung freiräumen
 (`docker compose down`), dann neu starten.
 
 ## Image-Pull schlägt fehl
@@ -138,7 +155,7 @@ Reverse-Proxy. Den belegenden Prozess beenden oder die Umgebung freiräumen
 
 ## Nach einem Repo-Update zeigt eine Story den falschen Inhalt
 
-**Geltung:** macOS/Linux/Windows · **Status:** erwartbar seit 2026-09
+**Geltung:** macOS/Linux/Windows · **Status:** erwartbar (seit 2026-09)
 
 Im September 2026 wurden die Stories 2 bis 7 zu 3 bis 8 umnummeriert (Story 2
 ist seitdem eine Design-Session ohne Code). Die Docker-Tags `story3` bis
@@ -149,9 +166,9 @@ Bulkhead-Stand statt des Circuit Breakers.
 Abhilfe: Images neu ziehen bzw. neu bauen.
 
 ```bash
-make -C services docker-up-hub   # zieht die aktuellen Tags von Docker Hub
+make docker-up-hub   # zieht die aktuellen Tags von Docker Hub
 # oder
-make -C services docker-up       # baut lokal aus dem aktuellen Stand
+make docker-up       # baut lokal aus dem aktuellen Stand
 ```
 
 ## Nur Windows/WSL2: `http://localhost` nicht erreichbar, obwohl alle Container laufen
