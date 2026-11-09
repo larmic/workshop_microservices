@@ -62,10 +62,14 @@ make docker-up-hub
 Das zieht fertige Images von Docker Hub und startet alle Container. Die `.env` funktioniert so, wie sie ist. Falls `make` nicht verfügbar ist:
 
 ```bash
-F="-f docker-compose.yml -f docker-compose.infra.yml -f docker-compose.reference.yml"
-docker compose $F pull
-docker compose $F -f docker-compose.custom.yml build booking-custom
-docker compose $F -f docker-compose.custom.yml up
+docker compose -f docker-compose.yml -f docker-compose.infra.yml \
+  -f docker-compose.reference.yml pull
+
+docker compose -f docker-compose.yml -f docker-compose.infra.yml \
+  -f docker-compose.reference.yml -f docker-compose.custom.yml build booking-custom
+
+docker compose -f docker-compose.yml -f docker-compose.infra.yml \
+  -f docker-compose.reference.yml -f docker-compose.custom.yml up
 ```
 
 Erfolgreich vorbereitet bist du, wenn:
