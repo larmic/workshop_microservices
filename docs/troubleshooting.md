@@ -81,8 +81,8 @@ Das Dashboard sucht deine Hausaufgabe in dieser Reihenfolge:
    danach wieder.
 3. Das Image `my-booking-service`: Das Dashboard startet einen Testcontainer
    `workshop-homework-check`. Das passiert auch, wenn Punkt 2 scheitert, etwa
-   weil der Container mit `-p 8080:8080` angelegt wurde und Traefik den Port
-   belegt.
+   weil der Container mit `-p 8099:8080` angelegt wurde und der Stack den Port
+   selbst belegt.
 4. Nichts davon gefunden: Du wählst dein Image aus einer Liste.
 
 Geprüft wird immer `GET /health` auf Port 8080 im Container. Die Meldung nennt
@@ -135,7 +135,7 @@ lsof -nP -iTCP:80 -sTCP:LISTEN
 netstat -ano | findstr :80
 ```
 
-Port 8080 belegt? Meist läuft noch der Container aus dem Smoke-Test der
+Port 8099 belegt? Meist läuft noch der Container aus dem Smoke-Test der
 Vorbereitung: `docker ps`, dann `docker stop <id>`. Häufigster Kandidat für
 Port 80 ist ein lokaler Webserver oder ein anderer Reverse-Proxy. Den belegenden Prozess beenden oder die Umgebung freiräumen
 (`docker compose down`), dann neu starten.

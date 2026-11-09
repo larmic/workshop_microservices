@@ -22,21 +22,26 @@ Akzeptanzkriterien:
 - [ ] Neues Projekt in deiner Sprache/deinem Framework
 - [ ] `GET /health` antwortet mit HTTP 200
 - [ ] Eine `Dockerfile` liegt im Projekt, `docker build` läuft fehlerfrei durch
-- [ ] Der Container startet und lauscht auf Port `8080`
+- [ ] Der Container startet, dein Service lauscht darin auf Port `8080`
+- [ ] Der Code liegt in einem Git-Repository, das du im Workshop mit deinem Team teilen kannst
 
 Mehr nicht: Body und Format der Health-Antwort sind egal, ein leeres HTTP 200 genügt. Alles Weitere kommt erst im Workshop.
+
+Zum Repository: Im Workshop arbeitet ihr in Teams. Jedes Team einigt sich auf einen der mitgebrachten Services und erweitert ihn gemeinsam, die anderen klonen ihn. Wo das Repository liegt, ist egal, solange dein Team darauf zugreifen kann: GitHub, GitLab, Bitbucket oder das Git deiner Firma. Es darf privat sein, wenn du andere einladen kannst. Achte darauf, dass keine Passwörter oder internen Daten darin stehen.
 
 Smoke-Test:
 
 ```bash
 docker build -t my-booking-service .
-docker run --rm -p 8080:8080 my-booking-service
+docker run --rm -p 8099:8080 my-booking-service
 
 # zweites Terminal:
-curl -i http://localhost:8080/health   # erwartet: HTTP/1.1 200
+curl -i http://localhost:8099/health   # erwartet: HTTP/1.1 200
 ```
 
-Danach den Container mit Ctrl+C stoppen, denn den Host-Port `8080` belegt gleich die Workshop-Umgebung. Zeigt `docker ps` ihn noch, mit `docker stop <id>` stoppen. Das Image bleibt erhalten, das Dashboard prüft es in Schritt 2. Der Name `my-booking-service` ist nicht Pflicht. Mit diesem Namen findet das Dashboard dein Image aber automatisch, sonst wählst du es aus einer Liste aus.
+Unter `localhost:8099` ist dein Service auch später im Workshop erreichbar. Im Container bleibt es Port `8080`.
+
+Danach den Container mit Ctrl+C stoppen, denn den Host-Port `8099` belegt gleich die Workshop-Umgebung. Zeigt `docker ps` ihn noch, mit `docker stop <id>` stoppen. Das Image bleibt erhalten, das Dashboard prüft es in Schritt 2. Der Name `my-booking-service` ist nicht Pflicht. Mit diesem Namen findet das Dashboard dein Image aber automatisch, sonst wählst du es aus einer Liste aus.
 
 ## 2. Workshop-Umgebung auschecken und prüfen
 

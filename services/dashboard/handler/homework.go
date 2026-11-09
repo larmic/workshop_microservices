@@ -308,8 +308,8 @@ func matchHomeworkContainers(containers []dockerContainer, imageID string, byNam
 // checkExisting prüft einen vorhandenen Container. Er hängt meist im Netz
 // bridge und ist vom Dashboard aus nicht erreichbar, deshalb kommt er kurz
 // zusätzlich ins Compose-Netz. Ein gestoppter wird gestartet und danach
-// wieder gestoppt. Klappt das nicht (z. B. Host-Port 8080 belegt, weil
-// Traefik ihn hat), gibt es einen Testcontainer aus seinem Image.
+// wieder gestoppt. Klappt das nicht (z. B. Host-Port belegt, weil der Stack
+// ihn hat), gibt es einen Testcontainer aus seinem Image.
 func (h *Homework) checkExisting(ctx context.Context, c dockerContainer, wasStopped bool) HomeworkResult {
 	start := time.Now()
 	bg := func() (context.Context, context.CancelFunc) {
