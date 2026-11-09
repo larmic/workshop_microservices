@@ -66,6 +66,27 @@ Mögliche Ursachen und Diagnose:
 3. **Browser-Cache / alte Weiterleitung.** Hartes Neuladen oder ein privates
    Fenster ausprobieren.
 
+## „Hausaufgabe prüfen“ wird rot
+
+**Geltung:** macOS/Linux/Windows · **Status:** verifiziert
+
+Der Button auf der Startseite startet das gewählte Image kurz als Container
+`workshop-homework-check` im Compose-Netz und ruft `GET /health` auf Port 8080
+auf. Die Meldung nennt die Ursache:
+
+| Meldung | Ursache und Abhilfe |
+|---|---|
+| Kein eigenes Image gefunden | Im Projektordner `docker build -t my-booking-service .`, dann die Seite neu laden. Images des Workshops (Referenz, Beispiel-Lösung, Traefik, Consul, …) stehen bewusst nicht in der Liste. |
+| Container hat sich beendet | Exit-Code und Log stehen unter der Meldung. Exit-Code 0: Der Start-Befehl startet keinen Server, der dauerhaft läuft. |
+| Keine Antwort auf `GET /health` | Der Service lauscht nicht auf Port 8080 oder nur auf `127.0.0.1`/`localhost`. Auf `0.0.0.0` binden. |
+| Antwortet mit 404 (o. ä.) statt 200 | Die Route heißt nicht genau `/health`. |
+| Kommt nicht an Docker heran | Podman, rootless Docker oder gesperrter Socket. Dann den Smoke-Test aus der Vorbereitung nutzen, Host-Port z. B. 9090, weil 8080 Traefik gehört. |
+| Nur über `http://localhost` | Der Check antwortet nur Aufrufen über localhost oder eine private IP, damit fremde Webseiten ihn nicht auslösen können. |
+
+Das eigene Image fehlt in der Liste, ist aber gebaut? „Selbst gebaut“ erkennt
+das Dashboard daran, dass das Image direkt nach dem Bauen getaggt wurde. Ein
+später per `docker tag` umbenanntes Image steht unter „alle Images anzeigen“.
+
 ## Port belegt (Adresse bereits in Verwendung)
 
 **Geltung:** macOS/Linux/Windows · **Status:** verifiziert

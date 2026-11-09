@@ -1120,6 +1120,47 @@
             margin-top: 0.6rem;
             font-size: 0.85rem;
         }
+        .hw-done { color: #1d7a3a; }
+        .hw-muted { color: #5B4E93; font-size: 0.85rem; }
+        .hw-current { margin-bottom: 0.6rem; }
+        .hw-link { background: none; border: none; padding: 0; color: #7348E1; font: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: underline; }
+        .hw-list { border: 1px solid #e1e5ec; border-radius: 8px; padding: 0.25rem; margin: 0.4rem 0; }
+        .hw-option { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; }
+        .hw-option:has(input:checked) { background: #EEE7FB; }
+        .hw-option.pulled { opacity: 0.6; }
+        .hw-option .hw-age { margin-left: auto; font-size: 0.8rem; color: #5B4E93; text-align: right; }
+        .hw-option input { accent-color: #7348E1; }
+        .hw-btn {
+            margin-top: 0.4rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            background: #7348E1;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .hw-btn:hover { background: #0A0349; }
+        .hw-btn:disabled { background: #7348E1; opacity: 0.6; cursor: wait; }
+        .hw-result { margin-top: 0.6rem; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; }
+        .hw-result.run { background: #EEE7FB; color: #0A0349; }
+        .hw-result.ok  { background: #d4f4dd; color: #1d7a3a; }
+        .hw-result.err { background: #fde0e0; color: #b3261e; }
+        .hw-result.warn { background: #fff3cd; color: #8a6d00; }
+        .hw-result details { margin-top: 0.4rem; }
+        .hw-result pre { margin-top: 0.4rem; }
+        .hw-help { margin-top: 0.6rem; font-size: 0.85rem; }
+        details.start-later {
+            background: #fff;
+            border: 1px dashed #7348E1;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+        }
+        details.start-later > summary { cursor: pointer; color: #0A0349; font-size: 0.9rem; }
+        details.start-later > summary span { color: #5B4E93; }
+        details.start-later[open] > summary { margin-bottom: 0.75rem; }
         .start-go { text-align: center; margin-top: 1.25rem; }
         .start-go-btn {
             padding: 0.7rem 1.4rem;
@@ -1544,7 +1585,7 @@
             </button>
             <div class="stepper-nodes" id="stepper-nodes">
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="start" data-story-node="0" onclick="showStory(0)" title="Einklinken und testen">0</button>
+                    <button type="button" class="stepper-node" data-kind="start" data-story-node="0" onclick="showStory(0)" title="Hausaufgabe pr&uuml;fen">0</button>
                     <small class="stepper-kind">Start</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -1611,11 +1652,16 @@
                 </div>
 
                 <div class="start-card start-homework">
-                    <h3>Hausaufgabe erledigt?</h3>
-                    <p>Ihr bringt einen Mini-Service in eurer Sprache mit: <code>GET /health</code> antwortet mit 200, ein <code>Dockerfile</code> baut das Image, der Container lauscht auf Port <code>8080</code>. Den Workshop-Stack habt ihr einmal mit <code>make docker-up-hub</code> gestartet.</p>
-                    <p><a href="https://larmic.github.io/workshop_microservices/vorbereitung/" target="_blank" rel="noopener">Zur Vorbereitung &rarr;</a> Noch nicht fertig? Jetzt nachholen, oder setzt euch zu jemandem, bei dem es l&auml;uft.</p>
+                    <h3>Hausaufgabe erledigt? <span class="hw-done" id="hw-done" hidden>&check;</span></h3>
+                    <p>Das Dashboard startet euer Image kurz selbst und ruft <code>GET /health</code> auf. Euer Container muss daf&uuml;r nicht laufen.</p>
+                    <div id="hw-picker"><p class="hw-muted">Images werden geladen &hellip;</p></div>
+                    <button type="button" class="hw-btn" id="hw-btn" onclick="runHomeworkCheck()" hidden>Hausaufgabe pr&uuml;fen</button>
+                    <div class="hw-result" id="hw-result" role="status" aria-live="polite" hidden></div>
+                    <p class="hw-help" id="hw-help" hidden><a href="https://larmic.de/workshop_microservices/vorbereitung/" target="_blank" rel="noopener">Zur Vorbereitung &rarr;</a> Noch nicht fertig? Jetzt nachholen, oder setzt euch zu jemandem, bei dem es l&auml;uft.</p>
                 </div>
 
+                <details class="start-later" id="start-later">
+                    <summary><strong>Im Workshop: eigenen Service einklinken</strong> <span>&middot; nicht vorab n&ouml;tig, machen wir gemeinsam</span></summary>
                 <ol class="start-steps">
                     <li class="start-card">
                         <h3>Einklinken</h3>
@@ -1641,6 +1687,7 @@ docker logs booking-custom                          # kein BEISPIEL-L&Ouml;SUNG-
                         <p>In jeder Story schaltet ihr oben zwischen <em>Referenz</em> und <em>Mein Service</em> um. Details: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/custom-setup.md" target="_blank" rel="noopener"><code>docs/custom-setup.md</code></a></p>
                     </li>
                 </ol>
+                </details>
 
                 <div class="start-go">
                     <button type="button" class="start-go-btn" onclick="showStory(1)">Los geht&rsquo;s: Story 1 &rarr;</button>
@@ -1697,7 +1744,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         </ol>
                     </div>
                 </details>
-                <p class="story-start-hint">Noch nicht eingeklinkt? <a href="#" onclick="showStory(0); return false;">&larr; Start</a> zeigt, wie es geht und wie ihr es testet.</p>
+                <p class="story-start-hint">Noch nicht eingeklinkt? <a href="#" onclick="showStory(0); document.getElementById('start-later').open = true; return false;">&larr; Start</a> zeigt, wie es geht und wie ihr es testet.</p>
             </div>
         <div class="source-toggle" data-source-toggle="1">
             <span class="source-toggle-label">Service-Quelle</span>
@@ -2433,6 +2480,154 @@ on receiveCompensationEvent(event):
             if (storyNum === 5 && typeof fetchBulkheadState === "function") fetchBulkheadState();
             if (storyNum === 6 && typeof fetchSagaState === "function") fetchSagaState();
             if (storyNum === 7 && typeof fetchSaga7State === "function") fetchSaga7State();
+        }
+
+        // Hausaufgaben-Check (Start 0): Das Backend startet das gewählte Image
+        // kurz im Compose-Netz und ruft GET /health auf. Ohne Image namens
+        // my-booking-service wählt man aus den selbst gebauten Images.
+        const HW_IMAGE_KEY = "workshop-dashboard.homeworkImage.v1";
+        const hw = { images: [], selected: null, showAll: false, picking: false };
+        function hwEscape(t) {
+            return String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+        }
+        function hwAge(img) {
+            if (!img.builtLocally) return "geladen";
+            const days = Math.floor((Date.now() - Date.parse(img.created)) / 86400000);
+            if (!(days >= 0)) return "";
+            if (days === 0) return "heute gebaut";
+            if (days === 1) return "gestern gebaut";
+            if (days < 30) return "vor " + days + " Tagen gebaut";
+            const months = Math.floor(days / 30);
+            return months === 1 ? "vor einem Monat gebaut" : "vor " + months + " Monaten gebaut";
+        }
+        function hwSampleHint(img) {
+            return img && img.workshopCode ? ' <span class="hw-muted">(sieht aus wie Code aus dem Workshop-Repo, z. B. die Beispiel-L&ouml;sung)</span>' : "";
+        }
+        function hwSetResult(kind, html) {
+            const el = document.getElementById("hw-result");
+            el.className = "hw-result " + kind;
+            el.innerHTML = html;
+            el.hidden = false;
+            document.getElementById("hw-help").hidden = kind !== "err" && kind !== "warn";
+        }
+        function renderHomeworkPicker() {
+            const picker = document.getElementById("hw-picker");
+            const btn = document.getElementById("hw-btn");
+            const images = hw.images;
+            if (images.length === 0) {
+                picker.innerHTML = '<p>Kein eigenes Image gefunden. Im Ordner eures Service bauen, dann die Seite neu laden:</p><pre>docker build -t my-booking-service .</pre>';
+                btn.hidden = true;
+                document.getElementById("hw-help").hidden = false;
+                return;
+            }
+            btn.hidden = false;
+            const current = images.find(i => i.id === hw.selected);
+            if (current && !hw.picking) {
+                picker.innerHTML = '<p class="hw-current">Image: <code>' + hwEscape(current.name) + '</code>' + hwSampleHint(current) +
+                    ' <button type="button" class="hw-link" onclick="hw.picking = true; renderHomeworkPicker()">anderes w&auml;hlen</button></p>';
+                return;
+            }
+            const local = images.filter(i => i.builtLocally);
+            const shown = hw.showAll || local.length === 0 ? images : local;
+            let html = '<p>Welches Image ist eure Hausaufgabe?</p><div class="hw-list">';
+            for (const img of shown) {
+                html += '<label class="hw-option' + (img.builtLocally ? "" : " pulled") + '"><input type="radio" name="hw-image" value="' + hwEscape(img.id) + '"' +
+                    (img.id === hw.selected ? " checked" : "") + ' onchange="hw.selected = this.value"><code>' + hwEscape(img.name) + '</code>' +
+                    (img.workshopCode ? ' <span class="hw-muted">Workshop-Code?</span>' : "") + '<span class="hw-age">' + hwAge(img) + '</span></label>';
+            }
+            html += '</div>';
+            if (local.length > 0 && local.length < images.length) {
+                html += hw.showAll
+                    ? '<button type="button" class="hw-link" onclick="hw.showAll = false; renderHomeworkPicker()">nur selbst gebaute zeigen</button>'
+                    : '<button type="button" class="hw-link" onclick="hw.showAll = true; renderHomeworkPicker()">alle Images anzeigen (' + images.length + ')</button>';
+            }
+            picker.innerHTML = html;
+        }
+        async function loadHomeworkImages() {
+            const picker = document.getElementById("hw-picker");
+            if (!picker) return;
+            try {
+                const res = await fetch("/dashboard/api/homework/images");
+                if (res.status === 404) {
+                    picker.innerHTML = '<p>Dieses Dashboard kennt den Check noch nicht. <code>make docker-up-hub</code> zieht das neue Image.</p>';
+                    return;
+                }
+                const data = await res.json();
+                if (!data.dockerAvailable) {
+                    picker.innerHTML = '<p>Das Dashboard kommt hier nicht an Docker heran. Pr&uuml;ft die Hausaufgabe mit dem Smoke-Test aus der Vorbereitung:</p>' +
+                        '<pre>docker run --rm -p 9090:8080 my-booking-service\ncurl -i http://localhost:9090/health   # erwartet: HTTP/1.1 200</pre>';
+                    document.getElementById("hw-help").hidden = false;
+                    return;
+                }
+                hw.images = data.images;
+                let saved = null;
+                try { saved = localStorage.getItem(HW_IMAGE_KEY); } catch (_) {}
+                const ids = hw.images.map(i => i.id);
+                const own = hw.images.filter(i => i.builtLocally && !i.workshopCode);
+                hw.selected = ids.includes(saved) ? saved : (data.preferred || (own[0] || {}).id || null);
+                hw.picking = !(ids.includes(saved) || data.preferred);
+                renderHomeworkPicker();
+            } catch (e) {
+                picker.innerHTML = '<p>Die Pr&uuml;fung ist gerade nicht erreichbar. L&auml;uft der Stack noch? Seite neu laden.</p>';
+            }
+        }
+        const HW_MESSAGES = {
+            "exited": r => "<strong>&cross; Euer Container hat sich " + (r.seconds < 1 ? "sofort" : "nach " + r.seconds + " s") + " beendet (Exit-Code " + r.exitCode + ").</strong>" +
+                (r.exitCode === 0 ? " Startet der Befehl im Image einen Server, der dauerhaft l&auml;uft?" : " Die letzten Log-Zeilen zeigen meist den Grund."),
+            "timeout": r => "<strong>&cross; Nach " + r.seconds + " s keine Antwort auf <code>GET /health</code>.</strong> Lauscht der Service auf Port 8080 und auf 0.0.0.0 (nicht nur localhost)?",
+            "bad-status": r => "<strong>&cross; <code>GET /health</code> antwortet mit " + r.status + " statt 200.</strong> Gibt es die Route genau unter <code>/health</code>?",
+            "start-failed": () => "<strong>&cross; Der Container lie&szlig; sich nicht starten.</strong> Klappt <code>docker run</code> mit dem Image im Terminal?",
+            "unknown-image": () => "<strong>Das Image gibt es nicht mehr.</strong> Seite neu laden und erneut w&auml;hlen.",
+            "docker-error": () => "<strong>Das Dashboard kommt gerade nicht an Docker heran.</strong> Pr&uuml;ft die Hausaufgabe mit dem Smoke-Test aus der Vorbereitung.",
+        };
+        async function runHomeworkCheck() {
+            if (!hw.selected) {
+                hwSetResult("warn", "Bitte zuerst ein Image w&auml;hlen.");
+                return;
+            }
+            const btn = document.getElementById("hw-btn");
+            const img = hw.images.find(i => i.id === hw.selected);
+            btn.disabled = true;
+            document.getElementById("hw-done").hidden = true;
+            let seconds = 0;
+            btn.textContent = "Pr\u00fcfe \u2026";
+            hwSetResult("run", "Starte <code>" + hwEscape(img ? img.name : "") + "</code>, warte auf <code>/health</code> (bis 45 s) &hellip;");
+            const timer = setInterval(() => { seconds++; btn.textContent = "Pr\u00fcfe \u2026 " + seconds + " s"; }, 1000);
+            try {
+                const ctrl = new AbortController();
+                const abort = setTimeout(() => ctrl.abort(), 60000);
+                const res = await fetch("/dashboard/api/homework/check", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ imageId: hw.selected }),
+                    signal: ctrl.signal,
+                });
+                clearTimeout(abort);
+                const r = await res.json().catch(() => ({ result: res.status === 404 ? "outdated" : res.status === 403 ? "forbidden" : "docker-error" }));
+                if (r.result === "ok") {
+                    try { localStorage.setItem(HW_IMAGE_KEY, hw.selected); } catch (_) {}
+                    hw.picking = false;
+                    renderHomeworkPicker();
+                    document.getElementById("hw-done").hidden = false;
+                    hwSetResult("ok", "<strong>&check; Hausaufgabe erledigt.</strong> <code>GET /health</code> antwortet " + (r.seconds < 1 ? "sofort" : "nach " + r.seconds + " s") + " mit 200. Vor dem Workshop ist sonst nichts zu tun.");
+                } else if (r.result === "busy") {
+                    hwSetResult("warn", "Ein Check l&auml;uft gerade, bitte kurz warten.");
+                } else if (r.result === "forbidden") {
+                    hwSetResult("warn", "Der Check l&auml;uft nur, wenn das Dashboard &uuml;ber <code>http://localhost</code> ge&ouml;ffnet ist.");
+                } else if (r.result === "outdated") {
+                    hwSetResult("warn", "Dieses Dashboard kennt den Check noch nicht. <code>make docker-up-hub</code> zieht das neue Image.");
+                } else {
+                    const msg = (HW_MESSAGES[r.result] || HW_MESSAGES["docker-error"])(r);
+                    const logs = r.logs ? '<details><summary>Log anzeigen</summary><pre>' + hwEscape(r.logs) + '</pre></details>' : "";
+                    hwSetResult("err", msg + logs);
+                }
+            } catch (e) {
+                hwSetResult("err", "<strong>Keine Antwort vom Dashboard.</strong> L&auml;uft der Stack noch?");
+            } finally {
+                clearInterval(timer);
+                btn.disabled = false;
+                btn.textContent = "Erneut pr\u00fcfen";
+            }
         }
 
         // Custom-Service-Erreichbarkeit. Wird beim Page-Load und periodisch
@@ -3417,8 +3612,8 @@ on receiveCompensationEvent(event):
         // Titel und Zeit-Pille wie auf den Story-Folien (Kicker, Überschrift, Badge).
         const KIND_LABEL = { start: "Start", code: "Hands-on", design: "Design-Session", play: "Rollenspiel" };
         const STORY_META = {
-            0: { title: "Willkommen bei &bdquo;Microservices richtig gemacht&ldquo;", kind: "start", pill: "Einklinken und testen",
-                 subtitle: "Hausaufgabe pr&uuml;fen, eigenen Service einklinken, testen. Einmal am Anfang, danach nie wieder." },
+            0: { title: "Willkommen bei &bdquo;Microservices richtig gemacht&ldquo;", kind: "start", pill: "Hausaufgabe pr&uuml;fen",
+                 subtitle: "Ein Klick pr&uuml;ft eure Hausaufgabe. Einklinken machen wir gemeinsam im Workshop." },
             1: { title: "Story 1: Erst lauff&auml;hig, dann smart", kind: "code", pill: "&asymp; 90 min",
                  subtitle: "Der erste cloud-native Booking-Service: Health-Check, externe Konfiguration, ein Build f&uuml;r viele Umgebungen." },
             2: { title: "Story 2: Erst denken, dann tippen", kind: "design", pill: "&asymp; 55 min <small>davon 20 Flipchart</small>",
@@ -3868,6 +4063,7 @@ on receiveCompensationEvent(event):
         setInterval(fetchSaga7State, 1000);
         refreshCustomAvailability();
         setInterval(refreshCustomAvailability, 5000);
+        loadHomeworkImages();
     </script>
 </body>
 </html>

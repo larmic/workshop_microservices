@@ -41,8 +41,9 @@ func main() {
 	swaggerUIURL := getEnv("SWAGGER_UI_URL", "http://swagger-ui:8080/api/")
 	consulStatusURL := getEnv("CONSUL_STATUS_URL", consulURL+"/v1/status/leader")
 
-	var composeArgs []string
+	var composeArgs, composeFiles []string
 	for _, f := range strings.Split(composeFilesRaw, ",") {
+		composeFiles = append(composeFiles, strings.TrimSpace(f))
 		composeArgs = append(composeArgs, "-f", strings.TrimSpace(f))
 	}
 	composeArgs = append(composeArgs, "-p", projectName)
@@ -94,6 +95,10 @@ func main() {
 	mux.HandleFunc("GET /api/saga7-state", handler.SagaStateHandler(bookingRefStory7URL))
 	mux.HandleFunc("POST /api/saga7-reset", handler.SagaResetHandler(bookingRefStory7URL))
 	mux.HandleFunc("POST /api/saga7-trigger", handler.SagaTriggerHandler(bookingRefStory7URL))
+	homework := handler.NewHomework(composeFiles, projectName)
+	mux.HandleFunc("GET /api/homework/images", handler.LocalOriginOnly(homework.ImagesHandler()))
+	mux.HandleFunc("POST /api/homework/check", handler.LocalOriginOnly(homework.CheckHandler()))
+	go handler.CleanupHomeworkContainers()
 	mux.HandleFunc("GET /api/booking-custom-available", func(w http.ResponseWriter, r *http.Request) {
 		if bookingCustomURL == "" {
 			w.WriteHeader(http.StatusServiceUnavailable)

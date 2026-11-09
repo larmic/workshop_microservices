@@ -30,7 +30,7 @@
 </div>
 
 <ol class="story-path" aria-label="Ablauf">
-<li class="done"><span class="sp-step">Hausaufgabe</span><span class="sp-what"><code>/health</code> &middot; Dockerfile &middot; Port 8080</span></li>
+<li class="done"><span class="sp-step">Hausaufgabe</span><span class="sp-what"><code>/health</code> &middot; Dockerfile &middot; Port 8080 &middot; auf Start gepr&uuml;ft</span></li>
 <li class="now" data-n="0"><span class="sp-step">Start (0)</span><span class="sp-what">einklinken und testen</span></li>
 <li class="next" data-n="1"><span class="sp-step">Story 1</span><span class="sp-what">Logs, Env-Vars, <code>/info</code>, <code>/openapi</code>, Offers</span></li>
 </ol>

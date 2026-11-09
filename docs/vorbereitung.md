@@ -34,7 +34,7 @@ docker run --rm -p 8080:8080 my-booking-service
 curl -i http://localhost:8080/health   # erwartet: HTTP/1.1 200
 ```
 
-Danach den Container stoppen (Ctrl+C): der Host-Port `8080` wird gleich von der Workshop-Umgebung belegt.
+Danach den Container stoppen (Ctrl+C): der Host-Port `8080` wird gleich von der Workshop-Umgebung belegt. Das Image bleibt, und genau das prüft das Dashboard gleich. Der Name `my-booking-service` ist nicht Pflicht, spart aber die Auswahl.
 
 ## 2. Workshop-Umgebung auschecken und prüfen
 
@@ -58,6 +58,7 @@ Erfolgreich vorbereitet bist du, wenn:
 - [ ] Repo geklont, `.env` angelegt
 - [ ] Der Stack läuft ohne Fehler
 - [ ] Das **Dashboard** unter <http://localhost> lädt
+- [ ] Auf der Startseite **Hausaufgabe prüfen** klicken: grün. Das Dashboard startet euer Image dafür kurz selbst, euer Container muss nicht laufen.
 
 ![Workshop Dashboard](assets/dashboard.png)
 
