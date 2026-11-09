@@ -2,9 +2,11 @@
 
 Diese Vorbereitung ist **Pflicht** und wird **vor** dem Workshop-Termin erledigt. Aufwand: ca. 1 bis 2 Stunden. Sie stellt sicher, dass wir am Workshop-Tag direkt mit den Inhalten starten, statt Setup-Probleme zu lösen.
 
-> Erledige die Schritte 1 und 2 möglichst **in dem Netz, in dem du auch am Workshop-Tag arbeitest** (Firmen-WLAN, VPN). Firmen-Proxies und TLS-Zertifikate fallen sonst erst am Workshop-Tag auf, besonders unter Windows/WSL2.
+> Erledige die Schritte 1 bis 3 möglichst **in dem Netz, in dem du auch am Workshop-Tag arbeitest** (Firmen-WLAN, VPN). Firmen-Proxies und TLS-Zertifikate fallen sonst erst am Workshop-Tag auf, besonders unter Windows/WSL2.
 
 ## Voraussetzungen
+
+<!-- schritt: Voraussetzungen -->
 
 - **Git**
 - **Docker** inkl. Docker Compose (harte Voraussetzung, ohne läuft die Workshop-Umgebung nicht)
@@ -14,6 +16,8 @@ Diese Vorbereitung ist **Pflicht** und wird **vor** dem Workshop-Termin erledigt
 - Du kannst darin ein neues Projekt aufsetzen, das einen HTTP-Endpoint bereitstellt und per Dockerfile ein Image baut. Genau das ist die Pflicht-Hausaufgabe in Abschnitt 1. Im Workshop selbst üben wir das nicht.
 
 ## 1. Eigenen Mini-Service bauen (Pflicht-Hausaufgabe)
+
+<!-- schritt: Hausaufgabe -->
 
 Setze in deiner Sprache/deinem Framework ein neues, leeres Projekt auf. Diesen Mini-Service erweiterst du im Workshop in einem Team, Story für Story. Das Einbinden in die Workshop-Umgebung („Einklinken“) machen wir gemeinsam im Workshop.
 
@@ -46,9 +50,15 @@ curl -i http://localhost:8099/health   # erwartet: HTTP/1.1 200
 
 Unter `localhost:8099` ist dein Service auch später im Workshop erreichbar. Im Container bleibt es Port `8080`.
 
-Danach den Container mit Ctrl+C stoppen, denn den Host-Port `8099` belegt gleich die Workshop-Umgebung. Zeigt `docker ps` ihn noch, mit `docker stop <id>` stoppen. Das Image bleibt erhalten, das Dashboard prüft es in Schritt 2. Der Name `my-booking-service` ist nicht Pflicht. Mit diesem Namen findet das Dashboard dein Image aber automatisch, sonst wählst du es aus einer Liste aus.
+Danach den Container mit Ctrl+C stoppen, denn den Host-Port `8099` belegt gleich die Workshop-Umgebung. Zeigt `docker ps` ihn noch, mit `docker stop <id>` stoppen. Das Image bleibt erhalten, das Dashboard prüft es in Schritt 3. Der Name `my-booking-service` ist nicht Pflicht. Mit diesem Namen findet das Dashboard dein Image aber automatisch, sonst wählst du es aus einer Liste aus.
 
-## 2. Workshop-Umgebung auschecken und prüfen
+> **Klappt nicht?**
+> - [Port belegt (Adresse bereits in Verwendung)](troubleshooting.md#port-belegt-adresse-bereits-in-verwendung)
+> - [Nur Windows/WSL2: Zertifikatsfehler beim `git clone` oder Build](troubleshooting.md#nur-windowswsl2-zertifikatsfehler-beim-git-clone-oder-build)
+
+## 2. Workshop-Umgebung starten
+
+<!-- schritt: Umgebung -->
 
 > **Windows:** Klone das Repo in das WSL2-Dateisystem (z. B. `~/projects/...`, nicht `/mnt/c/...`). Die `.env` muss LF-Zeilenenden haben, nicht CRLF.
 
@@ -72,10 +82,24 @@ docker compose -f docker-compose.yml -f docker-compose.infra.yml \
   -f docker-compose.reference.yml -f docker-compose.custom.yml up
 ```
 
-Erfolgreich vorbereitet bist du, wenn:
+Erledigt, wenn:
 
 - [ ] Repo geklont, `.env` angelegt
 - [ ] Der Stack läuft ohne Fehler
+
+> **Klappt nicht?**
+> - [Port belegt (Adresse bereits in Verwendung)](troubleshooting.md#port-belegt-adresse-bereits-in-verwendung)
+> - [Image-Pull schlägt fehl](troubleshooting.md#image-pull-schlägt-fehl)
+> - [Nur Windows/WSL2: Zertifikatsfehler beim `git clone` oder Build](troubleshooting.md#nur-windowswsl2-zertifikatsfehler-beim-git-clone-oder-build)
+
+## 3. Hausaufgabe prüfen
+
+<!-- schritt: Prüfen -->
+
+Öffne das Dashboard unter <http://localhost> und klicke auf der Startseite auf **Hausaufgabe prüfen**.
+
+Erfolgreich vorbereitet bist du, wenn:
+
 - [ ] Das **Dashboard** unter <http://localhost> lädt
 - [ ] Auf der Startseite des Dashboards zeigt **Hausaufgabe prüfen** ein grünes Ergebnis. Das Dashboard findet deinen Container oder dein Image selbst und startet es bei Bedarf kurz.
 
@@ -84,14 +108,13 @@ Erfolgreich vorbereitet bist du, wenn:
 
 ![Dashboard-Startseite mit dem Button „Hausaufgabe prüfen“](assets/dashboard.png)
 
-> Wenn etwas nicht startet, das Dashboard nicht lädt oder **Hausaufgabe prüfen** rot wird: siehe
-> [troubleshooting.md](troubleshooting.md) (Hausaufgaben-Check, Port-Konflikte, Image-Pull,
-> Windows/WSL2-Erreichbarkeit, Zertifikate).
-
-## 3. Bei Problemen
-
-Wenn etwas hakt und [troubleshooting.md](troubleshooting.md) nicht weiterhilft: melde dich **vor** dem Workshop kurz per Mail oder Chat beim Trainer. Am Workshop-Tag selbst bleibt für Setup-Probleme wenig Zeit.
-
----
+> **Klappt nicht?**
+> - [„Hausaufgabe prüfen“ wird rot](troubleshooting.md#hausaufgabe-prüfen-wird-rot)
+> - [Dashboard / `http://localhost` lädt nicht](troubleshooting.md#dashboard--httplocalhost-lädt-nicht)
+> - [Nur Windows/WSL2: `http://localhost` nicht erreichbar, obwohl alle Container laufen](troubleshooting.md#nur-windowswsl2-httplocalhost-nicht-erreichbar-obwohl-alle-container-laufen)
 
 Das war's. Alles Weitere machen wir gemeinsam im Workshop.
+
+## Bei Problemen
+
+Wenn etwas hakt und die Hilfe zu den Schritten nicht weiterhilft: melde dich **vor** dem Workshop kurz per Mail oder Chat beim Trainer. Am Workshop-Tag selbst bleibt für Setup-Probleme wenig Zeit.

@@ -53,26 +53,6 @@
             font-weight: 700;
         }
         .topbar .back:hover { text-decoration: underline; }
-        .doc-tabs { display: flex; gap: 0.5rem; }
-        .doc-tabs a {
-            padding: 0.3rem 0.8rem;
-            border-radius: 999px;
-            border: 1px solid var(--line);
-            color: var(--primary-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-        .doc-tabs a.active {
-            background: var(--primary-dark);
-            border-color: var(--primary-dark);
-            color: #fff;
-        }
-        .doc-tabs a:not(.active):hover {
-            background: var(--wave);
-            border-color: var(--primary-violet);
-        }
-
         /* Doku-Typografie für gerendertes Markdown */
         #content { line-height: 1.65; }
         #content h1 { font-size: 1.7rem; margin: 0.5rem 0 1rem; }
@@ -151,6 +131,124 @@
             accent-color: var(--primary-violet);
         }
 
+        /* Stepper wie im Workshop-Dashboard */
+        .prep-stepper {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0 0.5rem;
+            padding: 1rem 0;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+        .prep-track { display: flex; align-items: flex-start; gap: 0.25rem; }
+        .prep-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            width: 6.2rem;
+            text-decoration: none;
+            color: var(--primary-dark);
+            position: relative;
+        }
+        .prep-dot {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+            border: 2px solid #c9c9d6;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary-dark);
+        }
+        .prep-label { font-size: 0.78rem; font-weight: 600; text-align: center; color: #5B4E93; }
+        .prep-node:hover .prep-dot { border-color: var(--primary-violet); color: var(--primary-violet); }
+        .prep-node.active .prep-dot {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: var(--highlight);
+            box-shadow: 0 0 0 4px var(--highlight);
+        }
+        .prep-node.active .prep-label { color: var(--primary-dark); }
+        .prep-node.done .prep-dot::after {
+            content: "\2713";
+            position: absolute;
+            top: -0.2rem;
+            left: calc(50% + 0.7rem);
+            width: 1.1rem;
+            height: 1.1rem;
+            border-radius: 50%;
+            background: var(--highlight);
+            color: var(--primary-dark);
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .prep-node.help .prep-dot { border-style: dashed; border-color: var(--primary-violet); color: var(--primary-violet); }
+        .prep-node.help.active .prep-dot { border-style: solid; color: var(--highlight); }
+        .prep-sep { width: 1px; align-self: stretch; background: var(--line); margin: 0 0.5rem; }
+        .prep-nav-btn {
+            padding: 0.45rem 0.9rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--primary-dark);
+            font: inherit;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 0.35rem;
+        }
+        .prep-nav-btn:hover:not(:disabled) { border-color: var(--primary-violet); color: var(--primary-violet); }
+        .prep-nav-btn:disabled { opacity: 0.4; cursor: default; }
+        #content a.prep-nav-btn, #content a.prep-node { text-decoration: none; }
+        #content a.prep-nav-btn { color: var(--primary-dark); }
+        #content a.prep-nav-btn.primary { background: var(--primary-violet); border-color: var(--primary-violet); color: #fff; }
+        #content a.prep-nav-btn.primary:hover { background: var(--primary-dark); color: #fff; }
+        .prep-step > h2:first-child { margin-top: 1.25rem; }
+        .prep-step-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+        }
+        #content li > input[type="checkbox"]:not(:disabled) { cursor: pointer; }
+        /* Hilfe: aufklappbare Einträge aus troubleshooting.md */
+        .help-box, .ts-entry {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin: 0.75rem 0;
+            background: #fff;
+        }
+        .help-box { border-left: 4px solid #b3261e; padding: 0.25rem 0.9rem 0.6rem; }
+        .help-box > summary { cursor: pointer; padding: 0.4rem 0; }
+        .help-box > summary span { color: #5B4E93; font-size: 0.85rem; margin-left: 0.3rem; }
+        .help-box .ts-entry { margin: 0.4rem 0; }
+        .help-all { display: inline-block; margin-top: 0.3rem; font-size: 0.85rem; }
+        .ts-entry > summary { cursor: pointer; padding: 0.55rem 0.9rem; font-weight: 600; }
+        .ts-entry > summary code { font-weight: 600; }
+        .ts-entry[open] > summary { border-bottom: 1px solid var(--line); }
+        .ts-body { padding: 0.25rem 0.9rem 0.75rem; }
+        .ts-tag {
+            margin-left: 0.5rem;
+            padding: 0.05rem 0.5rem;
+            border-radius: 999px;
+            background: var(--primary-dark);
+            color: var(--highlight);
+            font-size: 0.72rem;
+            font-weight: 700;
+            vertical-align: middle;
+        }
+        .ts-intro > summary { font-weight: 400; color: #5B4E93; font-size: 0.9rem; }
         .status-box {
             padding: 1rem 1.25rem;
             border-radius: 8px;
@@ -195,10 +293,6 @@
     <main class="card" role="main">
         <div class="topbar">
             <a class="back" href="../">&larr; Zur &Uuml;bersicht</a>
-            <nav class="doc-tabs" aria-label="Dokument w&auml;hlen">
-                <a href="./" data-doc="vorbereitung.md">Vorbereitung</a>
-                <a href="?doc=troubleshooting.md" data-doc="troubleshooting.md">Troubleshooting</a>
-            </nav>
         </div>
 
         <noscript>
@@ -222,75 +316,93 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
     <script>
-        // Rendert docs/vorbereitung.md bzw. docs/troubleshooting.md client-seitig.
-        // Die Markdown-Dateien werden im Pages-Build unverändert hierher kopiert,
-        // Single Source of Truth bleibt docs/ im Repo.
+        // Rendert docs/vorbereitung.md als Stepper (ein Schritt pro Ansicht) und
+        // hängt docs/troubleshooting.md als Knoten "Hilfe" an. Beide Dateien
+        // werden im Pages-Build unverändert hierher kopiert und bleiben auf
+        // GitHub normale Dokumente.
+        //
+        // Konventionen im Markdown:
+        //  - Jede "##"-Überschrift ist ein Schritt. Ein Kommentar
+        //    "<!-- schritt: Kurzname -->" darunter liefert das Label am Knoten.
+        //  - "## Bei Problemen" ist kein Schritt, sondern der Kopf der Hilfe.
+        //  - "> **Klappt nicht?**" mit Links auf troubleshooting.md#anker wird
+        //    zu einer aufklappbaren Box mit genau diesen Einträgen.
         const REPO_BLOB = "https://github.com/larmic/workshop_microservices/blob/main/docs/";
-        const DOCS = {
-            "vorbereitung.md": "Workshop-Vorbereitung",
-            "troubleshooting.md": "Troubleshooting"
-        };
-
-        // Doc-Auswahl per Query-Param mit harter Whitelist (kein Path-Traversal),
-        // der Hash bleibt frei für Heading-Anker.
-        const param = new URLSearchParams(location.search).get("doc");
-        const doc = Object.prototype.hasOwnProperty.call(DOCS, param) ? param : "vorbereitung.md";
-        document.title = DOCS[doc] + " · Microservices richtig gemacht";
-        document.querySelectorAll(".doc-tabs a").forEach((a) => {
-            if (a.dataset.doc === doc) a.classList.add("active");
-        });
+        const CHECK_KEY = "workshop-vorbereitung.checks.v1";
+        const HELP_HEADING = /^Bei Problemen/;
 
         const content = document.getElementById("content");
+        const steps = [];          // { section, label, node }
+        let help = null;           // { section, node }
+        const tsEntries = {};      // Anker -> { title, body } aus troubleshooting.md
 
         function showError() {
             content.innerHTML = "";
             const box = document.createElement("div");
             box.className = "status-box error";
             box.innerHTML = "Die Anleitung konnte nicht geladen werden. Sie steht auch direkt im Repo: " +
-                '<a href="' + REPO_BLOB + doc + '" rel="noopener">' + doc + " auf GitHub</a>";
+                '<a href="' + REPO_BLOB + 'vorbereitung.md" rel="noopener">vorbereitung.md auf GitHub</a>';
             content.appendChild(box);
         }
 
+        // Anker wie auf GitHub: Kleinbuchstaben, Satzzeichen weg, jedes
+        // Leerzeichen ein Bindestrich. So gelten dieselben Links auf GitHub
+        // und hier.
         function slugify(text) {
-            return text.toLowerCase()
-                .replace(/[^a-z0-9äöüß\s-]/g, "")
-                .trim()
-                .replace(/\s+/g, "-");
+            return text.trim().toLowerCase()
+                .replace(/[^\p{L}\p{N}\s_-]/gu, "")
+                .replace(/\s/g, "-");
         }
 
-        function postProcess() {
-            // Heading-Anker (marked v12 vergibt keine IDs mehr)
-            content.querySelectorAll("h1, h2, h3, h4").forEach((h) => {
-                h.id = slugify(h.textContent);
-            });
+        function parse(md) {
+            const div = document.createElement("div");
+            div.innerHTML = marked.parse(md);
+            return div;
+        }
 
-            // Link-Rewriting: extern öffnen, Whitelist-Docs intern navigieren,
-            // alle übrigen repo-relativen Links auf GitHub zeigen lassen.
-            content.querySelectorAll("a").forEach((a) => {
+        // Teilt gerendertes HTML an jeder h2: [kopf, [h2, ...inhalt], ...]
+        function splitAtH2(root) {
+            const head = [];
+            const parts = [];
+            for (const el of Array.from(root.childNodes)) {
+                if (el.nodeName === "H2") parts.push([el]);
+                else if (parts.length) parts[parts.length - 1].push(el);
+                else head.push(el);
+            }
+            return { head, parts };
+        }
+
+        function fixLinksAndImages(root) {
+            root.querySelectorAll("a").forEach((a) => {
                 const raw = a.getAttribute("href") || "";
                 if (/^(https?:|mailto:)/i.test(raw)) {
                     a.target = "_blank";
                     a.rel = "noopener";
                     return;
                 }
-                if (raw.startsWith("#")) return; // Heading-Anker im Dokument
+                if (raw.startsWith("#")) return;
                 const clean = raw.replace(/^\.\//, "");
-                const hashPos = clean.indexOf("#");
-                const path = hashPos === -1 ? clean : clean.slice(0, hashPos);
-                const hash = hashPos === -1 ? "" : clean.slice(hashPos);
-                if (Object.prototype.hasOwnProperty.call(DOCS, path)) {
-                    a.href = "?doc=" + path + hash;
-                } else {
+                const [path, hash] = clean.split("#");
+                if (path === "troubleshooting.md") a.href = "#" + (hash || "hilfe");
+                else if (path === "vorbereitung.md") a.href = "#" + (hash || "schritt-0");
+                else {
                     a.href = REPO_BLOB + clean;
                     a.target = "_blank";
                     a.rel = "noopener";
                 }
             });
+            root.querySelectorAll("img").forEach((img) => {
+                const src = img.getAttribute("src") || "";
+                if (!/^https?:/i.test(src)) img.src = "./" + src.replace(/^\.\//, "");
+                img.loading = "lazy";
+            });
+        }
 
-            // Kästen: Steht der fette Titel allein in der ersten Zeile, wird er
-            // zur Titelzeile. "Mehr nicht" und "Gut zu wissen" bekommen den
-            // lime Strich, alle anderen bleiben violett.
-            content.querySelectorAll("blockquote").forEach((q) => {
+        // Kästen: Steht der fette Titel allein in der ersten Zeile, wird er
+        // zur Titelzeile. "Mehr nicht" und "Gut zu wissen" bekommen den
+        // lime Strich, alle anderen bleiben violett.
+        function styleCallouts(root) {
+            root.querySelectorAll("blockquote").forEach((q) => {
                 const first = q.querySelector(":scope > p:first-child");
                 const title = first && first.firstElementChild;
                 if (!title || title.tagName !== "STRONG" || first.firstChild !== title) return;
@@ -300,34 +412,287 @@
                 title.classList.add("callout-title");
                 if (/^(Mehr nicht|Gut zu wissen)/.test(title.textContent)) q.classList.add("callout-lime");
             });
+        }
 
-            // Bilder: lokal mitkopierte assets/ referenzieren, lazy laden
-            content.querySelectorAll("img").forEach((img) => {
-                const src = img.getAttribute("src") || "";
-                if (!/^https?:/i.test(src)) img.src = "./" + src.replace(/^\.\//, "");
-                img.loading = "lazy";
-            });
-
-            // Hash-Anker erst nach dem Rendern anspringen
-            if (location.hash) {
-                const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-                if (target) target.scrollIntoView();
+        function entryDetails(anchor, withId) {
+            const entry = tsEntries[anchor];
+            const d = document.createElement("details");
+            d.className = "ts-entry";
+            if (withId) d.id = anchor;
+            const sum = document.createElement("summary");
+            sum.innerHTML = entry.title;
+            if (/Windows/.test(sum.textContent)) {
+                const tag = document.createElement("span");
+                tag.className = "ts-tag";
+                tag.textContent = "Windows";
+                sum.appendChild(tag);
             }
+            d.appendChild(sum);
+            const body = document.createElement("div");
+            body.className = "ts-body";
+            body.innerHTML = entry.body;
+            if (!withId) body.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
+            d.appendChild(body);
+            return d;
+        }
+
+        // "> **Klappt nicht?**" wird zur Box mit den verlinkten Einträgen.
+        function buildHelpBoxes(root) {
+            root.querySelectorAll("blockquote.callout").forEach((q) => {
+                const title = q.querySelector(".callout-title");
+                if (!title || !/^Klappt nicht/.test(title.textContent)) return;
+                const anchors = Array.from(q.querySelectorAll("a"))
+                    .map((a) => decodeURIComponent((a.getAttribute("href") || "").replace(/^#/, "")))
+                    .filter((h) => tsEntries[h]);
+                if (!anchors.length) return; // Troubleshooting nicht geladen: Links bleiben
+                const box = document.createElement("details");
+                box.className = "help-box";
+                box.innerHTML = '<summary><strong>Klappt nicht?</strong> <span>' + anchors.length +
+                    (anchors.length === 1 ? " Hilfe" : " Hilfen") + "</span></summary>";
+                anchors.forEach((a) => box.appendChild(entryDetails(a, false)));
+                const all = document.createElement("a");
+                all.className = "help-all";
+                all.href = "#hilfe";
+                all.textContent = "Alle Probleme in der Hilfe →";
+                box.appendChild(all);
+                q.replaceWith(box);
+            });
+        }
+
+        function loadChecks() {
+            try { return JSON.parse(localStorage.getItem(CHECK_KEY)) || {}; } catch (_) { return {}; }
+        }
+        function saveChecks(state) {
+            try { localStorage.setItem(CHECK_KEY, JSON.stringify(state)); } catch (_) {}
+        }
+        // Checkboxen klickbar machen, Stand pro Browser merken, Haken am Knoten.
+        function wireChecks() {
+            const state = loadChecks();
+            steps.forEach((step, i) => {
+                const boxes = Array.from(step.section.querySelectorAll('input[type="checkbox"]'));
+                boxes.forEach((box, j) => {
+                    const key = i + "-" + j;
+                    box.disabled = false;
+                    box.checked = !!state[key];
+                    box.addEventListener("change", () => {
+                        state[key] = box.checked;
+                        saveChecks(state);
+                        updateDone();
+                    });
+                });
+                step.boxes = boxes;
+            });
+            updateDone();
+        }
+        function updateDone() {
+            steps.forEach((step) => {
+                const done = step.boxes.length > 0 && step.boxes.every((b) => b.checked);
+                step.node.classList.toggle("done", done);
+            });
+        }
+
+        function buildNav() {
+            const nav = document.createElement("nav");
+            nav.className = "prep-stepper";
+            nav.setAttribute("aria-label", "Schritte der Vorbereitung");
+            const back = document.createElement("button");
+            back.type = "button";
+            back.className = "prep-nav-btn";
+            back.textContent = "← Zurück";
+            back.addEventListener("click", () => go(currentIndex() - 1));
+            nav.appendChild(back);
+            const track = document.createElement("div");
+            track.className = "prep-track";
+            steps.forEach((step, i) => {
+                const node = document.createElement("a");
+                node.className = "prep-node";
+                node.href = "#schritt-" + i;
+                node.innerHTML = '<span class="prep-dot">' + i + '</span><span class="prep-label"></span>';
+                node.querySelector(".prep-label").textContent = step.label;
+                track.appendChild(node);
+                step.node = node;
+            });
+            const sep = document.createElement("span");
+            sep.className = "prep-sep";
+            track.appendChild(sep);
+            const hnode = document.createElement("a");
+            hnode.className = "prep-node help";
+            hnode.href = "#hilfe";
+            hnode.innerHTML = '<span class="prep-dot">?</span><span class="prep-label">Hilfe</span>';
+            track.appendChild(hnode);
+            help.node = hnode;
+            nav.appendChild(track);
+            const next = document.createElement("button");
+            next.type = "button";
+            next.className = "prep-nav-btn";
+            next.textContent = "Weiter →";
+            next.addEventListener("click", () => go(currentIndex() + 1));
+            nav.appendChild(next);
+            nav.back = back;
+            nav.next = next;
+            return nav;
+        }
+
+        function stepFooter(i) {
+            const f = document.createElement("div");
+            f.className = "prep-step-footer";
+            if (i > 0) {
+                const b = document.createElement("a");
+                b.className = "prep-nav-btn";
+                b.href = "#schritt-" + (i - 1);
+                b.textContent = "← " + steps[i - 1].label;
+                f.appendChild(b);
+            } else f.appendChild(document.createElement("span"));
+            if (i < steps.length - 1) {
+                const n = document.createElement("a");
+                n.className = "prep-nav-btn primary";
+                n.href = "#schritt-" + (i + 1);
+                n.textContent = "Weiter: " + steps[i + 1].label + " →";
+                f.appendChild(n);
+            }
+            return f;
+        }
+
+        let current = 0; // Index in steps, steps.length = Hilfe
+        let nav = null;
+        function currentIndex() { return current; }
+        function go(i) {
+            if (i < 0 || i > steps.length) return;
+            location.hash = i === steps.length ? "hilfe" : "schritt-" + i;
+        }
+        function show(i, target) {
+            current = i;
+            steps.forEach((s, j) => {
+                s.section.hidden = j !== i;
+                s.node.classList.toggle("active", j === i);
+                s.node.setAttribute("aria-current", j === i ? "step" : "false");
+            });
+            help.section.hidden = i !== steps.length;
+            help.node.classList.toggle("active", i === steps.length);
+            nav.back.disabled = i === 0;
+            nav.next.disabled = i === steps.length;
+            if (target) {
+                const d = target.closest("details");
+                if (d) d.open = true;
+                target.scrollIntoView();
+            } else {
+                nav.scrollIntoView({ block: "nearest" });
+            }
+        }
+        function route() {
+            const hash = decodeURIComponent(location.hash.slice(1));
+            let m = /^schritt-(\d+)$/.exec(hash);
+            if (m && +m[1] < steps.length) return show(+m[1]);
+            if (hash === "hilfe") return show(steps.length);
+            const target = hash && document.getElementById(hash);
+            if (target) {
+                const idx = steps.findIndex((s) => s.section.contains(target));
+                return show(idx === -1 ? steps.length : idx, target);
+            }
+            show(0);
+        }
+
+        async function fetchText(name) {
+            const res = await fetch("./" + name, { cache: "no-cache" });
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.text();
         }
 
         async function load() {
             if (typeof marked === "undefined") return showError(); // CDN nicht erreichbar
             content.innerHTML = '<div class="status-box">Lade Anleitung &hellip;</div>';
-            try {
-                const res = await fetch("./" + doc, { cache: "no-cache" });
-                if (!res.ok) throw new Error("HTTP " + res.status);
-                const md = await res.text();
-                marked.setOptions({ gfm: true, breaks: false });
-                content.innerHTML = marked.parse(md);
-                postProcess();
-            } catch (err) {
-                showError();
+            marked.setOptions({ gfm: true, breaks: false });
+            let prepMd, tsMd = null;
+            try { prepMd = await fetchText("vorbereitung.md"); } catch (_) { return showError(); }
+            try { tsMd = await fetchText("troubleshooting.md"); } catch (_) {}
+
+            const prep = splitAtH2(parse(prepMd));
+            const out = document.createDocumentFragment();
+            const headBox = document.createElement("div");
+            prep.head.forEach((n) => headBox.appendChild(n));
+            out.appendChild(headBox);
+
+            let helpHead = null;
+            prep.parts.forEach((part) => {
+                const h2 = part[0];
+                h2.id = slugify(h2.textContent);
+                if (HELP_HEADING.test(h2.textContent)) { helpHead = part; return; }
+                const section = document.createElement("section");
+                section.className = "prep-step";
+                let label = h2.textContent.replace(/^\d+\.\s*/, "").replace(/\s*\(.*\)$/, "");
+                part.forEach((n) => {
+                    if (n.nodeType === Node.COMMENT_NODE) {
+                        const m = /schritt:\s*(.+)/.exec(n.textContent);
+                        if (m) label = m[1].trim();
+                        return;
+                    }
+                    section.appendChild(n);
+                });
+                section.id = "schritt-" + steps.length + "-inhalt";
+                steps.push({ section, label });
+            });
+
+            // Hilfe: "Bei Problemen" plus troubleshooting.md, jede h2 ein Eintrag.
+            const hsec = document.createElement("section");
+            hsec.className = "prep-step prep-help";
+            const hh = document.createElement("h2");
+            hh.id = "bei-problemen";
+            hh.textContent = "Hilfe bei Problemen";
+            hsec.appendChild(hh);
+            if (helpHead) helpHead.slice(1).forEach((n) => hsec.appendChild(n));
+            if (tsMd) {
+                const ts = splitAtH2(parse(tsMd));
+                const intro = document.createElement("details");
+                intro.className = "ts-entry ts-intro";
+                intro.innerHTML = "<summary>So liest du die Einträge (Ports, Geltung, Status)</summary>";
+                const ib = document.createElement("div");
+                ib.className = "ts-body";
+                ts.head.filter((n) => n.nodeName !== "H1").forEach((n) => ib.appendChild(n));
+                intro.appendChild(ib);
+                ts.parts.forEach((part) => {
+                    const anchor = slugify(part[0].textContent);
+                    const body = document.createElement("div");
+                    part.slice(1).forEach((n) => body.appendChild(n));
+                    styleCallouts(body);
+                    fixLinksAndImages(body);
+                    tsEntries[anchor] = { title: part[0].innerHTML, body: body.innerHTML };
+                });
+                Object.keys(tsEntries).forEach((a, i) => {
+                    const d = entryDetails(a, true);
+                    if (i === 0) d.open = true; // "Erste Diagnose"
+                    hsec.appendChild(d);
+                });
+                hsec.appendChild(intro);
+            } else {
+                const p = document.createElement("p");
+                p.innerHTML = 'Die Hilfe konnte nicht geladen werden: <a href="' + REPO_BLOB +
+                    'troubleshooting.md" target="_blank" rel="noopener">troubleshooting.md auf GitHub</a>';
+                hsec.appendChild(p);
             }
+            help = { section: hsec };
+
+            nav = buildNav();
+            out.appendChild(nav);
+            steps.forEach((s, i) => {
+                s.section.appendChild(stepFooter(i));
+                out.appendChild(s.section);
+            });
+            out.appendChild(hsec);
+
+            content.innerHTML = "";
+            content.appendChild(out);
+            content.querySelectorAll("h1, h3, h4").forEach((h) => { if (!h.id) h.id = slugify(h.textContent); });
+            styleCallouts(content);
+            fixLinksAndImages(content);
+            buildHelpBoxes(content);
+            wireChecks();
+
+            // Alte Links auf den Troubleshooting-Tab landen in der Hilfe.
+            if (new URLSearchParams(location.search).get("doc") === "troubleshooting.md" && !location.hash) {
+                history.replaceState(null, "", "./#hilfe");
+            }
+            window.addEventListener("hashchange", route);
+            route();
         }
 
         load();
