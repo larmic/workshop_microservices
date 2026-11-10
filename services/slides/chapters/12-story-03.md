@@ -54,9 +54,11 @@
 
 
 Note:
-- <strong>Hook:</strong> &bdquo;Hotel wurde neu deployed, der Port ist ein anderer. Wer passt heute Nacht die Env-Variable an?&ldquo; Ab jetzt kennt der Code nur Namen.
-- <strong>Priorit&auml;t:</strong> Erst Resolver plus <code>GET /booking/offers</code> (ca. 30 min), dann <code>POST /booking/bookings</code> (ca. 30 min). Optionales nur, wer fertig ist.
-- <strong>Neu:</strong> erster schreibender Endpoint nach Story 2: <code>201 Created</code>, Fehler als Status-Code. Error-Handling noch keins.
-- <strong>Demo</strong> (vorher pr&uuml;fen): im Dashboard Hotel auf drei Instanzen, Consul-UI <code>localhost:8500</code> daneben, eine Instanz stoppen.
-- Referenz: <code>services/booking/story3/</code>. Doku: <code>docs/stories/story-03-service-discovery.md</code>.
+- <strong>Hook:</strong> &bdquo;Hotel wurde neu deployed, der Port ist ein anderer. Wer passt heute Nacht die Env-Variable an?&ldquo;
+- <strong>Reihenfolge:</strong>
+  - Resolver plus <code>GET /booking/offers</code> (ca. 30 min)
+  - dann <code>POST /booking/bookings</code> (ca. 30 min)
+  - Optionales nur, wer fertig ist.
+- <strong>Neu:</strong> erster schreibender Endpoint, <code>201 Created</code>, Fehler als Status-Code. Error-Handling noch keins.
+- <strong>Demo</strong> (vorher pr&uuml;fen): Hotel im Dashboard auf drei Instanzen, Consul &uuml;ber den Link oben daneben, eine Instanz stoppen.
 - <strong>Weiter:</strong> &bdquo;L&auml;uft. Und wenn Consul kippt?&ldquo;
