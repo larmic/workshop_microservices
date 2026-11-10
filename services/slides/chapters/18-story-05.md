@@ -28,7 +28,7 @@
 <li><strong>Probelauf:</strong> Hotel ist schnell, drei Takte zum Einspielen.</li>
 <li><strong>Runde 1, ohne W&auml;nde, ein Pool mit sechs Chips:</strong> Wie viele Karten warten nach 20 Takten? <span class="fragment">&rarr; vier, ab Suche 7 wartet jede schon auf Flight</span></li>
 <li><strong>Runde 2, mit W&auml;nden, je zwei Chips:</strong> Hotel-Spalte leer, sofort <code>hotels: []</code>. Wie viele bekommen Hotels? <span class="fragment">&rarr; sechs, die anderen 14 sofort</span></li>
-<li><strong>Schild:</strong> Noch CLOSED? <span class="fragment">&rarr; ja, kein Timeout, Rejects erreichen den Breaker nie</span></li>
+<li><strong>Zustandskarte:</strong> Noch CLOSED? <span class="fragment">&rarr; ja, kein Timeout, Rejects erreichen den Breaker nie</span></li>
 </ol>
 </div>
 </div>

@@ -69,6 +69,7 @@
         .pill.karton { background: var(--wave); color: var(--primary-dark); }
         .pill.duplex { background: var(--primary-violet); color: #fff; }
         .pill.papier { background: #eee; color: #444; }
+        .pill.pduplex { background: #444; color: #fff; }
         .pill.a3 { background: var(--highlight); color: var(--primary-dark); }
         .sum { font-size: 0.85rem; margin-top: 0.6rem; color: #444; }
 
@@ -80,9 +81,11 @@
         .sheet.a4l { width: 297mm; height: 209.6mm; page: a4l; }
         .sheet.a3l { width: 420mm; height: 296.6mm; page: a3l; }
         .sheet-label { position: absolute; left: 0; right: 0; bottom: 1.6mm; text-align: center; font-size: 6pt; color: #999; letter-spacing: 0.02em; }
+        .sheet-label.mid { left: 50%; right: auto; bottom: auto; transform: translate(-50%, -50%); z-index: 4; background: #fff; padding: 0 2mm; white-space: nowrap; }
         body[data-batch="karton"] .sheet:not([data-paper="karton"]),
         body[data-batch="duplex"] .sheet:not([data-paper="duplex"]),
         body[data-batch="papier"] .sheet:not([data-paper="papier"]),
+        body[data-batch="pduplex"] .sheet:not([data-paper="pduplex"]),
         body[data-batch="a3"] .sheet:not([data-paper="a3"]) { display: none; }
 
         /* Schnitt- und Falzlinien */
@@ -158,19 +161,39 @@
         .state .role-name { font-size: 62pt; }
         .state .role-name.long { font-size: 46pt; }
 
-        /* Strichlisten (Prospekthülle) */
+        /* Strichliste Story 7 (Prospekthülle) */
         .tally { position: absolute; inset: 12mm 14mm 10mm; display: flex; flex-direction: column; }
         .tally h2 { margin: 0; font-size: 26pt; font-weight: 800; }
         .tally .lead { margin: 1.5mm 0 6mm; font-size: 12pt; color: #333; }
-        .tally .boxes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5mm; flex: 1; }
-        .tally .box { border: 1mm solid var(--primary-dark); border-radius: 4mm; position: relative; }
-        .tally .box b { position: absolute; top: 2mm; left: 3mm; font-size: 16pt; color: #bbb; }
-        .tally .box.last { border-color: var(--bad); background: var(--bad-bg); }
-        .tally .box.last em { position: absolute; bottom: 3mm; left: 0; right: 0; text-align: center; font-style: normal; font-weight: 800; font-size: 18pt; color: var(--bad); }
-        .tally .wipe { margin-top: 5mm; padding: 3mm 5mm; border-radius: 3mm; background: var(--ok-bg); color: var(--ok); font-weight: 800; font-size: 17pt; text-align: center; }
         .tally .bigbox { flex: 1; border: 1mm solid var(--primary-dark); border-radius: 4mm; position: relative; }
         .tally .bigbox span { position: absolute; top: 3mm; left: 4mm; font-size: 12pt; color: #aaa; font-weight: 700; }
         .tally .small { margin-top: 3mm; font-size: 9pt; color: #666; display: flex; justify-content: space-between; }
+
+        /* A6-Karten (Stapel Story 4, Fehler- und Zustandskarten): 5 mm Rand, weil die Karten bis an die Blattkante gehen */
+        .cell.a6 { padding: 5mm; }
+        .face.deck { background: #fff; }
+        .deck .dk-head { display: flex; align-items: stretch; background: #fff; border-bottom: 0.8mm solid var(--c); }
+        .deck .dk-num { font-family: var(--mono); font-weight: 800; font-size: 34pt; line-height: 1; padding: 2.2mm 3mm 1.6mm; color: var(--c); }
+        .deck .dk-band { flex: 1; background: var(--c); color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 1mm 3mm; font-weight: 800; font-size: 14pt; line-height: 1.1; letter-spacing: 0.03em; text-transform: uppercase; }
+        .deck .dk-band small { font-size: 7pt; font-weight: 600; letter-spacing: 0.06em; opacity: 0.85; margin-bottom: 0.8mm; }
+        .deck .dk-lbl { font-size: 7.5pt; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #666; margin-bottom: 1mm; }
+        .deck .dk-tut { padding: 3mm 4mm 2mm; font-size: 14pt; line-height: 1.3; }
+        .deck .dk-ans { margin: auto 3mm 0; padding: 2.5mm 3mm; border: 0.5mm solid var(--c); border-radius: 2mm; background: var(--bg); }
+        .deck .dk-pre { font-size: 12pt; font-weight: 700; line-height: 1.3; margin-bottom: 1.5mm; }
+        .deck .dk-note { font-size: 12pt; line-height: 1.3; }
+        .deck .dk-code { margin: 0; font-family: var(--mono); font-size: 12pt; font-weight: 600; line-height: 1.35; white-space: pre-wrap; }
+        .deck .dk-foot { font-size: 7.5pt; color: #555; text-align: center; padding: 1.8mm 3mm 2.2mm; }
+        .face.deck.stopp { --c: #4a4a55; --bg: #fff; background: repeating-linear-gradient(45deg, #d6d6de 0 2mm, #fff 2mm 4.5mm); }
+        .deck.stopp .dk-tut { background: #fff; margin: 3mm 3mm 0; border: 0.4mm solid var(--c); border-radius: 2mm; }
+        .deck .dk-big { margin: auto 3mm 3mm; text-align: center; font-size: 50pt; font-weight: 900; letter-spacing: 0.04em; line-height: 1.2; color: var(--c); background: #fff; border: 0.8mm solid var(--c); border-radius: 3mm; }
+
+        /* Fehlerkarten Story 4 + 5 */
+        .fault .fk-main { flex: 1; display: flex; align-items: center; gap: 7mm; padding: 2mm 7mm; }
+        .fault .fk-num { font-size: 100pt; font-weight: 900; line-height: 1; color: var(--c); }
+        .fault .fk-text { font-size: 12pt; line-height: 1.35; color: #222; }
+        .fault .fk-text b { display: block; font-size: 30pt; line-height: 1.05; color: var(--c); margin-bottom: 2.5mm; }
+        .fault .foot, .state .foot { font-size: 9pt; color: #444; padding-bottom: 3mm; }
+        .dark.fault { --bg: #fff; }
 
         /* Uhrmatte Story 5 */
         .clock { position: absolute; display: grid; gap: 10mm 8mm; }
@@ -224,6 +247,19 @@
         .cheat .box { background: var(--wave); border-radius: 2mm; padding: 2mm 3mm; }
         .cheat .ans { color: var(--ok); font-weight: 700; }
         .cheat code { font-size: 0.95em; }
+        .cheat .quote { margin: 0; padding: 2mm 3mm; border-left: 1mm solid var(--primary-violet); background: #f5f5fa; }
+        .cheat table.stops td { font-size: 8.2pt; }
+        .cheat table.stops td:first-child { white-space: normal; width: 21mm; }
+        .cheat table.stops td:first-child small { display: block; font-weight: 600; color: var(--primary-violet); }
+        .cheat .fn { font-size: 8pt; color: #444; }
+        .cheat table.decktab { font-size: 8.6pt; }
+        .cheat table.decktab td { padding: 0.9mm 1.5mm; }
+        .cheat table.decktab td.mono { font-family: var(--mono); font-size: 8.2pt; white-space: nowrap; }
+        .cheat table.decktab tr.stopp td { background: #ececf1; font-weight: 700; }
+        .cheat .chk { display: inline-block; width: 3.6mm; height: 3.6mm; border: 0.35mm solid #666; border-radius: 0.6mm; vertical-align: middle; }
+
+        /* Überlaufprüfung: Inhalte, die nicht in ihre Karte passen, rot umranden (nur am Bildschirm) */
+        @media screen { .overflow { outline: 1.2mm solid #e00 !important; outline-offset: -0.6mm; } }
 
         @page { margin: 0; }
         @page a4p { size: A4 portrait; margin: 0; }
@@ -258,6 +294,7 @@
                     <option value="karton">Karton 250 g, einseitig</option>
                     <option value="duplex">Karton 250 g, beidseitig</option>
                     <option value="papier">Papier 80 g</option>
+                    <option value="pduplex">Papier 80 g, beidseitig</option>
                     <option value="a3">A3</option>
                 </select>
             </label>
@@ -280,12 +317,14 @@
         <ul class="hints">
             <li><strong>Browser:</strong> Chrome oder Edge. Firefox und Safari halten die gemischten Formate (A4 hoch, A4 quer, A3) nicht zuverl&auml;ssig ein. Im Druckdialog: R&auml;nder <em>Keine</em>, Skalierung <em>100&nbsp;%</em> bzw. <em>Tats&auml;chliche Gr&ouml;&szlig;e</em>, <em>Hintergrundgrafiken</em> an.</li>
             <li><strong>Pro Papiersorte einen Stapel:</strong> oben den Druckstapel w&auml;hlen, dann drucken. Die Seite zeigt und druckt nur dessen Bogen. Die Anzahl in der Tabelle unten ist schon die Zahl der Bogen, also immer <strong>1 Exemplar</strong> drucken.</li>
-            <li><strong>Karton 250 g</strong> (A4) f&uuml;r alle Karten: Antwort-, Such-, Rollen- und Zustandskarten, Zettel E1&nbsp;&hellip;, Becher-Etiketten, Tablett-Streifen. Viele B&uuml;rodrucker nehmen 250 g nur &uuml;ber den manuellen Einzug. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
-            <li><strong>Papier 80 g</strong> f&uuml;r Strichlisten, Buchungslisten, Spickzettel. Die <strong>Strichlisten kommen in eine klare Prospekth&uuml;lle</strong> und werden mit Whiteboard-Marker beschrieben und mit einem Tuch weggewischt.</li>
+            <li><strong>Karton 250 g</strong> (A4) f&uuml;r alle Karten: Stapel 00&ndash;27 aus Story 4, Fehler- und Zustandskarten, Such-, Fallback- und Rollenkarten, Zettel E1&nbsp;&hellip;, Becher-Etiketten, Tablett-Streifen. Viele B&uuml;rodrucker nehmen 250 g nur &uuml;ber den manuellen Einzug. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
+            <li><strong>A6-Karten</strong> (Stapel Story 4 hoch, Fehler- und Zustandskarten quer) f&uuml;llen das A4-Blatt ganz aus: vier pro Bogen, einmal l&auml;ngs und einmal quer schneiden. Druckt der Drucker nicht randlos, f&auml;llt nur ein Teil des wei&szlig;en Rands weg.</li>
+            <li><strong>Papier 80 g</strong> f&uuml;r Buchungslisten, Spickzettel und die Strichliste aus Story 7. Die <strong>Strichliste kommt in eine klare Prospekth&uuml;lle</strong> und wird mit Whiteboard-Marker beschrieben und mit einem Tuch weggewischt.</li>
+            <li><strong>Papier 80 g, beidseitig</strong> nur f&uuml;r das Trainer-Skript Story 4: zwei Seiten auf ein Blatt, <strong>an der langen Kante wenden</strong>.</li>
             <li><strong>A3</strong> nur f&uuml;r die Uhrmatte aus Story 5 (80 bis 160 g). Ohne A3-Drucker oben &bdquo;2&times; A4&ldquo; w&auml;hlen und die beiden H&auml;lften an der markierten Kante zusammenkleben.</li>
             <li><strong>Schneiden und falzen:</strong> grau gestrichelt ist Schnitt, violett gestrichelt ist Falz. Karton vor dem Falzen mit Lineal und dem R&uuml;cken eines Messers rillen. Jede Karte hat 3&nbsp;mm wei&szlig;en Rand, ein paar Millimeter daneben schneiden st&ouml;rt nicht.</li>
-            <li><strong>Rollenkarten</strong> passen in den 3D-Aufsteller (<code>card_stand.scad</code>, Schlitz 0,8&nbsp;mm). Als <em>Faltkarte</em> einseitig drucken, in der Mitte falzen, Falz nach oben, unbedruckte Seiten zusammen: vorne die Rolle f&uuml;r den Raum, hinten die Regeln f&uuml;r die Person. Als <em>Einzelkarte</em> beidseitig drucken, <strong>an der kurzen Kante wenden</strong>, vorher einen Bogen gegen das Licht halten.</li>
-            <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 ab 16 mit Booking-2, Story 5 ab 14 mit zwei Tischen, Story 7 ab 12 mit zwei Tischen. Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
+            <li><strong>Zustandskarten</strong> (A6 quer) stehen im 3D-Aufsteller (<code>card_stand.scad</code>) vor Booking. <strong>Rollenkarten</strong> passen ebenfalls hinein (Schlitz 0,8&nbsp;mm). Als <em>Faltkarte</em> einseitig drucken, in der Mitte falzen, Falz nach oben, unbedruckte Seiten zusammen: vorne die Rolle f&uuml;r den Raum, hinten die Regeln f&uuml;r die Person. Als <em>Einzelkarte</em> beidseitig drucken, <strong>an der kurzen Kante wenden</strong>, vorher einen Bogen gegen das Licht halten.</li>
+            <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 braucht f&uuml;r jede Gruppengr&ouml;&szlig;e denselben Stapel, Story 5 ab 14 mit zwei Tischen (dann zwei S&auml;tze Fehler- und Zustandskarten, Story 4 nutzt Satz A), Story 7 ab 12 mit zwei Tischen. Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
         </ul>
 
         <h2>Inhalt</h2>
@@ -302,44 +341,54 @@
 
 <!-- ============ Trainer-Spickzettel (statisches HTML, wird je 1x gedruckt) ============ -->
 
-<template id="tpl-cheat-s4">
+<template id="tpl-script-s4">
 <div class="cheat">
-    <div class="ckline"><div><div class="ck">Spickzettel Trainer &middot; Story 4</div><h1>Wenn der Flug ausf&auml;llt</h1></div><div>ca. 20 min Spiel &middot; ab 7 Personen</div></div>
+    <div class="ckline"><div><div class="ck">Trainer-Skript &middot; Story 4 &middot; Seite 1/2</div><h1>Ein Booking, ein Stapel</h1></div><div>ca. 20 min inkl. Gespr&auml;ch &middot; ab 4 Personen &middot; ein Stapel f&uuml;r jede Gruppengr&ouml;&szlig;e</div></div>
     <div class="two">
         <div>
+            <h2>Vorher</h2>
+            <ul>
+                <li>Stapel 00&ndash;27 mit Seite 2 abhaken, 00 liegt oben.</li>
+                <li>Fehlerkarten 1&ndash;5, Zustandskarten CLOSED / OPEN / HALF_OPEN und Aufsteller bereitlegen (Satz A aus &bdquo;Story 4 + 5&ldquo;).</li>
+                <li>Dashboard Story 4 f&uuml;r die Demo danach offen, Flight auf &bdquo;Normal&ldquo;.</li>
+            </ul>
             <h2>Aufbau</h2>
             <ul>
-                <li>Booking-Tisch: Strichliste in Prospekth&uuml;lle mit Whiteboard-Marker, Zustandskarte CLOSED im Aufsteller (OPEN und HALF_OPEN daneben), gr&uuml;ne und blaue Karten, Korb &bdquo;R&uuml;ckgabe&ldquo;, PROBE-Token.</li>
-                <li>Hotel + Car direkt neben Booking, Flight mit Briefing-Karte etwas abseits, die Schlange davor. Stoppuhr beim Trainer.</li>
-                <li>Die f&uuml;nf roten Karten beh&auml;lt der Trainer bis Runde 3b.</li>
+                <li>Eine Person spielt Booking: Tisch, Stapel vor sich, Aufsteller zur Schlange hin. Zustands- und Fehlerkarten liegen daneben, sie kommen erst mit Karte 04 ins Spiel.</li>
+                <li>Alle anderen stehen in einer Schlange vor Booking. Daneben ein freier Ablagetisch.</li>
+                <li>Flight, Hotel und Car spielt niemand. Der Trainer hat keine Rolle und keine Uhr, er moderiert nur an den grauen STOPP-Karten.</li>
             </ul>
         </div>
         <div>
-            <h2>Besetzung</h2>
+            <h2>Ansage</h2>
+            <p class="quote">&bdquo;Eine Person ist Booking, alle anderen sind Suchanfragen, <code>GET /booking/offers</code>. Flight, Hotel und Car spielt niemand, ihr Verhalten steht auf den Karten. Booking liest oben, tut genau das und gibt dem n&auml;chsten Gast die Karte. Ihr lest unten &sbquo;Deine Antwort&lsquo; laut vor, legt die Karte nach Nummer auf den Ablagetisch und stellt euch sofort hinten wieder an. Graue STOPP-Karten kommen zu mir.&ldquo;</p>
+            <h2>Wenn es hakt</h2>
             <ul>
-                <li>Booking 1, Flight 1, Hotel + Car 1&ndash;2, alle anderen sind Suchanfragen (bei 12: 8&ndash;9).</li>
-                <li>Ab 16: ein echtes Booking-2 mit eigener Schlange, Strichliste und Zustandskarten. Die roten G&auml;ste gehen nur zu Booking-1.</li>
+                <li>Z&auml;hlt zu schnell: einmal laut mitz&auml;hlen.</li>
+                <li>Fehlerkarte vergessen: am STOPP mit Seite 2 abgleichen, die Antworten stehen fest.</li>
+                <li>Stapel durcheinander: Nummern, Seite 2.</li>
+                <li>Schlange leer: sofort wieder anstellen ist Pflicht.</li>
             </ul>
         </div>
     </div>
-    <h2>Runden: erst ansagen, Vorhersage, dann spielen, dann Fragment</h2>
-    <table>
-        <tr><th>Runde</th><th>Flight (geheim)</th><th>Mechanik</th><th>Aufl&ouml;sung</th></tr>
-        <tr><td>1 ohne Schalter</td><td>schweigt</td><td>Booking z&auml;hlt bis drei, sagt &bdquo;500&ldquo; und fragt Hotel und Car nicht.</td><td class="ans">Null Karten, jede Anfrage kostet 3 s.</td></tr>
-        <tr><td>2 mit Schalter</td><td>schweigt</td><td>Jeder Timeout: Strich, Hotel und Car fragen, gr&uuml;ne Karte. F&uuml;nf in Folge: &bdquo;OPEN&ldquo;, Zustandskarte tauschen, ab dann Karte sofort und &bdquo;Circuit open!&ldquo;.</td><td class="ans">Die Karte gibt es ab dem ersten Fehler, nur langsam. Der Schalter macht sie schnell (Recap 02).</td></tr>
-        <tr><td>HALF_OPEN</td><td>1. Probe schweigt, 2. Probe antwortet</td><td>30 s nach &bdquo;OPEN&ldquo; ruft der Trainer &bdquo;HALF_OPEN&ldquo;. Booking gibt dem n&auml;chsten Gast das PROBE-Token und fragt Flight, alle dahinter bekommen sofort die Karte. Still: Strich, OPEN, 30 s neu. Antwort: blaue Karte, wegwischen, CLOSED. Token zur&uuml;ck an Booking.</td><td class="ans">Nur einer probiert, die anderen warten nicht (Recap 03).</td></tr>
-        <tr><td>3a wacklig</td><td>antwortet jedes zweite Mal</td><td>Jede Antwort: blaue Karte, Liste wegwischen. Jeder Timeout: Strich und gr&uuml;ne Karte.</td><td class="ans">Das Schild geht nie auf OPEN, trotzdem wartet jede zweite Suche. Br&uuml;cke zur Fehlerquote im Fenster.</td></tr>
-        <tr><td>3b rote G&auml;ste</td><td>gesund, auf Rot sofort &bdquo;400&ldquo;</td><td>Der Trainer gibt den n&auml;chsten f&uuml;nf in der Schlange je eine rote Karte &bdquo;Datum 31.02.&ldquo;.</td><td class="ans">Ja, das gibt Striche: unser Code z&auml;hlt alles ab 400 (Recap 01). Transfer Recap 04: Booking-2 hat die roten G&auml;ste nie gesehen und zeigt CLOSED.</td></tr>
+    <h2>Die f&uuml;nf STOPPs: fragen, Antworten sammeln, dann aufl&ouml;sen</h2>
+    <table class="stops">
+        <tr><th>STOPP</th><th>Sagen</th><th>Soll passieren</th><th>Erkl&auml;rung</th></tr>
+        <tr><td>STOPP 1<small>Karte 04</small></td><td>&bdquo;Was habt ihr bekommen? Wie lange? Hotel und Car waren gesund, was hattet ihr davon?&ldquo; Ansage: &bdquo;Booking bekommt einen Schalter und 3&nbsp;s Timeout. Was &auml;ndert sich?&ldquo;</td><td>Booking stellt CLOSED auf, legt die Fehlerkarten 1&ndash;5 bereit und z&auml;hlt ab jetzt nur bis drei.</td><td class="ans">Story 3 bricht beim ersten Fehler mit 500 ab, Hotel und Car werden nie gefragt. &bdquo;Zustand und Fehlerkarten sind das Dashboard. Das sieht der Betrieb, nicht ihr.&ldquo;</td></tr>
+        <tr><td>STOPP 2<small>Karte 13 &middot; Recap 02</small></td><td>Am Ablagetisch: &bdquo;Ab welcher Nummer gab es <code>flights: []</code>? Was ist ab 10 anders?&ldquo; &bdquo;Steht die Zahl der Fehler in eurer Antwort?&ldquo; Zum Schluss: &bdquo;30 Sekunden sind um.&ldquo;</td><td>Booking stellt die Zustandskarte auf HALF_OPEN. Die Fehlerkarten bleiben liegen.</td><td class="ans">Fallback ab dem ersten Fehler, OPEN macht ihn nur schnell und setzt <code>X-Circuit-Open</code> (09 hat Flight noch gefragt). Nein: Status, Body, Header. Hotel und Car haben eigene Schalter, die bleiben zu.</td></tr>
+        <tr><td>STOPP 3<small>Karte 17 &middot; Recap 03</small></td><td>&bdquo;Wer war bei Flight? Was haben 15 und 16 bekommen, wie schnell? Was, wenn alle Wartenden zu Flight gegangen w&auml;ren?&ldquo; Zum Schluss: &bdquo;30 Sekunden sind um, Flight ist zur&uuml;ck.&ldquo;</td><td>Booking stellt auf HALF_OPEN. Karte 18 ist die zweite Probe und schlie&szlig;t den Schalter.</td><td class="ans">Genau ein Probe-Slot (<code>CompareAndSwap</code>), der Rest sofort Fallback, sonst kippt das erholende Backend wieder.</td></tr>
+        <tr><td>STOPP 4<small>Karte 20</small></td><td>Vorhersage, nicht aufl&ouml;sen: &bdquo;Flight ist gesund. Die n&auml;chsten haben sich vertippt, Datum 31.02. Gibt das Fehlerkarten?&ldquo;</td><td>Handzeichen, dann weiterspielen. Zustand CLOSED, 0/5.</td><td class="ans">Erst bei ENDE aufl&ouml;sen.</td></tr>
+        <tr><td>ENDE<small>Karte 27 &middot; Recap 01 + 04</small></td><td>&bdquo;War Flight bei 21 bis 25 kaputt? Wer wurde bei 26 bestraft?&ldquo; Dann: &bdquo;Neben uns l&auml;uft eine zweite Booking-Instanz mit eigenem Speicher. Was zeigt deren Zustandskarte? H&auml;tte sie bei 05 bis 09 auch f&uuml;nfmal 3&nbsp;s warten m&uuml;ssen? Was wei&szlig; Booking nach einem Neustart?&ldquo;</td><td>Zustand und Fehlerkarten bleiben liegen (OPEN, 5/5), alle reden gemeinsam.</td><td class="ans">4xx ist kein Ausfall, unser Code z&auml;hlt alles ab 400. Zustand lebt im RAM einer Instanz: macht zu Unrecht dicht und ist unn&ouml;tig langsam. Geteilter Zustand hilft, kostet Kopplung.</td></tr>
     </table>
-    <h2>Merken</h2>
+    <h2>Vereinfachungen (offen sagen)</h2>
     <ul>
-        <li><strong>Du bist die Uhr</strong>, nicht Flight: Stoppuhr bei &bdquo;OPEN&ldquo; starten, nach einer stillen Probe neu starten. Ab 16 laufen zwei Fenster.</li>
-        <li>HALF_OPEN einmal einfrieren: &bdquo;Wer darf zu Flight?&ldquo; Nur wer das Token h&auml;lt.</li>
-        <li>Kartenfluss: Wer eine Antwort hat, legt die Karte in den Korb und stellt sich sofort hinten wieder an. Booking nimmt Nachschub aus dem Korb.</li>
-        <li>Wann eine Runde endet, steht weder im Doc noch auf der Folie: beenden, sobald der Punkt sichtbar ist.</li>
-        <li>Vereinfachungen: bis drei = 3-s-Timeout (Story 3 hatte 5 s), das Neu-Anstellen in Runde 1 ist ein Client-Retry, HALF_OPEN wechselt im Code erst beim n&auml;chsten Call.</li>
-        <li>Danach Demo: Flight auf &bdquo;H&auml;ngt&ldquo;. <strong>Strichliste, Zustandskarten und Aufsteller f&uuml;r Story 5 aufheben.</strong></li>
+        <li>Bis f&uuml;nf z&auml;hlen = 5&nbsp;s Timeout in Story 3, bis drei = 3&nbsp;s in Story 4.</li>
+        <li>Die 30&nbsp;s vergehen im Gespr&auml;ch; im Code wechselt der Zustand beim n&auml;chsten Call oder beim n&auml;chsten Blick ins Dashboard.<sup>*</sup></li>
+        <li>Datum 31.02. ist ein Gedankenspiel: Die Referenz reicht keine Suchparameter an Flight weiter.</li>
+        <li>Wieder anstellen ist ein Client-Retry, den die Referenz nicht hat.</li>
+        <li>Vertiefung nur im Gespr&auml;ch (kein Spielblock mehr): Fehler in Folge vs. Fehlerquote im Fenster (Resilience4j): ein wackliges Flight &ouml;ffnet unseren Schalter nie, trotzdem wartet jede zweite Suche.</li>
     </ul>
+    <p class="fn"><sup>*</sup> Fu&szlig;note: Die Referenz z&auml;hlt auch die gescheiterte Probe (14) mit, das Dashboard zeigt dann 6/5. Im Spiel keine sechste Karte.</p>
 </div>
 </template>
 
@@ -350,7 +399,7 @@
         <div>
             <h2>Aufbau (pro Tisch)</h2>
             <ul>
-                <li>Booking: Bulkhead-Tablett mit 6 Chips, Streifen davor, Zustandskarte CLOSED, Strichliste aus Story 4, orange Karten <code>hotels: []</code>, Ablage &bdquo;wartet&ldquo; / &bdquo;komplett&ldquo; / &bdquo;<code>hotels: []</code>&ldquo;.</li>
+                <li>Booking: Bulkhead-Tablett mit 6 Chips, Streifen davor, Zustandskarte CLOSED, Fehlerkarten 1&ndash;5 aus Story 4, orange Karten <code>hotels: []</code>, Ablage &bdquo;wartet&ldquo; / &bdquo;komplett&ldquo; / &bdquo;<code>hotels: []</code>&ldquo;.</li>
                 <li>Hotel mit der Uhrmatte. Suchkarten #01&ndash;#20 als Stapel am Anfang der Schlange.</li>
                 <li>Ohne Tablett: ein gro&szlig;er Becher, f&uuml;r Runde 2 drei Becher F, H, C.</li>
             </ul>
@@ -370,7 +419,7 @@
         <tr><td>Probelauf</td><td>ohne W&auml;nde, 6 Chips, Hotel gibt beim n&auml;chsten Takt zur&uuml;ck</td><td>3 Takte zum Einspielen</td><td class="ans">Bei Hotel liegt nie mehr als ein Chip. Danach Stapel und Uhr zur&uuml;cksetzen.</td></tr>
         <tr><td>Runde 1</td><td>ohne W&auml;nde, ein Pool mit 6 Chips</td><td>Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?</td><td class="ans">4 (#17&ndash;#20). Uhr 6 (#11&ndash;#16), komplett 10. Ab #7 wartet jede schon auf Flight (Recap 01).</td></tr>
         <tr><td>Runde 2</td><td>W&auml;nde rein, je 2 Chips f&uuml;r Flight, Hotel, Car</td><td>Wie viele der 20 Suchen bekommen einen Hotel-Chip?</td><td class="ans">6 (#01, #02, #09, #10, #17, #18). Komplett 4, Uhr 2, <code>hotels: []</code> 14. Flight und Car laufen ungest&ouml;rt.</td></tr>
-        <tr><td>Schild</td><td></td><td>Steht es noch auf CLOSED?</td><td class="ans">Ja: 8 Takte liegen unter 12, kein Strich, Rejects erreichen den Breaker nie.</td></tr>
+        <tr><td>Schild</td><td></td><td>Steht es noch auf CLOSED?</td><td class="ans">Ja: 8 Takte liegen unter 12, keine Fehlerkarte, Rejects erreichen den Breaker nie.</td></tr>
     </table>
     <div class="two">
         <div>
@@ -465,6 +514,7 @@ const PAPER = {
     karton: { label: "Karton 250 g", hint: "einseitig" },
     duplex: { label: "Karton 250 g", hint: "beidseitig, kurze Kante" },
     papier: { label: "Papier 80 g", hint: "" },
+    pduplex: { label: "Papier 80 g", hint: "beidseitig, lange Kante" },
     a3:     { label: "A3", hint: "80–160 g" }
 };
 const SIZES = { a4p: [210, 297], a4l: [297, 210], a3l: [420, 297] };
@@ -473,14 +523,49 @@ const FORMAT = { a4p: "A4 hoch", a4l: "A4 quer", a3l: "A3 quer" };
 // Bulkhead-Tablett aus docs/orga/3d/bulkhead_tray.scad (col_pitch, Breite 161,5 mm)
 const TRAY = { width: 161.5, pitch: 52 };
 
-// Antwortkarten Story 4 (70 × 99 mm)
-const S4_CARDS = {
-    fallback: { cls: "green", band: "Fallback", main: ["Hotel ✓ ·", "Car ✓ ·", "`flights: []`"], foot: "Karte in den Korb, dann sofort hinten wieder anstellen." },
-    full:     { cls: "blue", band: "Volles Angebot", main: ["Hotel ✓ ·", "Car ✓ ·", "Flight ✓"], foot: "Karte in den Korb, dann sofort hinten wieder anstellen." },
-    red:      { cls: "red", band: "Runde 3b", main: ["Datum", "31.02."], foot: "Kaputtes Datum. Flight sagt darauf sofort „400“." },
-    probe:    { cls: "yellow", band: "HALF_OPEN", main: ["PROBE"], foot: "Nur wer das hält, darf zu Flight. Danach zurück an Booking. (Ersatz für das 3D-Token)" },
-    basket:   { cls: "dark", band: "Korb", main: ["Rückgabe"], foot: "Antwortkarte hier hinein, dann sofort hinten wieder anstellen." }
+// Story 4: Stapel 00–27 (A6 hoch). Booking liest oben „Booking tut“, der Gast liest unten „Deine Antwort“.
+// Antworten wie services/booking/story3 (Timeout 5 s, Abbruch) und story4 (Timeout 3 s, Fallback, Breaker).
+const S4_ANSWERS = {
+    fail500: { code: "500/5s",  lines: ["500 · 5 s", "failed to fetch flights", "keine Hotels, keine Autos"] },
+    fbSlow:  { code: "FB slow", lines: ["200 · 3 s", "flights: []", "hotels ✓ · cars ✓", "X-Fallback: flight"] },
+    fbFast:  { code: "FB fast", lines: ["200 · sofort", "flights: []", "hotels ✓ · cars ✓", "X-Fallback: flight"] },
+    co:      { code: "CO",      lines: ["200 · sofort", "flights: []", "hotels ✓ · cars ✓", "X-Fallback: flight", "X-Circuit-Open: flight"] },
+    ok:      { code: "ok",      lines: ["200 · sofort", "flights ✓ · hotels ✓ · cars ✓", "keine X-Header"] }
 };
+// cls: Farbe des Bands (start, none, closed, open, half, stopp); same: Text wie Karte NN; ans: Schlüssel in S4_ANSWERS;
+// pre: Satz vor dem Antwortblock; note: statt Antwort; after: Fehlerkarten und Zustand danach (nur Trainer-Skript)
+const S4_DECK = [
+    { nr: "00", band: "START", cls: "start", key: "Regeln, noch kein Schalter", tut: "Du bist Booking. Karten streng der Reihe nach: oben lesen, genau das tun, Karte dem nächsten Gast geben. Graue STOPP-Karten gibst du dem Trainer. Noch hast du keinen Schalter.", note: "Booking behält sie, legt sie am Ende als erste auf den Ablagetisch.", after: "kein Schalter" },
+    { nr: "01", band: "OHNE SCHALTER", cls: "none", key: "Flight schweigt, bis fünf, 500", tut: "Frag Flight. Flight schweigt. Zähl laut und langsam: „eins, zwei, drei, vier, fünf, Timeout.“ Sag: „500.“ Hotel und Car fragst du nicht.", ans: "fail500", after: "kein Schalter" },
+    { nr: "02", band: "OHNE SCHALTER", cls: "none", key: "bis fünf, 500", tut: "Flight schweigt. Zähl laut und langsam bis fünf: „… Timeout.“ Sag: „500.“", ans: "fail500", after: "kein Schalter" },
+    { nr: "03", band: "OHNE SCHALTER", cls: "none", key: "wie 02", same: "02", ans: "fail500", after: "kein Schalter" },
+    { nr: "04", band: "STOPP 1", cls: "stopp", key: "Schalter kommt, ab jetzt bis drei", tut: "STOPP. Karte zum Trainer. Danach: Zustandskarte CLOSED vor dich stellen, die Fehlerkarten 1–5 daneben bereitlegen. Ab jetzt hast du einen Schalter und zählst nur bis drei.", big: "STOPP", after: "0/5 · CLOSED" },
+    { nr: "05", band: "CLOSED", cls: "closed", key: "Timeout, 1. Fehlerkarte", tut: "Frag Flight. Flight schweigt. Zähl laut: „eins, zwei, drei, Timeout.“ Leg die nächste Fehlerkarte hin.", ans: "fbSlow", after: "1/5 · CLOSED" },
+    { nr: "06", band: "CLOSED", cls: "closed", key: "Timeout, Fehlerkarte", tut: "Flight schweigt. Zähl laut bis drei: „… Timeout.“ Leg die nächste Fehlerkarte hin.", ans: "fbSlow", after: "2/5" },
+    { nr: "07", band: "CLOSED", cls: "closed", key: "wie 06", same: "06", ans: "fbSlow", after: "3/5" },
+    { nr: "08", band: "CLOSED", cls: "closed", key: "wie 06", same: "06", ans: "fbSlow", after: "4/5" },
+    { nr: "09", band: "CLOSED → OPEN", cls: "open", key: "5. Fehlerkarte, „OPEN!“", tut: "Flight schweigt. Zähl laut bis drei: „… Timeout.“ Leg die nächste Fehlerkarte hin. Ist es die 5: ruf „OPEN!“ und stell die Zustandskarte auf OPEN.", ans: "fbSlow", after: "5/5 · OPEN" },
+    { nr: "10", band: "OPEN", cls: "open", key: "Circuit open, sofort", tut: "Zustand OPEN: Flight nicht fragen, nicht zählen. Sag sofort: „Circuit open!“", ans: "co", after: "5/5 · OPEN" },
+    { nr: "11", band: "OPEN", cls: "open", key: "wie 10", same: "10", ans: "co", after: "OPEN" },
+    { nr: "12", band: "OPEN", cls: "open", key: "wie 10", same: "10", ans: "co", after: "OPEN" },
+    { nr: "13", band: "STOPP 2", cls: "stopp", key: "30 s um, HALF_OPEN", tut: "STOPP. Karte zum Trainer. Sagt der Trainer „30 Sekunden sind um“: Zustandskarte auf HALF_OPEN.", big: "STOPP", after: "5/5 · HALF_OPEN" },
+    { nr: "14", band: "HALF_OPEN · PROBE", cls: "half", key: "Probe scheitert, wieder OPEN", tut: "Dieser Gast ist die PROBE: Er stellt sich neben dich und zählt selbst. Du machst sofort weiter. Ruft er „Timeout!“: Zustandskarte auf OPEN.", pre: "Du bist die PROBE. Karte hoch, laut: „eins, zwei, drei, Timeout!“", ans: "fbSlow", code: "PROBE + FB slow", after: "OPEN (Fehlerkarten bleiben liegen)" },
+    { nr: "15", band: "PROBE LÄUFT", cls: "half", key: "Probe läuft, sofort Fallback", tut: "Die Probe läuft: Flight nicht fragen. Sag sofort: „Circuit open!“", ans: "co", after: "HALF_OPEN oder OPEN" },
+    { nr: "16", band: "PROBE LÄUFT", cls: "half", key: "sofort Fallback, auf „Timeout!“ warten", tut: "Flight nicht fragen. Sag sofort: „Circuit open!“ Weiter erst, wenn die Probe „Timeout!“ gerufen hat.", ans: "co", after: "OPEN" },
+    { nr: "17", band: "STOPP 3", cls: "stopp", key: "30 s um, HALF_OPEN", tut: "STOPP. Karte zum Trainer. Sagt der Trainer „30 Sekunden sind um“: Zustandskarte auf HALF_OPEN.", big: "STOPP", after: "HALF_OPEN" },
+    { nr: "18", band: "HALF_OPEN · PROBE", cls: "half", key: "Probe gelingt, CLOSED", tut: "Dieser Gast ist die PROBE und stellt sich neben dich. Ruft er „Flight antwortet!“: alle Fehlerkarten weg, Zustandskarte auf CLOSED.", pre: "Du bist die PROBE. Ruf sofort: „Flight antwortet!“", ans: "ok", code: "PROBE + ok", after: "0/5 · CLOSED" },
+    { nr: "19", band: "CLOSED", cls: "closed", key: "Flight antwortet", tut: "Frag Flight. Flight antwortet sofort. Antworte normal.", ans: "ok", after: "0/5 · CLOSED" },
+    { nr: "20", band: "STOPP 4", cls: "stopp", key: "Vorhersage 31.02.", tut: "STOPP. Karte zum Trainer.", big: "STOPP", after: "0/5 · CLOSED" },
+    { nr: "21", band: "CLOSED · 31.02.", cls: "closed", key: "400 zählt als Fehler", tut: "Flight ist gesund. Lies laut: „Datum 31.02.“ Flight sagt sofort „400“. Unser Code zählt alles ab 400: Leg die nächste Fehlerkarte hin.", pre: "Dein Datum: 31.02.", ans: "fbFast", code: "31.02. + FB fast", after: "1/5" },
+    { nr: "22", band: "31.02.", cls: "closed", key: "400, Fehlerkarte", tut: "Lies laut: „Datum 31.02.“ Flight sagt sofort „400“. Leg die nächste Fehlerkarte hin.", pre: "Dein Datum: 31.02.", ans: "fbFast", code: "31.02. + FB fast", after: "2/5" },
+    { nr: "23", band: "31.02.", cls: "closed", key: "wie 22", same: "22", pre: "Dein Datum: 31.02.", ans: "fbFast", code: "31.02. + FB fast", after: "3/5" },
+    { nr: "24", band: "31.02.", cls: "closed", key: "wie 22", same: "22", pre: "Dein Datum: 31.02.", ans: "fbFast", code: "31.02. + FB fast", after: "4/5" },
+    { nr: "25", band: "31.02. → OPEN", cls: "open", key: "5. Fehlerkarte, „OPEN!“", tut: "Lies laut: „Datum 31.02.“ Flight sagt sofort „400“. Leg die nächste Fehlerkarte hin. Ist es die 5: ruf „OPEN!“, Zustandskarte auf OPEN.", pre: "Dein Datum: 31.02.", ans: "fbFast", code: "31.02. + FB fast", after: "5/5 · OPEN" },
+    { nr: "26", band: "OPEN · 14.03.", cls: "open", key: "gültiges Datum, trotzdem Circuit open", tut: "Dieser Gast hat ein gültiges Datum. Zustand OPEN: Flight nicht fragen. Sag sofort: „Circuit open!“", pre: "Dein Datum: 14.03.", ans: "co", code: "14.03. + CO", after: "OPEN" },
+    { nr: "27", band: "ENDE", cls: "stopp", key: "Endstand, Gespräch", tut: "ENDE. Karte zum Trainer. Zustand und Fehlerkarten bleiben liegen, wir reden jetzt gemeinsam.", big: "ENDE", after: "Endstand" }
+];
+// Bandfarben je Phase (Text im Band trägt die Phase auch in Schwarzweiß)
+const S4_PHASE = { start: "violet", none: "dark", closed: "green", open: "red", half: "yellow", stopp: "stopp" };
 
 // Story 5 (65 × 90 mm)
 const S5_FALLBACK = { cls: "orange", band: "Fallback · Runde 2", main: ["`hotels: []`"], foot: "Hotel-Spalte leer: Booking legt die Karte sofort auf die Suchkarte." };
@@ -488,40 +573,18 @@ const S5_FALLBACK = { cls: "orange", band: "Fallback · Runde 2", main: ["`hotel
 // Story 7 (70 × 49,5 mm, je zwei in einer 70 × 99-Zelle)
 const S7_SIGNAL = { cls: "violet", band: "Kassensturz", main: ["Runde fertig,", "Korb leer"], foot: "Hotel und Flight sind fertig, der Korb ist leer. Jetzt laut die Becher zählen." };
 
-// Zustandskarten für den Aufsteller (Booking tauscht die Karte)
+// Story 4 + 5: Zustandskarten (A6 quer, Aufsteller) und Fehlerkarten 1–5 (ersetzen die Strichliste)
 const STATES = [
     { id: "closed",   cls: "green",  name: "CLOSED",    sub: "Booking fragt Flight." },
-    { id: "open",     cls: "red",    name: "OPEN",      sub: "Karte sofort, „Circuit open!“" },
+    { id: "open",     cls: "red",    name: "OPEN",      sub: "Flight nicht fragen, sofort „Circuit open!“" },
     { id: "halfopen", cls: "yellow", name: "HALF_OPEN", sub: "Nur die Probe geht zu Flight." }
 ];
+const OPS_NOTE = "Das sieht nur der Betrieb (Dashboard), nicht die Kundschaft.";
+const FAULT_TEXT = "Bei jedem Fehler legt Booking die nächste Fehlerkarte in die Reihe vor die Zustandskarte. Ein Erfolg: alle zurück auf den Stapel.";
+const FAULT_LAST = "Fünfte Karte: „OPEN!“ rufen, Zustandskarte auf OPEN. Ein Erfolg: alle zurück auf den Stapel.";
 
 // Rollenkarten: Vorderseite Rolle groß, Rückseite 2–3 Regeln
 const ROLES = {
-    // ---------- Story 4 ----------
-    s4_booking: { story: "Story 4 · Circuit Breaker", cls: "c-violet", name: "Booking", sub: "hat den Schalter", rules: [
-        "Wartest du auf Flight, zählst du laut: „eins, zwei, drei, Timeout“. Runde 1 ohne Schalter: dann „500“, Hotel und Car fragst du nicht.",
-        "Ab Runde 2: Antwortet Flight, Liste wegwischen und blaue Karte. Jeder Fehler (Timeout oder „400“) ist ein Strich, dann Hotel und Car fragen und grüne Karte. Fünf Striche in Folge: „OPEN“ rufen, Zustandskarte tauschen, ab dann grüne Karte sofort und „Circuit open!“.",
-        "Ruft der Trainer „HALF_OPEN“, bekommt der nächste Gast das PROBE-Token und nur für ihn fragst du Flight. Alle dahinter bekommen sofort die Karte. Antwortet Flight: CLOSED. Bleibt Flight still: Strich, wieder OPEN."
-    ], foot: "Nachschub an Karten holst du dir aus dem Korb." },
-    s4_booking2: { story: "Story 4 · ab 16 Personen", cls: "c-violet", name: "Booking-2", sub: "zweite Instanz, eigener Schalter", rules: [
-        "Du hast eine eigene Schlange, eine eigene Strichliste und eigene Zustandskarten.",
-        "Es gelten dieselben Regeln wie bei Booking, auch für HALF_OPEN und die Probe.",
-        "Die roten Gäste aus Runde 3b kommen nicht zu dir. Welches Schild zeigst du am Ende?"
-    ] },
-    s4_flight: { story: "Story 4 · Circuit Breaker", cls: "c-flight", name: "Flight", sub: "folgt den geheimen Ansagen", rules: [
-        "Booking fragt dich für jeden Gast. Was du tust, steht auf deiner Briefing-Karte. Zeig sie niemandem.",
-        "Antworten heißt: sofort „Flight ✓“. Schweigen heißt: nichts sagen, Booking zählt bis drei."
-    ] },
-    s4_hotelcar: { story: "Story 4 · Circuit Breaker", cls: "c-dark", name: "Hotel + Car", long: true, sub: "antworten sofort", rules: [
-        "Fragt Booking, antwortet ihr sofort: „Hotel ✓“, „Car ✓“.",
-        "In Runde 1 fragt Booking euch gar nicht. Genau das ist der Punkt.",
-        "Ab Runde 2 werdet ihr immer gefragt, auch wenn Flight schweigt: Der Schalter gilt pro Backend."
-    ] },
-    s4_queue: { story: "Story 4 · Circuit Breaker", cls: "c-dark", name: "Suchanfragen", long: true, sub: "`GET /booking/offers`", rules: [
-        "Stell dich bei Booking an und warte auf deine Antwort.",
-        "Antwort bekommen: Karte in den Korb legen und sofort hinten wieder anstellen.",
-        "Runde 3b: Bekommst du vom Trainer eine rote Karte, bringst du sie mit zu Booking."
-    ] },
     // ---------- Story 5 ----------
     s5_takt: { story: "Story 5 · Bulkhead", cls: "c-violet", name: "Takt", sub: "zählt 1 bis 8 und klatscht", rules: [
         "Zähl laut 1 bis 8, dann wieder von vorn.",
@@ -531,7 +594,7 @@ const ROLES = {
     s5_booking: { story: "Story 5 · Bulkhead", cls: "c-violet", name: "Booking", sub: "verteilt die Chips", rules: [
         "Für jede Suchkarte rufst du nacheinander Flight, Hotel und Car. Jeder Aufruf braucht einen Chip aus dem Tablett. Kein Chip frei: Karte in die Reihe „wartet“.",
         "Runde 1 (ohne Wände): Die Karte behält ihren Chip von Flight über Hotel bis Car, dann geht er an die wartende Karte mit der kleinsten Nummer. Runde 2 (mit Wänden): Chip aus der Spalte des Backends. Hotel-Spalte leer: sofort orange Karte `hotels: []` drauf, weiter zu Car.",
-        "Fertige Karten auf die Stapel „komplett“ und „`hotels: []`“. Timeout: zwölf Takte ab dem Hotel-Aufruf, dann Strich wie in Story 4."
+        "Fertige Karten auf die Stapel „komplett“ und „`hotels: []`“. Timeout: zwölf Takte ab dem Hotel-Aufruf, dann die nächste Fehlerkarte hinlegen wie in Story 4."
     ] },
     s5_booking2: { story: "Story 5 · ab 12 am Tisch", cls: "c-violet", name: "Booking", sub: "an den Stapeln", rules: [
         "Ihr seid zu zweit Booking: Du nimmst die Suchkarten an und führst die Reihe „wartet“, kleinste Nummer vorn.",
@@ -593,15 +656,8 @@ const ROLES = {
     ] }
 };
 
-// Geheime Briefings (Wortlaut: story-04 „Geheimes Briefing“, story-07 Tabelle „Geheimes Briefing“)
+// Geheimes Briefing (Wortlaut: story-07 Tabelle „Geheimes Briefing“)
 const BRIEFINGS = {
-    s4: { story: "Story 4", title: "Briefing Flight", rows: [
-        ["Runde 1", "Schweigen."],
-        ["Runde 2", "Schweigen."],
-        ["HALF_OPEN", "Erste Probe: schweigen. Zweite Probe: antworten."],
-        ["Runde 3a", "Abwechselnd: jedes zweite Mal antworten."],
-        ["Runde 3b", "Gesund, immer antworten. Auf rote Karten sofort „400“."]
-    ], foot: "Die Uhr ist der Trainer, nicht du." },
     s7: { story: "Story 7", title: "Briefing Flight", rows: [
         ["Runde 1", "Spiel ganz normal."],
         ["Runde 2", "Bei Reise 2 reagierst du auf „storniere“ nicht: kein „gehört“, kein Gummibärchen. Buchen geht normal."],
@@ -618,9 +674,8 @@ function split(n, k) {
 
 function config(n) {
     const tableNames = ["A", "B", "C"];
-    // Story 4: ab 16 ein echtes Booking-2 (story-04 „Variante ab 16 Personen“)
-    const s4Bookings = n >= 16 ? 2 : 1;
-    const s4Queue = n - s4Bookings - 2; // Flight, Hotel + Car
+    // Story 4: ein Booking, alle anderen sind Suchanfragen, ein Stapel für jede Gruppengröße
+    const s4Queue = n - 1;
     // Story 5: ab 14 zwei Tische; ab 9 Flight/Car getrennt, ab 12 zwei bei Booking
     const s5 = split(n, n >= 14 ? 2 : 1).map((t, i) => ({ name: tableNames[i], size: t, bookingHelper: t >= 12, splitFlightCar: t >= 9 }));
     // Story 7: ab 12 zwei Tische; ab 9 am Tisch eigene Korb-Person
@@ -628,7 +683,9 @@ function config(n) {
         const korb = t >= 9;
         return { name: tableNames[i], size: t, korb, trips: t - 4 - (korb ? 1 : 0) };
     });
-    return { n, s4Bookings, s4Queue, s5, s7 };
+    // Fehler- und Zustandskarten: ein Satz pro Story-5-Tisch, Story 4 nutzt Satz A
+    const stateSets = Math.max(1, s5.length);
+    return { n, s4Queue, stateSets, s5, s7 };
 }
 
 /* =====================================================================
@@ -681,9 +738,59 @@ function briefBack(b) {
         `<table class="brief-table">${b.rows.map(([r, t]) => `<tr><th>${esc(r)}</th><td>${fmt(t)}</td></tr>`).join("")}</table>` +
         `<div class="foot" style="margin-top:auto">${fmt(b.foot)}</div></div>`;
 }
-function stateFace(s) {
-    return `<div class="face state ${s.cls}"><div class="band">Story 4 + 5 · Zustand<small>Booking tauscht die Karte</small></div>` +
-        `<div class="role-main"><div class="role-name${s.name.length > 6 ? " long" : ""}">${esc(s.name)}</div><div class="role-sub">${fmt(s.sub)}</div></div></div>`;
+function stateFace(s, set) {
+    return `<div class="face state ${s.cls}"><div class="band">Story 4 + 5 · Zustand<small>Booking tauscht die Karte${set ? " · Satz " + esc(set) : ""}</small></div>` +
+        `<div class="role-main"><div class="role-name${s.name.length > 6 ? " long" : ""}">${esc(s.name)}</div><div class="role-sub">${fmt(s.sub)}</div></div>` +
+        `<div class="foot">${fmt(OPS_NOTE)}</div></div>`;
+}
+function faultFace(i, set) {
+    const last = i === 5;
+    return `<div class="face fault ${last ? "red" : "dark"}"><div class="band">Story 4 + 5 · Fehlerkarte<small>Fehler in Folge${set ? " · Satz " + esc(set) : ""}</small></div>` +
+        `<div class="fk-main"><div class="fk-num">${i}</div><div class="fk-text">${last ? "<b>5 → OPEN!</b>" + fmt(FAULT_LAST) : fmt(FAULT_TEXT)}</div></div>` +
+        `<div class="foot">${fmt(OPS_NOTE)}</div></div>`;
+}
+
+// Story-4-Stapel: „wie NN“ löst Text und Antwort der Bezugskarte auf
+function deckEntry(d) {
+    const ref = d.same ? S4_DECK.find(x => x.nr === d.same) : null;
+    return Object.assign({}, ref, d, { tut: d.tut || ref.tut });
+}
+function deckCode(d) {
+    return d.code || (d.ans ? S4_ANSWERS[d.ans].code : "–");
+}
+function deckCard(raw) {
+    const d = deckEntry(raw);
+    const head = `<div class="dk-head"><div class="dk-num">${esc(d.nr)}</div><div class="dk-band"><small>Story 4 · Circuit Breaker</small>${esc(d.band)}</div></div>`;
+    const tut = `<div class="dk-tut"><div class="dk-lbl">Booking tut</div>${fmt(d.tut)}</div>`;
+    let bottom;
+    if (d.big) {
+        bottom = `<div class="dk-big">${esc(d.big)}</div>`;
+    } else if (d.note) {
+        bottom = `<div class="dk-ans"><div class="dk-lbl">Keine Antwort</div><div class="dk-note">${fmt(d.note)}</div></div><div class="dk-foot">Stapel streng der Reihe nach, 00 bis 27.</div>`;
+    } else {
+        bottom = `<div class="dk-ans"><div class="dk-lbl">Deine Antwort</div>${d.pre ? `<div class="dk-pre">${fmt(d.pre)}</div>` : ""}` +
+            `<pre class="dk-code">${esc(S4_ANSWERS[d.ans].lines.join("\n"))}</pre></div>` +
+            `<div class="dk-foot">Laut vorlesen · nach Nummer auf den Ablagetisch · sofort hinten anstellen</div>`;
+    }
+    return `<div class="face deck ${S4_PHASE[d.cls]}">${head}${tut}${bottom}</div>`;
+}
+
+// Trainer-Skript Seite 2: Kartentabelle aus S4_DECK
+function scriptS4Table() {
+    const rows = S4_DECK.map(raw => {
+        const d = deckEntry(raw);
+        return `<tr${d.cls === "stopp" ? ' class="stopp"' : ""}><td>${esc(d.nr)}</td><td>${esc(d.band)}</td><td>${fmt(d.key)}</td>` +
+            `<td class="mono">${esc(deckCode(d))}</td><td>${esc(d.after)}</td><td><span class="chk"></span></td></tr>`;
+    }).join("");
+    const legend = Object.entries(S4_ANSWERS).map(([, a]) => `<tr><td class="mono">${esc(a.code)}</td><td><code>${a.lines.map(esc).join(" / ")}</code></td></tr>`).join("");
+    return `<div class="cheat"><div class="ckline"><div><div class="ck">Trainer-Skript · Story 4 · Seite 2/2</div><h1>Der Stapel 00–27</h1></div><div>Danach = Fehlerkarten n/5 · Zustand · ☐ beim Sortieren abhaken</div></div>` +
+        `<table class="decktab"><tr><th>Nr</th><th>Phase</th><th>Stichwort</th><th>Antwort</th><th>Danach</th><th>☐</th></tr>${rows}</table>` +
+        `<h2>Antwort-Kurzcodes</h2><table class="decktab">${legend}</table>` +
+        `<p class="fn" style="margin:1.5mm 0 0"><code>X-Circuit-Open</code> nur, wenn Booking Flight gar nicht gefragt hat. Die 5. Fehlerkarte (09, 25) und die gescheiterte Probe (14) haben Flight noch gefragt: nur <code>X-Fallback</code>.</p>` +
+        `<h2>Danach: Demo im Dashboard Story 4</h2>` +
+        `<ul><li>Flight auf „Hängt“ (antwortet nach 10 s, Booking-Timeout 3 s), <code>GET /booking/offers</code>: Die ersten fünf warten je 3 s, immer 200 mit <code>flights: []</code> und <code>X-Fallback: flight</code>, ab dem 6. sofort mit <code>X-Circuit-Open: flight</code>. Schneller mit „Fehler“.</li>` +
+        `<li>Flight zurück auf „Normal“: nach 30 s HALF_OPEN (das Panel zeigt es schon ohne Call), eine erfolgreiche Probe schließt.</li>` +
+        `<li><strong>Fehlerkarten, Zustandskarten und Aufsteller für Story 5 aufheben.</strong></li></ul></div>`;
 }
 
 // Raster mit Schnittlinien. cells: HTML oder null; mirror spiegelt die Spalten (Rückseiten).
@@ -720,7 +827,7 @@ function padTo(list, size) {
  * ===================================================================== */
 function buildPlan(cfg, opts) {
     const sheets = [];
-    const add = (game, title, size, paper, body) => sheets.push({ game, title, size, paper, body });
+    const add = (game, title, size, paper, body, extra = {}) => sheets.push(Object.assign({ game, title, size, paper, body }, extra));
 
     // ---------- Karten 70 × 99 mm, 8 pro Bogen ----------
     const cards70 = (game, title, cells, fillWith) => {
@@ -748,41 +855,19 @@ function buildPlan(cfg, opts) {
     const rot = (html, on) => on ? html.replace('class="face ', 'class="face rot ') : html;
     const roleItem = id => ({ front: () => roleFront(ROLES[id]), back: r => rot(roleBack(ROLES[id]), r) });
     const briefItem = id => ({ front: () => briefFront(BRIEFINGS[id]), back: r => rot(briefBack(BRIEFINGS[id]), r) });
-    const stateItem = s => ({ front: () => stateFace(s), back: r => rot(stateFace(s), r) });
 
     // ================= Story 4 =================
-    add("Story 4", "Spickzettel Trainer", "a4p", "papier", document.getElementById("tpl-cheat-s4").innerHTML);
-    {
-        const b = cfg.s4Bookings;
-        const cells = [];
-        const green = face(S4_CARDS.fallback);
-        for (let i = 0; i < cfg.s4Queue + 4; i++) cells.push(green);
-        for (let i = 0; i < 6 * b; i++) cells.push(face(S4_CARDS.full));
-        for (let i = 0; i < 5; i++) cells.push(face(S4_CARDS.red));
-        for (let i = 0; i < b; i++) cells.push(face(S4_CARDS.probe), face(S4_CARDS.basket));
-        // Reihenfolge: grün, blau, rot, Probe/Korb; Lücken am Ende mit grünen Karten füllen
-        const per = 8, total = Math.ceil(cells.length / per) * per;
-        const greens = cells.filter(c => c === green);
-        const rest = cells.filter(c => c !== green);
-        while (greens.length + rest.length < total) greens.push(green);
-        chunk(greens.concat(rest), per).forEach(page => add("Story 4", "Antwortkarten", "a4l", "karton", grid("a4l", 4, 2, 70, 99, page)));
-    }
-    // Story 5 nutzt die Strichliste aus Story 4 wieder: so viele wie Booking-Instanzen bzw. Story-5-Tische
-    for (let i = 0; i < Math.max(cfg.s4Bookings, cfg.s5.length); i++) {
-        add("Story 4 + 5", "Strichliste Booking", "a4l", "papier", tallyS4(i ? "Exemplar 2: Booking-2 (Story 4), Tisch B (Story 5)" : ""));
-    }
-    {
-        const items = [];
-        const sets = Math.max(cfg.s4Bookings, cfg.s5.length);
-        for (let i = 0; i < sets; i++) STATES.forEach(s => items.push(stateItem(s)));
-        roleCards("Story 4 + 5", "Zustandskarten CLOSED / OPEN / HALF_OPEN", items);
-    }
-    {
-        const ids = ["s4_booking", "s4_flight", "s4_hotelcar", "s4_queue"];
-        if (cfg.s4Bookings > 1) ids.push("s4_booking2", "s4_queue");
-        const items = ids.map(roleItem);
-        items.push(briefItem("s4"));
-        roleCards("Story 4", "Rollenkarten und Briefing Flight", items);
+    add("Story 4", "Trainer-Skript", "a4p", "pduplex", document.getElementById("tpl-script-s4").innerHTML);
+    add("Story 4", "Trainer-Skript", "a4p", "pduplex", scriptS4Table());
+    // Stapel 00–27: A6 hoch, 4 pro A4-Bogen
+    chunk(S4_DECK.map(deckCard), 4).forEach(page => add("Story 4", "Stapel 00–27", "a4p", "karton",
+        grid("a4p", 2, 2, 105, 148, padTo(page, 4), { cellClass: "a6" }), { labelMid: 148 }));
+    // Fehlerkarten 1–5 und Zustandskarten: A6 quer (Aufsteller), ein Satz pro Story-5-Tisch
+    for (let i = 0; i < cfg.stateSets; i++) {
+        const set = cfg.stateSets > 1 ? cfg.s5[i].name : "";
+        const cells = [1, 2, 3, 4, 5].map(k => faultFace(k, set)).concat(STATES.map(st => stateFace(st, set)));
+        chunk(cells, 4).forEach(page => add("Story 4 + 5", "Fehlerkarten 1–5 und Zustandskarten" + (set ? " · Satz " + set : ""), "a4l", "karton",
+            grid("a4l", 2, 2, 148, 105, padTo(page, 4), { cellClass: "a6" }), { labelMid: 105 }));
     }
 
     // ================= Story 5 =================
@@ -867,14 +952,6 @@ function gridMixed(cells) {
     return out;
 }
 
-function tallyS4(note) {
-    return `<div class="tally"><h2>Booking · Fehler in Folge${note ? ` <small style="font-size:10pt;font-weight:600;color:#777">${esc(note)}</small>` : ""}</h2>` +
-        `<p class="lead">Strich bei jedem Fehler (Timeout oder „400“). Fünf in Folge: „OPEN“ rufen, Zustandskarte tauschen.</p>` +
-        `<div class="boxes">${[1, 2, 3, 4, 5].map(i => `<div class="box${i === 5 ? " last" : ""}"><b>${i}</b>${i === 5 ? "<em>→ OPEN</em>" : ""}</div>`).join("")}</div>` +
-        `<div class="wipe">Flight antwortet = alles wegwischen</div>` +
-        `<div class="small"><span>In eine Prospekthülle stecken, mit Whiteboard-Marker schreiben.</span><span>Story 5: Timeout nach 12 Takten ab dem Hotel-Aufruf</span></div></div>`;
-}
-
 function tallyS7(table) {
     return `<div class="tally"><h2>Booking · <code>dispatch-failed</code></h2>` +
         `<p class="lead">Runde 2: Bleibt „gehört!“ aus, laut bis drei zählen, einen Strich machen und trotzdem „storniert“ melden.</p>` +
@@ -952,7 +1029,8 @@ function render() {
         seen[k] = (seen[k] || 0) + 1;
         const p = PAPER[s.paper];
         const label = `${s.game} · ${s.title} · ${FORMAT[s.size]} · ${p.label}${p.hint ? " " + p.hint : ""} · Bogen ${seen[k]}/${counts[k]} · ${n} Teilnehmende`;
-        return `<section class="sheet ${s.size}" data-paper="${s.paper}">${s.body}<div class="sheet-label">${esc(label)}</div></section>`;
+        const lbl = s.labelMid ? `<div class="sheet-label mid" style="top:${s.labelMid}mm">` : `<div class="sheet-label">`;
+        return `<section class="sheet ${s.size}" data-paper="${s.paper}">${s.body}${lbl}${esc(label)}</div></section>`;
     }).join("");
 
     // letzter sichtbarer Bogen ohne Seitenumbruch, sonst druckt Chrome eine leere Seite
@@ -976,14 +1054,28 @@ function render() {
         return `<tr class="${hidden ? "hidden-batch" : ""}"><td>${esc(r.game)}</td><td>${esc(r.title)}</td><td>${FORMAT[r.size]}</td>` +
             `<td><span class="pill ${r.paper}">${esc(p.label)}${p.hint ? " · " + esc(p.hint) : ""}</span></td><td class="n">${r.count}</td></tr>`;
     }).join("");
-    const tables = `Story 4: ${cfg.s4Bookings === 2 ? "Booking + Booking-2" : "ein Booking"}, ${cfg.s4Queue} in der Schlange · Story 5: ${cfg.s5.map(t => t.size).join(" + ")} pro Tisch · Story 7: ${cfg.s7.map(t => t.size + " am Tisch, " + t.trips + " Reisen" + (t.korb ? ", eigener Korb" : "")).join(" / ")}`;
+    const tables = `Story 4: ein Booking, ${cfg.s4Queue} in der Schlange, ein Stapel 00–27, Fehler- und Zustandskarten ${cfg.stateSets === 1 ? "1 Satz" : cfg.stateSets + " Sätze"} · Story 5: ${cfg.s5.map(t => t.size).join(" + ")} pro Tisch · Story 7: ${cfg.s7.map(t => t.size + " am Tisch, " + t.trips + " Reisen" + (t.korb ? ", eigener Korb" : "")).join(" / ")}`;
     document.getElementById("toc-sum").innerHTML = `<strong>Bogen gesamt:</strong> ` +
         Object.keys(PAPER).filter(k => byPaper[k]).map(k => `${byPaper[k]} × ${PAPER[k].label}${PAPER[k].hint ? " (" + PAPER[k].hint + ")" : ""}`).join(", ") +
         `<br><strong>Aufteilung bei ${n}:</strong> ${esc(tables)}`;
+    checkOverflow();
+}
+
+// Überlaufprüfung: Karten und Zettel, deren Inhalt nicht passt, rot umranden und in der Konsole melden
+function checkOverflow() {
+    const bad = [];
+    document.querySelectorAll("#sheets .face, #sheets .cheat, #sheets .tally, #sheets .blist").forEach(el => {
+        el.classList.remove("overflow");
+        if (!el.offsetParent) return; // ausgeblendeter Druckstapel
+        if (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1) { el.classList.add("overflow"); bad.push(el); }
+    });
+    document.body.dataset.overflow = String(bad.length);
+    bad.forEach(el => console.warn("Inhalt passt nicht:", el.closest(".sheet").querySelector(".sheet-label").textContent, el));
 }
 
 ["ctl-n", "ctl-roles", "ctl-clock", "ctl-batch"].forEach(id => document.getElementById(id).addEventListener("input", render));
 render();
+if (document.fonts) document.fonts.ready.then(checkOverflow);
 </script>
 </body>
 </html>

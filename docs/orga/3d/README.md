@@ -1,6 +1,7 @@
 # 3D-Druck: Requisiten für die Rollenspiele
 
-Drei parametrische OpenSCAD-Modelle für die Rollenspiele aus Story 4 und 5.
+Drei parametrische OpenSCAD-Modelle für die Rollenspiele aus Story 4 und 5
+(das PROBE-Token ist seit dem Kartenstapel in Story 4 optional).
 Im Repo liegen nur die `.scad`-Quellen; die STL-Dateien entstehen per Export
 (siehe unten) und werden nicht eingecheckt.
 
@@ -8,7 +9,7 @@ Im Repo liegen nur die `.scad`-Quellen; die STL-Dateien entstehen per Export
 |---|---|---|---|---|
 | `bulkhead_tray.scad` | Bulkhead-Tablett | 161,5 × 109,5 × 12,4 mm | 70 g | 1,5–2 h |
 | | 2 Trennwände (liegend) | je 103,2 × 34,7 × 3 mm, eingesteckt 25 mm über dem Rand | je 12 g | je 15 min |
-| `probe_token.scad` | PROBE-Token | 60 × 70 × 5 mm | 15 g | 25 min |
+| `probe_token.scad` | PROBE-Token (nicht mehr nötig, optional) | 60 × 70 × 5 mm | 15 g | 25 min |
 | `card_stand.scad` | Aufsteller für A6-Karten | 70 × 40 × 18 mm | je 17 g | je 25 min |
 
 Material und Zeit sind grobe Schätzungen ohne Slicer (Volumen aus dem STL,
@@ -66,19 +67,16 @@ sofort `hotels: []`, Flight und Car greifen weiter in ihre eigene Spalte.
 Das Einstecken der Wände ist der Moment, in dem die Gruppe das Pattern sieht:
 Die Ressourcen werden nicht mehr, sie werden aufgeteilt.
 
-**PROBE-Token (Story 4).** Es gibt genau ein Token, und es liegt bei Booking.
-Ruft der Trainer „HALF_OPEN", gibt Booking das Token dem nächsten Gast. Nur
-wer das Token hält, darf zu Flight; alle dahinter bekommen sofort die Karte
-„Hotel ✓ · Car ✓ · flights: []" und „Circuit open!". Ob Flight antwortet
-oder schweigt, das Token geht danach zurück an Booking. So wird greifbar, was
-der atomare Probe-Slot in der Referenz verhindert: einen Probe-Sturm auf ein
-gerade erst genesendes Backend. Vorne steht erhaben „PROBE / NUR EINER", hinten
-vertieft „HALF_OPEN"; durch das Loch passt ein Schlüsselband.
+**PROBE-Token (Story 4, nicht mehr nötig).** Seit dem Umbau auf den
+Kartenstapel steht die Probe auf den Karten 14 und 18: Der Gast mit dieser
+Karte stellt sich neben Booking und zählt selbst. Ein Token braucht es dafür
+nicht mehr. `probe_token.scad` bleibt optional im Repo, wer eins hat, kann es
+dem Probe-Gast zusätzlich in die Hand geben.
 
 **Kartenaufsteller (beide Stories).** Die Aufsteller halten A6-Karten im
 Querformat (148 × 105 mm) leicht nach hinten geneigt (10°), damit die ganze
-Schlange sie lesen kann: das Schild CLOSED / OPEN / HALF_OPEN bei Booking
-(Booking tauscht die Karte statt das Schild zu drehen), Rollenschilder für
-Booking, Flight, Hotel, Car und Takt sowie Hinweiskarten wie die Timeout-Regel
-in Story 5. Der Schlitz ist auf 250-g-Karton ausgelegt (`card_t = 0.3`,
+Schlange sie lesen kann: die Zustandskarte CLOSED / OPEN / HALF_OPEN bei
+Booking (Story 4 und 5, Booking tauscht die Karte), Rollenschilder für Story 5
+sowie Hinweiskarten wie die Timeout-Regel in Story 5. Die Fehlerkarten 1 bis 5
+liegen flach in einer Reihe vor dem Aufsteller. Der Schlitz ist auf 250-g-Karton ausgelegt (`card_t = 0.3`,
 Schlitz 0,8 mm). Für laminierte Karten `card_t` auf die gemessene Dicke setzen.

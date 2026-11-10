@@ -60,7 +60,7 @@
 
 Note:
 - Erst diskutieren, dann Klick f&uuml;r die Merks&auml;tze.
-- <strong>Circuit Breaker:</strong> CB reagiert auf Fehler, Bulkhead auf Ressourcen-Druck. Runde 1: Hotel fehlerfrei, das Schild bleibt CLOSED, trotzdem wartet alles. <strong>Spicy:</strong> Der CB sieht Fehler, nicht Latenz.
+- <strong>Circuit Breaker:</strong> CB reagiert auf Fehler, Bulkhead auf Ressourcen-Druck. Runde 1: Hotel fehlerfrei, die Zustandskarte bleibt CLOSED, trotzdem wartet alles. <strong>Spicy:</strong> Der CB sieht Fehler, nicht Latenz.
 - <strong>Rate Limit:</strong> Z&auml;hlt Requests pro Zeit, der Bulkhead gleichzeitige Aufrufe. Probelauf und Runde 1: gleicher Takt, nur Hotel langsamer. 100/s bei pl&ouml;tzlich 5 s pro Call hei&szlig;t 500 h&auml;ngende Aufrufe. <strong>Spicy:</strong> Durchsatz ist nicht Nebenl&auml;ufigkeit.
 - <strong>Non-blocking:</strong> Threads werden billig, Connection-Pool, Speicher und Sockets nicht. Der Engpass wandert, siehe Bonus-Folie.
 - <strong>Warteschlange:</strong> Runde 1 war die Queue: Jede Suche kam sp&auml;ter. Der sofortige Reject ist das Backpressure-Signal, die Queue schluckt es.

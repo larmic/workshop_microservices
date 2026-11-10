@@ -1,6 +1,6 @@
 # Story 4: Wenn der Flug ausfällt
 
-**Thema:** Circuit Breaker, als Rollenspiel mit Schalter und Strichliste statt Code
+**Thema:** Circuit Breaker, als Rollenspiel mit Kartenstapel statt Code
 **Zeitrahmen:** ca. 60 Minuten (20 Minuten Spiel, 10 Minuten Demo mit der Referenz, Recap)
 
 ## Kontext
@@ -17,58 +17,58 @@ damit **ich nicht vor einer hängenden Seite sitze**.
 
 ---
 
-## Teil 1: Das Rollenspiel (ca. 20 Minuten)
+## Teil 1: Das Rollenspiel „Ein Booking, ein Stapel" (ca. 20 Minuten)
 
-Ihr seid die Suchanfragen. Booking hat den Schalter.
+Ihr seid die Suchanfragen. Flight ist krank, und was Booking tut, steht auf der Karte.
 
 ### Material
 
-- Eine Strichliste (in Prospekthülle, mit Whiteboard-Marker beschreibbar, damit Booking sie wegwischen kann) und ein Schild mit drei Seiten: CLOSED, OPEN, HALF_OPEN
-- Karten „Hotel ✓ · Car ✓ · flights: []" für die Fallback-Antworten
-- Blaue Karten „Hotel ✓ · Car ✓ · Flight ✓" für erfolgreiche Antworten (geglückte Probe, Runde 3a und 3b)
-- Fünf rote Karten „Datum 31.02." für Runde 3b
-- Ein Korb, in den die Gäste ihre Antwortkarte zurücklegen
-- Ein PROBE-Token (3D-gedruckt oder ein beliebiger Gegenstand), es gibt nur eins
-- Eine Uhr mit Sekundenanzeige (der Trainer ist die Uhr)
+- Ein Kartenstapel 00–27 (A6 hoch, Karton 250 g, 7 Bogen). Oben steht „Booking tut", unten „Deine Antwort" mit Status und Dauer, Body und Headern. Graue Karten sind STOPP- bzw. ENDE-Karten
+- Die Zustandskarten CLOSED, OPEN und HALF_OPEN, eine davon steht im Kartenaufsteller vor Booking, zur Schlange gedreht
+- Die Fehlerkarten 1 bis 5, die 5 ist rot („5 → OPEN!"). Zustand und Fehlerkarten sind das Dashboard: Das sieht nur der Betrieb, nicht die Kundschaft
+- Ein Ablagetisch, auf dem die gespielten Karten der Reihe nach landen
+- Das Trainer-Skript (ein Bogen, beidseitig): Ansage, die fünf STOPPs, „Wenn es hakt", Vereinfachungen und auf Seite 2 die Kartentabelle 00–27
 
-Gesamtliste und Druckvorlagen: [`docs/orga/materialliste.md`](../orga/materialliste.md), druckfertig unter <https://larmic.github.io/workshop_microservices/material/>.
+Gesamtliste: [`docs/orga/materialliste.md`](../orga/materialliste.md), Druckvorlagen und Trainer-Skript unter <https://larmic.github.io/workshop_microservices/material/>.
 
-Spielbar ab sieben Personen: Booking, Flight, Hotel + Car und mindestens vier Suchanfragen.
+Spielbar ab vier Personen, derselbe Stapel für jede Gruppengröße.
 
 ### Rollen
 
-1. **Booking** ist eine Person. Sie hat den Schalter: Strichliste, Schild und die Karten. Wartet Booking auf Flight, zählt es laut: eins, zwei, drei, Timeout.
-2. **Flight** folgt den geheimen Ansagen des Trainers. **Hotel und Car** antworten sofort, bei kleiner Gruppe übernimmt eine Person beides.
-3. **Alle anderen** sind Suchanfragen auf `GET /booking/offers`. Wer eine Antwort hat, legt die Karte in den Korb und stellt sich **sofort hinten wieder an**. So bleibt immer jemand in der Schlange, auch für die Probe, und Booking nimmt sich aus dem Korb Nachschub, die Karten gehen nie aus.
+1. **Booking** ist eine Person. Sie hat den Stapel, die Zustandskarten und die Fehlerkarten und arbeitet die Karten streng der Reihe nach ab: oben lesen, genau das tun, Karte dem nächsten Gast geben.
+2. **Alle anderen** sind Suchanfragen auf `GET /booking/offers`. Flight, Hotel und Car spielt niemand, ihr Verhalten steht auf den Karten.
+3. **Der Trainer** spielt keine Rolle. Er moderiert nur an den grauen Karten, Booking gibt sie ihm.
 
-### Ablauf
+### So läuft es
 
-1. **Runde 1, ohne Schalter (wie Story 3):** Flight schweigt. Nach drei Sekunden sagt Booking „500" und fragt Hotel und Car gar nicht erst.
-2. **Runde 2, mit Schalter:** Bei jedem Timeout macht Booking einen Strich, fragt Hotel und Car und gibt die Karte „Hotel ✓ · Car ✓ · flights: []". Nach fünf Strichen **in Folge** ruft Booking „OPEN" und dreht das Schild. Ab dann fragt Booking Flight nicht mehr: Karte sofort, dazu „Circuit open!".
-3. **HALF_OPEN:** 30 Sekunden nach „OPEN" ruft der Trainer „HALF_OPEN". Der nächste Gast ist die Probe: Booking gibt ihm das PROBE-Token und fragt Flight. Nur wer das Token hält, darf zu Flight. Wer dahinter steht, bekommt sofort die Karte und „Circuit open!". Bleibt Flight still: Strich, OPEN, die 30 Sekunden laufen neu. Antwortet Flight: blaue Karte, Liste wegwischen, CLOSED, volle Angebote. Das Token geht in beiden Fällen zurück an Booking.
-4. **Runde 3a, wackliges Flight:** Flight antwortet jedes zweite Mal. Jede Antwort gibt die blaue Karte und wischt die Liste weg, jeder Timeout gibt Strich und Karte.
-5. **Runde 3b, rote Gäste:** Flight ist gesund. Die nächsten fünf Anfragen bekommen eine rote Karte „Datum 31.02." (kaputtes Datum), Flight sagt darauf sofort „400". Ein Gedankenspiel: Die echte Referenz reicht keine Suchparameter an Flight weiter.
+Wer eine Karte bekommt, liest „Deine Antwort" laut vor, legt die Karte der Reihe nach auf den Ablagetisch und stellt sich **sofort hinten wieder an**. Die Karten 01–03 spielen ohne Schalter wie Story 3: Booking zählt laut bis fünf und sagt „500". Ab Karte 04 hat Booking einen Schalter und zählt nur bis drei: Jeder Fehler legt die nächste Fehlerkarte hin, bei der 5 dreht Booking die Zustandskarte auf OPEN und antwortet ab dann sofort mit „Circuit open!". An den STOPPs vergehen die 30 Sekunden im Gespräch, danach kommt HALF_OPEN und genau ein Gast ist die Probe. Ein Erfolg legt alle Fehlerkarten zurück. Zum Schluss haben sich fünf Gäste beim Datum vertippt. Der Ablauf Satz für Satz steht im Trainer-Skript.
 
-Geheimes Briefing für Flight: Runde 1 und 2 schweigen, erste Probe schweigen, zweite antworten. Runde 3a abwechselnd. Runde 3b gesund, auf rote Karten sofort „400".
+### Wo wir reden
 
-### Was passieren sollte
+| STOPP | Karte | Worüber wir reden | Recap |
+|---|---|---|---|
+| STOPP 1 | 04 | Was habt ihr bekommen, wie lange? Hotel und Car waren gesund, was hattet ihr davon? Story 3 bricht beim ersten Fehler mit 500 ab. Ansage: Booking bekommt einen Schalter und 3 s Timeout | – |
+| STOPP 2 | 13 | Am Ablagetisch: Ab welcher Nummer gab es `flights: []`, was ist ab 10 anders? Steht die Zahl der Fehler in eurer Antwort? Fallback ab dem ersten Fehler, OPEN macht ihn nur schnell und setzt `X-Circuit-Open` (09 hat Flight noch gefragt). Hotel und Car haben eigene Schalter | 02 |
+| STOPP 3 | 17 | Wer war bei Flight? Was haben 15 und 16 bekommen, wie schnell? Was, wenn alle Wartenden zu Flight gegangen wären? Genau ein Probe-Slot, der Rest sofort Fallback | 03 |
+| STOPP 4 | 20 | Vorhersage, nicht auflösen: Flight ist gesund, die nächsten haben sich vertippt, Datum 31.02. Gibt das Fehlerkarten? | – |
+| ENDE | 27 | War Flight bei 21 bis 25 kaputt? Wer wurde bei 26 bestraft? Unser Code zählt alles ab 400. Dann: Was zeigt die Zustandskarte einer zweiten Booking-Instanz, hätte sie bei 05 bis 09 auch fünfmal 3 s gewartet, was weiß Booking nach einem Neustart? | 01, 04 |
 
-- Runde 1: Null Karten. Jede Anfrage kostet drei Sekunden und endet mit einem Fehler.
-- Runde 2: Die Karte gibt es schon ab dem ersten Fehler, nur langsam. Der Schalter macht sie schnell, er erfindet den Fallback nicht (Recap 02). Hotel und Car arbeiten weiter, der Schalter gilt pro Backend.
-- HALF_OPEN: Nur einer probiert, die anderen warten nicht, sondern bekommen sofort die Karte (Recap 03).
-- Runde 3a: Das Schild geht nie auf OPEN, weil ein Erfolg den Zähler auf null setzt. Trotzdem wartet jede zweite Suche drei Sekunden. Brücke zur Fehlerquote im Fenster (Resilience4j, siehe unten).
-- Runde 3b: Ja, das gibt Striche. Unser Code zählt alles ab 400 als Fehler und macht wegen Tippfehlern der Kundschaft dicht (Recap 01).
-- Transfer zu Recap 04: Neben Booking steht Booking-2 mit eigener Liste. Es hat die roten Gäste nie gesehen und zeigt CLOSED.
+### Bewusste Vereinfachungen
 
-Bewusste Vereinfachungen: Booking zählt bis drei wie der Story-4-Timeout (Story 3 hatte 5 Sekunden). Das Neu-Anstellen in Runde 1 ist ein Client-Retry, den die Referenz nicht hat. HALF_OPEN ruft der Trainer nach Uhr aus, im Code passiert der Wechsel erst beim nächsten Call.
+Offen ansagen:
 
-**Variante ab 16 Personen:** Ein echtes Booking-2 mit eigener Schlange und eigener Strichliste. Die roten Gäste gehen nur zu Booking-1.
+- Bis fünf zählen steht für die 5 s Timeout in Story 3, bis drei für die 3 s in Story 4.
+- Die 30 Sekunden vergehen im Gespräch. Im Code wechselt der Zustand beim nächsten Call oder beim nächsten Blick ins Dashboard.
+- Die Referenz zählt auch die gescheiterte Probe (Karte 14) mit, das Dashboard zeigt dann 6/5. Im Spiel gibt es keine sechste Fehlerkarte.
+- Das Datum 31.02. ist ein Gedankenspiel: Die Referenz reicht keine Suchparameter an Flight weiter.
+- Wieder anstellen ist ein Client-Retry, den die Referenz nicht hat.
+- Fehler in Folge gegen Fehlerquote im Fenster (Resilience4j) ist kein Spielblock, nur Gesprächsstoff: Ein wackliges Flight, das jedes zweite Mal antwortet, öffnet unseren Schalter nie, trotzdem wartet jede zweite Suche 3 s.
 
 ---
 
 ## Teil 2: Die Demo mit der Referenz (ca. 10 Minuten)
 
-Im Dashboard unter Story 4: Flight auf „Hängt" stellen (antwortet erst nach 10 s, also nach dem 3-s-Timeout von Booking), dann `GET /booking/offers` auslösen. Die ersten fünf Calls warten je 3 Sekunden, genau wie im Spiel. Schneller geht es mit „Fehler" (sofort ein 500, ohne Warten). Der Client bekommt immer 200 mit `flights: []` und `X-Fallback: flight`. Der fünfte Call öffnet den Breaker, ab dem sechsten steht zusätzlich `X-Circuit-Open: flight` in der Antwort. Flight zurück auf „Normal": Nach 30 Sekunden geht der Breaker beim nächsten Call auf HALF_OPEN, die erfolgreiche Probe schließt ihn. Drehbuch im Detail weiter unten.
+Im Dashboard unter Story 4: Flight auf „Hängt" stellen (antwortet erst nach 10 s, also nach dem 3-s-Timeout von Booking), dann `GET /booking/offers` auslösen. Die ersten fünf Calls warten je 3 Sekunden, genau wie die Karten 05–09. Schneller geht es mit „Fehler" (sofort ein 500, ohne Warten). Der Client bekommt immer 200 mit `flights: []` und `X-Fallback: flight`. Der fünfte Call öffnet den Breaker, ab dem sechsten steht zusätzlich `X-Circuit-Open: flight` in der Antwort. Flight zurück auf „Normal": Nach 30 Sekunden zeigt das Panel HALF_OPEN schon ohne Call, die erfolgreiche Probe schließt den Breaker. Drehbuch im Detail weiter unten.
 
 ---
 
@@ -112,7 +112,7 @@ Wer den Breaker selbst implementieren will, findet hier die ursprüngliche Codin
           waitDurationInOpenState: 30000
           slidingWindowSize: 10
   ```
-  Achtung: Resilience4j zählt hier eine Fehlerquote im Fenster, unsere Referenz zählt Fehler in Folge. Das wacklige Flight aus Runde 3a würde Resilience4j öffnen, unsere Referenz nicht.
+  Achtung: Resilience4j zählt hier eine Fehlerquote im Fenster, unsere Referenz zählt Fehler in Folge. Ein wackliges Flight, das jedes zweite Mal antwortet, würde Resilience4j öffnen, unsere Referenz nicht.
 
 ### Bonus (optional)
 

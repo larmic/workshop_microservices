@@ -12,9 +12,10 @@ Frage 6 (Recap 04). Die übrigen sind Reserve.
 
 ## Frage 1 — Wir öffnen den Circuit nach 5 aufeinanderfolgenden Fehlern. Wo kommt diese Zahl her?
 
-**Frage:** Booking hat im Spiel bis fünf in Folge gezählt, das wacklige
-Flight aus Runde 3a hat den Schalter nie geöffnet. Warum fünf? Wäre 3
-nicht sicherer, oder 20 stabiler?
+**Frage:** Booking hat im Spiel bei der fünften Fehlerkarte auf OPEN
+gestellt. Ein wackliges Flight, das jedes zweite Mal antwortet, würde
+den Schalter nie öffnen. Warum fünf? Wäre 3 nicht sicherer, oder 20
+stabiler?
 
 **Antwort:** Die ehrliche Antwort: **niemand weiß es genau, ohne die
 Last und das Backend zu kennen.** 5 ist eine sinnvolle Default-Zahl,
@@ -90,7 +91,7 @@ selbstgeschriebenem Code.
 
 ---
 
-## Frage 3 — Was zählt überhaupt als „Fehler"? Eine 404 ist doch kein Backend-Problem. (Recap 01, Runde 3b)
+## Frage 3 — Was zählt überhaupt als „Fehler"? Eine 404 ist doch kein Backend-Problem. (Recap 01, Karten 21–26)
 
 **Frage:** Unser CB zählt jeden Fehler. Aber: ein `404 Not Found` ist
 kein Defekt des Backends — der Aufrufer hat eine ID benutzt, die nicht
@@ -130,7 +131,8 @@ Implementierungen (Resilience4j: `recordExceptions` /
 ## Frage 4 — Bei jedem Fehler liefern wir `flights: []` statt einer Fehlermeldung. Täuschen wir den User? (Recap 02)
 
 **Vorab, aus dem Spiel:** Der Fallback kommt nicht erst bei OPEN,
-sondern schon beim ersten Fehler (Runde 2). Der Breaker erfindet ihn
+sondern schon beim ersten Fehler (Ablagetisch 05–12: `flights: []` ab
+05, `X-Circuit-Open` erst ab 10). Der Breaker erfindet ihn
 nicht, er spart nur das Warten: CLOSED kostet bis zu 3 s, OPEN
 antwortet sofort und setzt zusätzlich `X-Circuit-Open`.
 
@@ -168,7 +170,8 @@ trifft.
 
 ## Frage 5 — Wir warten 30 Sekunden, bevor wir's noch mal probieren. Wo kommt diese Zahl her — und ist sie sinnvoll?
 
-**Frage:** Im Spiel hat der Trainer nach 30 s „HALF_OPEN" gerufen. Aber:
+**Frage:** Im Spiel vergingen die 30 s im Gespräch, bis der Trainer
+„30 Sekunden sind um" sagte. Aber:
 - wenn das Backend in 1 s wieder gesund ist, blockieren wir 29 s
   unnötig
 - wenn es 5 min braucht, hämmern wir alle 30 s erneut drauf
