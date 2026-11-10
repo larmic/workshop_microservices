@@ -289,6 +289,71 @@ unter Last steht.
 
 ---
 
+## Frage 8 — Liefert der Circuit Breaker das `flights: []`? Und wie machen das Resilience4j und Spring Boot?
+
+**Frage:** Im Spiel kam ab Karte 05 `200` mit `flights: []`, schon im
+Zustand CLOSED. Ist das der Circuit Breaker?
+
+**Antwort:** Nein. Das sind zwei Patterns, die Story 4 kombiniert:
+
+- **Circuit Breaker:** entscheidet nur, *ob* Booking Flight aufruft.
+  Er zählt Fehler und schaltet auf OPEN. Bei Nygard scheitert er dann
+  schnell, er liefert selbst keine Ersatzantwort.
+- **Fallback:** entscheidet, *was* Booking antwortet, wenn Flight
+  nichts liefert. Bei uns `flights: []` plus `X-Fallback: flight`.
+  Er greift bei jedem Fehler, auch im Zustand CLOSED (05–09).
+
+| Situation                      | Circuit Breaker            | Fallback          | Antwort                                  |
+|--------------------------------|----------------------------|-------------------|------------------------------------------|
+| CLOSED, Flight scheitert       | lässt durch, zählt mit     | greift nach 3 s   | 200, `X-Fallback`                        |
+| OPEN                           | blockt den Call            | greift sofort     | 200, `X-Fallback` + `X-Circuit-Open`     |
+| OPEN, ohne Fallback            | blockt den Call            | gibt es nicht     | sofort Fehler, z. B. 503 („fail fast“)   |
+
+Resilience4j trennt das genauso. Der Circuit Breaker wirft bei OPEN
+eine `CallNotPermittedException`. Den Fallback gibt man getrennt an,
+in Spring Boot per Annotation:
+
+```java
+@CircuitBreaker(name = "flight", fallbackMethod = "noFlights")
+public List<Flight> searchFlights(Query q) {
+    return flightClient.search(q);
+}
+
+private List<Flight> noFlights(Query q, Throwable t) {
+    // CallNotPermittedException: CB ist offen. Sonst der echte Fehler.
+    return List.of();
+}
+```
+
+Spring Cloud CircuitBreaker macht es ähnlich:
+`factory.create("flight").run(() -> call(), t -> fallback())`. Den
+Timeout regelt ein eigener Baustein (`TimeLimiter`).
+
+Was Resilience4j anders macht als unser Go-Code (Standardwerte laut
+Doku):
+
+| Thema                | Unser Code               | Resilience4j (Default)                                             |
+|----------------------|--------------------------|--------------------------------------------------------------------|
+| Wann OPEN            | 5 Fehler in Folge        | Fehlerrate ≥ 50 % (`failureRateThreshold`) im Fenster              |
+| Fenster              | keins                    | letzte 100 Calls (`slidingWindowSize`, `COUNT_BASED`), mindestens 100 Calls (`minimumNumberOfCalls`) |
+| Langsame Calls       | nur über den Timeout     | eigene Schwelle (`slowCallDurationThreshold` 60 s, `slowCallRateThreshold` 100 %) |
+| Dauer OPEN           | 30 s                     | 60 s (`waitDurationInOpenState`)                                   |
+| Probes in HALF_OPEN  | genau eine               | 10 (`permittedNumberOfCallsInHalfOpenState`)                       |
+| OPEN → HALF_OPEN     | beim nächsten Aufruf     | beim nächsten Aufruf, außer `automaticTransitionFromOpenToHalfOpenEnabled` |
+| Was zählt als Fehler | jeder Status ab 400      | jede Exception, einschränkbar mit `recordExceptions` / `ignoreExceptions` |
+
+Der letzte Punkt passt zu Frage 3: Ein `400` wirft beim `RestClient`
+eine `HttpClientErrorException` und zählt damit auch bei Resilience4j
+als Fehler. Wer das nicht will, setzt
+`ignoreExceptions = HttpClientErrorException.class`.
+
+**Spicy Take-away:** „Wir haben einen Circuit Breaker“ sagt nichts
+darüber, was der Kunde bekommt. Die Antwort macht der Fallback, und
+den schreibt ihr selbst. Und die Defaults der Bibliothek (100 Calls,
+50 %, 60 s) passen selten zum eigenen Backend.
+
+---
+
 ## Sammelthemen für die Diskussion
 
 - Welcher Schwellenwert ist bei euch konfiguriert (oder eben nicht)?
