@@ -1019,6 +1019,26 @@
     color: #fff;
 }
 
+/* Marktübersicht als letzte Karte im Raster (dunkel, kleinere Pills) */
+.reveal .card.market-card {
+    background: var(--box-bg);
+}
+.reveal .cards-3.violet .card.market-card h3 {
+    color: var(--highlight);
+}
+.reveal .card.market-card .pills {
+    gap: 8px;
+    margin-top: 4px;
+}
+.reveal .card.market-card .pill {
+    font-size: 15px;
+    padding: 5px 14px;
+}
+.reveal .card.market-card .pill.brand {
+    background: var(--highlight);
+    color: var(--box-bg);
+}
+
 /* ---------------------------------------------------------------------- */
 /* Code-Folie (.codeblock): dunkle Fläche, Lime-Labels, gedämpfte Ausgabe,  */
 /* markierte Werte. Erster Einsatz: 11a Consul                              */

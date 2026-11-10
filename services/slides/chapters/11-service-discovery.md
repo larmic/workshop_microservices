@@ -33,16 +33,15 @@
 <p>Der Aufrufer l&ouml;st selbst auf, oder ein Load Balancer tut es f&uuml;r ihn.</p>
 <p class="muted">Wir bauen die erste Variante.</p>
 </div>
-</div>
-
-<div class="market">
-<h4>Am Markt</h4>
+<div class="card market-card">
+<h3>Am Markt</h3>
 <div class="pills">
 <span class="pill brand">HashiCorp Consul</span>
 <span class="pill">Kubernetes / CoreDNS</span>
 <span class="pill">Netflix Eureka</span>
 <span class="pill">AWS Cloud Map</span>
 <span class="pill">Apache Zookeeper</span>
+</div>
 </div>
 </div>
 
@@ -52,3 +51,4 @@
 
 Note:
 - Wir setzen hier Consul ein.
+- Client-Side hei&szlig;t in Story 3: Der Booking-Service fragt Consul selbst und w&auml;hlt eine Instanz.
