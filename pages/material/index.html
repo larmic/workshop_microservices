@@ -72,6 +72,66 @@
         .pill.pduplex { background: #444; color: #fff; }
         .pill.a3 { background: var(--highlight); color: var(--primary-dark); }
         .sum { font-size: 0.85rem; margin-top: 0.6rem; color: #444; }
+        details.hints-box > summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; margin: 1.5rem 0 0.5rem; color: var(--primary-dark); }
+        details.hints-box > summary span { font-weight: 400; font-size: 0.85rem; color: #5B4E93; margin-left: 0.3rem; }
+
+        /* ---------- Leiste links: ein Spiel wählen, nur dessen Bogen zeigen und drucken ---------- */
+        .mat-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 1.25rem; align-items: start; padding: 1.25rem; }
+        .mat-main { min-width: 0; }
+        .mat-main > header.screen-only { padding: 0 0 1.25rem; }
+        .mat-side {
+            position: sticky;
+            top: 1.25rem;
+            max-height: calc(100vh - 2.5rem);
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+            padding: 1rem 0.75rem;
+            font-size: 0.88rem;
+        }
+        .side-title { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #5B4E93; margin: 0.25rem 0.5rem 0.4rem; }
+        .side-games { list-style: none; margin: 0; padding: 0; }
+        .side-games > li > a {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.45rem 0.5rem;
+            border-radius: 8px;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+        .side-games > li > a:hover { background: var(--wave); }
+        .side-dot {
+            flex: none;
+            width: 1.9rem;
+            height: 1.9rem;
+            border-radius: 50%;
+            border: 2px solid #c8c8d4;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.78rem;
+        }
+        .side-text { display: flex; flex-direction: column; line-height: 1.3; }
+        .side-text small { color: #5B4E93; font-size: 0.75rem; }
+        .side-games > li > a.active { background: var(--wave); }
+        .side-games > li > a.active .side-dot { background: var(--primary-dark); border-color: var(--primary-dark); color: var(--highlight); box-shadow: 0 0 0 3px var(--highlight); }
+        .side-sheets { list-style: none; margin: 0.15rem 0 0.4rem; padding: 0 0 0 2.9rem; }
+        .side-sheets a { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.2rem 0.4rem; border-radius: 6px; color: var(--primary-dark); text-decoration: none; font-size: 0.82rem; line-height: 1.3; }
+        .side-sheets a:hover { background: var(--wave); }
+        .side-sheets a span { color: #5B4E93; font-variant-numeric: tabular-nums; }
+        .side-links { list-style: none; margin: 0.6rem 0 0; padding: 0.5rem 0 0; border-top: 1px solid var(--line); }
+        .side-links a { display: block; padding: 0.22rem 0.5rem; border-radius: 6px; color: var(--primary-violet); text-decoration: none; }
+        .side-links a:hover { background: var(--wave); }
+        body[data-game="s4"] .sheet:not(.g-s4),
+        body[data-game="s5"] .sheet:not(.g-s5),
+        body[data-game="s7"] .sheet:not(.g-s7) { display: none; }
+        body[data-game="s4"] .only-s5s7,
+        body[data-game="s4"] .only-s5,
+        body[data-game="s7"] .only-s5 { display: none; }
 
         /* ---------- Bogen ---------- */
         #sheets { display: flex; flex-direction: column; align-items: center; gap: 10mm; padding: 0 0 20mm; }
@@ -268,19 +328,28 @@
         @media print {
             body { background: #fff; background-image: none; }
             .screen-only { display: none !important; }
+            .mat-layout { display: block; padding: 0; }
             #sheets { display: block; padding: 0; gap: 0; }
             .sheet { box-shadow: none; margin: 0; }
         }
+        @media screen and (max-width: 1500px) {
+            #sheets { zoom: 0.75; }
+        }
         @media screen and (max-width: 1100px) {
             #sheets { zoom: 0.5; }
+            .mat-layout { grid-template-columns: minmax(0, 1fr); }
+            .mat-side { position: static; max-height: none; }
         }
     </style>
 </head>
 <body data-batch="all">
 
+<div class="mat-layout">
+<aside class="mat-side screen-only" id="mat-side" aria-label="Spiele"></aside>
+<div class="mat-main">
 <header class="screen-only">
     <div class="panel">
-        <p class="kicker">Microservices richtig gemacht &middot; f&uuml;r Trainer:innen</p>
+        <p class="kicker">Microservices richtig gemacht &middot; f&uuml;r den Trainer</p>
         <h1>Spielmaterial drucken</h1>
         <p class="sub">Alle Druckvorlagen f&uuml;r die Rollenspiele aus Story 4 (Circuit Breaker), Story 5 (Bulkhead) und Story 7 (Choreography-Saga). Die Mengen rechnet die Seite aus der Teilnehmerzahl aus. Packliste mit allem, was man kaufen oder 3D-drucken muss: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/orga/materialliste.md">docs/orga/materialliste.md</a>, 3D-Modelle: <a href="https://github.com/larmic/workshop_microservices/tree/main/docs/orga/3d">docs/orga/3d/</a>.</p>
 
@@ -298,13 +367,13 @@
                     <option value="a3">A3</option>
                 </select>
             </label>
-            <label>Rollenkarten
+            <label class="only-s5s7">Rollenkarten
                 <select id="ctl-roles">
                     <option value="fold">Faltkarte (einseitig drucken)</option>
                     <option value="duplex">Einzelkarte (beidseitig drucken)</option>
                 </select>
             </label>
-            <label>Uhrmatte Story 5
+            <label class="only-s5">Uhrmatte Story 5
                 <select id="ctl-clock">
                     <option value="a3">1&times; A3 quer</option>
                     <option value="a4">2&times; A4 hoch (aneinanderkleben)</option>
@@ -313,7 +382,8 @@
             <button class="btn" type="button" onclick="window.print()">Drucken</button>
         </div>
 
-        <h2>So wird gedruckt</h2>
+        <details class="hints-box" id="hints">
+        <summary>So wird gedruckt <span>Browser, Papier, Schneiden, Mengen</span></summary>
         <ul class="hints">
             <li><strong>Browser:</strong> Chrome oder Edge. Firefox und Safari halten die gemischten Formate (A4 hoch, A4 quer, A3) nicht zuverl&auml;ssig ein. Im Druckdialog: R&auml;nder <em>Keine</em>, Skalierung <em>100&nbsp;%</em> bzw. <em>Tats&auml;chliche Gr&ouml;&szlig;e</em>, <em>Hintergrundgrafiken</em> an.</li>
             <li><strong>Pro Papiersorte einen Stapel:</strong> oben den Druckstapel w&auml;hlen, dann drucken. Die Seite zeigt und druckt nur dessen Bogen. Die Anzahl in der Tabelle unten ist schon die Zahl der Bogen, also immer <strong>1 Exemplar</strong> drucken.</li>
@@ -326,8 +396,9 @@
             <li><strong>Zustandskarten</strong> (A6 quer) stehen im 3D-Aufsteller (<code>card_stand.scad</code>) vor Booking. <strong>Rollenkarten</strong> passen ebenfalls hinein (Schlitz 0,8&nbsp;mm). Als <em>Faltkarte</em> einseitig drucken, in der Mitte falzen, Falz nach oben, unbedruckte Seiten zusammen: vorne die Rolle f&uuml;r den Raum, hinten die Regeln f&uuml;r die Person. Als <em>Einzelkarte</em> beidseitig drucken, <strong>an der kurzen Kante wenden</strong>, vorher einen Bogen gegen das Licht halten.</li>
             <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 braucht f&uuml;r jede Gruppengr&ouml;&szlig;e denselben Stapel, Story 5 ab 14 mit zwei Tischen (dann zwei S&auml;tze Fehler- und Zustandskarten, Story 4 nutzt Satz A), Story 7 ab 12 mit zwei Tischen. Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
         </ul>
+        </details>
 
-        <h2>Inhalt</h2>
+        <h2 id="inhalt">Inhalt</h2>
         <table class="toc">
             <thead><tr><th>Spiel</th><th>Bogen</th><th>Format</th><th>Papier</th><th style="text-align:right">Anzahl</th></tr></thead>
             <tbody id="toc-body"></tbody>
@@ -338,6 +409,8 @@
 </header>
 
 <main id="sheets"></main>
+</div>
+</div>
 
 <!-- ============ Trainer-Spickzettel (statisches HTML, wird je 1x gedruckt) ============ -->
 
@@ -1024,17 +1097,19 @@ function render() {
     const counts = {};
     sheets.forEach(s => { const k = s.game + "|" + s.title; counts[k] = (counts[k] || 0) + 1; });
     const seen = {};
-    document.getElementById("sheets").innerHTML = sheets.map(s => {
+    document.getElementById("sheets").innerHTML = sheets.map((s, i) => {
         const k = s.game + "|" + s.title;
         seen[k] = (seen[k] || 0) + 1;
         const p = PAPER[s.paper];
         const label = `${s.game} · ${s.title} · ${FORMAT[s.size]} · ${p.label}${p.hint ? " " + p.hint : ""} · Bogen ${seen[k]}/${counts[k]} · ${n} Teilnehmende`;
         const lbl = s.labelMid ? `<div class="sheet-label mid" style="top:${s.labelMid}mm">` : `<div class="sheet-label">`;
-        return `<section class="sheet ${s.size}" data-paper="${s.paper}">${s.body}${lbl}${esc(label)}</div></section>`;
+        return `<section class="sheet ${s.size} ${gameClasses(s.game)}" id="sheet-${i}" data-paper="${s.paper}">${s.body}${lbl}${esc(label)}</div></section>`;
     }).join("");
 
     // letzter sichtbarer Bogen ohne Seitenumbruch, sonst druckt Chrome eine leere Seite
-    const visible = Array.from(document.querySelectorAll("#sheets .sheet")).filter(el => batch === "all" || el.dataset.paper === batch);
+    const game = currentGame();
+    document.body.dataset.game = game;
+    const visible = Array.from(document.querySelectorAll("#sheets .sheet")).filter(el => (batch === "all" || el.dataset.paper === batch) && (game === "all" || el.classList.contains("g-" + game)));
     if (visible.length) visible[visible.length - 1].classList.add("last-visible");
 
     // Inhaltsverzeichnis
@@ -1043,23 +1118,61 @@ function render() {
     sheets.forEach(s => {
         const base = s.title.replace(/ \((Vorderseiten|Rückseiten)\)$/, "");
         const k = s.game + "|" + base + "|" + s.paper;
-        if (!(k in index)) { index[k] = rows.length; rows.push({ game: s.game, title: base, size: s.size, paper: s.paper, count: 0 }); }
+        if (!(k in index)) { index[k] = rows.length; rows.push({ game: s.game, title: base, size: s.size, paper: s.paper, count: 0, first: sheets.indexOf(s) }); }
         rows[index[k]].count++;
     });
+    const inGame = r => game === "all" || gameClasses(r.game).includes("g-" + game);
     const byPaper = {};
-    rows.forEach(r => { byPaper[r.paper] = (byPaper[r.paper] || 0) + r.count; });
-    document.getElementById("toc-body").innerHTML = rows.map(r => {
+    rows.filter(inGame).forEach(r => { byPaper[r.paper] = (byPaper[r.paper] || 0) + r.count; });
+    document.getElementById("toc-body").innerHTML = rows.filter(inGame).map(r => {
         const p = PAPER[r.paper];
         const hidden = batch !== "all" && batch !== r.paper;
         return `<tr class="${hidden ? "hidden-batch" : ""}"><td>${esc(r.game)}</td><td>${esc(r.title)}</td><td>${FORMAT[r.size]}</td>` +
             `<td><span class="pill ${r.paper}">${esc(p.label)}${p.hint ? " · " + esc(p.hint) : ""}</span></td><td class="n">${r.count}</td></tr>`;
     }).join("");
     const tables = `Story 4: ein Booking, ${cfg.s4Queue} in der Schlange, ein Stapel 00–27, Fehler- und Zustandskarten ${cfg.stateSets === 1 ? "1 Satz" : cfg.stateSets + " Sätze"} · Story 5: ${cfg.s5.map(t => t.size).join(" + ")} pro Tisch · Story 7: ${cfg.s7.map(t => t.size + " am Tisch, " + t.trips + " Reisen" + (t.korb ? ", eigener Korb" : "")).join(" / ")}`;
-    document.getElementById("toc-sum").innerHTML = `<strong>Bogen gesamt:</strong> ` +
+    const scope = game === "all" ? "Bogen gesamt" : "Bogen für " + GAMES.find(g => g.id === game).name;
+    document.getElementById("toc-sum").innerHTML = `<strong>${scope}:</strong> ` +
         Object.keys(PAPER).filter(k => byPaper[k]).map(k => `${byPaper[k]} × ${PAPER[k].label}${PAPER[k].hint ? " (" + PAPER[k].hint + ")" : ""}`).join(", ") +
         `<br><strong>Aufteilung bei ${n}:</strong> ${esc(tables)}`;
+    renderSide(rows, game);
     checkOverflow();
 }
+
+// Spiele für die Leiste links; "Story 4 + 5" gehört zu beiden
+const GAMES = [
+    { id: "s4", nr: "4", name: "Story 4", sub: "Circuit Breaker" },
+    { id: "s5", nr: "5", name: "Story 5", sub: "Bulkhead" },
+    { id: "s7", nr: "7", name: "Story 7", sub: "Choreography-Saga" }
+];
+function gameClasses(game) {
+    return GAMES.filter(g => new RegExp("\\b" + g.nr + "\\b").test(game.replace(/^Story /, ""))).map(g => "g-" + g.id).join(" ");
+}
+function currentGame() {
+    const h = location.hash.replace("#", "");
+    return GAMES.some(g => "story" + g.nr === h) ? GAMES.find(g => "story" + g.nr === h).id : "all";
+}
+function renderSide(rows, game) {
+    const count = id => rows.filter(r => id === "all" || gameClasses(r.game).includes("g-" + id)).reduce((a, r) => a + r.count, 0);
+    const item = (id, dot, name, sub, hash) => `<li><a href="#${hash}" class="${game === id ? "active" : ""}">` +
+        `<span class="side-dot">${dot}</span><span class="side-text">${esc(name)}<small>${esc(sub)} · ${count(id)} Bogen</small></span></a>` +
+        (game === id && id !== "all" ? `<ul class="side-sheets">${rows.filter(r => gameClasses(r.game).includes("g-" + id)).map(r =>
+            `<li><a href="#" data-sheet="${r.first}">${esc(r.title)}<span>${r.count}</span></a></li>`).join("")}</ul>` : "") + `</li>`;
+    document.getElementById("mat-side").innerHTML =
+        `<p class="side-title">Spiel wählen</p><ul class="side-games">` +
+        item("all", "∗", "Alle Spiele", "alles auf einmal", "alle") +
+        GAMES.map(g => item(g.id, g.nr, g.name, g.sub, "story" + g.nr)).join("") +
+        `</ul><ul class="side-links"><li><a href="#" data-jump="hints">So wird gedruckt</a></li><li><a href="#" data-jump="inhalt">Inhalt und Mengen</a></li><li><a href="../">&larr; Startseite</a></li></ul>`;
+}
+document.getElementById("mat-side").addEventListener("click", e => {
+    const a = e.target.closest("a[data-sheet], a[data-jump]");
+    if (!a) return;
+    e.preventDefault();
+    if (a.dataset.jump === "hints") document.getElementById("hints").open = true;
+    const el = a.dataset.sheet ? document.getElementById("sheet-" + a.dataset.sheet) : document.getElementById(a.dataset.jump);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
 
 // Überlaufprüfung: Karten und Zettel, deren Inhalt nicht passt, rot umranden und in der Konsole melden
 function checkOverflow() {
