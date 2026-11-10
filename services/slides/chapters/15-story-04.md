@@ -27,7 +27,7 @@
 <ol>
 <li><strong>Runde 1, ohne Schalter:</strong> Flight schweigt, nach drei Sekunden sagt Booking &bdquo;500&ldquo;. <span class="fragment">&rarr; null Karten</span></li>
 <li><strong>Runde 2, mit Schalter:</strong> Jeder Timeout gibt einen Strich <em>und</em> die Karte. F&uuml;nf Striche <strong>in Folge</strong>: OPEN, ab dann Karte sofort. <span class="fragment">&rarr; Karte schon beim ersten Fehler, nur langsam</span></li>
-<li><strong>HALF_OPEN:</strong> Ein Gast bekommt das PROBE-Token und fragt, alle dahinter bekommen sofort die Karte. Antwortet Flight: Liste wegwischen, CLOSED.</li>
+<li><strong>HALF_OPEN:</strong> 30 s nach OPEN bekommt ein Gast das PROBE-Token und fragt, alle dahinter bekommen sofort die Karte. Antwortet Flight: Liste wegwischen, CLOSED.</li>
 <li><strong>Runde 3a:</strong> Flight antwortet jedes zweite Mal. Wann geht das Schild auf OPEN? <span class="fragment">&rarr; nie, aber jede zweite Suche wartet</span></li>
 <li><strong>Runde 3b:</strong> F&uuml;nf rote Anfragen, Flight sagt sofort &bdquo;400&ldquo;. Gibt das einen Strich? <span class="fragment">&rarr; ja, bei uns schon</span></li>
 </ol>
@@ -39,9 +39,16 @@
 </div>
 
 Note:
-- Hook: &bdquo;Story 3 hat uns geholfen, Services zu finden. Jetzt haben wir einen gefunden, und er antwortet nicht.&ldquo; Ab 7 Personen spielbar. Runden einzeln ansagen, Fragment erst nach der Vorhersage aufdecken.
-- Flight geheim briefen: R1 und R2 schweigen, erste Probe schweigen, zweite antworten. R3a abwechselnd. R3b gesund, auf rote Anfragen sofort &bdquo;400&ldquo;. Die Uhr bist du als Trainer, nicht Flight: 30 s nach &bdquo;OPEN&ldquo; rufst du &bdquo;HALF_OPEN&ldquo;.
-- R1 gegen R2 (Recap 02): Die Karte gibt es ab dem ersten Fehler, der Schalter spart nur das Warten. Hotel und Car werden in R2 immer gefragt. Vereinfachung: Booking z&auml;hlt bis drei (Story-4-Timeout), Neu-Anstellen ist ein Client-Retry, den die Referenz nicht hat.
-- HALF_OPEN (Recap 03): Einmal einfrieren, &bdquo;Wer darf zu Flight?&ldquo; Nur einer. Die anderen warten nicht, sie bekommen sofort die Karte.
-- R3a: Gez&auml;hlt wird in Folge, ein Erfolg setzt auf null. R3b (Recap 01) ist ein Gedankenspiel: Unser Code z&auml;hlt alles ab 400. Transfer Recap 04: &bdquo;Booking-2 hat die roten G&auml;ste nie gesehen. Welches Schild zeigt es?&ldquo;
-- Demo: Flight auf &bdquo;H&auml;ngt&ldquo;. F&uuml;nf Calls warten je 3 s wie im Spiel, ab dem 6. kommt sofort 200 mit <code>flights: []</code> und <code>X-Circuit-Open</code>. Schneller: &bdquo;Fehler&ldquo;, sofort 500. Details: <code>docs/stories/story-04-circuit-breaker.md</code>.
+- <strong>Hook:</strong> &bdquo;Story 3 hat uns Services finden lassen. Jetzt haben wir einen gefunden, und er antwortet nicht.&ldquo;
+- <strong>Setup:</strong> Ab 7 Personen. Runden einzeln ansagen, Fragment erst nach der Vorhersage aufdecken.
+- <strong>Flight geheim briefen:</strong>
+  - R1, R2 und erste Probe: schweigen. Zweite Probe: antworten.
+  - R3a abwechselnd. R3b gesund, auf rote Anfragen sofort &bdquo;400&ldquo;.
+  - Die Uhr bist du: 30 s nach &bdquo;OPEN&ldquo; rufst du &bdquo;HALF_OPEN&ldquo;.
+- <strong>Auswerten:</strong>
+  - R1 gegen R2 (Recap 02): Die Karte gibt es ab dem ersten Fehler, der Schalter spart nur das Warten.
+  - HALF_OPEN (Recap 03): Einfrieren, &bdquo;Wer darf zu Flight?&ldquo; Nur einer, die anderen bekommen sofort die Karte.
+  - R3a: in Folge, ein Erfolg setzt auf null.
+  - R3b (Recap 01): Unser Code z&auml;hlt alles ab 400. Transfer Recap 04: &bdquo;Booking-2 hat die roten G&auml;ste nie gesehen. Welches Schild zeigt es?&ldquo;
+- <strong>Vereinfacht:</strong> Neu-Anstellen ist ein Client-Retry, den die Referenz nicht hat.
+- <strong>Demo:</strong> Flight auf &bdquo;H&auml;ngt&ldquo;. F&uuml;nf Calls warten je 3 s, ab dem 6. sofort 200 mit <code>flights: []</code> und <code>X-Circuit-Open</code>. Schneller: &bdquo;Fehler&ldquo;. Details: <code>docs/stories/story-04-circuit-breaker.md</code>.
