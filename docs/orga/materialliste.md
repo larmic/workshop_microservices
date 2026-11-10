@@ -74,11 +74,12 @@ Die Leiter (Folie 24a) braucht kein eigenes Material, die Becher bleiben einfach
 
 ## Story 2: Design-Session am Flipchart
 
+Nichts zu drucken, die Teams schreiben die Tabelle direkt aufs Flipchart.
+
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
 | Flipchart-Ständer oder Whiteboard-Fläche | Büro | 2 | 4 | 5 | eine pro Team |
 | Flipchart-Bogen | Büro | 2 + 2 | 4 + 2 | 5 + 2 | mit Reserve |
-| Kopfzeile „Methode \| Pfad \| Request (Kern) \| Antwort und Status-Code \| Idempotent? \| Begründung“ | drucken | 3 | 6 | 6 | jede aus 2 A4-Streifen, an der Markierung zusammenkleben |
 | Flipchart-Marker in 2 Farben | kaufen | 6 | 12 | 15 | etwa 3 pro Team |
 | Kreppband | kaufen | 1 Rolle | 1 Rolle | 1 Rolle | Bogen nebeneinander aufhängen, Quiz 3 und 4 greifen darauf zurück |
 | Plenum-Flipchart | Büro | 1 | 1 | 1 | Erwartungen und Schnittfrage, bleibt beide Tage hängen |
@@ -89,7 +90,7 @@ Die Leiter (Folie 24a) braucht kein eigenes Material, die Becher bleiben einfach
 |---|---|---|---|---|---|
 | Kartenaufsteller A6 quer | 3D | 6 | 12 | 12 | `card_stand.scad`, Schlitz 0,8 mm hält eine gefalzte 250-g-Karte; 12 Stück passen als Raster 3 × 4 auf eine Platte |
 | Karton 250 g, A4 | kaufen | ca. 25 Bogen | ca. 30 Bogen | ca. 40 Bogen | Druckseite: 22 / 28 / 39 Bogen bei Faltkarten |
-| Papier 80 g, A4 | Büro | 9 Bogen | 14 Bogen | 15 Bogen | Strichlisten, Listen, Spickzettel, Kopfzeilen |
+| Papier 80 g, A4 | Büro | 7 Bogen | 10 Bogen | 11 Bogen | Strichlisten, Listen, Spickzettel |
 | A3-Papier | Büro | 1 | 1 | 2 | Uhrmatte, sonst 2× A4 |
 | Klare Prospekthüllen A4 | kaufen | 2 + 2 | 3 + 2 | 4 + 2 | für die Strichlisten, plus Reserve |
 | Schere oder Schneidemaschine, Lineal, Falzbein (oder Messerrücken) | Büro | 1 | 1 | 1 | 250 g vor dem Falzen rillen |
@@ -116,7 +117,7 @@ Beim Rollenkarten-Modus „Einzelkarte“ werden die Rollen-, Briefing- und Zust
 - [ ] Story 5: Die Wände sitzen im Tablett, sechs Chips plus Reserve passen in die Mulden, der Streifen liegt dabei. Suchkarten #01–#20 sind sortiert, die orangen Karten liegen getrennt. Uhrmatte liegt bereit (bei 2× A4 zusammengeklebt).
 - [ ] Story 5 läuft am zweiten Tag: Strichliste und Zustandskarten aus Story 4 über Nacht aufheben.
 - [ ] Story 7: Becher beschriftet, Schälchen gefüllt, Allergien bzw. vegane Ernährung abgefragt (sonst Büroklammern). E-Zettel pro Tisch sortiert, nur E1 bis E(2 × Reisen). Buchungslisten auf die Spalte Runde 1 geknickt.
-- [ ] Story 2: Kopfzeilen zusammengeklebt, Flipchart-Bogen, Marker und Kreppband liegen bereit, Wandfläche für alle Bogen nebeneinander vorhanden.
+- [ ] Story 2: Flipchart-Bogen, Marker und Kreppband liegen bereit, Wandfläche für alle Bogen nebeneinander vorhanden.
 - [ ] Raum: Platz für eine stehende Schlange vor dem Booking-Tisch (Story 4 und 5) und zwei Spieltische (Story 7 ab 12, Story 5 ab 14).
 - [ ] Stoppuhr (Handy) für die 30 s in Story 4 griffbereit.
 - [ ] Dashboard: alle Services auf „Normal“, damit die Demos nach den Spielen sauber starten.

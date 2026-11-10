@@ -205,12 +205,7 @@
         .blist-row .tick { width: 9mm; height: 9mm; border: 0.5mm solid #888; border-radius: 1mm; }
         .blist-col .how { margin-top: 2mm; font-size: 7.5pt; color: #666; }
 
-        /* Flipchart-Kopfzeile Story 2 */
-        .fc-strip { position: absolute; left: 8mm; right: 8mm; height: 58mm; display: flex; }
-        .fc-strip > div { border: 0.8mm solid var(--primary-violet); border-left-width: 0; background: var(--wave); display: flex; flex-direction: column; justify-content: center; padding: 0 4mm; }
-        .fc-strip > div:first-child { border-left-width: 0.8mm; }
-        .fc-strip b { font-size: 22pt; line-height: 1.1; }
-        .fc-strip small { font-size: 11pt; color: #555; margin-top: 1.5mm; }
+        /* Klebehinweis an geteilten Bogen (Uhrmatte Story 5 als 2× A4) */
         .fc-join { position: absolute; font-size: 7pt; color: var(--primary-violet); }
 
         /* Trainer-Spickzettel */
@@ -251,7 +246,7 @@
     <div class="panel">
         <p class="kicker">Microservices richtig gemacht &middot; f&uuml;r Trainer:innen</p>
         <h1>Spielmaterial drucken</h1>
-        <p class="sub">Alle Druckvorlagen f&uuml;r die Rollenspiele aus Story 4 (Circuit Breaker), Story 5 (Bulkhead) und Story 7 (Choreography-Saga) sowie die Flipchart-Kopfzeile f&uuml;r Story 2. Die Mengen rechnet die Seite aus der Teilnehmerzahl aus. Packliste mit allem, was man kaufen oder 3D-drucken muss: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/orga/materialliste.md">docs/orga/materialliste.md</a>, 3D-Modelle: <a href="https://github.com/larmic/workshop_microservices/tree/main/docs/orga/3d">docs/orga/3d/</a>.</p>
+        <p class="sub">Alle Druckvorlagen f&uuml;r die Rollenspiele aus Story 4 (Circuit Breaker), Story 5 (Bulkhead) und Story 7 (Choreography-Saga). Die Mengen rechnet die Seite aus der Teilnehmerzahl aus. Packliste mit allem, was man kaufen oder 3D-drucken muss: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/orga/materialliste.md">docs/orga/materialliste.md</a>, 3D-Modelle: <a href="https://github.com/larmic/workshop_microservices/tree/main/docs/orga/3d">docs/orga/3d/</a>.</p>
 
         <div class="controls">
             <label>Teilnehmende
@@ -286,7 +281,7 @@
             <li><strong>Browser:</strong> Chrome oder Edge. Firefox und Safari halten die gemischten Formate (A4 hoch, A4 quer, A3) nicht zuverl&auml;ssig ein. Im Druckdialog: R&auml;nder <em>Keine</em>, Skalierung <em>100&nbsp;%</em> bzw. <em>Tats&auml;chliche Gr&ouml;&szlig;e</em>, <em>Hintergrundgrafiken</em> an.</li>
             <li><strong>Pro Papiersorte einen Stapel:</strong> oben den Druckstapel w&auml;hlen, dann drucken. Die Seite zeigt und druckt nur dessen Bogen. Die Anzahl in der Tabelle unten ist schon die Zahl der Bogen, also immer <strong>1 Exemplar</strong> drucken.</li>
             <li><strong>Karton 250 g</strong> (A4) f&uuml;r alle Karten: Antwort-, Such-, Rollen- und Zustandskarten, Zettel E1&nbsp;&hellip;, Becher-Etiketten, Tablett-Streifen. Viele B&uuml;rodrucker nehmen 250 g nur &uuml;ber den manuellen Einzug. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
-            <li><strong>Papier 80 g</strong> f&uuml;r Strichlisten, Buchungslisten, Spickzettel und Flipchart-Kopfzeilen. Die <strong>Strichlisten kommen in eine klare Prospekth&uuml;lle</strong> und werden mit Whiteboard-Marker beschrieben und mit einem Tuch weggewischt.</li>
+            <li><strong>Papier 80 g</strong> f&uuml;r Strichlisten, Buchungslisten, Spickzettel. Die <strong>Strichlisten kommen in eine klare Prospekth&uuml;lle</strong> und werden mit Whiteboard-Marker beschrieben und mit einem Tuch weggewischt.</li>
             <li><strong>A3</strong> nur f&uuml;r die Uhrmatte aus Story 5 (80 bis 160 g). Ohne A3-Drucker oben &bdquo;2&times; A4&ldquo; w&auml;hlen und die beiden H&auml;lften an der markierten Kante zusammenkleben.</li>
             <li><strong>Schneiden und falzen:</strong> grau gestrichelt ist Schnitt, violett gestrichelt ist Falz. Karton vor dem Falzen mit Lineal und dem R&uuml;cken eines Messers rillen. Jede Karte hat 3&nbsp;mm wei&szlig;en Rand, ein paar Millimeter daneben schneiden st&ouml;rt nicht.</li>
             <li><strong>Rollenkarten</strong> passen in den 3D-Aufsteller (<code>card_stand.scad</code>, Schlitz 0,8&nbsp;mm). Als <em>Faltkarte</em> einseitig drucken, in der Mitte falzen, Falz nach oben, unbedruckte Seiten zusammen: vorne die Rolle f&uuml;r den Raum, hinten die Regeln f&uuml;r die Person. Als <em>Einzelkarte</em> beidseitig drucken, <strong>an der kurzen Kante wenden</strong>, vorher einen Bogen gegen das Licht halten.</li>
@@ -614,12 +609,6 @@ const BRIEFINGS = {
     ], foot: "Hotel spielt alle Runden normal. Die Zettelnummer merkst du dir nicht." }
 };
 
-// Story 2: Spalten der Endpoint-Tabelle (story-02-api-design-session.md, Folie 10d)
-const FLIPCHART = {
-    left:  [["Methode", "", 58], ["Pfad", "", 112], ["Request (Kern)", "", 111]],
-    right: [["Antwort und Status-Code", "", 112], ["Idempotent?", "ja / nein", 56], ["Begründung", "auch für bewusste Abweichungen", 113]]
-};
-
 /* =====================================================================
  * Mengen aus der Teilnehmerzahl (Regeln der Story-Docs)
  * ===================================================================== */
@@ -639,9 +628,7 @@ function config(n) {
         const korb = t >= 9;
         return { name: tableNames[i], size: t, korb, trips: t - 4 - (korb ? 1 : 0) };
     });
-    // Story 2: Teams zu 3–4, eine Kopfzeile pro Team plus eine Reserve
-    const teams = Math.floor(n / 3);
-    return { n, s4Bookings, s4Queue, s5, s7, teams, flipStrips: teams + 1 };
+    return { n, s4Bookings, s4Queue, s5, s7 };
 }
 
 /* =====================================================================
@@ -762,25 +749,6 @@ function buildPlan(cfg, opts) {
     const roleItem = id => ({ front: () => roleFront(ROLES[id]), back: r => rot(roleBack(ROLES[id]), r) });
     const briefItem = id => ({ front: () => briefFront(BRIEFINGS[id]), back: r => rot(briefBack(BRIEFINGS[id]), r) });
     const stateItem = s => ({ front: () => stateFace(s), back: r => rot(stateFace(s), r) });
-
-    // ================= Story 2 =================
-    const pairs = Math.ceil(cfg.flipStrips / 3);
-    const fcSheet = (cols, side) => {
-        let body = "";
-        const tops = [14, 75, 136];
-        tops.forEach(t => {
-            body += `<div class="fc-strip" style="top:${t}mm">${cols.map(([h, s, w]) => `<div style="width:${w}mm"><b>${esc(h)}</b>${s ? `<small>${esc(s)}</small>` : ""}</div>`).join("")}</div>`;
-            body += `<div class="cut h" style="top:${t - 1.5}mm"></div><div class="cut h" style="top:${t + 59.5}mm"></div>`;
-        });
-        body += `<div class="cut v" style="left:8mm"></div><div class="cut v" style="left:289mm"></div>`;
-        body += `<div class="fc-join" style="top:4mm;${side === "left" ? "right:9mm" : "left:9mm"}">${side === "left" ? "rechte Hälfte hier anlegen →" : "← an die linke Hälfte anlegen"}</div>`;
-        body += `<div class="fc-join" style="top:4mm;${side === "left" ? "left:9mm" : "right:9mm"};color:#999">Story 2 · Endpoint-Tabelle, eine Zeile pro Endpoint</div>`;
-        return body;
-    };
-    for (let i = 0; i < pairs; i++) {
-        add("Story 2", "Flipchart-Kopfzeile, linke Hälfte", "a4l", "papier", fcSheet(FLIPCHART.left, "left"));
-        add("Story 2", "Flipchart-Kopfzeile, rechte Hälfte", "a4l", "papier", fcSheet(FLIPCHART.right, "right"));
-    }
 
     // ================= Story 4 =================
     add("Story 4", "Spickzettel Trainer", "a4p", "papier", document.getElementById("tpl-cheat-s4").innerHTML);
