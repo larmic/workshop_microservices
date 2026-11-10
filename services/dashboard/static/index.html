@@ -1821,12 +1821,13 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <p>Als <em>Betriebsteam</em> möchte ich <em>Backend-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
-                            <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul</li>
+                            <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul. Anmelden m&uuml;sst ihr euch nicht, das machen die Backends selbst.</li>
                             <li>Statische URLs ersetzt durch logische Namen: <code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
                             <li>Bestehender <code>GET /booking/offers</code> aus Story 1 umgebaut, löst Flight/Hotel/Car über den Consul-Resolver auf statt über statische Env-URLs</li>
                             <li><code>POST /booking/bookings</code> orchestriert die drei Backend-Services und antwortet mit <code>201 Created</code> und der aggregierten Buchung</li>
                             <li>Aus Story 2 mitgenommen: Ressource <code>bookings</code> statt Verb, <code>POST</code> antwortet mit <code>201 Created</code>, Fehler kommen als Status-Code, nicht als <code>200</code> mit Fehler-Body</li>
                             <li>Optional: Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)</li>
+                            <li>Optional: Consul Key-Value Store für zusätzliche Konfiguration</li>
                         </ul>
                     </div>
                 </details>

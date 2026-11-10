@@ -29,7 +29,7 @@
 </div>
 
 Note:
-- Reines HTTP, kein SDK n&ouml;tig.
+- Reines HTTP, kein SDK n&ouml;tig. Ihr baut in Story 3 nur das Aufl&ouml;sen; Anmelden und Abmelden machen Flight, Hotel und Car schon.
 - <strong>passing=true:</strong> nur Instanzen mit gr&uuml;nem Health-Check.
 - <strong>Die zwei Zahlen:</strong>
   - Interval: Nach einem Absturz l&auml;uft bis zu 10 s Verkehr ins Leere.

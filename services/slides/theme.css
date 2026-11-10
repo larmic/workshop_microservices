@@ -978,6 +978,7 @@
     padding: 0.1em 0.4em;
     white-space: normal;
 }
+.reveal .cards-3 .card p code.nowrap { white-space: nowrap; }
 
 .reveal .card p.muted {
     color: #5B4E93;
