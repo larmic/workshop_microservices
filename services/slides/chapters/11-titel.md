@@ -19,6 +19,6 @@
 
 
 Note:
-- <strong>Hook:</strong> &bdquo;Erinnert ihr euch an Frage 2 aus dem Story-1-Recap? Vielleicht ist Flight gar nicht tot, sondern hat nur eine neue Adresse.&ldquo;
-- <strong>Kernbotschaft:</strong> Bisher steht die URL fest in der Konfiguration. Container starten neu, skalieren, ziehen um: Die Topologie &auml;ndert sich st&auml;ndig. Wer sich die Adresse merkt, ruft ins Leere.
-- <strong>&Uuml;berleitung:</strong> Die Grafik zeigt die Idee: Ein Verzeichnis l&ouml;st den Namen auf eine lebende Instanz auf. Was so eine Registry leistet, kommt jetzt.
+- <strong>Hook:</strong> &bdquo;Erinnert ihr euch an Frage 2 im Story-1-Recap? Vielleicht ist Flight nicht tot, sondern umgezogen.&ldquo;
+- Container starten neu, skalieren, ziehen um: Die Adresse &auml;ndert sich st&auml;ndig.
+- <strong>&Uuml;berleitung:</strong> Ein Verzeichnis l&ouml;st den Namen auf eine lebende Instanz auf. Was so eine Registry leistet, kommt jetzt.
