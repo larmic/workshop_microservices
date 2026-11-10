@@ -145,7 +145,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Recap-Frage: Was passiert, wenn Consul kurz weg ist?
 
 ### 6d. Story 4 — [Wenn der Flug ausfällt](stories/story-04-circuit-breaker.md) (60 Min)
-- Rollenspiel statt Code: 20 Minuten (eine Person ist Booking mit einem nummerierten Kartenstapel 00–27, alle anderen sind Suchanfragen in der Schlange; erst ohne, dann mit Schalter, Gespräch an fünf grauen STOPP-Karten), 10 Minuten Demo mit der Referenz im Dashboard, Recap mit vier Fragen
+- Rollenspiel statt Code: 20 Minuten (eine Person ist Booking mit einem nummerierten Kartenstapel 00–27, alle anderen sind Requests in der Schlange; erst ohne, dann mit Circuit Breaker und Board, Gespräch an fünf grauen STOPP-Karten), 10 Minuten Demo mit der Referenz im Dashboard, Recap mit vier Fragen
 - Lernpointe: Circuit Breaker schützt den Aufrufer und gibt dem Backend Luft, graceful Degradation beim Lesen
 - Nach dem Recap die offene Frage „Und jetzt die Buchung?": Lesen und Schreiben trennen, Antworten (Nein, asynchron, Saga, alternativer Anbieter) nur als Tonspur, Saga kommt in Story 6
 - Letzter Block von Tag 1, bewusst ohne Coding

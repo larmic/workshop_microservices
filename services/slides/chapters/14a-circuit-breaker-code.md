@@ -31,8 +31,8 @@
 
 Note:
 - <strong>Kernbotschaft:</strong> Das tippen wir nicht ab, wir spielen es gleich.
-  - Fehlerkarten = <code>failures</code>, Zustandskarte = <code>state</code>, <code>flights: []</code> auf der Antwort = <code>fallback()</code>.
+  - Pl&auml;tze auf dem Board = <code>failures</code>, Zustandskarte = <code>state</code>, Probe-Feld = <code>probeInFlight</code>, <code>flights: []</code> auf der Antwort = <code>fallback()</code>.
 - <strong>Drei Zahlen:</strong> 3 s, 5 in Folge, 30 s. Jede h&auml;ngt am Backend und an eurem Budget.
 - <strong>Reset bei Erfolg:</strong> Jeder Erfolg setzt auf null. Darum &bdquo;in Folge&ldquo;: Ein wackliges Flight, das jedes zweite Mal antwortet, &ouml;ffnet den Schalter nie.
-- <strong>Probe-Slot:</strong> In HALF_OPEN darf genau einer durch (CAS), alle anderen bekommen den Fallback. Scheitert die Probe: sofort wieder OPEN f&uuml;r 30 s.
+- <strong>Probe-Slot:</strong> In HALF_OPEN darf genau einer durch (CAS), alle anderen bekommen den Fallback. Scheitert die Probe: sofort wieder OPEN, die 30 s laufen von vorn.
 - Referenz: <code>services/booking/story4/circuitbreaker/circuitbreaker.go</code>. Weiter: Booking bestimmen, Stapel &uuml;bergeben.

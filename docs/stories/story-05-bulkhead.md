@@ -19,7 +19,7 @@ damit **ein langsamer oder fehlerhafter Service nicht das gesamte System blockie
 
 ## Teil 1: Das Rollenspiel (ca. 25 Minuten)
 
-Gleiche Schlange und gleiche Zustandskarte wie in Story 4. Neu: ein Takt, Chips im Bulkhead-Tablett, und Hotel ist langsam, nicht kaputt.
+Gleiche Schlange und gleiches Circuit-Breaker-Board wie in Story 4. Neu: ein Takt, Chips im Bulkhead-Tablett, und Hotel ist langsam, nicht kaputt.
 
 ### Material
 
@@ -28,7 +28,7 @@ Gleiche Schlange und gleiche Zustandskarte wie in Story 4. Neu: ein Takt, Chips 
 - Ein A4-Blatt als Uhr mit acht Feldern, nummeriert 1 bis 8
 - Zwanzig Suchkarten, nummeriert 1 bis 20, als Stapel am Anfang der Schlange
 - 20 Karten `hotels: []` für die Fallback-Antworten in Runde 2, gebraucht werden 14, der Rest ist Reserve (oder Klebepunkte, mit denen Booking die Suchkarte markiert)
-- Die Zustandskarten CLOSED / OPEN / HALF_OPEN und die Fehlerkarten 1 bis 5 aus Story 4, ein Satz pro Tisch
+- Das Circuit-Breaker-Board und die Zustandskarten CLOSED / OPEN / HALF_OPEN aus Story 4, ein Satz pro Tisch
 
 Gesamtliste und Druckvorlagen: [`docs/orga/materialliste.md`](../orga/materialliste.md), druckfertig unter <https://larmic.github.io/workshop_microservices/material/>.
 
@@ -39,7 +39,7 @@ Spielbar ab sieben Personen: Takt, Booking, Hotel, Flight + Car und mindestens d
 ### Rollen
 
 1. **Takt** ist eine Person aus der Gruppe. Sie zählt laut 1 bis 8, immer wieder von vorn, und klatscht erst, wenn Booking und Hotel „fertig" sagen, etwa alle drei Sekunden. Bei jedem Klatscher nimmt die vorderste Suchanfrage die nächste **Suchkarte** vom Stapel (1 bis 20), gibt sie Booking und stellt sich **sofort hinten wieder an**. Die Runde endet, wenn der Stapel leer ist, also nach dem 20. Klatscher.
-2. **Booking** ruft für jede Suchkarte Flight, Hotel und Car nacheinander auf. Jeder Aufruf braucht einen Chip aus dem Tablett. Wartende Karten liegen in einer Reihe bei Booking, die Personen stellen sich trotzdem hinten an. Dazu liegen bei Booking die Zustandskarte CLOSED, die Fehlerkarten 1 bis 5, die Karten `hotels: []` und der Timeout: zwölf Takte ab dem Hotel-Aufruf, das Warten auf einen Chip zählt nicht mit. Läuft der Timeout ab, gelten die Regeln aus Story 4: nächste Fehlerkarte hinlegen, bei der 5 OPEN, ein Erfolg legt alle zurück. Fertige Suchen legt Booking auf zwei Stapel: komplett und `hotels: []`.
+2. **Booking** ruft für jede Suchkarte Flight, Hotel und Car nacheinander auf. Jeder Aufruf braucht einen Chip aus dem Tablett. Wartende Karten liegen in einer Reihe bei Booking, die Personen stellen sich trotzdem hinten an. Dazu liegen bei Booking das Circuit-Breaker-Board mit CLOSED, die Karten `hotels: []` und der Timeout: zwölf Takte ab dem Hotel-Aufruf, das Warten auf einen Chip zählt nicht mit. Läuft der Timeout ab, gelten die Regeln aus Story 4: Die Suchkarte kommt auf den nächsten Platz des Boards, Platz 5 heißt OPEN, ein Erfolg räumt das Board ab. Fertige Suchen legt Booking auf zwei Stapel: komplett und `hotels: []`.
 3. **Hotel** legt Karte und Chip auf das Feld der Uhr, dessen Zahl Takt gerade gerufen hat. Kommt die Zahl wieder (nach acht Takten), gibt Hotel zuerst beides an Booking zurück, dann kommt die neue Karte. **Flight und Car** antworten sofort: Sie tippen den Chip nur an, er bleibt bei Booking.
 4. **Alle anderen** sind Suchanfragen auf `GET /booking/offers`.
 
@@ -48,7 +48,7 @@ Spielbar ab sieben Personen: Takt, Booking, Hotel, Flight + Car und mindestens d
 1. **Probelauf:** Tablett ohne Wände, sechs Chips, Hotel gibt schon beim nächsten Takt zurück. Drei Takte, damit alle die Handgriffe kennen. Danach Stapel und Uhr zurücksetzen.
 2. **Runde 1, ohne Wände, ein Pool mit sechs Chips:** Alle Aufrufe holen ihren Chip aus demselben Pool. Ist kein Chip frei, wartet die Karte in der Reihe. Kommt eine Karte von Hotel zurück, behält sie ihren Chip für Car. Erst danach geht der Chip an die älteste wartende Karte, also die mit der kleinsten Nummer. Frage vor der Runde: Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?
 3. **Runde 2, mit Wänden, je zwei Chips für Flight, Hotel und Car:** Vorher Stapel und Uhr zurücksetzen und die beiden Wände einstecken. Jeder Aufruf holt seinen Chip aus der Spalte seines Backends. Ist die Hotel-Spalte leer, legt Booking sofort die Karte `hotels: []` auf die Suchkarte und ruft Car auf. Niemand wartet. Frage vor der Runde: Wie viele der 20 Suchen bekommen einen Hotel-Chip?
-4. **Nach Runde 2:** Steht die Zustandskarte noch auf CLOSED?
+4. **Nach Runde 2:** Steht das Board noch auf CLOSED?
 
 Gezählt wird nach dem 20. Klatscher: was in der Reihe bei Booking liegt, was auf der Uhr liegt und was auf den beiden Stapeln.
 
@@ -60,7 +60,7 @@ Tipp zur Moderation: Vorhersage per Handzeichen, erst dann auflösen. Wer am nä
 - Runde 1: Vier, ab Suche 7 wartet jede schon auf Flight. Am Ende liegen sechs Karten auf der Uhr (11 bis 16), vier in der Reihe (17 bis 20), zehn sind komplett. Flight ist gesund und bekommt trotzdem keinen Chip (Recap 01).
 - Runde 2: Sechs, die anderen 14 sofort. Einen Hotel-Chip bekommen die Suchen 1, 2, 9, 10, 17 und 18. Nach Takt 20 sind vier davon komplett, 17 und 18 liegen noch auf der Uhr, 14 liegen auf dem Stapel `hotels: []`. Zwei Chips bei acht Takten heißen: im Dauerlauf bekommt jede vierte Suche Hotels, Little's Law zum Anfassen. Flight und Car laufen ungestört. Das ist die Isolation.
 - Ehrlicher Vergleich: Runde 1 hat nach 20 Takten mehr komplette Antworten (10 gegen 4), weil Hotel dort alle sechs Chips nehmen durfte, auf Kosten von Flight und Car. Dafür kommt jede Suche ab Nummer 7 später. Der Bulkhead tauscht Vollständigkeit gegen Verfügbarkeit. Kommt der Einwand „Gebt Hotel in Runde 2 doch vier Chips": Bei acht Takten Latenz bräuchte Hotel acht, mehr Chips verschieben das Problem nur (Brücke zu Teil 3). Die Reihe aus Runde 1 ist genau die Queue aus Recap 04.
-- Die Zustandskarte: Ja, acht Takte liegen unter zwölf, es gibt keine Fehlerkarte, und Rejects erreichen den Breaker nie. In der Referenz sitzt der Bulkhead vor dem Circuit Breaker.
+- Das Board: Ja, CLOSED, acht Takte liegen unter zwölf, das Board bleibt leer, und Rejects erreichen den Breaker nie. In der Referenz sitzt der Bulkhead vor dem Circuit Breaker.
 
 ### Spickzettel Takt für Takt
 

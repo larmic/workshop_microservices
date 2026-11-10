@@ -23,12 +23,12 @@ Packliste für „Microservices richtig gemacht“ mit 8, 12 und 16 Teilnehmende
 
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
-| Kartenstapel 00–27 | drucken | 1 | 1 | 1 | 28 Karten A6 hoch, 4 pro Bogen, 7 Bogen Karton, einseitig. Derselbe Stapel für jede Gruppengröße |
-| Fehlerkarten 1–5 und Zustandskarten CLOSED / OPEN / HALF_OPEN | drucken | 1 Satz | 1 Satz | 2 Sätze | 8 Karten A6, 2 Bogen Karton pro Satz. Ein Satz pro Story-5-Tisch, mindestens einer; Story 4 nutzt Satz 1 |
+| Kartenstapel 00–27 mit Legende und Zustandskarten | drucken | 1 | 1 | 1 | 28 Karten plus Legende und CLOSED / OPEN / HALF_OPEN, A7 hoch, 8 pro Bogen, 4 Bogen Karton, einseitig. Derselbe Stapel für jede Gruppengröße |
+| Circuit-Breaker-Board | drucken | 1 | 1 | 2 | A3 quer oder 2× A4 hoch zusammengeklebt: Fehler 1–5, Probe-Feld, Zustandsfeld. Eins pro Story-5-Tisch; jeder weitere Tisch braucht dazu 1 Bogen Karton mit Zustandskarten |
 | Trainer-Skript | drucken | 1 | 1 | 1 | 1 Bogen Papier 80 g, beidseitig: STOPPs vorn, Kartentabelle 00–27 hinten |
 | Ablagetisch | Büro | 1 | 1 | 1 | die Karten landen dort der Reihe nach, die Nummer auf der Karte reicht |
 
-Die Zustandskarte steht im Kartenaufsteller vor Booking (siehe „Für alle Spiele“).
+Board und Zustandskarte liegen flach auf dem Booking-Tisch, Booking legt das Board erst bei STOPP 1 hin.
 
 ## Story 5: Der geteilte Pool
 
@@ -41,7 +41,7 @@ Die Zustandskarte steht im Kartenaufsteller vor Booking (siehe „Für alle Spie
 | Orange Karten „hotels: []“ | drucken | 20 | 20 | 40 | gebraucht werden 14 pro Tisch, der Rest ist Reserve |
 | Uhrmatte mit 8 Feldern | drucken | 1 | 1 | 2 | A3 quer oder 2× A4 hoch zusammengeklebt |
 | Rollenkarten | drucken | 5 | 7 | 10 | Takt, Booking, Hotel, Flight + Car bzw. Flight und Car, Suchanfragen; ab 12 am Tisch dazu „Booking an den Stapeln“ |
-| Fehlerkarten und Zustandskarten | aus Story 4 | 1 Satz | 1 Satz | 2 Sätze | ein Satz pro Tisch, nach Story 4 aufheben |
+| Circuit-Breaker-Board und Zustandskarten | aus Story 4 | 1 | 1 | 2 | eins pro Tisch, nach Story 4 aufheben |
 | Spickzettel Trainer mit Takt-für-Takt-Verlauf | drucken | 1 | 1 | 1 | A4, Papier |
 
 Folie 18a (Little's Law) braucht kein Material.
@@ -82,10 +82,10 @@ Nichts zu drucken, die Teams schreiben die Tabelle direkt aufs Flipchart.
 
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
-| Kartenaufsteller A6 quer | 3D | 6 | 12 | 12 | `card_stand.scad`, Schlitz 0,8 mm hält eine gefalzte 250-g-Karte; 12 Stück passen als Raster 3 × 4 auf eine Platte |
-| Karton 250 g, A4 | kaufen | 23 Bogen | 28 Bogen | 38 Bogen | plus Reserve; Story 4 allein: 9 / 9 / 11 Bogen (Stapel plus Fehler- und Zustandskarten) |
+| Kartenaufsteller A6 quer | 3D | 6 | 12 | 12 | `card_stand.scad` für die Rollenkarten aus Story 5 und 7, Schlitz 0,8 mm hält eine gefalzte 250-g-Karte; 12 Stück passen als Raster 3 × 4 auf eine Platte |
+| Karton 250 g, A4 | kaufen | 18 Bogen | 23 Bogen | 32 Bogen | plus Reserve; Story 4 allein: 4 / 4 / 5 Bogen (Stapel mit Legende und Zustandskarten, ab 14 ein Bogen Zustandskarten mehr) |
 | Papier 80 g, A4 | Büro | 6 Bogen | 9 Bogen | 9 Bogen | Strichliste Story 7, Listen, Spickzettel; dazu das Trainer-Skript Story 4 als ein Blatt beidseitig |
-| A3-Papier | Büro | 1 | 1 | 2 | Uhrmatte, sonst 2× A4 |
+| A3-Papier | Büro | 2 | 2 | 4 | Circuit-Breaker-Board und Uhrmatte je Tisch, sonst je 2× A4 |
 | Klare Prospekthüllen A4 | kaufen | 1 + 2 | 2 + 2 | 2 + 2 | für die Strichlisten aus Story 7, plus Reserve |
 | Schere oder Schneidemaschine, Lineal, Falzbein (oder Messerrücken) | Büro | 1 | 1 | 1 | 250 g vor dem Falzen rillen |
 | Umschläge oder Gummibänder | Büro | ca. 6 | ca. 8 | ca. 10 | Karten pro Spiel und Tisch getrennt aufbewahren |
@@ -97,19 +97,18 @@ Beim Rollenkarten-Modus „Einzelkarte“ werden die Rollen- und Briefing-Karten
 
 **Kaufen:** Pokerchips 40 mm, Becher und Schälchen, Korb oder Schachtel (Story 7), Gummibärchen oder Büroklammern, Prospekthüllen, Whiteboard-Marker mit Tuch, Kugelschreiber, Flipchart-Marker in 2 Farben, Kreppband, Karton 250 g.
 
-**Drucken:** alle Bogen der Druckseite, je Papiersorte ein Stapel: Karton 250 g, Papier 80 g, A3 (oder die Uhrmatte als 2× A4).
+**Drucken:** alle Bogen der Druckseite, je Papiersorte ein Stapel: Karton 250 g, Papier 80 g, A3 (oder Board und Uhrmatte als 2× A4).
 
 **3D:** Bulkhead-Tablett mit 2 Trennwänden (1, ab 14 Personen 2), Kartenaufsteller (6 bzw. 12). Vorlauf einplanen, das Tablett braucht etwa 2 h, ein Raster mit 12 Aufstellern 5 bis 6 h.
 
 ## Am Vorabend prüfen
 
 - [ ] Teilnehmerzahl bestätigt. Hat sie sich geändert, die Druckseite neu rechnen lassen und fehlende Karten nachdrucken (Story 5 ab 14, Story 7 ab 12 und ab 9 am Tisch).
-- [ ] Story 4: Kartenstapel 00–27 lückenlos und der Reihe nach sortiert (mit der Kartentabelle auf Seite 2 des Trainer-Skripts abgleichen), 00 liegt oben. Fehlerkarten 1–5 komplett, die 5 ist rot. Ablagetisch freigeräumt.
+- [ ] Story 4: Kartenstapel 00–27 lückenlos und der Reihe nach sortiert (mit der Kartentabelle auf Seite 2 des Trainer-Skripts abgleichen), 00 liegt oben, Legende und Zustandskarten dabei. Circuit-Breaker-Board liegt bereit (bei 2× A4 zusammengeklebt). Ablagetisch freigeräumt.
 - [ ] Strichliste für Story 7 steckt in der Prospekthülle. Den Marker einmal getestet: Er schreibt und lässt sich wieder wegwischen.
-- [ ] Zustandskarten CLOSED / OPEN / HALF_OPEN passen in den Aufsteller, CLOSED liegt vorn.
 - [ ] Briefing-Karte für Flight (Story 7) liegt verdeckt und getrennt von den Rollenkarten.
 - [ ] Story 5: Die Wände sitzen im Tablett, sechs Chips plus Reserve passen in die Mulden, der Streifen liegt dabei. Suchkarten #01–#20 sind sortiert, die orangen Karten liegen getrennt. Uhrmatte liegt bereit (bei 2× A4 zusammengeklebt).
-- [ ] Story 5 läuft am zweiten Tag: Fehlerkarten und Zustandskarten aus Story 4 über Nacht aufheben.
+- [ ] Story 5 läuft am zweiten Tag: Circuit-Breaker-Board und Zustandskarten aus Story 4 über Nacht aufheben.
 - [ ] Story 7: Becher beschriftet, Schälchen gefüllt, Allergien bzw. vegane Ernährung abgefragt (sonst Büroklammern). E-Zettel pro Tisch sortiert, nur E1 bis E(2 × Reisen). Buchungslisten auf die Spalte Runde 1 geknickt.
 - [ ] Story 2: Flipchart-Bogen, Marker und Kreppband liegen bereit, Wandfläche für alle Bogen nebeneinander vorhanden.
 - [ ] Raum: Platz für eine stehende Schlange vor dem Booking-Tisch (Story 4 und 5) und zwei Spieltische (Story 7 ab 12, Story 5 ab 14).

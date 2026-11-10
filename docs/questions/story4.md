@@ -12,7 +12,7 @@ Frage 6 (Recap 04). Die übrigen sind Reserve.
 
 ## Frage 1 — Wir öffnen den Circuit nach 5 aufeinanderfolgenden Fehlern. Wo kommt diese Zahl her?
 
-**Frage:** Booking hat im Spiel bei der fünften Fehlerkarte auf OPEN
+**Frage:** Booking hat im Spiel bei der fünften Karte auf dem Board auf OPEN
 gestellt. Ein wackliges Flight, das jedes zweite Mal antwortet, würde
 den Schalter nie öffnen. Warum fünf? Wäre 3 nicht sicherer, oder 20
 stabiler?
@@ -131,7 +131,7 @@ Implementierungen (Resilience4j: `recordExceptions` /
 ## Frage 4 — Bei jedem Fehler liefern wir `flights: []` statt einer Fehlermeldung. Täuschen wir den User? (Recap 02)
 
 **Vorab, aus dem Spiel:** Der Fallback kommt nicht erst bei OPEN,
-sondern schon beim ersten Fehler (Ablagetisch 05–12: `flights: []` ab
+sondern schon beim ersten Fehler (Board 05–09, Ablage 10–12: `flights: []` ab
 05, `X-Circuit-Open` erst ab 10). Der Breaker erfindet ihn
 nicht, er spart nur das Warten: CLOSED kostet bis zu 3 s, OPEN
 antwortet sofort und setzt zusätzlich `X-Circuit-Open`.

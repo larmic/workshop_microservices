@@ -68,15 +68,15 @@ Das Einstecken der Wände ist der Moment, in dem die Gruppe das Pattern sieht:
 Die Ressourcen werden nicht mehr, sie werden aufgeteilt.
 
 **PROBE-Token (Story 4, nicht mehr nötig).** Seit dem Umbau auf den
-Kartenstapel steht die Probe auf den Karten 14 und 18: Der Gast mit dieser
-Karte stellt sich neben Booking und zählt selbst. Ein Token braucht es dafür
+Kartenstapel steht die Probe auf den Karten 14 und 18: Der Request mit dieser
+Karte legt sie aufs Probe-Feld des Circuit-Breaker-Boards und wartet dort. Ein Token braucht es dafür
 nicht mehr. `probe_token.scad` bleibt optional im Repo, wer eins hat, kann es
-dem Probe-Gast zusätzlich in die Hand geben.
+dem Probe-Request zusätzlich in die Hand geben.
 
-**Kartenaufsteller (beide Stories).** Die Aufsteller halten A6-Karten im
+**Kartenaufsteller (Story 5 und 7).** Die Aufsteller halten A6-Karten im
 Querformat (148 × 105 mm) leicht nach hinten geneigt (10°), damit die ganze
-Schlange sie lesen kann: die Zustandskarte CLOSED / OPEN / HALF_OPEN bei
-Booking (Story 4 und 5, Booking tauscht die Karte), Rollenschilder für Story 5
-sowie Hinweiskarten wie die Timeout-Regel in Story 5. Die Fehlerkarten 1 bis 5
-liegen flach in einer Reihe vor dem Aufsteller. Der Schlitz ist auf 250-g-Karton ausgelegt (`card_t = 0.3`,
+Schlange sie lesen kann: Rollenschilder für Story 5 und 7 sowie Hinweiskarten
+wie die Timeout-Regel in Story 5. Die Zustandskarten aus Story 4 brauchen
+keinen Aufsteller mehr, sie liegen im Zustandsfeld des Circuit-Breaker-Boards.
+Der Schlitz ist auf 250-g-Karton ausgelegt (`card_t = 0.3`,
 Schlitz 0,8 mm). Für laminierte Karten `card_t` auf die gemessene Dicke setzen.

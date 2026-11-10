@@ -1917,13 +1917,13 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                 <details class="story-info" open>
                     <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Suchanfragen, Flight ist krank. Das Circuit-Breaker-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Requests, Flight ist krank. Das Circuit-Breaker-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
                         <p>Der Flight-Service ist zeitweise nicht erreichbar (Netzprobleme, Überlast, Deployment). Ohne Schutz wartet der Booking-Service bei jeder Anfrage drei Sekunden auf den Timeout und reißt seine Aufrufer mit. Ein <em>Circuit Breaker</em> zählt die Fehler, schaltet nach fünf Fehlern in Folge ab, antwortet sofort mit einem Fallback und probiert nach einer Pause vorsichtig wieder zu.</p>
                         <h4>User Story</h4>
                         <p>Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
                         <h4>So spielen wir</h4>
-                        <p>Eine Person ist Booking und arbeitet einen nummerierten Kartenstapel streng der Reihe nach ab, alle anderen sind Suchanfragen auf <code>GET /booking/offers</code>: Antwort laut vorlesen, Karte der Reihe nach auf den Ablagetisch, sofort hinten wieder anstellen. An den grauen STOPP-Karten reden wir. Kartenstapel, Zustands- und Fehlerkarten sowie das Trainer-Skript: <a href="https://larmic.github.io/workshop_microservices/material/" target="_blank" rel="noopener">Materialseite</a>.</p>
+                        <p>Eine Person ist Booking und gibt einen nummerierten Kartenstapel streng der Reihe nach aus, alle anderen sind Requests auf <code>GET /booking/offers</code>: Zeit abwarten, Antwort laut vorlesen, Karte dorthin legen, wo das Band sagt (Ablage, Circuit-Breaker-Board oder Probe-Feld), sofort hinten wieder anstellen. An den grauen STOPP-Karten reden wir. Kartenstapel, Board, Zustandskarten und Trainer-Skript: <a href="https://larmic.github.io/workshop_microservices/material/" target="_blank" rel="noopener">Materialseite</a>.</p>
                         <h4>Und die Buchung?</h4>
                         <p>Lesen und Schreiben sind zwei Fälle. Was passiert, wenn der Flight-Breaker offen ist und jemand auf Buchen klickt, besprechen wir nach dem Recap, und in Story 6 noch einmal.</p>
                         <p>Vollständige Beschreibung mit Material zum Nachbauen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-04-circuit-breaker.md" target="_blank" rel="noopener"><code>docs/stories/story-04-circuit-breaker.md</code></a>. Referenz-Implementierung: <code>services/booking/story4/</code>.</p>
@@ -1963,17 +1963,17 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                 <details class="story-info" open>
                     <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Gleiche Schlange, gleiche Zustandskarte wie Story 4. Neu: Takt, Chips und ein langsames Hotel. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Gleiche Schlange, gleiches Circuit-Breaker-Board wie Story 4. Neu: Takt, Chips und ein langsames Hotel. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
                         <p>Antwortet der Hotel-Service extrem langsam, binden seine Aufrufe die Ressourcen des Booking-Service, in einem klassischen Server den gemeinsamen Thread- oder Connection-Pool. Dann warten auch Anfragen an den Flight-Service, obwohl dieser einwandfrei funktioniert, bis sie beim Aufrufer in den Timeout laufen. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
                         <h4>User Story</h4>
                         <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
                         <h4>Material</h4>
-                        <p>Sechs Chips, ein Bulkhead-Tablett (drei Spalten Flight / Hotel / Car mit je zwei Mulden, zwei steckbare Trennwände; alternativ ein großer Becher, dann drei Becher), ein A4-Blatt als Uhr mit den Feldern 1 bis 8, Suchkarten 1 bis 20, 20 Karten <code>hotels: []</code>, Zustandskarten und Fehlerkarten aus Story 4. Spielbar ab sieben Personen. Nach jeder Runde Stapel und Uhr zurücksetzen. Druckvorlagen: <a href="https://larmic.github.io/workshop_microservices/material/" target="_blank" rel="noopener">Materialseite</a>.</p>
+                        <p>Sechs Chips, ein Bulkhead-Tablett (drei Spalten Flight / Hotel / Car mit je zwei Mulden, zwei steckbare Trennwände; alternativ ein großer Becher, dann drei Becher), ein A4-Blatt als Uhr mit den Feldern 1 bis 8, Suchkarten 1 bis 20, 20 Karten <code>hotels: []</code>, Circuit-Breaker-Board und Zustandskarten aus Story 4. Spielbar ab sieben Personen. Nach jeder Runde Stapel und Uhr zurücksetzen. Druckvorlagen: <a href="https://larmic.github.io/workshop_microservices/material/" target="_blank" rel="noopener">Materialseite</a>.</p>
                         <h4>Rollen</h4>
                         <ol>
                             <li><strong>Takt</strong> zählt laut 1 bis 8, immer wieder, und klatscht, sobald Booking und Hotel „fertig" sagen. Pro Klatscher nimmt die vorderste Suchanfrage die nächste <strong>Suchkarte</strong> vom Stapel (1 bis 20), gibt sie Booking und stellt sich <strong>sofort hinten wieder an</strong>. Stapel leer: Runde vorbei.</li>
-                            <li><strong>Booking</strong> ruft Flight, Hotel und Car nacheinander, jeder Aufruf braucht einen Chip. Wartende Karten liegen in einer Reihe bei Booking. Fertige Suchen auf zwei Stapel: komplett und <code>hotels: []</code>. Timeout zwölf Takte ab Hotel-Aufruf, dann Fehlerkarte wie in Story 4.</li>
+                            <li><strong>Booking</strong> ruft Flight, Hotel und Car nacheinander, jeder Aufruf braucht einen Chip. Wartende Karten liegen in einer Reihe bei Booking. Fertige Suchen auf zwei Stapel: komplett und <code>hotels: []</code>. Timeout zwölf Takte ab Hotel-Aufruf, dann kommt die Suchkarte aufs Board wie in Story 4.</li>
                             <li><strong>Hotel</strong> legt Karte und Chip auf das Feld der Uhr (A4, Felder 1 bis 8), das Takt gerade gerufen hat. Kommt die Zahl wieder, gibt Hotel zuerst beides zurück, dann kommt die neue Karte. <strong>Flight + Car</strong> tippen den Chip nur an.</li>
                             <li><strong>Alle anderen</strong> sind Suchanfragen.</li>
                         </ol>
@@ -1982,7 +1982,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             <li><strong>Probelauf:</strong> Tablett ohne Wände, sechs Chips, Hotel gibt schon beim nächsten Takt zurück. Drei Takte.</li>
                             <li><strong>Runde 1, ohne Wände, ein Pool mit sechs Chips:</strong> Eine Karte von Hotel behält ihren Chip für Car, erst danach geht er an die älteste wartende Karte. Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?</li>
                             <li><strong>Runde 2, mit Wänden, je zwei Chips für Flight / Hotel / Car:</strong> Hotel-Spalte leer? Sofort <code>hotels: []</code>, weiter zu Car. Wie viele der 20 Suchen bekommen einen Hotel-Chip?</li>
-                            <li><strong>Nach Runde 2:</strong> Steht die Zustandskarte noch auf CLOSED?</li>
+                            <li><strong>Nach Runde 2:</strong> Steht das Board noch auf CLOSED?</li>
                         </ol>
                         <details class="story-solution">
                             <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
