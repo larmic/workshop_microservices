@@ -38,19 +38,7 @@
         code { font-family: var(--mono); }
 
         /* ---------- Bildschirm: Kopf mit Steuerung und Inhaltsverzeichnis ---------- */
-        .screen-only { padding: 1.25rem; }
-        .panel {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 1.75rem;
-        }
-        .panel h1 { font-size: 1.4rem; margin: 0 0 0.35rem; }
-        .panel h2 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
-        .panel .sub { font-size: 0.9rem; color: #555; margin: 0 0 1rem; }
-        .panel a { color: var(--primary-violet); }
+        @media screen { body { padding: 1.25rem; } }
         .kicker { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--primary-violet); margin: 0 0 0.3rem; }
         .controls { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: flex-end; padding: 1rem; background: #f5f5fa; border: 2px solid var(--line); border-radius: 12px; }
         .controls label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8rem; font-weight: 600; color: #555; }
@@ -75,57 +63,40 @@
         details.hints-box > summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; margin: 1.5rem 0 0.5rem; color: var(--primary-dark); }
         details.hints-box > summary span { font-weight: 400; font-size: 0.85rem; color: #5B4E93; margin-left: 0.3rem; }
 
-        /* ---------- Leiste links: ein Spiel wählen, nur dessen Bogen zeigen und drucken ---------- */
-        .mat-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 1.25rem; align-items: start; padding: 1.25rem; }
+        /* ---------- Gehäuse wie die Vorbereitung: eine Karte, Leiste links, Footer ---------- */
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35); max-width: 1140px; width: 100%; margin: 0 auto; padding: 1.5rem 2rem; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+        .topbar .back { color: var(--primary-violet); text-decoration: none; font-weight: 700; }
+        .topbar .back:hover { text-decoration: underline; }
+        .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 2.25rem; align-items: start; }
         .mat-main { min-width: 0; }
-        .mat-main > header.screen-only { padding: 0 0 1.25rem; }
-        .mat-side {
-            position: sticky;
-            top: 1.25rem;
-            max-height: calc(100vh - 2.5rem);
-            overflow-y: auto;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-            padding: 1rem 0.75rem;
-            font-size: 0.88rem;
-        }
-        .side-title { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #5B4E93; margin: 0.25rem 0.5rem 0.4rem; }
+        .mat-main h1 { font-size: 1.7rem; margin: 0.5rem 0 0.75rem; }
+        .mat-main h2 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+        .mat-main .sub { font-size: 0.95rem; line-height: 1.6; color: #444; margin: 0 0 1rem; }
+        .mat-main a { color: var(--primary-violet); }
+        .mat-side { position: sticky; top: 1.25rem; max-height: calc(100vh - 2.5rem); overflow-y: auto; font-size: 0.88rem; padding: 0.25rem 0.25rem 1rem 0; }
+        .side-title { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #5B4E93; margin: 0.5rem 0 0.4rem; }
         .side-games { list-style: none; margin: 0; padding: 0; }
-        .side-games > li > a {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.45rem 0.5rem;
-            border-radius: 8px;
-            color: var(--primary-dark);
-            text-decoration: none;
-        }
+        .side-games > li > a { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.4rem 0.5rem; border-radius: 8px; color: var(--primary-dark); text-decoration: none; }
         .side-games > li > a:hover { background: var(--wave); }
-        .side-dot {
-            flex: none;
-            width: 1.9rem;
-            height: 1.9rem;
-            border-radius: 50%;
-            border: 2px solid #c8c8d4;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.78rem;
-        }
-        .side-text { display: flex; flex-direction: column; line-height: 1.3; }
+        .side-dot { flex: none; width: 1.7rem; height: 1.7rem; border-radius: 50%; border: 2px solid #c9c9d6; background: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
+        .side-text { display: flex; flex-direction: column; line-height: 1.3; padding-top: 0.15rem; }
         .side-text small { color: #5B4E93; font-size: 0.75rem; }
         .side-games > li > a.active { background: var(--wave); }
         .side-games > li > a.active .side-dot { background: var(--primary-dark); border-color: var(--primary-dark); color: var(--highlight); box-shadow: 0 0 0 3px var(--highlight); }
-        .side-sheets { list-style: none; margin: 0.15rem 0 0.4rem; padding: 0 0 0 2.9rem; }
-        .side-sheets a { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.2rem 0.4rem; border-radius: 6px; color: var(--primary-dark); text-decoration: none; font-size: 0.82rem; line-height: 1.3; }
+        .side-sheets { list-style: none; margin: 0.1rem 0 0.3rem; padding: 0 0 0 1.2rem; }
+        .side-sheets a { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.22rem 0.5rem; border-radius: 6px; color: var(--primary-dark); text-decoration: none; font-size: 0.82rem; line-height: 1.35; }
         .side-sheets a:hover { background: var(--wave); }
         .side-sheets a span { color: #5B4E93; font-variant-numeric: tabular-nums; }
-        .side-links { list-style: none; margin: 0.6rem 0 0; padding: 0.5rem 0 0; border-top: 1px solid var(--line); }
-        .side-links a { display: block; padding: 0.22rem 0.5rem; border-radius: 6px; color: var(--primary-violet); text-decoration: none; }
+        .side-links { list-style: none; margin: 0.5rem 0 0; padding: 0.4rem 0 0; border-top: 1px solid var(--line); }
+        .side-links a { display: block; padding: 0.22rem 0.5rem; border-radius: 6px; color: var(--primary-dark); text-decoration: none; line-height: 1.35; }
         .side-links a:hover { background: var(--wave); }
+        .stage-title { margin-top: 2rem !important; }
+        .workshop-footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #d0d7e2; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem; color: #555; }
+        .workshop-footer .footer-author strong { color: #0A0349; }
+        .workshop-footer .footer-author .accent { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; background: #CCF465; color: #0A0349; font-weight: 700; }
+        .workshop-footer .footer-logo { height: 32px; width: auto; opacity: 0.8; transition: opacity 0.15s; }
+        .workshop-footer .footer-logo:hover { opacity: 1; }
         body[data-game="s4"] .sheet:not(.g-s4),
         body[data-game="s5"] .sheet:not(.g-s5),
         body[data-game="s7"] .sheet:not(.g-s7) { display: none; }
@@ -134,7 +105,9 @@
         body[data-game="s7"] .only-s5 { display: none; }
 
         /* ---------- Bogen ---------- */
-        #sheets { display: flex; flex-direction: column; align-items: center; gap: 10mm; padding: 0 0 20mm; }
+        #sheets { display: flex; flex-direction: column; align-items: center; gap: 10mm; padding: 8mm 0; background: #f5f5fa; border: 2px solid var(--line); border-radius: 12px; }
+        #sheets .sheet { box-shadow: 0 4px 14px rgba(10, 3, 73, 0.18); flex: none; }
+        @media screen { #sheets { overflow-x: auto; } }
         .sheet { position: relative; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); color: var(--primary-dark); break-after: page; page-break-after: always; }
         .sheet.last-visible { break-after: auto; page-break-after: auto; }
         .sheet.a4p { width: 210mm; height: 296.6mm; page: a4p; }
@@ -304,7 +277,7 @@
         .cheat td { border-bottom: 0.2mm solid #ccc; padding: 1mm 1.5mm; vertical-align: top; }
         .cheat td:first-child { font-weight: 700; white-space: nowrap; }
         .cheat .two { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
-        .cheat svg.room { display: block; width: 100%; height: auto; margin: 0.5mm 0 0; font-family: inherit; }
+        .cheat svg.room { display: block; width: 90%; height: auto; margin: 0.5mm 0 0; font-family: inherit; }
         .cheat .room-note { margin: 1mm 0 0; font-size: 7.8pt; color: #444; }
         .cheat .box { background: var(--wave); border-radius: 2mm; padding: 2mm 3mm; }
         .cheat .ans { color: var(--ok); font-weight: 700; }
@@ -330,30 +303,30 @@
         @media print {
             body { background: #fff; background-image: none; }
             .screen-only { display: none !important; }
-            .mat-layout { display: block; padding: 0; }
+            body { padding: 0; }
+            .card { max-width: none; padding: 0; border-radius: 0; box-shadow: none; background: none; }
+            .layout { display: block; }
+            #sheets { background: none; border: 0; border-radius: 0; zoom: 1 !important; }
             #sheets { display: block; padding: 0; gap: 0; }
             .sheet { box-shadow: none; margin: 0; }
         }
-        @media screen and (max-width: 1500px) {
-            #sheets { zoom: 0.75; }
-        }
-        @media screen and (max-width: 1100px) {
-            #sheets { zoom: 0.5; }
-            .mat-layout { grid-template-columns: minmax(0, 1fr); }
+        @media screen and (max-width: 900px) {
+            .layout { grid-template-columns: minmax(0, 1fr); }
             .mat-side { position: static; max-height: none; }
         }
     </style>
 </head>
 <body data-batch="all">
 
-<div class="mat-layout">
+<div class="card">
+<div class="topbar screen-only"><a class="back" href="../">&larr; Zur &Uuml;bersicht</a></div>
+<div class="layout">
 <aside class="mat-side screen-only" id="mat-side" aria-label="Spiele"></aside>
 <div class="mat-main">
 <header class="screen-only">
-    <div class="panel">
-        <p class="kicker">Microservices richtig gemacht &middot; f&uuml;r den Trainer</p>
+    <div>
         <h1>Spielmaterial drucken</h1>
-        <p class="sub">Alle Druckvorlagen f&uuml;r die Rollenspiele aus Story 4 (Circuit Breaker), Story 5 (Bulkhead) und Story 7 (Choreography-Saga). Die Mengen rechnet die Seite aus der Teilnehmerzahl aus. Packliste mit allem, was man kaufen oder 3D-drucken muss: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/orga/materialliste.md">docs/orga/materialliste.md</a>, 3D-Modelle: <a href="https://github.com/larmic/workshop_microservices/tree/main/docs/orga/3d">docs/orga/3d/</a>.</p>
+        <p class="sub">F&uuml;r den Trainer: alle Druckvorlagen f&uuml;r die Rollenspiele aus Story 4 (Circuit Breaker), Story 5 (Bulkhead) und Story 7 (Choreography-Saga). Die Mengen rechnet die Seite aus der Teilnehmerzahl aus. Packliste mit allem, was man kaufen oder 3D-drucken muss: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/orga/materialliste.md">docs/orga/materialliste.md</a>, 3D-Modelle: <a href="https://github.com/larmic/workshop_microservices/tree/main/docs/orga/3d">docs/orga/3d/</a>.</p>
 
         <div class="controls">
             <label>Teilnehmende
@@ -406,12 +379,17 @@
             <tbody id="toc-body"></tbody>
         </table>
         <p class="sum" id="toc-sum"></p>
-        <p class="sub" style="margin-top:1rem"><a href="../">&larr; zur&uuml;ck zur Startseite</a></p>
+        <h2 class="stage-title">Vorschau</h2>
     </div>
 </header>
 
 <main id="sheets"></main>
 </div>
+</div>
+<footer class="workshop-footer screen-only">
+    <div class="footer-author"><span class="accent">Workshop</span> von <strong>Lars Michaelis</strong></div>
+    <a href="https://www.team-neusta.de/" target="_blank" rel="noopener" aria-label="team neusta"><img class="footer-logo" src="../assets/team-neusta-logo.svg" alt="team neusta"></a>
+</footer>
 </div>
 
 <!-- ============ Trainer-Spickzettel (statisches HTML, wird je 1x gedruckt) ============ -->
@@ -1174,6 +1152,7 @@ function render() {
         Object.keys(PAPER).filter(k => byPaper[k]).map(k => `${byPaper[k]} × ${PAPER[k].label}${PAPER[k].hint ? " (" + PAPER[k].hint + ")" : ""}`).join(", ") +
         `<br><strong>Aufteilung bei ${n}:</strong> ${esc(tables)}`;
     renderSide(rows, game);
+    fitSheets();
     checkOverflow();
 }
 
@@ -1197,10 +1176,10 @@ function renderSide(rows, game) {
         (game === id && id !== "all" ? `<ul class="side-sheets">${rows.filter(r => gameClasses(r.game).includes("g-" + id)).map(r =>
             `<li><a href="#" data-sheet="${r.first}">${esc(r.title)}<span>${r.count}</span></a></li>`).join("")}</ul>` : "") + `</li>`;
     document.getElementById("mat-side").innerHTML =
-        `<p class="side-title">Spiel wählen</p><ul class="side-games">` +
+        `<p class="side-title">Spielmaterial</p><ul class="side-games">` +
         item("all", "∗", "Alle Spiele", "alles auf einmal", "alle") +
         GAMES.map(g => item(g.id, g.nr, g.name, g.sub, "story" + g.nr)).join("") +
-        `</ul><ul class="side-links"><li><a href="#" data-jump="hints">So wird gedruckt</a></li><li><a href="#" data-jump="inhalt">Inhalt und Mengen</a></li><li><a href="../">&larr; Startseite</a></li></ul>`;
+        `</ul><ul class="side-links"><li><a href="#" data-jump="hints">So wird gedruckt</a></li><li><a href="#" data-jump="inhalt">Inhalt und Mengen</a></li></ul>`;
 }
 document.getElementById("mat-side").addEventListener("click", e => {
     const a = e.target.closest("a[data-sheet], a[data-jump]");
@@ -1211,6 +1190,17 @@ document.getElementById("mat-side").addEventListener("click", e => {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
+
+// Bogen am Bildschirm auf die Spaltenbreite verkleinern (breitester Bogen: A3 quer); der Druck bleibt 1:1
+function fitSheets() {
+    const box = document.getElementById("sheets");
+    box.style.zoom = "";
+    // Maß ist A4 quer; nur die A3-Uhrmatte ist breiter und scrollt dann seitlich
+    const a4l = Math.min(...Array.from(box.querySelectorAll(".sheet")).filter(el => el.offsetParent).map(el => el.offsetWidth).filter(w => w >= 1000), 1123);
+    const room = box.clientWidth - 32;
+    if (a4l > room) box.style.zoom = String(Math.max(0.3, room / a4l));
+}
+window.addEventListener("resize", fitSheets);
 
 // Überlaufprüfung: Karten und Zettel, deren Inhalt nicht passt, rot umranden und in der Konsole melden
 function checkOverflow() {
