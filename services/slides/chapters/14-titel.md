@@ -8,7 +8,10 @@
 <div class="split-text">
 <p class="statement">Wer ein totes Backend weiter anruft, stirbt <span class="accent">mit</span>.</p>
 <p class="sub">Nach f&uuml;nf Fehlern in Folge macht der Aufrufer dicht. Schnell scheitern statt im Timeout h&auml;ngen.</p>
-<p class="source">Nach Michael Nygard, <em>Release It!</em> (2007): Der Circuit Breaker ist das Pattern, mit dem ein Aufrufer sich vor einem kranken Partner sch&uuml;tzt.</p>
+<figure class="foot-quote">
+<blockquote>Der Circuit Breaker ist das Pattern, mit dem ein Aufrufer sich vor einem kranken Partner sch&uuml;tzt.</blockquote>
+<figcaption>Michael Nygard, <em>Release It!</em>, 2007 (sinngem&auml;&szlig;)</figcaption>
+</figure>
 </div>
 <div class="split-figure">
 <img src="./assets/circuitbreaker.svg" alt="Sicherungskasten mit drei Schutzschaltern f&uuml;r Flight, Hotel und Car, der von Flight ist ausgel&ouml;st"/>

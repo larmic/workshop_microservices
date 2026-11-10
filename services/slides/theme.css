@@ -1795,6 +1795,51 @@
     content: "\2014\00a0";
 }
 
+/* Dasselbe Zitat auf dunklen Split-Folien (14): unten links, helle Schrift */
+.reveal .split-text .foot-quote {
+    position: relative;
+    margin: 0;
+    padding: 40px 0 0 52px;
+    max-width: 640px;
+}
+
+.reveal .split-text .foot-quote::before {
+    content: "\201C";
+    position: absolute;
+    left: 0;
+    top: 22px;
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 84px;
+    line-height: 1;
+    color: var(--highlight);
+}
+
+.reveal .split-text .foot-quote blockquote {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    font-style: italic;
+    font-size: 21px;
+    line-height: 1.4;
+    color: #E4E0F5;
+}
+
+.reveal .split-text .foot-quote figcaption {
+    margin-top: 8px;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #9A93C4;
+}
+
+.reveal .split-text .foot-quote figcaption::before {
+    content: "\2014\00a0";
+}
+
 /* Themen-Wolke (08b): vertieft Frage 01, erscheint per Klick daneben.     */
 /* Eisberg: über Wasser „Microservices“, darunter drei Schichten          */
 /* (Schnitt, Kommunikation, Betrieb) mit Tiefenmesser und roter Boje.     */
