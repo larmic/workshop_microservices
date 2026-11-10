@@ -304,6 +304,8 @@
         .cheat td { border-bottom: 0.2mm solid #ccc; padding: 1mm 1.5mm; vertical-align: top; }
         .cheat td:first-child { font-weight: 700; white-space: nowrap; }
         .cheat .two { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+        .cheat svg.room { display: block; width: 100%; height: auto; margin: 0.5mm 0 0; font-family: inherit; }
+        .cheat .room-note { margin: 1mm 0 0; font-size: 7.8pt; color: #444; }
         .cheat .box { background: var(--wave); border-radius: 2mm; padding: 2mm 3mm; }
         .cheat .ans { color: var(--ok); font-weight: 700; }
         .cheat code { font-size: 0.95em; }
@@ -426,11 +428,47 @@
                 <li>Dashboard Story 4 f&uuml;r die Demo danach offen, Flight auf &bdquo;Normal&ldquo;.</li>
             </ul>
             <h2>Aufbau</h2>
-            <ul>
-                <li>Eine Person spielt Booking: Tisch, Stapel vor sich, Aufsteller zur Schlange hin. Zustands- und Fehlerkarten liegen daneben, sie kommen erst mit Karte 04 ins Spiel.</li>
-                <li>Alle anderen stehen in einer Schlange vor Booking. Daneben ein freier Ablagetisch.</li>
-                <li>Flight, Hotel und Car spielt niemand. Der Trainer hat keine Rolle und keine Uhr, er moderiert nur an den grauen STOPP-Karten.</li>
-            </ul>
+            <svg class="room" viewBox="0 0 240 122" role="img" aria-label="Aufbau im Raum: Booking-Tisch mit Stapel, Zustandskarte und Fehlerkarten, davor die Schlange, daneben der Ablagetisch, der Trainer am Rand">
+                <defs><marker id="room-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7348E1"/></marker></defs>
+                <rect x="2" y="2" width="150" height="50" rx="5" fill="#fff" stroke="#0A0349" stroke-width="1.3"/>
+                <text x="8" y="12" font-size="6.5" font-weight="800" fill="#0A0349" letter-spacing=".4">BOOKING</text>
+                <rect x="8" y="17" width="20" height="28" rx="2.5" fill="#EEE7FB" stroke="#7348E1"/>
+                <text x="18" y="34" text-anchor="middle" font-size="7.5" font-weight="800" fill="#0A0349">00</text>
+                <rect x="34" y="17" width="44" height="18" rx="2.5" fill="#d4f4dd" stroke="#1d7a3a" stroke-width="1.1"/>
+                <text x="56" y="29" text-anchor="middle" font-size="7.5" font-weight="800" fill="#1d7a3a">CLOSED</text>
+                <text x="56" y="45" text-anchor="middle" font-size="6.5" fill="#5B4E93">Zustand</text>
+                <g font-size="7" font-weight="800" text-anchor="middle">
+                    <rect x="84" y="19" width="11" height="15" rx="1.5" fill="#fff" stroke="#0A0349"/><text x="89.5" y="29.5" fill="#0A0349">1</text>
+                    <rect x="97" y="19" width="11" height="15" rx="1.5" fill="#fff" stroke="#0A0349"/><text x="102.5" y="29.5" fill="#0A0349">2</text>
+                    <rect x="110" y="19" width="11" height="15" rx="1.5" fill="#fff" stroke="#0A0349"/><text x="115.5" y="29.5" fill="#0A0349">3</text>
+                    <rect x="123" y="19" width="11" height="15" rx="1.5" fill="#fff" stroke="#c8c8d4" stroke-dasharray="2 1.5"/>
+                    <rect x="136" y="19" width="11" height="15" rx="1.5" fill="#fff" stroke="#b3261e" stroke-dasharray="2 1.5"/><text x="141.5" y="29.5" fill="#b3261e">5</text>
+                </g>
+                <text x="115" y="45" text-anchor="middle" font-size="6.5" fill="#5B4E93">Fehlerkarten</text>
+                <rect x="166" y="2" width="72" height="50" rx="5" fill="#fff" stroke="#0A0349" stroke-width="1.3"/>
+                <text x="172" y="12" font-size="6.5" font-weight="800" fill="#0A0349" letter-spacing=".4">ABLAGE</text>
+                <g font-size="6" font-weight="800" fill="#0A0349" text-anchor="middle">
+                    <rect x="172" y="17" width="14" height="20" rx="1.5" fill="#f5f5fa" stroke="#5B4E93"/><text x="179" y="29.5">00</text>
+                    <rect x="189" y="17" width="14" height="20" rx="1.5" fill="#f5f5fa" stroke="#5B4E93"/><text x="196" y="29.5">01</text>
+                    <rect x="206" y="17" width="14" height="20" rx="1.5" fill="#f5f5fa" stroke="#5B4E93"/><text x="213" y="29.5">02</text>
+                    <text x="229" y="29.5">…</text>
+                </g>
+                <text x="202" y="46" text-anchor="middle" font-size="6.5" fill="#5B4E93">der Nummer nach</text>
+                <circle cx="18" cy="66" r="7.5" fill="#0A0349"/><text x="18" y="68.8" text-anchor="middle" font-size="7.5" font-weight="800" fill="#D3F871">T</text>
+                <text x="29" y="64.5" font-size="6.5" font-weight="700" fill="#0A0349">Trainer</text>
+                <text x="29" y="71.5" font-size="6" fill="#5B4E93">STOPP-Karten</text>
+                <circle cx="80" cy="64" r="7.5" fill="#7348E1"/><text x="80" y="66.8" text-anchor="middle" font-size="7.5" font-weight="800" fill="#fff">B</text>
+                <circle cx="100" cy="64" r="6" fill="#fff3cd" stroke="#8a6d00"/><text x="100" y="66.5" text-anchor="middle" font-size="6.5" font-weight="800" fill="#8a6d00">P</text>
+                <text x="109" y="66.5" font-size="6.5" fill="#8a6d00">Probe (14, 18)</text>
+                <g fill="#EEE7FB" stroke="#5B4E93"><circle cx="80" cy="82" r="5"/><circle cx="80" cy="95" r="5"/><circle cx="80" cy="108" r="5"/><circle cx="93" cy="116" r="5"/><circle cx="106" cy="116" r="5"/></g>
+                <text x="70" y="97" text-anchor="end" font-size="7" font-weight="700" fill="#0A0349">Schlange</text>
+                <text x="70" y="105" text-anchor="end" font-size="6" fill="#5B4E93">alle anderen</text>
+                <path d="M87 80 C 140 78, 180 70, 196 55" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room-ar)"/>
+                <text x="150" y="86" font-size="6.5" fill="#7348E1">vorlesen, ablegen</text>
+                <path d="M216 55 C 224 100, 170 118, 115 117" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room-ar)"/>
+                <text x="168" y="106" font-size="6.5" fill="#7348E1">hinten anstellen</text>
+            </svg>
+            <p class="room-note">Zustands- und Fehlerkarten kommen erst mit Karte 04 ins Spiel. Flight, Hotel und Car spielt niemand, der Trainer hat keine Rolle und keine Uhr.</p>
         </div>
         <div>
             <h2>Ansage</h2>
