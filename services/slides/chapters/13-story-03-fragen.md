@@ -46,8 +46,10 @@
 </div>
 
 Note:
-- <strong>SPOF:</strong> Consul ist ein HA-Cluster und muss erreichbar sein. Ist er weg: Fehler, nicht raten. Der lokale Consul-Agent puffert, nicht der Service. Clients halten die Aufl&ouml;sung h&ouml;chstens Sekunden, das ist fl&uuml;chtig, kein State.
-- <strong>Kubernetes:</strong> Nein, API-Server plus CoreDNS sind die Registry. Consul nur bei Hybrid, Multi-Cluster oder Brownfield. Die Frage ist meist Mesh, nicht Discovery.
-- <strong>Stop vs. Kill:</strong> <code>docker stop</code> schickt SIGTERM, unsere Backends melden sich selbst ab, der Eintrag ist sofort weg. Bei <code>kill</code> oder Absturz l&auml;uft Traffic bis zum n&auml;chsten fehlgeschlagenen Check ins Leere, hier bis zu 10 s. Discovery ist immer eventually consistent, deshalb Story 4 und 5.
-- <strong>Registriert &ne; gesund:</strong> Der Check kann l&uuml;gen oder veraltet sein. Discovery sagt, wo der Service <em>war</em>, nicht ob er noch da ist. Der Aufrufer muss sich selbst sch&uuml;tzen, Story 4.
+- <strong>SPOF:</strong> Consul l&auml;uft im Betrieb als HA-Cluster. Ist er weg: Fehler, nicht raten. Gepuffert wird im lokalen Agent, nicht im Service.
+- <strong>Kubernetes:</strong> Nein, API-Server plus CoreDNS sind die Registry. Consul nur bei Hybrid, Multi-Cluster oder Brownfield.
+- <strong>Stop vs. Kill:</strong>
+  - stop: SIGTERM, die Backends melden sich ab, der Eintrag ist sofort weg.
+  - kill oder Absturz: bis zu 10 s Verkehr ins Leere, bis der Check fehlschl&auml;gt.
+- <strong>Registriert &ne; gesund:</strong> Discovery sagt, wo der Service <em>war</em>, nicht ob er noch da ist. Der Aufrufer muss sich selbst sch&uuml;tzen, Story 4.
 - Lang: <code>docs/questions/story3.md</code>.

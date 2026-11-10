@@ -280,6 +280,42 @@ Fenster, ohne dass der User es spürt.
 
 ---
 
+## Frage 7 — Wir laufen auf Kubernetes. Brauchen wir Consul dann überhaupt?
+
+**Frage:** Im Workshop melden sich die Services bei Consul an, der
+Booking-Service fragt Consul. Kubernetes hat doch schon Services und
+DNS. Ist Consul dort nicht doppelt?
+
+**Antwort:** Meistens ja. In Kubernetes **ist** die Plattform die
+Registry:
+
+| Aufgabe              | Workshop (Consul)                 | Kubernetes                          |
+|----------------------|-----------------------------------|-------------------------------------|
+| Anmelden / Abmelden  | Service ruft Consul-API           | Plattform, über Pod-Lifecycle       |
+| Health-Check         | Consul prüft `/health`            | Readiness-Probe am Pod              |
+| Auflösen             | Resolver fragt `/v1/health/...`   | CoreDNS: `flight-service.ns.svc`    |
+| Instanz wählen       | Client-Side im Booking-Service    | `kube-proxy` bzw. Service-IP        |
+
+Der API-Server hält die Endpoints, CoreDNS löst den Namen auf. Kein
+Service-Code weiß davon etwas, das entspricht dem Sidecar-/Plattform-
+Modell aus Frage 2.
+
+Consul lohnt sich in Kubernetes vor allem, wenn:
+
+1. **Hybrid:** Ein Teil läuft auf VMs oder Bare Metal und muss die
+   Pods finden (und umgekehrt).
+2. **Multi-Cluster / Multi-Datacenter:** Discovery über
+   Cluster-Grenzen hinweg.
+3. **Brownfield:** Consul ist schon da, Kubernetes kommt dazu.
+
+**Spicy Take-away:** Wer auf Kubernetes nach Consul fragt, meint
+meistens gar nicht Discovery, sondern Service Mesh (mTLS, Traffic-
+Splitting, Intentions). Dann ist die Frage „Consul Connect, Istio oder
+Linkerd?", nicht „Consul oder CoreDNS?". Im Workshop nutzen wir Consul,
+weil es das Muster sichtbar macht, das Kubernetes sonst versteckt.
+
+---
+
 ## Sammelthemen für die Diskussion
 
 - Welche Service Registry / Discovery nutzt ihr? Wie hochverfügbar ist
