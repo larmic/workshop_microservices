@@ -1021,6 +1021,26 @@
     color: #fff;
 }
 
+/* Karte, die bewusst nicht zum Pattern gehört (z. B. Fallback neben dem Circuit Breaker) */
+.reveal .card.own-pattern {
+    position: relative;
+    background: #fff;
+    border: 3px dashed var(--box-border);
+}
+.reveal .card.own-pattern .tag {
+    position: absolute;
+    top: -15px;
+    right: 18px;
+    background: var(--highlight);
+    color: var(--box-bg);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
 /* Marktübersicht als letzte Karte im Raster (dunkel, kleinere Pills) */
 .reveal .card.market-card {
     background: var(--box-bg);

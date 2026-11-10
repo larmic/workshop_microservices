@@ -23,11 +23,12 @@
 </div>
 <div class="card">
 <h3>Schnell scheitern</h3>
-<p>Statt 3 s Timeout sofort Fallback. Der Aufrufer bleibt reaktiv.</p>
+<p>Bei OPEN gar kein Call. Statt 3 s Timeout sofort eine Antwort, der Aufrufer bleibt reaktiv.</p>
 </div>
-<div class="card">
-<h3>Fallback-Strategie</h3>
-<p>Leere Liste, Cache, anderer Provider. Hauptsache etwas.</p>
+<div class="card own-pattern">
+<span class="tag">eigenes Pattern</span>
+<h3>Fallback</h3>
+<p>Was der Kunde bekommt: leere Liste, Cache, anderer Provider. Der Breaker liefert das nicht, ihr schreibt es selbst.</p>
 <code>flights: []</code>
 </div>
 <div class="card">
@@ -56,4 +57,5 @@ Note:
   - Aufrufer: keine Threads mehr in Timeouts.
   - Backend: keine Anfragen mehr, kann sich erholen.
 - <strong>Warum beim Aufrufer:</strong> Ein totes Backend kann sich nicht selbst abschalten. Nur der Aufrufer sieht die Fehler.
+- <strong>Fallback ist nicht der Breaker:</strong> Der Breaker entscheidet nur, ob gerufen wird. Was zurückkommt, macht der Fallback, auch schon bei CLOSED (Karten 05–09). Ohne Fallback: bei OPEN sofort Fehler, &bdquo;fail fast&ldquo;. Resilience4j: <code>CallNotPermittedException</code> plus eigene <code>fallbackMethod</code>.
 - <strong>Denkfehler:</strong> &bdquo;CB vor unseren Service, damit er nicht &uuml;berlastet.&ldquo; Das ist Rate Limiting oder Load Shedding. Auch Bulkhead sitzt im Aufrufer (Story 5).
