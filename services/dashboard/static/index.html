@@ -1923,10 +1923,28 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <h4>User Story</h4>
                         <p>Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
                         <h4>So spielen wir</h4>
-                        <p>Eine Person ist Booking und gibt einen nummerierten Kartenstapel streng der Reihe nach aus, alle anderen sind Requests auf <code>GET /booking/offers</code>: Zeit abwarten, Antwort laut vorlesen, Karte dorthin legen, wo das Band sagt (Ablage, Circuit-Breaker-Board oder Probe-Feld), sofort hinten wieder anstellen. An den grauen STOPP-Karten reden wir. Kartenstapel, Board, Zustandskarten und Trainer-Skript: <a href="https://larmic.github.io/workshop_microservices/material/" target="_blank" rel="noopener">Materialseite</a>.</p>
+                        <p>Eine Person ist Booking, ruft die Nummern, gibt die Karten aus und führt das Board. Alle anderen sind Requests in der Schlange: <code>GET /booking/offers</code>. <strong>Bei jeder Karte:</strong> Nummer rufen, warten, Antwort vorlesen, ablegen, hinten anstellen. Dunkle Karte: STOPP, wir reden.</p>
+                        <ol>
+                            <li><strong>Ohne Breaker (01&ndash;03):</strong> Was bleibt von Hotel und Car?</li>
+                            <li><strong>STOPP 1, das Board kommt:</strong> Rot = Flight-Fehler, aufs Board. Platz 5 = OPEN.</li>
+                            <li><strong>OPEN:</strong> Wie lange wartet der nächste Request?</li>
+                            <li><strong>STOPP 2, 30&nbsp;s sind um:</strong> Gelb = Probe. Sie scheitert, später gelingt sie.</li>
+                            <li><strong>31.02.:</strong> Flight ist gesund. Kommt das aufs Board?</li>
+                        </ol>
+                        <details class="story-solution">
+                            <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
+                            <div class="story-solution-body">
+                                <ul>
+                                    <li><strong>Ohne Breaker:</strong> nichts. Der erste Fehler bricht mit 500 ab, Hotel und Car werden gar nicht gefragt.</li>
+                                    <li><strong>OPEN:</strong> gar nicht, sofort <code>flights: []</code> mit <code>X-Circuit-Open</code>. Den Fallback gab es schon ab dem ersten Fehler, der Breaker spart nur das Warten.</li>
+                                    <li><strong>Probe:</strong> Genau eine liegt auf dem Probe-Feld, die anderen bekommen sofort den Fallback.</li>
+                                    <li><strong>31.02.:</strong> Ja, bei uns schon. Unser Code zählt alles ab 400, bei 26 trifft es einen Request mit gültigem Datum.</li>
+                                </ul>
+                            </div>
+                        </details>
                         <h4>Und die Buchung?</h4>
                         <p>Lesen und Schreiben sind zwei Fälle. Was passiert, wenn der Flight-Breaker offen ist und jemand auf Buchen klickt, besprechen wir nach dem Recap, und in Story 6 noch einmal.</p>
-                        <p>Vollständige Beschreibung mit Material zum Nachbauen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-04-circuit-breaker.md" target="_blank" rel="noopener"><code>docs/stories/story-04-circuit-breaker.md</code></a>. Referenz-Implementierung: <code>services/booking/story4/</code>.</p>
+                        <p>Material, Trainer-Skript und Kartentabelle: <a href="https://larmic.github.io/workshop_microservices/material/#story4" target="_blank" rel="noopener">Materialseite</a>. Vollständige Beschreibung: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-04-circuit-breaker.md" target="_blank" rel="noopener"><code>docs/stories/story-04-circuit-breaker.md</code></a>. Referenz-Implementierung: <code>services/booking/story4/</code>.</p>
                     </div>
                 </details>
             </div>

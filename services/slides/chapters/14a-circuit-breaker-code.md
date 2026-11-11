@@ -35,4 +35,5 @@ Note:
 - <strong>Drei Zahlen:</strong> 3 s, 5 in Folge, 30 s. Jede h&auml;ngt am Backend und an eurem Budget.
 - <strong>Reset bei Erfolg:</strong> Jeder Erfolg setzt auf null. Darum &bdquo;in Folge&ldquo;: Ein wackliges Flight, das jedes zweite Mal antwortet, &ouml;ffnet den Schalter nie.
 - <strong>Probe-Slot:</strong> In HALF_OPEN darf genau einer durch (CAS), alle anderen bekommen den Fallback. Scheitert die Probe: sofort wieder OPEN, die 30 s laufen von vorn.
+- <strong>Nicht auf der Karte:</strong> <code>fallback()</code> hei&szlig;t HTTP 200 mit <code>X-Fallback</code>. Das steht nicht auf den Spielkarten, die Demo zeigt es.
 - Referenz: <code>services/booking/story4/circuitbreaker/circuitbreaker.go</code>. Weiter: Booking bestimmen, Stapel &uuml;bergeben.

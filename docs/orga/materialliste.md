@@ -23,10 +23,10 @@ Packliste für „Microservices richtig gemacht“ mit 8, 12 und 16 Teilnehmende
 
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
-| Kartenstapel 00–27 mit Legende und Zustandskarten | drucken | 1 | 1 | 1 | 28 Karten plus Legende und CLOSED / OPEN / HALF_OPEN, A7 hoch, 8 pro Bogen, 4 Bogen Karton, einseitig. Derselbe Stapel für jede Gruppengröße |
-| Circuit-Breaker-Board | drucken | 1 | 1 | 1 | A3 quer oder 2× A4 hoch zusammengeklebt: Fehler 1–5, Probe-Feld, Zustandsfeld |
-| Trainer-Skript | drucken | 1 | 1 | 1 | 1 Bogen Papier 80 g, beidseitig: STOPPs vorn, Kartentabelle 00–27 hinten |
-| Ablagetisch | Büro | 1 | 1 | 1 | die Karten landen dort der Reihe nach, die Nummer auf der Karte reicht |
+| Kartenstapel 01–27 mit Zustandskarten | drucken | 1 | 1 | 1 | 30 Karten: 01–27 und CLOSED / OPEN / HALF_OPEN, A7 hoch, 8 pro Bogen, 4 Bogen Karton (2 Felder frei), einseitig. Nur Nummer, Wartezeit und eine Zeile, STOPP 04, 13, 17, 20, 27 dunkel. Derselbe Stapel für jede Gruppengröße |
+| Circuit-Breaker-Board | drucken | 1 | 1 | 1 | A3 quer oder 2× A4 hoch zusammengeklebt: Fehler 1–5, Probe-Feld, Zustandsfeld, ohne Regelblock |
+| Trainer-Skript | drucken | 1 | 1 | 1 | 1 Bogen Papier 80 g, beidseitig: Regeln und STOPP-Fragen vorn, Kartentabelle 01–27 hinten |
+| Tisch für die abgelegten Karten | Raum | 1 | 1 | 1 | alle Karten auf einen Haufen |
 
 Board und Zustandskarte liegen flach auf dem Booking-Tisch, Booking legt das Board erst bei STOPP 1 hin.
 
@@ -82,7 +82,7 @@ Nichts zu drucken, die Teams schreiben die Tabelle direkt aufs Flipchart.
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
 | Kartenaufsteller A6 quer | 3D | 6 | 12 | 12 | `card_stand.scad` für die Rollenkarten aus Story 7, Schlitz 0,8 mm hält eine gefalzte 250-g-Karte; 12 Stück passen als Raster 3 × 4 auf eine Platte |
-| Karton 250 g, A4 | kaufen | 16 Bogen | 20 Bogen | 28 Bogen | plus Reserve; Story 4: 4 / 4 / 4 Bogen (Stapel mit Legende und Zustandskarten), Story 5: 7 / 7 / 14 (Karten und Schilder), Story 7: 5 / 9 / 10 |
+| Karton 250 g, A4 | kaufen | 16 Bogen | 20 Bogen | 28 Bogen | plus Reserve; Story 4: 4 / 4 / 4 Bogen (Stapel mit Zustandskarten), Story 5: 7 / 7 / 14 (Karten und Schilder), Story 7: 5 / 9 / 10 |
 | Papier 80 g, A4 | Büro | 6 Bogen | 9 Bogen | 9 Bogen | Trainer-Skripte Story 4 und 5 (je ein Blatt beidseitig), Spickzettel, Listen und Strichliste Story 7 |
 | A3-Papier | Büro | 1 | 1 | 1 | Circuit-Breaker-Board aus Story 4, sonst 2× A4 |
 | Klare Prospekthüllen A4 | kaufen | 1 + 2 | 2 + 2 | 2 + 2 | für die Strichlisten aus Story 7, plus Reserve |
@@ -100,12 +100,12 @@ Beim Rollenkarten-Modus „Einzelkarte“ werden die Rollen- und Briefing-Karten
 
 **3D:** Kartenaufsteller für Story 7 (6 bzw. 12). Vorlauf einplanen, ein Raster mit 12 Aufstellern braucht 5 bis 6 h.
 
-**Aus dem Raum:** Stühle, Tische und eine Wand (Pinnwand oder Flipchart) für Story 5.
+**Aus dem Raum:** Stühle, Tische und eine Wand (Pinnwand oder Flipchart) für Story 5, ein Tisch für den Haufen in Story 4.
 
 ## Am Vorabend prüfen
 
 - [ ] Teilnehmerzahl bestätigt. Hat sie sich geändert, die Druckseite neu rechnen lassen und fehlende Karten nachdrucken (Story 5 ab 14 ein zweiter Satz, Story 7 ab 12 und ab 9 am Tisch).
-- [ ] Story 4: Kartenstapel 00–27 lückenlos und der Reihe nach sortiert (mit der Kartentabelle auf Seite 2 des Trainer-Skripts abgleichen), 00 liegt oben, Legende und Zustandskarten dabei. Circuit-Breaker-Board liegt bereit (bei 2× A4 zusammengeklebt). Ablagetisch freigeräumt.
+- [ ] Story 4: Kartenstapel 01–27 lückenlos und der Reihe nach sortiert (mit der Kartentabelle auf Seite 2 des Trainer-Skripts abgleichen), 01 liegt oben, die drei Zustandskarten dabei. Circuit-Breaker-Board liegt bereit (bei 2× A4 zusammengeklebt). Tisch für den Haufen freigeräumt.
 - [ ] Strichliste für Story 7 steckt in der Prospekthülle. Den Marker einmal getestet: Er schreibt und lässt sich wieder wegwischen.
 - [ ] Briefing-Karte für Flight (Story 7) liegt verdeckt und getrennt von den Rollenkarten.
 - [ ] Story 5: Kartenstapel 01–27 lückenlos und der Reihe nach sortiert, 01 liegt oben. Hotel-Schild zeigt vorn „schnell“, hinten „langsam“. Zwei Stühle und eine Wand (Pinnwand, Flipchart oder Tisch) sind im Raum.

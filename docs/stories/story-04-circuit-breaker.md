@@ -19,49 +19,99 @@ damit **ich nicht vor einer hängenden Seite sitze**.
 
 ## Teil 1: Das Rollenspiel „Ein Booking, ein Board" (ca. 20 Minuten)
 
-Ihr seid die Requests. Flight ist krank, und was Booking tut, steht auf der Karte.
+Ihr seid die Requests. Flight ist krank, und was ihr zurückbekommt, steht auf der Karte.
 
 ### Material
 
-- Ein Kartenstapel 00–27 (A7 hoch, Karton 250 g, 8 pro A4-Bogen). Oben sieht Booking Flight, Hotel und Car mit grünem Haken, rotem Kreuz oder grau für „nicht fragen". Unten steht „Request · deine Antwort": Wartezeit, „Antwort HTTP …", Body und Header
-- Die Farbe einer Karte sagt, wohin sie danach geht: dunkel auf die Ablage, rot aufs Board, gelb aufs Probe-Feld, grau zum Trainer
-- Das Circuit-Breaker-Board (A3 quer oder 2 × A4): fünf Plätze „Fehler in Folge", Platz 5 heißt OPEN, dazu das Probe-Feld und das Zustandsfeld. Das Board ist das Dashboard: Das sieht nur der Betrieb, nicht die Kundschaft
-- Die Zustandskarten CLOSED, OPEN und HALF_OPEN (A7 hoch) für das Zustandsfeld und eine Legendenkarte
-- Ein Ablagetisch, auf dem die Karten der Nummer nach landen
-- Das Trainer-Skript (ein Bogen, beidseitig): Ansage, Aufbau, die fünf STOPPs, „Wenn es hakt", Vereinfachungen und auf Seite 2 die Kartentabelle 00–27
+- Ein Kartenstapel mit 30 Karten: 01–27 und die drei Zustandskarten CLOSED, OPEN, HALF_OPEN (A7 hoch, Karton 250 g, 8 pro A4-Bogen, 4 Bögen, 2 Felder frei). Auf jeder Karte stehen nur die große Nummer, die Wartezeit („5 s", „3 s" oder „sofort"), eine Zeile zum Vorlesen und eine kleine Zeile darunter, bei 14, 18 und 21–26 dazu ein Etikett (PROBE, Datum). Unten rechts klein „Story 4", damit sich die Stapel von Story 4 und 5 nicht mischen
+- Die Farbe sagt, was passiert ist: weiß mit violettem Rahmen heißt Haufen, rot heißt Flight hat einen Fehler geliefert, gelb ist die Probe, dunkel ist STOPP. Die STOPP-Karten 04, 13, 17, 20 und 27 tragen nur „STOPP n" bzw. „ENDE"
+- Das Circuit-Breaker-Board (A3 quer oder 2 × A4): fünf Plätze „Fehler in Folge", Platz 5 heißt OPEN, dazu das Probe-Feld („nur eine") und das Zustandsfeld. Kein Regelblock, die Regeln sagt der Trainer. Das Board ist das Dashboard: Das sieht nur der Betrieb, nicht die Kundschaft
+- Das Trainer-Skript (ein Blatt Papier, beidseitig): vorn Aufbau, Ansage mit den vier Regeln und den Ergänzungen bei STOPP 1 und 2, die fünf STOPPs, „Wenn es hakt" und Vereinfachungen, hinten die Kartentabelle 01–27
+- Aus dem Raum: ein Tisch für alle abgelegten Karten (ein Haufen)
 
 Gesamtliste: [`docs/orga/materialliste.md`](../orga/materialliste.md), Druckvorlagen und Trainer-Skript unter <https://larmic.github.io/workshop_microservices/material/>.
 
-Spielbar ab vier Personen, derselbe Stapel für jede Gruppengröße.
+Spielbar ab vier Personen (Booking und drei Requests, damit während der Probe zwei für 15 und 16 da sind), derselbe Stapel für jede Gruppengröße.
 
 ### Rollen
 
-1. **Booking** ist eine Person. Sie hat den Stapel und gibt die Karten streng der Reihe nach aus, die nächste erst, wenn die vorige liegt. Nur bei der gelben Probe geht es sofort weiter. Booking legt nichts ab, schaut aufs Board, ruft „OPEN!" und tauscht die Zustandskarte.
-2. **Alle anderen** sind Requests auf `GET /booking/offers`. Flight, Hotel und Car spielt niemand, ihr Verhalten steht auf den Karten.
-3. **Der Trainer** spielt keine Rolle. Er moderiert nur an den grauen Karten, Booking gibt sie ihm.
+1. **Der Trainer** spielt keine Rolle. Er erklärt die Regeln, nimmt die STOPP-Karten, leitet das Gespräch und sagt „30 Sekunden sind um".
+2. **Booking** ist eine Person. Sie hält den Stapel 01–27 und die drei Zustandskarten, ruft die Nummer und gibt die Karte dem Nächsten. Booking schaut aufs Board, ruft „OPEN!", tauscht die Zustandskarte und räumt ab. Sonst liest Booking nichts vor.
+3. **Alle anderen** sind Requests auf `GET /booking/offers` und stehen in einer Schlange vor Booking. Flight, Hotel und Car spielt niemand, ihr Verhalten steht auf den Karten.
 
-### So läuft es
+### Die Regeln
 
-Wer eine Karte bekommt, wartet die Zeit darauf ab, liest die Antwort laut vor, legt die Karte dorthin, wo das Band unten sagt, und stellt sich **sofort hinten wieder an**.
+Der Trainer sagt sie am Anfang einmal (stehen auch auf Folie 15 und im Dashboard). Bei jeder Karte, immer in dieser Reihenfolge:
 
-- **01–03** spielen ohne Circuit Breaker wie Story 3: 5 Sekunden warten, HTTP 500, keine Hotels, keine Autos. Das Board liegt noch nicht auf dem Tisch.
-- **STOPP 1 (04)** ist das Update: Booking bekommt einen Circuit Breaker und 3 s Timeout, legt das Board hin und CLOSED ins Zustandsfeld.
-- **05–09:** Booking fragt Flight, Flight schweigt. Der Request wartet 3 s und bekommt den Fallback. Die Karten sind rot und kommen auf Platz 1 bis 5. Liegt Platz 5, ruft Booking „OPEN!".
-- **10–12:** OPEN, Flight wird nicht gefragt, die Antwort kommt sofort mit `X-Circuit-Open`.
-- **STOPP 2 und 3:** Die 30 Sekunden vergehen im Gespräch, danach HALF_OPEN. Die gelben Karten 14 und 18 sind die Probe und liegen auf dem Probe-Feld, solange sie läuft. 14 scheitert (wieder OPEN, die 30 s laufen von vorn), 18 gelingt: Booking räumt das Board ab, CLOSED.
-- **21–25:** Flight ist gesund, aber das Datum 31.02. bringt einen 400. Die Karten kommen trotzdem aufs Board, bei 25 wieder „OPEN!".
+1. **Booking ruft die Nummer** und gibt die Karte dem Nächsten in der Schlange. Die nächste erst, wenn die vorige liegt.
+2. **Warten, was auf der Karte steht.** Bei „5 s" oder „3 s" laut zählen: „einundzwanzig, zweiundzwanzig, dreiundzwanzig". Bei „sofort" nicht.
+3. **Die Antwort laut vorlesen.**
+4. **Karte ablegen, hinten anstellen.** Weiße Karten kommen auf den Haufen.
 
-Der Ablauf Satz für Satz steht im Trainer-Skript.
+Dunkle Karte: Booking ruft „STOPP" und gibt sie dem Trainer. Wer noch zählt, zählt fertig.
+
+**Bei STOPP 1 dazu** (das Board kommt, CLOSED): Rot heißt, Flight hat einen Fehler geliefert. Rote Karten kommen aufs Board, auf den nächsten freien Platz. Liegt Platz 5, ruft Booking „OPEN!" und legt OPEN ins Zustandsfeld.
+
+**Bei STOPP 2 dazu** (30 s sind um, HALF_OPEN): Gelb ist die Probe. Die Karte kommt zuerst aufs Probe-Feld, dann zählen und vorlesen, danach auf den Haufen. Booking hört zu: „Timeout!" heißt OPEN, die 30 s laufen von vorn. „Flight antwortet!" heißt Board abräumen, CLOSED.
+
+Weil die gelbe Karte zuerst aufs Probe-Feld kommt, liegt sie schon: Booking gibt 15 und 16 sofort aus, ohne Ausnahme von Regel 1. Die Karten 21–25 brauchen keine neue Regel, rot heißt Board.
+
+### Die Karten
+
+| Karte | Farbe | Wartezeit | Vorlesen | Danach |
+|---|---|---|---|---|
+| 01–03 | weiß | 5 s | „500, keine Hotels, keine Autos" | Haufen. Noch kein Breaker, das Board liegt noch nicht |
+| 04 | dunkel | – | STOPP 1 | Trainer. Booking legt das Board hin, CLOSED |
+| 05–09 | rot | 3 s | „`flights: []`, Hotel + Car da" | Board, Platz 1–5. Bei 09 ruft Booking „OPEN!" |
+| 10–12 | weiß | sofort | „`flights: []` + `X-Circuit-Open`" | Haufen |
+| 13 | dunkel | – | STOPP 2 | Trainer, danach HALF_OPEN |
+| 14 | gelb, PROBE | 3 s | „Timeout!", `flights: []` | Probe-Feld, dann Haufen. Booking: OPEN, 30 s von vorn |
+| 15, 16 | weiß | sofort | „`flights: []` + `X-Circuit-Open`" | Haufen (Probe-Feld belegt) |
+| 17 | dunkel | – | STOPP 3 | Trainer, danach HALF_OPEN |
+| 18 | gelb, PROBE | sofort | „Flight antwortet!", alles da | Probe-Feld, dann Haufen. Booking räumt 05–09 auf den Haufen, CLOSED |
+| 19 | weiß | sofort | „alles da", Flight, Hotel, Car | Haufen |
+| 20 | dunkel | – | STOPP 4 | Trainer |
+| 21–25 | rot, 31.02. | sofort | „`flights: []`, Hotel + Car da" | Board, Platz 1–5. Bei 25 ruft Booking „OPEN!" |
+| 26 | weiß, 14.03. | sofort | „`flights: []` + `X-Circuit-Open`" | Haufen. Gültiges Datum, trotzdem abgewiesen |
+| 27 | dunkel | – | ENDE | Trainer. Board bleibt liegen (21–25, OPEN) |
+
+### Durchlauf mit 10 Personen
+
+Booking und die Requests P1 bis P9.
+
+| Karte | an | Was passiert | Board | Zustand danach |
+|---|---|---|---|---|
+| 01–03 | P1, P2, P3 | 5 s zählen, „500, keine Hotels, keine Autos", Haufen | – | kein Breaker |
+| 04 | Trainer | STOPP 1. Booking legt das Board hin, CLOSED | 0/5 | CLOSED |
+| 05 | P4 | 3 s, „`flights: []`, Hotel + Car da", rot: Platz 1 | 1/5 | CLOSED |
+| 06–08 | P5, P6, P7 | wie 05, Plätze 2–4 | 4/5 | CLOSED |
+| 09 | P8 | wie 05, Platz 5. Booking: „OPEN!", OPEN hinlegen | 5/5 | OPEN |
+| 10–12 | P9, P1, P2 | sofort, „`flights: []` + `X-Circuit-Open`", Haufen | 5/5 | OPEN |
+| 13 | Trainer | STOPP 2. Gespräch, dann „30 Sekunden sind um": HALF_OPEN | 5/5 | HALF_OPEN |
+| 14 | P3 | gelb: Probe-Feld, 3 s zählen, „Timeout!". Booking: OPEN, 30 s von vorn. Karte auf den Haufen | 5/5 | OPEN |
+| 15, 16 | P4, P5 | während P3 zählt: sofort, `X-Circuit-Open`, Haufen (Probe-Feld belegt) | 5/5 | OPEN |
+| 17 | Trainer | STOPP 3. Gespräch, dann „30 Sekunden sind um, Flight ist zurück": HALF_OPEN | 5/5 | HALF_OPEN |
+| 18 | P6 | gelb: Probe-Feld, „Flight antwortet!". Booking räumt 05–09 auf den Haufen, CLOSED | 0/5 | CLOSED |
+| 19 | P7 | sofort, „alles da" | 0/5 | CLOSED |
+| 20 | Trainer | STOPP 4. Vorhersage zum 31.02., nicht auflösen | 0/5 | CLOSED |
+| 21–24 | P8, P9, P1, P2 | 31.02., sofort, rot: Plätze 1–4 | 4/5 | CLOSED |
+| 25 | P4 | 31.02., Platz 5. Booking: „OPEN!" | 5/5 | OPEN |
+| 26 | P5 | 14.03., sofort, `X-Circuit-Open`: gültig und trotzdem abgewiesen | 5/5 | OPEN |
+| 27 | Trainer | ENDE. Board bleibt liegen (21–25, OPEN) | 5/5 | OPEN |
+
+Booking gibt der Reihe nach aus, deshalb wandert die Schlange gleichmäßig. Nur bei der Probe 14 ändert sich die Reihenfolge: P4 und P5 sind sofort zurück, P3 erst nach dem Zählen. Ob P3 vor oder nach P5 wieder ansteht, hängt vom Tempo ab. An Karten und Antworten ändert das nichts. Bei 8 Personen ist jeder bis zu viermal dran, bei 12 genau zweimal.
 
 ### Wo wir reden
 
-| STOPP | Karte | Worüber wir reden | Recap |
-|---|---|---|---|
-| STOPP 1 | 04 | Was habt ihr bekommen, wie lange? Hotel und Car waren gesund, was hattet ihr davon? Story 3 bricht beim ersten Fehler mit 500 ab. Ansage: Booking bekommt einen Circuit Breaker und 3 s Timeout | – |
-| STOPP 2 | 13 | Am Board: Welche Karten liegen hier, ab welcher Nummer gab es `flights: []`, was ist ab 10 anders? Was davon war der Breaker, was der Fallback? Fallback ab dem ersten Fehler, auch bei CLOSED. OPEN fragt Flight nicht und setzt `X-Circuit-Open` (09 hat Flight noch gefragt). Hotel und Car haben eigene Breaker | 02 |
-| STOPP 3 | 17 | Wer lag auf dem Probe-Feld? Was haben 15 und 16 bekommen, wie schnell? Was, wenn alle zu Flight gegangen wären? Genau ein Probe-Slot, der Rest sofort Fallback | 03 |
-| STOPP 4 | 20 | Vorhersage, nicht auflösen: Flight ist gesund, die nächsten haben sich vertippt, Datum 31.02. Kommen die aufs Board? | – |
-| ENDE | 27 | War Flight bei 21 bis 25 kaputt? Wer wurde bei 26 bestraft? Unser Code zählt alles ab 400. Dann: Eine zweite Booking-Instanz hat ein eigenes Board, was liegt darauf? Was weiß Booking nach einem Neustart? | 01, 04 |
+| STOPP | Karte | Trainer fragt | Erwartete Antwort | Recap |
+|---|---|---|---|---|
+| STOPP 1 | 04 | Was habt ihr bekommen, wie lange? Hotel und Car waren gesund, was hattet ihr davon? Dann: Booking bekommt einen Circuit Breaker und 3 s Timeout. Regel für Rot und Platz 5 ansagen | Story 3 bricht beim ersten Fehler mit 500 ab, Hotel und Car werden gar nicht gefragt. Das Board ist das Dashboard, das sieht der Betrieb | – |
+| STOPP 2 | 13 | Am Board: Welche Karten liegen hier, ab welcher Nummer gab es `flights: []`, was ist ab 10 anders? Was davon war der Breaker, was der Fallback? Einmal sagen: „Das war immer HTTP 200 mit `X-Fallback`." Dann „30 Sekunden sind um", Regel für Gelb ansagen | Fallback ab dem ersten Fehler, auch bei CLOSED. Der Breaker spart nur das Warten: OPEN fragt Flight nicht, darum `X-Circuit-Open` (09 hat Flight noch gefragt). Hotel und Car haben eigene Breaker | 02 |
+| STOPP 3 | 17 | Wer lag auf dem Probe-Feld? Was haben 15 und 16 bekommen, wie schnell? Was, wenn alle zu Flight gegangen wären? Dann: „30 Sekunden sind um, Flight ist zurück." | Genau ein Probe-Slot (CompareAndSwap), der Rest sofort Fallback. Nach der gescheiterten Probe laufen die 30 s von vorn | 03 |
+| STOPP 4 | 20 | Vorhersage, nicht auflösen: Flight ist gesund, die nächsten haben sich vertippt, Datum 31.02. Kommen die aufs Board? | Handzeichen, weiterspielen. Erst bei ENDE auflösen | – |
+| ENDE | 27 | War Flight bei 21 bis 25 kaputt? Wer wurde bei 26 bestraft? Dann: Eine zweite Booking-Instanz hat ein eigenes Board, was liegt darauf? Was weiß Booking nach einem Neustart? | 4xx ist kein Ausfall, unser Code zählt alles ab 400. Der Zustand lebt im RAM einer Instanz. Geteilter Zustand hilft, kostet aber Kopplung | 01, 04 |
+
+Die Fragen stehen nicht auf den STOPP-Karten, sondern im Trainer-Skript und in den Notes zu Folie 15.
 
 ### Bewusste Vereinfachungen
 
@@ -69,7 +119,8 @@ Offen ansagen:
 
 - Der Request wartet selbst: 5 s Timeout in Story 3, 3 s in Story 4. Booking gibt die nächste Karte erst aus, wenn die vorige liegt. Im Code laufen Requests parallel.
 - Die 30 Sekunden vergehen im Gespräch. Im Code wechselt der Zustand beim nächsten Call oder beim nächsten Blick ins Dashboard.
-- Die Referenz zählt auch die gescheiterte Probe (Karte 14) mit, das Dashboard zeigt dann 6/5. Im Spiel geht 14 vom Probe-Feld zur Ablage, das Board ist schon voll.
+- Die Referenz zählt auch die gescheiterte Probe (Karte 14) mit, das Dashboard zeigt dann 6/5. Im Spiel geht 14 vom Probe-Feld auf den Haufen, das Board ist schon voll.
+- HTTP 200 und `X-Fallback` stehen nicht auf den Karten. Der Trainer sagt sie einmal bei STOPP 2, die Demo zeigt sie.
 - Das Datum 31.02. ist ein Gedankenspiel: Die Referenz reicht keine Suchparameter an Flight weiter.
 - Wieder anstellen ist ein Client-Retry, den die Referenz nicht hat.
 - Fehler in Folge gegen Fehlerquote im Fenster (Resilience4j, [Frage 8](../questions/story4.md)) ist kein Spielblock, nur Gesprächsstoff: Ein wackliges Flight, das jedes zweite Mal antwortet, öffnet unseren Breaker nie, trotzdem wartet jede zweite Suche 3 s.

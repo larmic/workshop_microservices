@@ -131,7 +131,7 @@ Implementierungen (Resilience4j: `recordExceptions` /
 ## Frage 4 — Bei jedem Fehler liefern wir `flights: []` statt einer Fehlermeldung. Täuschen wir den User? (Recap 02)
 
 **Vorab, aus dem Spiel:** Der Fallback kommt nicht erst bei OPEN,
-sondern schon beim ersten Fehler (Board 05–09, Ablage 10–12: `flights: []` ab
+sondern schon beim ersten Fehler (Board 05–09, Haufen 10–12: `flights: []` ab
 05, `X-Circuit-Open` erst ab 10). Der Breaker erfindet ihn
 nicht, er spart nur das Warten: CLOSED kostet bis zu 3 s, OPEN
 antwortet sofort und setzt zusätzlich `X-Circuit-Open`.
@@ -291,8 +291,8 @@ unter Last steht.
 
 ## Frage 8 — Liefert der Circuit Breaker das `flights: []`? Und wie machen das Resilience4j und Spring Boot?
 
-**Frage:** Im Spiel kam ab Karte 05 `200` mit `flights: []`, schon im
-Zustand CLOSED. Ist das der Circuit Breaker?
+**Frage:** Im Spiel kam ab Karte 05 `flights: []` (HTTP 200, das sagt
+der Trainer bei STOPP 2), schon im Zustand CLOSED. Ist das der Circuit Breaker?
 
 **Antwort:** Nein. Das sind zwei Patterns, die Story 4 kombiniert:
 
