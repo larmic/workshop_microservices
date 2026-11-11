@@ -1,7 +1,7 @@
 # Story 5: Der geteilte Pool
 
 **Thema:** Bulkhead Pattern, als Rollenspiel mit zwei Stühlen und einer Wand statt Code
-**Zeitrahmen:** ca. 60 Minuten (25 Minuten Spiel, 10 Minuten Demo mit der Referenz, 15 Minuten Rechnen, 10 Minuten Recap)
+**Zeitrahmen:** ca. 45 Minuten (25 Minuten Spiel, 10 Minuten Demo mit der Referenz, 10 Minuten Recap)
 
 ## Kontext
 
@@ -81,13 +81,11 @@ Links oder rechts ist egal. Hotel zählt jeden, der sich setzt.
 
    Dann alle Karten auf den Tisch, alle stellen sich neu an. **Der Trainer schiebt die Wand zwischen die Stühle.** Hotel stellt sich auf die eine Seite, Flight und Car auf die andere: „Dieselben zwei Stühle, nur mit einer Wand." Zusatzregel erklären. Vorhersage: Wie viele der nächsten elf bekommen Hotels? Die Zähler fangen neu an, die Werte aus Runde 1 merken.
 6. **Runde 2, 16–26** (3 min): Auf dem Hotel-Stuhl sitzen nacheinander 16, 20 und 24. Alle anderen klatschen Flight und Car ab und sind sofort fertig. Niemand steht an.
-7. **STOPP 3, Karte 27** (6 min): Zähler abfragen und mit Runde 1 vergleichen (Tabelle unten, Folie 18b).
+7. **STOPP 3, Karte 27** (6 min): Zähler abfragen und mit Runde 1 vergleichen (Tabelle unten).
    - „Welche Runde war besser?" Ehrlich: Runde 1 hatte mehr Hotels, in Runde 2 wartet niemand, und mehr sind beantwortet.
    - „Wie viele Stühle hätte Hotel gebraucht?" Vier: Jede Nummer kommt einer dazu, jeder bleibt vier. Hotel hat einen, deshalb bekommt jeder vierte Hotels (16, 20, 24).
    - „Steht der Breaker noch auf CLOSED?" Ja, ein besetzter Stuhl ist kein Fehler.
    - „Wem gehören die Stühle?" Booking. Hotel weiß nichts davon. Die Wand schützt Booking, nicht Hotel, fünf Booking-Instanzen hätten fünf Hotel-Stühle.
-
-   Überleitung zu Teil 3 („Warum ausgerechnet zehn?").
 
 Tipp zur Moderation: Vorhersage per Handzeichen, erst dann auflösen.
 
@@ -106,7 +104,7 @@ Gezählt wird bei STOPP 3 über die Services:
 | Breaker | CLOSED | CLOSED | langsam ist kein Fehler |
 | Stühle bei Booking | 2 | 2 | gleich viele, nur durch eine Wand getrennt |
 
-Der Bulkhead tauscht Vollständigkeit gegen Verfügbarkeit. Kommt der Einwand „Gebt Hotel doch beide Stühle": Bei langsamem Hotel bräuchte es vier, mehr Stühle verschieben das Problem nur (Brücke zu Teil 3). Die Reihe hinter den Stühlen ist genau die Queue aus Recap 04.
+Der Bulkhead tauscht Vollständigkeit gegen Verfügbarkeit. Kommt der Einwand „Gebt Hotel doch beide Stühle": Bei langsamem Hotel bräuchte es vier, mehr Stühle verschieben das Problem nur (Rechnung unter „Zum Nachlesen“). Die Reihe hinter den Stühlen ist genau die Queue aus Recap 04.
 
 ### Durchlauf mit 10 Personen
 
@@ -171,7 +169,7 @@ Warum die Zahlen stimmen: In der Probe ist Hotel normal, man sitzt eine Nummer. 
 ### Maßstab zur Referenz
 
 - **1 Nummer = 0,5 s.** Hotel normal (0,5 s) ist eine Nummer, „Langsam" (2 s) vier Nummern, der Timeout (3 s) sechs Nummern.
-- **Pro Nummer kommt ein Request**, also 20 Requests pro Sekunde wie in Teil 3.
+- **Pro Nummer kommt ein Request**, also 20 Requests pro Sekunde wie unter „Zum Nachlesen“.
 - **1 Stuhl = 10 Slots** (`MaxConcurrent` 10). Runde 1 ist ein gemeinsamer Pool aus zwei Stühlen (20 Slots). In Runde 2 hat Hotel einen Stuhl, also genau die 10 Slots der Referenz, Flight und Car das Abteil auf der anderen Seite.
 - **Stuhl** = Thread oder Slot, **Wand** = Bulkhead, **Abteil** = `max[service]`, **hinter den Stühlen stehen** = Queue, **sofort fertig ohne Hotels** = `fallback()` mit `hotels: []`, **Schild „langsam"** = Modus „Langsam" des Hotel-Service.
 
@@ -194,7 +192,7 @@ Vorher im Dashboard alle Services auf „Normal" stellen. Steht Flight noch aus 
 
 ---
 
-## Teil 3: Warum ausgerechnet zehn? (ca. 15 Minuten)
+## Zum Nachlesen: Warum ausgerechnet zehn?
 
 Little's Law: `L = λ × W`
 

@@ -31,7 +31,7 @@ Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 
 | Block | Thema | Zeit |
 |-------|-------|------|
-| 6e | Rollenspiel: Story 5 (Bulkhead, zwei Stühle und eine Wand statt Code) | 60 Min |
+| 6e | Rollenspiel: Story 5 (Bulkhead, zwei Stühle und eine Wand statt Code) | 45 Min |
 | 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
 | 6g | Rollenspiel: Story 7 (Choreography-Saga, Rollenspiel statt Code) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
@@ -150,8 +150,8 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Nach dem Recap die offene Frage „Und jetzt die Buchung?": Lesen und Schreiben trennen, Antworten (Nein, asynchron, Saga, alternativer Anbieter) nur als Tonspur, Saga kommt in Story 6
 - Letzter Block von Tag 1, bewusst ohne Coding
 
-### 6e. Story 5 — [Der geteilte Pool](stories/story-05-bulkhead.md) (60 Min)
-- Rollenspiel statt Code: 25 Minuten Spiel (zwei Stühle sind die Threads von Booking, Hotel wird langsam und die Requests stehen auch für das gesunde Flight an; dann schiebt der Trainer eine Wand zwischen die Stühle, Hotel bekommt nur noch einen, wer keinen Platz bekommt, ist sofort ohne Hotels fertig; Hotel, Flight und Car zählen mit, Gespräch an drei STOPP-Karten), 10 Minuten Demo mit der Referenz, 15 Minuten Little's Law („Warum ausgerechnet zehn?"), Recap mit fünf Fragen plus Bonus zu non-blocking
+### 6e. Story 5 — [Der geteilte Pool](stories/story-05-bulkhead.md) (45 Min)
+- Rollenspiel statt Code: 25 Minuten Spiel (zwei Stühle sind die Threads von Booking, Hotel wird langsam und die Requests stehen auch für das gesunde Flight an; dann schiebt der Trainer eine Wand zwischen die Stühle, Hotel bekommt nur noch einen, wer keinen Platz bekommt, ist sofort ohne Hotels fertig; Hotel, Flight und Car zählen mit, Gespräch an drei STOPP-Karten), 10 Minuten Demo mit der Referenz, Recap mit fünf Fragen plus Bonus zu non-blocking
 - Lernpointe: Ressourcen-Isolation pro Downstream; die Größe des Pools ist die eigentliche Arbeit
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?
 - Rückgriff auf Story 2: `POST /admin/bulkhead-reset` ist bewusst RPC-artig (Dashboard-Knopf, ein Aufrufer). Abweichen mit Grund

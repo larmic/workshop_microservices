@@ -6,7 +6,7 @@
 
 ## Der geteilte Pool
 
-<span class="badge design">&asymp; 60 min <small>davon 25 Spiel</small></span>
+<span class="badge design">&asymp; 45 min <small>davon 25 Spiel</small></span>
 </div>
 
 <p class="subtitle">Zwei St&uuml;hle sind die Threads von Booking. Und Hotel wird <span class="hl">langsam</span>.</p>
@@ -57,5 +57,10 @@ Note:
   - Wand zwischen die St&uuml;hle schieben: &bdquo;Dieselben zwei St&uuml;hle, nur mit einer Wand.&ldquo; Hotel auf die eine Seite, Flight und Car auf die andere.
   - Zusatzregel erkl&auml;ren, dann Vorhersage: Wie viele der elf bekommen Hotels?
 - <strong>Runde 2 (16&ndash;26):</strong> Auf dem Hotel-Stuhl sitzen nacheinander 16, 20, 24. Alle anderen klatschen Flight und Car ab und sind sofort fertig. Niemand steht an.
-- <strong>STOPP 3 (Karte 27):</strong> Z&auml;hler abfragen, weiter auf der n&auml;chsten Folie.
+- <strong>STOPP 3 (Karte 27):</strong> Z&auml;hler abfragen, erst Runde 1 (gemerkt), dann Runde 2.
+  - Beantwortet (Car) 4 &rarr; 10, davon mit Hotels 4 &rarr; 2, hinter den St&uuml;hlen 4 &rarr; 0, Flight 6 &rarr; 11.
+  - &bdquo;Welche Runde war besser?&ldquo; Runde 1 mehr Hotels, Runde 2 mehr beantwortet und niemand stand an.
+  - &bdquo;Wie viele St&uuml;hle h&auml;tte Hotel gebraucht?&ldquo; Vier, Hotel hat einen. Deshalb bekommt jeder Vierte Hotels (16, 20, 24). Little&rsquo;s Law zum Anfassen: ein Stuhl = 10 Slots, langsam br&auml;uchte es 40.
+  - &bdquo;Breaker?&ldquo; CLOSED, ein besetzter Stuhl ist kein Fehler.
+  - &bdquo;Wem geh&ouml;ren die St&uuml;hle?&ldquo; Booking, nicht Hotel. F&uuml;nf Booking-Instanzen h&auml;tten f&uuml;nf Hotel-St&uuml;hle.
 - Demo: Alle Services auf Normal, dann Hotel auf &bdquo;Langsam&ldquo;, Burst. &bdquo;hotel rej&ldquo; zeigt etwa zehn, &bdquo;failed&ldquo; bleibt 0. Danach Hotel zur&uuml;ck. Details: <code>docs/stories/story-05-bulkhead.md</code>.

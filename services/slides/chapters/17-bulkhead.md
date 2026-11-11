@@ -64,6 +64,6 @@ Note:
   - Hotel selbst sch&uuml;tzt sich mit Rate Limiting oder Load Shedding. Serverseitige Bulkheads (Pools pro Consumer) gibt es auch, die bauen wir nicht.
 - <strong>Die Gr&ouml;&szlig;e ist die Arbeit:</strong> Zu klein lehnt ein gesundes Hotel ab, zu gro&szlig; sch&uuml;tzt nicht.
   - Little&rsquo;s Law: Slots = Aufrufe pro Sekunde &times; Dauer. 20/s &times; 0,5 s = 10. Bei 3 s Timeout w&auml;ren es 60.
-  - Dimensioniert wird auf die normale Latenz. Story 5 spielt das mit zwei St&uuml;hlen und einer Wand, Folie 18a rechnet nach.
+  - Dimensioniert wird auf die normale Latenz. Story 5 spielt das mit zwei St&uuml;hlen und einer Wand: Hotel br&auml;uchte vier, hat einen.
 - Envoy/Istio: dasselbe im Sidecar (<code>max_requests</code> bzw. <code>max_connections</code>).
 - &Uuml;berleitung: &bdquo;Sieben Zeilen Code.&ldquo;

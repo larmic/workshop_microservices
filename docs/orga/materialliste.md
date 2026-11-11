@@ -43,7 +43,6 @@ Board und Zustandskarte liegen flach auf dem Booking-Tisch, Booking legt das Boa
 
 Kein Einkauf, kein 3D-Druck, kein A3. Ab 14 Personen spielen zwei Gruppen parallel, jede mit eigenem Satz.
 
-Folie 18a (Little's Law) braucht kein Material.
 
 ## Story 7: Die Saga wird leise
 

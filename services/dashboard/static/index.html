@@ -2101,14 +2101,6 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
             <div class="saga-list" id="bh-burst-list"></div>
         </div>
                         <div class="ref-slot"></div>
-                        <h4>Warum ausgerechnet zehn? (ca. 15 Minuten)</h4>
-                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Hotel antwortet in 50&nbsp;ms, 500&nbsp;ms, 2&nbsp;s oder erst nach dem 3-Sekunden-Timeout. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
-                        <details class="story-solution">
-                            <summary>Die Rechnung <span class="badge">erst nach der Vorhersage</span></summary>
-                            <div class="story-solution-body">
-                                <p>50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, 2&nbsp;s ergeben 40, ein 3-Sekunden-Timeout ergibt 60. Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die <strong>normale</strong> Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal. Im Spiel: normal 1 Stuhl, langsam 4. Hotel hat 1 Stuhl, das sind 10 Slots (<code>MaxConcurrent</code>).</p>
-                            </div>
-                        </details>
                         <h4>Zum Nachbauen</h4>
                         <p>Antwortet der Hotel-Service extrem langsam, binden seine Aufrufe die Ressourcen des Booking-Service, in einem klassischen Server den gemeinsamen Thread- oder Connection-Pool. Dann warten auch Anfragen an den Flight-Service, obwohl dieser einwandfrei funktioniert, bis sie beim Aufrufer in den Timeout laufen. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
                         <p><strong>User Story:</strong> Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Downstream-Service nicht die Aufrufe an andere Downstream-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
@@ -3708,8 +3700,8 @@ on receiveCompensationEvent(event):
                  subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
             4: { title: "Story 4: Wenn der Flug ausf&auml;llt", kind: "play", pill: "&asymp; 60 min <small>davon 20 Spiel</small>",
                  subtitle: "Circuit Breaker als Rollenspiel: Ein Booking, ein Kartenstapel, alle anderen sind die Requests. Danach die Demo mit der Referenz." },
-            5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
-                 subtitle: "Bulkhead als Rollenspiel: zwei Stühle, eine Wand, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz und die Rechnung, warum ausgerechnet zehn." },
+            5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 45 min <small>davon 25 Spiel</small>",
+                 subtitle: "Bulkhead als Rollenspiel: zwei Stühle, eine Wand, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz." },
             6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
