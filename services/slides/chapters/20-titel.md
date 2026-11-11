@@ -10,7 +10,7 @@
 <p class="sub">Keine Transaktion &uuml;ber Service-Grenzen. Stattdessen eine Kette lokaler Schritte, jeder mit seinem Gegenst&uuml;ck.</p>
 <figure class="foot-quote">
 <blockquote>Entweder laufen alle Teiltransaktionen durch, oder die schon ausgef&uuml;hrten werden kompensiert.</blockquote>
-<figcaption>Hector Garcia-Molina, Kenneth Salem, <em>Sagas</em>, 1987 (sinngem&auml;&szlig;)</figcaption>
+<figcaption>Hector Garcia-Molina, Kenneth Salem, <em>Sagas</em>, Paper auf der ACM SIGMOD 1987 (sinngem&auml;&szlig;)</figcaption>
 </figure>
 </div>
 <div class="split-figure">
@@ -23,5 +23,7 @@
 Note:
 - <strong>Hook:</strong> &bdquo;Flug gebucht, Hotel sagt nein. Was nun?&ldquo;
 - <strong>Grafik:</strong> Hotel scheitert, Car wird gar nicht mehr gefragt. Der lime Pfeil storniert den Flug.
-- <strong>Herkunft:</strong> Garcia-Molina und Salem, 1987, f&uuml;r lange Datenbank-Transaktionen. Jeder Schritt committet f&uuml;r sich und hat eine Kompensation.
+- <strong>Herkunft:</strong> Kein Buch, sondern das Paper, das den Begriff Saga gepr&auml;gt hat. Zwei Datenbank-Forscher aus Princeton, 1987.
+  - Problem damals: lange Transaktionen halten Sperren zu lange. L&ouml;sung: in Teilschritte zerlegen, jeder committet f&uuml;r sich und hat eine Kompensation.
+  - In die Microservice-Welt gebracht hat es Chris Richardson (<em>Microservices Patterns</em>, 2018). Das Muster ist also &auml;lter als Microservices.
 - <strong>Spicy:</strong> Kompensation ist kein Rollback. Der Flug war kurz wirklich gebucht, und jemand h&auml;tte ihn sehen k&ouml;nnen.
