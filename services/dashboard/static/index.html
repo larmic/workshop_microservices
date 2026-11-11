@@ -1003,17 +1003,7 @@
         .story-info-body details.story-solution summary { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
         .story-info-body details.story-solution:not([open]) summary::before { transform: none; }
         .story-solution-body { padding: 0 0.75rem 0.5rem; }
-        /* Rollenspiele: oben die Spielregeln wie auf der Folie, darunter eingeklappt die Referenz. */
-        .play-card {
-            background: #f5f6f8;
-            border: 1px solid #e1e5ec;
-            border-left: 4px dotted #0A0349;
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            font-size: 0.9rem;
-            color: #333;
-            line-height: 1.55;
-        }
+        /* Rollenspiele: in der Aufgabe die Spielregeln wie auf der Folie, darunter eingeklappt Demo und Nachbauen. */
         .play-lead { color: #7348E1; font-size: 1.05rem; margin-bottom: 0.75rem; }
         .play-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         .play-grid h4 {
@@ -1035,45 +1025,6 @@
             margin: 0 0 0.5rem;
         }
         .play-note { margin: 0; }
-        .play-card details.story-solution {
-            margin: 1rem 0 0;
-            background: #fff;
-            border: 1px dashed #d0d6e0;
-            border-radius: 6px;
-        }
-        .play-card details.story-solution summary {
-            list-style: none;
-            cursor: pointer;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #0A0349;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .play-card details.story-solution summary::-webkit-details-marker { display: none; }
-        .play-card details.story-solution summary::before { content: "\25B8"; font-size: 0.7rem; color: #666; }
-        .play-card details.story-solution[open] summary::before { content: "\25BE"; }
-        .play-card details.story-solution summary .badge {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #5B4E93;
-            font-weight: 700;
-            margin-left: auto;
-        }
-        .play-card .story-solution-body { font-size: 0.85rem; }
-        .play-card .story-solution-body ul { padding-left: 1.25rem; }
-        .play-card .story-solution-body h4 {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #5B4E93;
-            font-weight: 700;
-            margin: 0.75rem 0 0.3rem;
-        }
-        .play-card .story-solution-body em { color: #7348E1; font-style: normal; font-weight: 600; }
         .ref-panel .cb-section { margin: 0.75rem 0; }
         .ref-slot .backend-panel { max-width: none; margin: 0.75rem 0; padding: 0.75rem 0 0; }
         /* Linker Rand in der Art der Story, gleiche Strichart wie am Stepper-Knoten. */
@@ -1987,7 +1938,9 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
 
         <section class="story-section" data-story="4" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="4">
-                <div class="play-card">
+                <details class="story-info" open>
+                    <summary>Aufgabe <span class="badge">Rollenspiel</span></summary>
+                    <div class="story-info-body">
                     <p class="play-lead">Ihr seid die Requests. Flight ist krank, die Antwort steht auf der Karte.</p>
                     <div class="play-grid">
                         <div>
@@ -2015,14 +1968,19 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             </div>
                         </details>
                 </div>
+                </details>
                 <details class="story-info ref-panel">
-                    <summary>Referenz-Implementierung <span class="badge">Demo und Nachbauen</span></summary>
+                    <summary>Demo und Nachbauen <span class="badge">Referenz oder Mein Service</span></summary>
                     <div class="story-info-body">
                         <h4>Demo</h4>
-                        <p>Bei den Downstream-Services Flight auf &bdquo;H&auml;ngt&ldquo; stellen, dann <code>GET /booking/offers</code> ausl&ouml;sen. Die ersten f&uuml;nf Calls warten je 3&nbsp;s, wie die Karten 05&ndash;09, und bekommen 200 mit <code>flights: []</code> und <code>X-Fallback</code>. Ab dem sechsten kommt die Antwort sofort, mit <code>X-Circuit-Open</code>. Flight zur&uuml;ck auf &bdquo;Normal&ldquo;: Nach 30&nbsp;s zeigt das Panel HALF_OPEN, die erfolgreiche Probe schlie&szlig;t den Breaker.</p>
-                        <div class="ref-slot"></div>
+                        <p>Unten bei den Downstream-Services Flight auf &bdquo;H&auml;ngt&ldquo; stellen, dann <code>GET /booking/offers</code> ausl&ouml;sen. Die ersten f&uuml;nf Calls warten je 3&nbsp;s, wie die Karten 05&ndash;09, und bekommen 200 mit <code>flights: []</code> und <code>X-Fallback</code>. Ab dem sechsten kommt die Antwort sofort, mit <code>X-Circuit-Open</code>. Flight zur&uuml;ck auf &bdquo;Normal&ldquo;: Nach 30&nbsp;s zeigt das Panel HALF_OPEN, die erfolgreiche Probe schlie&szlig;t den Breaker.</p>
+        <div class="source-toggle" data-source-toggle="4">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(4,'reference')">Referenz</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(4,'custom')">Mein Service</button>
+        </div>
         <div class="cb-section">
-            <h2>Circuit-Breaker-Demo (Referenz Story 4)</h2>
+            <h2>Circuit Breaker (Booking Story 4)</h2>
             <div class="rest-actions">
                 <div class="rest-row">
                     <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-ref-story4/offers', 's4-offers')">
@@ -2044,6 +2002,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
             </div>
             <div class="cb-grid" id="cb-grid"></div>
         </div>
+                        <div class="ref-slot"></div>
                         <h4>Und die Buchung?</h4>
                         <p>Lesen und Schreiben sind zwei Fälle. Was passiert, wenn der Flight-Breaker offen ist und jemand auf Buchen klickt, besprechen wir nach dem Recap, und in Story 6 noch einmal.</p>
                         <h4>Zum Nachbauen</h4>
@@ -2059,7 +2018,9 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
              die Spielregeln; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
         <section class="story-section" data-story="5" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="5">
-                <div class="play-card">
+                <details class="story-info" open>
+                    <summary>Aufgabe <span class="badge">Rollenspiel</span></summary>
+                    <div class="story-info-body">
                     <p class="play-lead">Zwei St&uuml;hle sind die Threads von Booking. Und Hotel wird langsam.</p>
                     <div class="play-grid">
                         <div>
@@ -2088,15 +2049,20 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             </div>
                         </details>
                 </div>
+                </details>
                 <details class="story-info ref-panel">
-                    <summary>Referenz-Implementierung <span class="badge">Demo und Nachbauen</span></summary>
+                    <summary>Demo und Nachbauen <span class="badge">Referenz oder Mein Service</span></summary>
                     <div class="story-info-body">
                         <h4>Demo</h4>
-                        <p>Alle Downstream-Services auf &bdquo;Normal&ldquo;, dann Hotel auf &bdquo;Langsam&ldquo; (2&nbsp;s) und den Burst-Knopf dr&uuml;cken. Alle 20 Antworten sind 200, &bdquo;failed&ldquo; bleibt 0. Ma&szlig;geblich ist &bdquo;hotel rej&ldquo;: etwa zehn. Flight und Car laufen weiter, der Hotel-Breaker bleibt CLOSED. Danach Hotel zur&uuml;ck auf &bdquo;Normal&ldquo;.</p>
-                        <div class="ref-slot"></div>
+                        <p>Unten alle Downstream-Services auf &bdquo;Normal&ldquo;, dann Hotel auf &bdquo;Langsam&ldquo; (2&nbsp;s) und den Burst-Knopf dr&uuml;cken. Alle 20 Antworten sind 200, &bdquo;failed&ldquo; bleibt 0. Ma&szlig;geblich ist &bdquo;hotel rej&ldquo;: etwa zehn. Flight und Car laufen weiter, der Hotel-Breaker bleibt CLOSED. Danach Hotel zur&uuml;ck auf &bdquo;Normal&ldquo;.</p>
+        <div class="source-toggle" data-source-toggle="5">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(5,'reference')">Referenz</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(5,'custom')">Mein Service</button>
+        </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Bulkhead-Demo (Referenz Story 5)</h2>
+                <h2>Bulkhead (Booking Story 5)</h2>
                 <button class="panel-reset-btn" id="bh-reset-btn" onclick="resetBulkheadStats()" title="Bulkhead-Counters zurücksetzen">Reset</button>
             </div>
             <div class="rest-actions">
@@ -2134,6 +2100,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
             </div>
             <div class="saga-list" id="bh-burst-list"></div>
         </div>
+                        <div class="ref-slot"></div>
                         <h4>Warum ausgerechnet zehn? (ca. 15 Minuten)</h4>
                         <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Hotel antwortet in 50&nbsp;ms, 500&nbsp;ms, 2&nbsp;s oder erst nach dem 3-Sekunden-Timeout. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
                         <details class="story-solution">
@@ -2257,7 +2224,9 @@ booked = []                          // für Rollback</pre>
              Saga-Panel darunter bleibt als Demo der Webhook-Referenz. -->
         <section class="story-section" data-story="7" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="7">
-                <div class="play-card">
+                <details class="story-info" open>
+                    <summary>Aufgabe <span class="badge">Rollenspiel</span></summary>
+                    <div class="story-info-body">
                     <p class="play-lead">Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich storniert wurde.</p>
                     <div class="play-grid">
                         <div>
@@ -2299,15 +2268,20 @@ booked = []                          // für Rollback</pre>
                             </div>
                         </details>
                 </div>
+                </details>
                 <details class="story-info ref-panel">
-                    <summary>Referenz-Implementierung <span class="badge">Demo und Nachbauen</span></summary>
+                    <summary>Demo und Nachbauen <span class="badge">Referenz oder Mein Service</span></summary>
                     <div class="story-info-body">
                         <h4>Demo</h4>
-                        <p>Bei den Downstream-Services Car auf &bdquo;Fehler&ldquo; stellen, dann <code>POST /booking/bookings</code> ausl&ouml;sen. Die Saga endet mit <code>FAILED</code>, Hotel und Flight stehen auf <code>COMPENSATED</code>, im Log von <code>booking-ref-story7</code> r&uuml;ckw&auml;rts, erst Hotel, dann Flight. Nach f&uuml;nf Klicks ist der Car-Breaker offen, 30&nbsp;s lang antwortet der Pre-Check sofort mit 503.</p>
-                        <div class="ref-slot"></div>
+                        <p>Unten bei den Downstream-Services Car auf &bdquo;Fehler&ldquo; stellen, dann <code>POST /booking/bookings</code> ausl&ouml;sen. Die Saga endet mit <code>FAILED</code>, Hotel und Flight stehen auf <code>COMPENSATED</code>, im Log von <code>booking-ref-story7</code> r&uuml;ckw&auml;rts, erst Hotel, dann Flight. Nach f&uuml;nf Klicks ist der Car-Breaker offen, 30&nbsp;s lang antwortet der Pre-Check sofort mit 503.</p>
+        <div class="source-toggle" data-source-toggle="7">
+            <span class="source-toggle-label">Service-Quelle</span>
+            <button class="source-btn active" data-mode="reference" onclick="setBookingMode(7,'reference')">Referenz</button>
+            <button class="source-btn" data-mode="custom" onclick="setBookingMode(7,'custom')">Mein Service</button>
+        </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Choreography-Demo (Referenz Story 7)</h2>
+                <h2>Choreography (Booking Story 7)</h2>
                 <button class="panel-reset-btn" id="saga7-reset-btn" onclick="resetSagas6()" title="Saga-Store leeren">Reset</button>
             </div>
             <div class="rest-actions">
@@ -2339,6 +2313,7 @@ booked = []                          // für Rollback</pre>
             </div>
             <div class="saga-list" id="saga7-list"></div>
         </div>
+                        <div class="ref-slot"></div>
                         <h4>Zum Nachbauen</h4>
                         <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Downstream-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
                         <p><strong>User Story:</strong> Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Downstream-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
