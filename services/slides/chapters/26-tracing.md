@@ -37,10 +37,8 @@
 <p>Bit 0 in den Flags: Soll dieser Trace exportiert werden? Alles ist zu teuer.</p>
 <code>flags = 01 &harr; sampled</code>
 </div>
-</div>
-
-<div class="market">
-<h4>Am Markt</h4>
+<div class="card market-card">
+<h3>Am Markt</h3>
 <div class="pills">
 <span class="pill brand">OpenTelemetry</span>
 <span class="pill">Jaeger</span>
@@ -48,6 +46,7 @@
 <span class="pill">Zipkin</span>
 <span class="pill">Datadog APM</span>
 <span class="pill">Honeycomb</span>
+</div>
 </div>
 </div>
 

@@ -37,10 +37,8 @@
 <p>Zwischenzust&auml;nde sind sichtbar. Die Kompensation muss letztlich gelingen.</p>
 <code>nicht atomar</code>
 </div>
-</div>
-
-<div class="market">
-<h4>Am Markt</h4>
+<div class="card market-card">
+<h3>Am Markt</h3>
 <div class="pills">
 <span class="pill brand">Temporal</span>
 <span class="pill">Cadence</span>
@@ -48,6 +46,7 @@
 <span class="pill">Axon Framework</span>
 <span class="pill">AWS Step Functions</span>
 <span class="pill">Eventuate Tram</span>
+</div>
 </div>
 </div>
 

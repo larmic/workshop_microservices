@@ -37,10 +37,8 @@
 <p>Gewinn: Entkopplung. Verlust: Das Wissen ist jetzt &uuml;berall.</p>
 <code>verteilter Monolith</code>
 </div>
-</div>
-
-<div class="market">
-<h4>Am Markt</h4>
+<div class="card market-card">
+<h3>Am Markt</h3>
 <div class="pills">
 <span class="pill brand">Apache Kafka</span>
 <span class="pill">RabbitMQ</span>
@@ -48,6 +46,7 @@
 <span class="pill">AWS SNS + SQS</span>
 <span class="pill">GCP Pub/Sub</span>
 <span class="pill">Outbox-Pattern</span>
+</div>
 </div>
 </div>
 

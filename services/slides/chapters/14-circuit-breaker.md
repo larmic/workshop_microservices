@@ -38,7 +38,7 @@
 <div class="card market-card">
 <h3>Am Markt</h3>
 <div class="pills">
-<span class="pill">Resilience4j</span>
+<span class="pill brand">Resilience4j</span>
 <span class="pill">Polly</span>
 <span class="pill">Spring Cloud Circuit Breaker</span>
 <span class="pill">gobreaker</span>

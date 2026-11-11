@@ -36,10 +36,8 @@
 <h3>Die Gr&ouml;&szlig;e ist die Arbeit</h3>
 <p>Der Code ist trivial. Die Zahl darin nicht.</p>
 </div>
-</div>
-
-<div class="market">
-<h4>Am Markt</h4>
+<div class="card market-card">
+<h3>Am Markt</h3>
 <div class="pills">
 <span class="pill brand">Resilience4j Bulkhead</span>
 <span class="pill">Polly</span>
@@ -48,17 +46,20 @@
 <span class="pill">Envoy / Istio</span>
 </div>
 </div>
+</div>
 
 </div>
 
 </div>
 
 Note:
-- Schiff: Ein Leck flutet eine Kammer, ein h&auml;ngender Downstream nur seinen Pool.
+- <strong>Schiff:</strong> Ein Leck flutet eine Kammer, ein h&auml;ngender Downstream nur seinen Pool.
 - <strong>Pool pro Downstream:</strong> Im gemeinsamen Topf frisst Hotel alle Slots, Flight und Car verhungern.
-- <strong>Fail-Fast:</strong> Reject ist klares Backpressure-Signal, eine Queue tarnt das Problem.
+- <strong>Fail-Fast:</strong> Ein Reject ist ein klares Backpressure-Signal, eine Queue tarnt das Problem.
+  - Im Code: <code>hotels: []</code> mit <code>X-Fallback</code> und <code>X-Bulkhead-Full</code>. Der Fallback ist derselbe wie in Story 4, wieder ein eigenes Pattern.
 - <strong>Nicht Circuit Breaker:</strong> Langsam, aber fehlerfrei? Da hilft nur der Bulkhead.
-- <strong>Sch&uuml;tzt den Aufrufer:</strong> Booking und seine anderen Calls, nicht Hotel. Serverseitige Bulkheads (Pools pro Consumer) gibt es auch. Die bauen wir nicht.
+- <strong>Sch&uuml;tzt den Aufrufer:</strong> Booking und seine anderen Calls, nicht Hotel.
+  - Serverseitige Bulkheads (Pools pro Consumer) gibt es auch, die bauen wir nicht.
 - <strong>Die Gr&ouml;&szlig;e ist die Arbeit:</strong> Rechnen wir in Story 5 nach.
 - Envoy/Istio: dasselbe im Sidecar (<code>max_requests</code> bzw. <code>max_connections</code>).
 - &Uuml;berleitung: &bdquo;Sieben Zeilen Code.&ldquo;
