@@ -1179,6 +1179,17 @@
     font-weight: 700;
 }
 
+/* Eine Regel über der Liste, die für jeden Schritt gilt */
+.reveal .steps .step-rule {
+    background: var(--wave);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 0 0 16px;
+    font-size: 17px;
+    line-height: 1.4;
+    text-align: left;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Little's Law (.littles): Formel-Chip, Erklärung, Vierspalten-Tabelle    */
 /* mit Fragezeichen, die per Klick den Ergebnissen weichen                 */

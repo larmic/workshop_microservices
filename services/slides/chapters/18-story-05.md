@@ -18,25 +18,19 @@
 <h4>Rollen</h4>
 <ol>
 <li><strong>Booking</strong> ruft die Nummern und gibt die Karten aus.</li>
-<li><strong>Hotel, Flight, Car</strong> halten ihr Schild und z&auml;hlen mit: Hotel, wer sich setzt. Flight und Car, wer abklatscht.</li>
-<li><strong>Alle anderen</strong> sind Requests in der Schlange vor Booking.</li>
-</ol>
-<h4>Bei jeder Nummer</h4>
-<ol>
-<li><strong>Booking</strong> ruft die Nummer.</li>
-<li><strong>Wer sitzt</strong> und die Nummer auf der Karte hat: aufstehen, Car abklatschen, Karte auf den Tisch, hinten anstellen.</li>
-<li><strong>Wer hinter den St&uuml;hlen wartet</strong>, setzt sich auf den freien Stuhl und klatscht Flight ab.</li>
-<li><strong>Booking</strong> gibt die Karte dem N&auml;chsten. Stuhl frei: Flight abklatschen, hinsetzen. Sonst hinter die St&uuml;hle.</li>
+<li><strong>Hotel, Flight, Car</strong> halten ihr Schild und z&auml;hlen mit.</li>
+<li><strong>Alle anderen</strong> sind Requests in der Schlange.</li>
 </ol>
 </div>
 <div class="steps-col">
 <h4>Ablauf</h4>
+<p class="step-rule"><strong>Bei jeder Nummer:</strong> Wer sie auf der Karte hat, steht auf. Wer wartet, r&uuml;ckt nach. Dann die n&auml;chste Karte.</p>
 <ol>
-<li><strong>Probe 01&ndash;03, Hotel schnell:</strong> Man sitzt eine Nummer. Bei STOPP 1 dreht Hotel das Schild auf &bdquo;langsam&ldquo;, ab jetzt vier.</li>
-<li><strong>Runde 1, zwei St&uuml;hle f&uuml;r alle:</strong> Was seht ihr bei STOPP 2? <span class="fragment">&rarr; vier stehen dahinter, Flight und Car haben fast nichts zu tun</span></li>
-<li><strong>Die Wand kommt</strong> zwischen die St&uuml;hle. Ab Runde 2 gilt: Hotel-Stuhl besetzt? <strong>Nicht warten</strong>, sofort Car abklatschen, fertig ohne Hotels.</li>
-<li><strong>Runde 2, ein Stuhl f&uuml;r Hotel:</strong> Wie viele der n&auml;chsten elf bekommen Hotels? <span class="fragment">&rarr; drei von elf bekommen Hotels</span></li>
-<li><strong>Circuit Breaker:</strong> Was zeigt er nach beiden Runden? <span class="fragment">&rarr; CLOSED, langsam ist kein Fehler</span></li>
+<li><strong>Probe:</strong> Hotel schnell, man sitzt eine Nummer.</li>
+<li><strong>Hotel wird langsam:</strong> Man sitzt vier.</li>
+<li><strong>Runde 1, zwei St&uuml;hle f&uuml;r alle</strong> <span class="fragment">&rarr; vier stehen dahinter</span></li>
+<li><strong>Die Wand kommt.</strong> Hotel besetzt? Nicht warten, fertig ohne Hotels.</li>
+<li><strong>Runde 2:</strong> Wie viele bekommen Hotels? <span class="fragment">&rarr; drei von elf. Breaker: CLOSED</span></li>
 </ol>
 </div>
 </div>
@@ -51,6 +45,12 @@ Note:
   - 10 Personen: Booking, Hotel, Flight, Car, sechs Requests. Der Trainer spielt nicht mit, er leitet die STOPPs und schiebt die Wand.
   - 7: Booking und sechs Requests, die Schilder lehnen, der Trainer z&auml;hlt. 8: Hotel als Person. 9: eine Person h&auml;lt Flight und Car.
   - 11&ndash;13: mehr Requests, sonst gleich. Ab 14 zwei Gruppen mit eigenem Satz. Unter 7 nicht spielbar.
+- <strong>Regeln ansagen</strong>, bei jeder Nummer in dieser Reihenfolge:
+  - Booking ruft die Nummer.
+  - Wer sitzt und die Nummer auf der Karte hat: aufstehen, Car abklatschen, Karte auf den Tisch, hinten anstellen.
+  - Wer hinter den St&uuml;hlen wartet, setzt sich und klatscht Flight ab. Wer zuerst kam, zuerst.
+  - Booking gibt die Karte dem N&auml;chsten. Stuhl frei: Flight abklatschen, hinsetzen. Sonst hinter die St&uuml;hle.
+  - Hotel z&auml;hlt, wer sich setzt. Flight und Car z&auml;hlen, wer abklatscht.
 - <strong>Aufbau:</strong> Zwei St&uuml;hle, Sitzfl&auml;che zu Booking. Ein Tisch, alle Karten auf einen Haufen. Die Wand liegt bereit (Pinnwand, Flipchart, Tisch hochkant). Karten, Schilder, Trainer-Skript: Materialseite.
 - <strong>STOPP 1 (Karte 04):</strong> &bdquo;Wie viele St&uuml;hle waren gleichzeitig besetzt?&ldquo; Einer: eine Ankunft pro Nummer mal eine Nummer Dauer.
   - Hotel dreht auf &bdquo;langsam&ldquo;. Vorhersage per Handzeichen. Z&auml;hler auf 0.
