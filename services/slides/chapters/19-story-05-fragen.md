@@ -57,8 +57,12 @@ Note:
   - Spicy: Der CB sieht Fehler, nicht Latenz.
 - <strong>02 Non-blocking:</strong> Threads werden billig, Connection-Pool, Speicher und Sockets nicht. Der Engpass wandert, siehe Bonus-Folie.
 - <strong>03 Warteschlange:</strong> Runde 1 war die Queue.
-  - Wer hinter den St&uuml;hlen stand, kam immer sp&auml;ter dran, Karte 14 erst nach 6 s.
-  - Der sofortige Reject ist das Backpressure-Signal, die Queue schluckt es.
+  - Sie w&auml;chst, solange Hotel langsam ist: Jede Nummer stand einer mehr hinter den St&uuml;hlen.
+  - Warten macht die Antwort nur sp&auml;ter: Karte 14 erst nach 6 s, so lange wartet kein Client. Er l&auml;dt neu, und die Last w&auml;chst.
+  - Wer wartet, h&auml;lt Verbindung und Speicher. Das Problem wandert nur vor den Pool.
+  - Der sofortige Reject ist das Signal (Backpressure). Die Queue versteckt es, bis die Timeouts kommen.
+  - Okay ist nur eine kurze, begrenzte Wartezeit gegen Spitzen. In Resilience4j <code>maxWaitDuration</code>, Default 0.
+  - Spicy: Eine unbegrenzte Queue vor einem langsamen Downstream ist ein Timeout auf Raten.
 - <strong>04 Replicas:</strong> Der Bulkhead sch&uuml;tzt den Aufrufer, nicht das Backend: Hotel sieht 50 Calls.
   - Im Spiel geh&ouml;rten die St&uuml;hle Booking, Hotel wusste nichts davon.
   - Das Backend sch&uuml;tzt sich selbst: Rate Limit, Load Shedding, <code>429</code> plus <code>Retry-After</code>.
