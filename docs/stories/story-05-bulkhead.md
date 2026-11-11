@@ -213,15 +213,14 @@ Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert
 
 ---
 
-## Recap: Fünf Fragen
+## Recap: Vier Fragen
 
 1. Wir haben doch einen Circuit Breaker. Was kann der Bulkhead, was der CB nicht kann?
-2. Ein Rate Limit erlaubt hundert Aufrufe pro Sekunde. Und wenn alle hundert gleichzeitig hängen?
-3. Wir sind non-blocking, Threads sind bei uns billig. Brauchen wir den Bulkhead dann überhaupt noch?
-4. Warum keine Warteschlange? Wäre kurz warten nicht freundlicher?
-5. Fünf Replicas mal zehn Slots sind fünfzig Aufrufe. Wen schützt der Bulkhead dann?
+2. Wir sind non-blocking, Threads sind bei uns billig. Brauchen wir den Bulkhead dann überhaupt noch?
+3. Warum keine Warteschlange? Wäre kurz warten nicht freundlicher?
+4. Fünf Replicas mal zehn Slots sind fünfzig Aufrufe. Wen schützt der Bulkhead dann?
 
-Bonus zu Frage 3: Wo ist die Grenze bei non-blocking? Threads sind billig, knapp werden Speicher, Dateideskriptoren und das Backend selbst. Die Grenze verschwindet nicht, sie wird nur vom Betriebssystem gesetzt statt von euch.
+Bonus zu Frage 2: Wo ist die Grenze bei non-blocking? Threads sind billig, knapp werden Speicher, Dateideskriptoren und der Downstream selbst. Die Grenze verschwindet nicht, sie wird nur vom Betriebssystem gesetzt statt von euch.
 
 Antworten und Anekdoten: [questions/story5.md](../questions/story5.md)
 
