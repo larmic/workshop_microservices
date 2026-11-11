@@ -57,10 +57,8 @@ Note:
   - Spicy: Der CB sieht Fehler, nicht Latenz.
 - <strong>02 Non-blocking:</strong> Threads werden billig, Connection-Pool, Speicher und Sockets nicht. Der Engpass wandert, siehe Bonus-Folie.
 - <strong>03 Warteschlange:</strong> Ist Hotel langsam, kommen mehr Aufrufe an, als Hotel abarbeitet. Die Schlange w&auml;chst und baut sich nicht mehr ab.
-  - Runde 1: Jede Nummer stand einer mehr hinter den St&uuml;hlen. Karte 14 w&auml;re erst nach 6 s dran gewesen, so lange wartet kein Client.
   - Sofort ablehnen ist ehrlicher: Antwort ohne Hotels jetzt statt Timeout sp&auml;ter.
-- <strong>04 Booking-Instanzen:</strong> Der Bulkhead sch&uuml;tzt den Aufrufer, nicht das Backend: Hotel sieht 50 Calls.
-  - Im Spiel geh&ouml;rten die St&uuml;hle Booking, Hotel wusste nichts davon.
-  - Das Backend sch&uuml;tzt sich selbst: Rate Limit, Load Shedding, <code>429</code> plus <code>Retry-After</code>.
-  - Spicy: Bulkhead allein ist eine halbe L&ouml;sung.
+- <strong>04 Booking-Instanzen:</strong> Der Bulkhead sch&uuml;tzt Booking, nicht Hotel.
+  - Jede Booking-Instanz begrenzt nur sich selbst. F&uuml;nf Instanzen schicken zusammen bis zu 50 Aufrufe zu Hotel.
+  - Hotel muss sich selbst sch&uuml;tzen, zum Beispiel mit Rate Limit und <code>429</code>.
 - Lang: <code>docs/questions/story5.md</code>
