@@ -29,4 +29,11 @@
   <path d="M 226 208 L 235 192 L 244 208 Z" fill="#D3F871"/>
   <!-- Flight nach der Kompensation: Lampe geht aus -->
   <circle cx="271" cy="134" r="7" fill="none" stroke="#D3F871" stroke-width="2"/>
+  <!-- Beschriftung -->
+  <g font-family="Poppins, sans-serif" font-size="20" font-weight="600" fill="#E4E0F5" text-anchor="middle">
+    <text x="74" y="104">Booking</text>
+    <text x="235" y="104">Flight</text>
+    <text x="401" y="104">Hotel</text>
+    <text x="545" y="104" opacity="0.5">Car</text>
+  </g>
 </svg>
