@@ -1,6 +1,6 @@
 # Story 5: Der geteilte Pool
 
-**Thema:** Bulkhead Pattern, als Rollenspiel mit Chips, Trennwänden, Takt und Uhr statt Code
+**Thema:** Bulkhead Pattern, als Rollenspiel mit zwei Stühlen und einer Wand statt Code
 **Zeitrahmen:** ca. 60 Minuten (25 Minuten Spiel, 10 Minuten Demo mit der Referenz, 15 Minuten Rechnen, 10 Minuten Recap)
 
 ## Kontext
@@ -17,83 +17,174 @@ damit **ein langsamer oder fehlerhafter Service nicht das gesamte System blockie
 
 ---
 
-## Teil 1: Das Rollenspiel (ca. 25 Minuten)
+## Teil 1: Das Rollenspiel „Der geteilte Pool" (ca. 25 Minuten)
 
-Gleiche Schlange und gleiches Circuit-Breaker-Board wie in Story 4. Neu: ein Takt, Chips im Bulkhead-Tablett, und Hotel ist langsam, nicht kaputt.
+Zwei Stühle sind die Threads von Booking. Wer sitzt, hat gerade einen Aufruf laufen. Hotel wird langsam, die Stühle laufen voll, und Requests stehen dahinter, obwohl Flight und Car gesund sind. Dann schiebt der Trainer eine Wand zwischen die Stühle.
 
 ### Material
 
-- Sechs Chips (Münzen, Pokerchips oder Zettel)
-- Ein Bulkhead-Tablett (3D-gedruckt): drei Spalten Flight, Hotel und Car mit je zwei Chip-Mulden und zwei steckbaren Trennwänden. Ohne Wände ist es ein gemeinsamer Pool mit sechs Chips (Probelauf, Runde 1), mit Wänden hat jeder Service seine zwei Chips (Runde 2). Alternativ: ein großer Becher, dann drei Becher, beschriftet mit F, H und C
-- Ein A4-Blatt als Uhr mit acht Feldern, nummeriert 1 bis 8
-- Zwanzig Suchkarten, nummeriert 1 bis 20, als Stapel am Anfang der Schlange
-- 20 Karten `hotels: []` für die Fallback-Antworten in Runde 2, gebraucht werden 14, der Rest ist Reserve (oder Klebepunkte, mit denen Booking die Suchkarte markiert)
-- Das Circuit-Breaker-Board und die Zustandskarten CLOSED / OPEN / HALF_OPEN aus Story 4, ein Satz pro Tisch
+- Ein Kartenstapel 01–27 (A7 hoch, Karton 250 g, 8 pro A4-Bogen, 4 Bögen). Auf jeder Karte stehen nur die große Nummer und „Steh auf bei XX", violetter Rahmen. Die STOPP-Karten 04, 15 und 27 sind dunkel. Notfalls von Hand auf Karteikarten
+- Drei Service-Schilder A4 hoch auf Karton: Hotel doppelseitig („Hotel · schnell", hinten „Hotel · langsam"), Flight („Flight · schnell"), Car („Car · schnell"). Doppelseitig heißt Rückseite bedrucken oder zwei Blätter zusammenkleben
+- Das Trainer-Skript (ein Blatt Papier, beidseitig): vorn Ablauf, Regeln und STOPP-Fragen, hinten Kartentabelle und Durchlauf mit 10 Personen
+- Aus dem Raum: zwei Stühle, ein Tisch für alle abgelegten Karten (ein Haufen), eine „Wand" (Pinnwand, Flipchart oder ein hochkant gestellter Tisch)
 
-Gesamtliste und Druckvorlagen: [`docs/orga/materialliste.md`](../orga/materialliste.md), druckfertig unter <https://larmic.github.io/workshop_microservices/material/>.
-
-Spielbar ab sieben Personen: Takt, Booking, Hotel, Flight + Car und mindestens drei Suchanfragen. Ab neun Personen spielen Flight und Car getrennt, ab zwölf Personen sind zwei Leute bei Booking (eine am Tablett, eine an den Stapeln).
-
-**Variante ab 14 Personen:** zwei Tische mit eigenem Material und gleicher Ansage. Am Ende vergleichen beide Tische ihre Zahlen.
+Kein Einkauf, kein 3D-Druck, kein A3. Gesamtliste: [`docs/orga/materialliste.md`](../orga/materialliste.md), Druckvorlagen und Trainer-Skript unter <https://larmic.github.io/workshop_microservices/material/>.
 
 ### Rollen
 
-1. **Takt** ist eine Person aus der Gruppe. Sie zählt laut 1 bis 8, immer wieder von vorn, und klatscht erst, wenn Booking und Hotel „fertig" sagen, etwa alle drei Sekunden. Bei jedem Klatscher nimmt die vorderste Suchanfrage die nächste **Suchkarte** vom Stapel (1 bis 20), gibt sie Booking und stellt sich **sofort hinten wieder an**. Die Runde endet, wenn der Stapel leer ist, also nach dem 20. Klatscher.
-2. **Booking** ruft für jede Suchkarte Flight, Hotel und Car nacheinander auf. Jeder Aufruf braucht einen Chip aus dem Tablett. Wartende Karten liegen in einer Reihe bei Booking, die Personen stellen sich trotzdem hinten an. Dazu liegen bei Booking das Circuit-Breaker-Board mit CLOSED, die Karten `hotels: []` und der Timeout: zwölf Takte ab dem Hotel-Aufruf, das Warten auf einen Chip zählt nicht mit. Läuft der Timeout ab, gelten die Regeln aus Story 4: Die Suchkarte kommt auf den nächsten Platz des Boards, Platz 5 heißt OPEN, ein Erfolg räumt das Board ab. Fertige Suchen legt Booking auf zwei Stapel: komplett und `hotels: []`.
-3. **Hotel** legt Karte und Chip auf das Feld der Uhr, dessen Zahl Takt gerade gerufen hat. Kommt die Zahl wieder (nach acht Takten), gibt Hotel zuerst beides an Booking zurück, dann kommt die neue Karte. **Flight und Car** antworten sofort: Sie tippen den Chip nur an, er bleibt bei Booking.
-4. **Alle anderen** sind Suchanfragen auf `GET /booking/offers`.
+1. **Der Trainer** spielt keine Rolle. Er baut auf, erklärt die Regeln, leitet die drei STOPPs und schiebt die Wand.
+2. **Booking** ist eine Person. Sie hält den Stapel 01–27, ruft die Nummer der obersten Karte und gibt die Karte dem Nächsten in der Schlange. Bei einer STOPP-Karte ruft sie „STOPP" und gibt die Karte dem Trainer. Sonst liest Booking nichts vor.
+3. **Hotel, Flight und Car** halten je ihr Schild. Hotel steht bei den Stühlen, Flight und Car daneben. Jeder Service zählt mit, an den Fingern oder per Strichliste: Hotel zählt, wer sich auf einen Stuhl setzt, Flight und Car zählen, wer sie abklatscht.
+4. **Alle anderen** sind Requests auf `GET /booking/offers` und stehen in einer Schlange vor Booking.
+
+| Personen | Besetzung |
+|---|---|
+| 7 | Booking und 6 Requests. Die drei Schilder lehnen an Wand oder Stuhl, der Trainer zählt |
+| 8 | dazu Hotel als Person (zählt), Flight und Car lehnen, der Trainer zählt dort |
+| 9 | eine Person hält Flight und Car zusammen |
+| 10 | Normalfall: Booking, Hotel, Flight, Car, 6 Requests |
+| 11–13 | mehr Requests, sonst alles gleich |
+
+Unter sieben Personen nicht spielbar, Runde 1 braucht sechs Requests. **Ab 14 Personen** zwei Gruppen parallel, jede mit eigenem Satz (Karten, Schilder, zwei Stühle, Wand).
+
+### Aufbau
+
+- Zwei Stühle nebeneinander, Sitzfläche zu Booking, damit wer sitzt, die Nummern hört.
+- Hotel steht mit Schild bei den Stühlen, Flight und Car daneben. Alle Schilder zeigen „schnell".
+- Ein Tisch, auf dem alle abgelegten Karten auf einem Haufen landen.
+- Die Wand liegt bereit, steht aber noch nicht zwischen den Stühlen.
+
+### Die Regeln
+
+Bei jeder Nummer, immer in dieser Reihenfolge:
+
+1. **Booking ruft die Nummer.**
+2. **Wer sitzt** und diese Nummer auf seiner Karte hat, steht auf, klatscht Car ab, legt die Karte auf den Tisch und stellt sich hinten in die Schlange.
+3. **Wer hinter den Stühlen wartet**, setzt sich auf den frei gewordenen Stuhl (wer zuerst kam, zuerst) und klatscht dabei Flight ab.
+4. **Booking gibt die Karte dem Nächsten in der Schlange.** Ist ein Stuhl frei: Flight abklatschen, hinsetzen. Sonst hinter die Stühle stellen und warten.
+
+Links oder rechts ist egal. Hotel zählt jeden, der sich setzt.
+
+**Zusatzregel ab Runde 2** (nach der Wand): Der Request klatscht sofort Flight ab. Ist der Stuhl auf der Hotel-Seite frei, setzt er sich (Hotel zählt). Ist er besetzt, wartet er **nicht**, sondern klatscht sofort Car ab, legt die Karte auf den Tisch und stellt sich hinten an. Das ist die Antwort `hotels: []` mit `X-Fallback` und `X-Bulkhead-Full`. Wer auf dem Hotel-Stuhl sitzt, klatscht beim Aufstehen Car ab. Der Stuhl auf der Flight-/Car-Seite bleibt frei: Flight und Car sind schnell, ihr Abteil wird nie voll.
 
 ### Ablauf
 
-1. **Probelauf:** Tablett ohne Wände, sechs Chips, Hotel gibt schon beim nächsten Takt zurück. Drei Takte, damit alle die Handgriffe kennen. Danach Stapel und Uhr zurücksetzen.
-2. **Runde 1, ohne Wände, ein Pool mit sechs Chips:** Alle Aufrufe holen ihren Chip aus demselben Pool. Ist kein Chip frei, wartet die Karte in der Reihe. Kommt eine Karte von Hotel zurück, behält sie ihren Chip für Car. Erst danach geht der Chip an die älteste wartende Karte, also die mit der kleinsten Nummer. Frage vor der Runde: Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?
-3. **Runde 2, mit Wänden, je zwei Chips für Flight, Hotel und Car:** Vorher Stapel und Uhr zurücksetzen und die beiden Wände einstecken. Jeder Aufruf holt seinen Chip aus der Spalte seines Backends. Ist die Hotel-Spalte leer, legt Booking sofort die Karte `hotels: []` auf die Suchkarte und ruft Car auf. Niemand wartet. Frage vor der Runde: Wie viele der 20 Suchen bekommen einen Hotel-Chip?
-4. **Nach Runde 2:** Steht das Board noch auf CLOSED?
+1. **Aufbau und Ansage** (3 min): Stühle, Services, Regeln.
+2. **Probe 01–03** (2 min): Alle Schilder auf „schnell". Es sitzt immer nur einer, der zweite Stuhl bleibt leer.
+3. **STOPP 1, Karte 04** (2 min): „Wie viele Stühle waren gleichzeitig besetzt?" Einer: Ankünfte × Dauer = 1 × 1 = 1. Danach dreht Hotel sein Schild auf „langsam": „Ab jetzt sitzt man vier Nummern." Vorhersage per Handzeichen: Was passiert? Die Zähler fangen bei 0 an, die Probe zählt nicht.
+4. **Runde 1, 05–14** (4 min): Nach 06 sind beide Stühle voll, ab 07 stehen Requests dahinter, die Reihe wächst. Flight und Car stehen herum.
+5. **STOPP 2, Karte 15** (5 min): Standbild, zwei sitzen (09, 10), vier stehen dahinter (11–14).
+   - „Ihr hinten, worauf wartet ihr?" Auf einen Stuhl. Zuerst wollt ihr nur Flight, und Flight ist gesund.
+   - „Flight, Car, wie viele kamen bei euch an?" Flight 6, Car 4.
+   - „Hat der Circuit Breaker etwas gemerkt?" Nein: 2 s liegen unter 3 s Timeout, langsam ist kein Fehler, CLOSED.
+   - „Karte 14, wann stehst du auf?" Bei 26, so spät käme die Antwort.
 
-Gezählt wird nach dem 20. Klatscher: was in der Reihe bei Booking liegt, was auf der Uhr liegt und was auf den beiden Stapeln.
+   Dann alle Karten auf den Tisch, alle stellen sich neu an. **Der Trainer schiebt die Wand zwischen die Stühle.** Hotel stellt sich auf die eine Seite, Flight und Car auf die andere: „Dieselben zwei Stühle, nur mit einer Wand." Zusatzregel erklären. Vorhersage: Wie viele der nächsten elf bekommen Hotels? Die Zähler fangen neu an, die Werte aus Runde 1 merken.
+6. **Runde 2, 16–26** (3 min): Auf dem Hotel-Stuhl sitzen nacheinander 16, 20 und 24. Alle anderen klatschen Flight und Car ab und sind sofort fertig. Niemand steht an.
+7. **STOPP 3, Karte 27** (6 min): Zähler abfragen und mit Runde 1 vergleichen (Tabelle unten, Folie 18b).
+   - „Welche Runde war besser?" Ehrlich: Runde 1 hatte mehr Hotels, in Runde 2 wartet niemand, und mehr sind beantwortet.
+   - „Wie viele Stühle hätte Hotel gebraucht?" Vier: Jede Nummer kommt einer dazu, jeder bleibt vier. Hotel hat einen, deshalb bekommt jeder vierte Hotels (16, 20, 24).
+   - „Steht der Breaker noch auf CLOSED?" Ja, ein besetzter Stuhl ist kein Fehler.
+   - „Wem gehören die Stühle?" Booking. Hotel weiß nichts davon. Die Wand schützt Booking, nicht Hotel, fünf Booking-Instanzen hätten fünf Hotel-Stühle.
 
-Tipp zur Moderation: Vorhersage per Handzeichen, erst dann auflösen. Wer am nächsten lag, spielt in der nächsten Runde Hotel.
+   Überleitung zu Teil 3 („Warum ausgerechnet zehn?").
+
+Tipp zur Moderation: Vorhersage per Handzeichen, erst dann auflösen.
 
 ### Was passieren sollte
 
-- Probelauf: Hotel ist schnell, bei Hotel liegt nie mehr als ein Chip. Es wartet niemand.
-- Runde 1: Vier, ab Suche 7 wartet jede schon auf Flight. Am Ende liegen sechs Karten auf der Uhr (11 bis 16), vier in der Reihe (17 bis 20), zehn sind komplett. Flight ist gesund und bekommt trotzdem keinen Chip (Recap 01).
-- Runde 2: Sechs, die anderen 14 sofort. Einen Hotel-Chip bekommen die Suchen 1, 2, 9, 10, 17 und 18. Nach Takt 20 sind vier davon komplett, 17 und 18 liegen noch auf der Uhr, 14 liegen auf dem Stapel `hotels: []`. Zwei Chips bei acht Takten heißen: im Dauerlauf bekommt jede vierte Suche Hotels, Little's Law zum Anfassen. Flight und Car laufen ungestört. Das ist die Isolation.
-- Ehrlicher Vergleich: Runde 1 hat nach 20 Takten mehr komplette Antworten (10 gegen 4), weil Hotel dort alle sechs Chips nehmen durfte, auf Kosten von Flight und Car. Dafür kommt jede Suche ab Nummer 7 später. Der Bulkhead tauscht Vollständigkeit gegen Verfügbarkeit. Kommt der Einwand „Gebt Hotel in Runde 2 doch vier Chips": Bei acht Takten Latenz bräuchte Hotel acht, mehr Chips verschieben das Problem nur (Brücke zu Teil 3). Die Reihe aus Runde 1 ist genau die Queue aus Recap 04.
-- Das Board: Ja, CLOSED, acht Takte liegen unter zwölf, das Board bleibt leer, und Rejects erreichen den Breaker nie. In der Referenz sitzt der Bulkhead vor dem Circuit Breaker.
+Gezählt wird bei STOPP 3 über die Services:
 
-### Spickzettel Takt für Takt
+| | Runde 1 | Runde 2 | was es heißt |
+|---|---|---|---|
+| Hotel: bei mir gesessen | 6 | 3 | Runde 1 lieferte mehr Hotels |
+| Flight: abgeklatscht | 6 | 11 | Flight war in Runde 1 gesund und trotzdem ausgehungert |
+| Car: abgeklatscht = beantwortet | 4 | 10 | Verfügbarkeit vor Vollständigkeit |
+| davon komplett mit Hotels | 4 | 2 | ehrlicher Tausch |
+| davon sofort ohne Hotels | 0 | 8 | Fallback `hotels: []` |
+| stehen hinter den Stühlen | 4 | 0 | die Queue ist weg |
+| Breaker | CLOSED | CLOSED | langsam ist kein Fehler |
+| Stühle bei Booking | 2 | 2 | gleich viele, nur durch eine Wand getrennt |
 
-Ein frei gewordener Chip kann im selben Takt mehrere Aufrufe bedienen, weil Flight und Car ihn sofort zurückgeben. Beispiel Takt 9 in Runde 1: Karte 1 kommt von Hotel und ruft Car, dann geht derselbe Chip an Karte 7, die Flight und Hotel ruft.
+Der Bulkhead tauscht Vollständigkeit gegen Verfügbarkeit. Kommt der Einwand „Gebt Hotel doch beide Stühle": Bei langsamem Hotel bräuchte es vier, mehr Stühle verschieben das Problem nur (Brücke zu Teil 3). Die Reihe hinter den Stühlen ist genau die Queue aus Recap 04.
 
-**Runde 1** (ohne Wände, sechs Chips)
+### Durchlauf mit 10 Personen
 
-| Takt | Was passiert | Uhr | Reihe | komplett |
-|---|---|---|---|---|
-| 1–6 | Karten 1 bis 6 holen je einen Chip, Flight, dann Hotel. Danach ist der Pool leer. | 6 | 0 | 0 |
-| 7–8 | Karten 7 und 8 warten auf Flight. | 6 | 2 | 0 |
-| 9–14 | Hotel gibt Karten 1 bis 6 zurück, sie rufen Car und sind komplett. Der Chip geht an Karten 7 bis 12. Karten 9 bis 14 kommen neu in die Reihe. | 6 | 2 | 6 |
-| 15–16 | Felder 7 und 8 sind leer (in Takt 7 und 8 kam nichts auf die Uhr). Karten 15 und 16 warten zusätzlich. | 6 | 4 | 6 |
-| 17–20 | Hotel gibt Karten 7 bis 10 zurück, der Chip geht an Karten 13 bis 16. | 6 | 4 | 10 |
+Booking, Hotel, Flight, Car und die Requests P1 bis P6. **Probe:** 01 an P1, P1 setzt sich. Bei 02 steht P1 auf (Car), P2 bekommt 02 und setzt sich. Bei 03 genauso mit P3. Bei 04 steht P3 auf, Booking ruft STOPP. Die Schlange ist danach P4, P5, P6, P1, P2, P3.
 
-**Runde 2** (mit Wänden, je zwei Chips)
+**Runde 1** (Zähler ab 05):
 
-| Takt | Was passiert | Uhr | komplett | `hotels: []` |
-|---|---|---|---|---|
-| 1–2 | Karten 1 und 2 holen die beiden Hotel-Chips. | 2 | 0 | 0 |
-| 3–8 | Hotel-Spalte leer, Karten 3 bis 8 bekommen sofort `hotels: []`. | 2 | 0 | 6 |
-| 9–10 | Hotel gibt Karten 1 und 2 zurück, Karten 9 und 10 bekommen die Chips. | 2 | 2 | 6 |
-| 11–16 | Karten 11 bis 16 bekommen sofort `hotels: []`. | 2 | 2 | 12 |
-| 17–18 | Hotel gibt Karten 9 und 10 zurück, Karten 17 und 18 bekommen die Chips. | 2 | 4 | 12 |
-| 19–20 | Karten 19 und 20 bekommen sofort `hotels: []`. | 2 | 4 | 14 |
+| Nr. | Karte an | Was passiert | Stuhl | Stuhl | dahinter |
+|---|---|---|---|---|---|
+| 05 | P4 | setzt sich | P4 (05) | – | – |
+| 06 | P5 | setzt sich, beide voll | P4 | P5 (06) | – |
+| 07 | P6 | kein Stuhl frei: dahinter | P4 | P5 | P6 (07) |
+| 08 | P1 | dahinter | P4 | P5 | P6, P1 (08) |
+| 09 | P2 | P4 (05) steht auf, P6 (07) setzt sich, P2 dahinter | P6 | P5 | P1, P2 (09) |
+| 10 | P3 | P5 (06) steht auf, P1 (08) setzt sich, P3 dahinter | P6 | P1 | P2, P3 (10) |
+| 11 | P4 | niemand steht auf, P4 dahinter | P6 | P1 | P2, P3, P4 (11) |
+| 12 | P5 | dahinter | P6 | P1 | P2 … P5 (12) |
+| 13 | P6 | P6 (07) steht auf und stellt sich an, P2 (09) setzt sich, P6 bekommt 13 und geht dahinter | P2 | P1 | P3 … P6 (13) |
+| 14 | P1 | P1 (08) steht auf, P3 (10) setzt sich, P1 bekommt 14 und geht dahinter | P2 | P3 | P4, P5, P6, P1 (14) |
+| 15 | STOPP 2 | Booking gibt die Karte dem Trainer | P2 (09) | P3 (10) | 11, 12, 13, 14 |
 
-### Maßstab und Vereinfachungen
+Zähler Runde 1: Hotel 6 (05–10 haben sich gesetzt), Flight 6, Car 4 (05–08 fertig).
 
-- **Maßstab:** 1 Chip steht für 5 Slots, zwei Chips je Backend sind also `maxConcurrent` 10 aus der Referenz. 8 Takte zu 12 Takten entsprechen 2 s Latenz („Langsam") zu 3 s Timeout, 1 Takt ist also 0,25 s. 1 Suchkarte steht für 5 Suchen. Eine Karte pro Takt sind damit 20 Hotel-Aufrufe pro Sekunde, wie in Teil 3.
-- **Runde 1 ist kein Abbild der Referenz.** Der gemeinsame Pool ohne Wände steht für den Thread- oder Connection-Pool eines klassischen Servers. Die Go-Referenz hat keinen solchen Pool, dort gibt es nur die drei Bulkheads aus Runde 2.
-- **Runde 2 entspricht der Referenz:** eigener Pool je Backend, keine Warteschlange, sofortiger Fallback. Der Client bekommt HTTP 200 mit `hotels: []` sowie die Header `X-Fallback: hotel` und `X-Bulkhead-Full: hotel`. Eine 503 gibt es bei `GET /booking/offers` nicht.
-- **Brücke zu Teil 3:** Im Probelauf ist L = 1 Chip, zwei Chips je Backend hätten mit Luft gereicht. Bei langsamem Hotel ist L = 8 Chips, also 40 Slots, der Pool hat 10. Die leere Hotel-Spalte ist dann das Signal, kein Grund, den Pool zu vergrößern.
-- **Nicht im Spiel und nicht in der Referenz:** Chips nachkippen (non-blocking), eine Warteschlange vor der Hotel-Spalte, ein zweites Booking. Diese Varianten kommen im Recap als Gedankenspiel vor.
+**Runde 2** (neu angestellt, Zähler auf 0):
+
+| Nr. | Was passiert | Hotel-Stuhl |
+|---|---|---|
+| 16 | Flight, setzt sich auf den Hotel-Stuhl | 16 |
+| 17–19 | Flight, Hotel besetzt: sofort Car, Tisch, anstellen | 16 |
+| 20 | 16 steht auf (Car), 20 setzt sich | 20 |
+| 21–23 | sofort fertig | 20 |
+| 24 | 20 steht auf, 24 setzt sich | 24 |
+| 25–26 | sofort fertig | 24 |
+| 27 | STOPP 3, Booking gibt die Karte dem Trainer | 24 |
+
+Zähler Runde 2: Hotel 3 (16, 20, 24), Flight 11, Car 10 (24 sitzt noch). Wer welche Karte bekommt, hängt davon ab, wie sich die Leute anstellen, die Kartenzahlen nicht.
+
+### Die Karten
+
+| Karte | Phase | Text |
+|---|---|---|
+| 01 | Probe | Steh auf bei 02 |
+| 02 | Probe | Steh auf bei 03 |
+| 03 | Probe | Steh auf bei 04 |
+| 04 | – | STOPP 1 |
+| 05 | Runde 1 | Steh auf bei 09 |
+| 06 | Runde 1 | Steh auf bei 10 |
+| 07 | Runde 1 | Steh auf bei 13 |
+| 08 | Runde 1 | Steh auf bei 14 |
+| 09 | Runde 1 | Steh auf bei 17 |
+| 10 | Runde 1 | Steh auf bei 18 |
+| 11 | Runde 1 | Steh auf bei 21 |
+| 12 | Runde 1 | Steh auf bei 22 |
+| 13 | Runde 1 | Steh auf bei 25 |
+| 14 | Runde 1 | Steh auf bei 26 |
+| 15 | – | STOPP 2 |
+| 16–26 | Runde 2 | Steh auf bei Nummer + 4 (16 → 20, 17 → 21, … 26 → 30) |
+| 27 | – | STOPP 3 |
+
+Warum die Zahlen stimmen: In der Probe ist Hotel normal, man sitzt eine Nummer. In Runde 1 und 2 ist Hotel langsam, man sitzt vier Nummern ab dem Hinsetzen. Runde 1 läuft deterministisch: 07 wartet, setzt sich bei 09 und steht bei 13 auf. Die Karten 09–14 nennen Zahlen hinter STOPP 2, das ist egal, der STOPP räumt auf. Sie zeigen, wann die Antwort käme: Karte 14 erst bei 26, also 12 Nummern oder 6 s nach dem Ankommen. In Runde 2 braucht nur die Zahl, wer den Hotel-Stuhl bekommt. 25 und 26 nennen 29 und 30, sie sitzen nie.
+
+### Maßstab zur Referenz
+
+- **1 Nummer = 0,5 s.** Hotel normal (0,5 s) ist eine Nummer, „Langsam" (2 s) vier Nummern, der Timeout (3 s) sechs Nummern.
+- **Pro Nummer kommt ein Request**, also 20 Requests pro Sekunde wie in Teil 3.
+- **1 Stuhl = 10 Slots** (`MaxConcurrent` 10). Runde 1 ist ein gemeinsamer Pool aus zwei Stühlen (20 Slots). In Runde 2 hat Hotel einen Stuhl, also genau die 10 Slots der Referenz, Flight und Car das Abteil auf der anderen Seite.
+- **Stuhl** = Thread oder Slot, **Wand** = Bulkhead, **Abteil** = `max[service]`, **hinter den Stühlen stehen** = Queue, **sofort fertig ohne Hotels** = `fallback()` mit `hotels: []`, **Schild „langsam"** = Modus „Langsam" des Hotel-Service.
+
+### Bewusste Vereinfachungen
+
+Offen ansagen:
+
+- **Runde 1 ist kein Abbild der Referenz.** Die zwei Stühle ohne Wand stehen für den Thread- oder Connection-Pool eines klassischen Servers. Die Go-Referenz hat keinen solchen Pool und keine Queue, dort gibt es nur die Bulkheads aus Runde 2.
+- **Runde 2 entspricht der Referenz:** eigenes Abteil, keine Warteschlange, sofortiger Fallback. Der Client bekommt HTTP 200 mit `hotels: []` und den Headern `X-Fallback: hotel` und `X-Bulkhead-Full: hotel`. Eine 503 gibt es bei `GET /booking/offers` nicht.
+- In der Referenz haben Flight und Car je ein eigenes Abteil mit 10 Slots. Im Spiel teilen sie sich den zweiten Stuhl, er bleibt leer, weil beide schnell sind. Flight und Car abzuklatschen kostet keine Zeit.
+- Wer sich hinten anstellt, spielt den nächsten Request, keinen Retry.
+- Der Breaker liegt nicht im Spiel, er wird nur gefragt. In der Referenz sitzt der Bulkhead vor dem Circuit Breaker, Rejects erreichen ihn nie.
+- **Nicht im Spiel und nicht in der Referenz:** eine Warteschlange vor dem Hotel-Stuhl, ein zweites Booking. Beides kommt im Recap als Gedankenspiel vor.
 
 ---
 
@@ -117,9 +208,10 @@ Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Legt euch vorher fest:
 |---|---|---|---|
 | 50 ms | 20 / s | 0,05 s | 1 |
 | 500 ms | 20 / s | 0,5 s | 10 |
+| 2 s („Langsam") | 20 / s | 2 s | 40 |
 | 3 s Timeout | 20 / s | 3 s | 60 |
 
-Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die normale Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal, kein Grund zum Vergrößern. Genau das hat Runde 2 gezeigt. Wer den Pool dagegen von vornherein klein macht, „um das Backend zu schonen", lehnt ab, was das Backend hätte schaffen können. In Produktion leitet sich die Zahl aus drei Faktoren ab: Connection-Pool des HTTP-Clients, Backend-Kapazität (Replicas × maxConcurrent ≤ Kapazität) und Little's Law aus gemessener Latenz und Ziel-Durchsatz. Im Spiel sind es 2 Chips, im Code 10, die Rechnung ist dieselbe.
+Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die normale Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal, kein Grund zum Vergrößern. Genau das hat Runde 2 gezeigt: Der Hotel-Stuhl war voll, und das war richtig so. Wer den Pool dagegen von vornherein klein macht, „um das Backend zu schonen", lehnt ab, was das Backend hätte schaffen können. In Produktion leitet sich die Zahl aus drei Faktoren ab: Connection-Pool des HTTP-Clients, Backend-Kapazität (Replicas × maxConcurrent ≤ Kapazität) und Little's Law aus gemessener Latenz und Ziel-Durchsatz. Im Spiel: normal 1 Stuhl, langsam 4, Hotel hat 1 Stuhl = 10 Slots. Die Rechnung ist dieselbe.
 
 ---
 

@@ -1610,7 +1610,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="play" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit Chips, Trennwänden, Takt und Uhr, kein Code">5</button>
+                    <button type="button" class="stepper-node" data-kind="play" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit zwei Stühlen und einer Wand, kein Code">5</button>
                     <small class="stepper-kind">Spiel</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -1956,53 +1956,64 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
 
         </section>
 
-        <!-- Story 5: Rollenspiel mit Chips, Trennwänden, Takt und Uhr statt Code. Story-Karte zeigt
+        <!-- Story 5: Rollenspiel mit zwei Stühlen und einer Wand statt Code. Story-Karte zeigt
              die Spielregeln; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
         <section class="story-section" data-story="5" data-kind="play" data-backend="demo" hidden>
             <div class="story-helpers" data-story-helpers="5">
                 <details class="story-info" open>
                     <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
                     <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Gleiche Schlange, gleiches Circuit-Breaker-Board wie Story 4. Neu: Takt, Chips und ein langsames Hotel. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
+                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Zwei Stühle sind die Threads von Booking, ihr seid die Requests. Hotel wird langsam, nicht kaputt. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
                         <h4>Kontext</h4>
                         <p>Antwortet der Hotel-Service extrem langsam, binden seine Aufrufe die Ressourcen des Booking-Service, in einem klassischen Server den gemeinsamen Thread- oder Connection-Pool. Dann warten auch Anfragen an den Flight-Service, obwohl dieser einwandfrei funktioniert, bis sie beim Aufrufer in den Timeout laufen. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
                         <h4>User Story</h4>
                         <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
                         <h4>Material</h4>
-                        <p>Sechs Chips, ein Bulkhead-Tablett (drei Spalten Flight / Hotel / Car mit je zwei Mulden, zwei steckbare Trennwände; alternativ ein großer Becher, dann drei Becher), ein A4-Blatt als Uhr mit den Feldern 1 bis 8, Suchkarten 1 bis 20, 20 Karten <code>hotels: []</code>, Circuit-Breaker-Board und Zustandskarten aus Story 4. Spielbar ab sieben Personen. Nach jeder Runde Stapel und Uhr zurücksetzen. Druckvorlagen: <a href="https://larmic.github.io/workshop_microservices/material/" target="_blank" rel="noopener">Materialseite</a>.</p>
+                        <p>Kartenstapel 01 bis 27 (auf jeder Karte nur die Nummer und „Steh auf bei XX“), drei Service-Schilder (Hotel doppelseitig „schnell“ / „langsam“, Flight und Car „schnell“), aus dem Raum zwei Stühle, ein Tisch für die abgelegten Karten und eine Wand (Pinnwand, Flipchart oder ein hochkant gestellter Tisch). Spielbar mit 7 bis 13 Personen, ab 14 zwei Gruppen mit eigenem Satz. Druckvorlagen und Trainer-Skript: <a href="https://larmic.github.io/workshop_microservices/material/#story5" target="_blank" rel="noopener">Materialseite</a>.</p>
                         <h4>Rollen</h4>
                         <ol>
-                            <li><strong>Takt</strong> zählt laut 1 bis 8, immer wieder, und klatscht, sobald Booking und Hotel „fertig" sagen. Pro Klatscher nimmt die vorderste Suchanfrage die nächste <strong>Suchkarte</strong> vom Stapel (1 bis 20), gibt sie Booking und stellt sich <strong>sofort hinten wieder an</strong>. Stapel leer: Runde vorbei.</li>
-                            <li><strong>Booking</strong> ruft Flight, Hotel und Car nacheinander, jeder Aufruf braucht einen Chip. Wartende Karten liegen in einer Reihe bei Booking. Fertige Suchen auf zwei Stapel: komplett und <code>hotels: []</code>. Timeout zwölf Takte ab Hotel-Aufruf, dann kommt die Suchkarte aufs Board wie in Story 4.</li>
-                            <li><strong>Hotel</strong> legt Karte und Chip auf das Feld der Uhr (A4, Felder 1 bis 8), das Takt gerade gerufen hat. Kommt die Zahl wieder, gibt Hotel zuerst beides zurück, dann kommt die neue Karte. <strong>Flight + Car</strong> tippen den Chip nur an.</li>
-                            <li><strong>Alle anderen</strong> sind Suchanfragen.</li>
+                            <li><strong>Booking</strong> hält den Stapel, ruft die Nummer der obersten Karte und gibt sie dem Nächsten in der Schlange. Bei einer STOPP-Karte ruft Booking „STOPP“ und gibt sie dem Trainer.</li>
+                            <li><strong>Hotel, Flight, Car</strong> halten ihr Schild und <strong>zählen mit</strong>: Hotel jeden, der sich setzt, Flight und Car jeden, der sie abklatscht.</li>
+                            <li><strong>Alle anderen</strong> sind Requests und stehen in einer Schlange vor Booking.</li>
                         </ol>
+                        <h4>Regeln</h4>
+                        <p>Bei jeder Nummer, immer in dieser Reihenfolge:</p>
+                        <ol>
+                            <li><strong>Booking ruft die Nummer.</strong></li>
+                            <li><strong>Wer sitzt</strong> und diese Nummer auf der Karte hat, steht auf, klatscht Car ab, legt die Karte auf den Tisch und stellt sich hinten an.</li>
+                            <li><strong>Wer hinter den Stühlen wartet</strong>, setzt sich auf den frei gewordenen Stuhl und klatscht dabei Flight ab. Wer zuerst kam, zuerst.</li>
+                            <li><strong>Booking gibt die Karte dem Nächsten.</strong> Stuhl frei: Flight abklatschen, hinsetzen. Sonst hinter die Stühle stellen und warten.</li>
+                        </ol>
+                        <p>Links oder rechts ist egal.</p>
+                        <p><strong>Ab Runde 2, mit Wand:</strong> Sofort Flight abklatschen. Hotel-Stuhl frei: hinsetzen. Besetzt: <strong>nicht warten</strong>, sofort Car abklatschen, Karte auf den Tisch, hinten anstellen. Das ist <code>hotels: []</code> mit <code>X-Fallback</code> und <code>X-Bulkhead-Full</code>. Der Stuhl auf der Flight-/Car-Seite bleibt frei: Flight und Car sind schnell, ihr Abteil wird nie voll.</p>
                         <h4>Ablauf</h4>
                         <ol>
-                            <li><strong>Probelauf:</strong> Tablett ohne Wände, sechs Chips, Hotel gibt schon beim nächsten Takt zurück. Drei Takte.</li>
-                            <li><strong>Runde 1, ohne Wände, ein Pool mit sechs Chips:</strong> Eine Karte von Hotel behält ihren Chip für Car, erst danach geht er an die älteste wartende Karte. Wie viele Karten liegen nach 20 Takten ohne Chip in der Reihe?</li>
-                            <li><strong>Runde 2, mit Wänden, je zwei Chips für Flight / Hotel / Car:</strong> Hotel-Spalte leer? Sofort <code>hotels: []</code>, weiter zu Car. Wie viele der 20 Suchen bekommen einen Hotel-Chip?</li>
-                            <li><strong>Nach Runde 2:</strong> Steht das Board noch auf CLOSED?</li>
+                            <li><strong>Probe, 01 bis 03:</strong> Alle Schilder auf „schnell“, man sitzt eine Nummer. <strong>STOPP 1</strong> bei 04: Wie viele Stühle waren gleichzeitig besetzt? Dann dreht Hotel sein Schild auf „langsam“, ab jetzt sitzt man vier Nummern. Was passiert?</li>
+                            <li><strong>Runde 1, 05 bis 14, zwei Stühle ohne Wand:</strong> <strong>STOPP 2</strong> bei 15: Wie viele stehen hinter den Stühlen, und worauf warten sie? Wie viele kamen bei Flight und Car an? Hat der Circuit Breaker etwas gemerkt? Karte 14, wann stehst du auf?</li>
+                            <li><strong>Die Wand:</strong> Alle Karten auf den Tisch, alle stellen sich neu an, die Zähler fangen bei null an. Der Trainer schiebt die Wand zwischen die Stühle, Hotel auf die eine Seite, Flight und Car auf die andere. Wie viele der nächsten elf bekommen Hotels?</li>
+                            <li><strong>Runde 2, 16 bis 26:</strong> <strong>STOPP 3</strong> bei 27: Zähler abfragen, mit Runde 1 vergleichen. Welche Runde war besser? Steht der Breaker noch auf CLOSED? Wem gehören die Stühle?</li>
                         </ol>
                         <details class="story-solution">
                             <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
                             <div class="story-solution-body">
                                 <ul>
-                                    <li><strong>Runde 1:</strong> vier, ab Suche 7 wartet jede schon auf Flight.</li>
-                                    <li><strong>Runde 2:</strong> sechs, die anderen 14 sofort.</li>
-                                    <li><strong>Nach Runde 2:</strong> ja, acht Takte liegen unter zwölf, und Rejects erreichen den Breaker nie.</li>
+                                    <li><strong>STOPP 1:</strong> einer. Eine Ankunft pro Nummer mal eine Nummer Dauer.</li>
+                                    <li><strong>STOPP 2:</strong> Zwei sitzen (09, 10), <strong>vier stehen dahinter</strong> (11 bis 14) und warten auf einen Stuhl, obwohl sie zuerst nur Flight wollen, und Flight ist gesund. Flight 6, Car 4. Der Breaker merkt nichts: 2&nbsp;s liegen unter dem 3-Sekunden-Timeout, langsam ist kein Fehler, CLOSED. Karte 14 stünde erst bei 26 auf: 12 Nummern, also 6&nbsp;s nach dem Ankommen, genau der Timeout.</li>
+                                    <li><strong>STOPP 3:</strong> Hotel 6 &rarr; 3, Flight 6 &rarr; 11, Car (beantwortet) 4 &rarr; 10. Davon mit Hotels 4 &rarr; 2, sofort ohne Hotels 0 &rarr; 8, hinter den Stühlen 4 &rarr; 0. Breaker beide Male CLOSED.</li>
+                                    <li><strong>Ehrlicher Tausch:</strong> Runde 1 lieferte mehr Hotels, in Runde 2 wartet niemand. Hotel hätte vier Stühle gebraucht, hat einen, also bekommt jeder vierte Hotels (16, 20, 24).</li>
+                                    <li><strong>Wem gehören die Stühle?</strong> Booking. Die Wand schützt Booking, nicht Hotel. Fünf Booking-Instanzen hätten fünf Hotel-Stühle.</li>
                                 </ul>
                             </div>
                         </details>
                         <h4>Warum ausgerechnet zehn? (ca. 15 Minuten)</h4>
-                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Hotel antwortet in 50&nbsp;ms, 500&nbsp;ms oder erst nach dem 3-Sekunden-Timeout. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
+                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Hotel antwortet in 50&nbsp;ms, 500&nbsp;ms, 2&nbsp;s oder erst nach dem 3-Sekunden-Timeout. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
                         <details class="story-solution">
                             <summary>Die Rechnung <span class="badge">erst nach der Vorhersage</span></summary>
                             <div class="story-solution-body">
-                                <p>50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, ein 3-Sekunden-Timeout ergibt 60. Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die <strong>normale</strong> Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal. Im Spiel: normal L = 1 Chip, langsam L = 8, Pool 2.</p>
+                                <p>50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, 2&nbsp;s ergeben 40, ein 3-Sekunden-Timeout ergibt 60. Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die <strong>normale</strong> Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal. Im Spiel: normal 1 Stuhl, langsam 4. Hotel hat 1 Stuhl, das sind 10 Slots (<code>MaxConcurrent</code>).</p>
                             </div>
                         </details>
-                        <p>Vollständige Beschreibung mit Material, Takt-Protokoll und Maßstab: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-05-bulkhead.md" target="_blank" rel="noopener"><code>docs/stories/story-05-bulkhead.md</code></a>. Referenz-Implementierung: <code>services/booking/story5/</code>.</p>
+                        <p>Vollständige Beschreibung mit Material und Maßstab: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-05-bulkhead.md" target="_blank" rel="noopener"><code>docs/stories/story-05-bulkhead.md</code></a>. Referenz-Implementierung: <code>services/booking/story5/</code>.</p>
                     </div>
                 </details>
             </div>
@@ -3622,7 +3633,7 @@ on receiveCompensationEvent(event):
             4: { title: "Story 4: Wenn der Flug ausf&auml;llt", kind: "play", pill: "&asymp; 60 min <small>davon 20 Spiel</small>",
                  subtitle: "Circuit Breaker als Rollenspiel: Ein Booking, ein Kartenstapel, alle anderen sind die Suchanfragen. Danach die Demo mit der Referenz." },
             5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
-                 subtitle: "Bulkhead als Rollenspiel: Ihr seid die Suchanfragen, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz und die Rechnung, warum ausgerechnet zehn." },
+                 subtitle: "Bulkhead als Rollenspiel: zwei Stühle, eine Wand, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz und die Rechnung, warum ausgerechnet zehn." },
             6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",

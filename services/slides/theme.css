@@ -1244,6 +1244,17 @@
     color: #B9B1DC;
 }
 
+/* Auswertungstabelle (18b): breite Text-Spalten, kompaktere Zeilen */
+.reveal .ltable.result {
+    grid-template-columns: 1.5fr 0.7fr 0.7fr 2fr;
+    column-gap: 28px;
+}
+
+.reveal .ltable.result > div {
+    padding: 7px 0;
+    font-size: 18px;
+}
+
 /* Überlagerung zweier Zustände: das Fragment blendet den einen aus, den anderen ein */
 .reveal .swap {
     display: grid;

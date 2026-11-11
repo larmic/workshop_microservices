@@ -30,7 +30,7 @@ Note:
   - Check und Increment atomar (Mutex, CAS, Semaphore), sonst rutschen unter Last mehr Calls durch.
   - Decrement ins finally, sonst leckt der Pool und &ouml;ffnet nie wieder.
   - Ein Bulkhead pro Downstream, nie ein gemeinsamer.
-- <strong>Im Spiel gleich:</strong> Chip = Slot, Spalte im Tablett = <code>max[service]</code>, orange Karte = <code>fallback()</code>.
-  - Runde 1 ohne W&auml;nde hat eine Warteschlange, das ist der gemeinsame Pool ohne Bulkhead. Der Code hier wartet nie.
+- <strong>Im Spiel gleich:</strong> Stuhl = Slot, Wand = Bulkhead, Abteil = <code>max[service]</code>, sofort fertig ohne Hotels = <code>fallback()</code>.
+  - Runde 1 ohne Wand: Wer hinter den St&uuml;hlen steht, ist die Queue des gemeinsamen Pools. Der Code hier wartet nie.
 - Referenz: <code>services/booking/story5/bulkhead/bulkhead.go</code>, knapp 100 Zeilen Go, <code>chan struct{}</code> als Semaphore. Im Dashboard unter Story 5 mit dem Burst-Knopf gegen langsame Backends treiben.
-- &Uuml;berleitung: &bdquo;Die Zahl kl&auml;ren wir jetzt. Nicht am Rechner, sondern mit Chips und Trennw&auml;nden.&ldquo;
+- &Uuml;berleitung: &bdquo;Die Zahl kl&auml;ren wir jetzt. Nicht am Rechner, sondern mit zwei St&uuml;hlen und einer Wand.&ldquo;
