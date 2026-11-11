@@ -1190,6 +1190,18 @@
     text-align: left;
 }
 
+.reveal .steps .step-rule.big {
+    font-size: 22px;
+    padding: 18px 22px;
+}
+
+.reveal .steps .step-note {
+    font-size: 18px;
+    line-height: 1.4;
+    margin: 0;
+    text-align: left;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Little's Law (.littles): Formel-Chip, Erklärung, Vierspalten-Tabelle    */
 /* mit Fragezeichen, die per Klick den Ergebnissen weichen                 */

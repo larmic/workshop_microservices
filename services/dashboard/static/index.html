@@ -1924,13 +1924,6 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <p>Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
                         <h4>So spielen wir</h4>
                         <p>Eine Person ist Booking, ruft die Nummern, gibt die Karten aus und führt das Board. Alle anderen sind Requests in der Schlange: <code>GET /booking/offers</code>. <strong>Bei jeder Karte:</strong> Nummer rufen, warten, Antwort vorlesen, ablegen, hinten anstellen. Dunkle Karte: STOPP, wir reden.</p>
-                        <ol>
-                            <li><strong>Ohne Breaker (01&ndash;03):</strong> Was bleibt von Hotel und Car?</li>
-                            <li><strong>STOPP 1, das Board kommt:</strong> Rot = Flight-Fehler, aufs Board. Platz 5 = OPEN.</li>
-                            <li><strong>OPEN:</strong> Wie lange wartet der nächste Request?</li>
-                            <li><strong>STOPP 2, 30&nbsp;s sind um:</strong> Gelb = Probe. Sie scheitert, später gelingt sie.</li>
-                            <li><strong>31.02.:</strong> Flight ist gesund. Kommt das aufs Board?</li>
-                        </ol>
                         <details class="story-solution">
                             <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
                             <div class="story-solution-body">
@@ -1987,14 +1980,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <h4>User Story</h4>
                         <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
                         <h4>So spielen wir</h4>
-                        <p>Eine Person ist Booking, ruft die Nummern und gibt die Karten aus. Hotel, Flight und Car halten ihr Schild und zählen mit. Alle anderen sind Requests in der Schlange. <strong>Bei jeder Nummer:</strong> Wer sie auf der Karte hat, steht auf. Wer wartet, rückt nach. Dann die nächste Karte.</p>
-                        <ol>
-                            <li><strong>Probe:</strong> Hotel schnell, man sitzt eine Nummer.</li>
-                            <li><strong>Hotel wird langsam:</strong> Man sitzt vier.</li>
-                            <li><strong>Runde 1, zwei Stühle für alle:</strong> Was seht ihr?</li>
-                            <li><strong>Die Wand kommt.</strong> Hotel besetzt? Nicht warten, fertig ohne Hotels.</li>
-                            <li><strong>Runde 2:</strong> Wie viele bekommen Hotels? Und was zeigt der Circuit Breaker?</li>
-                        </ol>
+                        <p>Eine Person ist Booking, ruft die Nummern und gibt die Karten aus. Hotel, Flight und Car halten ihr Schild und zählen mit. Alle anderen sind Requests in der Schlange. <strong>Bei jeder Nummer:</strong> Wer sie auf der Karte hat, steht auf. Wer wartet, rückt nach. Dann die nächste Karte. Dunkle Karte: STOPP, wir reden.</p>
                         <details class="story-solution">
                             <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
                             <div class="story-solution-body">

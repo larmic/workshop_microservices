@@ -19,19 +19,12 @@
 <ol>
 <li><strong>Booking</strong> ruft Nummern, gibt Karten aus, f&uuml;hrt das Board.</li>
 <li><strong>Alle anderen</strong> sind Requests in der Schlange.</li>
-<li><strong>Dunkle Karte:</strong> STOPP, wir reden.</li>
 </ol>
 </div>
 <div class="steps-col">
-<h4>Ablauf</h4>
-<p class="step-rule"><strong>Bei jeder Karte:</strong> Nummer rufen, warten, Antwort vorlesen, ablegen, hinten anstellen.</p>
-<ol>
-<li><strong>Ohne Breaker, 01&ndash;03</strong> <span class="fragment">&rarr; 500, auch kein Hotel</span></li>
-<li><strong>STOPP 1, das Board:</strong> Rot aufs Board. Platz 5 = OPEN.</li>
-<li><strong>OPEN:</strong> Wie lange wartet man? <span class="fragment">&rarr; gar nicht</span></li>
-<li><strong>STOPP 2, 30 s um:</strong> Gelb probt. Erst Timeout, dann CLOSED.</li>
-<li><strong>31.02.:</strong> Kommt das aufs Board? <span class="fragment">&rarr; ja, bei uns schon</span></li>
-</ol>
+<h4>So l&auml;uft jede Karte</h4>
+<p class="step-rule big">Nummer rufen, warten, Antwort vorlesen, ablegen, hinten anstellen.</p>
+<p class="step-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
 </div>
 </div>
 

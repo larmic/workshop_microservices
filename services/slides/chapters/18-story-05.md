@@ -23,15 +23,9 @@
 </ol>
 </div>
 <div class="steps-col">
-<h4>Ablauf</h4>
-<p class="step-rule"><strong>Bei jeder Nummer:</strong> Wer sie auf der Karte hat, steht auf. Wer wartet, r&uuml;ckt nach. Dann die n&auml;chste Karte.</p>
-<ol>
-<li><strong>Probe:</strong> Hotel schnell, man sitzt eine Nummer.</li>
-<li><strong>Hotel wird langsam:</strong> Man sitzt vier.</li>
-<li><strong>Runde 1, zwei St&uuml;hle f&uuml;r alle</strong> <span class="fragment">&rarr; vier stehen dahinter</span></li>
-<li><strong>Die Wand kommt.</strong> Hotel besetzt? Nicht warten, fertig ohne Hotels.</li>
-<li><strong>Runde 2:</strong> Wie viele bekommen Hotels? <span class="fragment">&rarr; drei von elf. Breaker: CLOSED</span></li>
-</ol>
+<h4>So l&auml;uft jede Nummer</h4>
+<p class="step-rule big">Wer sie auf der Karte hat, steht auf. Wer wartet, r&uuml;ckt nach. Dann die n&auml;chste Karte.</p>
+<p class="step-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
 </div>
 </div>
 
