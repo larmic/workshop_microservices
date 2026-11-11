@@ -1003,6 +1003,79 @@
         .story-info-body details.story-solution summary { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
         .story-info-body details.story-solution:not([open]) summary::before { transform: none; }
         .story-solution-body { padding: 0 0.75rem 0.5rem; }
+        /* Rollenspiele: oben die Spielregeln wie auf der Folie, darunter eingeklappt die Referenz. */
+        .play-card {
+            background: #f5f6f8;
+            border: 1px solid #e1e5ec;
+            border-left: 4px dotted #0A0349;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.55;
+        }
+        .play-lead { color: #7348E1; font-size: 1.05rem; margin-bottom: 0.75rem; }
+        .play-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .play-grid h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5B4E93;
+            font-weight: 700;
+            margin: 0 0 0.4rem;
+        }
+        .play-grid ol { padding-left: 1.25rem; margin: 0; }
+        .play-grid li { margin-bottom: 0.35rem; }
+        .play-rule {
+            background: #EEE7FB;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            color: #0A0349;
+            margin: 0 0 0.5rem;
+        }
+        .play-note { margin: 0; }
+        .play-card details.story-solution {
+            margin: 1rem 0 0;
+            background: #fff;
+            border: 1px dashed #d0d6e0;
+            border-radius: 6px;
+        }
+        .play-card details.story-solution summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #0A0349;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .play-card details.story-solution summary::-webkit-details-marker { display: none; }
+        .play-card details.story-solution summary::before { content: "\25B8"; font-size: 0.7rem; color: #666; }
+        .play-card details.story-solution[open] summary::before { content: "\25BE"; }
+        .play-card details.story-solution summary .badge {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5B4E93;
+            font-weight: 700;
+            margin-left: auto;
+        }
+        .play-card .story-solution-body { font-size: 0.85rem; }
+        .play-card .story-solution-body ul { padding-left: 1.25rem; }
+        .play-card .story-solution-body h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5B4E93;
+            font-weight: 700;
+            margin: 0.75rem 0 0.3rem;
+        }
+        .play-card .story-solution-body em { color: #7348E1; font-style: normal; font-weight: 600; }
+        .ref-panel .cb-section { margin: 0.75rem 0; }
+        .ref-slot .backend-panel { max-width: none; margin: 0.75rem 0; padding: 0.75rem 0 0; }
         /* Linker Rand in der Art der Story, gleiche Strichart wie am Stepper-Knoten. */
         .story-section[data-kind="code"] details.story-info { border-left: 4px solid #7348E1; }
         .story-section[data-kind="design"] details.story-info { border-left: 4px dashed #7348E1; }
@@ -1224,7 +1297,7 @@
         }
         .source-btn:disabled:hover { background: transparent; color: #555; }
 
-        /* Backend-Services-Panel (immer unten sichtbar) */
+        /* Downstream-Services-Panel (immer unten sichtbar) */
         .backend-panel {
             max-width: 1100px;
             margin: 1rem auto 2rem;
@@ -1816,15 +1889,15 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                     <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
-                        <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Backend-Services registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Läuft eine zweite Instanz, übernimmt sie, sobald sich die erste abmeldet oder ihr Health-Check fehlschlägt.</p>
+                        <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Downstream-Services registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Läuft eine zweite Instanz, übernimmt sie, sobald sich die erste abmeldet oder ihr Health-Check fehlschlägt.</p>
                         <h4>User Story</h4>
-                        <p>Als <em>Betriebsteam</em> möchte ich <em>Backend-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
+                        <p>Als <em>Betriebsteam</em> möchte ich <em>Downstream-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
                             <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul. Anmelden m&uuml;sst ihr euch nicht, das machen die Backends selbst.</li>
                             <li>Statische URLs ersetzt durch logische Namen: <code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
                             <li>Bestehender <code>GET /booking/offers</code> aus Story 1 umgebaut, löst Flight/Hotel/Car über den Consul-Resolver auf statt über statische Env-URLs</li>
-                            <li><code>POST /booking/bookings</code> orchestriert die drei Backend-Services und antwortet mit <code>201 Created</code> und der aggregierten Buchung</li>
+                            <li><code>POST /booking/bookings</code> orchestriert die drei Downstream-Services und antwortet mit <code>201 Created</code> und der aggregierten Buchung</li>
                             <li>Aus Story 2 mitgenommen: Ressource <code>bookings</code> statt Verb, <code>POST</code> antwortet mit <code>201 Created</code>, Fehler kommen als Status-Code, nicht als <code>200</code> mit Fehler-Body</li>
                             <li>Optional: Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)</li>
                             <li>Optional: Consul Key-Value Store für zusätzliche Konfiguration</li>
@@ -1912,20 +1985,26 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
 
         </section>
 
-        <section class="story-section" data-story="4" data-kind="play" data-backend="demo" hidden>
+        <section class="story-section" data-story="4" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="4">
-                <details class="story-info" open>
-                    <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
-                    <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Requests, Flight ist krank. Das Circuit-Breaker-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
-                        <h4>Kontext</h4>
-                        <p>Der Flight-Service ist zeitweise nicht erreichbar (Netzprobleme, Überlast, Deployment). Ohne Schutz wartet der Booking-Service bei jeder Anfrage drei Sekunden auf den Timeout und reißt seine Aufrufer mit. Ein <em>Circuit Breaker</em> zählt die Fehler, schaltet nach fünf Fehlern in Folge ab, antwortet sofort mit einem Fallback und probiert nach einer Pause vorsichtig wieder zu.</p>
-                        <h4>User Story</h4>
-                        <p>Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
-                        <h4>So spielen wir</h4>
-                        <p>Eine Person ist Booking, ruft die Nummern, gibt die Karten aus und führt das Board. Alle anderen sind Requests in der Schlange: <code>GET /booking/offers</code>. <strong>Bei jeder Karte:</strong> Nummer rufen, warten, Antwort vorlesen, ablegen, hinten anstellen. Dunkle Karte: STOPP, wir reden.</p>
-                        <details class="story-solution">
-                            <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
+                <div class="play-card">
+                    <p class="play-lead">Ihr seid die Requests. Flight ist krank, die Antwort steht auf der Karte.</p>
+                    <div class="play-grid">
+                        <div>
+                            <h4>Rollen</h4>
+                            <ol>
+                                <li><strong>Booking</strong> ruft Nummern, gibt Karten aus, f&uuml;hrt das Board.</li>
+                                <li><strong>Alle anderen</strong> sind Requests in der Schlange.</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4>So l&auml;uft jede Karte</h4>
+                            <p class="play-rule">Nummer rufen, warten, Antwort vorlesen, ablegen, hinten anstellen.</p>
+                            <p class="play-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
+                        </div>
+                    </div>
+                    <details class="story-solution">
+                            <summary>Was passieren sollte <span class="badge">erst nach dem Spiel</span></summary>
                             <div class="story-solution-body">
                                 <ul>
                                     <li><strong>Ohne Breaker:</strong> nichts. Der erste Fehler bricht mit 500 ab, Hotel und Car werden gar nicht gefragt.</li>
@@ -1935,12 +2014,13 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                                 </ul>
                             </div>
                         </details>
-                        <h4>Und die Buchung?</h4>
-                        <p>Lesen und Schreiben sind zwei Fälle. Was passiert, wenn der Flight-Breaker offen ist und jemand auf Buchen klickt, besprechen wir nach dem Recap, und in Story 6 noch einmal.</p>
-                        <p>Material, Trainer-Skript und Kartentabelle: <a href="https://larmic.github.io/workshop_microservices/material/#story4" target="_blank" rel="noopener">Materialseite</a>. Vollständige Beschreibung: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-04-circuit-breaker.md" target="_blank" rel="noopener"><code>docs/stories/story-04-circuit-breaker.md</code></a>. Referenz-Implementierung: <code>services/booking/story4/</code>.</p>
-                    </div>
-                </details>
-            </div>
+                </div>
+                <details class="story-info ref-panel">
+                    <summary>Referenz-Implementierung <span class="badge">Demo und Nachbauen</span></summary>
+                    <div class="story-info-body">
+                        <h4>Demo</h4>
+                        <p>Bei den Downstream-Services Flight auf &bdquo;H&auml;ngt&ldquo; stellen, dann <code>GET /booking/offers</code> ausl&ouml;sen. Die ersten f&uuml;nf Calls warten je 3&nbsp;s, wie die Karten 05&ndash;09, und bekommen 200 mit <code>flights: []</code> und <code>X-Fallback</code>. Ab dem sechsten kommt die Antwort sofort, mit <code>X-Circuit-Open</code>. Flight zur&uuml;ck auf &bdquo;Normal&ldquo;: Nach 30&nbsp;s zeigt das Panel HALF_OPEN, die erfolgreiche Probe schlie&szlig;t den Breaker.</p>
+                        <div class="ref-slot"></div>
         <div class="cb-section">
             <h2>Circuit-Breaker-Demo (Referenz Story 4)</h2>
             <div class="rest-actions">
@@ -1964,25 +2044,40 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
             </div>
             <div class="cb-grid" id="cb-grid"></div>
         </div>
-
+                        <h4>Und die Buchung?</h4>
+                        <p>Lesen und Schreiben sind zwei Fälle. Was passiert, wenn der Flight-Breaker offen ist und jemand auf Buchen klickt, besprechen wir nach dem Recap, und in Story 6 noch einmal.</p>
+                        <h4>Zum Nachbauen</h4>
+                        <p>Der Flight-Service ist zeitweise nicht erreichbar (Netzprobleme, Überlast, Deployment). Ohne Schutz wartet der Booking-Service bei jeder Anfrage drei Sekunden auf den Timeout und reißt seine Aufrufer mit. Ein <em>Circuit Breaker</em> zählt die Fehler, schaltet nach fünf Fehlern in Folge ab, antwortet sofort mit einem Fallback und probiert nach einer Pause vorsichtig wieder zu.</p>
+                        <p><strong>User Story:</strong> Als <em>Kundin</em> möchte ich <em>Hotel und Mietwagen auch dann sehen und vergleichen können, wenn die Flugsuche ausfällt</em>, damit <em>ich nicht vor einer hängenden Seite sitze</em>.</p>
+                        <p>Material, Trainer-Skript und Kartentabelle: <a href="https://larmic.github.io/workshop_microservices/material/#story4" target="_blank" rel="noopener">Materialseite</a>. Story zum Nachbauen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-04-circuit-breaker.md" target="_blank" rel="noopener"><code>docs/stories/story-04-circuit-breaker.md</code></a>. Referenz: <code>services/booking/story4/</code>.</p>
+                    </div>
+                </details>
+            </div>
         </section>
 
         <!-- Story 5: Rollenspiel mit zwei Stühlen und einer Wand statt Code. Story-Karte zeigt
              die Spielregeln; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
-        <section class="story-section" data-story="5" data-kind="play" data-backend="demo" hidden>
+        <section class="story-section" data-story="5" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="5">
-                <details class="story-info" open>
-                    <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
-                    <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Zwei Stühle sind die Threads von Booking, ihr seid die Requests. Hotel wird langsam, nicht kaputt. Das Bulkhead-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
-                        <h4>Kontext</h4>
-                        <p>Antwortet der Hotel-Service extrem langsam, binden seine Aufrufe die Ressourcen des Booking-Service, in einem klassischen Server den gemeinsamen Thread- oder Connection-Pool. Dann warten auch Anfragen an den Flight-Service, obwohl dieser einwandfrei funktioniert, bis sie beim Aufrufer in den Timeout laufen. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
-                        <h4>User Story</h4>
-                        <p>Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
-                        <h4>So spielen wir</h4>
-                        <p>Eine Person ist Booking, ruft die Nummern und gibt die Karten aus. Hotel, Flight und Car halten ihr Schild und zählen mit. Alle anderen sind Requests in der Schlange. <strong>Bei jeder Nummer:</strong> Wer sie auf der Karte hat, steht auf. Wer wartet, rückt nach. Dann die nächste Karte. Dunkle Karte: STOPP, wir reden.</p>
-                        <details class="story-solution">
-                            <summary>Was passieren sollte <span class="badge">erst nach der Vorhersage</span></summary>
+                <div class="play-card">
+                    <p class="play-lead">Zwei St&uuml;hle sind die Threads von Booking. Und Hotel wird langsam.</p>
+                    <div class="play-grid">
+                        <div>
+                            <h4>Rollen</h4>
+                            <ol>
+                                <li><strong>Booking</strong> ruft die Nummern und gibt die Karten aus.</li>
+                                <li><strong>Hotel, Flight, Car</strong> halten ihr Schild und z&auml;hlen mit.</li>
+                                <li><strong>Alle anderen</strong> sind Requests in der Schlange.</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4>So l&auml;uft jede Nummer</h4>
+                            <p class="play-rule">Wer sie auf der Karte hat, steht auf. Wer wartet, r&uuml;ckt nach. Dann die n&auml;chste Karte.</p>
+                            <p class="play-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
+                        </div>
+                    </div>
+                    <details class="story-solution">
+                            <summary>Was passieren sollte <span class="badge">erst nach dem Spiel</span></summary>
                             <div class="story-solution-body">
                                 <ul>
                                     <li><strong>Runde 1:</strong> Zwei sitzen, <strong>vier stehen dahinter</strong> und warten auf einen Stuhl, obwohl sie zuerst nur Flight wollen, und Flight ist gesund.</li>
@@ -1992,18 +2087,13 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                                 </ul>
                             </div>
                         </details>
-                        <h4>Warum ausgerechnet zehn? (ca. 15 Minuten)</h4>
-                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Hotel antwortet in 50&nbsp;ms, 500&nbsp;ms, 2&nbsp;s oder erst nach dem 3-Sekunden-Timeout. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
-                        <details class="story-solution">
-                            <summary>Die Rechnung <span class="badge">erst nach der Vorhersage</span></summary>
-                            <div class="story-solution-body">
-                                <p>50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, 2&nbsp;s ergeben 40, ein 3-Sekunden-Timeout ergibt 60. Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die <strong>normale</strong> Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal. Im Spiel: normal 1 Stuhl, langsam 4. Hotel hat 1 Stuhl, das sind 10 Slots (<code>MaxConcurrent</code>).</p>
-                            </div>
-                        </details>
-                        <p>Material, Trainer-Skript und Kartentabelle: <a href="https://larmic.github.io/workshop_microservices/material/#story5" target="_blank" rel="noopener">Materialseite</a>. Vollständige Beschreibung: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-05-bulkhead.md" target="_blank" rel="noopener"><code>docs/stories/story-05-bulkhead.md</code></a>. Referenz-Implementierung: <code>services/booking/story5/</code>.</p>
-                    </div>
-                </details>
-            </div>
+                </div>
+                <details class="story-info ref-panel">
+                    <summary>Referenz-Implementierung <span class="badge">Demo und Nachbauen</span></summary>
+                    <div class="story-info-body">
+                        <h4>Demo</h4>
+                        <p>Alle Downstream-Services auf &bdquo;Normal&ldquo;, dann Hotel auf &bdquo;Langsam&ldquo; (2&nbsp;s) und den Burst-Knopf dr&uuml;cken. Alle 20 Antworten sind 200, &bdquo;failed&ldquo; bleibt 0. Ma&szlig;geblich ist &bdquo;hotel rej&ldquo;: etwa zehn. Flight und Car laufen weiter, der Hotel-Breaker bleibt CLOSED. Danach Hotel zur&uuml;ck auf &bdquo;Normal&ldquo;.</p>
+                        <div class="ref-slot"></div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Bulkhead-Demo (Referenz Story 5)</h2>
@@ -2044,7 +2134,21 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
             </div>
             <div class="saga-list" id="bh-burst-list"></div>
         </div>
-
+                        <h4>Warum ausgerechnet zehn? (ca. 15 Minuten)</h4>
+                        <p>Little&rsquo;s Law: <code>L = &lambda; &times; W</code>. L sind die gleichzeitig laufenden Aufrufe, also die benötigten Slots, &lambda; die Aufrufe pro Sekunde, W die Dauer eines Aufrufs. Der Booking-Service schickt 20 Hotel-Aufrufe pro Sekunde. Hotel antwortet in 50&nbsp;ms, 500&nbsp;ms, 2&nbsp;s oder erst nach dem 3-Sekunden-Timeout. Legt euch vorher fest: Braucht ein langsames Backend mehr, weniger oder gleich viele Slots?</p>
+                        <details class="story-solution">
+                            <summary>Die Rechnung <span class="badge">erst nach der Vorhersage</span></summary>
+                            <div class="story-solution-body">
+                                <p>50&nbsp;ms ergeben 1 Slot, 500&nbsp;ms ergeben 10, 2&nbsp;s ergeben 40, ein 3-Sekunden-Timeout ergibt 60. Zehnmal langsamer heißt zehnmal mehr Slots, bei gleichem Verkehr. Dimensioniert wird aber auf die <strong>normale</strong> Latenz: Ist der Pool voll, weil das Backend degradiert, ist das das Signal. Im Spiel: normal 1 Stuhl, langsam 4. Hotel hat 1 Stuhl, das sind 10 Slots (<code>MaxConcurrent</code>).</p>
+                            </div>
+                        </details>
+                        <h4>Zum Nachbauen</h4>
+                        <p>Antwortet der Hotel-Service extrem langsam, binden seine Aufrufe die Ressourcen des Booking-Service, in einem klassischen Server den gemeinsamen Thread- oder Connection-Pool. Dann warten auch Anfragen an den Flight-Service, obwohl dieser einwandfrei funktioniert, bis sie beim Aufrufer in den Timeout laufen. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
+                        <p><strong>User Story:</strong> Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Downstream-Service nicht die Aufrufe an andere Downstream-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
+                        <p>Material, Trainer-Skript und Kartentabelle: <a href="https://larmic.github.io/workshop_microservices/material/#story5" target="_blank" rel="noopener">Materialseite</a>. Story zum Nachbauen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-05-bulkhead.md" target="_blank" rel="noopener"><code>docs/stories/story-05-bulkhead.md</code></a>. Referenz: <code>services/booking/story5/</code>.</p>
+                    </div>
+                </details>
+            </div>
         </section>
 
         <section class="story-section" data-story="6" data-kind="code" data-backend="demo" hidden>
@@ -2151,32 +2255,31 @@ booked = []                          // für Rollback</pre>
 
         <!-- Story 7: Rollenspiel statt Code. Story-Karte zeigt das Rollenspiel; das
              Saga-Panel darunter bleibt als Demo der Webhook-Referenz. -->
-        <section class="story-section" data-story="7" data-kind="play" data-backend="demo" hidden>
+        <section class="story-section" data-story="7" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="7">
-                <details class="story-info" open>
-                    <summary>Aufgabe <span class="badge">User Story + Rollenspiel</span></summary>
-                    <div class="story-info-body">
-                        <p><strong>Diese Story wird gespielt, nicht programmiert.</strong> Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich storniert wurde. Das Saga-Panel darunter zeigt anschließend die Referenz-Implementierung.</p>
-                        <h4>Kontext</h4>
-                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Backend-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
-                        <h4>User Story</h4>
-                        <p>Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Backend-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
-                        <h4>Material</h4>
-                        <p>Pro Tisch: sechs verdeckte Listen (je drei für Hotel und Flight), ein Becher pro Reise, etwa sieben Gummibärchen pro Reise (Alternative: Büroklammern), ein Korb, pro Reise zwei nummerierte Zettel, eine Strichliste, ein Briefing-Kärtchen für Flight. Ab 12 Personen zwei Tische.</p>
-                        <h4>Rollen</h4>
-                        <ol>
-                            <li><strong>Booking</strong> hat eine Strichliste und bucht eine Reise nach der anderen bei Flight, Hotel und Car. Sagt Car nein, storniert Booking rückwärts, erst Hotel, dann Flight. Danach sagt Booking „storniert“.</li>
-                            <li><strong>Hotel und Flight</strong> buchen auf einer verdeckten Liste. Stornieren heißt: an den Fingern bis fünf zählen, durchstreichen, ein Gummibärchen in den Becher der Reise. Jedes Mal, auch wenn die Reise schon durchgestrichen ist. Flight folgt den geheimen Ansagen des Trainers.</li>
-                            <li><strong>Car</strong> hat heute keine Autos und sagt immer „nein“. In Runde 3 ist Car auch der Korb.</li>
-                            <li><strong>Alle anderen</strong> haben je eine Reise. Die Becher stehen nummeriert auf dem Tisch, angestellt wird nach Reisenummer. Die nächste Reise kommt dran, wenn die vorige „storniert“ gehört hat. Storniert niemand mehr und ist der Korb leer: <strong>Kassensturz</strong>, in jeden Becher gehören zwei.</li>
-                        </ol>
-                        <h4>Ablauf</h4>
-                        <ol>
-                            <li><strong>Runde 1, Anruf (wie Story 6):</strong> „Hotel, storniere Reise 1!“ Booking wartet auf „erledigt“, dann dasselbe mit Flight. Wer wartet?</li>
-                            <li><strong>Runde 2, Zuruf (unsere Referenz):</strong> Das Backend ruft sofort „gehört!“ und storniert danach, Booking ruft gleich das nächste Backend. Bleibt es still, zählt Booking laut bis drei, macht einen Strich und meldet trotzdem „storniert“. Stimmt jeder Becher?</li>
-                            <li><strong>Runde 3, Korb:</strong> Booking wirft pro Storno einen Zettel in den Korb und meldet sofort „storniert“. Der Korb liest die Zettel der Reihe nach vor, das Backend storniert und sagt „quittiert“. Fehlt das nach dem Gummibärchen, zählt der Korb laut bis fünf und liest denselben Zettel noch einmal. Stimmt jeder Becher?</li>
-                        </ol>
-                        <details class="story-solution">
+                <div class="play-card">
+                    <p class="play-lead">Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich storniert wurde.</p>
+                    <div class="play-grid">
+                        <div>
+                            <h4>Rollen</h4>
+                            <ol>
+                                <li><strong>Booking</strong> bucht eine Reise nach der anderen. Sagt Car nein, storniert Booking r&uuml;ckw&auml;rts: Hotel, dann Flight.</li>
+                                <li><strong>Hotel und Flight</strong> stornieren: bis f&uuml;nf z&auml;hlen, ein Gummib&auml;rchen in den Becher der Reise. Jedes Mal.</li>
+                                <li><strong>Car</strong> sagt immer &bdquo;nein&ldquo;, in Runde 3 ist Car der Korb.</li>
+                                <li><strong>Alle anderen</strong> haben je eine Reise und einen Becher. In jeden Becher geh&ouml;ren zwei.</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4>Drei Runden</h4>
+                            <ol>
+                                <li><strong>Anruf (wie Story 6):</strong> Booking wartet auf &bdquo;erledigt&ldquo;.</li>
+                                <li><strong>Zuruf (unsere Referenz):</strong> Das Backend ruft &bdquo;geh&ouml;rt!&ldquo;. Bleibt es still: bis drei z&auml;hlen, Strich, trotzdem &bdquo;storniert&ldquo;.</li>
+                                <li><strong>Korb:</strong> Booking wirft Zettel in den Korb. Der Korb liest vor, bis &bdquo;quittiert&ldquo; kommt, sonst noch einmal.</li>
+                            </ol>
+                            <p class="play-note">Nach jeder Runde <strong>Kassensturz</strong>: Stimmt jeder Becher?</p>
+                        </div>
+                    </div>
+                    <details class="story-solution">
                             <summary>Was passieren sollte <span class="badge">erst nach dem Kassensturz</span></summary>
                             <div class="story-solution-body">
                                 <ul>
@@ -2195,10 +2298,13 @@ booked = []                          // für Rollback</pre>
                                 <p>Eventing macht das Problem nicht kleiner. Es macht es leiser.</p>
                             </div>
                         </details>
-                        <p>Vollständige Beschreibung mit Material, Briefing und Auflösungen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-07-choreography-saga.md" target="_blank" rel="noopener"><code>docs/stories/story-07-choreography-saga.md</code></a>. Referenz-Implementierung: <code>services/booking/story7/</code>.</p>
-                    </div>
-                </details>
-            </div>
+                </div>
+                <details class="story-info ref-panel">
+                    <summary>Referenz-Implementierung <span class="badge">Demo und Nachbauen</span></summary>
+                    <div class="story-info-body">
+                        <h4>Demo</h4>
+                        <p>Bei den Downstream-Services Car auf &bdquo;Fehler&ldquo; stellen, dann <code>POST /booking/bookings</code> ausl&ouml;sen. Die Saga endet mit <code>FAILED</code>, Hotel und Flight stehen auf <code>COMPENSATED</code>, im Log von <code>booking-ref-story7</code> r&uuml;ckw&auml;rts, erst Hotel, dann Flight. Nach f&uuml;nf Klicks ist der Car-Breaker offen, 30&nbsp;s lang antwortet der Pre-Check sofort mit 503.</p>
+                        <div class="ref-slot"></div>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Choreography-Demo (Referenz Story 7)</h2>
@@ -2233,6 +2339,14 @@ booked = []                          // für Rollback</pre>
             </div>
             <div class="saga-list" id="saga7-list"></div>
         </div>
+                        <h4>Zum Nachbauen</h4>
+                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Downstream-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
+                        <p><strong>User Story:</strong> Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Downstream-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
+                        <p><strong>Material:</strong> Pro Tisch: sechs verdeckte Listen (je drei für Hotel und Flight), ein Becher pro Reise, etwa sieben Gummibärchen pro Reise (Alternative: Büroklammern), ein Korb, pro Reise zwei nummerierte Zettel, eine Strichliste, ein Briefing-Kärtchen für Flight. Ab 12 Personen zwei Tische.</p>
+                        <p>Story zum Nachbauen mit Briefing und Aufl&ouml;sungen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-07-choreography-saga.md" target="_blank" rel="noopener"><code>docs/stories/story-07-choreography-saga.md</code></a>. Referenz: <code>services/booking/story7/</code>.</p>
+                    </div>
+                </details>
+            </div>
         </section>
 
         <section class="story-section" data-story="8" data-kind="code" data-backend="hide" hidden>
@@ -2421,7 +2535,7 @@ on receiveCompensationEvent(event):
     </main>
 
     <details class="backend-panel" id="backend-panel" open>
-        <summary class="backend-panel-heading" id="backend-panel-heading">Backend-Services &mdash; Chaos &amp; Scaling</summary>
+        <summary class="backend-panel-heading" id="backend-panel-heading">Downstream-Services &mdash; Chaos &amp; Scaling</summary>
         <div class="services-grid" id="services"></div>
     </details>
 
@@ -3618,7 +3732,7 @@ on receiveCompensationEvent(event):
             3: { title: "Story 3: Services finden sich selbst", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Service Discovery via Consul: logische Namen statt fest verdrahteter URLs." },
             4: { title: "Story 4: Wenn der Flug ausf&auml;llt", kind: "play", pill: "&asymp; 60 min <small>davon 20 Spiel</small>",
-                 subtitle: "Circuit Breaker als Rollenspiel: Ein Booking, ein Kartenstapel, alle anderen sind die Suchanfragen. Danach die Demo mit der Referenz." },
+                 subtitle: "Circuit Breaker als Rollenspiel: Ein Booking, ein Kartenstapel, alle anderen sind die Requests. Danach die Demo mit der Referenz." },
             5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
                  subtitle: "Bulkhead als Rollenspiel: zwei Stühle, eine Wand, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz und die Rechnung, warum ausgerechnet zehn." },
             6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 60 min",
@@ -3653,14 +3767,24 @@ on receiveCompensationEvent(event):
                 sec.hidden = (sn !== n);
                 if (sn === n) backend = sec.getAttribute("data-backend") || "hide";
             });
-            // Backend-Services nur, wo sie etwas bringen: offen (show), eingeklappt
-            // für die Demo am Ende der Story (demo) oder gar nicht (hide).
+            // Downstream-Services nur, wo sie etwas bringen: offen (show), eingeklappt
+            // für die Demo am Ende der Story (demo), offen im Bereich
+            // „Referenz-Implementierung“ der Rollenspiele (inline) oder gar nicht (hide).
             const panel = document.getElementById("backend-panel");
+            const slot = (backend === "inline")
+                ? document.querySelector(`.story-section[data-story="${n}"] .ref-slot`)
+                : null;
+            if (slot) {
+                if (panel.parentElement !== slot) slot.appendChild(panel);
+            } else {
+                const footer = document.querySelector(".workshop-footer");
+                if (panel.nextElementSibling !== footer) footer.before(panel);
+            }
             panel.hidden = (backend === "hide");
-            panel.open = (backend === "show");
+            panel.open = (backend === "show" || backend === "inline");
             document.getElementById("backend-panel-heading").innerHTML = (backend === "demo")
-                ? "Backend-Services &mdash; Chaos &amp; Scaling f&uuml;r die Demo"
-                : "Backend-Services &mdash; Chaos &amp; Scaling";
+                ? "Downstream-Services &mdash; Chaos &amp; Scaling f&uuml;r die Demo"
+                : "Downstream-Services &mdash; Chaos &amp; Scaling";
             document.querySelectorAll(".stepper-node").forEach(btn => {
                 const sn = parseInt(btn.getAttribute("data-story-node"), 10);
                 btn.classList.toggle("active", sn === n);
