@@ -11,15 +11,16 @@ Eine Reisebuchung umfasst Flug, Hotel und Mietwagen. Wenn die Hotelbuchung fehls
 
 Als **Kunde**
 möchte ich **eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die am Ende entweder vollständig steht oder nichts mehr gebucht ist**,
-damit **ich nicht mit einer unvollständigen Buchung dastehe**.
+damit **ich nicht mit einer halben Reise dastehe**.
 
 ## Akzeptanzkriterien
 
 - [ ] Eine Buchungsanfrage für Flug, Hotel und Mietwagen kann gestellt werden
 - [ ] Die Services werden nacheinander aufgerufen (Orchestration-Saga)
-- [ ] Bei Fehler in einem Schritt werden alle vorherigen Schritte kompensiert (Rollback)
-- [ ] Jeder Service bietet einen Stornieren/Kompensieren-Endpoint an
+- [ ] Bei Fehler in einem Schritt werden alle vorherigen Schritte kompensiert, in umgekehrter Reihenfolge
+- [ ] Jeder Service bietet einen Stornieren/Kompensieren-Endpoint an (`DELETE /bookings/{id}`), idempotent: zweiter Aufruf, gleicher Zustand, wieder `204`
 - [ ] Der aktuelle Status einer Buchung kann abgefragt werden (PENDING, COMPLETED, COMPENSATING, FAILED)
+- [ ] Optional: Retry-Logik für die Kompensation, Timeout-Handling, Persistenz für Recovery
 
 ## Technische Hinweise
 

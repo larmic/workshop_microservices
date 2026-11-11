@@ -33,7 +33,7 @@
 <div class="story-list">
 <h4>Die Kompensation</h4>
 <ul>
-<li>Jeder Service bietet <code>DELETE /bookings/{id}</code> an</li>
+<li>Jeder Service bietet <code style="white-space:nowrap">DELETE /bookings/{id}</code> an</li>
 <li>Der Endpoint ist idempotent: zweiter Aufruf, gleicher Zustand, wieder <code>204</code></li>
 </ul>
 <h4>Sichtbarkeit</h4>
@@ -48,10 +48,12 @@
 </div>
 
 Note:
-- Hook: &bdquo;Resilience-Patterns aus Story 4 und 5 helfen <em>einem</em> Aufruf. Sobald mehrere zusammenh&auml;ngende Schritte im Spiel sind und einer kippt, brauche ich etwas anderes.&ldquo; Flight gebucht, Hotel sagt nein. Was tun mit dem Flug?
-- Wiedererkennung: dieselbe Story (Kontext, User Story, Akzeptanzkriterien) im Dashboard unter Story 6, &bdquo;Aufgabe&ldquo;.
-- Sprache und Framework wieder frei. Referenz unter <code>services/booking/story6/</code> (Go, sequenzielle Saga in etwa 100 Zeilen).
-- R&uuml;ckblick auf Story 2: Der Storno vom Flipchart ist jetzt die Kompensation. &bdquo;Ihr habt damals &uuml;ber DELETE zweimal diskutiert. Heute wiederholt niemand. Sobald ein Retry dazukommt oder jemand manuell nachst&ouml;&szlig;t, muss <code>DELETE /bookings/{id}</code> idempotent sein.&ldquo;
-- Im Workshop bewusst <strong>nur ein Versuch</strong> f&uuml;r die Kompensation, kein Retry, kein persistenter Status. Das macht das Pattern sichtbar, ohne den Slot zu sprengen. Persistenz und Retry sind Diskussionspunkte im Recap.
-- Demo-Drehbuch: Dashboard, Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code>. In der Saga-Karte sichtbar: Flight BOOKED, Hotel FAILED, Status COMPENSATING, Flight COMPENSATED, Status FAILED. Dann Hotel zur&uuml;ck auf normal, neue Buchung, alles gr&uuml;n.
-- Time-Box 60 min inklusive Demo. Vollst&auml;ndige Aufgabenbeschreibung: <code>docs/stories/story-06-saga.md</code>.
+- <strong>Hook:</strong> &bdquo;Flight gebucht, Hotel sagt nein. Jetzt baut ihr den R&uuml;ckweg.&ldquo;
+- <strong>Wiedererkennung:</strong> dieselbe Story im Dashboard unter Story 6, &bdquo;Aufgabe&ldquo;. Sprache und Framework wieder frei.
+- <strong>R&uuml;ckblick Story 2:</strong> Der Storno vom Flipchart ist jetzt die Kompensation.
+  - Sobald ein Retry dazukommt oder jemand nachst&ouml;&szlig;t, muss <code>DELETE</code> idempotent sein.
+- <strong>Nur ein Versuch</strong> f&uuml;r die Kompensation, kein Retry, kein persistenter Status. Das macht das Pattern sichtbar, Persistenz und Retry kommen im Recap.
+- <strong>Demo:</strong> Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code>.
+  - Saga-Karte: Flight BOOKED, Hotel FAILED, COMPENSATING, Flight COMPENSATED, FAILED.
+  - Hotel zur&uuml;ck auf normal, neue Buchung, alles gr&uuml;n.
+- <strong>Referenz:</strong> <code>services/booking/story6/handler/booking.go</code>. Volle Aufgabe: <code>docs/stories/story-06-saga.md</code>.

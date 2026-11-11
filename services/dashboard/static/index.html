@@ -2118,12 +2118,12 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <h4>Kontext</h4>
                         <p>Eine Reise = Flug + Hotel + Mietwagen. Schlägt die Hotelbuchung fehl, nachdem der Flug schon gebucht wurde, muss der Flug storniert werden. DB-Transaktionen funktionieren nicht über Service-Grenzen &mdash; das <em>Saga-Pattern</em> ersetzt die fehlende Transaktion durch Kompensationsschritte. Atomar ist das nicht.</p>
                         <h4>User Story</h4>
-                        <p>Als <em>Kunde</em> möchte ich <em>eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die am Ende entweder vollständig steht oder nichts mehr gebucht ist</em>, damit <em>ich nicht mit einer unvollständigen Buchung dastehe</em>.</p>
+                        <p>Als <em>Kunde</em> möchte ich <em>eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die am Ende entweder vollständig steht oder nichts mehr gebucht ist</em>, damit <em>ich nicht mit einer halben Reise dastehe</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
                             <li>Orchestrierte Saga: Flight &rarr; Hotel &rarr; Car (zentraler Koordinator)</li>
-                            <li>Jeder Service bietet einen Stornieren-/Kompensieren-Endpoint (<code>DELETE /bookings/{id}</code>)</li>
-                            <li>Bei Fehler in einem Schritt: alle vorherigen Schritte kompensieren (Rollback in umgekehrter Reihenfolge)</li>
+                            <li>Jeder Service bietet einen Stornieren-/Kompensieren-Endpoint (<code>DELETE /bookings/{id}</code>), idempotent: zweiter Aufruf, gleicher Zustand, wieder <code>204</code></li>
+                            <li>Bei Fehler in einem Schritt: alle vorherigen Schritte kompensieren, in umgekehrter Reihenfolge</li>
                             <li>Status pro Saga abfragbar: <code>PENDING</code>, <code>COMPLETED</code>, <code>COMPENSATING</code>, <code>FAILED</code></li>
                             <li>Optional: Retry-Logik für Kompensation; Timeout-Handling; Persistenz für Recovery</li>
                         </ul>
@@ -2137,7 +2137,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                                 <h4>Saga anlegen</h4>
                                 <p>Status und Schritte festhalten, gebuchte IDs f&uuml;r den R&uuml;ckweg merken.</p>
 <pre>saga = { id, status: PENDING, steps: [] }
-booked = []                          // für Rollback</pre>
+booked = []                          // für die Kompensation</pre>
                             </li>
                             <li>
                                 <h4>Vorw&auml;rts buchen</h4>
@@ -2194,7 +2194,7 @@ booked = []                          // für Rollback</pre>
                             <span class="service-chip hotel">hotel</span>
                             &rarr;
                             <span class="service-chip car">car</span>
-                            &mdash; bei Fehler Rollback der bereits gebuchten Schritte</span>
+                            &mdash; bei Fehler Kompensation der bereits gebuchten Schritte</span>
                     </button>
                 </div>
                 <span class="bh-result" id="saga-result"></span>
