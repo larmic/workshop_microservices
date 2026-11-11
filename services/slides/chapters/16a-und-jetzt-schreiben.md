@@ -15,8 +15,13 @@
 </div>
 
 Note:
-- Nur Fragen stellen, keine L&ouml;sung zeigen. Lesen und Schreiben sind zwei verschiedene F&auml;lle.
-- <strong>Nein, sofort:</strong> klare Meldung statt h&auml;ngender Seite. Fail fast ist auch ein Fallback.
-- <strong>Asynchron:</strong> Hotel und Auto buchen, Flug vormerken und nachbuchen, sobald der Breaker schlie&szlig;t. Braucht Zustand und Benachrichtigung.
-- <strong>Kompensation:</strong> Hotel und Auto buchen, Flug scheitert, beides stornieren. Das ist die Saga, Story 6.
-- <strong>Alternativer Anbieter:</strong> zweiter Flug-Provider als Fallback. Teuer, selten.
+- Nur fragen, keine L&ouml;sung zeigen. Lesen und Schreiben sind zwei F&auml;lle.
+  - Suche: <code>flights: []</code> ist ein guter Fallback.
+  - Buchung: &bdquo;ohne Flug&ldquo; w&auml;re eine falsche Buchung.
+- <strong>Unsere Referenz:</strong> <code>POST /booking/bookings</code> pr&uuml;ft vorher alle Breaker. Einer OPEN: sofort 503, nichts gebucht.
+  - Scheitert Hotel nach dem Flug, bleibt der Flug gebucht, kein Rollback.
+- <strong>Alternativen:</strong>
+  - Nein, sofort: klare Meldung statt h&auml;ngender Seite. Fail fast ist auch ein Fallback.
+  - Asynchron: Hotel und Auto buchen, Flug nachbuchen, sobald der Breaker schlie&szlig;t. Braucht Zustand und Benachrichtigung.
+  - Kompensation: buchen, bei Fehler stornieren. Das ist die Saga, Story 6.
+  - Anderer Anbieter: zweiter Flug-Provider. Teuer, selten.
