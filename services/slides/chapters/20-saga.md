@@ -24,7 +24,7 @@
 </div>
 <div class="card">
 <h3>Orchestrator</h3>
-<p>Booking kennt Reihenfolge und Fortschritt. Die Backends bleiben dumm.</p>
+<p>Booking kennt Reihenfolge und Fortschritt. Die Downstreams bleiben dumm.</p>
 <code>Booking wei&szlig; alles</code>
 </div>
 <div class="card">
@@ -55,11 +55,13 @@
 </div>
 
 Note:
-- <strong>Lokal:</strong> 2PC ist praktisch tot: fragil, langsam, sperrt. Geteilte DB = geteiltes Schema = gemeinsames Deployment = verteilter Monolith. Im Workshop in-memory, bewusst reduziert.
-- <strong>Kompensation:</strong> Fachliche Gegenbuchung (Storno, Gutschein), kein technisches Rollback. Forward darf scheitern, Kompensation <em>muss</em> gelingen.
-- <strong>Orchestrator:</strong> Saga-Logik an einer Stelle. Choreography kommt in Story 7.
-- <strong>Status:</strong> Bei Fehler <code>COMPENSATING</code>, dann <code>FAILED</code>. Produktiv persistent (Recap 5).
+- <strong>Lokal:</strong> 2PC ist praktisch tot, fragil, langsam und sperrend.
+  - Geteilte DB hei&szlig;t geteiltes Schema und gemeinsames Deployment, also verteilter Monolith.
+  - Im Workshop in-memory, bewusst reduziert.
+- <strong>Kompensation:</strong> fachliche Gegenbuchung (Storno, Gutschein), kein technisches Rollback.
+  - Forward darf scheitern, die Kompensation <em>muss</em> gelingen.
+- <strong>Orchestrator:</strong> die Saga-Logik an einer Stelle. Choreography kommt in Story 7.
+- <strong>Status:</strong> bei Fehler <code>COMPENSATING</code>, dann <code>FAILED</code>. Produktiv persistent (Recap 05).
 - <strong>Eventual Consistency:</strong> Flug gebucht, Hotel noch nicht. UI und E-Mail m&uuml;ssen das aushalten.
-- Markt: Temporal, Cadence; .NET: MassTransit, NServiceBus.
-- Saga ist nicht Eventing: sync/async ist Transportwahl.
-- &Uuml;berleitung: &bdquo;Die Mechanik passt auf eine Folie.&ldquo;
+- <strong>Markt:</strong> f&uuml;r .NET zus&auml;tzlich MassTransit und NServiceBus.
+- <strong>Spicy:</strong> Saga ist nicht Eventing. Ob sync oder async, ist eine Frage des Transports.

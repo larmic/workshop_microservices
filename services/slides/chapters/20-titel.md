@@ -8,7 +8,10 @@
 <div class="split-text">
 <p class="statement">Flug gebucht, Hotel sagt nein. Der Flug muss <span class="accent">wieder weg</span>.</p>
 <p class="sub">Keine Transaktion &uuml;ber Service-Grenzen. Stattdessen eine Kette lokaler Schritte, jeder mit seinem Gegenst&uuml;ck.</p>
-<p class="source">Hector Garcia-Molina, Kenneth Salem, <em>Sagas</em> (1987): Lange Transaktionen in Teilschritte zerlegen, jeder mit einer Kompensation.</p>
+<figure class="foot-quote">
+<blockquote>Entweder laufen alle Teiltransaktionen durch, oder die schon ausgef&uuml;hrten werden kompensiert.</blockquote>
+<figcaption>Hector Garcia-Molina, Kenneth Salem, <em>Sagas</em>, 1987 (sinngem&auml;&szlig;)</figcaption>
+</figure>
 </div>
 <div class="split-figure">
 <img src="./assets/saga.svg" alt="Booking ruft Flight, Hotel und Car nacheinander auf, Hotel scheitert, ein Pfeil f&uuml;hrt von Hotel zur&uuml;ck zu Flight"/>
