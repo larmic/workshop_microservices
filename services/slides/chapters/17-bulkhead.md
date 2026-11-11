@@ -29,12 +29,13 @@
 </div>
 <div class="card">
 <h3>Sch&uuml;tzt den Aufrufer</h3>
-<p>Defensives Pattern im Aufrufer, nicht im Backend.</p>
+<p>H&auml;ngt Hotel, bindet es h&ouml;chstens <code class="nowrap">max</code> Calls von Booking. Der Rest bleibt frei f&uuml;r Flight und Car.</p>
 <code>Outbound, nicht Inbound</code>
 </div>
 <div class="card">
 <h3>Die Gr&ouml;&szlig;e ist die Arbeit</h3>
-<p>Der Code ist trivial. Die Zahl darin nicht.</p>
+<p>Zu klein: unn&ouml;tige Rejects. Zu gro&szlig;: sch&uuml;tzt nicht. Die Zahl h&auml;ngt an der Latenz.</p>
+<code>Slots = Aufrufe/s &times; Dauer</code>
 </div>
 <div class="card market-card">
 <h3>Am Markt</h3>
@@ -58,8 +59,11 @@ Note:
 - <strong>Fail-Fast:</strong> Ein Reject ist ein klares Backpressure-Signal, eine Queue tarnt das Problem.
   - Im Code: <code>hotels: []</code> mit <code>X-Fallback</code> und <code>X-Bulkhead-Full</code>. Der Fallback ist derselbe wie in Story 4, wieder ein eigenes Pattern.
 - <strong>Nicht Circuit Breaker:</strong> Langsam, aber fehlerfrei? Da hilft nur der Bulkhead.
-- <strong>Sch&uuml;tzt den Aufrufer:</strong> Booking und seine anderen Calls, nicht Hotel.
-  - Serverseitige Bulkheads (Pools pro Consumer) gibt es auch, die bauen wir nicht.
-- <strong>Die Gr&ouml;&szlig;e ist die Arbeit:</strong> Rechnen wir in Story 5 nach.
+- <strong>Sch&uuml;tzt den Aufrufer:</strong> Booking hat begrenzte Threads und Connections. H&auml;ngt Hotel, wartet bald alles in Booking auf Hotel, und Booking kann auch Flight und Car nicht mehr rufen. Booking f&auml;llt um, obwohl nur Hotel krank ist.
+  - Der Bulkhead begrenzt, wie viel von Booking an Hotel h&auml;ngen darf (Referenz: 10). Gesch&uuml;tzt ist Booking, nicht Hotel.
+  - Hotel selbst sch&uuml;tzt sich mit Rate Limiting oder Load Shedding. Serverseitige Bulkheads (Pools pro Consumer) gibt es auch, die bauen wir nicht.
+- <strong>Die Gr&ouml;&szlig;e ist die Arbeit:</strong> Zu klein lehnt ein gesundes Hotel ab, zu gro&szlig; sch&uuml;tzt nicht.
+  - Little&rsquo;s Law: Slots = Aufrufe pro Sekunde &times; Dauer. 20/s &times; 0,5 s = 10. Bei 3 s Timeout w&auml;ren es 60.
+  - Dimensioniert wird auf die normale Latenz. Story 5 spielt das mit Chips, Folie 18a rechnet nach.
 - Envoy/Istio: dasselbe im Sidecar (<code>max_requests</code> bzw. <code>max_connections</code>).
 - &Uuml;berleitung: &bdquo;Sieben Zeilen Code.&ldquo;
