@@ -59,10 +59,20 @@
 </div>
 
 Note:
-- Erst diskutieren, dann Klick f&uuml;r die Merks&auml;tze.
-- <strong>Circuit Breaker:</strong> CB reagiert auf Fehler, Bulkhead auf Ressourcen-Druck. Runde 1: Hotel fehlerfrei, der Breaker bleibt CLOSED, trotzdem stehen vier hinter den St&uuml;hlen. <strong>Spicy:</strong> Der CB sieht Fehler, nicht Latenz.
-- <strong>Rate Limit:</strong> Z&auml;hlt Requests pro Zeit, der Bulkhead gleichzeitige Aufrufe. Probe und Runde 1: gleich viele Requests pro Nummer, nur Hotel langsamer. Erst reichte ein Stuhl, dann nicht einmal zwei. 100/s bei pl&ouml;tzlich 5 s pro Call hei&szlig;t 500 h&auml;ngende Aufrufe. <strong>Spicy:</strong> Durchsatz ist nicht Nebenl&auml;ufigkeit.
-- <strong>Non-blocking:</strong> Threads werden billig, Connection-Pool, Speicher und Sockets nicht. Der Engpass wandert, siehe Bonus-Folie.
-- <strong>Warteschlange:</strong> Runde 1 war die Queue: Wer hinter den St&uuml;hlen stand, kam immer sp&auml;ter dran, Karte 14 erst nach 6 s. Der sofortige Reject ist das Backpressure-Signal, die Queue schluckt es.
-- <strong>Replicas:</strong> Der Bulkhead im Aufrufer sch&uuml;tzt den Aufrufer, nicht das Backend: Hotel sieht 50 Calls. Im Spiel: Die St&uuml;hle geh&ouml;rten Booking, Hotel wusste nichts davon. Das Backend sch&uuml;tzt sich selbst, mit Rate Limit, Load Shedding, <code>429</code> plus <code>Retry-After</code>. <strong>Spicy:</strong> Bulkhead allein ist eine halbe L&ouml;sung.
+- <strong>Erst diskutieren</strong>, dann Klick f&uuml;r die Merks&auml;tze.
+- <strong>01 Circuit Breaker:</strong> Der CB reagiert auf Fehler, der Bulkhead auf Ressourcen-Druck.
+  - Runde 1: Hotel war fehlerfrei, der Breaker blieb CLOSED, trotzdem standen vier hinter den St&uuml;hlen.
+  - Spicy: Der CB sieht Fehler, nicht Latenz.
+- <strong>02 Rate Limit:</strong> Es z&auml;hlt Requests pro Zeit, der Bulkhead gleichzeitige Aufrufe.
+  - Probe und Runde 1: gleich viele Requests, nur Hotel langsamer. Erst reichte ein Stuhl, dann nicht einmal zwei.
+  - 100/s bei pl&ouml;tzlich 5 s pro Call ergibt 500 h&auml;ngende Aufrufe.
+  - Spicy: Durchsatz ist nicht Nebenl&auml;ufigkeit.
+- <strong>03 Non-blocking:</strong> Threads werden billig, Connection-Pool, Speicher und Sockets nicht. Der Engpass wandert, siehe Bonus-Folie.
+- <strong>04 Warteschlange:</strong> Runde 1 war die Queue.
+  - Wer hinter den St&uuml;hlen stand, kam immer sp&auml;ter dran, Karte 14 erst nach 6 s.
+  - Der sofortige Reject ist das Backpressure-Signal, die Queue schluckt es.
+- <strong>05 Replicas:</strong> Der Bulkhead sch&uuml;tzt den Aufrufer, nicht das Backend: Hotel sieht 50 Calls.
+  - Im Spiel geh&ouml;rten die St&uuml;hle Booking, Hotel wusste nichts davon.
+  - Das Backend sch&uuml;tzt sich selbst: Rate Limit, Load Shedding, <code>429</code> plus <code>Retry-After</code>.
+  - Spicy: Bulkhead allein ist eine halbe L&ouml;sung.
 - Lang: <code>docs/questions/story5.md</code>
