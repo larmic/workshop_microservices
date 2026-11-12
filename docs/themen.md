@@ -156,7 +156,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?
 - Rückgriff auf Story 2: `POST /admin/bulkhead-reset` ist bewusst RPC-artig (Dashboard-Knopf, ein Aufrufer). Abweichen mit Grund
 
-### 6f. Story 6 — [Alles oder nichts – aber richtig](stories/story-06-saga.md) (60 Min)
+### 6f. Story 6 — [Alles oder nichts](stories/story-06-saga.md) (60 Min)
 - Lernpointe: Orchestration-Saga mit synchroner Kompensation. Die Idempotenz-Diskussion aus Story 2 zahlt hier ein zweites Mal ein (`DELETE /bookings/{id}` muss wiederholbar sein)
 - Recap-Frage: Wer kennt das Endergebnis bei dieser Variante?
 

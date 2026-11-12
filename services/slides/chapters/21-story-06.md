@@ -54,6 +54,7 @@ Note:
   - Sobald ein Retry dazukommt oder jemand nachst&ouml;&szlig;t, muss <code>DELETE</code> idempotent sein.
 - <strong>Nur ein Versuch</strong> f&uuml;r die Kompensation, kein Retry, kein persistenter Status. Das macht das Pattern sichtbar, Persistenz und Retry kommen im Recap.
 - <strong>Demo:</strong> Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code>.
-  - Saga-Karte: Flight BOOKED, Hotel FAILED, COMPENSATING, Flight COMPENSATED, FAILED.
+  - Saga-Karte: Flight COMPENSATED, Hotel FAILED, Car nicht aufgerufen, Saga FAILED. <code>COMPENSATING</code> sieht man nicht, die Kompensation dauert Millisekunden.
+  - Nicht zu oft klicken: Nach 5 Fehlern &ouml;ffnet der Breaker f&uuml;r Hotel, dann startet die Saga gar nicht erst.
   - Hotel zur&uuml;ck auf normal, neue Buchung, alles gr&uuml;n.
 - <strong>Referenz:</strong> <code>services/booking/story6/handler/booking.go</code>. Volle Aufgabe: <code>docs/stories/story-06-saga.md</code>.

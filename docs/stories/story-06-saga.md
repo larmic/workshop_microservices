@@ -1,4 +1,4 @@
-# Story 6: Alles oder nichts - aber richtig
+# Story 6: Alles oder nichts
 
 **Thema:** Saga Pattern
 **Zeitrahmen:** ca. 60 Minuten

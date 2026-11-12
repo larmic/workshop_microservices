@@ -2135,36 +2135,27 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <ol class="cheat-steps">
                             <li>
                                 <h4>Saga anlegen</h4>
-                                <p>Status und Schritte festhalten, gebuchte IDs f&uuml;r den R&uuml;ckweg merken.</p>
-<pre>saga = { id, status: PENDING, steps: [] }
-booked = []                          // für die Kompensation</pre>
+                                <p>Status und Schritte festhalten, jeder Schritt merkt sich seine Buchungs-ID f&uuml;r den R&uuml;ckweg.</p>
+<pre>saga = { id, status: PENDING, steps: [] }</pre>
                             </li>
                             <li>
                                 <h4>Vorw&auml;rts buchen</h4>
-                                <p>Schritt f&uuml;r Schritt, jeder erfolgreiche Schritt landet in <code>booked</code>.</p>
+                                <p>Schritt f&uuml;r Schritt, jeder erfolgreiche Schritt landet mit seiner ID in <code>saga.steps</code>.</p>
 <pre>try:
-  flight = POST flight/bookings { ... }
-  booked.push({ svc: "flight", id: flight.id })
-  saga.steps.push({ svc: "flight", status: BOOKED })
-
-  hotel = POST hotel/bookings { ... }
-  booked.push({ svc: "hotel", id: hotel.id })
-  saga.steps.push({ svc: "hotel", status: BOOKED })
-
-  car = POST car/bookings { ... }
-  saga.steps.push({ svc: "car", status: BOOKED })
-
+  for svc in [flight, hotel, car]:
+    res = POST svc/bookings { ... }
+    saga.steps.push({ svc, id: res.bookingId, status: BOOKED })
   saga.status = COMPLETED</pre>
                             </li>
                             <li>
                                 <h4>R&uuml;ckw&auml;rts kompensieren</h4>
-                                <p>Schl&auml;gt ein Schritt fehl, werden die gebuchten in umgekehrter Reihenfolge storniert.</p>
+                                <p>Schl&auml;gt ein Schritt fehl, werden die gebuchten in umgekehrter Reihenfolge storniert, je ein Versuch.</p>
 <pre>catch error at step X:
   saga.status   = COMPENSATING
   saga.failedAt = X
-  for b in reverse(booked):
-    DELETE b.svc/bookings/{b.id}     // Kompensation
-    mark step COMPENSATED
+  for step in reverse(saga.steps):
+    ok = DELETE step.svc/bookings/{step.id}   // Kompensation
+    step.status = ok ? COMPENSATED : COMPENSATION_FAILED
   saga.status = FAILED</pre>
                             </li>
                         </ol>
