@@ -24,8 +24,8 @@
 </div>
 <div class="card">
 <h3>Orchestrator</h3>
-<p>Booking kennt Reihenfolge und Fortschritt. Die Downstreams bleiben dumm.</p>
-<code>Booking wei&szlig; alles</code>
+<p>Booking kennt Reihenfolge und Fortschritt. Die andere Variante, Choreografie, kommt in Story 7.</p>
+<code>Variante 1 von 2</code>
 </div>
 <div class="card">
 <h3>Saga-Status</h3>
@@ -60,7 +60,7 @@ Note:
   - Im Workshop in-memory, bewusst reduziert.
 - <strong>Kompensation:</strong> fachliche Gegenbuchung (Storno, Gutschein), kein technisches Rollback.
   - Forward darf scheitern, die Kompensation <em>muss</em> gelingen.
-- <strong>Orchestrator:</strong> die Saga-Logik an einer Stelle. Choreography kommt in Story 7.
+- <strong>Orchestrator:</strong> eine von zwei Arten, die Saga zu koordinieren (Chris Richardson). Die Saga-Logik an einer Stelle, die Downstreams bleiben dumm. Choreografie, ohne Dirigent, kommt in Story 7.
 - <strong>Status:</strong> bei Fehler <code>COMPENSATING</code>, dann <code>FAILED</code>. Produktiv persistent (Recap 04).
 - <strong>Eventual Consistency:</strong> Flug gebucht, Hotel noch nicht. UI und E-Mail m&uuml;ssen das aushalten.
 - <strong>Markt:</strong> f&uuml;r .NET zus&auml;tzlich MassTransit und NServiceBus.

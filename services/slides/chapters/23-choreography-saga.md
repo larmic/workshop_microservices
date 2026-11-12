@@ -19,7 +19,7 @@
 </div>
 <div class="card">
 <h3>Verantwortung verlagern</h3>
-<p>Wer buchen kann, kann auch stornieren. Jedes Backend macht seinen eigenen Rollback.</p>
+<p>Wer buchen kann, kann auch stornieren. Jedes Backend kompensiert selbst.</p>
 <code>eigene lokale Transaktion</code>
 </div>
 <div class="card">
