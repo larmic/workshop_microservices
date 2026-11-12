@@ -20,4 +20,4 @@
 Note:
 - Hook: &bdquo;In Story 6 wartet Booking, bis storniert ist, und muss jeden Storno-Fehler selbst ausbaden. Jetzt wartet es nur noch, bis jemand &sbquo;geh&ouml;rt&lsquo; sagt. Fachlich geh&ouml;rt die Stornierung doch zu Hotel selbst, nicht zum Aggregator.&ldquo;
 - Grafik: Pattern mit Broker, das Event des fehlenden Backends bleibt liegen. Unsere Referenz ruft direkt zu, genau diesen Unterschied spielen wir.
-- Ehrlich gesagt ist unsere Referenz ein Mittelweg: Booking dirigiert den Hinweg und entscheidet, wer ein Storno bekommt. Nur das Stornieren selbst machen die Backends. Ist Hotel weg, wartet Booking weiter bis zum Timeout (3 s), dieselbe Zeit wie in Story 6. Heute wird nicht programmiert, sondern gespielt.
+- Ehrlich gesagt ist unsere Referenz ein Mittelweg: Booking dirigiert den Hinweg und entscheidet, wer ein Storno bekommt. Nur das Stornieren selbst machen die Backends. H&auml;ngt Hotel, wartet Booking weiter bis zum Timeout (3 s), dieselbe Zeit wie in Story 6. Heute wird nicht programmiert, sondern gespielt.
