@@ -35,7 +35,7 @@ Note:
   - <code>reverse</code>: Die Kompensation l&auml;uft r&uuml;ckw&auml;rts.
   - Ein Versuch: L&auml;uft der <code>DELETE</code> in einen 5xx-Fehler, steht die Saga auf <code>FAILED</code> (Recap 01).
 - <strong>Achtung, Timeout und trotzdem gebucht:</strong> Hotel auf &bdquo;H&auml;ngt&ldquo;. Nach 3 s ist die Saga <code>FAILED</code>, nach 10 s bucht Hotel trotzdem. Abhilfe: eine Buchungs-ID von Booking oder ein Idempotency-Key.
-- <strong><code>DELETE</code> idempotent:</strong> Recap 03.
+- <strong><code>DELETE</code> idempotent:</strong> Recap 02.
 - <strong>Im echten Code zus&auml;tzlich:</strong> der Pre-Check (Breaker OPEN, keine Saga) und die Kompensation im eigenen Context.
 - <strong>Bewusst weggelassen:</strong> Retry mit Backoff, persistenter Saga-Log, Workflow-Engine, fachlicher Pivot. Mehr in <code>docs/questions/story6.md</code>.
 - <strong>Referenz:</strong> <code>services/booking/story6/handler/booking.go</code>, <code>CreateBookingHandler</code> und <code>compensate</code>.
