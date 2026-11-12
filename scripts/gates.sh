@@ -17,7 +17,7 @@ set -eu
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 SERVICES="$ROOT/services"
-HTML_VALIDATE_VERSION=11.19.0
+HTML_VALIDATE_VERSION=11.21.0
 skipped=""
 HTML_FILES="pages/landing/index.html pages/vorbereitung/index.html pages/feedback/index.html pages/material/index.html services/dashboard/static/index.html services/slides/index.html"
 
