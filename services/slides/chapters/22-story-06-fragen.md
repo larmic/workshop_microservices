@@ -13,7 +13,7 @@
 <p class="numlist-label">Die Kompensation scheitert</p>
 <h3>Der Storno l&auml;uft selbst in <span class="hl">5xx</span>, und wir versuchen es nur einmal. Was nun?</h3>
 </div>
-<code class="numlist-pill fragment" data-fragment-index="1">must eventually succeed</code>
+<code class="numlist-pill fragment" data-fragment-index="1">Storno muss irgendwann klappen</code>
 </div>
 <div class="numlist-row">
 <div class="numlist-num">02</div>
