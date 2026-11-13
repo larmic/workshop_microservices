@@ -406,7 +406,7 @@ ID erst aus der Antwort erfährt, verliert sie beim Timeout.
 - Was passiert, wenn der Orchestrator selbst während `COMPENSATING`
   abstürzt? Was muss persistiert sein, damit der Resume nach Neustart
   korrekt ist?
-- Würdest du den **gleichen Saga-Code** wiederverwenden für eine
+- Würdet ihr den **gleichen Saga-Code** wiederverwenden für eine
   Reise-Stornierung, die der Kunde aktiv anstößt (also Forward-Step
   „Storno", nicht Compensation)? Oder ist das ein anderer Use-Case?
   (Hint: oft ist es derselbe — die Saga ist nur eine Sequenz von

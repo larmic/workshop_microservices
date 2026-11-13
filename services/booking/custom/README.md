@@ -4,7 +4,7 @@ Eigene Umsetzung der **Story 1** in Kotlin mit [Ktor](https://ktor.io/).
 Funktional identisch zur Go-Referenz unter `services/booking/story1/`.
 
 Diese Lösung dient als Default-Custom-Service im Workshop-Setup
-(`docker-compose.custom.yml`) — Teilnehmer können sie ersetzen,
+(`docker-compose.custom.yml`) — Teilnehmende können sie ersetzen,
 indem sie `CUSTOM_BOOKING_PATH` in `.env` auf ihr eigenes Projekt zeigen lassen.
 
 ## Eigenschaften

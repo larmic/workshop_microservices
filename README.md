@@ -118,7 +118,7 @@ Dieses Repository ist **source-available, aber nicht klassisch Open Source**. Le
 **Erlaubt (ohne Rückfrage):**
 
 - Code und Doku lesen, klonen, forken
-- Persönliche Nutzung zum Lernen, Experimentieren und Nachvollziehen — etwa als ehemaliger Workshop-Teilnehmer
+- Persönliche Nutzung zum Lernen, Experimentieren und Nachvollziehen — etwa nach der Teilnahme am Workshop
 - Nutzung im Rahmen von Bildungs- oder Forschungseinrichtungen
 
 **Erfordert eine schriftliche Genehmigung:**

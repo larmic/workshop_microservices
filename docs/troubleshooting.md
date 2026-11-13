@@ -12,10 +12,10 @@ Jeder Eintrag ist mit zwei Markern versehen:
 - **Status:** `verifiziert` (gegen das Repo und lokal getestet, Datum und System
   am Eintrag, ohne Angabe: 2026-06-02 auf macOS), `erwartbar` (aus einer
   Repo-Änderung abgeleitet, nicht beobachtet) oder `berichtet` (von
-  Teilnehmern eines früheren Termins am 2026-05-30 unter Windows gemeldet, hier
+  Teilnehmenden eines früheren Termins am 2026-05-30 unter Windows gemeldet, hier
   nicht nachgestellt, mit Links zur Eigendiagnose)
 
-> Die Windows/WSL2-Einträge stammen aus Rückmeldungen von Teilnehmern und sind
+> Die Windows/WSL2-Einträge stammen aus Rückmeldungen von Teilnehmenden und sind
 > von uns noch nicht unter Windows geprüft. Wenn du sie bestätigen oder
 > korrigieren kannst, gib dem Trainer kurz Bescheid.
 
@@ -237,7 +237,7 @@ Weiterführend:
 
 Projekt im WSL2-Dateisystem und `.env` mit LF statt CRLF: Kasten „Windows“ in
 [vorbereitung.md](vorbereitung.md), Schritt 2. Pfade mit Forward-Slashes:
-„Hinweise für Windows-Teilnehmer“ in [custom-setup.md](custom-setup.md).
+„Hinweise für Windows“ in [custom-setup.md](custom-setup.md).
 
 ## Stack komplett zurücksetzen
 

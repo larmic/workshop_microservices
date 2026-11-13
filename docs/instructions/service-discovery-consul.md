@@ -80,7 +80,7 @@ Hardcodierte URLs sind in der Konferenz-Folie schön. Im Betrieb sind sie der h�
 
 > 🎯 *Folie:* Diese Tabelle zeigen und betonen: Es gibt keine universellen Werte. Sie hängen ab von:
 > - Wie schnell muss der Failover sein? (Intervall)
-> - Wie viele Instanzen × Services hast du? (Last auf Consul)
+> - Wie viele Instanzen × Services habt ihr? (Last auf Consul)
 > - Wie zuverlässig ist Graceful Shutdown? (DeregisterCriticalServiceAfter)
 
 ### Eindeutige Service-ID — wichtiger als man denkt
@@ -233,7 +233,7 @@ Booking ──▶ Gateway/Mesh: "ich will an `flight-service`"
 | Python | `python-consul2` |
 | Node.js | `consul` (npm) |
 
-> 💬 *Diskussionsfrage an die Teilnehmer:* „Welche von denen nutzt ihr in eurem Tagesgeschäft? Habt ihr schon mal Consul gegen Eureka / etcd / K8s-native getauscht? Was war der Treiber?"
+> 💬 *Diskussionsfrage an die Teilnehmenden:* „Welche von denen nutzt ihr in eurem Tagesgeschäft? Habt ihr schon mal Consul gegen Eureka / etcd / K8s-native getauscht? Was war der Treiber?"
 
 ---
 
@@ -300,4 +300,4 @@ Zum Abschluss, wenn Zeit bleibt:
 | Resolver-Verwendung im Caller | `services/booking/story3/main.go`, `services/booking/story3/handler/booking.go` |
 | Consul-Container im Compose-Setup | `services/docker-compose.infra.yml` (Service `consul`, Dev-Mode, UI auf Port 8500) |
 | Begleitend: Zusammenspiel Traefik / Docker-DNS / Consul | `services/load-balancing.md` |
-| Story-Beschreibung (was Teilnehmer bauen) | `docs/stories/story-03-service-discovery.md` |
+| Story-Beschreibung (was die Teilnehmenden bauen) | `docs/stories/story-03-service-discovery.md` |

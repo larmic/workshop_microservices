@@ -87,7 +87,7 @@ Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-
 
 Das Setup ist Pflicht-Hausaufgabe vor dem Workshop ([vorbereitung.md](vorbereitung.md)). Hier wird nur verifiziert, Restprobleme werden sofort eingesammelt und parallel gelöst.
 
-- Kurz-Check pro Teilnehmer: Dashboard unter http://localhost lädt, auf Schritt 0 „Start“ zeigt **Hausaufgabe prüfen** grün. Wer Rot sieht, bekommt die Ursache direkt angezeigt
+- Kurz-Check pro Person: Dashboard unter http://localhost lädt, auf Schritt 0 „Start“ zeigt **Hausaufgabe prüfen** grün. Wer Rot sieht, bekommt die Ursache direkt angezeigt
 - Auf Schritt 0 den Block „Im Workshop: eigenen Service einklinken“ aufklappen und gemeinsam durchgehen: Teams einigen sich auf einen der mitgebrachten Services (Repo aus der Vorbereitung), die anderen klonen ihn, dann den Service über `CUSTOM_BOOKING_PATH` einklinken, Stack neu starten, testen mit `curl -i http://localhost:8099/health` und über das Gateway (`http://localhost/api/booking-custom/health`)
 - Kurz zeigen: Consul-UI und Traefik-Dashboard (http://localhost:8080), das Gateway selbst läuft auf http://localhost
 - **OpenAPI-Schwenk (API First):** APIs der Backend-Services in Swagger UI / OpenAPI-Datei anschauen — Vertrag *vor* Implementierung
@@ -128,7 +128,7 @@ These aufwerfen und mit der Gruppe sezieren.
 
 ## 6. Hands-on: Stories 1–7
 
-Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion. Vier Stories kommen ohne Code aus: Story 2 ist eine Design-Session am Flipchart, Story 4, 5 und 7 sind Spiele.
+Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmende arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion. Vier Stories kommen ohne Code aus: Story 2 ist eine Design-Session am Flipchart, Story 4, 5 und 7 sind Spiele.
 
 ### 6a. Story 1 — [Erst lauffähig, dann smart](stories/story-01-cloud-native-booking-service.md) (90 Min)
 - Lernpointe: 12 Factor in der Praxis, Health-Checks, externe Konfiguration

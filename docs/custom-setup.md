@@ -3,7 +3,7 @@
 > **Workshop-Material:** Dieses Dokument nutzen wir gemeinsam im Workshop (ab
 > Story 1). Für die Vorbereitung vorab gilt [vorbereitung.md](vorbereitung.md).
 
-Im Dashboard kannst du pro Story zwischen *Referenz* und *Mein Service* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf.
+Im Dashboard könnt ihr pro Story zwischen *Referenz* und *Mein Service* umschalten — die Buttons rufen dann den jeweils ausgewählten Service auf.
 
 ## Konzept
 
@@ -70,7 +70,7 @@ curl http://localhost/api/hotel/health
 curl http://localhost/api/car/health
 ```
 
-## Hinweise für Windows-Teilnehmer
+## Hinweise für Windows
 
 - **Pfade** mit Forward-Slashes statt Backslashes: `CUSTOM_BOOKING_PATH=C:/Users/foo/projects/my-booking-service`
 - **Line endings** der `.env` müssen LF sein (nicht CRLF) — sonst landet `\r` am Pfadende und der Build schlägt mit "no such file" fehl. Editor entsprechend einstellen oder `.env` über WSL/Git Bash erzeugen.
@@ -87,4 +87,4 @@ Stoppt alle Container — Referenz-Services, Infrastruktur und Custom-Service in
 
 ## Los geht's
 
-Dein Arbeitsplatz ist eingerichtet. Starte mit [Story 1: Erst lauffähig, dann smart](stories/story-01-cloud-native-booking-service.md).
+Euer Arbeitsplatz ist eingerichtet. Startet mit [Story 1: Erst lauffähig, dann smart](stories/story-01-cloud-native-booking-service.md).

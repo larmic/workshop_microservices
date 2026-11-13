@@ -97,7 +97,7 @@ Wichtige Diskussion, oft unterschätzt:
 | HTTP 4xx | ❌ nein (üblicherweise) | Der Aufrufer hat Mist gemacht — Backend ist gesund |
 | Cancelled durch Client | ❌ nein | Kein Backend-Problem (unsere Referenz zählt ihn trotzdem mit, über `r.Context()`) |
 
-> 💡 Resilience4j hat dafür einen `recordExceptions` / `ignoreExceptions`-Predicate. Spring Cloud Circuit Breaker analog. Im Workshop-Code: bewusst simpel gehalten, alles ≥ 400 zählt — Diskussionspunkt für die Teilnehmer: "Wo seht ihr das anders?"
+> 💡 Resilience4j hat dafür einen `recordExceptions` / `ignoreExceptions`-Predicate. Spring Cloud Circuit Breaker analog. Im Workshop-Code: bewusst simpel gehalten, alles ≥ 400 zählt — Diskussionspunkt für die Teilnehmenden: "Wo seht ihr das anders?"
 
 ---
 
@@ -164,7 +164,7 @@ Das ist der **wichtigste pädagogische Übergang** der Story 4.
 - Mit CB: Antwort enthält Hotels + Cars, `flights: []`, Header `X-Fallback: flight`. Der Nutzer sieht *etwas* — der Browse-Screen funktioniert.
 - Ohne CB: ganzer Request scheitert mit 500. Schwarzes Loch.
 
-**Graceful Degradation passt perfekt zu GET.** Workshop-Teilnehmer sollen das selbst sehen: Backend deaktivieren, in Story 3 vs. Story 4 testen.
+**Graceful Degradation passt perfekt zu GET.** Die Teilnehmenden sollen das selbst sehen: Backend deaktivieren, in Story 3 vs. Story 4 testen.
 
 ### Schreib-Operationen (POST) — knifflig
 
@@ -205,7 +205,7 @@ Drei Stufen:
 | Go | gobreaker, sony/gobreaker, hashicorp/go-circuitbreaker |
 | Node.js | opossum |
 
-> 💬 *Diskussionsfrage an die Teilnehmer:* "Welche von denen nutzt ihr in eurem Tagesgeschäft? Was hat euch überrascht?"
+> 💬 *Diskussionsfrage an die Teilnehmenden:* "Welche von denen nutzt ihr in eurem Tagesgeschäft? Was hat euch überrascht?"
 
 ---
 
@@ -225,7 +225,7 @@ In den vorherigen Abschnitten lebt der CB *im* Service. Alternative: CB ins Serv
 - Latenz pro Hop steigt minimal (Sidecar-Proxy).
 - Debugging ist anders (Header-Propagation, mTLS, etc.).
 
-> 🔭 *Im Workshop nur kurz erwähnen.* Service-Mesh-Tiefe gehört in einen eigenen Termin. Aber wichtig: die Teilnehmer sollen wissen, dass der CB nicht zwingend Anwendungscode sein muss.
+> 🔭 *Im Workshop nur kurz erwähnen.* Service-Mesh-Tiefe gehört in einen eigenen Termin. Aber wichtig: die Teilnehmenden sollen wissen, dass der CB nicht zwingend Anwendungscode sein muss.
 
 ---
 

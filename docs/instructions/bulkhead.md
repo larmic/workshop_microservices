@@ -14,7 +14,7 @@
 
 ## 2. Wer wird geschützt?
 
-> Das ist die wichtigste pädagogische Klarstellung — Teilnehmer denken oft, Bulkhead schütze die Downstream-Services.
+> Das ist die wichtigste pädagogische Klarstellung — Teilnehmende denken oft, Bulkhead schütze die Downstream-Services.
 
 Bulkhead ist ein **client-seitiges, defensives Pattern**. Geschützt wird:
 

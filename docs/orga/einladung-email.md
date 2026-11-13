@@ -1,6 +1,6 @@
 # E-Mail-Einladung: Vorlage pro Termin
 
-Vorlage für die Einladungs-Mail an angemeldete Teilnehmer:innen. Platzhalter
+Vorlage für die Einladungs-Mail an angemeldete Teilnehmende. Platzhalter
 ersetzen und versenden. Die Schritt-für-Schritt-Details leben in
 [vorbereitung.md](../vorbereitung.md), die Mail benennt sie nur kompakt.
 

@@ -63,7 +63,7 @@ curl http://localhost/api/booking-custom/booking/offers
 | `docker-compose.yml`           | Basis-Services (Flight, Hotel, Car)              |
 | `docker-compose.infra.yml`     | Infrastruktur (Traefik, Consul, Swagger UI, Slides, Dashboard) |
 | `docker-compose.reference.yml` | Referenzlösungen (Booking Reference Story 1, 3…8) |
-| `docker-compose.custom.yml`    | Custom-Lösung des Teilnehmers (Booking Custom)   |
+| `docker-compose.custom.yml`    | Custom-Lösung der Teilnehmenden (Booking Custom) |
 
 ## Quickstart
 
