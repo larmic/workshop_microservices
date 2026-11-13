@@ -2,7 +2,7 @@
 
 [![Guard-Gates](https://github.com/larmic/workshop_microservices/actions/workflows/gates.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/gates.yml)
 [![Docker Build & Push Go-Services](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/docker.yml)
-[![Deploy Pages (Feedback + Slides)](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml)
+[![Deploy Pages](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/deploy-pages.yml)
 [![Update Docker Hub descriptions](https://github.com/larmic/workshop_microservices/actions/workflows/dockerhub-description.yml/badge.svg)](https://github.com/larmic/workshop_microservices/actions/workflows/dockerhub-description.yml)
 
 Microservices für das Travel-Booking-System (Flight, Hotel, Car, Booking).
@@ -61,7 +61,7 @@ curl http://localhost/api/booking-custom/booking/offers
 | Datei                          | Inhalt                                          |
 |--------------------------------|-------------------------------------------------|
 | `docker-compose.yml`           | Basis-Services (Flight, Hotel, Car)              |
-| `docker-compose.infra.yml`     | Infrastruktur (Traefik, Consul, Swagger UI)      |
+| `docker-compose.infra.yml`     | Infrastruktur (Traefik, Consul, Swagger UI, Slides, Dashboard) |
 | `docker-compose.reference.yml` | Referenzlösungen (Booking Reference Story 1, 3…8) |
 | `docker-compose.custom.yml`    | Custom-Lösung des Teilnehmers (Booking Custom)   |
 

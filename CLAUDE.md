@@ -40,7 +40,8 @@ Die User-Stories für die Hands-on-Aufgaben liegen in `docs/stories/`
   - `questions/`: Diskussionsfragen
   - `orga/`: Vorlagen für Intranet-Text und E-Mail-Einladung
 - `pages/`: statische Quellen der GitHub-Pages-Seite (Landing, Vorbereitung,
-  Feedback-Formular; die Folien kommen aus `services/slides/`)
+  Spielmaterial zum Drucken, Feedback-Formular; die Folien kommen aus
+  `services/slides/`)
 - `services/`: Go-Referenz-Implementierung
   - `booking/`: BookingService mit einem Ordner pro Code-Story (`story1`, `story3`
     bis `story8`; Story 2 ist eine Design-Session ohne Code, Port 8086 bleibt frei)

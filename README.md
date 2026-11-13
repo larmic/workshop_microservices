@@ -30,7 +30,7 @@ Die vollständige Themenübersicht findet sich in [docs/themen.md](docs/themen.m
 
 ## Einstieg
 
-Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitung.md](docs/vorbereitung.md), online lesbar unter <https://larmic.github.io/workshop_microservices/vorbereitung/>. Die Workshop-Seite mit Folien und Feedback: <https://larmic.github.io/workshop_microservices/>.
+Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitung.md](docs/vorbereitung.md), online lesbar unter <https://larmic.github.io/workshop_microservices/vorbereitung/>. Die Workshop-Seite mit Folien, Spielmaterial und Feedback: <https://larmic.github.io/workshop_microservices/>.
 
 ## Projektstruktur
 
@@ -42,10 +42,11 @@ Die Anleitung zur Einrichtung des Arbeitsplatzes findet sich in [docs/vorbereitu
 │   ├── stories/           # User Stories (story-01 … story-08)
 │   ├── instructions/      # Trainer-Hinweise
 │   ├── questions/         # Fragen & Diskussionsimpulse
-│   └── orga/              # Vorlagen für Intranet-Text & Einladungs-Mail
+│   └── orga/              # Intranet-Text, Einladungs-Mail, Materialliste
 ├── pages/                 # Statische Quellen der GitHub-Pages-Seite
 │   ├── landing/           # Startseite (larmic.github.io/workshop_microservices)
 │   ├── vorbereitung/      # Vorbereitung & Troubleshooting (rendert docs/*.md)
+│   ├── material/          # Druckvorlagen für das Spielmaterial
 │   └── feedback/          # Anonymes Feedback-Formular
 ├── services/              # Backend-Services (Go)
 │   ├── booking/           # BookingService (story1, story3 … story8; Story 2 hat keinen Code)
