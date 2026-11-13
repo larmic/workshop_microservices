@@ -145,6 +145,16 @@ Spürbare Verbesserungen für Verständnis, Konsistenz und Auftritt.
 
 Feinschliff ohne Risiko, wenn Zeit ist.
 
+> **Stand 13.11.:** Erledigt sind N1 bis N4, N6 bis N10, N12 bis N17 und N19.
+>
+> - **N1:** Leerer Stapel aufgelöst, Story-4-Recap mit Badge. Fünf Fragen in Story 8, Titelfolien ohne Zitat und Story 7 ohne Code-Folie bleiben bewusst.
+> - **N2:** Nur die Notes zum Story-7-Recap sind gekürzt und nummeriert. Die Spielskripte zu Story 4 und 5 bleiben lang.
+> - **N5:** Zuordnung der Karten vom Anfang, Feedback-Folie am Schluss (63 Folien) und Note zu Timeouts und Retry sind drin. Die Transferfrage pro Recap bleibt bewusst weg. Offen: eine Folie, die die Domäne einführt.
+> - **N9:** Überschriften in Poppins, Fließtext bleibt Systemschrift.
+> - **N16:** Der eine Link auf `larmic.de` nutzt jetzt wie alle anderen `larmic.github.io`. Welche Adresse die kanonische sein soll, ist nicht entschieden.
+>
+> **Offen, braucht eine Entscheidung:** N5 (Domänen-Folie), N11 (Emojis) und N18 (Anrede und Gendern in Docs und Pages).
+
 | Nr. | Bereich | Befund | Wo | Aufwand |
 |---|---|---|---|---|
 | N1 | Folien | Strukturabweichungen zwischen den Story-Blöcken: Story 7 als einzige ab Story 3 ohne Code-Folie, Story 8 mit fünf Fragen, Titelfolien 23 und 26 ohne Zitat, 16 ohne „↓“-Badge auf 16a, leerer Stapel um Folie 18 in `index.html:91-93`. | Deck | klein |
