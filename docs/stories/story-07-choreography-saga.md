@@ -42,20 +42,29 @@ Zu viert übernimmt Booking auch Car. Ab sechs Personen führt jemand die Strich
 
 ### Die Regel
 
-1. Vor der ersten Reise gibt der Kunde beliebig viele seiner 13 Chips als **Retry-Budget** an Booking. Sie kommen nie zurück.
-2. Booking würfelt pro Reise: Bei 4–6 buchen alle. Bei 1–3 sagt ein Service nein (1 Flight, 2 Hotel, 3 Car).
-3. Gebucht wird in der Reihenfolge Flight, Hotel, Car. Jedes Ja kostet den Kunden einen Chip an diesen Service.
-4. Wer nein sagt, würfelt: 1–3 „503“, 4–6 „ausgebucht“.
-5. Bei 503 darf Booking statt des Kunden einen Budget-Chip an den Service zahlen. Der sagt ja, und die Reise läuft weiter.
-6. Sonst ruft Booking rückwärts nur die schon Gebuchten („Storno Hotel! Storno Flight!“), sagt sofort „Storniert“ und macht einen Strich.
-7. Erst dann würfelt jeder Gerufene: Bei 1–4 geht der Chip zurück an den Kunden, bei 5–6 hat er nichts gehört, behält den Chip und schweigt.
-8. Hat der Kunde vor einer Reise weniger als 3 Chips, ist Schluss.
-9. Das Team gewinnt, wenn es in höchstens 6 Versuchen 4 Reisen bucht, sonst gewinnen die Downstreams.
+Ziel: 4 Reisen buchen. Höchstens 6 Reisen dürfen starten, gescheiterte zählen mit.
+
+Vor dem Spiel:
+
+1. Booking und Kunde spielen als Team. Flight, Hotel und Car würfeln nur und behalten, was bei ihnen liegt.
+2. Der Kunde hat 13 Chips. Eine Reise kostet 3: je einen für Flight, Hotel und Car.
+3. Vor der ersten Reise entscheidet das Team: Wie viele Chips bekommt Booking als **Retry-Budget**? Sie bezahlen nur Retries und kommen nie zurück.
+4. Hat der Kunde vor einer Reise nur 0, 1 oder 2 Chips, ist das Team raus, auch mit Budget. Mit 3 geht es weiter.
+
+Jede Reise:
+
+1. Der Kunde legt 3 Chips vor Booking. Damit startet die Reise.
+2. Booking würfelt: 4–6 alle buchen und nehmen je einen Chip. 1 Flight, 2 Hotel, 3 Car sagt nein, wer davor dran war, hat schon gebucht.
+3. Wer nein sagt, würfelt den Grund: 1–3 nicht erreichbar (`503`). Mit Budget zahlt Booking einen Budget-Chip, die Reise klappt ohne neuen Wurf.
+4. 4–6 ausgebucht oder kein Budget: Die Reise scheitert. Booking ruft den schon Gebuchten rückwärts „Storno!“ zu, sagt sofort „Storniert“ und macht pro Ruf einen Strich.
+5. Erst dann würfelt jeder Gerufene: 1–4 gehört, Chip zurück an den Kunden. 5–6 überhört, er behält ihn. Was danach noch vor Booking liegt, nimmt der Kunde zurück.
+
+Gewonnen ist, sobald 4 Reisen geklappt haben. Verloren ist nach 6 Reisen mit weniger Erfolgen oder wenn der Kunde vor einer Reise nur 0, 1 oder 2 Chips hat.
 
 Ergänzungen zum Ansagen:
 
 - Chips vorher laut abzählen lassen. Die Balance hängt an 13 Chips und 6 Reisen.
-- „Statt des Kunden“ betonen: Bei einem Retry zahlt nur das Budget, nicht zusätzlich der Kunde.
+- Beim Retry zahlt nur das Budget: Der Kunden-Chip für diesen Service bleibt vor Booking liegen und geht nach der Reise zurück.
 - Booking ruft nur die schon Gebuchten. Sagt Flight nein, gibt es nichts zu stornieren.
 - „Storniert“ kommt vor dem Würfeln der Gerufenen, nie danach. Wer warten will, hat das Thema verstanden: Stoff für die Nachbesprechung.
 - Die 6 Reisen ausspielen, auch wenn das Ziel schon verloren ist. Sonst fehlen stille Stornos.
