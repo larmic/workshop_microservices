@@ -47,12 +47,13 @@
         .kicker { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--primary-violet); margin: 0 0 0.3rem; }
         .controls { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: flex-end; padding: 1rem; background: #f5f5fa; border: 2px solid var(--line); border-radius: 12px; }
         .controls label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8rem; font-weight: 600; color: #555; }
-        .controls select, .controls input { font: inherit; font-size: 0.95rem; padding: 0.35rem 0.5rem; border: 1px solid #c8c8d4; border-radius: 6px; background: #fff; color: var(--primary-dark); }
+        .controls select, .controls input { max-width: 100%; font: inherit; font-size: 0.95rem; padding: 0.35rem 0.5rem; border: 1px solid #c8c8d4; border-radius: 6px; background: #fff; color: var(--primary-dark); }
         .controls input[type=number] { width: 5.5rem; }
         .btn { font: inherit; font-weight: 700; font-size: 0.95rem; padding: 0.55rem 1.1rem; border-radius: 8px; border: 0; background: var(--primary-violet); color: #fff; cursor: pointer; }
         .btn:hover { background: #5a31bd; }
         .hints { font-size: 0.86rem; line-height: 1.5; color: #333; padding-left: 1.2rem; margin: 0; }
         .hints li { margin: 0.2rem 0; }
+        .toc-wrap { overflow-x: auto; }
         table.toc { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         table.toc th, table.toc td { text-align: left; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--line); vertical-align: top; }
         table.toc th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #666; }
@@ -356,10 +357,10 @@
         </details>
 
         <h2 id="inhalt">Inhalt</h2>
-        <table class="toc">
+        <div class="toc-wrap"><table class="toc">
             <thead><tr><th>Spiel</th><th>Bogen</th><th>Format</th><th>Papier</th><th style="text-align:right">Anzahl</th></tr></thead>
             <tbody id="toc-body"></tbody>
-        </table>
+        </table></div>
         <p class="sum" id="toc-sum"></p>
         <h2 class="stage-title">Vorschau</h2>
     </div>
