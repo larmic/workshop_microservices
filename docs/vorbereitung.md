@@ -10,6 +10,7 @@ Diese Vorbereitung ist **Pflicht** und wird **vor** dem Workshop-Termin erledigt
 
 - **Git**
 - **Docker** inkl. Docker Compose (harte Voraussetzung, ohne läuft die Workshop-Umgebung nicht)
+- **Unter Windows: WSL2** mit aktivierter Docker-Desktop-Integration. Alle Befehle dieser Anleitung laufen in der WSL-Shell.
 - **IDE / Editor** nach Wahl
 - **jq** (empfohlen für Story 8, zum Filtern der JSON-Logs; ohne jq geht es auch mit `grep`)
 - Eine Sprache bzw. ein Framework deiner Wahl für deinen Mini-Service (Java/Spring Boot, Quarkus, Go, Node.js, ...)
@@ -25,7 +26,7 @@ Akzeptanzkriterien:
 
 - [ ] Neues Projekt in deiner Sprache/deinem Framework
 - [ ] `GET /health` antwortet mit HTTP 200
-- [ ] Eine `Dockerfile` liegt im Projekt, `docker build` läuft fehlerfrei durch
+- [ ] Eine `Dockerfile` liegt im Projekt, `docker build` läuft fehlerfrei durch, auch aus einem frischen Klon
 - [ ] Der Container startet, dein Service lauscht darin auf Port `8080`
 - [ ] Der Code liegt in einem Git-Repository, das du im Workshop mit deinem Team teilen kannst
 
@@ -34,6 +35,7 @@ Akzeptanzkriterien:
 
 > **Repository für dein Team**
 > - Im Workshop einigt sich jedes Team auf einen der mitgebrachten Services, die anderen klonen ihn.
+> - Deshalb muss das Dockerfile den Service selbst bauen (mehrstufiger Build), statt ein lokal gebautes Artefakt zu kopieren. Sonst baut er nur auf deinem Rechner.
 > - Ort egal: GitHub, GitLab, Bitbucket oder das Git deiner Firma.
 > - Privat ist ok, wenn du andere einladen kannst.
 > - Keine Passwörter oder internen Daten.
@@ -54,7 +56,7 @@ Danach den Container mit Ctrl+C stoppen, denn den Host-Port `8099` belegt gleich
 
 > **Klappt nicht?**
 > - [Port belegt (Adresse bereits in Verwendung)](troubleshooting.md#port-belegt-adresse-bereits-in-verwendung)
-> - [Nur Windows/WSL2: Zertifikatsfehler beim `git clone` oder Build](troubleshooting.md#nur-windowswsl2-zertifikatsfehler-beim-git-clone-oder-build)
+> - [Zertifikatsfehler beim `git clone` oder Build (Firmen-Proxy)](troubleshooting.md#zertifikatsfehler-beim-git-clone-oder-build-firmen-proxy)
 
 ## 2. Workshop-Umgebung starten
 
@@ -69,7 +71,7 @@ cp .env.example .env
 make docker-up-hub
 ```
 
-Das zieht fertige Images von Docker Hub und startet alle Container. Die `.env` funktioniert so, wie sie ist. Falls `make` nicht verfügbar ist:
+Das zieht fertige Images von Docker Hub, baut zusätzlich eine kleine Beispiel-Lösung (das dauert beim ersten Mal ein paar Minuten und lädt Abhängigkeiten aus dem Netz) und startet alle Container. Die `.env` funktioniert so, wie sie ist. Das Terminal bleibt mit den Logs belegt; beendet wird mit Ctrl+C. Falls `make` nicht verfügbar ist:
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.infra.yml \
@@ -85,12 +87,12 @@ docker compose -f docker-compose.yml -f docker-compose.infra.yml \
 Erledigt, wenn:
 
 - [ ] Repo geklont, `.env` angelegt
-- [ ] Der Stack läuft ohne Fehler
+- [ ] Der Stack läuft: <http://localhost> zeigt das Dashboard
 
 > **Klappt nicht?**
 > - [Port belegt (Adresse bereits in Verwendung)](troubleshooting.md#port-belegt-adresse-bereits-in-verwendung)
 > - [Image-Pull schlägt fehl](troubleshooting.md#image-pull-schlägt-fehl)
-> - [Nur Windows/WSL2: Zertifikatsfehler beim `git clone` oder Build](troubleshooting.md#nur-windowswsl2-zertifikatsfehler-beim-git-clone-oder-build)
+> - [Zertifikatsfehler beim `git clone` oder Build (Firmen-Proxy)](troubleshooting.md#zertifikatsfehler-beim-git-clone-oder-build-firmen-proxy)
 
 ## 3. Hausaufgabe prüfen
 

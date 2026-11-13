@@ -201,9 +201,14 @@ Vorgehen:
    genutzte Distribution muss aktiviert sein. Hintergrund:
    [Docker Desktop WSL2 Backend](https://docs.docker.com/desktop/wsl/).
 
-## Nur Windows/WSL2: Zertifikatsfehler beim `git clone` oder Build
+## Zertifikatsfehler beim `git clone` oder Build (Firmen-Proxy)
 
-**Geltung:** nur Windows/WSL2 · **Status:** berichtet (2026-05-30, nicht reproduziert)
+**Geltung:** macOS/Linux/Windows, berichtet unter Windows/WSL2 · **Status:** berichtet (2026-05-30, nicht reproduziert)
+
+Betrifft jedes Betriebssystem hinter einem Proxy, der TLS aufbricht: Auch der
+Build der Beispiel-Lösung in `make docker-up-hub` lädt Abhängigkeiten aus dem
+Netz, und zwar im Build-Container, der das Firmen-Zertifikat nicht kennt. Am
+schnellsten hilft dann Lösung 1.
 
 Beobachtung im Kickoff: In der WSL war kein Zertifikat hinterlegt, `git clone`
 (bzw. Downloads im Build) scheiterten an der TLS-Prüfung. Workaround vor Ort war
