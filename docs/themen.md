@@ -19,13 +19,13 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 3 | Vortrag: 12 Factor App | 30 Min |
 | 4 | Vorbereitung verifizieren (Setup-Check) | 30 Min |
 | 5 | Diskussion: „MS = Monolithen mit Netzwerkproblemen" | 30 Min |
-| 6a | Hands-on: Story 1 (Cloud-native Setup) | 90 Min |
+| 6a | Hands-on: Story 1 (Cloud-native Setup) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 6b | Design-Session: Story 2 (REST vs. RESTful, Flipchart, kein Code) | 55 Min |
 | 6c | Hands-on: Story 3 (Service Discovery) | 60 Min |
 | 6d | Rollenspiel: Story 4 (Circuit Breaker, Rollenspiel statt Code) | 60 Min |
 
-Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 8 h 10. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten und der Mittagspause; Minuten und Blöcke stehen allein hier.
+Summe Tag 1: 225 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 7 h 40. In einem Tag von 9:00 bis 17:00 bleiben damit 20 Min für Kaffeepausen. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten und der Mittagspause; Minuten und Blöcke stehen allein hier.
 
 ### Tag 2 (≈ 5,5 h inkl. Mittag, der Rest ist Puffer)
 
@@ -130,7 +130,7 @@ These aufwerfen und mit der Gruppe sezieren.
 
 Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmende arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion. Vier Stories kommen ohne Code aus: Story 2 ist eine Design-Session am Flipchart, Story 4, 5 und 7 sind Spiele.
 
-### 6a. Story 1 — [Erst lauffähig, dann smart](stories/story-01-cloud-native-booking-service.md) (90 Min)
+### 6a. Story 1 — [Erst lauffähig, dann smart](stories/story-01-cloud-native-booking-service.md) (60 Min)
 - Lernpointe: 12 Factor in der Praxis, Health-Checks, externe Konfiguration
 - Recap-Frage: Welche Faktoren sind in eurer Umsetzung wirklich erfüllt?
 

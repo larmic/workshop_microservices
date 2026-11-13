@@ -56,8 +56,8 @@
 Note:
 - <strong>Hook:</strong> &bdquo;Hotel wurde neu deployed, der Port ist ein anderer. Wer passt heute Nacht die Env-Variable an?&ldquo;
 - <strong>Reihenfolge:</strong>
-  - Resolver plus <code>GET /booking/offers</code> (ca. 30 min)
-  - dann <code>POST /booking/bookings</code> (ca. 30 min)
+  - Resolver plus <code>GET /booking/offers</code> (ca. 20 min)
+  - dann <code>POST /booking/bookings</code> (ca. 20 min)
   - Optionales nur, wer fertig ist.
 - <strong>Neu:</strong> erster schreibender Endpoint, <code>201 Created</code>, Fehler als Status-Code. Error-Handling noch keins.
 - <strong>Demo</strong> (vorher pr&uuml;fen): Hotel im Dashboard auf drei Instanzen, Consul &uuml;ber den Link oben daneben, eine Instanz stoppen.
