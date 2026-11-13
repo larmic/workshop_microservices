@@ -42,4 +42,4 @@
 Note:
 - Jeder Punkt verdient seinen eigenen Tag. Wir hatten zwei. Br&uuml;cke zu Folgeterminen und weiterf&uuml;hrenden Workshops.
 - Service-Schnitt kam im Feedback als Wunsch nach Aufgaben ohne Coding. Kandidat f&uuml;r eine 30-Minuten-&Uuml;bung am ersten Tag beim n&auml;chsten Durchlauf.
-- Repo-Link und Kontakt f&uuml;r Follow-up: <code>github.com/larmic/workshop_microservices</code>, Stories, Code, Diskussion in GitHub Discussions.
+- Repo-Link und Kontakt f&uuml;r Follow-up: <code>github.com/larmic/workshop_microservices</code>, Stories, Code, Fragen als GitHub Issue.
