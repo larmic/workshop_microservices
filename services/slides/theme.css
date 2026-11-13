@@ -2744,3 +2744,80 @@
     vertical-align: -2px;
     margin-right: 6px;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Reiseplattform (08d): Kunde, Booking, darunter Flight, Hotel, Car.      */
+/* ---------------------------------------------------------------------- */
+
+.reveal .platform {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.reveal .platform svg {
+    display: block;
+    width: 86%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.reveal .platform text {
+    font-family: inherit;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.reveal .platform .pf-line {
+    fill: none;
+    stroke: var(--box-border);
+    stroke-width: 3;
+}
+
+.reveal .platform .pf-pill {
+    fill: #EEE7FB;
+}
+
+.reveal .platform .pf-pill-text {
+    fill: #0A0349;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.reveal .platform .pf-call {
+    fill: #5B4E93;
+    font-size: 16px;
+    text-anchor: start;
+}
+
+.reveal .platform .pf-main {
+    fill: #0A0349;
+}
+
+.reveal .platform .pf-main-name {
+    fill: #ffffff;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.reveal .platform .pf-main-sub {
+    fill: #D3F871;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.reveal .platform .pf-box {
+    fill: #ffffff;
+    stroke: var(--box-border);
+    stroke-width: 3;
+}
+
+.reveal .platform .pf-name {
+    fill: #0A0349;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.reveal .platform .pf-sub {
+    fill: #5B4E93;
+    font-size: 18px;
+}
