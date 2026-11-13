@@ -21,7 +21,7 @@ damit **der Booking-Service nicht für deren Verfügbarkeit haften muss und die 
 
 ## Teil 1: Das Würfelspiel „Retry oder Storno“ (ca. 20 Minuten)
 
-Booking und Kunde wollen vier Reisen durchbringen. Storniert wird per Zuruf.
+Booking und Kunde wollen 4 Reisen buchen und haben dafür 6 Versuche. Storniert wird per Zuruf.
 
 ### Material (pro Tisch)
 
@@ -43,14 +43,14 @@ Zu viert übernimmt Booking auch Car. Ab sechs Personen führt jemand die Strich
 ### Die Regel
 
 1. Vor der ersten Reise gibt der Kunde beliebig viele seiner 13 Chips als **Retry-Budget** an Booking. Sie kommen nie zurück.
-2. Booking würfelt pro Reise: 1 Flight nein, 2 Hotel nein, 3 Car nein, 4–6 alle ja.
+2. Booking würfelt pro Reise: Bei 4–6 buchen alle. Bei 1–3 sagt ein Service nein (1 Flight, 2 Hotel, 3 Car).
 3. Gebucht wird in der Reihenfolge Flight, Hotel, Car. Jedes Ja kostet den Kunden einen Chip an diesen Service.
 4. Wer nein sagt, würfelt: 1–3 „503“, 4–6 „ausgebucht“.
 5. Bei 503 darf Booking statt des Kunden einen Budget-Chip an den Service zahlen. Der sagt ja, und die Reise läuft weiter.
 6. Sonst ruft Booking rückwärts nur die schon Gebuchten („Storno Hotel! Storno Flight!“), sagt sofort „Storniert“ und macht einen Strich.
 7. Erst dann würfelt jeder Gerufene: Bei 1–4 geht der Chip zurück an den Kunden, bei 5–6 hat er nichts gehört, behält den Chip und schweigt.
 8. Hat der Kunde vor einer Reise weniger als 3 Chips, ist Schluss.
-9. Das Team gewinnt mit 4 Reisen durch in höchstens 6 Reisen, sonst gewinnen die Downstreams.
+9. Das Team gewinnt, wenn es in höchstens 6 Versuchen 4 Reisen bucht, sonst gewinnen die Downstreams.
 
 Ergänzungen zum Ansagen:
 

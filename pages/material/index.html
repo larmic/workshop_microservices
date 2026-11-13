@@ -583,7 +583,7 @@
         <div>
             <h2>Ziel</h2>
             <ul>
-                <li>4 Reisen durch in h&ouml;chstens 6. Vor einer Reise weniger als 3 Chips: Schluss.</li>
+                <li>4 Reisen buchen in h&ouml;chstens 6 Versuchen. Vor einer Reise weniger als 3 Chips: Schluss.</li>
                 <li>Vorher legt das Team ein Retry-Budget in Chips zu Booking, es kommt nie zur&uuml;ck.</li>
             </ul>
         </div>
@@ -591,7 +591,7 @@
     <h2>Jede Reise</h2>
     <table>
         <tr><th>Wurf</th><th>Wer</th><th>Bedeutung</th></tr>
-        <tr><td>1</td><td>Booking</td><td>1 Flight, 2 Hotel, 3 Car sagt nein, 4&ndash;6 alle ja. Jedes Ja kostet den Kunden einen Chip an den Service.</td></tr>
+        <tr><td>1</td><td>Booking</td><td>4&ndash;6 alle buchen. 1&ndash;3 ein Service sagt nein: 1 Flight, 2 Hotel, 3 Car. Jedes Ja kostet den Kunden einen Chip an den Service.</td></tr>
         <tr><td>2</td><td>wer nein sagt</td><td>1&ndash;3 <code>503</code>: Booking darf statt des Kunden einen Budget-Chip zahlen, der Service sagt ja (vorw&auml;rts). 4&ndash;6 ausgebucht.</td></tr>
         <tr><td>3</td><td>jeder Gerufene</td><td>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; an die schon Gebuchten, sagt sofort &bdquo;Storniert&ldquo;, Strich. Dann: 1&ndash;4 Chip zur&uuml;ck, 5&ndash;6 nicht geh&ouml;rt, Chip bleibt, schweigen.</td></tr>
     </table>
