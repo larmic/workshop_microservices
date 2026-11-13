@@ -379,7 +379,7 @@ mit „cannot compensate". Abhilfen:
 - **Idempotency-Key** im Forward-Request; ein Retry liefert dieselbe
   Buchung zurück statt eine zweite anzulegen.
 
-**Live zeigen:** Im Dashboard Hotel auf „Hängt" stellen (antwortet erst
+**Live zeigen:** Im Dashboard Hotel auf „Timeout“ stellen (antwortet erst
 nach 10 s), dann `POST /booking/bookings`. Nach 3 s ist die Saga
 `FAILED`, Flight `COMPENSATED`. Rund 7 s später steht im Hotel-Log
 trotzdem `hotel booking confirmed`:

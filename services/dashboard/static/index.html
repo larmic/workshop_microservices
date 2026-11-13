@@ -623,6 +623,7 @@
             cursor: pointer;
             transition: all 0.15s;
         }
+        .chaos-btn small { display: block; font-size: 0.7rem; font-weight: 400; opacity: 0.8; }
         .chaos-btn:hover { border-color: #888; }
         .chaos-btn.active.normal   { background: #1d7a3a; color: #fff; border-color: #1d7a3a; }
         .chaos-btn.active.slow     { background: #8a6d00; color: #fff; border-color: #8a6d00; }
@@ -1954,7 +1955,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                     <summary>Demo und Nachbauen <span class="badge">Referenz oder Mein Service</span></summary>
                     <div class="story-info-body">
                         <h4>Demo</h4>
-                        <p>Unten bei den Downstream-Services Flight auf &bdquo;H&auml;ngt&ldquo; stellen, dann <code>GET /booking/offers</code> ausl&ouml;sen. Die ersten f&uuml;nf Calls warten je 3&nbsp;s, wie die Karten 05&ndash;09, und bekommen 200 mit <code>flights: []</code> und <code>X-Fallback</code>. Ab dem sechsten kommt die Antwort sofort, mit <code>X-Circuit-Open</code>. Flight zur&uuml;ck auf &bdquo;Normal&ldquo;: Nach 30&nbsp;s zeigt das Panel HALF_OPEN, die erfolgreiche Probe schlie&szlig;t den Breaker.</p>
+                        <p>Unten bei den Downstream-Services Flight auf &bdquo;Timeout&ldquo; stellen, dann <code>GET /booking/offers</code> ausl&ouml;sen. Die ersten f&uuml;nf Calls warten je 3&nbsp;s, wie die Karten 05&ndash;09, und bekommen 200 mit <code>flights: []</code> und <code>X-Fallback</code>. Ab dem sechsten kommt die Antwort sofort, mit <code>X-Circuit-Open</code>. Flight zur&uuml;ck auf &bdquo;Normal&ldquo;: Nach 30&nbsp;s zeigt das Panel HALF_OPEN, die erfolgreiche Probe schlie&szlig;t den Breaker.</p>
         <div class="source-toggle" data-source-toggle="4">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(4,'reference')">Referenz</button>
@@ -2898,9 +2899,9 @@ on receiveCompensationEvent(event):
                     <h3 id="chaos-heading-${name}">Chaos-Modus</h3>
                     <div class="chaos-btns">
                         <button class="chaos-btn normal" id="chaos-${name}-normal">Normal</button>
-                        <button class="chaos-btn slow"   id="chaos-${name}-slow">Langsam</button>
-                        <button class="chaos-btn fail"   id="chaos-${name}-fail">Fehler</button>
-                        <button class="chaos-btn hang"   id="chaos-${name}-hang" title="Antwortet erst nach dem Client-Timeout und verarbeitet die Anfrage trotzdem">H&auml;ngt</button>
+                        <button class="chaos-btn slow"   id="chaos-${name}-slow" title="Antwortet nach 2 s, unter dem Client-Timeout von Booking">Langsam<small>2 s</small></button>
+                        <button class="chaos-btn fail"   id="chaos-${name}-fail" title="Antwortet sofort mit 500">Fehler<small>500</small></button>
+                        <button class="chaos-btn hang"   id="chaos-${name}-hang" title="Antwortet erst nach 10 s, also nach dem Client-Timeout von Booking, und verarbeitet die Anfrage trotzdem">Timeout<small>10 s</small></button>
                     </div>
                     <div class="instances-block" id="instances-block-${name}" style="display:none">
                         <div class="instances-heading" id="instances-heading-${name}">Instanzen (0)</div>
@@ -3025,7 +3026,8 @@ on receiveCompensationEvent(event):
                 }
                 const modeSpan = li.querySelector(".instance-mode");
                 modeSpan.className = "instance-mode " + mode;
-                const modeText = mode + latencySuffix;
+                // Intern heißt der Modus weiter "hang", sichtbar ist er "timeout".
+                const modeText = (mode === "hang" ? "timeout" : mode) + latencySuffix;
                 if (modeSpan.textContent !== modeText) modeSpan.textContent = modeText;
 
                 li.classList.toggle("served-recent", inst.id === mostRecentId);

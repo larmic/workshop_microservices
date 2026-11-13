@@ -54,6 +54,6 @@ Note:
 - <strong>ENDE (Karte 27, Recap 01 + 04):</strong> Board bleibt liegen. &bdquo;War Flight bei 21 bis 25 kaputt? Wer wurde bei 26 bestraft?&ldquo; 4xx ist kein Ausfall, unser Code z&auml;hlt alles ab 400.
   - &bdquo;Eine zweite Booking-Instanz hat ein eigenes Board. Was liegt darauf? Was wei&szlig; Booking nach einem Neustart?&ldquo; Der Zustand lebt im RAM einer Instanz. Geteilter Zustand hilft, kostet aber Kopplung.
 - <strong>Demo:</strong>
-  - Flight auf &bdquo;H&auml;ngt&ldquo; (10 s, Timeout 3 s): f&uuml;nf Calls warten je 3 s, immer 200 mit <code>flights: []</code> und <code>X-Fallback: flight</code>, ab dem 6. sofort mit <code>X-Circuit-Open: flight</code>. Schneller: &bdquo;Fehler&ldquo;.
+  - Flight auf &bdquo;Timeout&ldquo; (10 s, Timeout 3 s): f&uuml;nf Calls warten je 3 s, immer 200 mit <code>flights: []</code> und <code>X-Fallback: flight</code>, ab dem 6. sofort mit <code>X-Circuit-Open: flight</code>. Schneller: &bdquo;Fehler&ldquo;.
   - Flight zur&uuml;ck auf &bdquo;Normal&ldquo;: nach 30 s HALF_OPEN, das Panel zeigt es schon ohne Call. Die erfolgreiche Probe schlie&szlig;t.
   - Details: <code>docs/stories/story-04-circuit-breaker.md</code>.

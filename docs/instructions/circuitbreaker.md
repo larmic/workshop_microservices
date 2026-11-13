@@ -12,7 +12,7 @@
 
 **Die Lösung:** A merkt sich, dass B kaputt ist, und kürzt zukünftige Calls sofort ab. So bleibt A schnell und gesund, auch wenn B unten ist. Nach einer Wartezeit testet A, ob B wieder da ist.
 
-> 🎯 *Demo-Einstieg:* Im Workshop-Stack Flight auf "Hängt" stellen (antwortet erst nach 10 s). Ohne CB (Story 3) wartet `/booking/offers` 5 s und antwortet dann mit einem Fehler, auch Hotel und Car fehlen. Mit CB (Story 4) warten die ersten fünf Calls je 3 s wie im Spiel und liefern 200 mit Hotel, Car und `flights: []`. Ab dem 6. Call kommt die Antwort sofort, zusätzlich mit `X-Circuit-Open: flight`. Wer es schneller will, nimmt "Fehler" (sofort ein 500, ohne Warten).
+> 🎯 *Demo-Einstieg:* Im Workshop-Stack Flight auf „Timeout“ stellen (antwortet erst nach 10 s). Ohne CB (Story 3) wartet `/booking/offers` 5 s und antwortet dann mit einem Fehler, auch Hotel und Car fehlen. Mit CB (Story 4) warten die ersten fünf Calls je 3 s wie im Spiel und liefern 200 mit Hotel, Car und `flights: []`. Ab dem 6. Call kommt die Antwort sofort, zusätzlich mit `X-Circuit-Open: flight`. Wer es schneller will, nimmt "Fehler" (sofort ein 500, ohne Warten).
 
 ---
 

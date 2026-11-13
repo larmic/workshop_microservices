@@ -129,7 +129,7 @@ Offen ansagen:
 
 ## Teil 2: Die Demo mit der Referenz (ca. 10 Minuten)
 
-Im Dashboard unter Story 4: Flight auf „Hängt" stellen (antwortet erst nach 10 s, also nach dem 3-s-Timeout von Booking), dann `GET /booking/offers` auslösen. Die ersten fünf Calls warten je 3 Sekunden, genau wie die Karten 05–09. Schneller geht es mit „Fehler" (sofort ein 500, ohne Warten). Der Client bekommt immer 200 mit `flights: []` und `X-Fallback: flight`. Der fünfte Call öffnet den Breaker, ab dem sechsten steht zusätzlich `X-Circuit-Open: flight` in der Antwort. Flight zurück auf „Normal": Nach 30 Sekunden zeigt das Panel HALF_OPEN schon ohne Call, die erfolgreiche Probe schließt den Breaker. Drehbuch im Detail weiter unten.
+Im Dashboard unter Story 4: Flight auf „Timeout“ stellen (antwortet erst nach 10 s, also nach dem 3-s-Timeout von Booking), dann `GET /booking/offers` auslösen. Die ersten fünf Calls warten je 3 Sekunden, genau wie die Karten 05–09. Schneller geht es mit „Fehler" (sofort ein 500, ohne Warten). Der Client bekommt immer 200 mit `flights: []` und `X-Fallback: flight`. Der fünfte Call öffnet den Breaker, ab dem sechsten steht zusätzlich `X-Circuit-Open: flight` in der Antwort. Flight zurück auf „Normal": Nach 30 Sekunden zeigt das Panel HALF_OPEN schon ohne Call, die erfolgreiche Probe schließt den Breaker. Drehbuch im Detail weiter unten.
 
 ---
 
