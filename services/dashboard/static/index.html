@@ -1672,7 +1672,7 @@
                 <div class="start-legend">
                     <span><span class="kind-pill" data-kind="code">Hands-on</span> eigener Code</span>
                     <span><span class="kind-pill" data-kind="design">Design-Session</span> am Flipchart</span>
-                    <span><span class="kind-pill" data-kind="play">Rollenspiel</span> am Tisch, danach die Demo hier</span>
+                    <span><span class="kind-pill" data-kind="play">Spiel</span> am Tisch, danach die Demo hier</span>
                 </div>
 
                 <div class="start-card start-homework">
@@ -2299,7 +2299,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <h4>Zum Nachbauen</h4>
                         <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Downstream-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
                         <p><strong>User Story:</strong> Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Downstream-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
-                        <p><strong>Material:</strong> Pro Tisch zu f&uuml;nft ein W&uuml;rfel, 13 Pokerchips und ein Zettel f&uuml;r Booking. Nichts zu drucken. Ab 7 Personen zwei Tische, mehr Tische machen das stille Storno sicherer sichtbar.</p>
+                        <p><strong>Material:</strong> Pro Tisch zu f&uuml;nft ein W&uuml;rfel, 13 Pokerchips und ein Zettel f&uuml;r Booking. Nichts zu drucken. Ab 8 Personen zwei Tische, mehr Tische machen das stille Storno sicherer sichtbar.</p>
                         <p>Story zum Nachbauen mit Regeln, Zahlen und Aufl&ouml;sungen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-07-choreography-saga.md" target="_blank" rel="noopener"><code>docs/stories/story-07-choreography-saga.md</code></a>. Referenz: <code>services/booking/story7/</code>.</p>
                     </div>
                 </details>
@@ -3678,7 +3678,7 @@ on receiveCompensationEvent(event):
 
         // -------- Story-Stepper-Navigation --------
         // Titel und Zeit-Pille wie auf den Story-Folien (Kicker, Überschrift, Badge).
-        const KIND_LABEL = { start: "Start", code: "Hands-on", design: "Design-Session", play: "Rollenspiel" };
+        const KIND_LABEL = { start: "Start", code: "Hands-on", design: "Design-Session", play: "Spiel" };
         const STORY_META = {
             0: { title: "Willkommen bei &bdquo;Microservices richtig gemacht&ldquo;", kind: "start", pill: "Hausaufgabe pr&uuml;fen",
                  subtitle: "Ein Klick pr&uuml;ft eure Hausaufgabe. Einklinken machen wir gemeinsam im Workshop." },

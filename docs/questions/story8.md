@@ -66,10 +66,10 @@ anderen freier Text, ist die Korrelation Theater.
 
 ---
 
-## Frage 4 — Ein Zettel hat keinen HTTP-Header. Wie kommt der Trace mit? (Recap 04)
+## Frage 4 — Ein Zuruf hat keinen HTTP-Header. Wie kommt der Trace mit? (Recap 04)
 
-**Frage:** Im Story-7-Rollenspiel lag die Stornierung als Zettel auf dem
-Tisch. Hätten wir das programmiert, wäre es ein Event gewesen. Wo steht
+**Frage:** Im Story-7-Spiel wurde die Stornierung nur zugerufen. Hätten
+wir das programmiert, wäre es ein Event gewesen. Wo steht
 dann die Trace-ID?
 
 **Antwort:** Der Kontext muss aktiv mitwandern: beim Publish als

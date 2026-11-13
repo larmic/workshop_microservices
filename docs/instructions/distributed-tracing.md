@@ -167,7 +167,7 @@ Reference-Implementierung: `services/shared/tracing/tracing.go` (~100 Zeilen).
 
 ## 4. Tracing über Async-Grenzen
 
-Bei Events reicht der HTTP-Header nicht mehr (im Workshop: Recap-Frage 04 mit dem Zettel aus dem Story-7-Rollenspiel und der Event-Bonus in Story 8) — der Trace-Kontext muss **als Property auf dem Event** mitwandern:
+Bei Events reicht der HTTP-Header nicht mehr (im Workshop: Recap-Frage 04 mit dem Zuruf aus dem Story-7-Spiel und der Event-Bonus in Story 8) — der Trace-Kontext muss **als Property auf dem Event** mitwandern:
 
 ```json
 {

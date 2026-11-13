@@ -26,8 +26,8 @@
 <h4>So l&auml;uft jede Reise</h4>
 <ol>
 <li>Booking w&uuml;rfelt: 1 Flight, 2 Hotel, 3 Car sagt nein, 4&ndash;6 alle ja.</li>
-<li>Wer nein sagt, w&uuml;rfelt: 1&ndash;3 <code>503</code>, Booking darf mit einem Budget-Chip retten. 4&ndash;6 ausgebucht.</li>
-<li>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; und sagt sofort &bdquo;Storniert&ldquo;. Dann w&uuml;rfeln die Gerufenen: 5&ndash;6 nicht geh&ouml;rt.</li>
+<li>Wer nein sagt, w&uuml;rfelt: 1&ndash;3 <code>503</code>, Booking darf statt des Kunden mit einem Budget-Chip retten. 4&ndash;6 ausgebucht.</li>
+<li>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; an die schon Gebuchten und sagt sofort &bdquo;Storniert&ldquo;. Dann w&uuml;rfeln die Gerufenen: 5&ndash;6 nicht geh&ouml;rt.</li>
 </ol>
 <p class="step-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts.</p>
 </div>
