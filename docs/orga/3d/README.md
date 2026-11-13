@@ -1,4 +1,4 @@
-# 3D-Druck: Requisiten für die Rollenspiele
+# 3D-Druck: optionales Requisit für Story 4
 
 Ein parametrisches OpenSCAD-Modell: das PROBE-Token aus Story 4, das seit dem
 Kartenstapel optional ist. Story 5 und Story 7 brauchen keinen 3D-Druck,

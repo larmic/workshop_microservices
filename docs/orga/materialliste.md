@@ -1,4 +1,4 @@
-# Materialliste: Spielmaterial für die Rollenspiele
+# Materialliste: Spielmaterial für die Spiele
 
 Packliste für „Microservices richtig gemacht“ mit 8, 12 und 16 Teilnehmenden. Sie umfasst die Rollenspiele aus Story 4 (Circuit Breaker) und Story 5 (Bulkhead), das Würfelspiel aus Story 7 (Choreography-Saga) sowie die Design-Session aus Story 2.
 
