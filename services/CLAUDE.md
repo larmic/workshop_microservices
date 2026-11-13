@@ -69,7 +69,9 @@ Regular (400). Keine System- oder Lizenzschriften (Futura, Faktum) im Stack;
 Details in `slides/assets/fonts/README.md`. Die Druckseite
 `pages/material/` nutzt ebenfalls Poppins (Kopie unter `pages/material/fonts/`),
 damit die Bogen auf jedem Rechner gleich umbrechen. Dashboard und die übrigen
-Pages nutzen die Systemschrift.
+Pages setzen nur die Überschriften in Poppins (Dashboard: Kopie unter
+`dashboard/static/fonts/`, Pages: aus `slides/assets/fonts/` des Pages-Builds),
+der Fließtext bleibt Systemschrift.
 
 ## Audience-Hinweis
 

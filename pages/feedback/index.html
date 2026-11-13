@@ -23,6 +23,11 @@
         }
         * { box-sizing: border-box; }
         html, body { margin: 0; padding: 0; }
+        /* Überschriften in Poppins wie auf den Folien. Die Dateien liegen auf GitHub Pages unter slides/assets/fonts/, lokal greift die Systemschrift. */
+        @font-face { font-family: "Poppins"; font-style: normal; font-weight: 700; font-display: swap; src: url("../slides/assets/fonts/poppins-700.woff2") format("woff2"); }
+        @font-face { font-family: "Poppins"; font-style: normal; font-weight: 800; font-display: swap; src: url("../slides/assets/fonts/poppins-800.woff2") format("woff2"); }
+        h1, h2, h3 { font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        h1 { font-weight: 800; }
         body {
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
