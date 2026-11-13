@@ -48,10 +48,11 @@
 </div>
 
 Note:
-- <strong>Hook:</strong> &bdquo;Flight gebucht, Hotel sagt nein. Jetzt baut ihr den R&uuml;ckweg.&ldquo;
+- <strong>Hook:</strong> &bdquo;Jetzt baut ihr den R&uuml;ckweg.&ldquo;
 - <strong>Wiedererkennung:</strong> dieselbe Story im Dashboard unter Story 6, &bdquo;Aufgabe&ldquo;. Sprache und Framework wieder frei.
 - <strong>R&uuml;ckblick Story 2:</strong> In Story 2 war das Storno meist eine eigene Ressource mit Grund (<code>POST &hellip;/cancellation</code>). Die Kompensation nimmt die andere Variante aus Quiz 4: <code>DELETE</code>, idempotent, ohne Body.
   - Sobald ein Retry dazukommt oder jemand nachst&ouml;&szlig;t, muss <code>DELETE</code> idempotent sein.
+- <strong>Zwei Ebenen:</strong> Saga-Status f&uuml;r die ganze Buchung, Schritt-Status pro Service (<code>BOOKED</code>, <code>COMPENSATED</code>, <code>COMPENSATION_FAILED</code>).
 - <strong>Nur ein Versuch</strong> f&uuml;r die Kompensation, kein Retry, kein persistenter Status. Das macht das Pattern sichtbar, Persistenz und Retry kommen im Recap.
 - <strong>Demo:</strong> Hotel auf &bdquo;Fehler&ldquo;, dann <code>POST /booking/bookings</code>.
   - Saga-Karte: Flight COMPENSATED, Hotel FAILED, Car nicht aufgerufen, Saga FAILED. <code>COMPENSATING</code> sieht man nicht, die Kompensation dauert Millisekunden.

@@ -10,7 +10,7 @@
 
 <div class="quiz-answer fragment">
 <div class="callout">RESTful</div>
-<p><code>offers</code> ist ein Substantiv, GET ver&auml;ndert nichts, und die Auswahl steht in Query-Parametern statt in eigenen Endpoints. Genau das meint &bdquo;Sub-Ressourcen und Filter&ldquo;, Regel 5 von der Regel-Folie eben. Und genau das habt ihr in Story 1 schon gebaut.</p>
+<p><code>offers</code> ist ein Substantiv, GET ver&auml;ndert nichts, und die Auswahl steht in Query-Parametern statt in eigenen Endpoints. Genau das meint &bdquo;Sub-Ressourcen und Filter&ldquo;, Regel 5 von der Regel-Folie. Und genau das habt ihr in Story 1 schon gebaut.</p>
 <code class="quiz-take">Filter &ne; Endpoint</code>
 </div>
 

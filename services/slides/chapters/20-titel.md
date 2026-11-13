@@ -21,7 +21,6 @@
 </div>
 
 Note:
-- <strong>Hook:</strong> &bdquo;Flug gebucht, Hotel sagt nein. Was nun?&ldquo;
 - <strong>Grafik:</strong> Hotel scheitert, Car wird gar nicht mehr gefragt. Der lime Pfeil storniert den Flug.
 - <strong>Herkunft:</strong> Kein Buch, sondern das Paper, das den Begriff Saga gepr&auml;gt hat. Zwei Datenbank-Forscher aus Princeton, 1987.
   - Problem damals: lange Transaktionen halten Sperren zu lange. L&ouml;sung: in Teilschritte zerlegen, jeder committet f&uuml;r sich und hat eine Kompensation.
