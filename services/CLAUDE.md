@@ -32,13 +32,31 @@ Einzelfarben nur für den Eisberg auf Folie 08b (kein Teil der Palette):
 `#3A1F9E` mittlere Schicht zwischen Violett und Primär-Dunkel, `#E5484D`
 rote Boje am Tiefenmesser.
 
-Status-Farben (Dashboard, Circuit-Breaker-Badges etc.):
+Status-Farben (Dashboard, Circuit-Breaker-Badges, Health- und Startup-Symbole auf hellem Grund):
 
 | Status | Hintergrund | Text |
 |---|---|---|
 | closed / ok | `#d4f4dd` | `#1d7a3a` |
 | open / Fehler | `#fde0e0` | `#b3261e` |
 | halfopen / Warnung | `#fff3cd` | `#8a6d00` |
+
+Status-Punkte im dunklen Dashboard-Kopf (Health-Chip): `#22c55e` ok,
+`#f59e0b` Warnung, `#ef4444` Fehler. Die Status-Textfarben wären dort zu
+dunkel, deshalb diese drei kräftigeren Töne, nur an dieser Stelle.
+
+Service-Farben (Chips im Dashboard, Karten und Schilder der Druckseite):
+
+| Service | Text | Hintergrund |
+|---|---|---|
+| Flight | `#1456b3` | `#e3effd` |
+| Hotel | `#8a4a00` | `#fdeede` |
+| Car | `#1d7a3a` | `#e6f4ea` |
+
+Das Palette-Gate (`scripts/gates.sh palette`) prüft beide Richtungen: Die
+Rollen kommen in Slides und Dashboard vor, und Dashboard und `pages/` nutzen
+keine Farbe außerhalb dieser Tabellen. Grau- und Fast-Weiß-Töne sind frei.
+Abgeleitete Töne (Hover, Rahmen) stehen als Ausnahmeliste in
+`archtest/palette_test.go`; neue Farben gehören in die Palette, nicht dorthin.
 
 ## Schriften (Slides)
 
@@ -48,8 +66,10 @@ eingebunden. Einzige Ausnahme ist **Sacramento** (SIL OFL 1.1), eine
 Schreibschrift nur für den „roten Faden“ auf der Feedback-Folie. Damit rendern Checkout, CI, GitHub Pages, Docker und Beamer
 identisch, auch offline. Titel laufen in ExtraBold (800), Fließtext in
 Regular (400). Keine System- oder Lizenzschriften (Futura, Faktum) im Stack;
-Details in `slides/assets/fonts/README.md`. Dashboard und Pages nutzen
-die Systemschrift.
+Details in `slides/assets/fonts/README.md`. Die Druckseite
+`pages/material/` nutzt ebenfalls Poppins (Kopie unter `pages/material/fonts/`),
+damit die Bogen auf jedem Rechner gleich umbrechen. Dashboard und die übrigen
+Pages nutzen die Systemschrift.
 
 ## Audience-Hinweis
 

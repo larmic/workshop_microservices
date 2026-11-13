@@ -24,12 +24,12 @@
         header h1 { font-size: 1.5rem; font-weight: 600; }
         header p { font-size: 0.875rem; color: #aaa; margin-top: 0.25rem; }
         .error-banner {
-            background: #fee;
-            color: #c00;
+            background: #fde0e0;
+            color: #b3261e;
             padding: 0.75rem 1rem;
             text-align: center;
             display: none;
-            border-bottom: 2px solid #fcc;
+            border-bottom: 2px solid #f3b8b8;
         }
         .container {
             max-width: 1100px;
@@ -191,7 +191,7 @@
             background: #1d7a3a;
             transition: width 0.3s, background 0.3s;
         }
-        .bh-bar-fill.warn { background: #b8860b; }
+        .bh-bar-fill.warn { background: #8a6d00; }
         .bh-bar-fill.full { background: #b3261e; }
 
         /* REST-Call Buttons mit Method/Pfad/Service-Chips */
@@ -432,7 +432,7 @@
         }
         .saga-stat.completed strong   { color: #1d7a3a; }
         .saga-stat.failed strong      { color: #b3261e; }
-        .saga-stat.compensating strong{ color: #b8860b; }
+        .saga-stat.compensating strong{ color: #8a6d00; }
         .saga-stat.pending strong     { color: #555; }
         .saga-list {
             display: flex;
@@ -1358,13 +1358,14 @@
             transition: background 0.15s, border-color 0.15s;
         }
         .health-chip:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); }
+        /* Status-Punkte auf dem dunklen Kopf: kräftiger als die Status-Farben, die dort zu dunkel wären (services/CLAUDE.md) */
         .health-chip.ok .health-chip-dot { background: #22c55e; }
         .health-chip.warn .health-chip-dot { background: #f59e0b; }
         .health-chip.err .health-chip-dot { background: #ef4444; }
         .health-chip-dot {
             width: 8px; height: 8px;
             border-radius: 50%;
-            background: #9ca3af;
+            background: #aaa;
             box-shadow: 0 0 0 0 currentColor;
         }
         .health-chip.warn .health-chip-dot { animation: pulse 1.6s ease-in-out infinite; }
@@ -1412,10 +1413,10 @@
         .health-panel-row + .health-panel-row { border-top: 1px solid #f0f0f4; }
         .health-panel-row .status-icon { font-size: 0.95rem; line-height: 1; }
         .health-panel-row .status-label { color: #666; font-size: 0.75rem; }
-        .health-panel-row.status-ready .status-icon { color: #16a34a; }
-        .health-panel-row.status-starting .status-icon { color: #f59e0b; }
-        .health-panel-row.status-scaled-to-zero .status-icon { color: #9ca3af; }
-        .health-panel-row.status-down .status-icon { color: #ef4444; }
+        .health-panel-row.status-ready .status-icon { color: #1d7a3a; }
+        .health-panel-row.status-starting .status-icon { color: #8a6d00; }
+        .health-panel-row.status-scaled-to-zero .status-icon { color: #aaa; }
+        .health-panel-row.status-down .status-icon { color: #b3261e; }
 
         .startup-overlay, .offline-overlay {
             position: fixed;
@@ -1468,14 +1469,14 @@
             width: 18px;
             height: 18px;
         }
-        .startup-row.status-ready .startup-icon { color: #16a34a; }
-        .startup-row.status-starting .startup-icon { color: #f59e0b; }
-        .startup-row.status-scaled-to-zero .startup-icon { color: #9ca3af; }
-        .startup-row.status-down .startup-icon { color: #ef4444; }
+        .startup-row.status-ready .startup-icon { color: #1d7a3a; }
+        .startup-row.status-starting .startup-icon { color: #8a6d00; }
+        .startup-row.status-scaled-to-zero .startup-icon { color: #aaa; }
+        .startup-row.status-down .startup-icon { color: #b3261e; }
         .startup-row .spinner {
             width: 14px; height: 14px;
-            border: 2px solid #fde68a;
-            border-top-color: #d97706;
+            border: 2px solid #fff3cd;
+            border-top-color: #8a6d00;
             border-radius: 50%;
             animation: spin 0.9s linear infinite;
         }
@@ -1511,7 +1512,7 @@
         .offline-card { text-align: center; max-width: 420px; }
         .offline-card .offline-icon {
             font-size: 2.4rem;
-            color: #ef4444;
+            color: #b3261e;
             margin-bottom: 0.5rem;
         }
         .offline-card h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }

@@ -72,7 +72,9 @@ Spürbare Verbesserungen für Verständnis, Konsistenz und Auftritt.
 >
 > **Nachgezogen:** W27 (`services/CLAUDE.md` und Kopfkommentar von `theme.css`).
 >
-> **Offen:** W24 (Ampelfarben und Gate, das Gate braucht Go) und W28 (Schrift der Druckseite).
+> **Nachgezogen:** W24 und W28.
+> - **W24:** Health- und Startup-Symbole auf hellem Grund nutzen die Status-Farben. Die drei kräftigen Punkte im dunklen Kopf bleiben und sind dokumentiert. Das Gate `TestPaletteNoForeignColours` meldet jede Farbe außerhalb der Palette in Dashboard und `pages/`.
+> - **W28:** Die Druckseite nutzt Poppins aus `pages/material/fonts/`. Die Trainer-Skripte zu Story 4 und 5 sind etwas enger gesetzt, alle Bogen laufen für 7 bis 20 Teilnehmer ohne Überlauf.
 
 ### Folien und roter Faden
 

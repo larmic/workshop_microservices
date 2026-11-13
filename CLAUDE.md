@@ -59,7 +59,7 @@ scripts/gates.sh gofmt      # Guard-Gate: Go-Formatierung (cd services && gofmt 
 scripts/gates.sh vet        # Guard-Gate: go vet ./...
 scripts/gates.sh arch       # Guard-Gate: Architekturregeln (services/archtest)
 scripts/gates.sh openapi    # Guard-Gate: api/openapi.yaml ⇄ registrierte Routen
-scripts/gates.sh palette    # Guard-Gate: Farbpalette slides/theme.css ⇄ dashboard/static/index.html
+scripts/gates.sh palette    # Guard-Gate: Farbpalette slides/theme.css ⇄ dashboard/static/index.html, keine fremden Farben in Dashboard und pages/
 scripts/gates.sh test       # Guard-Gate: go test (ohne archtest)
 scripts/gates.sh js         # Guard-Gate: Syntax der Inline-Skripte (node --check)
 scripts/gates.sh unicode    # Guard-Gate: keine unsichtbaren Unicode-Zeichen (gewollte als Escape, z. B. \u200B)
@@ -79,5 +79,5 @@ Regeln, die die Gates durchsetzen:
   keinen Service. Neue Stories fallen automatisch unter die Regel.
 - Jede Route in `main.go`/`handler/` steht in `api/openapi.yaml` und umgekehrt,
   Muster immer mit Methode (`"GET /pfad"`). Neue Routen also immer mit Spec.
-- Farbänderungen an Slides oder Dashboard laufen gegen die Palette in
+- Farbänderungen an Slides, Dashboard oder Pages laufen gegen die Palette in
   `services/CLAUDE.md` (`voxel.css`, das Easter-Egg-Theme, ist ausgenommen).
