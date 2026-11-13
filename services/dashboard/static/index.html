@@ -2609,7 +2609,6 @@ on receiveCompensationEvent(event):
             const own = hw.images.filter(i => i.builtLocally && !i.workshopCode);
             hw.selected = ids.includes(saved) ? saved : ((own[0] || {}).id || null);
             renderHomeworkPicker();
-            return ids.includes(saved);
         }
         function hwWhat(r) {
             if (r.source === "running") return "Euer laufender Container <code>" + hwEscape(r.container) + "</code>";
@@ -2668,9 +2667,11 @@ on receiveCompensationEvent(event):
                     hwSetResult("ok", "<strong>&check; Hausaufgabe erledigt.</strong> " + hwWhat(r) + " antwortet " + hwWhen(r) + " mit 200 auf <code>GET /health</code>. Vor dem Workshop ist sonst nichts zu tun.");
                 } else if (r.result === "choose") {
                     hwSetResult("", "");
-                    // Schon einmal erfolgreich gewählt? Dann gleich dieses Image prüfen.
-                    if (await loadHomeworkImages()) setTimeout(runHomeworkCheck, 0);
-                    label = btn.textContent;
+                    // Die Auswahl erscheint immer, ein früher erfolgreich geprüftes
+                    // Image ist vorausgewählt. So bleibt sichtbar, was geprüft wird,
+                    // und ein anderes Image (etwa das eines Kollegen) ist wählbar.
+                    await loadHomeworkImages();
+                    label = hw.picked ? "Dieses Image prüfen" : "Erneut prüfen";
                 } else if (r.result === "busy") {
                     hwSetResult("warn", "Ein Check l&auml;uft gerade, bitte kurz warten.");
                 } else if (r.result === "forbidden") {
