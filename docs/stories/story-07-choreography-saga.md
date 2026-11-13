@@ -142,7 +142,7 @@ Antworten und Anekdoten: [questions/story7.md](../questions/story7.md)
 
 Unter `services/booking/story7/` liegt die Referenz: Der Hinweg ist derselbe wie in Story 6 (Flight, Hotel, Car nacheinander, je mit Circuit Breaker). Scheitert ein Schritt, schickt Booking jedem Schritt mit Status `BOOKED` ein `CompensationRequested`-Event, rückwärts und einzeln per `POST /events/compensation`. Booking wartet jeweils auf `202 Accepted`, höchstens 3 Sekunden (HTTP-Client-Timeout). Kommt keine 202, loggt Booking `dispatch-failed` und setzt den Step trotzdem auf `COMPENSATED`. Es gibt genau einen Versuch, kein Retry und keine Nachlieferung. Die Backends antworten sofort mit 202 und loggen die Stornierung danach in einer Goroutine, sie deduplizieren nicht.
 
-Im Dashboard zeigt das Choreography-Panel unter Story 7 die Saga-Zustände. Reply-Events, Timeout-Erkennung (`STUCK`) und persistente Idempotenz gibt es in der Referenz **nicht**. Sie sind die Bonus-Kriterien für alle, die das Pattern selbst weiterbauen wollen.
+Im Dashboard zeigt das Choreography-Panel unter Story 7 die Saga-Zustände. Reply-Events, Timeout-Erkennung (`STUCK`) und persistente Idempotenz gibt es in der Referenz **nicht**. Sie sind Erweiterungen für alle, die das Pattern selbst weiterbauen wollen.
 
 ## Technische Hinweise
 
@@ -156,9 +156,9 @@ Im Dashboard zeigt das Choreography-Panel unter Story 7 die Saga-Zustände. Repl
   }
   ```
   `eventId` ist `ev-` plus acht Hex-Zeichen und wäre der Dedup-Key. Das Backend antwortet mit `202 Accepted`, bei fehlenden Feldern mit `400`.
-- **Wartet nur auf die Annahme (Pflicht-Variante):** Booking wartet nacheinander auf jede 202, aber nicht auf die eigentliche Stornierung. Ob sie geklappt hat, weiß Booking nicht. Das ist die bewusst schmale Variante, die zeigt, was Eventing ohne Broker strukturell nicht leistet (Diskussion im Recap).
+- **Wartet nur auf die Annahme (Referenz-Variante):** Booking wartet nacheinander auf jede 202, aber nicht auf die eigentliche Stornierung. Ob sie geklappt hat, weiß Booking nicht. Das ist die bewusst schmale Variante, die zeigt, was Eventing ohne Broker strukturell nicht leistet (Diskussion im Recap).
 - **Reply-Pattern (Bonus):** Wer die volle Variante will, baut den Rückkanal dazu: Das Backend POSTet später ein `BookingCancelled` oder `CancellationFailed` an einen Booking-Endpoint, Booking führt den Saga-Status nach. Dazu Timeout-Erkennung: Bleibt ein Reply aus, geht die Saga auf `STUCK`. Das ist asynchrones Request-Reply über zwei Webhook-Richtungen.
-- **Was Booking aufgibt, was bleibt (Pflicht-Variante):**
+- **Was Booking aufgibt, was bleibt (Referenz-Variante):**
   - **Aufgegeben:** die Ausführung der Stornierung. Booking weiß nicht mehr, ob sie geklappt hat
   - **Bleibt:** der **Saga-Status** gegenüber dem Kunden (Booking antwortet mit `FAILED`, sobald die Events angenommen oder gescheitert sind) und das Logging des Event-Dispatches
 - **Vergleich Orchestration ↔ Choreography:**

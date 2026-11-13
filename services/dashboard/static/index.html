@@ -2265,7 +2265,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
         <div class="cb-section">
             <div class="panel-header">
                 <h2>Choreography (Booking Story 7)</h2>
-                <button class="panel-reset-btn" id="saga7-reset-btn" onclick="resetSagas6()" title="Saga-Store leeren">Reset</button>
+                <button class="panel-reset-btn" id="saga7-reset-btn" onclick="resetSagas7()" title="Saga-Store leeren">Reset</button>
             </div>
             <div class="rest-actions">
                 <div class="rest-row">
@@ -3363,7 +3363,7 @@ on receiveCompensationEvent(event):
 
         // ----- Story 7: Choreography-Saga (analog zu Story 6, eigene Targets) -----
 
-        const SAGA6_RENDER_OPTS = {
+        const SAGA7_RENDER_OPTS = {
             statsId: "saga7-stats",
             listId: "saga7-list",
             label: "Booking Story 7",
@@ -3374,13 +3374,13 @@ on receiveCompensationEvent(event):
             try {
                 const res = await fetch(bookingUrl(7, "/dashboard/api/saga7-state"));
                 if (!res.ok) throw new Error(await res.text());
-                renderSagas(await res.json(), SAGA6_RENDER_OPTS);
+                renderSagas(await res.json(), SAGA7_RENDER_OPTS);
             } catch (e) {
-                renderSagas(null, SAGA6_RENDER_OPTS);
+                renderSagas(null, SAGA7_RENDER_OPTS);
             }
         }
 
-        async function resetSagas6() {
+        async function resetSagas7() {
             const btn = document.getElementById("saga7-reset-btn");
             btn.disabled = true;
             try {
@@ -3729,7 +3729,7 @@ on receiveCompensationEvent(event):
             });
             // Downstream-Services nur, wo sie etwas bringen: offen (show), eingeklappt
             // für die Demo am Ende der Story (demo), offen im Bereich
-            // „Referenz-Implementierung“ der Rollenspiele (inline) oder gar nicht (hide).
+            // „Demo und Nachbauen“ der Spiele (inline) oder gar nicht (hide).
             const panel = document.getElementById("backend-panel");
             const slot = (backend === "inline")
                 ? document.querySelector(`.story-section[data-story="${n}"] .ref-slot`)
