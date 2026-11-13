@@ -226,51 +226,60 @@ components:
       properties:
         id:
           type: string
-        airline:
-          type: string
-          example: Lufthansa
+          example: LH123
         origin:
           type: string
-          example: BER
+          example: Frankfurt
         destination:
           type: string
-          example: MUC
+          example: New York
         price:
           type: number
-          format: double
-          example: 129.99
+          format: float
+          example: 450
+        currency:
+          type: string
+          example: EUR
 
     Hotel:
       type: object
       properties:
         id:
           type: string
+          example: H1
         name:
           type: string
-          example: Grand Hotel
-        city:
-          type: string
-          example: Munich
-        pricePerNight:
+          example: Grand Hotel Berlin
+        price:
           type: number
-          format: double
-          example: 89.50
+          format: float
+          example: 150
+        currency:
+          type: string
+          example: EUR
+        unit:
+          type: string
+          example: night
 
     Car:
       type: object
       properties:
         id:
           type: string
-        provider:
-          type: string
-          example: Sixt
+          example: C1
         model:
           type: string
           example: VW Golf
-        pricePerDay:
+        price:
           type: number
-          format: double
-          example: 45.00
+          format: float
+          example: 45
+        currency:
+          type: string
+          example: EUR
+        unit:
+          type: string
+          example: day
 
     BookingRequest:
       type: object
