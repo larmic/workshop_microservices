@@ -6,7 +6,7 @@
 
 ## Der geteilte Pool
 
-<span class="badge design">&asymp; 45 min <small>davon 25 Spiel</small></span>
+<span class="badge design">&asymp; 25 min <small>Spiel</small></span>
 </div>
 
 <p class="subtitle">Zwei St&uuml;hle sind die Threads von Booking. Und Hotel wird <span class="hl">langsam</span>.</p>

@@ -6,7 +6,7 @@
 
 ## Die Saga wird leise
 
-<span class="badge design">&asymp; 60 min <small>davon 25 Spiel</small></span>
+<span class="badge design">&asymp; 25 min <small>Spiel</small></span>
 </div>
 
 <p class="subtitle">Ziel: <span class="hl">4 Reisen</span> buchen. H&ouml;chstens 6 Reisen d&uuml;rfen starten, gescheiterte z&auml;hlen mit.</p>

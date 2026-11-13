@@ -6,7 +6,7 @@
 
 ## Wenn der Flug ausf&auml;llt
 
-<span class="badge design">&asymp; 60 min <small>davon 20 Spiel</small></span>
+<span class="badge design">&asymp; 20 min <small>Spiel</small></span>
 </div>
 
 <p class="subtitle">Ihr seid die Requests. Flight ist krank, die Antwort steht auf der <span class="hl">Karte</span>.</p>
