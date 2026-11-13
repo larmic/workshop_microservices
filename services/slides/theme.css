@@ -2821,3 +2821,14 @@
     fill: #5B4E93;
     font-size: 18px;
 }
+
+/* Tabelle „Gespielt, jetzt konfiguriert“ (19c): Spiel, Stellschraube, Library. */
+.reveal table.knobs {
+    width: 100%;
+    font-size: 19px;
+    margin: 14px 0 12px;
+}
+
+.reveal table.knobs code {
+    white-space: nowrap;
+}

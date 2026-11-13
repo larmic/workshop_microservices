@@ -144,6 +144,13 @@ Schwere nach der Gegenprüfung. Aufwand ist meine Schätzung für die Behebung.
 > - **T7** behoben: Story 6 und Dashboard sagen, was gilt, wenn Story 3 nicht fertig ist.
 > - **T14** behoben: Folie, Dashboard und Story 7 sagen, dass nach dem Retry ohne neuen Wurf weitergebucht wird und dass Booking nach jeder Reise das übrige Reisegeld zurückgibt.
 > - **T17 bis T19** behoben: Die Vorbereitung verlangt ein Dockerfile, das aus einem frischen Klon baut, nennt WSL2 bei den Voraussetzungen und den lokalen Build der Beispiel-Lösung. Der Hilfe-Eintrag zu Zertifikatsfehlern gilt jetzt für alle Betriebssysteme. „Der Stack läuft“ ist an `http://localhost` prüfbar.
+> - **Zeit-Badges:** zeigen jetzt die eigene Zeit der Teilnehmenden (Code, Spiel, Flipchart), nicht mehr den Block. Damit ist **T5** erledigt.
+> - **T8, T9** behoben: Die Einladung nennt Themen und Format und sagt, dass Service-Schnitt nicht Thema ist. Der Aufhänger beschreibt jetzt, was der Workshop behandelt.
+> - **T10** behoben: neue Folie „Gespielt, jetzt konfiguriert“ nach dem Story-5-Recap (damit 65 Folien).
+> - **T11, T12** behoben: Abklatsch-Regel und Maßstab stehen auf der Folie „Der geteilte Pool“ und im Dashboard.
+> - **T13** bleibt bewusst offen (nicht nachgestellt).
+> - **T15** entschärft: Die Demo zu Story 7 ist auf 5 Minuten gekürzt und zeigt nur, was gegenüber Story 6 neu ist. Das stille Storno bleibt Code.
+> - **T16** behoben: Teams zu 3 bis 4, einer tippt, pro Story wechseln (Folie „Einklinken, dann los“, Dashboard-Start).
 
 ### Hoch
 

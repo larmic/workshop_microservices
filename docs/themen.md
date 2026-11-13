@@ -153,6 +153,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmen
 ### 6e. Story 5 — [Der geteilte Pool](stories/story-05-bulkhead.md) (45 Min)
 - Rollenspiel statt Code: 25 Minuten Spiel (zwei Stühle sind die Threads von Booking, Hotel wird langsam und die Requests stehen auch für das gesunde Flight an; dann schiebt der Trainer eine Wand zwischen die Stühle, Hotel bekommt nur noch einen, wer keinen Platz bekommt, ist sofort ohne Hotels fertig; Hotel, Flight und Car zählen mit, Gespräch an drei STOPP-Karten), 10 Minuten Demo mit der Referenz, Recap mit vier Fragen plus Bonus zu non-blocking
 - Lernpointe: Ressourcen-Isolation pro Downstream; die Größe des Pools ist die eigentliche Arbeit
+- Abschluss von Kapitel 2 (5 Minuten): Folie „Gespielt, jetzt konfiguriert“ übersetzt beide Spiele in die Stellschrauben einer Library (Beispiel Resilience4j), mit der Frage, wie sie in der eigenen Library heißen
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?
 - Rückgriff auf Story 2: `POST /admin/bulkhead-reset` ist bewusst RPC-artig (Dashboard-Knopf, ein Aufrufer). Abweichen mit Grund
 
