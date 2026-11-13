@@ -576,30 +576,30 @@
             <h2>Pro Tisch</h2>
             <ul>
                 <li>Ein W&uuml;rfel, genau 13 Pokerchips f&uuml;r den Kunden, Zettel und Stift f&uuml;r Booking. Chips laut abz&auml;hlen.</li>
-                <li>Feste Rollen: Booking und Kunde sind ein Team, Flight, Hotel und Car w&uuml;rfeln nur.</li>
+                <li>Feste Rollen: Kunde und Booking spielen zusammen, Flight, Hotel und Car w&uuml;rfeln nur.</li>
                 <li>Zu viert &uuml;bernimmt Booking auch Car, ab sechs f&uuml;hrt einer die Strichliste.</li>
             </ul>
         </div>
         <div>
             <h2>Ziel</h2>
             <ul>
-                <li>4 Reisen buchen, h&ouml;chstens 6 Reisen d&uuml;rfen starten. Eine Reise kostet 3 Chips: Hat der Kunde vorher nur 0, 1 oder 2, ist das Team raus, auch mit Budget.</li>
-                <li>Vorher legt das Team ein Retry-Budget in Chips zu Booking, es kommt nie zur&uuml;ck.</li>
+                <li>4 Reisen buchen, h&ouml;chstens 6 Reisen d&uuml;rfen starten. Eine Reise kostet 3 Chips. Kann der Kunde Booking keine 3 mehr geben, ist das Spiel vorbei.</li>
+                <li>Vorher machen Kunde und Booking aus, wie viele Chips Booking als Retry-Budget bekommt. Eigener Stapel, kommt nie zur&uuml;ck.</li>
             </ul>
         </div>
     </div>
     <h2>Jede Reise</h2>
     <table>
         <tr><th>Wurf</th><th>Wer</th><th>Bedeutung</th></tr>
-        <tr><td>0</td><td>Kunde</td><td>legt 3 Chips vor Booking, damit startet die Reise. Was danach noch dort liegt, nimmt er zur&uuml;ck.</td></tr>
-        <tr><td>1</td><td>Booking</td><td>4&ndash;6 alle buchen und nehmen je einen Chip. 1 Flight, 2 Hotel, 3 Car sagt nein, wer davor dran war, hat schon gebucht.</td></tr>
-        <tr><td>2</td><td>wer nein sagt</td><td>1&ndash;3 <code>503</code>: Mit Budget zahlt Booking einen Budget-Chip, die Reise klappt ohne neuen Wurf (vorw&auml;rts). 4&ndash;6 ausgebucht oder kein Budget: Reise scheitert.</td></tr>
+        <tr><td>0</td><td>Kunde</td><td>gibt Booking 3 Chips Reisegeld, damit startet die Reise. Was &uuml;brig bleibt, gibt Booking nach der Reise zur&uuml;ck.</td></tr>
+        <tr><td>1</td><td>Booking</td><td>4&ndash;6 alle buchen, Booking zahlt jedem einen Chip. 1 Flight, 2 Hotel, 3 Car sagt nein, wer davor dran war, hat schon gebucht.</td></tr>
+        <tr><td>2</td><td>wer nein sagt</td><td>1&ndash;3 <code>503</code>: Booking zahlt einen Chip aus dem Retry-Budget, die Reise klappt ohne neuen Wurf (vorw&auml;rts). 4&ndash;6 ausgebucht oder kein Budget: Reise scheitert.</td></tr>
         <tr><td>3</td><td>jeder Gerufene</td><td>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; an die schon Gebuchten, sagt sofort &bdquo;Storniert&ldquo;, Strich. Dann: 1&ndash;4 Chip zur&uuml;ck, 5&ndash;6 nicht geh&ouml;rt, Chip bleibt, schweigen.</td></tr>
     </table>
     <h2>Budget (simuliert)</h2>
     <table>
         <tr><th>Budget</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
-        <tr><td>Team gewinnt</td><td>32&nbsp;%</td><td>54&nbsp;%</td><td>44&nbsp;%</td><td>17&nbsp;%</td></tr>
+        <tr><td>Kunde + Booking gewinnen</td><td>32&nbsp;%</td><td>54&nbsp;%</td><td>44&nbsp;%</td><td>17&nbsp;%</td></tr>
         <tr><td>stilles Storno</td><td>59&nbsp;%</td><td>43&nbsp;%</td><td>32&nbsp;%</td><td>27&nbsp;%</td></tr>
     </table>
     <h2>Kassensturz und Merken</h2>

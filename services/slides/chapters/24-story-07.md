@@ -17,22 +17,22 @@
 <div class="steps-col">
 <h4>Vor dem Spiel</h4>
 <ol>
-<li><strong>Booking und Kunde</strong> spielen als Team. <strong>Flight, Hotel, Car</strong> w&uuml;rfeln nur und behalten, was bei ihnen liegt.</li>
-<li>Der Kunde hat 13 Chips. <strong>Eine Reise kostet 3</strong>: je einen f&uuml;r Flight, Hotel und Car.</li>
-<li>Vor der ersten Reise entscheidet das Team: Wie viele Chips bekommt Booking als <strong>Retry-Budget</strong>? Sie bezahlen nur Retries und kommen nie zur&uuml;ck.</li>
-<li>Hat der Kunde vor einer Reise nur 0, 1 oder 2 Chips, ist das Team raus, auch mit Budget. Mit 3 geht es weiter.</li>
+<li><strong>Kunde und Booking</strong> spielen zusammen. <strong>Flight, Hotel, Car</strong> w&uuml;rfeln nur und behalten, was bei ihnen liegt.</li>
+<li>Der Kunde hat 13 Chips. <strong>Eine Reise kostet 3</strong>, je einen f&uuml;r Flight, Hotel und Car.</li>
+<li>Kunde und Booking machen aus, wie viele Chips der Kunde Booking als <strong>Retry-Budget</strong> gibt. Booking legt sie als eigenen Stapel zur Seite. Sie kommen nie zur&uuml;ck.</li>
+<li>Kann der Kunde Booking keine 3 Chips mehr geben, ist das Spiel vorbei.</li>
 </ol>
+<p class="step-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts.</p>
 </div>
 <div class="steps-col">
 <h4>Jede Reise</h4>
 <ol>
-<li>Der Kunde legt 3 Chips vor Booking. Damit startet die Reise.</li>
-<li>Booking w&uuml;rfelt: 4&ndash;6 alle buchen und nehmen je einen Chip. 1 Flight, 2 Hotel, 3 Car sagt nein, wer davor dran war, hat schon gebucht.</li>
-<li>Wer nein sagt, w&uuml;rfelt den Grund: 1&ndash;3 nicht erreichbar (<code>503</code>). Mit Budget zahlt Booking einen Budget-Chip, die Reise klappt ohne neuen Wurf.</li>
-<li>4&ndash;6 ausgebucht oder kein Budget: Die Reise scheitert. Booking ruft den schon Gebuchten r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; zu und sagt sofort &bdquo;Storniert&ldquo;.</li>
-<li>Erst dann w&uuml;rfelt jeder Gerufene: 1&ndash;4 geh&ouml;rt, Chip zur&uuml;ck an den Kunden. 5&ndash;6 &uuml;berh&ouml;rt, er beh&auml;lt ihn. Was danach noch vor Booking liegt, nimmt der Kunde zur&uuml;ck.</li>
+<li>Der Kunde gibt Booking 3 Chips. Damit startet die Reise.</li>
+<li>Booking w&uuml;rfelt: Bei 4&ndash;6 buchen alle, und Booking zahlt jedem einen Chip. Bei 1 sagt Flight nein, bei 2 Hotel, bei 3 Car. Wer davor dran war, hat schon gebucht und seinen Chip.</li>
+<li>Wer nein sagt, w&uuml;rfelt den Grund: Bei 1&ndash;3 ist er nicht erreichbar (<code>503</code>). Booking zahlt ihm einen Chip aus dem Retry-Budget, und die Reise klappt.</li>
+<li>Bei 4&ndash;6 ist er ausgebucht, oder das Budget ist leer: Die Reise scheitert. Booking ruft den schon Gebuchten r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; zu und sagt sofort &bdquo;Storniert&ldquo;.</li>
+<li>Erst dann w&uuml;rfelt jeder Gerufene: Bei 1&ndash;4 hat er es geh&ouml;rt und gibt den Chip an den Kunden zur&uuml;ck. Bei 5&ndash;6 hat er es &uuml;berh&ouml;rt und beh&auml;lt ihn. Booking gibt dem Kunden zur&uuml;ck, was vom Reisegeld &uuml;brig ist.</li>
 </ol>
-<p class="step-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts.</p>
 </div>
 </div>
 
