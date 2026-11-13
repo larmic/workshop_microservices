@@ -592,7 +592,7 @@
     <table>
         <tr><th>Wurf</th><th>Wer</th><th>Bedeutung</th></tr>
         <tr><td>0</td><td>Kunde</td><td>gibt Booking 3 Chips Reisegeld, damit startet die Reise. Was &uuml;brig bleibt, gibt Booking nach der Reise zur&uuml;ck.</td></tr>
-        <tr><td>1</td><td>Booking</td><td>4&ndash;6 alle buchen, Booking zahlt jedem einen Chip. 1 Flight, 2 Hotel, 3 Car sagt nein, wer davor dran war, hat schon gebucht.</td></tr>
+        <tr><td>1</td><td>Booking</td><td>fragt der Reihe nach Flight, Hotel, Car: 4&ndash;6 alle buchen. 1 Flight, 2 Hotel, 3 Car sagt nein. Nur wer vor dem Nein gebucht hat, bekommt einen Chip.</td></tr>
         <tr><td>2</td><td>wer nein sagt</td><td>1&ndash;3 <code>503</code>: Booking zahlt einen Chip aus dem Retry-Budget, die Reise klappt ohne neuen Wurf (vorw&auml;rts). 4&ndash;6 ausgebucht oder kein Budget: Reise scheitert.</td></tr>
         <tr><td>3</td><td>jeder Gerufene</td><td>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; an die schon Gebuchten, sagt sofort &bdquo;Storniert&ldquo;, Strich. Dann: 1&ndash;4 Chip zur&uuml;ck, 5&ndash;6 nicht geh&ouml;rt, Chip bleibt, schweigen.</td></tr>
     </table>

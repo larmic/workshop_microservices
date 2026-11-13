@@ -28,8 +28,8 @@
 <h4>Jede Reise</h4>
 <ol>
 <li>Der Kunde gibt Booking 3 Chips. Damit startet die Reise.</li>
-<li>Booking w&uuml;rfelt: Bei 4&ndash;6 buchen alle, und Booking zahlt jedem einen Chip. Bei 1 sagt Flight nein, bei 2 Hotel, bei 3 Car. Wer davor dran war, hat schon gebucht und seinen Chip.</li>
-<li>Wer nein sagt, w&uuml;rfelt den Grund: Bei 1&ndash;3 ist er nicht erreichbar (<code>503</code>). Booking zahlt ihm einen Chip aus dem Retry-Budget, und die Reise klappt.</li>
+<li>Booking fragt der Reihe nach <strong>Flight, Hotel, Car</strong> und w&uuml;rfelt einmal: Bei 4&ndash;6 buchen alle drei. Bei 1 sagt Flight nein, bei 2 Hotel, bei 3 Car. Nur wer vor dem Nein gebucht hat, bekommt einen Chip.</li>
+<li>Wer nein sagt, w&uuml;rfelt den Grund: Bei 1&ndash;3 ist er nicht erreichbar (<code>503</code>). Booking zahlt ihm einen Chip aus dem Retry-Budget, er bucht doch, und die Reise klappt.</li>
 <li>Bei 4&ndash;6 ist er ausgebucht, oder das Budget ist leer: Die Reise scheitert. Booking ruft den schon Gebuchten r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; zu und sagt sofort &bdquo;Storniert&ldquo;.</li>
 <li>Erst dann w&uuml;rfelt jeder Gerufene: Bei 1&ndash;4 hat er es geh&ouml;rt und gibt den Chip an den Kunden zur&uuml;ck. Bei 5&ndash;6 hat er es &uuml;berh&ouml;rt und beh&auml;lt ihn. Booking gibt dem Kunden zur&uuml;ck, was vom Reisegeld &uuml;brig ist.</li>
 </ol>
@@ -47,6 +47,7 @@ Note:
 - <strong>Vorw&auml;rts oder r&uuml;ckw&auml;rts:</strong> Scheitert ein Schritt, kann Booking ihn wiederholen (Forward Recovery) oder das Gebuchte kompensieren (Backward Recovery).
   - Vorw&auml;rts nur bei technischen Fehlern wie <code>503</code>, ausgebucht bleibt ausgebucht.
   - Unsere Referenz kennt nur r&uuml;ckw&auml;rts, der Circuit Breaker wiederholt nicht.
+  - Bei <code>503</code> mit Budget immer retten, das ist rechnerisch richtig. Ausgebucht l&auml;sst sich nicht retten: Auch mit unbegrenztem Budget scheitert jede vierte Reise.
 - <strong>Leise:</strong> &bdquo;Storniert&ldquo; kommt vor dem Wurf der Gerufenen. 5&ndash;6 hei&szlig;t: Chip bleibt liegen, niemand sagt etwas. Genau die Referenz: <code>dispatch-failed</code> im Log, Step trotzdem <code>COMPENSATED</code>.
 - <strong>Kassensturz:</strong> Jeder Service sollte so viele Chips haben, wie Reisen durch sind. Jeder Chip dar&uuml;ber ist ein stilles Storno. Ergebnisse aller Tische an die Tafel, bei vier Tischen taucht fast immer eines auf.
 - &Uuml;berleitung: Chips liegen lassen, die Leiter sortiert sie. Die Demo steht in der Note dort.
