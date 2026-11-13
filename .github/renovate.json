@@ -46,6 +46,17 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
+        "/^scripts/vendor-marked\\.sh$/"
+      ],
+      "matchStrings": [
+        "MARKED_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "depNameTemplate": "marked",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
         "/^\\.github/workflows/gates\\.yml$/"
       ],
       "matchStrings": [
@@ -95,6 +106,16 @@
       "matchPackageNames": ["java"],
       "matchUpdateTypes": ["minor", "patch"],
       "enabled": false
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["marked"],
+      "automerge": false,
+      "dependencyDashboardCategory": "Manuell prüfen",
+      "addLabels": ["manuell prüfen"],
+      "prBodyNotes": [
+        "Die Datei `pages/vorbereitung/vendor/marked.min.js` liegt im Repo. Auf diesem Branch `scripts/vendor-marked.sh` ausführen und die Datei mit committen, sonst schlägt das Guard-Gate `js` fehl."
+      ]
     },
     {
       "matchManagers": ["custom.regex"],

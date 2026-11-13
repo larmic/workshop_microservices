@@ -52,6 +52,7 @@ jobs:
           cp services/dashboard/static/icon.png _site/slides/dashboard/icon.png
           cp services/dashboard/static/team-neusta-logo.svg _site/slides/dashboard/team-neusta-logo.svg
           cp pages/vorbereitung/index.html _site/vorbereitung/index.html
+          cp -r pages/vorbereitung/vendor _site/vorbereitung/vendor
           cp docs/vorbereitung.md _site/vorbereitung/vorbereitung.md
           cp docs/troubleshooting.md _site/vorbereitung/troubleshooting.md
           cp -r docs/assets/. _site/vorbereitung/assets/

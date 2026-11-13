@@ -72,6 +72,7 @@ gate_test() {
 gate_js() {
   need node js || return 0
   (cd "$ROOT" && node scripts/check-inline-js.mjs)
+  "$ROOT/scripts/vendor-marked.sh" --check
 }
 
 gate_unicode() {
