@@ -17,4 +17,4 @@ Note:
 - Conway's Law als Schluss-Ohrwurm: Die wichtigste Erkenntnis hat nichts mit Technik zu tun. Architektur folgt Organisation. Wer das wei&szlig;, schneidet die Teams bewusst passend (Inverse Conway Maneuver).
 - Conways eigene Kurzfassung: &bdquo;Any organization that designs a system will produce a design whose structure is a copy of the organization's communication structure.&ldquo; Das Paper: &bdquo;How Do Committees Invent?&ldquo;, Datamation 1968.
 - Provokation: &bdquo;Wer von euch hat ein Team, das genau einem Service entspricht?&ldquo; Meist Schweigen, dann interessante Antworten.
-- Letzte Frage in den Raum: &bdquo;Was nehmt ihr morgen in euer eigenes Projekt mit?&ldquo; Danach zur Feedback-Folie vom Anfang zur&uuml;ckspringen, QR-Code zeigen.
+- Letzte Frage in den Raum: &bdquo;Was nehmt ihr morgen in euer eigenes Projekt mit?&ldquo; Danach eine Folie weiter: Feedback mit QR-Code.

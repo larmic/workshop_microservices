@@ -51,6 +51,7 @@
 
 Note:
 - Die acht Karten sind der rote Faden: eine Karte pro Story, ein Satz pro Karte. Wenn die Teilnehmer das Bild in zwei Wochen noch vor Augen haben, war der Workshop wirkungsvoll.
+- Vom Anfang (&bdquo;&hellip; mit Netzwerkproblemen&ldquo;): Langsam war Story 5, L&uuml;gt war Story 3 und 7, Kommt nie an war Story 4 und 6.
 - Karte 07 einordnen: Unsere Referenz ist der Mittelweg. Booking dirigiert den Hinweg, nur das Storno l&auml;uft per Zuruf.
 - Provokation: &bdquo;Welche dieser acht w&uuml;rdet ihr in eurem Projekt sofort einf&uuml;hren? Welche nicht, weil ihr sie nicht braucht?&ldquo;
 - Optional vorlesen: &bdquo;Das Anti-Pattern ist nicht &sbquo;wir benutzen das falsche&lsquo;, sondern &sbquo;wir benutzen alles, weil es modern ist&lsquo;.&ldquo;
