@@ -42,7 +42,7 @@
 <div class="numlist-row">
 <div class="numlist-num">05</div>
 <div>
-<p class="numlist-label">Hundert Zeilen reichen</p>
+<p class="numlist-label">120 Zeilen reichen</p>
 <h3>Wozu dann <span class="hl">OpenTelemetry</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">OTel = SDK + Export</code>
@@ -59,6 +59,6 @@ Note:
 - <strong>&Uuml;bernehmen:</strong> Ohne Header darf jeder starten, wie in OTel. Die Backends lassen es weg (<code>Propagate</code>). <strong>Spicy:</strong> Wer &uuml;berschreibt, zerrei&szlig;t den Trace.
 - <strong>Feld statt Text:</strong> Im Flie&szlig;text wird die ID mal vergessen, mal anders geschrieben. Ein strukturierter Logger h&auml;ngt <code>trace_id</code> einmal als Feld an, danach filtert <code>jq</code>.
 - <strong>Event-Grenze:</strong> <code>traceparent</code> wandert als Property mit, bei echten Brokern im Message-Header, nicht im Payload. <strong>Spicy:</strong> Sonst rei&szlig;t der Trace an der Bus-Grenze.
-- <strong>OpenTelemetry:</strong> Propagation sind hundert Zeilen. Spans, Auto-Instrumentierung, Sampling und Export baut niemand neu. In Produktion: OTel.
+- <strong>OpenTelemetry:</strong> Propagation sind gut 120 Zeilen. Spans, Auto-Instrumentierung, Sampling und Export baut niemand neu. In Produktion: OTel.
 - Reserve: Sampling, Korrelation, Detektiv-Runde.
 - Lang: <code>docs/questions/story8.md</code>

@@ -87,9 +87,9 @@ da abreißt, wo es spannend wird: an der Bus-Grenze.
 
 ---
 
-## Frage 5 — Hundert Zeilen reichen. Wozu dann OpenTelemetry? (Recap 05)
+## Frage 5 — 120 Zeilen reichen. Wozu dann OpenTelemetry? (Recap 05)
 
-**Antwort:** Parsing und Propagation sind in hundert Zeilen erledigt,
+**Antwort:** Parsing und Propagation sind in gut 120 Zeilen erledigt,
 lehrreich und sprachneutral. Span-Lebenszyklus, Auto-Instrumentierung
 für HTTP-Clients, DB-Treiber und Broker, Sampling und Export an
 beliebige Backends sind die Arbeit, die niemand neu bauen will. Im
