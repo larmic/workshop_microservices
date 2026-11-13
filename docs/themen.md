@@ -25,7 +25,7 @@ Grobe Aufteilung über zwei Tage. Zeiten sind Richtwerte — bitte ans Tempo der
 | 6c | Hands-on: Story 3 (Service Discovery) | 60 Min |
 | 6d | Rollenspiel: Story 4 (Circuit Breaker, Rollenspiel statt Code) | 60 Min |
 
-Summe Tag 1: 225 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 7 h 40. In einem Tag von 9:00 bis 17:00 bleiben damit 20 Min für Kaffeepausen. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten und der Mittagspause; Minuten und Blöcke stehen allein hier.
+Summe Tag 1: 225 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175 Min Nachmittag, also rund 7 h 40. In einem Tag von 9:00 bis 17:00 bleiben damit 20 Min für Kaffeepausen. Im Deck kommt Block 5 (Diskussion) vor Block 4: Der Setup-Check mit dem Einklinken führt direkt in Story 1. Die Slides-Agenda (`services/slides/chapters/03-agenda.md`) zeigt die vier Halbtage mit ihren Schwerpunkten und der Mittagspause; Minuten und Blöcke stehen allein hier.
 
 ### Tag 2 (≈ 5,5 h inkl. Mittag, der Rest ist Puffer)
 

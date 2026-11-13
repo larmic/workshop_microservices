@@ -84,3 +84,4 @@ Note:
 - <strong>III Config:</strong> Ports und Backend-URLs kommen aus Env-Vars. Ein Image, jede Umgebung.
 - <strong>VII Port Binding:</strong> Der Service bringt seinen HTTP-Server selbst mit, kein Tomcat, kein IIS davor.
 - <strong>XI Logs:</strong> Nach stdout schreiben, sammeln macht die Plattform. Darauf baut Story 8 auf.
+- Der Health-Check aus der Hausaufgabe ist kein Faktor der zw&ouml;lf, sondern ein Betriebsthema. In Story 1 kommt er trotzdem vor.

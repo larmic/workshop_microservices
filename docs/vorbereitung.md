@@ -25,7 +25,7 @@ Setze in deiner Sprache/deinem Framework ein neues, leeres Projekt auf. Diesen M
 Akzeptanzkriterien:
 
 - [ ] Neues Projekt in deiner Sprache/deinem Framework
-- [ ] `GET /health` antwortet mit HTTP 200
+- [ ] `GET /health` antwortet mit HTTP 200, genau unter diesem Pfad (bei Spring Boot also nicht `/actuator/health`)
 - [ ] Eine `Dockerfile` liegt im Projekt, `docker build` läuft fehlerfrei durch, auch aus einem frischen Klon
 - [ ] Der Container startet, dein Service lauscht darin auf Port `8080`
 - [ ] Der Code liegt in einem Git-Repository, das du im Workshop mit deinem Team teilen kannst
@@ -50,7 +50,7 @@ docker run --rm -p 8099:8080 my-booking-service
 curl -i http://localhost:8099/health   # erwartet: HTTP/1.1 200
 ```
 
-Unter `localhost:8099` ist dein Service auch später im Workshop erreichbar. Im Container bleibt es Port `8080`.
+Unter `localhost:8099` ist dein Service auch später im Workshop erreichbar, sobald er eingeklinkt ist. Bis dahin antwortet dort im Workshop-Stack die mitgelieferte Beispiel-Lösung. Im Container bleibt es Port `8080`.
 
 Danach den Container mit Ctrl+C stoppen, denn den Host-Port `8099` belegt gleich die Workshop-Umgebung. Zeigt `docker ps` ihn noch, mit `docker stop <id>` stoppen. Das Image bleibt erhalten, das Dashboard prüft es in Schritt 3. Der Name `my-booking-service` ist nicht Pflicht. Mit diesem Namen findet das Dashboard dein Image aber automatisch, sonst wählst du es aus einer Liste aus.
 

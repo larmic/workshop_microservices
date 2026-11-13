@@ -68,4 +68,5 @@ Note:
   - Wer hat einen ESB gesehen?
   - Wer ist schon von Microservices zur&uuml;ck zum Modulith?
 - Vorher: Mainframes
+- K&uuml;rzel einmal aufl&ouml;sen: RMI und CORBA sind entfernte Methodenaufrufe der 90er (Java bzw. sprach&uuml;bergreifend). SCS hei&szlig;t Self-Contained Systems: vertikale Schnitte samt eigener Oberfl&auml;che, gr&ouml;ber als Microservices.
 - Microservices: feingranular, eine Aufgabe, ein Service

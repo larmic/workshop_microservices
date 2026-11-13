@@ -13,7 +13,7 @@ Microservices sind seit Jahren in aller Munde – und trotzdem begegnen uns in d
 
 Dieser Workshop räumt auf. Gemeinsam erarbeiten wir die Konzepte und Patterns, die Microservice-Architekturen wirklich tragen: hands-on, anhand einer praxisnahen Beispieldomäne. Du lernst nicht nur, wie man Microservices umsetzt, sondern vor allem warum bestimmte Entscheidungen den Unterschied machen.
 
-Die Themen: Cloud-native Grundlagen, REST-Design, Service Discovery, Circuit Breaker, Bulkhead, Saga (orchestriert und per Event) und Distributed Tracing. Gearbeitet wird in kleinen Teams an einem eigenen Service, der über acht Stories wächst. Dazu kommen eine Design-Session am Flipchart und drei Spiele, in denen wir die Patterns erst erleben und dann besprechen. Wie man Services schneidet (DDD, Bounded Contexts), ist nicht Thema dieses Workshops.
+Die Themen: Cloud-native Grundlagen, REST-Design, Service Discovery, Circuit Breaker, Bulkhead, Saga (orchestriert und per Event) und Distributed Tracing. Gearbeitet wird in kleinen Teams. Jedes Team einigt sich auf einen der mitgebrachten Services und dessen Sprache, und dieser Service wächst über acht Stories. Dazu kommen eine Design-Session am Flipchart und drei Spiele, in denen wir die Patterns erst erleben und dann besprechen. Wie man Services schneidet (DDD, Bounded Contexts), ist nicht Thema dieses Workshops.
 
 Egal ob du gerade in ein Microservice-Projekt einsteigst oder bestehende Architekturen hinterfragen möchtest:
 
