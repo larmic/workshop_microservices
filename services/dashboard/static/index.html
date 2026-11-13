@@ -2105,20 +2105,20 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             <li>Eine Anfrage bucht Flug, Hotel und Mietwagen</li>
                             <li>Orchestrierte Saga: Booking ruft Flight &rarr; Hotel &rarr; Car nacheinander auf</li>
                             <li>Bei Fehler in einem Schritt: alle vorherigen Schritte kompensieren, in umgekehrter Reihenfolge</li>
-                            <li>Jeder Service bietet einen Stornieren-/Kompensieren-Endpoint (<code>DELETE /bookings/{id}</code>), idempotent: zweiter Aufruf, gleicher Zustand, wieder <code>204</code></li>
+                            <li>Kompensiert wird &uuml;ber <code>DELETE /bookings/{id}</code>. Flight, Hotel und Car bieten das schon an, idempotent: zweiter Aufruf, gleicher Zustand, wieder <code>204</code></li>
                             <li>Status pro Saga abfragbar: <code>PENDING</code>, <code>COMPLETED</code>, <code>COMPENSATING</code>, <code>FAILED</code></li>
                             <li>Optional: Retry-Logik für Kompensation; Timeout-Handling; Persistenz für Recovery</li>
                         </ul>
                     </div>
                 </details>
                 <details class="story-cheatsheet">
-                    <summary>Spickzettel <span class="badge">3 Schritte &middot; Pseudo-Code</span></summary>
+                    <summary>Spickzettel <span class="badge">4 Schritte &middot; Pseudo-Code</span></summary>
                     <div class="story-cheatsheet-body">
                         <ol class="cheat-steps">
                             <li>
                                 <h4>Saga anlegen</h4>
                                 <p>Status und Schritte festhalten, jeder Schritt merkt sich seine Buchungs-ID f&uuml;r den R&uuml;ckweg.</p>
-<pre>saga = { id, status: PENDING, steps: [] }</pre>
+<pre>saga = { sagaId, status: PENDING, steps: [] }</pre>
                             </li>
                             <li>
                                 <h4>Vorw&auml;rts buchen</h4>
@@ -2126,7 +2126,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
 <pre>try:
   for svc in [flight, hotel, car]:
     res = POST svc/bookings { ... }
-    saga.steps.push({ svc, id: res.bookingId, status: BOOKED })
+    saga.steps.push({ service: svc, bookingId: res.bookingId, status: BOOKED })
   saga.status = COMPLETED</pre>
                             </li>
                             <li>
@@ -2136,9 +2136,18 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
   saga.status   = COMPENSATING
   saga.failedAt = X
   for step in reverse(saga.steps):
-    ok = DELETE step.svc/bookings/{step.id}   // Kompensation
+    ok = DELETE step.service/bookings/{step.bookingId}   // Kompensation
     step.status = ok ? COMPENSATED : COMPENSATION_FAILED
   saga.status = FAILED</pre>
+                            </li>
+                            <li>
+                                <h4>Im Dashboard zeigen</h4>
+                                <p>Damit die Karte unten auch bei <em>Mein Service</em> eure Sagas zeigt, fragt das Dashboard zwei Endpunkte an eurem Service ab. Die Feldnamen sind die aus Schritt 1 bis 3, <code>service</code> ist <code>flight</code>, <code>hotel</code> oder <code>car</code>.</p>
+<pre>GET  /admin/sagas         &rarr; 200, Liste, neueste zuerst:
+  [ { sagaId, status, customerName, createdAt, failedAt,
+      steps: [ { service, bookingId, status } ] } ]
+POST /admin/sagas-reset   &rarr; 204, leert die Liste</pre>
+                                <p>Den Status einer einzelnen Saga liefert <code>GET /booking/bookings/{sagaId}</code>. Scheitert die Saga, antwortet <code>POST /booking/bookings</code> mit einem Fehler-Status (die Referenz nimmt <code>503</code>) und der Saga im Body.</p>
                             </li>
                         </ol>
                     </div>
@@ -3542,7 +3551,10 @@ on receiveCompensationEvent(event):
             const list = document.getElementById(listId);
             if (!sagas || !Array.isArray(sagas)) {
                 stats.innerHTML = "";
-                list.innerHTML = '<div class="saga-empty">' + label + ' nicht erreichbar</div>';
+                const story = statsId === "saga7-stats" ? 7 : 6;
+                list.innerHTML = BookingMode[story] === "custom"
+                    ? '<div class="saga-empty">Mein Service liefert keine Saga-Liste. Das Dashboard fragt <code>GET /admin/sagas</code> ab' + (story === 6 ? ' (Spickzettel, Schritt 4)' : '') + '.</div>'
+                    : '<div class="saga-empty">' + label + ' nicht erreichbar</div>';
                 return;
             }
             const counts = { COMPLETED: 0, FAILED: 0, COMPENSATING: 0, PENDING: 0 };

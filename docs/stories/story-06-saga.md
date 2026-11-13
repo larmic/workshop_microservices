@@ -18,8 +18,8 @@ damit **ich nicht mit einer halben Reise dastehe**.
 - [ ] Eine Buchungsanfrage für Flug, Hotel und Mietwagen kann gestellt werden
 - [ ] Die Services werden nacheinander aufgerufen (Orchestration-Saga)
 - [ ] Bei Fehler in einem Schritt werden alle vorherigen Schritte kompensiert, in umgekehrter Reihenfolge
-- [ ] Jeder Service bietet einen Stornieren/Kompensieren-Endpoint an (`DELETE /bookings/{id}`), idempotent: zweiter Aufruf, gleicher Zustand, wieder `204`
-- [ ] Der aktuelle Status einer Buchung kann abgefragt werden (PENDING, COMPLETED, COMPENSATING, FAILED)
+- [ ] Kompensiert wird über `DELETE /bookings/{id}`. Flight, Hotel und Car bieten das schon an, idempotent: zweiter Aufruf, gleicher Zustand, wieder `204`
+- [ ] Der aktuelle Status einer Buchung kann abgefragt werden (PENDING, COMPLETED, COMPENSATING, FAILED), in der Referenz über `GET /booking/bookings/{sagaId}`
 - [ ] Optional: Retry-Logik für die Kompensation, Timeout-Handling, Persistenz für Recovery
 
 ## Technische Hinweise
@@ -33,6 +33,11 @@ damit **ich nicht mit einer halben Reise dastehe**.
 - **API-Endpunkte (Backend-Services):**
   - `POST /bookings` - Buchung erstellen
   - `DELETE /bookings/{id}` - Buchung stornieren (Kompensation)
+- **Fehler auslösen:** Im Dashboard einen Service auf „Fehler“ stellen (Chaos-Modus in der Service-Karte) oder mit `carId` `C9` buchen: Die ist im Car-Service reserviert, Car antwortet mit 409.
+- **Antwort im Fehlerfall:** Scheitert die Saga, antwortet `POST /booking/bookings` mit einem Fehler-Status und der Saga im Body. Die Referenz nimmt `503`.
+- **Anzeige im Dashboard:** Damit die Saga-Karte auch bei „Mein Service“ etwas zeigt, fragt das Dashboard zwei Endpunkte an eurem Service ab:
+  - `GET /admin/sagas` liefert die Liste, neueste zuerst: `[ { sagaId, status, customerName, createdAt, failedAt, steps: [ { service, bookingId, status } ] } ]`. `service` ist `flight`, `hotel` oder `car`, der Schritt-Status `BOOKED`, `COMPENSATED` oder `COMPENSATION_FAILED`.
+  - `POST /admin/sagas-reset` leert die Liste und antwortet mit `204`.
 - **Rückblick auf Story 2:** Die Storno-Diskussion vom Flipchart kommt hier als Kompensation zurück. `DELETE /bookings/{id}` muss idempotent sein, sobald der Orchestrator wiederholt (Bonus: Retry) oder jemand manuell nachstößt (siehe [questions/story2.md](../questions/story2.md), Frage 4)
 
 ## Bonus (optional)

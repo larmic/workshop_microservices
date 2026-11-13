@@ -136,6 +136,11 @@ Minute ausgefüllt.
 
 Schwere nach der Gegenprüfung. Aufwand ist meine Schätzung für die Behebung.
 
+> **Stand 13.11.2026:**
+> - **T1** behoben: `COMPOSE_FILE` steht in `services/.env.example`, damit laufen die gedruckten `docker compose`-Befehle im Ordner `services/`. Story 8, Dashboard-Panel und Troubleshooting nennen den Ordner und den Ausweg für eine ältere `.env`.
+> - **T3** behoben: Spickzettel (neuer Schritt 4) und Story 6 nennen `GET /admin/sagas`, `POST /admin/sagas-reset`, die Feldnamen, den Pfad der Statusabfrage, den Statuscode im Fehlerfall und wie man einen Fehler auslöst. Die Karte sagt bei „Mein Service“ jetzt, welcher Endpoint fehlt. Dass Flight, Hotel und Car `DELETE` schon anbieten, steht im Akzeptanzkriterium.
+> - **T2** offen, braucht eine Entscheidung zum Zeitplan (hängt mit T4 bis T6 zusammen).
+
 ### Hoch
 
 | # | Befund | Beleg | Aufwand |
