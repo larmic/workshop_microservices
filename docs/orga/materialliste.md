@@ -53,7 +53,7 @@ Kein Einkauf, kein 3D-Druck, kein A3. Ab 14 Personen spielen zwei Gruppen parall
 | Zettel und Stift für Booking | Büro | 2 | 2 | 3 | Striche für „Storniert“ und gelungene Reisen |
 | Flipchart oder Whiteboard | Raum | 1 | 1 | 1 | Ergebnisse aller Tische: Budget, gewonnen, stille Stornos |
 
-Nichts zu drucken. Die Leiter (Folie 24a) braucht kein eigenes Material, die Chips bleiben einfach liegen.
+Nichts zu drucken. Die Chips bleiben nach dem Kassensturz bis zum Recap liegen.
 
 ## Story 2: Design-Session am Flipchart
 

@@ -50,4 +50,5 @@ Note:
   - Bei <code>503</code> mit Budget immer retten, das ist rechnerisch richtig. Ausgebucht l&auml;sst sich nicht retten: Auch mit unbegrenztem Budget scheitert jede vierte Reise.
 - <strong>Leise:</strong> &bdquo;Storniert&ldquo; kommt vor dem Wurf der Gerufenen. 5&ndash;6 hei&szlig;t: Chip bleibt liegen, niemand sagt etwas. Genau die Referenz: <code>dispatch-failed</code> im Log, Step trotzdem <code>COMPENSATED</code>.
 - <strong>Kassensturz:</strong> Jeder Service sollte so viele Chips haben, wie Reisen durch sind. Jeder Chip dar&uuml;ber ist ein stilles Storno. Ergebnisse aller Tische an die Tafel, bei vier Tischen taucht fast immer eines auf.
-- &Uuml;berleitung: Chips liegen lassen, die Leiter sortiert sie. Die Demo steht in der Note dort.
+- <strong>Demo:</strong> Car auf &bdquo;Fehler&ldquo;, Saga starten. <code>FAILED</code>, Hotel und Flight <code>COMPENSATED</code>. Nach f&uuml;nf Klicks ist der Car-Breaker offen. Das stille Storno zeigt die Demo nicht, nur der Code (<code>compensate</code> in <code>booking/story7/handler/booking.go</code>).
+- &Uuml;berleitung: Chips bis zum Recap liegen lassen. Leitfrage: Was fehlt, damit kein Chip liegen bleibt <em>und</em> Booking es wei&szlig;?

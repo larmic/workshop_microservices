@@ -2241,14 +2241,6 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                                     <li><strong>Budget 1:</strong> die beste Wahl (54&nbsp;%). Budget 2 kommt auf 44&nbsp;%, Budget 3 auf 17&nbsp;%: Resilienz kostet Kapazit&auml;t.</li>
                                     <li><strong>Stilles Storno:</strong> Bei einem Service liegt ein Chip zu viel, obwohl Booking &bdquo;storniert&ldquo; gemeldet hat.</li>
                                 </ul>
-                                <h4>Danach: Die Leiter</h4>
-                                <p>Booking storniert nicht mehr selbst, antwortet aber weiter dem Kunden. Was fehlt, damit kein Chip liegen bleibt <em>und</em> Booking es wei&szlig;?</p>
-                                <ul>
-                                    <li><strong>Zuruf:</strong> Booking ruft und meldet sofort &bdquo;storniert&ldquo;. Wer es nicht h&ouml;rt, beh&auml;lt den Chip. <em>Webhook, unsere Referenz.</em></li>
-                                    <li><strong>Korb:</strong> Der Korb h&auml;lt das Storno fest und stellt zu, bis quittiert wird. Keins fehlt, manches kommt doppelt. <em>Broker, at-least-once.</em></li>
-                                    <li><strong>Nummer:</strong> Wer sich die Storno-Nummer merkt und sie wiedererkennt, quittiert nur und zahlt nicht noch einmal. <em>eventId, Idempotenz.</em></li>
-                                    <li><strong>Antwort zur&uuml;ck:</strong> Booking meldet &bdquo;storniert&ldquo; erst, wenn alle Chips zur&uuml;ck sind. Sonst meldet Booking nach einem Timeout <code>STUCK</code>. <em>Reply, Timeout.</em></li>
-                                </ul>
                                 <p>Eventing macht das Problem nicht kleiner. Es macht es leiser.</p>
                             </div>
                         </details>
@@ -3698,7 +3690,7 @@ on receiveCompensationEvent(event):
             6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
-                 subtitle: "Choreography als W&uuml;rfelspiel: Retry oder Storno, mit Kassensturz am Ende. Danach die Leiter und die Demo mit der Referenz." },
+                 subtitle: "Choreography als W&uuml;rfelspiel: Retry oder Storno, mit Kassensturz am Ende. Danach die Demo mit der Referenz und vier Fragen." },
             8: { title: "Story 8: Den roten Faden im Log", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Distributed Tracing: Gesch&auml;ftsvorg&auml;nge &uuml;ber Service-Grenzen hinweg verfolgen." },
         };

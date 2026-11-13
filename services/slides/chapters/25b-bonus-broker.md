@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">Bonus zu Frage 03</p>
+<p class="kicker">Bonus zu Frage 02</p>
 
 ## Was ein Broker kann
 

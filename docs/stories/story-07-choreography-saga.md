@@ -1,7 +1,7 @@
 # Story 7: Die Saga wird leise
 
 **Thema:** Event-Driven Architecture, Choreography-Saga, als Würfelspiel statt Code
-**Zeitrahmen:** ca. 60 Minuten: 10 Minuten Einstieg (Konzeptfolien), 20 Minuten Spiel, 5 Minuten Nachbereitung „Die Leiter“, 10 Minuten Demo mit der Referenz, 15 Minuten Recap. Spiel und Leiter zusammen sind die ≈ 25 Minuten auf der Folie.
+**Zeitrahmen:** ca. 60 Minuten: 10 Minuten Einstieg (Konzeptfolien), 25 Minuten Spiel inklusive Kassensturz, 10 Minuten Demo mit der Referenz, 15 Minuten Recap. Die ≈ 25 Minuten auf der Folie sind das Spiel mit Kassensturz.
 
 ## Kontext
 
@@ -99,31 +99,15 @@ Booking liest seine Striche vor, dann zählen Flight, Hotel und Car offen ihre C
 
 - Tische mit Budget 0 verlieren meist, weil jedes 503 zur Kompensation wird. Tische mit Budget 3 verlieren, weil Chips fürs Buchen fehlen.
 - An den meisten Tischen bleibt mindestens ein Chip bei einem Service liegen, obwohl Booking „storniert“ gemeldet hat. Genau das tut die Referenz: `dispatch-failed` im Log, Step trotzdem `COMPENSATED` (Recap 01).
-- Die doppelte Zustellung (Korb) wird nicht gespielt, sondern auf der Leiter als Gedankenexperiment aufgelöst.
+- Die doppelte Zustellung (Broker) wird nicht gespielt, sondern im Recap (Frage 2) als Gedankenexperiment aufgelöst.
 
 Bewusste Vereinfachungen: Die Würfelquoten sind Zeitraffer, in echt geht eins von tausend Stornos verloren, nicht eins von dreien. Car hat im Spiel keinen Circuit Breaker. In der Referenz öffnet der Car-Breaker nach fünf Fehlschlägen, danach startet 30 Sekunden lang keine Saga. Die Referenz wiederholt keine Vorwärtsschritte, das Retry-Budget ist eine Erweiterung im Spiel.
 
 ---
 
-## Teil 2: Nachbereitung „Die Leiter“ (ca. 5 Minuten)
+## Teil 2: Die Demo mit der Referenz (ca. 10 Minuten)
 
-Booking storniert nicht mehr selbst, antwortet aber weiter dem Kunden. Was fehlt, damit kein Chip liegen bleibt und Booking es weiß? Die Folie deckt Stufe für Stufe auf. Gespielt wurde nur der Zuruf, die übrigen Stufen sind Gedankenexperimente an den liegen gebliebenen Chips.
-
-| Stufe | Im Spiel | Technik | In der Referenz |
-|---|---|---|---|
-| Anruf | nicht gespielt, kennen alle aus Story 6: Booking wartet, bis der Chip zurück ist | synchroner Aufruf, `DELETE /bookings/{id}` | ja, in Story 6 |
-| Zuruf | gespielt: Booking ruft, meldet sofort „storniert“, bei 5–6 bleibt der Chip liegen | Webhook, `POST /events/compensation`, `202 Accepted` | ja, Story 7 |
-| Korb | Gedankenexperiment: Der Korb stellt zu, bis „erledigt“ kommt. Geht das „erledigt“ verloren, zahlt der Service zweimal | Broker mit Persistenz und Redelivery (at-least-once) | nein |
-| Nummer | Gedankenexperiment: Wer sich die Storno-Nummer merkt, quittiert nur und zahlt nicht noch einmal | Dedup über `eventId`, Idempotenz | nein, die Backends loggen nur |
-| Antwort zurück | Gedankenexperiment: Booking meldet „storniert“ erst, wenn alle Chips zurück sind, sonst nach einem Timeout `STUCK` | Reply-Event, Timeout, Saga-Status `STUCK` | nein |
-
-Merksatz: Eventing macht das Problem nicht kleiner. Es macht es leiser.
-
----
-
-## Teil 3: Die Demo mit der Referenz (ca. 10 Minuten)
-
-Die Demo kommt nach der Leiter (Hinweis in der Note von Folie 24a).
+Die Demo kommt direkt nach dem Kassensturz (Note der Spielfolie). Die Chips bleiben bis zum Recap liegen.
 
 Im Dashboard unter Story 7: Car auf „Fehler“ stellen, dann `POST /booking/bookings` auslösen. Die Saga endet mit `FAILED`, Hotel und Flight stehen auf `COMPENSATED`. Im Log von `booking-ref-story7` sieht man die Kompensation rückwärts, erst Hotel, dann Flight, jeweils mit `phase=publishing` und `phase=dispatched`.
 
@@ -134,11 +118,21 @@ Nach fünf Klicks ist der Car-Breaker offen. Danach startet 30 Sekunden lang kei
 ## Recap: Vier Fragen (ca. 15 Minuten)
 
 1. Ein Chip bleibt liegen. Booking schickt das Storno per HTTP-POST, Flight ist seit der Buchung down. Wo ist das Event jetzt?
-2. Der Korb liefert doppelt. Der Broker liefert, bis das Backend bestätigt. Stirbt es dazwischen, kommt das Event noch einmal. Was, wenn das Backend echten State ändert?
-3. Webhooks reichen doch. Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS überhaupt?
+2. Das Storno kommt zweimal. Ein Broker hält das Storno fest und liefert, bis Flight bestätigt. Stirbt Flight dazwischen, kommt das Event noch einmal. Was, wenn das Backend echten State ändert?
+3. Booking meldet zu früh „storniert“. Booking soll erst „storniert“ sagen, wenn alle Chips zurück sind. Was muss zurückkommen, und was gilt, wenn es nie kommt?
 4. Brauchen wir überhaupt einen Dirigenten? Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf Hotel. Wer merkt es, wenn Hotel das nicht weiß? (Faustregel nach Chris Richardson, *Microservices Patterns*: Choreographie für einfache Sagas ohne Reihenfolge, Orchestrierung sobald es einen Ablauf gibt.)
 
-Bonus zu Frage 3: Was ein Broker kann, was ein Webhook nicht kann. Behalten (Persistenz, Redelivery, Replay), Verteilen (Fan-out, Backpressure, Ordering), Scheitern lassen (Dead-Letter-Queue). Exactly-once-Zustellung gibt es trotzdem nicht, at-least-once plus Idempotenz ergibt exactly-once-Wirkung.
+Die Fragen 1 bis 3 steigen auf, vom Zuruf über den Broker bis zur Antwort zurück:
+
+| Stufe | Technik | In der Referenz |
+|---|---|---|
+| Zuruf (gespielt) | Webhook, `POST /events/compensation`, `202 Accepted` | ja |
+| Broker (Frage 2) | Persistenz und Redelivery (at-least-once), Dedup über `eventId` | nein, die Backends loggen nur |
+| Antwort zurück (Frage 3) | Reply-Event, Timeout, Saga-Status `STUCK` | nein |
+
+Merksatz: Eventing macht das Problem nicht kleiner. Es macht es leiser.
+
+Bonus zu Frage 2: Was ein Broker kann, was ein Webhook nicht kann. Behalten (Persistenz, Redelivery, Replay), Verteilen (Fan-out, Backpressure, Ordering), Scheitern lassen (Dead-Letter-Queue). Exactly-once-Zustellung gibt es trotzdem nicht, at-least-once plus Idempotenz ergibt exactly-once-Wirkung.
 
 Antworten und Anekdoten: [questions/story7.md](../questions/story7.md)
 

@@ -161,7 +161,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Recap-Frage: Wer kennt das Endergebnis bei dieser Variante?
 
 ### 6g. Story 7 — [Die Saga wird leise](stories/story-07-choreography-saga.md) (60 Min)
-- Würfelspiel statt Code: 10 Minuten Einstieg, dann 25 Minuten Spiel inklusive Nachbereitung. „Retry oder Storno“: Booking und Kunde bringen Reisen durch, ein Retry-Budget rettet `503`, ausgebucht wird per Zuruf storniert, und manches Storno bleibt still liegen. Danach „Die Leiter“ (Webhook, Broker, Idempotenz, Reply). 10 Minuten Demo mit der Referenz, 15 Minuten Recap mit vier Fragen plus Bonus zum Broker
+- Würfelspiel statt Code: 10 Minuten Einstieg, dann 25 Minuten Spiel inklusive Kassensturz. „Retry oder Storno“: Booking und Kunde bringen Reisen durch, ein Retry-Budget rettet `503`, ausgebucht wird per Zuruf storniert, und manches Storno bleibt still liegen. 10 Minuten Demo mit der Referenz, 15 Minuten Recap mit vier Fragen (Webhook, Broker und Idempotenz, Reply, Dirigent) plus Bonus zum Broker
 - Lernpointe: Choreography verteilt Verantwortung und Wissen; ohne haltbares Messaging wird das Problem nur leiser
 - Recap-Frage: Wann Orchestration, wann Choreography?
 

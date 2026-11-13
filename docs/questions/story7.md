@@ -8,7 +8,7 @@ verkaufen, sondern als bewusste Verschiebung der Komplexität.
 
 ---
 
-## Frage 1 — Was passiert, wenn der Event-POST selbst fehlschlägt?
+## Frage 1 — Was passiert, wenn der Event-POST selbst fehlschlägt? (Recap 01)
 
 **Frage:** Booking schickt `CompensationRequested` per HTTP-POST an jedes
 Backend, das schon gebucht hat, rückwärts (erst Hotel, dann Flight). Was,
@@ -48,16 +48,17 @@ nicht — es **verschiebt** es. In Story 6 hat Booking den Schmerz gespürt
 und konnte reagieren. In Story 7 steht er nur noch als Strich im Log. Das ist
 das Gegenteil von „resilient", solange wir nichts gegen verlorene Events
 haben. Wer Choreography ernst meint, fängt nicht beim Event-Versand an,
-sondern bei der **Durability des Events**.
+sondern bei der **Durability des Events**. Kurz: Eventing macht das Problem
+nicht kleiner. Es macht es leiser.
 
 ---
 
-## Frage 2 — Warum ist Idempotenz bei Events ein Feature, kein Nice-to-have?
+## Frage 2 — Das Storno kommt zweimal: Warum ist Idempotenz bei Events Pflicht? (Recap 02)
 
 **Frage:** Unser Backend tut bei `POST /events/compensation` *nichts
 außer loggen*. Welche Konsequenz hätte es, wenn dasselbe Event zweimal
-zugestellt würde? Müssen wir uns überhaupt darum kümmern? (Im Spiel nur als
-Gedankenexperiment auf der Leiter: Der Korb stellt noch einmal zu, der Service
+zugestellt würde? Müssen wir uns überhaupt darum kümmern? (Im Spiel nicht
+gespielt, ein Gedankenexperiment: Ein Broker stellt noch einmal zu, Flight
 zahlt zweimal.)
 
 **Antwort:** In unserer Schmalspur-Variante mit einmaligem `POST`
@@ -108,9 +109,7 @@ unterscheidet. Wer Events publiziert, muss davon ausgehen, dass sie
 mehrfach ankommen. Wer das ignoriert, hat einen Bug, der erst unter Last
 zuschlägt — also genau dann, wenn niemand ihn debuggen kann.
 
----
-
-## Frage 3 — Warum brauchen wir echte Broker (Kafka, RabbitMQ, NATS)?
+### Und wozu überhaupt ein Broker? (Bonus-Folie zu Recap 02)
 
 **Frage:** Wir machen Eventing mit HTTP-POST gegen die Backends via
 Consul. Das ist schnell, einfach, kostet keine zusätzliche Infrastruktur.
@@ -155,7 +154,34 @@ als das fertige Werkzeug zu nehmen.
 
 ---
 
-## Frage 4 — Brauchen wir überhaupt einen Dirigenten?
+## Frage 3 — Booking meldet zu früh „storniert“: Woher weiß Booking es wirklich? (Recap 03)
+
+**Frage:** Booking soll erst „storniert“ sagen, wenn alle Stornos
+angekommen sind. Was muss dafür zurückkommen, und was gilt, wenn es nie
+kommt? (Im Spiel: Booking sagt „Storniert“, bevor die Gerufenen würfeln.)
+
+**Antwort:** Ein **Reply-Event** pro Service, zum Beispiel
+`BookingCancelled` oder `CancellationFailed`, an einen Booking-Endpoint.
+Booking führt den Saga-Status erst danach nach und wartet mit **Timeout**:
+
+```
+   CompensationRequested  →  Hotel, Flight
+   BookingCancelled       ←  Hotel           Saga: COMPENSATING
+   (nichts von Flight nach N Sekunden)      Saga: STUCK, Alarm
+```
+
+`STUCK` ist ehrlicher als `COMPENSATED`: Booking sagt, was es weiß. Der
+Preis: Booking wartet wieder, nur asynchron. Das ist ein Stück
+Orchestrierung zurück, und genau das führt zu Frage 4. Die Referenz kennt
+keine Replies, sie markiert nach dem `202` sofort `COMPENSATED`.
+
+**Take-away:** Wer „storniert“ sagt, ohne es zu wissen, lügt höflich.
+Gewissheit gibt es nur mit Antwort und Timeout, und beides ist Arbeit, die
+ein Broker allein nicht abnimmt.
+
+---
+
+## Frage 4 — Brauchen wir überhaupt einen Dirigenten? (Recap 04)
 
 **Frage:** Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf
 Hotel, niemand dirigiert. Wer merkt es, wenn Hotel nicht weiß, dass es
