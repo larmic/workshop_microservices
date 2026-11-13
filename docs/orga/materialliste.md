@@ -76,7 +76,7 @@ Nichts zu drucken, die Teams schreiben die Tabelle direkt aufs Flipchart.
 | Papier 80 g, A4 | Büro | 3 Bogen | 3 Bogen | 3 Bogen | Trainer-Skripte Story 4 und 5 (je ein Blatt beidseitig), Spickzettel Story 7. Ohne A3-Drucker 5 Bogen: das Board als 2× A4 |
 | A3-Papier (optional) | Büro | 1 | 1 | 1 | nur mit A3-Drucker, sonst das Circuit-Breaker-Board aus Story 4 als 2× A4 |
 | Schere oder Schneidemaschine, Lineal | Büro | 1 | 1 | 1 | Karten nur schneiden, nichts falzen |
-| Umschläge oder Gummibänder | Büro | ca. 6 | ca. 8 | ca. 10 | Karten pro Spiel und Tisch getrennt aufbewahren |
+| Umschläge oder Gummibänder | Büro | 2 | 2 | 3 | je Kartenstapel einer: Story 4 und Story 5 (ab 14 Personen zwei Stapel) |
 | Beamer bzw. Bildschirm | Büro | 1 | 1 | 1 | Folien, Dashboard-Demos, QR-Code fürs Feedback |
 
 ## Zusammengefasst

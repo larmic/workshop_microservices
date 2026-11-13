@@ -61,7 +61,6 @@
         table.toc tr.hidden-batch td { color: #bbb; }
         .pill { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
         .pill.karton { background: var(--wave); color: var(--primary-dark); }
-        .pill.duplex { background: var(--primary-violet); color: #fff; }
         .pill.papier { background: #eee; color: #444; }
         .pill.pduplex { background: #444; color: #fff; }
         .pill.sduplex { background: var(--primary-dark); color: #fff; }
@@ -124,7 +123,6 @@
         .sheet-label { position: absolute; left: 0; right: 0; bottom: 1.6mm; text-align: center; font-size: 6pt; color: #999; letter-spacing: 0.02em; }
         .sheet-label.mid { left: 50%; right: auto; bottom: auto; transform: translate(-50%, -50%); z-index: 4; background: #fff; padding: 0 2mm; white-space: nowrap; }
         body[data-batch="karton"] .sheet:not([data-paper="karton"]),
-        body[data-batch="duplex"] .sheet:not([data-paper="duplex"]),
         body[data-batch="papier"] .sheet:not([data-paper="papier"]),
         body[data-batch="pduplex"] .sheet:not([data-paper="pduplex"]),
         body[data-batch="sduplex"] .sheet:not([data-paper="sduplex"]),
@@ -134,10 +132,6 @@
         .cut { position: absolute; z-index: 3; pointer-events: none; }
         .cut.v { top: 0; bottom: 0; width: 0; border-left: 0.25mm dashed var(--cut); }
         .cut.h { left: 0; right: 0; height: 0; border-top: 0.25mm dashed var(--cut); }
-        .fold { position: absolute; z-index: 3; height: 0; border-top: 0.35mm dashed var(--primary-violet); border-top-style: dashed; }
-        .fold.v { height: auto; width: 0; border-top: 0; border-left: 0.35mm dashed var(--primary-violet); }
-        .fold span { position: absolute; right: 2mm; top: -2.4mm; background: #fff; padding: 0 1mm; font-size: 5.5pt; color: var(--primary-violet); letter-spacing: 0.05em; text-transform: uppercase; }
-        .fold.v span { top: 3mm; right: auto; left: -4mm; writing-mode: vertical-rl; }
 
         /* Kartenzelle: 3 mm weißer Rand, damit ungenaues Schneiden nicht auffällt */
         .cell { position: absolute; padding: 3mm; }
@@ -633,7 +627,6 @@
 
 const PAPER = {
     karton: { label: "Karton 200–250 g", hint: "einseitig" },
-    duplex: { label: "Karton 200–250 g", hint: "beidseitig, kurze Kante" },
     papier: { label: "Papier 80 g", hint: "" },
     pduplex: { label: "Papier 80 g", hint: "beidseitig, lange Kante" },
     sduplex: { label: "Karton 200–250 g", hint: "beidseitig, lange Kante" },
@@ -923,7 +916,7 @@ function scriptS5Back() {
         `<p class="fn" style="margin:2mm 0 0"><strong>Maßstab (services/booking/story5):</strong> 1 Nummer = 0,5 s, pro Nummer 1 Request (20/s). Hotel normal 1 Nummer (0,5 s), langsam 4 (2 s), Timeout 6 (3 s). 1 Stuhl = 10 Slots (<code>MaxConcurrent</code> 10): Runde 1 ein Pool aus 2 Stühlen, Runde 2 hat Hotel 1 Stuhl.</p></div>`;
 }
 
-// Raster mit Schnittlinien. cells: HTML oder null; mirror spiegelt die Spalten (Rückseiten).
+// Raster mit Schnittlinien. cells: HTML oder null.
 function grid(size, cols, rows, w, h, cells, opts = {}) {
     const [W, H] = SIZES[size];
     const x0 = (W - cols * w) / 2, y0 = (H - rows * h) / 2;
@@ -931,10 +924,8 @@ function grid(size, cols, rows, w, h, cells, opts = {}) {
     cells.forEach((c, i) => {
         if (!c) return;
         const r = Math.floor(i / cols);
-        let col = i % cols;
-        if (opts.mirror) col = cols - 1 - col;
+        const col = i % cols;
         out += `<div class="cell${opts.cellClass ? " " + opts.cellClass : ""}" style="left:${x0 + col * w}mm;top:${y0 + r * h}mm;width:${w}mm;height:${h}mm">${c}</div>`;
-        if (opts.fold) out += `<div class="fold" style="left:${x0 + col * w + 2}mm;width:${w - 4}mm;top:${y0 + r * h + h / 2}mm"><span>falzen</span></div>`;
     });
     for (let k = 0; k <= cols; k++) out += `<div class="cut v" style="left:${x0 + k * w}mm"></div>`;
     for (let k = 0; k <= rows; k++) out += `<div class="cut h" style="top:${y0 + k * h}mm"></div>`;
@@ -958,15 +949,6 @@ function padTo(list, size) {
 function buildPlan(cfg, opts) {
     const sheets = [];
     const add = (game, title, size, paper, body, extra = {}) => sheets.push(Object.assign({ game, title, size, paper, body }, extra));
-
-    // ---------- Karten 70 × 99 mm, 8 pro Bogen ----------
-    const cards70 = (game, title, cells, fillWith) => {
-        const per = 8;
-        const total = Math.ceil(cells.length / per) * per;
-        const list = cells.slice();
-        while (fillWith && list.length < total) list.push(fillWith);
-        chunk(list, per).forEach(page => add(game, title, "a4l", "karton", grid("a4l", 4, 2, 70, 99, padTo(page, per))));
-    };
 
     // ================= Story 4 =================
     add("Story 4", "Trainer-Skript", "a4p", "pduplex", document.getElementById("tpl-script-s4").innerHTML);
@@ -1116,7 +1098,7 @@ window.addEventListener("resize", fitSheets);
 // Überlaufprüfung: Karten und Zettel, deren Inhalt nicht passt, rot umranden und in der Konsole melden
 function checkOverflow() {
     const bad = [];
-    document.querySelectorAll("#sheets .face, #sheets .cheat, #sheets .tally, #sheets .blist").forEach(el => {
+    document.querySelectorAll("#sheets .face, #sheets .cheat").forEach(el => {
         el.classList.remove("overflow");
         if (!el.offsetParent) return; // ausgeblendeter Druckstapel
         if (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1) { el.classList.add("overflow"); bad.push(el); }
