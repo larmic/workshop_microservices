@@ -25,7 +25,9 @@
 <div class="steps-col">
 <h4>So l&auml;uft jede Nummer</h4>
 <p class="step-rule big">Wer sie auf der Karte hat, steht auf. Wer wartet, r&uuml;ckt nach. Dann die n&auml;chste Karte.</p>
+<p class="step-note"><strong>Hinsetzen:</strong> Flight abklatschen. <strong>Aufstehen:</strong> Car abklatschen.</p>
 <p class="step-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
+<p class="step-note"><strong>Ma&szlig;stab:</strong> 1 Nummer = 0,5 s, 1 Stuhl = 10 Slots.</p>
 </div>
 </div>
 

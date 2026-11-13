@@ -1,7 +1,7 @@
 # Story 7: Die Saga wird leise
 
 **Thema:** Event-Driven Architecture, Choreography-Saga, als Würfelspiel statt Code
-**Zeitrahmen:** ca. 60 Minuten: 10 Minuten Einstieg (Konzeptfolien), 25 Minuten Spiel inklusive Kassensturz, 10 Minuten Demo mit der Referenz, 15 Minuten Recap. Die ≈ 25 Minuten auf der Folie sind das Spiel mit Kassensturz.
+**Zeitrahmen:** ca. 60 Minuten: 10 Minuten Einstieg (Konzeptfolien), 25 Minuten Spiel inklusive Kassensturz, 5 Minuten Demo mit der Referenz, 20 Minuten Recap. Die ≈ 25 Minuten auf der Folie sind das Spiel mit Kassensturz.
 
 ## Kontext
 
@@ -105,17 +105,20 @@ Bewusste Vereinfachungen: Die Würfelquoten sind Zeitraffer, in echt geht eins v
 
 ---
 
-## Teil 2: Die Demo mit der Referenz (ca. 10 Minuten)
+## Teil 2: Die Demo mit der Referenz (ca. 5 Minuten)
 
 Die Demo kommt direkt nach dem Kassensturz (Note der Spielfolie). Die Chips bleiben bis zum Recap liegen.
 
-Im Dashboard unter Story 7: Car auf „Fehler“ stellen, dann `POST /booking/bookings` auslösen. Die Saga endet mit `FAILED`, Hotel und Flight stehen auf `COMPENSATED`. Im Log von `booking-ref-story7` sieht man die Kompensation rückwärts, erst Hotel, dann Flight, jeweils mit `phase=publishing` und `phase=dispatched`.
+Eine Saga genügt, das Bild im Dashboard ist dasselbe wie in Story 6. Im Dashboard unter Story 7: Car auf „Fehler“ stellen, dann `POST /booking/bookings` auslösen. Die Saga endet mit `FAILED`, Hotel und Flight stehen auf `COMPENSATED`. Neu sind zwei Dinge:
 
-Nach fünf Klicks ist der Car-Breaker offen. Danach startet 30 Sekunden lang keine Saga, der Pre-Check antwortet sofort mit 503. Das stille Storno aus dem Spiel zeigt die Demo nicht: Ist Flight down, scheitert schon die Buchung, und es gibt nichts zu stornieren. Dass Booking auch ohne 202 `COMPENSATED` setzt, zeigt der Code (`compensate` in `services/booking/story7/handler/booking.go`).
+- Der Hinweis am Ergebnis: „Kompensation gemeldet, Ankunft ungeprüft“.
+- Im Log von `booking-ref-story7` läuft die Kompensation rückwärts, erst Hotel, dann Flight, jeweils mit `phase=publishing` und `phase=dispatched`. Mehr als „abgeschickt“ weiß Booking nicht.
+
+Das stille Storno aus dem Spiel zeigt die Demo nicht: Ist Flight down, scheitert schon die Buchung, und es gibt nichts zu stornieren. Dass Booking auch ohne 202 `COMPENSATED` setzt, zeigt der Code (`compensate` in `services/booking/story7/handler/booking.go`).
 
 ---
 
-## Recap: Vier Fragen (ca. 15 Minuten)
+## Recap: Vier Fragen (ca. 20 Minuten)
 
 1. Ein Chip bleibt liegen. Booking schickt das Storno per HTTP-POST, Flight ist seit der Buchung down. Wo ist das Event jetzt?
 2. Das Storno kommt zweimal. Ein Broker hält das Storno fest und liefert, bis Flight bestätigt. Stirbt Flight dazwischen, kommt das Event noch einmal. Was, wenn das Backend echten State ändert?

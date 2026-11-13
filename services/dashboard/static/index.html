@@ -1672,7 +1672,7 @@
                     <li class="start-card">
                         <h3>Einklinken</h3>
                         <ul>
-                            <li>Im Team auf einen der mitgebrachten Services einigen. Die anderen klonen sein Repository.</li>
+                            <li>Teams zu 3 bis 4: auf einen der mitgebrachten Services einigen, die anderen klonen sein Repository. Einer tippt, pro Story wechseln.</li>
                             <li>In <code>services/.env</code> den Pfad zu eurem Service eintragen: <code>CUSTOM_BOOKING_PATH=/absoluter/pfad/zu/eurem/service</code></li>
                             <li>Stack neu starten: Ctrl+C, dann <code>make docker-up-hub</code>. Compose baut euren Service als <code>booking-custom</code> mit.</li>
                             <li>Die Backend-URLs (<code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code>, ab Story 3 auch <code>CONSUL_URL</code>) bekommt euer Container automatisch. Nicht selbst setzen, in Story 1 lest ihr sie aus.</li>
@@ -2015,7 +2015,9 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <div>
                             <h4>So l&auml;uft jede Nummer</h4>
                             <p class="play-rule">Wer sie auf der Karte hat, steht auf. Wer wartet, r&uuml;ckt nach. Dann die n&auml;chste Karte.</p>
+                            <p class="play-note"><strong>Hinsetzen:</strong> Flight abklatschen. <strong>Aufstehen:</strong> Car abklatschen.</p>
                             <p class="play-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
+                            <p class="play-note"><strong>Ma&szlig;stab:</strong> 1 Nummer = 0,5 s, 1 Stuhl = 10 Slots.</p>
                         </div>
                     </div>
                     <details class="story-solution">
@@ -2242,7 +2244,7 @@ POST /admin/sagas-reset   &rarr; 204, leert die Liste</pre>
                     <summary>Demo und Nachbauen <span class="badge">Referenz oder Mein Service</span></summary>
                     <div class="story-info-body">
                         <h4>Demo</h4>
-                        <p>Unten bei den Downstream-Services Car auf &bdquo;Fehler&ldquo; stellen, dann <code>POST /booking/bookings</code> ausl&ouml;sen. Die Saga endet mit <code>FAILED</code>, Hotel und Flight stehen auf <code>COMPENSATED</code>, im Log von <code>booking-ref-story7</code> r&uuml;ckw&auml;rts, erst Hotel, dann Flight. Nach f&uuml;nf Klicks ist der Car-Breaker offen, 30&nbsp;s lang antwortet der Pre-Check sofort mit 503.</p>
+                        <p>Unten bei den Downstream-Services Car auf &bdquo;Fehler&ldquo; stellen, dann <code>POST /booking/bookings</code> ausl&ouml;sen. Die Saga endet mit <code>FAILED</code>, Hotel und Flight stehen auf <code>COMPENSATED</code>, im Log von <code>booking-ref-story7</code> r&uuml;ckw&auml;rts, erst Hotel, dann Flight. Neu gegen&uuml;ber Story 6: der Hinweis &bdquo;Kompensation gemeldet, Ankunft ungepr&uuml;ft&ldquo; und im Log <code>phase=publishing</code> und <code>phase=dispatched</code>. Nach f&uuml;nf Klicks ist der Car-Breaker offen, 30&nbsp;s lang antwortet der Pre-Check sofort mit 503.</p>
         <div class="source-toggle" data-source-toggle="7">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(7,'reference')">Referenz</button>

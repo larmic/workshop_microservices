@@ -6,7 +6,7 @@
 
 <div class="page-body">
 
-<p class="lead">Euer Mini-Service wird Teil des Stacks. Nachlesen: http://localhost, Schritt 0.</p>
+<p class="lead">Teams zu 3 bis 4 an einem Service: einer tippt, pro Story wechseln. Nachlesen: http://localhost, Schritt 0.</p>
 
 <div class="cards cards-3 start-cards">
 <div class="card">
@@ -40,4 +40,4 @@
 </div>
 
 Note:
-- Gemeinsam durchgehen. Erst einigt sich jedes Team auf einen der mitgebrachten Services, die anderen klonen ihn, dann klinkt das Team ihn ein. Wer h&auml;ngt, setzt sich zu jemandem, bei dem es l&auml;uft.
+- Gemeinsam durchgehen. Teams zu 3 bis 4. Erst einigt sich jedes Team auf einen der mitgebrachten Services, die anderen klonen ihn, dann klinkt das Team ihn ein. Einer tippt, die anderen denken mit, pro Story wird gewechselt. Wer h&auml;ngt, setzt sich zu jemandem, bei dem es l&auml;uft.
