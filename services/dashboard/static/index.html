@@ -2126,9 +2126,10 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <p>Als <em>Kunde</em> möchte ich <em>eine Komplettbuchung (Flug + Hotel + Mietwagen) durchführen, die am Ende entweder vollständig steht oder nichts mehr gebucht ist</em>, damit <em>ich nicht mit einer halben Reise dastehe</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
-                            <li>Orchestrierte Saga: Flight &rarr; Hotel &rarr; Car (zentraler Koordinator)</li>
-                            <li>Jeder Service bietet einen Stornieren-/Kompensieren-Endpoint (<code>DELETE /bookings/{id}</code>), idempotent: zweiter Aufruf, gleicher Zustand, wieder <code>204</code></li>
+                            <li>Eine Anfrage bucht Flug, Hotel und Mietwagen</li>
+                            <li>Orchestrierte Saga: Booking ruft Flight &rarr; Hotel &rarr; Car nacheinander auf</li>
                             <li>Bei Fehler in einem Schritt: alle vorherigen Schritte kompensieren, in umgekehrter Reihenfolge</li>
+                            <li>Jeder Service bietet einen Stornieren-/Kompensieren-Endpoint (<code>DELETE /bookings/{id}</code>), idempotent: zweiter Aufruf, gleicher Zustand, wieder <code>204</code></li>
                             <li>Status pro Saga abfragbar: <code>PENDING</code>, <code>COMPLETED</code>, <code>COMPENSATING</code>, <code>FAILED</code></li>
                             <li>Optional: Retry-Logik für Kompensation; Timeout-Handling; Persistenz für Recovery</li>
                         </ul>
