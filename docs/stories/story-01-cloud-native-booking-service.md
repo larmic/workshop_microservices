@@ -29,16 +29,16 @@ Ein Booking-Service, der:
 
 ### 1. Betrieb
 - `/health` habt ihr schon, der Statuscode 200 genügt, der Body ist egal
-- Logging auf stdout (nicht in Dateien)
+- Logging auf stdout (nicht in Dateien). Erfüllt, wenn eure Log-Zeilen in `docker logs booking-custom` auftauchen
 
 ### 2. Externe Konfiguration
 - Backend-URLs aus Umgebungsvariablen lesen: `FLIGHT_SERVICE_URL`, `HOTEL_SERVICE_URL`, `CAR_SERVICE_URL` (setzt `docker-compose.custom.yml`, ihr lest sie nur aus)
 - `GET /info` zeigt die aktuelle Konfiguration: die drei URLs
 
 ### 3. API-Vertrag
-- `GET /openapi` liefert die OpenAPI-Spec aus, Vorlage: [`services/booking/story1/api/openapi.yaml`](../../services/booking/story1/api/openapi.yaml), passend zum eigenen Service anpassen
+- `GET /openapi` liefert die OpenAPI-Spec aus, Vorlage: [`services/booking/story1/api/openapi.yaml`](../../services/booking/story1/api/openapi.yaml), anpassen heißt: Titel und Server-URL (`http://localhost/api/booking-custom`) auf euren Service umstellen, die Pfade bleiben
 
 ### 4. Erste Orchestrierung
-- `GET /booking/offers` → ruft Flight-, Hotel- und CarService auf
+- `GET /booking/offers` → ruft Flight-, Hotel- und CarService auf: `GET /flights`, `GET /hotels`, `GET /cars`
 - Kombinierte Ergebnisse als JSON zurückgeben
 - Kein Error-Handling nötig (darf fehlschlagen)

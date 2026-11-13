@@ -26,7 +26,7 @@ Ein Booking-Service, der:
 ## Aufgaben
 
 ### 1. Consul Resolver implementieren
-- Consul HTTP API (`/v1/health/service/{name}?passing=true`) abfragen
+- Consul HTTP API (`/v1/health/service/{name}?passing=true`) abfragen. Die Adresse von Consul kommt aus der Umgebungsvariable `CONSUL_URL` (setzt `docker-compose.custom.yml`, im Stack `http://consul:8500`)
 - Service-URL aus der Antwort (Address + Port) zusammenbauen
 
 ### 2. Service Discovery statt statischer URLs
@@ -41,13 +41,14 @@ Ein Booking-Service, der:
 - `POST /booking/bookings` im Booking-Service
   - Request: `{ flightId, hotelId, carId, customerName }`
   - Ruft die drei Backend-Services über den Consul Resolver auf:
-    - `POST /bookings` am Flight-Service
-    - `POST /bookings` am Hotel-Service
-    - `POST /bookings` am Car-Service
+    - `POST /bookings` am Flight-Service mit `{ flightId, customerName }`
+    - `POST /bookings` am Hotel-Service mit `{ hotelId, customerName }`
+    - `POST /bookings` am Car-Service mit `{ carId, customerName }`
   - Antwortet mit aggregierter Buchung: `{ bookingId, customerName, flight, hotel, car }`
   - Kein Error-Handling (darf fehlschlagen)
-- Backend-Services bestätigen die Buchung mit eigener Booking-ID und loggen sie auf stdout (keine Persistenz)
+- Die Backend-Services bestätigen die Buchung mit eigener Booking-ID und loggen sie auf stdout (keine Persistenz). Das können sie schon, daran baut ihr nichts
 
 ### 4. Ausfallsicherheit (optional)
+- Selbst ausprobieren: im Dashboard Hotel auf zwei Instanzen skalieren, eine stoppen, `GET /booking/offers` muss weiter antworten
 - Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)
 - Consul Key-Value Store für zusätzliche Konfiguration

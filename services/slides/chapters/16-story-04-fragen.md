@@ -6,7 +6,7 @@
 
 ## Vier Fragen an euch
 
-<span class="badge">Und jetzt schreiben &darr;</span>
+<span class="badge">Und beim Buchen? &darr;</span>
 </div>
 
 <div class="page-body">

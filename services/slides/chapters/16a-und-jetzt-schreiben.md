@@ -2,7 +2,7 @@
 
 <div class="page dark">
 
-<p class="kicker">Story 4 &middot; und jetzt schreiben</p>
+<p class="kicker">Story 4 &middot; und beim Buchen?</p>
 
 <div class="page-body">
 

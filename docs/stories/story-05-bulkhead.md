@@ -104,7 +104,7 @@ Gezählt wird bei STOPP 3 über die Services:
 | Breaker | CLOSED | CLOSED | langsam ist kein Fehler |
 | Stühle bei Booking | 2 | 2 | gleich viele, nur durch eine Wand getrennt |
 
-Der Bulkhead tauscht Vollständigkeit gegen Verfügbarkeit. Kommt der Einwand „Gebt Hotel doch beide Stühle": Bei langsamem Hotel bräuchte es vier, mehr Stühle verschieben das Problem nur (Rechnung unter „Zum Nachlesen“). Die Reihe hinter den Stühlen ist genau die Queue aus Recap 04.
+Der Bulkhead tauscht Vollständigkeit gegen Verfügbarkeit. Kommt der Einwand „Gebt Hotel doch beide Stühle": Bei langsamem Hotel bräuchte es vier, mehr Stühle verschieben das Problem nur (Rechnung unter „Zum Nachlesen“). Die Reihe hinter den Stühlen ist genau die Queue aus Recap 03.
 
 ### Durchlauf mit 10 Personen
 

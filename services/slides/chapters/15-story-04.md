@@ -41,7 +41,7 @@ Note:
   - Die Antwort laut vorlesen.
   - Karte ablegen, hinten anstellen. Wei&szlig;e Karten kommen auf den Haufen.
   - Dunkle Karte: Booking ruft &bdquo;STOPP&ldquo; und gibt sie dem Trainer. Wer noch z&auml;hlt, z&auml;hlt fertig.
-- <strong>STOPP 1 (Karte 04):</strong> &bdquo;Was habt ihr bekommen? Wie lange? Hotel und Car waren gesund, was hattet ihr davon?&ldquo; Story 3 bricht beim ersten Fehler mit 500 ab, Hotel und Car werden gar nicht gefragt.
+- <strong>STOPP 1 (Karte 04):</strong> &bdquo;Was habt ihr bekommen? Wie lange? Hotel und Car waren gesund, was hattet ihr davon?&ldquo; Story 3 bricht beim ersten Fehler mit 500 ab, Hotel und Car werden gar nicht gefragt. Die 5 s sind der Timeout der Referenz; ohne Timeout im eigenen Service w&auml;re die Wartezeit noch l&auml;nger.
   - &bdquo;Booking bekommt einen Circuit Breaker und 3 s Timeout.&ldquo; Board hinlegen, CLOSED ins Zustandsfeld. Das Board ist das Dashboard, das sieht der Betrieb.
   - Dazu ansagen: Rot hei&szlig;t, Flight hat einen Fehler geliefert. Rote Karten kommen aufs Board, auf den n&auml;chsten freien Platz. Liegt Platz 5, ruft Booking &bdquo;OPEN!&ldquo; und legt OPEN ins Zustandsfeld.
 - <strong>STOPP 2 (Karte 13, Recap 02):</strong> Am Board: &bdquo;Welche Karten liegen hier? Ab welcher Nummer gab es <code>flights: []</code>? Was ist ab 10 anders? Was war der Breaker, was der Fallback?&ldquo;
