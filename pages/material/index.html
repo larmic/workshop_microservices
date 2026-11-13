@@ -313,9 +313,8 @@
             <label>Druckstapel
                 <select id="ctl-batch">
                     <option value="all">alle Bogen zeigen</option>
-                    <option value="karton">Karton 250 g, einseitig</option>
-                    <option value="duplex">Karton 250 g, beidseitig (kurze Kante)</option>
-                    <option value="sduplex">Karton 250 g, beidseitig (lange Kante)</option>
+                    <option value="karton">Karton 200&ndash;250 g, einseitig</option>
+                    <option value="sduplex">Karton 200&ndash;250 g, beidseitig (lange Kante)</option>
                     <option value="papier">Papier 80 g</option>
                     <option value="pduplex">Papier 80 g, beidseitig</option>
                     <option value="a3">A3</option>
@@ -335,13 +334,13 @@
         <ul class="hints">
             <li><strong>Browser:</strong> Chrome oder Edge. Firefox und Safari halten die gemischten Formate (A4 hoch, A4 quer, A3) nicht zuverl&auml;ssig ein. Im Druckdialog: R&auml;nder <em>Keine</em>, Skalierung <em>100&nbsp;%</em> bzw. <em>Tats&auml;chliche Gr&ouml;&szlig;e</em>, <em>Hintergrundgrafiken</em> an.</li>
             <li><strong>Pro Papiersorte einen Stapel:</strong> oben den Druckstapel w&auml;hlen, dann drucken. Die Seite zeigt und druckt nur dessen Bogen. Die Anzahl in der Tabelle unten ist schon die Zahl der Bogen, also immer <strong>1 Exemplar</strong> drucken.</li>
-            <li><strong>Karton 250 g</strong> (A4) f&uuml;r alle Karten: Stapel 01&ndash;27 und Zustandskarten aus Story 4, Stapel 01&ndash;27 und die Schilder Flight und Car aus Story 5 (das Hotel-Schild steht unten bei beidseitig). Viele B&uuml;rodrucker nehmen 250 g nur &uuml;ber den manuellen Einzug. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
+            <li><strong>Karton 200&ndash;250 g</strong> (A4) f&uuml;r alle Karten: Stapel 01&ndash;27 und Zustandskarten aus Story 4, Stapel 01&ndash;27 und die Schilder Flight und Car aus Story 5 (das Hotel-Schild steht unten bei beidseitig). Viele B&uuml;rodrucker schaffen nur bis 200 g, das reicht. Karton als Papiersorte im Druckertreiber einstellen. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
             <li><strong>Stapel aus Story 4 und 5</strong> (A7 hoch) f&uuml;llen das A4-Blatt quer ganz aus: acht pro Bogen, jede mit 4&nbsp;mm wei&szlig;em Rand, randloser Druck ist nicht n&ouml;tig. Mit der Schneidemaschine alle Bogen stapeln, dann dreimal halbieren.</li>
             <li><strong>Papier 80 g</strong> f&uuml;r den Spickzettel aus Story 7. Das W&uuml;rfelspiel selbst braucht nur W&uuml;rfel und Pokerchips.</li>
             <li><strong>Papier 80 g, beidseitig</strong> f&uuml;r die Trainer-Skripte Story 4 und 5: zwei Seiten auf ein Blatt, <strong>an der langen Kante wenden</strong>.</li>
-            <li><strong>Karton 250 g, beidseitig, lange Kante</strong> nur f&uuml;r das Hotel-Schild aus Story 5: vorne &bdquo;schnell&ldquo;, hinten &bdquo;langsam&ldquo;. Ohne Duplex beide Seiten einseitig drucken und R&uuml;cken an R&uuml;cken zusammenkleben.</li>
+            <li><strong>Karton 200&ndash;250 g, beidseitig, lange Kante</strong> nur f&uuml;r das Hotel-Schild aus Story 5: vorne &bdquo;schnell&ldquo;, hinten &bdquo;langsam&ldquo;. Ohne Duplex beide Seiten einseitig drucken und R&uuml;cken an R&uuml;cken zusammenkleben.</li>
             <li><strong>A3</strong> f&uuml;r das Circuit-Breaker-Board (Story 4), 80 bis 160 g. Ohne A3-Drucker oben &bdquo;2&times; A4&ldquo; w&auml;hlen und die beiden H&auml;lften an der markierten Kante zusammenkleben.</li>
-            <li><strong>Schneiden und falzen:</strong> grau gestrichelt ist Schnitt, violett gestrichelt ist Falz. Karton vor dem Falzen mit Lineal und dem R&uuml;cken eines Messers rillen. Jede Karte hat 3&nbsp;mm wei&szlig;en Rand, ein paar Millimeter daneben schneiden st&ouml;rt nicht.</li>
+            <li><strong>Schneiden:</strong> grau gestrichelt ist Schnitt, gefalzt wird nichts. Jede Karte hat 3&nbsp;mm wei&szlig;en Rand, ein paar Millimeter daneben schneiden st&ouml;rt nicht.</li>
             <li><strong>Zustandskarten</strong> (A7 hoch) liegen im Zustandsfeld des Circuit-Breaker-Boards.</li>
             <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 braucht f&uuml;r jede Gruppengr&ouml;&szlig;e denselben Stapel, Story 5 bis 13 mit einer Gruppe, ab 14 mit zwei Gruppen und je einem Satz Karten und Schilder (ein Trainer-Skript reicht), Story 7 mit einem Tisch pro 4 bis 7 Personen (nur der Spickzettel wird gedruckt). Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
         </ul>
@@ -623,11 +622,11 @@
  * ===================================================================== */
 
 const PAPER = {
-    karton: { label: "Karton 250 g", hint: "einseitig" },
-    duplex: { label: "Karton 250 g", hint: "beidseitig, kurze Kante" },
+    karton: { label: "Karton 200–250 g", hint: "einseitig" },
+    duplex: { label: "Karton 200–250 g", hint: "beidseitig, kurze Kante" },
     papier: { label: "Papier 80 g", hint: "" },
     pduplex: { label: "Papier 80 g", hint: "beidseitig, lange Kante" },
-    sduplex: { label: "Karton 250 g", hint: "beidseitig, lange Kante" },
+    sduplex: { label: "Karton 200–250 g", hint: "beidseitig, lange Kante" },
     a3:     { label: "A3", hint: "80–160 g" }
 };
 const SIZES = { a4p: [210, 297], a4l: [297, 210], a3l: [420, 297] };

@@ -23,7 +23,7 @@ Ihr seid die Requests. Flight ist krank, und was ihr zurückbekommt, steht auf d
 
 ### Material
 
-- Ein Kartenstapel mit 30 Karten: 01–27 und die drei Zustandskarten CLOSED, OPEN, HALF_OPEN (A7 hoch, Karton 250 g, 8 pro A4-Bogen, 4 Bögen, 2 Felder frei). Auf jeder Karte stehen nur die große Nummer, die Wartezeit („5 s", „3 s" oder „sofort"), eine Zeile zum Vorlesen und eine kleine Zeile darunter, bei 14, 18 und 21–26 dazu ein Etikett (PROBE, Datum). Unten rechts klein „Story 4", damit sich die Stapel von Story 4 und 5 nicht mischen
+- Ein Kartenstapel mit 30 Karten: 01–27 und die drei Zustandskarten CLOSED, OPEN, HALF_OPEN (A7 hoch, Karton 200–250 g, 8 pro A4-Bogen, 4 Bögen, 2 Felder frei). Auf jeder Karte stehen nur die große Nummer, die Wartezeit („5 s", „3 s" oder „sofort"), eine Zeile zum Vorlesen und eine kleine Zeile darunter, bei 14, 18 und 21–26 dazu ein Etikett (PROBE, Datum). Unten rechts klein „Story 4", damit sich die Stapel von Story 4 und 5 nicht mischen
 - Die Farbe sagt, was passiert ist: weiß mit violettem Rahmen heißt Haufen, rot heißt Flight hat einen Fehler geliefert, gelb ist die Probe, dunkel ist STOPP. Die STOPP-Karten 04, 13, 17, 20 und 27 tragen nur „STOPP n" bzw. „ENDE"
 - Das Circuit-Breaker-Board (A3 quer oder 2 × A4): fünf Plätze „Fehler in Folge", Platz 5 heißt OPEN, dazu das Probe-Feld („nur eine") und das Zustandsfeld. Kein Regelblock, die Regeln sagt der Trainer. Das Board ist das Dashboard: Das sieht nur der Betrieb, nicht die Kundschaft
 - Das Trainer-Skript (ein Blatt Papier, beidseitig): vorn Aufbau, Ansage mit den vier Regeln und den Ergänzungen bei STOPP 1 und 2, die fünf STOPPs, „Wenn es hakt" und Vereinfachungen, hinten die Kartentabelle 01–27

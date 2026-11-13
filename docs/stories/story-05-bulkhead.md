@@ -23,7 +23,7 @@ Zwei Stühle sind die Threads von Booking. Wer sitzt, hat gerade einen Aufruf la
 
 ### Material
 
-- Ein Kartenstapel 01–27 (A7 hoch, Karton 250 g, 8 pro A4-Bogen, 4 Bögen). Auf jeder Karte stehen nur die große Nummer und „Steh auf bei XX", violetter Rahmen. Die STOPP-Karten 04, 15 und 27 sind dunkel. Notfalls von Hand auf Karteikarten
+- Ein Kartenstapel 01–27 (A7 hoch, Karton 200–250 g, 8 pro A4-Bogen, 4 Bögen). Auf jeder Karte stehen nur die große Nummer und „Steh auf bei XX", violetter Rahmen. Die STOPP-Karten 04, 15 und 27 sind dunkel. Notfalls von Hand auf Karteikarten
 - Drei Service-Schilder A4 hoch auf Karton: Hotel doppelseitig („Hotel · schnell", hinten „Hotel · langsam"), Flight („Flight · schnell"), Car („Car · schnell"). Doppelseitig heißt Rückseite bedrucken oder zwei Blätter zusammenkleben
 - Das Trainer-Skript (ein Blatt Papier, beidseitig): vorn Ablauf, Regeln und STOPP-Fragen, hinten Kartentabelle und Durchlauf mit 10 Personen
 - Aus dem Raum: zwei Stühle, ein Tisch für alle abgelegten Karten (ein Haufen), eine „Wand" (Pinnwand, Flipchart oder ein hochkant gestellter Tisch)

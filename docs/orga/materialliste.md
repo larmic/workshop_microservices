@@ -8,7 +8,7 @@ Packliste für „Microservices richtig gemacht“ mit 8, 12 und 16 Teilnehmende
 
 **Art:** *kaufen* heißt Büro oder Laden, *drucken* heißt über die Druckseite, *3D* heißt aus `docs/orga/3d/`, *Raum* heißt, was im Seminarraum ohnehin steht.
 
-**Ohne Laminiergerät:** Alle Karten kommen auf **Karton 250 g** (A4, an den Linien schneiden). Story 4 braucht keine Strichliste, dort zählt das Circuit-Breaker-Board mit seinen fünf Plätzen „Fehler in Folge“. In Story 5 zählen die Services an den Fingern.
+**Ohne Laminiergerät:** Alle Karten kommen auf **Karton 200–250 g** (A4, an den Linien schneiden). Viele Bürodrucker schaffen nur bis 200 g (z. B. Xerox C315), das reicht. Beidseitig drucken sie Karton meist nicht automatisch: Das Hotel-Schild aus Story 5 dann zweimal einseitig drucken und Rücken an Rücken kleben. Story 4 braucht keine Strichliste, dort zählt das Circuit-Breaker-Board mit seinen fünf Plätzen „Fehler in Folge“. In Story 5 zählen die Services an den Fingern.
 
 ## Aufteilung nach Gruppengröße
 
@@ -71,18 +71,18 @@ Nichts zu drucken, die Teams schreiben die Tabelle direkt aufs Flipchart.
 
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
-| Karton 250 g, A4 | kaufen | 11 Bogen | 11 Bogen | 18 Bogen | plus Reserve; Story 4: 4 / 4 / 4 Bogen (Stapel mit Zustandskarten), Story 5: 7 / 7 / 14 (Karten und Schilder) |
+| Karton 200–250 g, A4, laser-geeignet | kaufen | 11 Bogen | 11 Bogen | 18 Bogen | plus Reserve; Story 4: 4 / 4 / 4 Bogen (Stapel mit Zustandskarten), Story 5: 7 / 7 / 14 (Karten und Schilder) |
 | Papier 80 g, A4 | Büro | 2 Bogen | 2 Bogen | 2 Bogen | Trainer-Skripte Story 4 und 5 (je ein Blatt beidseitig) |
-| A3-Papier | Büro | 1 | 1 | 1 | Circuit-Breaker-Board aus Story 4, sonst 2× A4 |
-| Schere oder Schneidemaschine, Lineal, Falzbein (oder Messerrücken) | Büro | 1 | 1 | 1 | 250 g vor dem Falzen rillen |
+| A3-Papier (optional) | Büro | 1 | 1 | 1 | nur mit A3-Drucker, sonst das Circuit-Breaker-Board aus Story 4 als 2× A4 |
+| Schere oder Schneidemaschine, Lineal | Büro | 1 | 1 | 1 | Karten nur schneiden, nichts falzen |
 | Umschläge oder Gummibänder | Büro | ca. 6 | ca. 8 | ca. 10 | Karten pro Spiel und Tisch getrennt aufbewahren |
 | Beamer bzw. Bildschirm | Büro | 1 | 1 | 1 | Folien, Dashboard-Demos, QR-Code fürs Feedback |
 
 ## Zusammengefasst
 
-**Kaufen:** Würfel und Pokerchips (Story 7, oft schon vorhanden), Flipchart-Marker in 2 Farben, Kreppband, Karton 250 g.
+**Kaufen:** Würfel und Pokerchips (Story 7, oft schon vorhanden), Flipchart-Marker in 2 Farben, Kreppband, Karton 200–250 g (eine Packung mit 50 Bogen reicht).
 
-**Drucken:** alle Bogen der Druckseite, je Papiersorte ein Stapel: Karton 250 g, Papier 80 g, A3 (oder das Board als 2× A4).
+**Drucken:** alle Bogen der Druckseite, je Papiersorte ein Stapel: Karton 200–250 g, Papier 80 g, A3 nur mit A3-Drucker (sonst das Board als 2× A4).
 
 **Aus dem Raum:** Stühle, Tische und eine Wand (Pinnwand oder Flipchart) für Story 5, ein Tisch für den Haufen in Story 4.
 
