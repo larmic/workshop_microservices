@@ -1,4 +1,4 @@
-# Story 2: Design-Session: REST vs. RESTful
+# Story 2: Erst denken, dann tippen
 
 > Unser Booking-Service liefert jetzt Angebote. Als Nächstes sollen Kundinnen und Kunden buchen können, und wo gebucht wird, wird auch storniert und umgebucht. Bevor jemand losprogrammiert, hätten wir gern eine API, die man nicht in drei Monaten schon wieder umbauen muss.
 >
@@ -62,4 +62,4 @@ Leitfragen für die Teamarbeit:
 ### 4. Brücke zu Story 3
 
 - Nehmt eure Regeln mit: In Story 3 baut ihr `POST /booking/bookings` selbst
-- In Story 6 (Saga) kommt der Storno als Kompensation zurück. Dann zahlt sich die Diskussion ein zweites Mal aus
+- In Story 6 (Saga) kommt das Storno als Kompensation zurück. Dann zahlt sich die Diskussion ein zweites Mal aus

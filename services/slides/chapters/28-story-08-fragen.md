@@ -19,7 +19,7 @@
 <div class="numlist-num">02</div>
 <div>
 <p class="numlist-label">Eingehende ID &uuml;berschreiben</p>
-<h3>Ein Downstream bekommt einen <code>traceparent</code> und w&uuml;rfelt trotzdem eine <span class="hl">neue</span> ID. Was passiert?</h3>
+<h3>Ein Backend bekommt einen <code>traceparent</code> und w&uuml;rfelt trotzdem eine <span class="hl">neue</span> ID. Was passiert?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">&uuml;bernehmen, nie &uuml;berschreiben</code>
 </div>
@@ -54,11 +54,12 @@
 </div>
 
 Note:
-- Erst diskutieren, dann Daumen-Abstimmung, dann der Klick auf die Merks&auml;tze. Einstieg: &bdquo;Wo h&auml;tte euch Tracing in Stories 4 bis 7 schon geholfen?&ldquo;
+- Erst diskutieren, dann Daumen-Abstimmung, dann der Klick auf die Merks&auml;tze. Einstieg: &bdquo;Wo h&auml;tte euch die Trace-ID in Story 3 und 6 schon geholfen? Und wo in den Demos zu 4, 5 und 7?&ldquo;
 - <strong>Span-Baum:</strong> Eine Span ist ein Wegst&uuml;ck mit eigener ID und Parent-ID, erst das ergibt den Wasserfall in Jaeger. Wir haben nur die Trace-ID. <strong>Spicy:</strong> Logs mit Trace-ID: 80 Prozent Nutzen f&uuml;r 20 Prozent Aufwand.
 - <strong>&Uuml;bernehmen:</strong> Ohne Header darf jeder starten, wie in OTel. Die Backends lassen es weg (<code>Propagate</code>). <strong>Spicy:</strong> Wer &uuml;berschreibt, zerrei&szlig;t den Trace.
 - <strong>Feld statt Text:</strong> Im Flie&szlig;text wird die ID mal vergessen, mal anders geschrieben. Ein strukturierter Logger h&auml;ngt <code>trace_id</code> einmal als Feld an, danach filtert <code>jq</code>.
 - <strong>Event-Grenze:</strong> <code>traceparent</code> wandert als Property mit, bei echten Brokern im Message-Header, nicht im Payload. <strong>Spicy:</strong> Sonst rei&szlig;t der Trace an der Bus-Grenze.
 - <strong>OpenTelemetry:</strong> Propagation sind gut 120 Zeilen. Spans, Auto-Instrumentierung, Sampling und Export baut niemand neu. In Produktion: OTel.
 - Reserve: Sampling, Korrelation, Detektiv-Runde.
+- <strong>Preis:</strong> Jede Stelle muss mitmachen. Ein Service, der den Header nicht weiterreicht, zerrei&szlig;t den Trace.
 - Lang: <code>docs/questions/story8.md</code>

@@ -87,4 +87,4 @@ Stoppt alle Container — Referenz-Services, Infrastruktur und Custom-Service in
 
 ## Los geht's
 
-Dein Arbeitsplatz ist eingerichtet. Starte mit [Story 1: Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md).
+Dein Arbeitsplatz ist eingerichtet. Starte mit [Story 1: Erst lauffähig, dann smart](stories/story-01-cloud-native-booking-service.md).

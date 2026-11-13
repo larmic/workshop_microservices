@@ -61,4 +61,5 @@ Note:
 - <strong>04 Booking-Instanzen:</strong> Der Bulkhead sch&uuml;tzt Booking, nicht Hotel.
   - Jede Booking-Instanz begrenzt nur sich selbst. F&uuml;nf Instanzen schicken zusammen bis zu 50 Aufrufe zu Hotel.
   - Hotel muss sich selbst sch&uuml;tzen, zum Beispiel mit Rate Limit und <code>429</code>.
+- <strong>Preis:</strong> Die Gr&ouml;&szlig;e ist gesch&auml;tzt, und wer keinen Platz bekommt, wird abgelehnt, obwohl Hotel l&auml;uft.
 - Lang: <code>docs/questions/story5.md</code>

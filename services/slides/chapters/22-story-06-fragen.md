@@ -11,7 +11,7 @@
 <div class="numlist-num">01</div>
 <div>
 <p class="numlist-label">Die Kompensation scheitert</p>
-<h3>Der Storno l&auml;uft selbst in <span class="hl">5xx</span>, und wir versuchen es nur einmal. Was nun?</h3>
+<h3>Das Storno l&auml;uft selbst in <span class="hl">5xx</span>, und wir versuchen es nur einmal. Was nun?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">Storno muss irgendwann klappen</code>
 </div>
@@ -27,7 +27,7 @@
 <div class="numlist-num">03</div>
 <div>
 <p class="numlist-label">Die Saga h&auml;ngt</p>
-<h3>Zwischen Forward und Kompensation bleibt sie stehen. Wer <span class="hl">schl&auml;gt Alarm</span>?</h3>
+<h3>Zwischen Buchen und Kompensation bleibt sie stehen. Wer <span class="hl">schl&auml;gt Alarm</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">Status-Counter</code>
 </div>
@@ -47,7 +47,7 @@
 
 Note:
 - Erst diskutieren, dann per Klick die Merks&auml;tze.
-- <strong>Kompensation scheitert:</strong> F&uuml;r einen gescheiterten Forward-Schritt gibt es die Kompensation. F&uuml;r eine gescheiterte Kompensation gibt es nichts mehr, also muss sie gelingen, nicht beim ersten Versuch, aber irgendwann.
+- <strong>Kompensation scheitert:</strong> F&uuml;r einen gescheiterten Buchungsschritt gibt es die Kompensation. F&uuml;r eine gescheiterte Kompensation gibt es nichts mehr, also muss sie gelingen, nicht beim ersten Versuch, aber irgendwann.
   - Daf&uuml;r: idempotentes <code>DELETE</code>, Retry mit Backoff, persistenter Status, am Ende ein Mensch.
   - Alert auf <code>COMPENSATION_FAILED</code> (Dashboard: &bdquo;KOMP. FEHLER&ldquo;), nicht auf <code>FAILED</code>: Das ist auch jede sauber kompensierte Saga.
   - <strong>Spicy:</strong> Ohne Retry im Code muss das Monitoring der Retry sein.
@@ -55,4 +55,5 @@ Note:
 - <strong>Saga h&auml;ngt:</strong> N&ouml;tig ist ein Status-Counter mit Alarm bei <code>COMPENSATING &gt; 0</code> &uuml;ber N Minuten. <strong>Spicy:</strong> H&auml;ngende Sagas sind still.
 - <strong>Status im RAM:</strong> Der Flug bleibt gebucht, und niemand wei&szlig; es mehr. Saga macht fehlende Persistenz nur sichtbar. <strong>Spicy:</strong> Die echte Frage ist selbst bauen oder Temporal.
 - Reserve: Eventing statt sync, Owner.
+- <strong>Preis:</strong> Zwischenzust&auml;nde sind sichtbar, und die Kompensation muss irgendwann klappen, sonst bleibt eine halbe Reise.
 - Lang: <code>docs/questions/story6.md</code>.

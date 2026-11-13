@@ -12,7 +12,7 @@ beteiligten Services hinweg als **eine zusammenhängende Operation**
 verfolgen. Korrelation passiert heute nur über Timestamps und Augenmaß.
 Das wird mit jeder zusätzlichen Komponente schmerzhafter — und spätestens
 bei eurer Saga aus Story 6 (eine Operation, bis zu fünf HTTP-Calls über
-drei Backend-Services: drei Forward, zwei DELETE) wird Debugging zur
+drei Backend-Services: drei Buchungen, zwei DELETE) wird Debugging zur
 Detektivarbeit.
 
 Eine **Trace-ID** pro eingehender Anfrage, die durch alle nachgelagerten
@@ -57,7 +57,7 @@ Events, Circuit Breaker oder Bulkhead braucht ihr nicht.
 - [ ] Die Response trägt den effektiven `traceparent` zurück, damit
   Client, Dashboard und Support die Trace-ID kennen
 - [ ] Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call
-  weitergereicht: Forward (`POST /bookings` an Flight, Hotel, Car) und
+  weitergereicht: Buchung (`POST /bookings` an Flight, Hotel, Car) und
   Kompensation (`DELETE /bookings/{id}`). Pro Hop eine neue Span-ID, die
   Trace-ID bleibt
 - [ ] Jede Logzeile eures Booking-Service enthält die Trace-ID. Flight,
@@ -66,7 +66,7 @@ Events, Circuit Breaker oder Bulkhead braucht ihr nicht.
 - [ ] Logs sind strukturiert (JSON), damit `trace_id` ein eigenes Feld
   ist und nicht in einem freien Textstring versteckt liegt
 - [ ] Ein Filter zeigt den vollständigen Ablauf einer Buchung,
-  Forward-Buchung **und** Kompensation:
+  Buchung **und** Kompensation:
   `docker compose logs --no-log-prefix booking-custom flight hotel car | jq -cR 'fromjson? | select(.trace_id=="<trace-id>")'`
   (ohne jq: `docker compose logs | grep <trace-id>`)
 - [ ] Die OpenAPI-Dokumentation des Booking-Services beschreibt den
@@ -106,7 +106,7 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
   geschachtelten Aufrufen:
   ```
   POST /booking/bookings           ─┐
-    flight POST /bookings           │  Forward
+    flight POST /bookings           │  Buchung
     hotel  POST /bookings  ✗ failed │
     flight DELETE /bookings/{id}   ─┘  Compensation
   ```

@@ -32,7 +32,7 @@ wofür OpenTelemetry da ist.
 
 ---
 
-## Frage 2 — Ein Downstream bekommt einen traceparent und würfelt trotzdem eine neue ID. Was passiert? (Recap 02)
+## Frage 2 — Ein Backend bekommt einen traceparent und würfelt trotzdem eine neue ID. Was passiert? (Recap 02)
 
 **Antwort:** Der Trace reißt genau dort: Ab diesem Hop tragen die
 Logzeilen eine andere trace_id, grep auf die ursprüngliche ID findet

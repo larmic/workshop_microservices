@@ -57,6 +57,19 @@ Fehler, die im Workshop auffallen oder etwas Falsches lehren.
 
 Spürbare Verbesserungen für Verständnis, Konsistenz und Auftritt.
 
+> **Stand 13.11.:** Erledigt sind W1 bis W7, W10 bis W13, W15 bis W17, W19 bis W23, W25, W26, W29 bis W34 und W36 bis W38.
+>
+> - **W3** als Note-Zeile „Preis: …“ in den Recaps zu Story 3 bis 8, Folie 29 ist unverändert.
+> - **W13:** Spielname im Kicker und Kassensturz-Zeile, kein Tischblatt.
+> - **W31** ist nicht am Bild geprüft, weil die Chaos-Knöpfe ohne Backend nicht erscheinen.
+>
+> **Teilweise erledigt:**
+> - **W14:** Die Reihenfolge der Blöcke 4 und 5 und die zusätzlichen Recap-Fragen in `themen.md` sind unverändert.
+> - **W18:** Nur die Legende („im Raum“) ist angepasst, Oberbegriff und Strichart sind offen.
+> - **W35:** Kreppband ist optional, das Plenum-Flipchart steht noch in der Liste.
+>
+> **Offen, weil sie eine Entscheidung brauchen:** W8 (Überleitungen am ersten Vormittag, die Notes wurden dort bewusst gekürzt), W9 (Zeitplan Tag 1 und Story 3), W24 (Ampelfarben und Gate, das Gate braucht Go), W27 (`services/CLAUDE.md`), W28 (Schrift der Druckseite).
+
 ### Folien und roter Faden
 
 | Nr. | Befund | Wo | Vorschlag | Aufwand |

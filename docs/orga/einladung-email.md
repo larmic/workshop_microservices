@@ -24,10 +24,15 @@ schön, dass ihr dabei seid! Hier die wichtigsten Infos zum Workshop "Microservi
 **Wo:** {{ORT}} (kein Remote)
 **Mitbringen:** Entwickler-Notebook (installiert: Git, Docker inkl. Docker Compose, IDE, Programmiersprache eurer Wahl)
 
-**Vorbereitung (Pflicht, ca. 1 bis 2 Stunden, bis spätestens vor dem Kursbeginn):**
+**Vorbereitung (Pflicht, ca. 1 bis 2 Stunden, bis spätestens vor dem Workshop-Beginn):**
 
-Damit wir am Workshop-Tag direkt mit den Inhalten starten, statt Setups zu debuggen, erledigt bitte vorab die folgenden Punkte:
-<https://larmic.github.io/workshop_microservices/vorbereitung/>
+Damit wir am Workshop-Tag direkt mit den Inhalten starten, statt Setups zu debuggen, erledigt bitte vorab diese drei Punkte:
+
+1. einen Mini-Service mit Health-Endpoint und Dockerfile aufsetzen,
+2. die Workshop-Umgebung einmal starten,
+3. beides einmal im Firmennetz testen.
+
+Die Anleitung Schritt für Schritt: <https://larmic.github.io/workshop_microservices/vorbereitung/>
 
 Falls etwas hakt, meldet euch einfach vorab bei mir. Bitte nicht erst am Workshop-Tag, da bleibt für Setup-Probleme wenig Zeit.
 

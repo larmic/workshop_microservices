@@ -63,4 +63,4 @@ Note:
   - &bdquo;Wie viele St&uuml;hle h&auml;tte Hotel gebraucht?&ldquo; Vier, Hotel hat einen. Deshalb bekommt jeder Vierte Hotels (16, 20, 24). Little&rsquo;s Law zum Anfassen: ein Stuhl = 10 Slots, langsam br&auml;uchte es 40.
   - &bdquo;Breaker?&ldquo; CLOSED, ein besetzter Stuhl ist kein Fehler.
   - &bdquo;Wem geh&ouml;ren die St&uuml;hle?&ldquo; Booking, nicht Hotel. F&uuml;nf Booking-Instanzen h&auml;tten f&uuml;nf Hotel-St&uuml;hle.
-- Demo: Alle Services auf Normal, dann Hotel auf &bdquo;Langsam&ldquo;, Burst. &bdquo;hotel rej&ldquo; zeigt etwa zehn, &bdquo;failed&ldquo; bleibt 0. Danach Hotel zur&uuml;ck. Details: <code>docs/stories/story-05-bulkhead.md</code>.
+- Demo: Alle Services auf Normal, dann Hotel auf &bdquo;Langsam&ldquo;, Burst. &bdquo;hotel rej&ldquo; zeigt etwa zehn, die Ergebniszeile &bdquo;0 fail&ldquo;. Danach Hotel zur&uuml;ck. Details: <code>docs/stories/story-05-bulkhead.md</code>.

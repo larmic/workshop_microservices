@@ -183,14 +183,14 @@ ein Broker allein nicht abnimmt.
 
 ## Frage 4 — Brauchen wir überhaupt einen Dirigenten? (Recap 04)
 
-**Frage:** Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf
+**Frage:** Volle Choreografie hieße: Hotel reagiert auf Flight, Car auf
 Hotel, niemand dirigiert. Wer merkt es, wenn Hotel nicht weiß, dass es
 reagieren soll?
 
 **Antwort:** Niemand. Für unsere Buchung ist **Orchestrierung** der
 bessere Weg. Drei Schritte in fester Reihenfolge mit Kompensation sind ein
 Prozess, und den will man an einer Stelle lesen, testen und im Log
-verfolgen. Volle Choreographie verteilt die Reihenfolge auf die Köpfe der
+verfolgen. Volle Choreografie verteilt die Reihenfolge auf die Köpfe der
 Services: Jeder muss wissen, auf wen er hört. Fehlt ein Abonnement, bricht
 die Kette, und niemand bekommt einen Fehler — es passiert einfach nichts.
 Das ist der **verteilte Monolith**: lose gekoppelt zur Laufzeit, fest
@@ -206,10 +206,10 @@ Kapitel 4):
 
 | Wann | Was |
 |---|---|
-| einfache Saga, wenige Beteiligte, keine Reihenfolge (Benachrichtigung, Read-Model) | Choreographie |
+| einfache Saga, wenige Beteiligte, keine Reihenfolge (Benachrichtigung, Read-Model) | Choreografie |
 | Ablauf mit mehreren Schritten oder Verzweigungen | Orchestrierung, sonst werden die Abhängigkeiten zyklisch und niemand sieht mehr den Prozess |
 
-**Take-away:** Choreographie klingt eleganter, weil kein Service den
+**Take-away:** Choreografie klingt eleganter, weil kein Service den
 anderen kennt. In Wahrheit kennt jeder jeden, nur steht es nirgends.
 Brücke zu Story 8: Wer merkt es eigentlich, wenn ein Event verloren geht?
 

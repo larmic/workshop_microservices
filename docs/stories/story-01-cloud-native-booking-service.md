@@ -1,4 +1,4 @@
-# Story 1: Der erste cloud-native Booking-Service
+# Story 1: Erst lauffähig, dann smart
 
 > Wir brauchen einen Booking-Service, der Flüge, Hotels und Mietwagen bündelt. Wo der am Ende läuft – auf einem Server im Keller, in der Cloud oder auf dem Raspberry Pi meiner Nichte – wissen wir noch nicht. Erstmal soll er auf dem Entwicklerrechner laufen, ohne dass wir dafür Spezialwerkzeug brauchen.
 >

@@ -243,7 +243,7 @@
             display: inline-block;
             padding: 0.15rem 0.5rem;
             border-radius: 4px;
-            background: #CCF465;
+            background: #D3F871;
             color: #0A0349;
             font-weight: 700;
             margin-right: 0.4rem;
@@ -255,6 +255,7 @@
             transition: opacity 0.15s;
         }
         .workshop-footer .footer-logo:hover { opacity: 1; }
+        a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid #7348E1; outline-offset: 2px; }
     </style>
 </head>
 <body>
@@ -354,7 +355,7 @@
                 const clean = raw.replace(/^\.\//, "");
                 const [path, hash] = clean.split("#");
                 if (path === "troubleshooting.md") a.href = "#" + (hash || "hilfe");
-                else if (path === "vorbereitung.md") a.href = "#" + (hash || "schritt-0");
+                else if (path === "vorbereitung.md") a.href = "#" + (hash || "voraussetzungen");
                 else {
                     a.href = REPO_BLOB + clean;
                     a.target = "_blank";

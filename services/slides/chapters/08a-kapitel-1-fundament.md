@@ -6,7 +6,7 @@
 
 <div class="page-body">
 <h1 class="chapter-title">Fundament</h1>
-<p class="chapter-sub">Ein Service, der &uuml;berhaupt l&auml;uft.</p>
+<p class="chapter-sub">Ein Service, der l&auml;uft, sauber spricht und gefunden wird.</p>
 <p class="chapter-quote">&bdquo;Vertrauen ist gut, ein Health-Endpoint ist besser.&ldquo;</p>
 </div>
 

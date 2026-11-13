@@ -10,16 +10,16 @@
 
 <div class="codeblock">
 <div class="k">book(request):</div>
-<div>  saga = { status: <span class="hi">PENDING</span>, booked: [] }</div>
+<div>  saga = { status: <span class="hi">PENDING</span>, steps: [] }</div>
 <div class="gap">  try:</div>
 <div>    for svc in [flight, hotel, car]:</div>
-<div>      id = POST svc/bookings                 <span class="dim">// Forward</span></div>
-<div>      saga.booked.push({ svc, id })</div>
+<div>      id = POST svc/bookings                 <span class="dim">// buchen</span></div>
+<div>      saga.steps.push({ svc, id })</div>
 <div>    saga.status = <span class="hi">COMPLETED</span></div>
 <div class="gap">  catch error at step X:</div>
 <div>    saga.status = <span class="hi">COMPENSATING</span></div>
-<div>    for b in <span class="hi">reverse</span>(saga.booked):</div>
-<div>      DELETE b.svc/bookings/{b.id}           <span class="dim">// Kompensation, ein Versuch</span></div>
+<div>    for step in <span class="hi">reverse</span>(saga.steps):</div>
+<div>      DELETE step.svc/bookings/{step.id}     <span class="dim">// Kompensation, ein Versuch</span></div>
 <div>    saga.status = <span class="hi">FAILED</span></div>
 </div>
 
@@ -31,7 +31,7 @@
 
 Note:
 - <strong>Zeigen:</strong>
-  - <code>booked</code>: Nur Gebuchtes wird kompensiert. Car wird nach dem Hotel-Fehler nie angefasst.
+  - <code>steps</code>: Nur Gebuchtes wird kompensiert. Car wird nach dem Hotel-Fehler nie angefasst.
   - <code>reverse</code>: Die Kompensation l&auml;uft r&uuml;ckw&auml;rts.
   - Ein Versuch: L&auml;uft der <code>DELETE</code> in einen 5xx-Fehler, steht die Saga auf <code>FAILED</code> (Recap 01).
 - <strong>Achtung, Timeout und trotzdem gebucht:</strong> Hotel auf &bdquo;H&auml;ngt&ldquo;. Nach 3 s ist die Saga <code>FAILED</code>, nach 10 s bucht Hotel trotzdem. Abhilfe: eine Buchungs-ID von Booking oder ein Idempotency-Key.

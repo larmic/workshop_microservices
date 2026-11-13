@@ -13,7 +13,7 @@
 
 <div class="cards cards-3 violet compact">
 <div class="card">
-<h3>Pool pro Downstream</h3>
+<h3>Pool pro Backend</h3>
 <p>Eigener Semaphore je Backend, kein gemeinsamer Topf.</p>
 <code>Flight | Hotel | Car</code>
 </div>

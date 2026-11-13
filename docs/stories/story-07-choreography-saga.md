@@ -19,7 +19,7 @@ damit **der Booking-Service nicht für deren Verfügbarkeit haften muss und die 
 
 ---
 
-## Teil 1: Das Würfelspiel „Retry oder Storno“ (ca. 20 Minuten)
+## Teil 1: Das Würfelspiel „Retry oder Storno“ (ca. 25 Minuten inklusive Kassensturz)
 
 Booking und Kunde wollen 4 Reisen buchen und haben dafür 6 Versuche. Storniert wird per Zuruf.
 
@@ -93,7 +93,7 @@ Vorwärts lohnt nur bei Fehlern, die vorübergehen (`503`, Timeout), nicht bei e
 
 ### Kassensturz
 
-Booking liest seine Striche vor, dann zählen Flight, Hotel und Car offen ihre Chips. Jeder Service sollte genau so viele Chips haben, wie Reisen durch sind (Budget-Chips eingerechnet). Jeder Chip darüber ist ein stilles Storno: Booking hat „storniert“ gemeldet, der Kunde hat sein Geld nicht zurück. Der Trainer sammelt pro Tisch Budget, gewonnen oder verloren und stille Stornos an der Tafel.
+Booking liest seine Striche vor, dann zählen Flight, Hotel und Car offen ihre Chips. Jeder Service sollte genau so viele Chips haben, wie Reisen geklappt haben (Budget-Chips eingerechnet). Jeder Chip darüber ist ein stilles Storno: Booking hat „storniert“ gemeldet, der Kunde hat sein Geld nicht zurück. Der Trainer sammelt pro Tisch Budget, gewonnen oder verloren und stille Stornos an der Tafel.
 
 ### Was passieren sollte
 
@@ -120,7 +120,7 @@ Nach fünf Klicks ist der Car-Breaker offen. Danach startet 30 Sekunden lang kei
 1. Ein Chip bleibt liegen. Booking schickt das Storno per HTTP-POST, Flight ist seit der Buchung down. Wo ist das Event jetzt?
 2. Das Storno kommt zweimal. Ein Broker hält das Storno fest und liefert, bis Flight bestätigt. Stirbt Flight dazwischen, kommt das Event noch einmal. Was, wenn das Backend echten State ändert?
 3. Booking meldet zu früh „storniert“. Booking soll erst „storniert“ sagen, wenn alle Chips zurück sind. Was muss zurückkommen, und was gilt, wenn es nie kommt?
-4. Brauchen wir überhaupt einen Dirigenten? Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf Hotel. Wer merkt es, wenn Hotel das nicht weiß? (Faustregel nach Chris Richardson, *Microservices Patterns*: Choreographie für einfache Sagas ohne Reihenfolge, Orchestrierung sobald es einen Ablauf gibt.)
+4. Brauchen wir überhaupt einen Dirigenten? Volle Choreografie hieße: Hotel reagiert auf Flight, Car auf Hotel. Wer merkt es, wenn Hotel das nicht weiß? (Faustregel nach Chris Richardson, *Microservices Patterns*: Choreografie für einfache Sagas ohne Reihenfolge, Orchestrierung sobald es einen Ablauf gibt.)
 
 Die Fragen 1 bis 3 steigen auf, vom Zuruf über den Broker bis zur Antwort zurück:
 
@@ -176,4 +176,4 @@ Im Dashboard zeigt das Choreography-Panel unter Story 7 die Saga-Zustände. Repl
 
 - **Dead-Letter-Behandlung:** Was passiert mit Events, die nach N Versuchen nicht zugestellt werden konnten?
 - **Idempotenter Empfänger:** Das Backend merkt sich verarbeitete `eventId`s in derselben Transaktion wie das Storno und quittiert Wiederholungen nur.
-- **Auch der Happy Path über Events:** Nicht nur Kompensation, sondern auch das Forward-Booking als Event-Choreography. Das zeigt, wie weit man Choreography treiben kann.
+- **Auch der Happy Path über Events:** Nicht nur Kompensation, sondern auch das Buchen als Event-Choreography. Das zeigt, wie weit man Choreography treiben kann.

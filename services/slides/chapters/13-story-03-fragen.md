@@ -52,4 +52,5 @@ Note:
   - stop: SIGTERM, die Backends melden sich ab, der Eintrag ist sofort weg.
   - kill oder Absturz: bis zu 10 s Verkehr ins Leere, bis der Check fehlschl&auml;gt.
 - <strong>Registriert &ne; gesund:</strong> Discovery sagt, wo der Service <em>war</em>, nicht ob er noch da ist. Der Aufrufer muss sich selbst sch&uuml;tzen, Story 4.
+- <strong>Preis:</strong> Die Registry ist ein weiterer Service, der ausfallen kann, und sie ist immer ein paar Sekunden hinter der Wirklichkeit.
 - Lang: <code>docs/questions/story3.md</code>.

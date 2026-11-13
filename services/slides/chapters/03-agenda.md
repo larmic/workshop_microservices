@@ -26,14 +26,14 @@
 <div class="agenda-slot">
 <p class="agenda-label">Vormittag</p>
 <h4>Wenn ein Schritt scheitert</h4>
-<p>Bulkhead trennt die Pools. Saga und Choreography r&auml;umen auf, wenn Flug, Hotel und Auto nicht zusammenpassen.</p>
+<p>Bulkhead trennt die Pools. Saga und Choreography r&auml;umen auf, wenn Flug, Hotel und Mietwagen nicht zusammenpassen.</p>
 <code>Stories 5 &ndash; 7</code>
 </div>
 <div class="agenda-lunch"><span>Mittagspause</span><code>12:30 &ndash; 13:30</code></div>
 <div class="agenda-slot">
 <p class="agenda-label">Nachmittag</p>
 <h4>Sehen, was passiert</h4>
-<p>Distributed Tracing, ein R&uuml;ckblick und was wir bewusst nicht gemacht haben.</p>
+<p>Distributed Tracing, ein R&uuml;ckblick und was wir nicht angeschaut haben.</p>
 <code>Story 8 + Ausblick</code>
 </div>
 </div>
@@ -43,3 +43,4 @@
 
 Note:
 - Kaffeepausen nach Bedarf.
+- Drei Kapitel &uuml;ber vier Halbtage: Fundament (Story 1 bis 3), Resilience (Story 4 und 5, &uuml;ber die Nacht), Konsistenz und Sichtbarkeit (Story 6 bis 8).

@@ -1,6 +1,6 @@
 # Workshop-Skript
 
-Moderationsleitfaden für den Microservices-Workshop am Beispiel der Reisebuchungsplattform (Flug, Hotel, Auto). Knappe Stichpunkte, Diskussions-Anker und Verweise auf die Hands-on-Stories.
+Moderationsleitfaden für den Workshop „Microservices richtig gemacht“ am Beispiel der Reisebuchungsplattform (Flug, Hotel, Mietwagen). Knappe Stichpunkte, Diskussions-Anker und Verweise auf die Hands-on-Stories.
 
 Ergänzende Dokumente: [Vorbereitung](vorbereitung.md) · [Fragen](questions)
 
@@ -38,7 +38,7 @@ Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 | 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
 
-CQRS (Block 7), BFF (Block 9) und Downtimeless Deployment (Block 10) sind bewusst nicht im Ablauf: Die zwei Tage sind dicht genug, und für eine echte Vertiefung reicht der Platz nicht. Die Skripte bleiben als Reserve, falls eine Gruppe danach fragt oder Zeit übrig ist. Auf der Folie „Was wir bewusst nicht gemacht haben“ stehen CQRS und Versionierung als Ausblick.
+CQRS (Block 7), BFF (Block 9) und Downtimeless Deployment (Block 10) sind bewusst nicht im Ablauf: Die zwei Tage sind dicht genug, und für eine echte Vertiefung reicht der Platz nicht. Die Skripte bleiben als Reserve, falls eine Gruppe danach fragt oder Zeit übrig ist. Auf der Folie „Was wir nicht angeschaut haben“ stehen unter anderem CQRS und Versionierung als Ausblick.
 
 ---
 
@@ -73,7 +73,7 @@ Die Geschichte der verteilten Systeme als roter Faden — kein technisches Deep-
 
 ## 3. Vortrag: Bedingungen an einen Microservice — 12 Factor App (30 Min)
 
-- Einordnung vorweg: 12-Factor ist cloud-native und breiter als Microservices. Die zwölf Regeln sind die Eintrittskarte, notwendig, aber nicht hinreichend. Das Microservices-Spezifische (Service-Schnitt, unabhängige Deploybarkeit, Resilienz) liefern die Kapitel 2 und 3.
+- Einordnung vorweg: 12-Factor ist cloud-native und breiter als Microservices. Die zwölf Regeln sind die Eintrittskarte, notwendig, aber nicht hinreichend. Das Microservices-Spezifische (unabhängige Deploybarkeit, Resilienz) liefern die Kapitel 2 und 3.
 - 12 Faktoren kurz durchgehen, jeweils mit Praxisbezug zum Booking-Service
 - Alle zwölf stehen auf einer Folie; ein Klick hebt die drei hervor, die Story 1 konkret umsetzt:
   - **Config** (III): Backend-URLs aus Umgebungsvariablen, `/info`-Endpoint zeigt die aktive Konfiguration
@@ -128,19 +128,19 @@ These aufwerfen und mit der Gruppe sezieren.
 
 ## 6. Hands-on: Stories 1–7
 
-Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion. Story 2 ist die Ausnahme: Design-Session am Flipchart, kein Code.
+Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer arbeiten selbständig, am Ende gemeinsamer Recap mit Diskussion. Vier Stories kommen ohne Code aus: Story 2 ist eine Design-Session am Flipchart, Story 4, 5 und 7 sind Spiele.
 
-### 6a. Story 1 — [Der erste cloud-native Booking-Service](stories/story-01-cloud-native-booking-service.md) (90 Min)
+### 6a. Story 1 — [Erst lauffähig, dann smart](stories/story-01-cloud-native-booking-service.md) (90 Min)
 - Lernpointe: 12 Factor in der Praxis, Health-Checks, externe Konfiguration
 - Recap-Frage: Welche Faktoren sind in eurer Umsetzung wirklich erfüllt?
 
-### 6b. Story 2 — [Design-Session: REST vs. RESTful](stories/story-02-api-design-session.md) (55 Min)
+### 6b. Story 2 — [Erst denken, dann tippen](stories/story-02-api-design-session.md) (55 Min)
 - Lernpointe: HTTP benutzen ist nicht dasselbe wie HTTP richtig benutzen. Ressourcen statt Verben, Idempotenz macht Retries sicher, Status-Codes sind Infrastruktur
 - Ablauf: 10 Min Theorie, 20 Min Teamarbeit am Flipchart (Storno und Umbuchung), Vorstellung, Quiz "RESTful oder nicht?" mit fünf Endpoints
-- Recap-Frage: Was passiert, wenn der Client euren Storno zweimal schickt?
+- Recap-Frage: Was passiert, wenn der Client euer Storno zweimal schickt?
 - Trainer-Hinweis: [instructions/rest-vs-restful.md](instructions/rest-vs-restful.md), Fragen: [questions/story2.md](questions/story2.md)
 
-### 6c. Story 3 — [Services dynamisch finden](stories/story-03-service-discovery.md) (60 Min)
+### 6c. Story 3 — [Services finden sich selbst](stories/story-03-service-discovery.md) (60 Min)
 - Lernpointe: Service Discovery mit Consul ersetzt hartkodierte URLs. Erster schreibender Endpoint (`POST /booking/bookings`) nach den Regeln aus Story 2
 - Recap-Frage: Was passiert, wenn Consul kurz weg ist?
 
@@ -221,7 +221,7 @@ Zwischen dem Schreibvorgang (Saga fertig) und dem Auftauchen im Read-Model liege
 ## 8. Hands-on: Story 8 — [Den roten Faden im Log](stories/story-08-tracing.md) (60 Min)
 
 - Lernpointe: Distributed Tracing macht Geschäftsvorgänge über Service-Grenzen hinweg sichtbar
-- Recap-Frage: Wo hätte euch Tracing schon in Stories 4–7 geholfen?
+- Recap-Frage: Wo hätte euch die Trace-ID in Story 3 und 6 schon geholfen? Und wo in den Demos zu 4, 5 und 7?
 
 ---
 

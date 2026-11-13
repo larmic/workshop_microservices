@@ -26,7 +26,7 @@
 <h4>Der Trace</h4>
 <ul>
 <li>Booking erzeugt oder &uuml;bernimmt bei jedem Request einen W3C-<code>traceparent</code></li>
-<li>Jeder ausgehende Call reicht ihn weiter, Forward und DELETE-Kompensation</li>
+<li>Jeder ausgehende Call reicht ihn weiter, Buchung und DELETE-Kompensation</li>
 <li>Die Response gibt den <code>traceparent</code> zur&uuml;ck</li>
 </ul>
 </div>

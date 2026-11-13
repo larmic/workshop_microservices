@@ -35,7 +35,7 @@
 <div class="numlist-num">04</div>
 <div>
 <p class="numlist-label">Der Zustand lebt im RAM einer Instanz</p>
-<h3>Zwei Replicas: Flight-Breaker von A ist OPEN. Soll B auch <span class="hl">dichtmachen</span>?</h3>
+<h3>Zwei Booking-Instanzen: Flight-Breaker von A ist OPEN. Soll B auch <span class="hl">dichtmachen</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">kein shared state</code>
 </div>
@@ -47,7 +47,8 @@
 
 Note:
 - <strong>Fehler:</strong> Nein. 404 hei&szlig;t falsche ID, das Backend ist gesund. CB-relevant sind 5xx, Timeout, Connection refused. 4xx nicht, 429 diskutabel. Unser Code z&auml;hlt alles ab 400, in Produktion ein Bug. Im Spiel: Karten 21&ndash;25 (31.02.) &ouml;ffnen den Schalter, bei 26 trifft es einen Request mit g&uuml;ltigem Datum.
-- <strong>Fallback:</strong> Board 05&ndash;09 und Haufen 10&ndash;12: Ja, schon beim ersten Fehler. Die leere Liste kommt bei jedem gescheiterten Call. Der CB &auml;ndert nur das Wie: CLOSED kostet bis 3 s, OPEN antwortet sofort mit <code>X-Circuit-Open</code>. Der 5. Call tr&auml;gt nur <code>X-Fallback</code>, <code>X-Circuit-Open</code> kommt ab dem 6.
+- <strong>Fallback:</strong> Board 05&ndash;09 und Haufen 10&ndash;12: Ja, schon beim ersten Fehler. Die leere Liste kommt bei jedem gescheiterten Call. Der CB &auml;ndert nur das Wie: CLOSED kostet bis 3 s, OPEN antwortet sofort mit <code>X-Circuit-Open</code>. Der 5. Call tr&auml;gt nur <code>X-Fallback</code>, <code>X-Circuit-Open</code> kommt ab dem 6. Widerspruch zu Regel 6 aus Story 2? Nein: Eine Teilantwort ist kein Fehler, Hotel und Car sind echt. Aber <code>[]</code> hei&szlig;t jetzt zweierlei, darum <code>X-Fallback</code>, und das Monitoring muss den Header z&auml;hlen.
 - <strong>Probe-Storm:</strong> Sonst legen alle Wartenden das erholende Backend sofort wieder um. Ein atomarer Slot (CompareAndSwap) l&auml;sst genau einen durch. Im Spiel: 14 lag auf dem Probe-Feld und war als einzige bei Flight, 15 und 16 bekamen sofort <code>flights: []</code>.
-- <strong>Replicas:</strong> Am Ende gefragt: &bdquo;Was liegt auf dem Board einer zweiten Booking-Instanz?&ldquo; Nein, Zustand bleibt instanzlokal. B erreicht Flight vielleicht problemlos. Folge: Nach Neustart ist alles CLOSED, die ersten f&uuml;nf Calls kosten wieder 3 s.
+- <strong>Instanzen:</strong> Am Ende gefragt: &bdquo;Was liegt auf dem Board einer zweiten Booking-Instanz?&ldquo; Nein, Zustand bleibt instanzlokal. B erreicht Flight vielleicht problemlos. Folge: Nach Neustart ist alles CLOSED, die ersten f&uuml;nf Calls kosten wieder 3 s.
+- <strong>Preis:</strong> Der Zustand lebt pro Instanz im RAM, und der Fallback macht aus einem Ausfall eine leere Liste, die jemand z&auml;hlen muss.
 - Lang: <code>docs/questions/story4.md</code>.

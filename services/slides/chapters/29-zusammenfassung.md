@@ -25,7 +25,7 @@
 </div>
 <div class="card">
 <h3><span class="num">05</span> Bulkhead</h3>
-<p>Ein Pool pro Downstream. Langsam ist nicht kaputt.</p>
+<p>Ein Pool pro Backend. Langsam ist nicht kaputt.</p>
 </div>
 <div class="card">
 <h3><span class="num">06</span> Saga</h3>

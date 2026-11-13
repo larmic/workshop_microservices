@@ -620,6 +620,11 @@ body.voxel .backend-panel-heading {
     text-transform: none;
     color: #fff;
 }
+/* Demo-Panel in den Spiel-Stories: steckt in einem details.story-info, dessen Summary-Stil hier nicht gelten soll */
+body.voxel .ref-slot .backend-panel > summary { padding: 0; font-size: 22px; color: #fff; }
+body.voxel .ref-slot .backend-panel { padding: 16px; margin: 12px 0; }
+body.voxel .ref-slot .chaos-btns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
 body.voxel .services-grid { gap: 22px; }
 body.voxel .card {
     display: grid;
@@ -762,3 +767,7 @@ body.voxel.vx-spawn .stepper-node.active::before { animation: vx-spawn 0.24s ste
 @media (prefers-reduced-motion: reduce) {
     body.voxel *, body.voxel *::before, body.voxel *::after { animation: none !important; transition: none !important; }
 }
+
+/* Spiel-Stories: Regelkasten und Leitsatz im Holz-Look */
+body.voxel .play-rule { background: #fff; color: var(--ink); border-radius: 0; box-shadow: inset 0 0 0 3px var(--wood-frame); }
+body.voxel .play-lead { color: var(--ink); font-weight: 800; }

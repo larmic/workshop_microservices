@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">Story 7 &middot; W&uuml;rfelspiel</p>
+<p class="kicker">Story 7 &middot; W&uuml;rfelspiel &bdquo;Retry oder Storno&ldquo;</p>
 
 <div class="page-head">
 
@@ -23,6 +23,7 @@
 <li>Kann der Kunde Booking keine 3 Chips mehr geben, ist das Spiel vorbei.</li>
 </ol>
 <p class="step-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts.</p>
+<p class="step-note"><strong>Am Ende Kassensturz:</strong> Jeder Service sollte so viele Chips haben, wie Reisen geklappt haben.</p>
 </div>
 <div class="steps-col">
 <h4>Jede Reise</h4>
@@ -49,6 +50,6 @@ Note:
   - Unsere Referenz kennt nur r&uuml;ckw&auml;rts, der Circuit Breaker wiederholt nicht.
   - Bei <code>503</code> mit Budget immer retten, das ist rechnerisch richtig. Ausgebucht l&auml;sst sich nicht retten: Auch mit unbegrenztem Budget scheitert jede vierte Reise.
 - <strong>Leise:</strong> &bdquo;Storniert&ldquo; kommt vor dem Wurf der Gerufenen. 5&ndash;6 hei&szlig;t: Chip bleibt liegen, niemand sagt etwas. Genau die Referenz: <code>dispatch-failed</code> im Log, Step trotzdem <code>COMPENSATED</code>.
-- <strong>Kassensturz:</strong> Jeder Service sollte so viele Chips haben, wie Reisen durch sind. Jeder Chip dar&uuml;ber ist ein stilles Storno. Ergebnisse aller Tische an die Tafel, bei vier Tischen taucht fast immer eines auf.
+- <strong>Kassensturz:</strong> Jeder Service sollte so viele Chips haben, wie Reisen geklappt haben. Jeder Chip dar&uuml;ber ist ein stilles Storno. Ergebnisse aller Tische an die Tafel, bei vier Tischen taucht fast immer eines auf.
 - <strong>Demo:</strong> Car auf &bdquo;Fehler&ldquo;, Saga starten. <code>FAILED</code>, Hotel und Flight <code>COMPENSATED</code>. Nach f&uuml;nf Klicks ist der Car-Breaker offen. Das stille Storno zeigt die Demo nicht, nur der Code (<code>compensate</code> in <code>booking/story7/handler/booking.go</code>).
 - &Uuml;berleitung: Chips bis zum Recap liegen lassen. Leitfrage: Was fehlt, damit kein Chip liegen bleibt <em>und</em> Booking es wei&szlig;?

@@ -12,7 +12,8 @@
 </div>
 
 Note:
-- <strong>Br&uuml;cke:</strong> Kapitel 2 hat <em>einen</em> Aufruf gesch&uuml;tzt. Jetzt h&auml;ngen mehrere zusammen: Flug, Hotel, Auto in einer Buchung.
+- <strong>Br&uuml;cke:</strong> Kapitel 2 hat <em>einen</em> Aufruf gesch&uuml;tzt. Jetzt h&auml;ngen mehrere zusammen: Flug, Hotel, Mietwagen in einer Buchung.
+- <strong>Offen von gestern:</strong> Flight-Breaker OPEN, die Kundin klickt auf Buchen. Die Antwort bauen wir jetzt.
 - <strong>Ab jetzt:</strong> Was, wenn ein Schritt scheitert und die anderen schon gebucht sind?
   - Saga mit Dirigent &rarr; Story 6 (Code)
   - Saga per Zuruf &rarr; Story 7 (Spiel)

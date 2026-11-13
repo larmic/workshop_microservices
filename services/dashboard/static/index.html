@@ -253,7 +253,7 @@
             color: #0A0349;
         }
         .rest-arrow {
-            color: #888;
+            color: #5B4E93;
             font-size: 0.85rem;
         }
         .service-chip {
@@ -651,7 +651,7 @@
         }
         .chaos-btn:hover { border-color: #888; }
         .chaos-btn.active.normal   { background: #1d7a3a; color: #fff; border-color: #1d7a3a; }
-        .chaos-btn.active.slow     { background: #b8860b; color: #fff; border-color: #b8860b; }
+        .chaos-btn.active.slow     { background: #8a6d00; color: #fff; border-color: #8a6d00; }
         .chaos-btn.active.fail     { background: #b3261e; color: #fff; border-color: #b3261e; }
         .chaos-btn.active.hang     { background: #0A0349; color: #fff; border-color: #0A0349; }
         .chaos-btn.mixed { background: #ddd; color: #444; border-color: #aaa; }
@@ -701,13 +701,13 @@
 
         /* Highlight: zuletzt bediente Instanz */
         .instance-row.served-recent {
-            background: rgba(204, 244, 101, 0.30);
+            background: rgba(211, 248, 113, 0.30);
             border-radius: 4px;
             animation: served-pulse 1.1s ease-out;
         }
         @keyframes served-pulse {
-            0%   { background: rgba(204, 244, 101, 0.80); }
-            100% { background: rgba(204, 244, 101, 0.30); }
+            0%   { background: rgba(211, 248, 113, 0.80); }
+            100% { background: rgba(211, 248, 113, 0.30); }
         }
 
         .spinner {
@@ -878,7 +878,7 @@
            Die Strichart trägt die Art, damit sie auch ohne Farbe erkennbar ist. */
         .stepper-node[data-kind="design"] { border-style: dashed; border-color: #7348E1; }
         .stepper-node[data-kind="play"] { border-style: dotted; border-color: #0A0349; }
-        .stepper-node[data-kind="start"] { border-color: #0A0349; background: #0A0349; color: #CCF465; }
+        .stepper-node[data-kind="start"] { border-color: #0A0349; background: #0A0349; color: #D3F871; }
         .stepper-node[data-kind="design"].active,
         .stepper-node[data-kind="play"].active,
         .stepper-node[data-kind="start"].active { border-color: #0A0349; }
@@ -993,6 +993,10 @@
         .story-info-body p, .story-info-body ul, .story-info-body ol { margin-bottom: 0.5rem; }
         .story-info-body ul, .story-info-body ol { padding-left: 1.25rem; }
         .story-info-body em { color: #7348E1; font-style: normal; font-weight: 600; }
+        .story-info-body a, .start-card a, .hw-help a, .story-start-hint a { color: #7348E1; }
+        .story-info-body a:hover, .start-card a:hover, .hw-help a:hover, .story-start-hint a:hover { color: #0A0349; }
+        :focus-visible { outline: 3px solid #7348E1; outline-offset: 2px; }
+        header :focus-visible { outline-color: #D3F871; }
         /* Auflösung im Story-Text: standardmäßig zu, damit sie nicht vor der Vorhersage sichtbar ist. */
         .story-info-body details.story-solution {
             margin: 0.75rem 0 0.5rem;
@@ -1279,7 +1283,7 @@
         }
 
         /* === Workshop-Theme === */
-        .title-accent { color: #CCF465; font-weight: 700; }
+        .title-accent { color: #D3F871; font-weight: 700; }
         header p { color: rgba(255,255,255,0.78); }
 
         /* Werkzeuge: Links untereinander */
@@ -1292,10 +1296,10 @@
 
         /* Aktiver Stepper-Knoten im Highlight-Look */
         .stepper-node.active {
-            background: #CCF465;
-            border-color: #CCF465;
+            background: #D3F871;
+            border-color: #D3F871;
             color: #0A0349;
-            box-shadow: 0 2px 10px rgba(204,244,101,0.55);
+            box-shadow: 0 2px 10px rgba(211,248,113,0.55);
         }
 
         /* Footer */
@@ -1317,7 +1321,7 @@
             display: inline-block;
             padding: 0.15rem 0.5rem;
             border-radius: 4px;
-            background: #CCF465;
+            background: #D3F871;
             color: #0A0349;
             font-weight: 700;
             margin-right: 0.4rem;
@@ -1672,7 +1676,7 @@
                 <div class="start-legend">
                     <span><span class="kind-pill" data-kind="code">Hands-on</span> eigener Code</span>
                     <span><span class="kind-pill" data-kind="design">Design-Session</span> am Flipchart</span>
-                    <span><span class="kind-pill" data-kind="play">Spiel</span> am Tisch, danach die Demo hier</span>
+                    <span><span class="kind-pill" data-kind="play">Spiel</span> im Raum, danach die Demo hier</span>
                 </div>
 
                 <div class="start-card start-homework">
@@ -1840,15 +1844,15 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                     <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
                         <h4>Kontext</h4>
-                        <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Downstream-Services registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Läuft eine zweite Instanz, übernimmt sie, sobald sich die erste abmeldet oder ihr Health-Check fehlschlägt.</p>
+                        <p>Statische URLs sind eine schöne Idee für Folien, aber nicht für den Betrieb. Die Backends registrieren sich bei <em>Consul</em>; der Booking-Service findet sie über logische Namen statt fest verdrahteter Adressen. Läuft eine zweite Instanz, übernimmt sie, sobald sich die erste abmeldet oder ihr Health-Check fehlschlägt.</p>
                         <h4>User Story</h4>
-                        <p>Als <em>Betriebsteam</em> möchte ich <em>Downstream-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
+                        <p>Als <em>Betriebsteam</em> möchte ich <em>Backend-Services über logische Namen finden, statt URLs per Hand zu pflegen</em>, damit <em>Skalierung und Ausfälle ohne nächtliche Config-Edits funktionieren</em>.</p>
                         <h4>Akzeptanzkriterien</h4>
                         <ul>
                             <li>Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul. Anmelden m&uuml;sst ihr euch nicht, das machen die Backends selbst.</li>
                             <li>Statische URLs ersetzt durch logische Namen: <code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
                             <li>Bestehender <code>GET /booking/offers</code> aus Story 1 umgebaut, löst Flight/Hotel/Car über den Consul-Resolver auf statt über statische Env-URLs</li>
-                            <li><code>POST /booking/bookings</code> orchestriert die drei Downstream-Services und antwortet mit <code>201 Created</code> und der aggregierten Buchung</li>
+                            <li><code>POST /booking/bookings</code> orchestriert die drei Backends und antwortet mit <code>201 Created</code> und der aggregierten Buchung</li>
                             <li>Aus Story 2 mitgenommen: Ressource <code>bookings</code> statt Verb, <code>POST</code> antwortet mit <code>201 Created</code>, Fehler kommen als Status-Code, nicht als <code>200</code> mit Fehler-Body</li>
                             <li>Optional: Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)</li>
                             <li>Optional: Consul Key-Value Store für zusätzliche Konfiguration</li>
@@ -1960,10 +1964,10 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             <summary>Was passieren sollte <span class="badge">erst nach dem Spiel</span></summary>
                             <div class="story-solution-body">
                                 <ul>
-                                    <li><strong>Ohne Breaker:</strong> nichts. Der erste Fehler bricht mit 500 ab, Hotel und Car werden gar nicht gefragt.</li>
-                                    <li><strong>OPEN:</strong> gar nicht, sofort <code>flights: []</code> mit <code>X-Circuit-Open</code>. Den Fallback gab es schon ab dem ersten Fehler, der Breaker spart nur das Warten.</li>
-                                    <li><strong>Probe:</strong> Genau eine liegt auf dem Probe-Feld, die anderen bekommen sofort den Fallback.</li>
-                                    <li><strong>31.02.:</strong> Ja, bei uns schon. Unser Code zählt alles ab 400, bei 26 trifft es einen Request mit gültigem Datum.</li>
+                                    <li><strong>Ohne Breaker, was hatten die Requests von gesundem Hotel und Car?</strong> Nichts. Der erste Fehler bricht mit 500 ab, Hotel und Car werden gar nicht gefragt.</li>
+                                    <li><strong>OPEN, wie lange wartet ein Request?</strong> Gar nicht, sofort <code>flights: []</code> mit <code>X-Circuit-Open</code>. Den Fallback gab es schon ab dem ersten Fehler, der Breaker spart nur das Warten.</li>
+                                    <li><strong>HALF_OPEN, wer darf zu Flight?</strong> Genau eine Karte liegt auf dem Probe-Feld, die anderen bekommen sofort den Fallback.</li>
+                                    <li><strong>Falsches Datum 31.02., kommen die Karten aufs Board?</strong> Ja, bei uns schon. Unser Code zählt alles ab 400, bei 26 trifft es einen Request mit gültigem Datum.</li>
                                 </ul>
                             </div>
                         </details>
@@ -2054,7 +2058,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                     <summary>Demo und Nachbauen <span class="badge">Referenz oder Mein Service</span></summary>
                     <div class="story-info-body">
                         <h4>Demo</h4>
-                        <p>Unten alle Downstream-Services auf &bdquo;Normal&ldquo;, dann Hotel auf &bdquo;Langsam&ldquo; (2&nbsp;s) und den Burst-Knopf dr&uuml;cken. Alle 20 Antworten sind 200, &bdquo;failed&ldquo; bleibt 0. Ma&szlig;geblich ist &bdquo;hotel rej&ldquo;: etwa zehn. Flight und Car laufen weiter. Der Hotel-Breaker merkt nichts, 2&nbsp;s liegen unter dem Timeout von 3&nbsp;s (das Panel zeigt ihn hier nicht). Danach Hotel zur&uuml;ck auf &bdquo;Normal&ldquo;.</p>
+                        <p>Unten alle Downstream-Services auf &bdquo;Normal&ldquo;, dann Hotel auf &bdquo;Langsam&ldquo; (2&nbsp;s) und den Burst-Knopf dr&uuml;cken. Alle 20 Antworten sind 200, die Ergebniszeile zeigt &bdquo;0 fail&ldquo;. Ma&szlig;geblich ist &bdquo;hotel rej&ldquo;: etwa zehn. Flight und Car laufen weiter. Der Hotel-Breaker merkt nichts, 2&nbsp;s liegen unter dem Timeout von 3&nbsp;s (das Panel zeigt ihn hier nicht). Danach Hotel zur&uuml;ck auf &bdquo;Normal&ldquo;.</p>
         <div class="source-toggle" data-source-toggle="5">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(5,'reference')">Referenz</button>
@@ -2103,7 +2107,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <div class="ref-slot"></div>
                         <h4>Zum Nachbauen</h4>
                         <p>Antwortet der Hotel-Service extrem langsam, binden seine Aufrufe die Ressourcen des Booking-Service, in einem klassischen Server den gemeinsamen Thread- oder Connection-Pool. Dann warten auch Anfragen an den Flight-Service, obwohl dieser einwandfrei funktioniert, bis sie beim Aufrufer in den Timeout laufen. Das <em>Bulkhead-Pattern</em> gibt jedem Backend einen eigenen Pool: Läuft einer voll, bleiben die anderen trocken. Der Code dafür ist trivial, die Größe des Pools nicht.</p>
-                        <p><strong>User Story:</strong> Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Downstream-Service nicht die Aufrufe an andere Downstream-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
+                        <p><strong>User Story:</strong> Als <em>Betriebsteam</em> möchte ich, <em>dass Probleme mit einem Backend-Service nicht die Aufrufe an andere Backend-Services beeinträchtigen</em>, damit <em>ein langsamer oder fehlerhafter Service nicht das gesamte System blockiert</em>.</p>
                         <p>Material, Trainer-Skript und Kartentabelle: <a href="https://larmic.github.io/workshop_microservices/material/#story5" target="_blank" rel="noopener">Materialseite</a>. Story zum Nachbauen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-05-bulkhead.md" target="_blank" rel="noopener"><code>docs/stories/story-05-bulkhead.md</code></a>. Referenz: <code>services/booking/story5/</code>.</p>
                     </div>
                 </details>
@@ -2292,9 +2296,9 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
         </div>
                         <div class="ref-slot"></div>
                         <h4>Zum Nachbauen</h4>
-                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Downstream-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
-                        <p><strong>User Story:</strong> Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Downstream-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
-                        <p><strong>Material:</strong> Pro Tisch zu f&uuml;nft ein W&uuml;rfel, 13 Pokerchips und ein Zettel f&uuml;r Booking. Nichts zu drucken. Ab 8 Personen zwei Tische, mehr Tische machen das stille Storno sicherer sichtbar.</p>
+                        <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Backend-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
+                        <p><strong>User Story:</strong> Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Backend-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
+                        <p><strong>Material:</strong> Pro Tisch zu f&uuml;nft ein W&uuml;rfel, 13 Pokerchips und ein Zettel f&uuml;r Booking. F&uuml;r die Tische ist nichts zu drucken, den Trainer-Spickzettel gibt es auf der <a href="https://larmic.github.io/workshop_microservices/material/#story7" target="_blank" rel="noopener">Materialseite</a>. Ab 8 Personen zwei Tische, mehr Tische machen das stille Storno sicherer sichtbar.</p>
                         <p>Story zum Nachbauen mit Regeln, Zahlen und Aufl&ouml;sungen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-07-choreography-saga.md" target="_blank" rel="noopener"><code>docs/stories/story-07-choreography-saga.md</code></a>. Referenz: <code>services/booking/story7/</code>.</p>
                     </div>
                 </details>
@@ -2313,7 +2317,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             alle Services hinweg als <em>eine zusammenhängende Operation</em> verfolgen. Korrelation
                             passiert heute nur über Timestamps und Augenmaß. Mit jeder zusätzlichen Komponente wird das
                             schmerzhafter, spätestens bei eurer Saga aus Story 6 (bis zu fünf HTTP-Calls über drei
-                            Backends: drei Forward, zwei DELETE).
+                            Backends: drei Buchungen, zwei DELETE).
                         </p>
                         <p>
                             Eine <strong>Trace-ID</strong> pro eingehender Anfrage, die durch alle nachgelagerten Aufrufe
@@ -2336,12 +2340,12 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                                 Header übernommen (W3C Trace Context: <code>traceparent</code>).</li>
                             <li>Die Response trägt den effektiven <code>traceparent</code> zurück. Das Panel unten liest die
                                 Trace-ID daraus.</li>
-                            <li>Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call weitergereicht: Forward
+                            <li>Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call weitergereicht: Buchung
                                 (<code>POST /bookings</code>) und Kompensation (<code>DELETE /bookings/{id}</code>).</li>
                             <li>Jede Logzeile eures Booking-Service enthält die Trace-ID. Flight, Hotel und Car übernehmen
                                 einen eintreffenden <code>traceparent</code> schon und loggen ihn.</li>
                             <li>Logs sind strukturiert (JSON), damit <code>trace_id</code> ein eigenes Feld ist.</li>
-                            <li>Der Filter aus dem Panel zeigt den vollständigen Ablauf einer Buchung, Forward
+                            <li>Der Filter aus dem Panel zeigt den vollständigen Ablauf einer Buchung, Hinweg
                                 <strong>und</strong> Kompensation. Eine Kompensation löst ihr mit „Buchung mit kaputtem
                                 Mietwagen“ aus.</li>
                             <li>Die OpenAPI-Dokumentation des Booking-Services beschreibt den
@@ -2432,7 +2436,7 @@ on receiveCompensationEvent(event):
                         <span class="rest-path">/booking/bookings</span>
                         <span class="rest-arrow">&rarr;</span>
                         <span class="service-chip">booking-ref-story8</span>
-                        <span class="rest-btn-sub">Saga starten &mdash; <strong>trace_id automatisch</strong> generiert, in Forward- und Compensation-Logs aller Services sichtbar</span>
+                        <span class="rest-btn-sub">Saga starten &mdash; <strong>trace_id automatisch</strong> generiert, in den Buchungs- und Kompensations-Logs aller Services sichtbar</span>
                     </button>
                 </div>
                 <div class="rest-row">
@@ -3203,7 +3207,7 @@ on receiveCompensationEvent(event):
             const list = document.getElementById("bh-burst-list");
             if (bulkheadBursts.length === 0) {
                 stats.innerHTML = "";
-                list.innerHTML = '<div class="saga-empty">Noch kein Aufruf — <em>Normaler Aufruf</em> oder <em>Burst: 20 parallele Suchen</em> klicken.</div>';
+                list.innerHTML = '<div class="saga-empty">Noch kein Aufruf — <em>GET /booking/offers</em> oder <em>Burst: 20 parallele Suchen</em> klicken.</div>';
                 return;
             }
             const agg = { flight: 0, hotel: 0, car: 0, totalCalls: 0, totalRej: 0 };

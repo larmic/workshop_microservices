@@ -22,6 +22,6 @@ Note:
   - Scheitert Hotel nach dem Flug, bleibt der Flug gebucht, kein Rollback.
 - <strong>Alternativen:</strong>
   - Nein, sofort: klare Meldung statt h&auml;ngender Seite. Fail fast ist auch ein Fallback.
-  - Asynchron: Hotel und Auto buchen, Flug nachbuchen, sobald der Breaker schlie&szlig;t. Braucht Zustand und Benachrichtigung.
+  - Asynchron: Hotel und Mietwagen buchen, Flug nachbuchen, sobald der Breaker schlie&szlig;t. Braucht Zustand und Benachrichtigung.
   - Kompensation: buchen, bei Fehler stornieren. Das ist die Saga, Story 6.
   - Anderer Anbieter: zweiter Flug-Provider. Teuer, selten.

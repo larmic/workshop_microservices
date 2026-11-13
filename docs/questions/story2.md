@@ -6,7 +6,7 @@ Betriebsprobleme verhindern, und wo Abweichen legitim ist.
 
 ---
 
-## Frage 1 · Der Client schickt den Storno zweimal. Was passiert?
+## Frage 1 · Der Client schickt das Storno zweimal. Was passiert?
 
 **Frage:** Instabiles Netz, die erste Antwort geht im Timeout verloren,
 die App wiederholt die Anfrage. Was passiert bei `DELETE /bookings/4711`,
