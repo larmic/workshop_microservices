@@ -50,7 +50,7 @@
 
 Note:
 - Hook: &bdquo;Eure Saga aus Story 6: eine Buchung, bis zu f&uuml;nf HTTP-Calls. Welche Logzeile geh&ouml;rt zu welchem Vorgang?&ldquo; Demo: grep auf Story 7, dann auf Story 8.
-- Gegeben: Flight, Hotel, Car loggen eine eingehende <code>trace_id</code> schon. Aufgabe: der eigene Story-6-Service, ohne Events, CB, Bulkhead. Nicht fertig? Kompensation an der Referenz zeigen.
+- Gegeben: Flight, Hotel, Car loggen eine eingehende <code>trace_id</code> schon. Aufgabe: der eigene Story-6-Service, ohne Events, CB, Bulkhead. Nicht fertig? Kompensation an der Referenz zeigen. Die storniert per Event wie in Story 7, der <code>traceparent</code> wandert als Property mit, die Trace-ID bleibt trotzdem dieselbe.
 - Downstreams &uuml;bernehmen, starten per HTTP bewusst keinen, Tabu ist &uuml;berschreiben.
 - Kompensation ausl&ouml;sen: &bdquo;Buchung mit kaputtem Mietwagen&ldquo; (<code>C9</code>, 409). Panel zeigt den <code>jq</code>-Filter. Nicht f&uuml;nfmal schnell klicken, sonst &ouml;ffnet der Car-Breaker (503).
 - Bonus: Detektiv-Runde (Rush Hour, wer findet die kaputte Buchung?), Kompensation als Event, Jaeger.
