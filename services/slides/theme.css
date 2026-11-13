@@ -3,7 +3,7 @@
  *
  * Farbpalette (slides-spezifisch — Single Source of Truth):
  *   --slide-bg          #ffffff           Slide-Hintergrund (weiß)
- *   --slide-text        #000000           Standard-Textfarbe auf Slides (schwarz)
+ *   --slide-text        rgb( 10,  3, 73)  Standard-Textfarbe auf Slides (dunkles Blau-Violett)
  *   --wave              rgb(238,231,251)  Welle am unteren Slide-Rand
  *   --box-bg            rgb( 10,  3, 73)  Box-Hintergrund (dunkles Blau-Violett)
  *   --box-border        rgb(115, 72,225)  Box-Rahmen (dünn)

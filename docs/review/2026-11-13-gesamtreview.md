@@ -68,7 +68,11 @@ Spürbare Verbesserungen für Verständnis, Konsistenz und Auftritt.
 > - **W18:** Nur die Legende („im Raum“) ist angepasst, Oberbegriff und Strichart sind offen.
 > - **W35:** Kreppband ist optional, das Plenum-Flipchart steht noch in der Liste.
 >
-> **Offen, weil sie eine Entscheidung brauchen:** W8 (Überleitungen am ersten Vormittag, die Notes wurden dort bewusst gekürzt), W9 (Zeitplan Tag 1 und Story 3), W24 (Ampelfarben und Gate, das Gate braucht Go), W27 (`services/CLAUDE.md`), W28 (Schrift der Druckseite).
+> **Bewusst nicht umgesetzt:** W8 (Überleitungen am ersten Vormittag) und W9 (Zeitplan Tag 1 und Story 3).
+>
+> **Nachgezogen:** W27 (`services/CLAUDE.md` und Kopfkommentar von `theme.css`).
+>
+> **Offen:** W24 (Ampelfarben und Gate, das Gate braucht Go) und W28 (Schrift der Druckseite).
 
 ### Folien und roter Faden
 

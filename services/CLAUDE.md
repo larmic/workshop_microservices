@@ -22,9 +22,10 @@ Konami-Code) und nimmt an der Palette-Synchronisation nicht teil.
 | Welle (Slides) | `rgb(238, 231, 251)` | `#EEE7FB` | Dekorative Welle am unteren Slide-Rand |
 | Page-Hintergrund (Dashboard) | — | `#f0f2f5` | Body |
 | Slide-Hintergrund | — | `#ffffff` | Standard-Slide |
-| Slide-Text | — | `#000000` | Standard-Textfarbe auf Slides |
+| Slide-Text | `rgb( 10,   3,  73)` | `#0A0349` | Standard-Textfarbe auf Slides (Primär-Dunkel, kein Schwarz) |
 | Text (Dashboard) | — | `#333` | Standard |
 | Text gedämpft | — | `#555` / `#888` / `#aaa` | Sekundär / Tertiär |
+| Violett dunkel | — | `#4d27a8` | Inline-Code und dunkle Link-Variante auf Slides |
 | Text gedämpft (Violett) | — | `#5B4E93` | Kleine Labels, Badges, Kicker (Slides: Agenda, Merksätze; Dashboard: statt `#888` für kleinen Text, ≥ 6:1 auf hellem Grund) |
 
 Einzelfarben nur für den Eisberg auf Folie 08b (kein Teil der Palette):
@@ -41,12 +42,14 @@ Status-Farben (Dashboard, Circuit-Breaker-Badges etc.):
 
 ## Schriften (Slides)
 
-Die Slides nutzen ausschließlich **Poppins** (SIL OFL 1.1), selbst gehostet
+Die Slides nutzen **Poppins** (SIL OFL 1.1), selbst gehostet
 unter `slides/assets/fonts/` und per `@font-face` in `slides/theme.css`
-eingebunden. Damit rendern Checkout, CI, GitHub Pages, Docker und Beamer
+eingebunden. Einzige Ausnahme ist **Sacramento** (SIL OFL 1.1), eine
+Schreibschrift nur für den „roten Faden“ auf der Feedback-Folie. Damit rendern Checkout, CI, GitHub Pages, Docker und Beamer
 identisch, auch offline. Titel laufen in ExtraBold (800), Fließtext in
 Regular (400). Keine System- oder Lizenzschriften (Futura, Faktum) im Stack;
-Details in `slides/assets/fonts/README.md`.
+Details in `slides/assets/fonts/README.md`. Dashboard und Pages nutzen
+die Systemschrift.
 
 ## Audience-Hinweis
 
