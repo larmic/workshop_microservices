@@ -57,6 +57,7 @@
             color: #555;
             margin: 0 0 1.25rem;
         }
+        #text-hint { margin: 0 0 0.5rem; }
         .thumb-row {
             display: flex;
             gap: 0.75rem;
@@ -246,7 +247,8 @@
         </div>
 
         <label class="field-label" for="text">Dein Feedback</label>
-        <textarea id="text" maxlength="2000" rows="5" autofocus placeholder="Was war gut, was nicht? Konkrete Stories oder Stellen helfen am meisten."></textarea>
+        <p class="sub" id="text-hint">Zum Beispiel: Ist der rote Faden erkennbar? Fehlen Patterns? Passt der Zeitrahmen? Passen die Beispiele? Ist das Dashboard eine gute Idee?</p>
+        <textarea id="text" maxlength="2000" rows="5" autofocus aria-describedby="text-hint" placeholder="Was war gut, was nicht? Konkrete Stories oder Stellen helfen am meisten."></textarea>
         <div class="counter"><span id="counter">0</span> / 2000</div>
 
         <label class="field-label" for="name">Name <span class="optional">(optional, leer lassen f&uuml;r anonymes Feedback)</span></label>

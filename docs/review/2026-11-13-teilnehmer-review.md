@@ -151,6 +151,7 @@ Schwere nach der Gegenprüfung. Aufwand ist meine Schätzung für die Behebung.
 > - **T13** bleibt bewusst offen (nicht nachgestellt).
 > - **T15** entschärft: Die Demo zu Story 7 ist auf 5 Minuten gekürzt und zeigt nur, was gegenüber Story 6 neu ist. Das stille Storno bleibt Code.
 > - **T16** behoben: Teams zu 3 bis 4, einer tippt, pro Story wechseln (Folie „Einklinken, dann los“, Dashboard-Start).
+> - **Kleine Punkte:** abgearbeitet, soweit ohne Entscheidung möglich (Vorbereitung, Landing, Zeitlinie und 12 Faktoren in den Notes, Quiz 1, Story-Texte 1, 3, 5, 6 und 8, OpenAPI-Schemas der Angebote, Badge „Und beim Buchen?“, Merksatz 08, Feedback-Formular mit Leitfragen, Service-Chips im Modus „Mein Service“). Offen sind nur Punkte, die eine Entscheidung brauchen.
 
 ### Hoch
 

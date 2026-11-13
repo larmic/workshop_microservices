@@ -1844,7 +1844,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                                 <h4>Instanz bei Consul finden</h4>
                                 <p>Nur gesunde Instanzen abfragen und eine davon zuf&auml;llig w&auml;hlen.</p>
 <pre>resolve(name):
-  res = GET consul:8500/v1/health/service/{name}?passing=true
+  res = GET {CONSUL_URL}/v1/health/service/{name}?passing=true   // Env-Var, im Stack http://consul:8500
   // res = [ {Service:{Address, Port}}, ... ]
   instance = randomPick(res)
   return "http://{instance.Address}:{instance.Port}"</pre>
@@ -1863,7 +1863,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
 <pre>POST /booking/bookings { flightId, hotelId, carId, customerName }:
   for svc in [flight-service, hotel-service, car-service]:
     url = resolve(svc)
-    POST url/bookings
+    POST url/bookings { flightId | hotelId | carId, customerName }
   → { bookingId, customerName, flight, hotel, car }</pre>
                             </li>
                         </ol>
@@ -2025,7 +2025,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             <div class="story-solution-body">
                                 <ul>
                                     <li><strong>Runde 1:</strong> Zwei sitzen, <strong>vier stehen dahinter</strong> und warten auf einen Stuhl, obwohl sie zuerst nur Flight wollen, und Flight ist gesund.</li>
-                                    <li><strong>Runde 2:</strong> Drei von elf bekommen Hotels, alle anderen sofort eine Antwort ohne Hotels. Niemand wartet.</li>
+                                    <li><strong>Runde 2:</strong> Drei von elf bekommen Hotels (beim letzten STOPP sitzt der dritte noch, gez&auml;hlt sind deshalb zwei), alle anderen sofort eine Antwort ohne Hotels. Niemand wartet.</li>
                                     <li><strong>Circuit Breaker:</strong> beide Male CLOSED. 2&nbsp;s liegen unter dem 3-Sekunden-Timeout, langsam ist kein Fehler.</li>
                                     <li><strong>Wem gehören die Stühle?</strong> Booking. Die Wand schützt Booking, nicht Hotel.</li>
                                 </ul>
@@ -2524,6 +2524,12 @@ on receiveCompensationEvent(event):
             BookingMode[storyNum] = mode;
             document.querySelectorAll('[data-source-toggle="' + storyNum + '"] .source-btn').forEach(btn => {
                 btn.classList.toggle("active", btn.dataset.mode === mode);
+            });
+            // Die Chips an den Buttons zeigen, welcher Service gerufen wird.
+            document.querySelectorAll('.story-section[data-story="' + storyNum + '"] .service-chip').forEach(chip => {
+                if (!chip.dataset.ref) chip.dataset.ref = chip.textContent;
+                if (!/^booking-ref-story\d$/.test(chip.dataset.ref)) return;
+                chip.textContent = mode === "custom" ? "booking-custom" : chip.dataset.ref;
             });
             if (storyNum === 4 && typeof fetchCircuitState === "function") fetchCircuitState();
             if (storyNum === 5 && typeof fetchBulkheadState === "function") fetchBulkheadState();

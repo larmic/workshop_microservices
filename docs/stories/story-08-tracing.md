@@ -98,13 +98,18 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
   Sprach- und Tool-abhängig.
 - **Span-Konzept:** Pro Outbound-Hop eine neue Span-ID generieren
   (gleiche Trace-ID). Einen vollwertigen Span-Baum mit Parent-Child-
-  Verknüpfung zu bauen ist für 60 Minuten zu viel — bewusst weglassen,
-  in den Trainer-Notizen wird der Vollumfang erklärt.
-- **Strukturiertes Logging:** Mit `slog` (statt `log`) lässt sich
-  `trace_id` als eigenes Feld anhängen
-  (`slog.String("trace_id", ...)`) — mit `log.Printf` müsste man die ID
-  manuell in jeden Format-String einsetzen. JSON-Output macht das spätere
-  Filtern (z.B. mit `jq`) trivial.
+  Verknüpfung zu bauen ist für die Zeit zu viel — bewusst weglassen.
+  Den Baum liefert später ein SDK wie OpenTelemetry, das kommt im Recap.
+- **Strukturiertes Logging:** `trace_id` gehört als eigenes Feld in eine
+  JSON-Logzeile, nicht in einen freien Textstring. Dann filtert `jq` sie
+  heraus. Wie das geht, hängt vom Stack ab: in Go `slog` mit
+  `slog.String("trace_id", ...)`, in Java Logback oder Log4j mit
+  JSON-Encoder und der ID im MDC, in Node ein JSON-Logger wie `pino`
+  oder schlicht `console.log(JSON.stringify(...))`.
+- **Kontext durchreichen:** Die ID muss vom eingehenden Request bis zum
+  ausgehenden Aufruf mitwandern. In Go trägt sie der `context`, in Java
+  ein Filter plus MDC bzw. ThreadLocal und ein Client-Interceptor, in
+  Node `AsyncLocalStorage`.
 - **Saga + Tracing:** Eine Saga ergibt naturgemäß einen Vorgang mit
   geschachtelten Aufrufen:
   ```
@@ -115,14 +120,13 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
   ```
   Mit derselben Trace-ID in allen Logzeilen wird der Vorgang sofort
   sichtbar.
-- **Zwei Middlewares, zwei Rollen:** Die Library stellt bewusst zwei
-  Einstiegspunkte bereit. `Middleware` erzeugt einen Trace, falls keiner
-  reinkommt — das ist die Entry-Point-Variante (Booking-Service).
-  `Propagate` übernimmt nur einen bereits vorhandenen Trace und legt
-  sonst nichts an — das ist die Downstream-Variante (Flight/Hotel/Car).
-  Diese Trennung sorgt dafür, dass die Trace-ID in den
-  Downstream-Logs erst auftaucht, wenn der Entry-Point sie aktiv
-  propagiert — und nicht zufällig vom Service selbst generiert wurde.
+- **Zwei Rollen:** Der Entry-Point (euer Booking-Service) erzeugt einen
+  Trace, falls keiner reinkommt. Die Downstream-Services (Flight, Hotel,
+  Car) übernehmen nur einen vorhandenen und legen sonst nichts an. So
+  taucht die Trace-ID in den Downstream-Logs erst auf, wenn euer Service
+  sie aktiv weiterreicht, und nicht zufällig, weil ein Service sie selbst
+  erzeugt hat. Die Go-Referenz hat dafür zwei Funktionen in
+  `services/shared/tracing`: `Middleware` und `Propagate`.
 
 ## Bonus (optional)
 

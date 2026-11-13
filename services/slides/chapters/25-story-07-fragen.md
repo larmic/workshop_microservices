@@ -58,6 +58,7 @@ Note:
 - <strong>02 Storno kommt zweimal:</strong> Gedankenexperiment an den liegen gebliebenen Chips.
   - Ein Broker liefert, bis quittiert ist (at-least-once): Nichts fehlt, manches kommt doppelt.
   - Abhilfe: <code>eventId</code> merken, in derselben Transaktion wie die Fachlogik. Unsere Backends tun das nicht.
+  - Einwand aus Story 6: &bdquo;Das Storno war doch idempotent, zweimal 204.&ldquo; Stimmt, solange Stornieren nur &bdquo;weg&ldquo; hei&szlig;t. H&auml;ngt mehr daran (Gutschrift, Mail, Kontingent plus eins), z&auml;hlt jedes Doppelte.
   - Was ein Broker sonst kann: Bonus-Folie.
 - <strong>03 Antwort zur&uuml;ck:</strong> Auch ein Gedankenexperiment.
   - Reply-Event (<code>BookingCancelled</code>) plus Timeout, sonst <code>STUCK</code> statt <code>COMPENSATED</code>.

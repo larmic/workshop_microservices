@@ -37,7 +37,7 @@
 </div>
 <div class="card">
 <h3><span class="num">08</span> Tracing</h3>
-<p>Trace-ID nur am Entry-Point erzeugen, sonst &uuml;bernehmen. Eine Span pro Hop.</p>
+<p>Trace-ID &uuml;bernehmen, nie &uuml;berschreiben. Fehlt sie, erzeugt sie der Entry-Point. Eine Span pro Hop.</p>
 </div>
 </div>
 
