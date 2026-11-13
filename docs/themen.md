@@ -33,7 +33,7 @@ Summe Tag 1: 255 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 |-------|-------|------|
 | 6e | Rollenspiel: Story 5 (Bulkhead, zwei Stühle und eine Wand statt Code) | 45 Min |
 | 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
-| 6g | Rollenspiel: Story 7 (Choreography-Saga, Rollenspiel statt Code) | 60 Min |
+| 6g | Würfelspiel: Story 7 (Choreography-Saga, Würfelspiel statt Code) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
 | 8 | Hands-on: Story 8 (Distributed Tracing) | 60 Min |
 | 11 | Abschluss & Kulturwandel | 30 Min |
@@ -161,7 +161,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmer
 - Recap-Frage: Wer kennt das Endergebnis bei dieser Variante?
 
 ### 6g. Story 7 — [Die Saga wird leise](stories/story-07-choreography-saga.md) (60 Min)
-- Rollenspiel statt Code: 10 Minuten Einstieg, dann 25 Minuten Spiel inklusive Nachbereitung: dieselbe Saga in drei Runden (Anruf wie Story 6, Zuruf wie unsere Referenz, Korb als Broker), Kassensturz mit Bechern und Gummibärchen nach jeder Runde, danach „Die Leiter“ (Webhook, Broker, Idempotenz, Reply). 10 Minuten Demo mit der Referenz, 15 Minuten Recap mit vier Fragen plus Bonus zum Broker
+- Würfelspiel statt Code: 10 Minuten Einstieg, dann 25 Minuten Spiel inklusive Nachbereitung. „Retry oder Storno“: Booking und Kunde bringen Reisen durch, ein Retry-Budget rettet `503`, ausgebucht wird per Zuruf storniert, und manches Storno bleibt still liegen. Danach „Die Leiter“ (Webhook, Broker, Idempotenz, Reply). 10 Minuten Demo mit der Referenz, 15 Minuten Recap mit vier Fragen plus Bonus zum Broker
 - Lernpointe: Choreography verteilt Verantwortung und Wissen; ohne haltbares Messaging wird das Problem nur leiser
 - Recap-Frage: Wann Orchestration, wann Choreography?
 

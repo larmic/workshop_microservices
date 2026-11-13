@@ -15,10 +15,11 @@ Backend, das schon gebucht hat, rückwärts (erst Hotel, dann Flight). Was,
 wenn Flight seit der Buchung down ist und der POST in einen
 Connection-Refused, einen 5xx oder den 3-s-Timeout läuft? In Story 6 hätte
 Booking diesen Fehler dem Kunden zurückgegeben. Was tun wir in Story 7?
-(Im Spiel: Kassensturz nach Runde 2, Reise 2 hat nur ein Gummibärchen.)
+(Im Spiel: Beim Kassensturz liegt noch ein Chip bei Flight, obwohl Booking
+„storniert“ gemeldet hat.)
 
 **Antwort:** Aktuell genau **nichts**. Booking wartet beim Zuruf nur auf
-die Annahme: Die `202 Accepted` ist das „gehört!“ aus dem Spiel. Bleibt sie
+die Annahme: Im Spiel steht der Wurf 1–4 der Gerufenen dafür. Bleibt sie
 aus, merkt Booking das sogar und loggt `phase=dispatch-failed`. Der Step
 wird trotzdem als `COMPENSATED` markiert, die Saga geht auf `FAILED` und
 der Kunde bekommt seine Antwort. Es gibt genau einen Versuch, kein Retry.
@@ -55,8 +56,9 @@ sondern bei der **Durability des Events**.
 
 **Frage:** Unser Backend tut bei `POST /events/compensation` *nichts
 außer loggen*. Welche Konsequenz hätte es, wenn dasselbe Event zweimal
-zugestellt würde? Müssen wir uns überhaupt darum kümmern? (Im Spiel:
-Runde 3, ein Becher hat drei Gummibärchen.)
+zugestellt würde? Müssen wir uns überhaupt darum kümmern? (Im Spiel nur als
+Gedankenexperiment auf der Leiter: Der Korb stellt noch einmal zu, der Service
+zahlt zweimal.)
 
 **Antwort:** In unserer Schmalspur-Variante mit einmaligem `POST`
 **nie**: ein Versuch, kein Retry, also keine Duplikate, aber auch keine
@@ -168,7 +170,7 @@ die Kette, und niemand bekommt einen Fehler — es passiert einfach nichts.
 Das ist der **verteilte Monolith**: lose gekoppelt zur Laufzeit, fest
 gekoppelt im Kopf.
 
-Was unsere Referenz macht (im Spiel Runde 2, Zuruf), ist deshalb der
+Was unsere Referenz macht (im Spiel der Zuruf), ist deshalb der
 sinnvolle Mittelweg: Booking dirigiert den Hinweg und entscheidet auch,
 wer ein Storno bekommt, storniert wird per Zuruf. Streng genommen ist
 `CompensationRequested` damit ein Command und keine echte Choreografie.

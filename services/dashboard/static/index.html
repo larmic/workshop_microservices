@@ -1644,7 +1644,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="play" data-story-node="7" onclick="showStory(7)" title="Rollenspiel mit Bechern und Gummibärchen, kein Code">7</button>
+                    <button type="button" class="stepper-node" data-kind="play" data-story-node="7" onclick="showStory(7)" title="Würfelspiel mit Chips, kein Code">7</button>
                     <small class="stepper-kind">Spiel</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -2203,49 +2203,48 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
         </div>
         </section>
 
-        <!-- Story 7: Rollenspiel statt Code. Story-Karte zeigt das Rollenspiel; das
+        <!-- Story 7: Würfelspiel statt Code. Story-Karte zeigt das Würfelspiel; das
              Saga-Panel darunter bleibt als Demo der Webhook-Referenz. -->
         <section class="story-section" data-story="7" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="7">
                 <details class="story-info" open>
-                    <summary>Aufgabe <span class="badge">Rollenspiel</span></summary>
+                    <summary>Aufgabe <span class="badge">W&uuml;rfelspiel</span></summary>
                     <div class="story-info-body">
-                    <p class="play-lead">Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich storniert wurde.</p>
+                    <p class="play-lead">Booking und Kunde wollen vier Reisen durchbringen. Storniert wird per Zuruf.</p>
                     <div class="play-grid">
                         <div>
-                            <h4>Rollen</h4>
+                            <h4>Am Tisch</h4>
                             <ol>
-                                <li><strong>Booking</strong> bucht eine Reise nach der anderen. Sagt Car nein, storniert Booking r&uuml;ckw&auml;rts: Hotel, dann Flight.</li>
-                                <li><strong>Hotel und Flight</strong> stornieren: bis f&uuml;nf z&auml;hlen, ein Gummib&auml;rchen in den Becher der Reise. Jedes Mal.</li>
-                                <li><strong>Car</strong> sagt immer &bdquo;nein&ldquo;, in Runde 3 ist Car der Korb.</li>
-                                <li><strong>Alle anderen</strong> haben je eine Reise und einen Becher. In jeden Becher geh&ouml;ren zwei.</li>
+                                <li><strong>Booking und Kunde</strong> sind ein Team. Der Kunde hat 13 Chips, jede Buchung kostet einen.</li>
+                                <li><strong>Flight, Hotel, Car</strong> w&uuml;rfeln nur. Was bei ihnen liegen bleibt, behalten sie.</li>
+                                <li><strong>Ziel:</strong> 4 Reisen durch in h&ouml;chstens 6. Vorher geht ein Retry-Budget in Chips an Booking, es kommt nie zur&uuml;ck.</li>
                             </ol>
                         </div>
                         <div>
-                            <h4>Drei Runden</h4>
+                            <h4>So l&auml;uft jede Reise</h4>
                             <ol>
-                                <li><strong>Anruf (wie Story 6):</strong> Booking wartet auf &bdquo;erledigt&ldquo;.</li>
-                                <li><strong>Zuruf (unsere Referenz):</strong> Das Backend ruft &bdquo;geh&ouml;rt!&ldquo;. Bleibt es still: bis drei z&auml;hlen, Strich, trotzdem &bdquo;storniert&ldquo;.</li>
-                                <li><strong>Korb:</strong> Booking wirft Zettel in den Korb. Der Korb liest vor, bis &bdquo;quittiert&ldquo; kommt, sonst noch einmal.</li>
+                                <li>Booking w&uuml;rfelt: 1 Flight, 2 Hotel, 3 Car sagt nein, 4&ndash;6 alle ja. Jedes Ja kostet einen Chip.</li>
+                                <li>Wer nein sagt, w&uuml;rfelt: 1&ndash;3 <code>503</code>, Booking darf statt des Kunden mit einem Budget-Chip retten. 4&ndash;6 ausgebucht.</li>
+                                <li>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; an die schon Gebuchten und sagt sofort &bdquo;Storniert&ldquo;. Dann w&uuml;rfeln die Gerufenen: 1&ndash;4 Chip zur&uuml;ck, 5&ndash;6 nicht geh&ouml;rt.</li>
                             </ol>
-                            <p class="play-note">Nach jeder Runde <strong>Kassensturz</strong>: Stimmt jeder Becher?</p>
+                            <p class="play-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts. Am Ende <strong>Kassensturz</strong>: Jeder Service sollte so viele Chips haben, wie Reisen durch sind.</p>
                         </div>
                     </div>
                     <details class="story-solution">
                             <summary>Was passieren sollte <span class="badge">erst nach dem Kassensturz</span></summary>
                             <div class="story-solution-body">
                                 <ul>
-                                    <li><strong>Runde 1:</strong> die ganze Schlange, aber Booking weiß alles.</li>
-                                    <li><strong>Runde 2:</strong> nein, und Booking hat es sogar gemerkt.</li>
-                                    <li><strong>Runde 3:</strong> keiner fehlt, einer hat drei.</li>
+                                    <li><strong>Budget 0:</strong> Jedes <code>503</code> wird zur Kompensation, das Team verliert meist (32&nbsp;% gewonnen).</li>
+                                    <li><strong>Budget 1:</strong> die beste Wahl (54&nbsp;%). Budget 2 kommt auf 44&nbsp;%, Budget 3 auf 17&nbsp;%: Resilienz kostet Kapazit&auml;t.</li>
+                                    <li><strong>Stilles Storno:</strong> Bei einem Service liegt ein Chip zu viel, obwohl Booking &bdquo;storniert&ldquo; gemeldet hat.</li>
                                 </ul>
                                 <h4>Danach: Die Leiter</h4>
-                                <p>Booking storniert nicht mehr selbst, antwortet aber weiter der Kund:in. Was fehlt, damit jeder Becher stimmt <em>und</em> Booking es weiß?</p>
+                                <p>Booking storniert nicht mehr selbst, antwortet aber weiter dem Kunden. Was fehlt, damit kein Chip liegen bleibt <em>und</em> Booking es wei&szlig;?</p>
                                 <ul>
-                                    <li><strong>Zuruf:</strong> Booking wartet nur auf „gehört“. Ist Flight weg, ist das Storno weg. <em>Webhook, unsere Referenz.</em></li>
-                                    <li><strong>Korb:</strong> Der Korb hält den Zettel fest und liest vor, bis quittiert wird. Keiner fehlt, manches kommt doppelt. <em>Broker, at-least-once.</em></li>
-                                    <li><strong>Nummer:</strong> Wer sich die Zettelnummer merkt und sie wiedererkennt, quittiert nur, ohne Gummibärchen. <em>eventId, Idempotenz.</em></li>
-                                    <li><strong>Antwortzettel:</strong> Booking meldet „storniert“ erst, wenn beide Antworten da sind. Sonst zählt Booking bis zehn und meldet <code>STUCK</code>. <em>Reply, Timeout.</em></li>
+                                    <li><strong>Zuruf:</strong> Booking ruft und meldet sofort &bdquo;storniert&ldquo;. Wer es nicht h&ouml;rt, beh&auml;lt den Chip. <em>Webhook, unsere Referenz.</em></li>
+                                    <li><strong>Korb:</strong> Der Korb h&auml;lt das Storno fest und stellt zu, bis quittiert wird. Keins fehlt, manches kommt doppelt. <em>Broker, at-least-once.</em></li>
+                                    <li><strong>Nummer:</strong> Wer sich die Storno-Nummer merkt und sie wiedererkennt, quittiert nur und zahlt nicht noch einmal. <em>eventId, Idempotenz.</em></li>
+                                    <li><strong>Antwort zur&uuml;ck:</strong> Booking meldet &bdquo;storniert&ldquo; erst, wenn alle Chips zur&uuml;ck sind. Sonst meldet Booking nach einem Timeout <code>STUCK</code>. <em>Reply, Timeout.</em></li>
                                 </ul>
                                 <p>Eventing macht das Problem nicht kleiner. Es macht es leiser.</p>
                             </div>
@@ -2300,8 +2299,8 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                         <h4>Zum Nachbauen</h4>
                         <p>In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensation: Er ruft synchron <code>DELETE /bookings/{id}</code> gegen jeden Downstream-Service auf und behandelt jeden Fehler selbst. Fachlich ist die Stornierung aber Aufgabe der Backends. Booking ruft ihnen das Storno deshalb nur noch als <em>Event</em> zu und wartet nur, bis es angenommen ist. Ehrlich gesagt ist das ein Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.</p>
                         <p><strong>User Story:</strong> Als <em>System</em> möchte ich <em>bei einer fehlgeschlagenen Buchung die Kompensation asynchron an die zuständigen Downstream-Services delegieren</em>, damit <em>der Booking-Service nicht für deren Verfügbarkeit haften muss und die Backends ihre eigene Stornierungslogik kapseln können</em>.</p>
-                        <p><strong>Material:</strong> Pro Tisch: sechs verdeckte Listen (je drei für Hotel und Flight), ein Becher pro Reise, etwa sieben Gummibärchen pro Reise (Alternative: Büroklammern), ein Korb, pro Reise zwei nummerierte Zettel, eine Strichliste, ein Briefing-Kärtchen für Flight. Ab 12 Personen zwei Tische.</p>
-                        <p>Story zum Nachbauen mit Briefing und Aufl&ouml;sungen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-07-choreography-saga.md" target="_blank" rel="noopener"><code>docs/stories/story-07-choreography-saga.md</code></a>. Referenz: <code>services/booking/story7/</code>.</p>
+                        <p><strong>Material:</strong> Pro Tisch zu f&uuml;nft ein W&uuml;rfel, 13 Pokerchips und ein Zettel f&uuml;r Booking. Nichts zu drucken. Ab 7 Personen zwei Tische, mehr Tische machen das stille Storno sicherer sichtbar.</p>
+                        <p>Story zum Nachbauen mit Regeln, Zahlen und Aufl&ouml;sungen: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/stories/story-07-choreography-saga.md" target="_blank" rel="noopener"><code>docs/stories/story-07-choreography-saga.md</code></a>. Referenz: <code>services/booking/story7/</code>.</p>
                     </div>
                 </details>
             </div>
@@ -3696,7 +3695,7 @@ on receiveCompensationEvent(event):
             6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 60 min <small>davon 25 Spiel</small>",
-                 subtitle: "Choreography als Rollenspiel: Anruf, Zuruf, Korb, mit Kassensturz nach jeder Runde. Danach die Leiter und die Demo mit der Referenz." },
+                 subtitle: "Choreography als W&uuml;rfelspiel: Retry oder Storno, mit Kassensturz am Ende. Danach die Leiter und die Demo mit der Referenz." },
             8: { title: "Story 8: Den roten Faden im Log", kind: "code", pill: "&asymp; 60 min",
                  subtitle: "Distributed Tracing: Gesch&auml;ftsvorg&auml;nge &uuml;ber Service-Grenzen hinweg verfolgen." },
         };

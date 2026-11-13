@@ -15,7 +15,7 @@
 <div class="numlist-row">
 <div class="numlist-num">01</div>
 <div>
-<p class="numlist-label">Runde 2: Ein Gummib&auml;rchen fehlt</p>
+<p class="numlist-label">Ein Chip bleibt liegen</p>
 <h3>Booking schickt das Storno per HTTP-POST, Flight ist seit der Buchung down. Wo ist das Event <span class="hl">jetzt</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">Event ist weg</code>
@@ -23,7 +23,7 @@
 <div class="numlist-row">
 <div class="numlist-num">02</div>
 <div>
-<p class="numlist-label">Runde 3: Ein Becher hat drei</p>
+<p class="numlist-label">Der Korb liefert doppelt</p>
 <h3>Der Broker liefert, bis das Backend best&auml;tigt. Stirbt es dazwischen, kommt das Event <span class="hl">noch einmal</span>.</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">Nummer merken, Doppeltes ignorieren</code>
@@ -31,7 +31,7 @@
 <div class="numlist-row">
 <div class="numlist-num">03</div>
 <div>
-<p class="numlist-label">Runde 2 gegen Runde 3: Webhooks reichen doch</p>
+<p class="numlist-label">Webhooks reichen doch</p>
 <h3>Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS <span class="hl">&uuml;berhaupt</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">durable messaging</code>

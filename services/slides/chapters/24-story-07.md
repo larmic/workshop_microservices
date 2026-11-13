@@ -1,6 +1,6 @@
 <div class="page">
 
-<p class="kicker">Story 7 &middot; Rollenspiel</p>
+<p class="kicker">Story 7 &middot; W&uuml;rfelspiel</p>
 
 <div class="page-head">
 
@@ -9,27 +9,27 @@
 <span class="badge design">&asymp; 60 min <small>davon 25 Spiel</small></span>
 </div>
 
-<p class="subtitle">Ihr seid die Kund:innen. Car sagt immer nein. Der <span class="hl">Becher</span> zeigt, was wirklich storniert wurde.</p>
+<p class="subtitle">Booking und Kunde wollen vier Reisen durchbringen. Storniert wird per <span class="hl">Zuruf</span>.</p>
 
 <div class="page-body">
 
 <div class="steps">
 <div class="steps-col">
-<h4>Rollen</h4>
+<h4>Am Tisch</h4>
 <ol>
-<li><strong>Booking</strong> bucht eine Reise nach der anderen. Sagt Car nein, storniert Booking r&uuml;ckw&auml;rts: Hotel, dann Flight.</li>
-<li><strong>Hotel und Flight</strong> stornieren: bis f&uuml;nf z&auml;hlen, ein Gummib&auml;rchen in den Becher der Reise. Jedes Mal.</li>
-<li><strong>Car</strong> sagt immer &bdquo;nein&ldquo;, in Runde 3 ist Car der Korb.</li>
-<li><strong>Alle anderen</strong> haben je eine Reise und einen Becher. Nach jeder Runde <strong>Kassensturz</strong>: In jeden Becher geh&ouml;ren zwei.</li>
+<li><strong>Booking und Kunde</strong> sind ein Team. Der Kunde hat 13 Chips, jede Buchung kostet einen.</li>
+<li><strong>Flight, Hotel, Car</strong> w&uuml;rfeln nur. Was bei ihnen liegen bleibt, behalten sie.</li>
+<li><strong>Ziel:</strong> 4 Reisen durch in h&ouml;chstens 6. Vorher geht ein Retry-Budget in Chips an Booking.</li>
 </ol>
 </div>
 <div class="steps-col">
-<h4>Ablauf</h4>
+<h4>So l&auml;uft jede Reise</h4>
 <ol>
-<li><strong>Runde 1, Anruf (wie Story 6):</strong> Booking wartet auf &bdquo;erledigt&ldquo;. Wer wartet? <span class="fragment">&rarr; die ganze Schlange, aber Booking wei&szlig; alles</span></li>
-<li><strong>Runde 2, Zuruf (unsere Referenz):</strong> Das Backend ruft &bdquo;geh&ouml;rt!&ldquo;. Bleibt es still: bis drei z&auml;hlen, Strich, trotzdem &bdquo;storniert&ldquo;. Stimmt jeder Becher? <span class="fragment">&rarr; nein, und Booking hat es sogar gemerkt</span></li>
-<li><strong>Runde 3, Korb:</strong> Booking wirft Zettel in den Korb. Der Korb liest vor, bis &bdquo;quittiert&ldquo; kommt, sonst noch einmal. Stimmt jeder Becher? <span class="fragment">&rarr; keiner fehlt, einer hat drei</span></li>
+<li>Booking w&uuml;rfelt: 1 Flight, 2 Hotel, 3 Car sagt nein, 4&ndash;6 alle ja.</li>
+<li>Wer nein sagt, w&uuml;rfelt: 1&ndash;3 <code>503</code>, Booking darf mit einem Budget-Chip retten. 4&ndash;6 ausgebucht.</li>
+<li>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; und sagt sofort &bdquo;Storniert&ldquo;. Dann w&uuml;rfeln die Gerufenen: 5&ndash;6 nicht geh&ouml;rt.</li>
 </ol>
+<p class="step-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts.</p>
 </div>
 </div>
 
@@ -38,9 +38,12 @@
 </div>
 
 Note:
-- Hook: &bdquo;Story 6 habt ihr gebaut. Jetzt spielt ihr dieselbe Saga dreimal, jedes Mal ein bisschen leiser.&ldquo; Ab 12 Personen zwei Tische mit identischer Ansage. Jedes Fragment erst aufdecken, wenn beide Tische gez&auml;hlt haben.
-- Material, Detailregeln (Reihenfolge, wann die n&auml;chste Reise dran ist) und Briefing: Story-Doc und Dashboard. Flight geheim: R2 bei Reise 2 das Storno &uuml;berh&ouml;ren, R3 bei Reise 2 stornieren, aber nicht quittieren. Die Zettelnummer regelt nur die Reihenfolge, Flight merkt sie sich nicht.
-- R1 ist Story 6, R2 unsere Referenz: Zuruf = <code>POST /events/compensation</code>, &bdquo;geh&ouml;rt&ldquo; = 202, bis drei = 3-s-Timeout, Strich = <code>dispatch-failed</code>, trotzdem <code>COMPENSATED</code>.
-- R3 ist Bonus: Korb = Broker mit Redelivery. &bdquo;storniert&ldquo; kam vor dem Gummib&auml;rchen, das ist Eventual Consistency. Die Referenz versucht genau einmal: keine Duplikate, keine Nachlieferung.
-- Vereinfachungen: Car hat keinen Breaker, die Referenz bedient Anfragen parallel. Das Z&auml;hlen bis f&uuml;nf macht das Storno sp&uuml;rbar, unsere Backends loggen nur.
-- &Uuml;berleitung: Becher stehen lassen, die Leiter sortiert sie. Die Demo steht in der Note dort.
+- <strong>Hook:</strong> &bdquo;Story 6 habt ihr gebaut. Jetzt w&uuml;rfeln wir sie, und Booking ruft das Storno nur noch zu.&ldquo;
+- <strong>Tische zu f&uuml;nft</strong>, Rollen bleiben das ganze Spiel. Ein sechster f&uuml;hrt den Zettel. Pro Tisch ein W&uuml;rfel, 13 Chips. Chips laut abz&auml;hlen lassen, die Balance h&auml;ngt daran.
+- <strong>Erste Entscheidung:</strong> Wie viel Retry-Budget? Jeder Chip fehlt f&uuml;rs Buchen. Simuliert: 0 Chips 32&nbsp;%, 1 Chip 54&nbsp;%, 2 Chips 44&nbsp;%, 3 Chips 17&nbsp;% gewonnen. Resilienz kostet Kapazit&auml;t.
+- <strong>Vorw&auml;rts oder r&uuml;ckw&auml;rts:</strong> Scheitert ein Schritt, kann Booking ihn wiederholen (Forward Recovery) oder das Gebuchte kompensieren (Backward Recovery).
+  - Vorw&auml;rts nur bei technischen Fehlern wie <code>503</code>, ausgebucht bleibt ausgebucht.
+  - Unsere Referenz kennt nur r&uuml;ckw&auml;rts, der Circuit Breaker wiederholt nicht.
+- <strong>Leise:</strong> &bdquo;Storniert&ldquo; kommt vor dem Wurf der Gerufenen. 5&ndash;6 hei&szlig;t: Chip bleibt liegen, niemand sagt etwas. Genau die Referenz: <code>dispatch-failed</code> im Log, Step trotzdem <code>COMPENSATED</code>.
+- <strong>Kassensturz:</strong> Jeder Service sollte so viele Chips haben, wie Reisen durch sind. Jeder Chip dar&uuml;ber ist ein stilles Storno. Ergebnisse aller Tische an die Tafel, bei vier Tischen taucht fast immer eines auf.
+- &Uuml;berleitung: Chips liegen lassen, die Leiter sortiert sie. Die Demo steht in der Note dort.

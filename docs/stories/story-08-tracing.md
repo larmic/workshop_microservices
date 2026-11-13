@@ -158,8 +158,8 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
 - **Story 6 (Saga):** Erst mit Tracing sieht man die Saga als
   zusammenhängende Operation, nicht als Fragmente in mehreren
   Service-Logs.
-- **Story 7 (Choreography-Saga):** Story 7 war ein Rollenspiel mit
-  Zetteln. Ein Zettel hat keinen HTTP-Header, die Trace-ID muss als
+- **Story 7 (Choreography-Saga):** Story 7 war ein Würfelspiel mit
+  Zurufen. Ein Zuruf hat keinen HTTP-Header, die Trace-ID muss als
   Property mitwandern, sonst zerfällt der Vorgang an der Bus-Grenze.
   Das ist Recap-Frage 04 und der Event-Bonus. Die Story-8-Referenz
   zeigt eine Umsetzung.

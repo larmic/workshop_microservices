@@ -1,6 +1,6 @@
 # Story 7: Die Saga wird leise
 
-**Thema:** Event-Driven Architecture, Choreography-Saga, als Rollenspiel statt Code
+**Thema:** Event-Driven Architecture, Choreography-Saga, als Würfelspiel statt Code
 **Zeitrahmen:** ca. 60 Minuten: 10 Minuten Einstieg (Konzeptfolien), 20 Minuten Spiel, 5 Minuten Nachbereitung „Die Leiter“, 10 Minuten Demo mit der Referenz, 15 Minuten Recap. Spiel und Leiter zusammen sind die ≈ 25 Minuten auf der Folie.
 
 ## Kontext
@@ -9,7 +9,7 @@ In Story 6 trägt der Booking-Service die volle Verantwortung für die Kompensat
 
 Fachlich ist die Stornierung aber Aufgabe des jeweiligen Backends: Wer eine Buchung anlegen kann, muss sie auch zurücknehmen können. Deshalb ruft Booking den gebuchten Backends das Storno nur noch als **Event** zu (`CompensationRequested`) und wartet nur, bis das Backend es angenommen hat (`202 Accepted`). Stornieren muss das Backend selbst. Booking hängt damit nicht mehr an der Dauer des Stornos, an der Erreichbarkeit aber weiter: Antwortet ein Backend nicht, wartet Booking wie in Story 6 bis zum Timeout (3 Sekunden pro Zuruf). Der Preis: Fehler werden still.
 
-Ehrlich gesagt ist das ein **Mittelweg** und keine volle Choreografie: Booking dirigiert weiter den Hinweg und entscheidet, wer ein Storno bekommt. Storniert wird per Zuruf. Der Unterschied zu Story 6 steckt nicht im Code, der ist klein. Er steckt darin, wer wartet und wer am Ende Bescheid weiß. Deshalb spielen wir die Saga, statt sie zu programmieren.
+Ehrlich gesagt ist das ein **Mittelweg** und keine volle Choreografie: Booking dirigiert weiter den Hinweg und entscheidet, wer ein Storno bekommt. Storniert wird per Zuruf. Der Unterschied zu Story 6 steckt nicht im Code, der ist klein. Er steckt darin, wer wartet und wer am Ende Bescheid weiß. Deshalb würfeln wir die Saga, statt sie zu programmieren.
 
 ## User Story
 
@@ -19,84 +19,94 @@ damit **der Booking-Service nicht für deren Verfügbarkeit haften muss und die 
 
 ---
 
-## Teil 1: Das Rollenspiel (ca. 20 Minuten)
+## Teil 1: Das Würfelspiel „Retry oder Storno“ (ca. 20 Minuten)
 
-Ihr seid die Kund:innen. Car sagt immer nein. Der Becher zeigt, was wirklich storniert wurde.
+Booking und Kunde wollen vier Reisen durchbringen. Storniert wird per Zuruf.
 
 ### Material (pro Tisch)
 
-- Sechs verdeckte Listen (je drei für Hotel und Flight, eine pro Runde) oder je eine Liste mit drei Spalten, auf Klemmbrett oder gefaltetem Blatt
-- Ein Becher pro Reise, mit Reisenummer beschriftet (1, 2, 3, …)
-- Gummibärchen in zwei Schälchen, eins für Hotel, eins für Flight: etwa sieben pro Reise und Tisch, plus Naschreserve (Alternative: Büroklammern, etwa bei Allergien oder veganer Ernährung)
-- Ein Korb oder eine Schachtel für Runde 3
-- Pro Reise zwei vorbereitete Zettel, fortlaufend nummeriert in Storno-Reihenfolge: E1 „Hotel · Reise 1“, E2 „Flight · Reise 1“, E3 „Hotel · Reise 2“, E4 „Flight · Reise 2“, …
-- Eine Strichliste für Booking
-- Ein Briefing-Kärtchen für Flight (siehe unten)
+- Ein Würfel
+- 13 Pokerchips für den Kunden, Farbe egal
+- Ein Zettel und ein Stift für Booking
 
-Gesamtliste und Druckvorlagen: [`docs/orga/materialliste.md`](../orga/materialliste.md), druckfertig unter <https://larmic.github.io/workshop_microservices/material/>.
+Nichts zu drucken, nichts vorzubereiten. Gesamtliste: [`docs/orga/materialliste.md`](../orga/materialliste.md).
 
-Spielbar ab sechs Personen: Booking, Hotel, Flight, Car und mindestens zwei Kund:innen. Ab 9 Personen an einem Tisch spielt eine eigene Person den Korb, darunter übernimmt Car. Ab 12 Personen spielen zwei Tische mit eigenen Services und identischer Ansage. Jeder Tisch hat dann mindestens zwei Reisen, das reicht, weil das Briefing auf Reise 2 setzt.
+### Tische und Rollen
 
-### Rollen
+Tische mit vier bis sieben Personen, am besten fünf. Die Rollen bleiben das ganze Spiel gleich:
 
-1. **Booking** hat eine Strichliste und bucht eine Reise nach der anderen bei Flight, Hotel und Car. Sagt Car nein, storniert Booking rückwärts, erst Hotel, dann Flight. Danach sagt Booking „storniert“.
-2. **Hotel und Flight** buchen auf einer verdeckten Liste. Stornieren heißt: an den Fingern bis fünf zählen, durchstreichen, ein Gummibärchen in den Becher der Reise. Jedes Mal, auch wenn die Reise schon durchgestrichen ist. Flight folgt den geheimen Ansagen des Trainers.
-3. **Car** hat heute keine Autos und sagt immer „nein“. In Runde 3 ist Car auch der Korb.
-4. **Alle anderen** haben je eine Reise. Die Becher stehen nummeriert auf dem Tisch, angestellt wird nach Reisenummer. Die nächste Reise kommt dran, wenn die vorige „storniert“ gehört hat. Storniert niemand mehr und ist der Korb leer: **Kassensturz**, in jeden Becher gehören zwei.
+- **Booking und Kunde** sind ein Team. Booking würfelt, ruft und führt den Zettel. Der Kunde zahlt.
+- **Flight, Hotel und Car** würfeln nur, sie entscheiden nichts. Was bei ihnen liegen bleibt, behalten sie.
+
+Zu viert übernimmt Booking auch Car. Ab sechs Personen führt jemand die Strichliste und trägt am Ende an der Tafel ein. Ab 8 Personen spielen zwei Tische, jeder mit eigenem Würfel und eigenen Chips. Mehr Tische sind besser: Bei vier Tischen taucht fast sicher ein stilles Storno auf.
+
+### Die Regel
+
+1. Vor der ersten Reise gibt der Kunde beliebig viele seiner 13 Chips als **Retry-Budget** an Booking. Sie kommen nie zurück.
+2. Booking würfelt pro Reise: 1 Flight nein, 2 Hotel nein, 3 Car nein, 4–6 alle ja.
+3. Gebucht wird in der Reihenfolge Flight, Hotel, Car. Jedes Ja kostet den Kunden einen Chip an diesen Service.
+4. Wer nein sagt, würfelt: 1–3 „503“, 4–6 „ausgebucht“.
+5. Bei 503 darf Booking statt des Kunden einen Budget-Chip an den Service zahlen. Der sagt ja, und die Reise läuft weiter.
+6. Sonst ruft Booking rückwärts nur die schon Gebuchten („Storno Hotel! Storno Flight!“), sagt sofort „Storniert“ und macht einen Strich.
+7. Erst dann würfelt jeder Gerufene: Bei 1–4 geht der Chip zurück an den Kunden, bei 5–6 hat er nichts gehört, behält den Chip und schweigt.
+8. Hat der Kunde vor einer Reise weniger als 3 Chips, ist Schluss.
+9. Das Team gewinnt mit 4 Reisen durch in höchstens 6 Reisen, sonst gewinnen die Downstreams.
 
 Ergänzungen zum Ansagen:
 
-- Die Kund:innen stellen sich in Reihenfolge der Reisenummern bei Booking an, sonst passen die vornummerierten Zettel aus Runde 3 nicht. Die Becher stehen nummeriert in einer Reihe auf dem Tisch und bleiben die ganze Runde dort, auch wenn die Kund:in schon „storniert“ gehört hat. Booking bedient immer nur eine Reise.
-- Weil Car immer ablehnt, scheitert jede Reise. Hotel und Flight sind dann schon gebucht und müssen storniert werden. Deshalb gehören nach jeder Runde genau zwei Gummibärchen in jeden Becher.
-- Das Zählen bis fünf gibt dem Storno eine spürbare Dauer, in allen Runden gleich. In Runde 1 wartet die Schlange diese Zeit hörbar mit, in Runde 2 und 3 nicht.
-- „Jedes Mal“ ist wörtlich gemeint: Hotel und Flight legen bei jeder Storno-Ansage ein Gummibärchen hin, auch wenn die Reise auf ihrer Liste schon durchgestrichen ist. Menschen deduplizieren von selbst, unsere Backends nicht.
-- Ist Car auch der Korb, sagt Car zwischendurch weiter „nein“ zu neuen Buchungen. Eine Buchungsfrage von Booking geht vor, danach liest der Korb weiter.
-- Der Korb beginnt mit dem Zählen erst, wenn das Gummibärchen liegt, damit das Zählen des Backends nicht mit dem Timeout kollidiert. Reagiert ein Backend gar nicht (es zählt nicht an den Fingern), zählt der Korb direkt nach dem Vorlesen.
-- Die Runde endet erst, wenn Hotel und Flight fertig sind und der Korb leer ist. Wer früher zählt, übersieht Gummibärchen, die noch unterwegs sind. Genau das ist der Lernpunkt aus Runde 3: „storniert“ kam vor dem Gummibärchen, das ist Eventual Consistency.
-- Kassensturz: Alle Kund:innen zählen laut ihren Becher. Dann deckt Flight die Liste der Runde auf (in Runde 2 ist Reise 2 nicht durchgestrichen). Danach wird geleert (oder gegessen), und die nächste Runde beginnt mit leeren Bechern und der nächsten Liste.
+- Chips vorher laut abzählen lassen. Die Balance hängt an 13 Chips und 6 Reisen.
+- „Statt des Kunden“ betonen: Bei einem Retry zahlt nur das Budget, nicht zusätzlich der Kunde.
+- Booking ruft nur die schon Gebuchten. Sagt Flight nein, gibt es nichts zu stornieren.
+- „Storniert“ kommt vor dem Würfeln der Gerufenen, nie danach. Wer warten will, hat das Thema verstanden: Stoff für die Nachbesprechung.
+- Die 6 Reisen ausspielen, auch wenn das Ziel schon verloren ist. Sonst fehlen stille Stornos.
 
-### Ablauf
+### Die eine Entscheidung: Wie viel Budget?
 
-Runden einzeln ansagen, erst tippen lassen, dann spielen, dann Kassensturz, dann das Fragment aufdecken. Bei zwei Tischen jedes Fragment erst aufdecken, wenn beide Tische gezählt haben.
+Jeder Budget-Chip fehlt dem Kunden beim Bezahlen, er hilft nur bei 503, also bei jedem zweiten Nein, und unbenutzt verfällt er. Im Spiel selbst gibt es keine Falle: Hat Booking Budget, setzt es den Chip bei 503 immer ein.
 
-1. **Runde 1, Anruf (wie Story 6):** „Hotel, storniere Reise 1!“ Booking wartet auf „erledigt“, dann dasselbe mit Flight. Das Backend sagt „erledigt“ erst, wenn das Gummibärchen im Becher liegt. Frage: Wer wartet?
-2. **Runde 2, Zuruf (unsere Referenz):** Das Backend ruft sofort „gehört!“ und storniert danach, Booking ruft gleich das nächste Backend (erst Hotel, dann Flight) und bedient danach die nächste Reise. Bleibt es still, zählt Booking laut bis drei, macht einen Strich und meldet trotzdem „storniert“. Frage: Stimmt jeder Becher?
-3. **Runde 3, Korb:** Booking wirft pro Storno einen Zettel in den Korb (erst Hotel, dann Flight) und meldet sofort „storniert“. Der Korb liest die Zettel der Reihe nach vor („E4: Flight, storniere Reise 2!“), das Backend storniert und sagt „quittiert“. Fehlt das nach dem Gummibärchen, zählt der Korb laut bis fünf und liest denselben Zettel noch einmal. Erst nach „quittiert“ kommt der nächste Zettel dran. Frage: Stimmt jeder Becher?
+| Retry-Budget | Team gewinnt | Spiele mit stillem Storno |
+|---|---|---|
+| 0 | 32 % | 59 % |
+| 1 | 54 % | 43 % |
+| 2 | 44 % | 32 % |
+| 3 | 17 % | 27 % |
 
-Zur Vorhersage: Dass etwas schiefgehen kann, verrät die Rollenzeile („Flight folgt den geheimen Ansagen“). Wer nachfragt, bekommt als Hilfe: „Angenommen, Flight hört ein Storno nicht.“ Die Nummer auf dem Zettel regelt im Spiel nur die Reihenfolge, Flight merkt sie sich nicht. Was eine gemerkte Nummer bringen würde, zeigt erst die Leiter.
+Simuliert mit 200.000 Spielen und exakt nachgerechnet. Zu wenig Resilienz verliert, zu viel auch. Mit 14 Chips oder 7 Reisen wird es deutlich leichter, mit 12 Chips deutlich schwerer.
 
-### Geheimes Briefing
+### Vorwärts oder rückwärts
 
-Nur Flight bekommt eine Ansage, als Kärtchen, bei zwei Tischen für beide Flights identisch. Hotel spielt alle Runden normal.
+Scheitert ein Schritt einer Saga, hat der Orchestrator zwei Wege:
 
-| Runde | Ansage an Flight |
-|---|---|
-| 1 | Spiel ganz normal. |
-| 2 | Bei Reise 2 reagierst du auf „storniere“ nicht, kein „gehört“, kein Gummibärchen. Buchen geht normal. |
-| 3 | Bei Reise 2 legst du das Gummibärchen hin, sagst aber nicht „quittiert“. Liest der Korb noch einmal vor, machst du weiter wie immer. |
+- **Rückwärts (Backward Recovery):** das schon Gebuchte kompensieren, in umgekehrter Reihenfolge. Das ist Story 6.
+- **Vorwärts (Forward Recovery):** den gescheiterten Schritt wiederholen oder einen anderen Anbieter nehmen. Die Saga läuft weiter, nichts wird storniert.
+
+Vorwärts lohnt nur bei Fehlern, die vorübergehen (`503`, Timeout), nicht bei einem fachlichen Nein (ausgebucht). Bei einem Timeout ist zudem offen, ob der Schritt schon gebucht hat. Ein Retry braucht dann Idempotenz, sonst entsteht eine Doppelbuchung. Unsere Referenz kennt nur rückwärts: Jeder Schritt läuft einmal durch den Circuit Breaker, scheitert er, wird kompensiert.
+
+### Kassensturz
+
+Booking liest seine Striche vor, dann zählen Flight, Hotel und Car offen ihre Chips. Jeder Service sollte genau so viele Chips haben, wie Reisen durch sind (Budget-Chips eingerechnet). Jeder Chip darüber ist ein stilles Storno: Booking hat „storniert“ gemeldet, der Kunde hat sein Geld nicht zurück. Der Trainer sammelt pro Tisch Budget, gewonnen oder verloren und stille Stornos an der Tafel.
 
 ### Was passieren sollte
 
-- **Runde 1:** Jeder Becher hat zwei. Die ganze Schlange wartet, bis beide Backends ihr Gummibärchen hingelegt haben, aber Booking weiß am Ende alles. Wäre ein Storno gescheitert, hätte Booking es sofort gehört.
-- **Runde 2:** Die Schlange läuft spürbar schneller, denn das Zählen bis fünf passiert jetzt, während Booking schon weitermacht. Beim Kassensturz hat Reise 2 nur ein Gummibärchen, der Flug ist noch gebucht. Booking hat es sogar gemerkt (ein Strich), aber trotzdem „storniert“ gemeldet. Genau das tut die Referenz: `dispatch-failed` im Log, Step trotzdem `COMPENSATED` (Recap 01).
-- **Runde 3:** Keiner fehlt, einer hat drei. Der Korb hat den Zettel E4 wiederholt, weil das „quittiert“ fehlte, und Flight hat zweimal storniert (Recap 02). Bei einem Storno ist das harmlos, bei einer Rückerstattung wäre das Geld zweimal weg.
-- **Runde 2 gegen Runde 3:** Ohne Korb geht ein Storno verloren, mit Korb kommt es doppelt. Was ein Broker mehr kann als ein Webhook, ist Recap 03.
+- Tische mit Budget 0 verlieren meist, weil jedes 503 zur Kompensation wird. Tische mit Budget 3 verlieren, weil Chips fürs Buchen fehlen.
+- An den meisten Tischen bleibt mindestens ein Chip bei einem Service liegen, obwohl Booking „storniert“ gemeldet hat. Genau das tut die Referenz: `dispatch-failed` im Log, Step trotzdem `COMPENSATED` (Recap 01).
+- Die doppelte Zustellung (Korb) wird nicht gespielt, sondern auf der Leiter als Gedankenexperiment aufgelöst.
 
-Bewusste Vereinfachungen: Im Spiel hat Car keinen Circuit Breaker. In der Referenz öffnet der Car-Breaker nach fünf Fehlschlägen, danach startet 30 Sekunden lang keine Saga. In der Referenz streicht außerdem niemand etwas durch: Die Backends haben keinen Buchungsbestand und loggen nur `received`, `processing` und `done`. Die Schlange ist ebenfalls vereinfacht, denn die Referenz bedient Anfragen parallel, nur die Schritte innerhalb einer Saga laufen nacheinander. Der Korb (Runde 3) ist nicht die Referenz, sondern die erste Bonus-Stufe.
+Bewusste Vereinfachungen: Die Würfelquoten sind Zeitraffer, in echt geht eins von tausend Stornos verloren, nicht eins von dreien. Car hat im Spiel keinen Circuit Breaker. In der Referenz öffnet der Car-Breaker nach fünf Fehlschlägen, danach startet 30 Sekunden lang keine Saga. Die Referenz wiederholt keine Vorwärtsschritte, das Retry-Budget ist eine Erweiterung im Spiel.
 
 ---
 
 ## Teil 2: Nachbereitung „Die Leiter“ (ca. 5 Minuten)
 
-Booking haftet nicht mehr für das Stornieren selbst, aber weiter für Saga-Status und Antwort an die Kund:in. Was fehlt, damit jeder Becher stimmt und Booking es weiß? Die Folie deckt Stufe für Stufe auf. Gespielt werden nur Anruf, Zuruf und Korb, Nummer und Antwortzettel sind reine Auflösung.
+Booking storniert nicht mehr selbst, antwortet aber weiter dem Kunden. Was fehlt, damit kein Chip liegen bleibt und Booking es weiß? Die Folie deckt Stufe für Stufe auf. Gespielt wurde nur der Zuruf, die übrigen Stufen sind Gedankenexperimente an den liegen gebliebenen Chips.
 
 | Stufe | Im Spiel | Technik | In der Referenz |
 |---|---|---|---|
-| Anruf | Runde 1, Booking wartet auf „erledigt“ | synchroner Aufruf, `DELETE /bookings/{id}` | ja, in Story 6 |
-| Zuruf | Runde 2, Booking wartet nur auf „gehört“ | Webhook, `POST /events/compensation`, `202 Accepted` | ja, Story 7 |
-| Korb | Runde 3, liest vor bis „quittiert“ | Broker mit Persistenz und Redelivery (at-least-once) | nein |
-| Nummer | nicht gespielt: Wer sich die Zettelnummer merkt und sie wiedererkennt, quittiert nur, ohne Gummibärchen | Dedup über `eventId`, Idempotenz | nein, die Backends loggen nur |
-| Antwortzettel | nicht gespielt: Booking meldet „storniert“ erst nach zwei Antwortzetteln, sonst zählt Booking bis zehn und meldet `STUCK` | Reply-Event, Timeout, Saga-Status `STUCK` | nein |
+| Anruf | nicht gespielt, kennen alle aus Story 6: Booking wartet, bis der Chip zurück ist | synchroner Aufruf, `DELETE /bookings/{id}` | ja, in Story 6 |
+| Zuruf | gespielt: Booking ruft, meldet sofort „storniert“, bei 5–6 bleibt der Chip liegen | Webhook, `POST /events/compensation`, `202 Accepted` | ja, Story 7 |
+| Korb | Gedankenexperiment: Der Korb stellt zu, bis „erledigt“ kommt. Geht das „erledigt“ verloren, zahlt der Service zweimal | Broker mit Persistenz und Redelivery (at-least-once) | nein |
+| Nummer | Gedankenexperiment: Wer sich die Storno-Nummer merkt, quittiert nur und zahlt nicht noch einmal | Dedup über `eventId`, Idempotenz | nein, die Backends loggen nur |
+| Antwort zurück | Gedankenexperiment: Booking meldet „storniert“ erst, wenn alle Chips zurück sind, sonst nach einem Timeout `STUCK` | Reply-Event, Timeout, Saga-Status `STUCK` | nein |
 
 Merksatz: Eventing macht das Problem nicht kleiner. Es macht es leiser.
 
@@ -108,15 +118,15 @@ Die Demo kommt nach der Leiter (Hinweis in der Note von Folie 24a).
 
 Im Dashboard unter Story 7: Car auf „Fehler“ stellen, dann `POST /booking/bookings` auslösen. Die Saga endet mit `FAILED`, Hotel und Flight stehen auf `COMPENSATED`. Im Log von `booking-ref-story7` sieht man die Kompensation rückwärts, erst Hotel, dann Flight, jeweils mit `phase=publishing` und `phase=dispatched`.
 
-Nach fünf Klicks ist der Car-Breaker offen. Danach startet 30 Sekunden lang keine Saga, der Pre-Check antwortet sofort mit 503. Den Strich aus Runde 2 zeigt die Demo nicht: Ist Flight down, scheitert schon die Buchung, und es gibt nichts zu stornieren. Dass Booking auch ohne 202 `COMPENSATED` setzt, zeigt der Code (`compensate` in `services/booking/story7/handler/booking.go`).
+Nach fünf Klicks ist der Car-Breaker offen. Danach startet 30 Sekunden lang keine Saga, der Pre-Check antwortet sofort mit 503. Das stille Storno aus dem Spiel zeigt die Demo nicht: Ist Flight down, scheitert schon die Buchung, und es gibt nichts zu stornieren. Dass Booking auch ohne 202 `COMPENSATED` setzt, zeigt der Code (`compensate` in `services/booking/story7/handler/booking.go`).
 
 ---
 
 ## Recap: Vier Fragen (ca. 15 Minuten)
 
-1. Runde 2: Ein Gummibärchen fehlt. Booking schickt das Storno per HTTP-POST, Flight ist seit der Buchung down. Wo ist das Event jetzt?
-2. Runde 3: Ein Becher hat drei. Der Broker liefert, bis das Backend bestätigt. Stirbt es dazwischen, kommt das Event noch einmal. Was, wenn das Backend echten State ändert?
-3. Runde 2 gegen Runde 3: Webhooks reichen doch. Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS überhaupt?
+1. Ein Chip bleibt liegen. Booking schickt das Storno per HTTP-POST, Flight ist seit der Buchung down. Wo ist das Event jetzt?
+2. Der Korb liefert doppelt. Der Broker liefert, bis das Backend bestätigt. Stirbt es dazwischen, kommt das Event noch einmal. Was, wenn das Backend echten State ändert?
+3. Webhooks reichen doch. Kein Broker, keine Infrastruktur. Wozu Kafka, RabbitMQ oder NATS überhaupt?
 4. Brauchen wir überhaupt einen Dirigenten? Volle Choreographie hieße: Hotel reagiert auf Flight, Car auf Hotel. Wer merkt es, wenn Hotel das nicht weiß? (Faustregel nach Chris Richardson, *Microservices Patterns*: Choreographie für einfache Sagas ohne Reihenfolge, Orchestrierung sobald es einen Ablauf gibt.)
 
 Bonus zu Frage 3: Was ein Broker kann, was ein Webhook nicht kann. Behalten (Persistenz, Redelivery, Replay), Verteilen (Fan-out, Backpressure, Ordering), Scheitern lassen (Dead-Letter-Queue). Exactly-once-Zustellung gibt es trotzdem nicht, at-least-once plus Idempotenz ergibt exactly-once-Wirkung.

@@ -161,39 +161,6 @@
         .c-dark   { --c: var(--primary-dark); --bg: #fff; }
         .c-violet { --c: var(--primary-violet); --bg: #fff; }
 
-        /* Story-7-Zettel und Becher-Etiketten */
-        .slip .main { font-size: 13pt; }
-        .slip .slip-id { font-family: var(--mono); font-size: 22pt; font-weight: 800; line-height: 1; }
-        .slip .slip-tbl { position: absolute; top: 1.6mm; right: 2.2mm; font-size: 6.5pt; font-weight: 700; color: #777; }
-        .cup .main { font-size: 22pt; }
-        .cup .main small { font-size: 8pt; font-weight: 600; color: #555; }
-
-        /* Rollenkarten */
-        .role-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2mm 5mm 4mm; }
-        .role-name { font-size: 40pt; font-weight: 800; line-height: 1; color: var(--c); letter-spacing: -0.01em; }
-        .role-name.long { font-size: 30pt; }
-        .role-sub { margin-top: 3mm; font-size: 11pt; color: #444; }
-        .role-sub code { font-size: 10pt; }
-        .role-back ol { margin: 0; padding: 3mm 6mm 0 10mm; font-size: 10.2pt; line-height: 1.34; flex: 1; }
-        .role-back ol li { margin: 0 0 1.6mm; padding-left: 0.5mm; }
-        .role-back ol li::marker { color: var(--c); font-weight: 800; }
-        .role-back .foot { text-align: left; padding: 0 6mm 3mm; color: #555; }
-        .briefing-front { background: var(--primary-dark); color: #fff; }
-        .briefing-front .role-name { color: var(--highlight); }
-        .briefing-front .role-sub { color: #fff; }
-        .brief-table { width: calc(100% - 10mm); margin: 3mm 5mm 0; border-collapse: collapse; font-size: 9.2pt; line-height: 1.3; }
-        .brief-table th { text-align: left; white-space: nowrap; padding: 1.3mm 3mm 1.3mm 0; vertical-align: top; color: var(--c); }
-        .brief-table td { padding: 1.3mm 0; border-bottom: 0.2mm solid #ddd; }
-        .brief-table tr:first-child td, .brief-table tr:first-child th { padding-top: 0; }
-
-        /* Strichliste Story 7 (Prospekthülle) */
-        .tally { position: absolute; inset: 12mm 14mm 10mm; display: flex; flex-direction: column; }
-        .tally h2 { margin: 0; font-size: 26pt; font-weight: 800; }
-        .tally .lead { margin: 1.5mm 0 6mm; font-size: 12pt; color: #333; }
-        .tally .bigbox { flex: 1; border: 1mm solid var(--primary-dark); border-radius: 4mm; position: relative; }
-        .tally .bigbox span { position: absolute; top: 3mm; left: 4mm; font-size: 12pt; color: #aaa; font-weight: 700; }
-        .tally .small { margin-top: 3mm; font-size: 9pt; color: #666; display: flex; justify-content: space-between; }
-
         /* Story 4: Stapel 01–27 (A7 hoch, 8 pro A4 quer, 4 mm weißer Rand): Nummer, Wartezeit, eine Zeile. Die Farbe sagt, was passiert ist */
         .cell.a7 { padding: 4mm; }
         .s4k { --pc: var(--primary-violet); position: relative; width: 100%; height: 100%; box-sizing: border-box; border: 2.5mm solid var(--pc); border-radius: 3mm; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.4mm; padding: 0 2mm; text-align: center; overflow: hidden; }
@@ -246,18 +213,6 @@
 
         /* Circuit-Breaker-Board (A3 quer oder 2 × A4 hoch) */
         .cb-board { position: absolute; top: 0; width: 420mm; height: 297mm; }
-
-        /* Buchungslisten Story 7 */
-        .blist { position: absolute; inset: 10mm 8.5mm 9mm; display: flex; flex-direction: column; }
-        .blist-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2mm; font-size: 9pt; color: #444; }
-        .blist-head b { font-size: 15pt; color: var(--c); }
-        .blist-cols { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); position: relative; }
-        .blist-col { display: flex; flex-direction: column; padding: 0 4mm; }
-        .blist-col h4 { margin: 0 0 2mm; padding: 2mm 3mm; border-radius: 2mm; background: var(--c); color: #fff; font-size: 11pt; }
-        .blist-col h4 small { font-weight: 600; opacity: 0.85; }
-        .blist-row { flex: 1; max-height: 30mm; display: flex; align-items: center; border-bottom: 0.3mm solid #ccc; font-size: 13pt; font-weight: 700; gap: 4mm; }
-        .blist-row .tick { width: 9mm; height: 9mm; border: 0.5mm solid #888; border-radius: 1mm; }
-        .blist-col .how { margin-top: 2mm; font-size: 7.5pt; color: #666; }
 
         /* Klebehinweis an geteilten Bogen (Circuit-Breaker-Board als 2× A4) */
         .fc-join { position: absolute; font-size: 7pt; color: var(--primary-violet); }
@@ -349,7 +304,7 @@
 <header class="screen-only">
     <div>
         <h1>Spielmaterial drucken</h1>
-        <p class="sub">F&uuml;r den Trainer: alle Druckvorlagen f&uuml;r die Rollenspiele aus Story 4 (Circuit Breaker), Story 5 (Bulkhead) und Story 7 (Choreography-Saga). Die Mengen rechnet die Seite aus der Teilnehmerzahl aus. Packliste mit allem, was man kaufen oder 3D-drucken muss: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/orga/materialliste.md">docs/orga/materialliste.md</a>, 3D-Modelle: <a href="https://github.com/larmic/workshop_microservices/tree/main/docs/orga/3d">docs/orga/3d/</a>.</p>
+        <p class="sub">F&uuml;r den Trainer: alle Druckvorlagen f&uuml;r die Rollenspiele aus Story 4 (Circuit Breaker) und Story 5 (Bulkhead) sowie der Spickzettel f&uuml;r das W&uuml;rfelspiel aus Story 7 (Choreography-Saga). Die Mengen rechnet die Seite aus der Teilnehmerzahl aus. Packliste mit allem, was man kaufen muss: <a href="https://github.com/larmic/workshop_microservices/blob/main/docs/orga/materialliste.md">docs/orga/materialliste.md</a>.</p>
 
         <div class="controls">
             <label>Teilnehmende
@@ -366,12 +321,6 @@
                     <option value="a3">A3</option>
                 </select>
             </label>
-            <label class="only-s7">Rollenkarten
-                <select id="ctl-roles">
-                    <option value="fold">Faltkarte (einseitig drucken)</option>
-                    <option value="duplex">Einzelkarte (beidseitig drucken)</option>
-                </select>
-            </label>
             <label class="only-s4">Circuit-Breaker-Board
                 <select id="ctl-clock">
                     <option value="a3">1&times; A3 quer</option>
@@ -386,15 +335,15 @@
         <ul class="hints">
             <li><strong>Browser:</strong> Chrome oder Edge. Firefox und Safari halten die gemischten Formate (A4 hoch, A4 quer, A3) nicht zuverl&auml;ssig ein. Im Druckdialog: R&auml;nder <em>Keine</em>, Skalierung <em>100&nbsp;%</em> bzw. <em>Tats&auml;chliche Gr&ouml;&szlig;e</em>, <em>Hintergrundgrafiken</em> an.</li>
             <li><strong>Pro Papiersorte einen Stapel:</strong> oben den Druckstapel w&auml;hlen, dann drucken. Die Seite zeigt und druckt nur dessen Bogen. Die Anzahl in der Tabelle unten ist schon die Zahl der Bogen, also immer <strong>1 Exemplar</strong> drucken.</li>
-            <li><strong>Karton 250 g</strong> (A4) f&uuml;r alle Karten: Stapel 01&ndash;27 und Zustandskarten aus Story 4, Stapel 01&ndash;27 und die Schilder Flight und Car aus Story 5 (das Hotel-Schild steht unten bei beidseitig), Rollenkarten, Zettel E1&nbsp;&hellip; und Becher-Etiketten aus Story 7. Viele B&uuml;rodrucker nehmen 250 g nur &uuml;ber den manuellen Einzug. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
+            <li><strong>Karton 250 g</strong> (A4) f&uuml;r alle Karten: Stapel 01&ndash;27 und Zustandskarten aus Story 4, Stapel 01&ndash;27 und die Schilder Flight und Car aus Story 5 (das Hotel-Schild steht unten bei beidseitig). Viele B&uuml;rodrucker nehmen 250 g nur &uuml;ber den manuellen Einzug. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
             <li><strong>Stapel aus Story 4 und 5</strong> (A7 hoch) f&uuml;llen das A4-Blatt quer ganz aus: acht pro Bogen, jede mit 4&nbsp;mm wei&szlig;em Rand, randloser Druck ist nicht n&ouml;tig. Mit der Schneidemaschine alle Bogen stapeln, dann dreimal halbieren.</li>
-            <li><strong>Papier 80 g</strong> f&uuml;r Buchungslisten, Spickzettel und die Strichliste aus Story 7. Die <strong>Strichliste kommt in eine klare Prospekth&uuml;lle</strong> und wird mit Whiteboard-Marker beschrieben und mit einem Tuch weggewischt.</li>
+            <li><strong>Papier 80 g</strong> f&uuml;r den Spickzettel aus Story 7. Das W&uuml;rfelspiel selbst braucht nur W&uuml;rfel und Pokerchips.</li>
             <li><strong>Papier 80 g, beidseitig</strong> f&uuml;r die Trainer-Skripte Story 4 und 5: zwei Seiten auf ein Blatt, <strong>an der langen Kante wenden</strong>.</li>
             <li><strong>Karton 250 g, beidseitig, lange Kante</strong> nur f&uuml;r das Hotel-Schild aus Story 5: vorne &bdquo;schnell&ldquo;, hinten &bdquo;langsam&ldquo;. Ohne Duplex beide Seiten einseitig drucken und R&uuml;cken an R&uuml;cken zusammenkleben.</li>
             <li><strong>A3</strong> f&uuml;r das Circuit-Breaker-Board (Story 4), 80 bis 160 g. Ohne A3-Drucker oben &bdquo;2&times; A4&ldquo; w&auml;hlen und die beiden H&auml;lften an der markierten Kante zusammenkleben.</li>
             <li><strong>Schneiden und falzen:</strong> grau gestrichelt ist Schnitt, violett gestrichelt ist Falz. Karton vor dem Falzen mit Lineal und dem R&uuml;cken eines Messers rillen. Jede Karte hat 3&nbsp;mm wei&szlig;en Rand, ein paar Millimeter daneben schneiden st&ouml;rt nicht.</li>
-            <li><strong>Zustandskarten</strong> (A7 hoch) liegen im Zustandsfeld des Circuit-Breaker-Boards. <strong>Rollenkarten</strong> (Story 7) passen in den 3D-Aufsteller (<code>card_stand.scad</code>) (Schlitz 0,8&nbsp;mm). Als <em>Faltkarte</em> einseitig drucken, in der Mitte falzen, Falz nach oben, unbedruckte Seiten zusammen: vorne die Rolle f&uuml;r den Raum, hinten die Regeln f&uuml;r die Person. Als <em>Einzelkarte</em> beidseitig drucken, <strong>an der kurzen Kante wenden</strong>, vorher einen Bogen gegen das Licht halten.</li>
-            <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 braucht f&uuml;r jede Gruppengr&ouml;&szlig;e denselben Stapel, Story 5 bis 13 mit einer Gruppe, ab 14 mit zwei Gruppen und je einem Satz Karten und Schilder (ein Trainer-Skript reicht), Story 7 ab 12 mit zwei Tischen. Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
+            <li><strong>Zustandskarten</strong> (A7 hoch) liegen im Zustandsfeld des Circuit-Breaker-Boards.</li>
+            <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 braucht f&uuml;r jede Gruppengr&ouml;&szlig;e denselben Stapel, Story 5 bis 13 mit einer Gruppe, ab 14 mit zwei Gruppen und je einem Satz Karten und Schilder (ein Trainer-Skript reicht), Story 7 mit einem Tisch pro 4 bis 7 Personen (nur der Spickzettel wird gedruckt). Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
         </ul>
         </details>
 
@@ -621,44 +570,44 @@
 
 <template id="tpl-cheat-s7">
 <div class="cheat">
-    <div class="ckline"><div><div class="ck">Spickzettel Trainer &middot; Story 7</div><h1>Die Saga wird leise</h1></div><div>20 min Spiel + 5 min Leiter &middot; ab 6 Personen</div></div>
+    <div class="ckline"><div><div class="ck">Spickzettel Trainer &middot; Story 7</div><h1>Retry oder Storno</h1></div><div>20 min Spiel + 5 min Leiter &middot; Tische zu 4&ndash;7</div></div>
     <div class="two">
         <div>
-            <h2>Aufbau (pro Tisch)</h2>
+            <h2>Pro Tisch</h2>
             <ul>
-                <li>Becher Reise 1&hellip;n mit Etikett in einer Reihe, sie bleiben die ganze Runde stehen.</li>
-                <li>Gummib&auml;rchen in zwei Sch&auml;lchen (Hotel, Flight), etwa 7 pro Reise. Alternative: B&uuml;roklammern.</li>
-                <li>Booking: Strichliste &bdquo;dispatch-failed&ldquo; in Prospekth&uuml;lle, Zettel E1&hellip; sortiert (erst f&uuml;r Runde 3, nur E1 bis E(2&times;Reisen)).</li>
-                <li>Hotel und Flight: Buchungsliste auf die Spalte Runde 1 geknickt. Flight bekommt das Briefing.</li>
-                <li>Korb und Signalkarte &bdquo;Runde fertig, Korb leer&ldquo; bei Car bzw. beim Korb.</li>
+                <li>Ein W&uuml;rfel, genau 13 Pokerchips f&uuml;r den Kunden, Zettel und Stift f&uuml;r Booking. Chips laut abz&auml;hlen.</li>
+                <li>Feste Rollen: Booking und Kunde sind ein Team, Flight, Hotel und Car w&uuml;rfeln nur.</li>
+                <li>Zu viert &uuml;bernimmt Booking auch Car, ab sechs f&uuml;hrt einer die Strichliste.</li>
             </ul>
         </div>
         <div>
-            <h2>Besetzung</h2>
+            <h2>Ziel</h2>
             <ul>
-                <li>6&ndash;8 an einem Tisch: Booking, Hotel, Flight, Car (in Runde 3 auch Korb), Rest Kund:innen.</li>
-                <li>9&ndash;11 an einem Tisch: eine eigene Person spielt den Korb.</li>
-                <li>Ab 12: zwei Tische mit eigenen Services und identischer Ansage, je mindestens zwei Reisen. Jedes Fragment erst aufdecken, wenn beide Tische gez&auml;hlt haben.</li>
+                <li>4 Reisen durch in h&ouml;chstens 6. Vor einer Reise weniger als 3 Chips: Schluss.</li>
+                <li>Vorher legt das Team ein Retry-Budget in Chips zu Booking, es kommt nie zur&uuml;ck.</li>
             </ul>
         </div>
     </div>
-    <h2>Runden</h2>
+    <h2>Jede Reise</h2>
     <table>
-        <tr><th>Runde</th><th>Mechanik</th><th>Flight (geheim)</th><th>Kassensturz</th></tr>
-        <tr><td>1 Anruf (Story 6)</td><td>&bdquo;Hotel, storniere Reise 1!&ldquo; Booking wartet auf &bdquo;erledigt&ldquo;, das erst kommt, wenn das B&auml;rchen liegt. Dann Flight.</td><td>normal</td><td class="ans">Jeder Becher hat 2. Die ganze Schlange wartet, aber Booking wei&szlig; alles.</td></tr>
-        <tr><td>2 Zuruf (Referenz)</td><td>Backend ruft sofort &bdquo;geh&ouml;rt!&ldquo;, Booking ruft gleich weiter. Still: bis drei z&auml;hlen, Strich, trotzdem &bdquo;storniert&ldquo;.</td><td>Reise 2: Storno &uuml;berh&ouml;ren</td><td class="ans">Reise 2 hat 1, der Flug ist noch gebucht. Ein Strich = <code>dispatch-failed</code>, Step trotzdem <code>COMPENSATED</code> (Recap 01).</td></tr>
-        <tr><td>3 Korb (Bonus)</td><td>Zettel in den Korb, sofort &bdquo;storniert&ldquo;. Korb liest vor, fehlt nach dem B&auml;rchen &bdquo;quittiert&ldquo;: bis f&uuml;nf, denselben Zettel noch einmal.</td><td>Reise 2: B&auml;rchen ja, &bdquo;quittiert&ldquo; nein</td><td class="ans">Keiner fehlt, Reise 2 hat 3: E4 kam doppelt (Recap 02). &bdquo;storniert&ldquo; kam vor dem B&auml;rchen: Eventual Consistency.</td></tr>
+        <tr><th>Wurf</th><th>Wer</th><th>Bedeutung</th></tr>
+        <tr><td>1</td><td>Booking</td><td>1 Flight, 2 Hotel, 3 Car sagt nein, 4&ndash;6 alle ja. Jedes Ja kostet den Kunden einen Chip an den Service.</td></tr>
+        <tr><td>2</td><td>wer nein sagt</td><td>1&ndash;3 <code>503</code>: Booking darf statt des Kunden einen Budget-Chip zahlen, der Service sagt ja (vorw&auml;rts). 4&ndash;6 ausgebucht.</td></tr>
+        <tr><td>3</td><td>jeder Gerufene</td><td>Sonst ruft Booking r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; an die schon Gebuchten, sagt sofort &bdquo;Storniert&ldquo;, Strich. Dann: 1&ndash;4 Chip zur&uuml;ck, 5&ndash;6 nicht geh&ouml;rt, Chip bleibt, schweigen.</td></tr>
     </table>
-    <h2>Pro Runde</h2>
-    <p style="margin:0">Ansagen &rarr; tippen lassen &rarr; spielen &rarr; Signalkarte steht (Hotel und Flight fertig, Korb leer) &rarr; Kassensturz: Kund:innen z&auml;hlen laut, Flight deckt die Spalte der Runde auf &rarr; Fragment &rarr; Becher leeren (oder essen), Listen zur n&auml;chsten Spalte knicken.</p>
-    <h2>Merken</h2>
+    <h2>Budget (simuliert)</h2>
+    <table>
+        <tr><th>Budget</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+        <tr><td>Team gewinnt</td><td>32&nbsp;%</td><td>54&nbsp;%</td><td>44&nbsp;%</td><td>17&nbsp;%</td></tr>
+        <tr><td>stilles Storno</td><td>59&nbsp;%</td><td>43&nbsp;%</td><td>32&nbsp;%</td><td>27&nbsp;%</td></tr>
+    </table>
+    <h2>Kassensturz und Merken</h2>
     <ul>
-        <li>Kund:innen stellen sich nach Reisenummer an, sonst passen die Zettel in Runde 3 nicht. Booking bedient immer nur eine Reise.</li>
-        <li>&bdquo;Jedes Mal&ldquo; ist w&ouml;rtlich: Hotel und Flight legen bei jeder Storno-Ansage ein B&auml;rchen hin, auch doppelt.</li>
-        <li>Der Korb z&auml;hlt erst, wenn das B&auml;rchen liegt. Ist Car der Korb, gehen Buchungsfragen vor.</li>
-        <li>Hilfe bei der Vorhersage, nur auf Nachfrage: &bdquo;Angenommen, Flight h&ouml;rt ein Storno nicht.&ldquo;</li>
-        <li>Danach <strong>Die Leiter</strong> (Folie 24a), Becher stehen lassen. Nummer und Antwortzettel werden nur aufgedeckt, nicht gespielt.</li>
-        <li>Vereinfachungen: Car hat im Spiel keinen Breaker, die Referenz bedient Anfragen parallel, der Korb ist nicht die Referenz, sondern die erste Bonus-Stufe.</li>
+        <li>Booking liest die Striche vor. Jeder Service sollte so viele Chips haben, wie Reisen durch sind. Jeder Chip dar&uuml;ber ist ein stilles Storno: <code>dispatch-failed</code>, trotzdem <code>COMPENSATED</code> (Recap 01).</li>
+        <li>&bdquo;Storniert&ldquo; kommt vor dem Wurf der Gerufenen, nie danach. Booking ruft nur die schon Gebuchten.</li>
+        <li>Die 6 Reisen ausspielen, auch wenn das Ziel verloren ist. Ergebnisse aller Tische an die Tafel.</li>
+        <li>Danach <strong>Die Leiter</strong> (Folie 24a), Chips liegen lassen. Korb, Nummer und Antwort zur&uuml;ck sind Gedankenexperimente.</li>
+        <li>Vereinfachungen: W&uuml;rfelquoten sind Zeitraffer, Car hat keinen Breaker, die Referenz wiederholt keine Vorw&auml;rtsschritte.</li>
     </ul>
 </div>
 </template>
@@ -770,53 +719,6 @@ const STATES = [
     { id: "half",   name: "HALF_OPEN", sub: "Nur die Probe fragt Flight." }
 ];
 
-// Story 7 (70 × 49,5 mm, je zwei in einer 70 × 99-Zelle)
-const S7_SIGNAL = { cls: "violet", band: "Kassensturz", main: ["Runde fertig,", "Korb leer"], foot: "Hotel und Flight sind fertig, der Korb ist leer. Jetzt laut die Becher zählen." };
-
-// Rollenkarten: Vorderseite Rolle groß, Rückseite 2–3 Regeln
-const ROLES = {
-    // ---------- Story 7 ----------
-    s7_booking: { story: "Story 7 · Choreography-Saga", cls: "c-violet", name: "Booking", sub: "bucht, storniert rückwärts", rules: [
-        "Buch eine Reise nach der anderen bei Flight, Hotel und Car. Sagt Car „nein“, stornierst du rückwärts: erst Hotel, dann Flight. Danach sagst du der Kund:in „storniert“.",
-        "Runde 1: Warte auf „erledigt“. Runde 2: Warte nur auf „gehört!“. Bleibt es still: laut bis drei zählen, Strich, trotzdem „storniert“.",
-        "Runde 3: Pro Storno den nächsten Zettel (E1, E2, …) in den Korb, erst Hotel, dann Flight, und sofort „storniert“."
-    ] },
-    s7_hotel: { story: "Story 7 · Choreography-Saga", cls: "c-hotel", name: "Hotel", sub: "bucht auf verdeckter Liste", rules: [
-        "Buchen: auf deiner verdeckten Liste die Reise abhaken. Offen ist nur die Spalte der Runde.",
-        "Stornieren: an den Fingern bis fünf zählen, durchstreichen, ein Gummibärchen in den Becher der Reise. Jedes Mal, auch wenn sie schon durchgestrichen ist.",
-        "Antwort: Runde 1 „erledigt“, erst wenn das Bärchen liegt. Runde 2 sofort „gehört!“, dann stornieren. Runde 3 nach dem Stornieren „quittiert“."
-    ] },
-    s7_flight: { story: "Story 7 · Choreography-Saga", cls: "c-flight", name: "Flight", sub: "folgt den geheimen Ansagen", rules: [
-        "Buchen: auf deiner verdeckten Liste die Reise abhaken. Offen ist nur die Spalte der Runde, beim Kassensturz deckst du sie auf.",
-        "Stornieren: an den Fingern bis fünf zählen, durchstreichen, ein Gummibärchen in den Becher der Reise. Jedes Mal, auch wenn sie schon durchgestrichen ist.",
-        "Antwort: Runde 1 „erledigt“, erst wenn das Bärchen liegt. Runde 2 sofort „gehört!“, dann stornieren. Runde 3 nach dem Stornieren „quittiert“."
-    ], foot: "Zusätzlich gilt deine geheime Briefing-Karte." },
-    s7_car: { story: "Story 7 · Choreography-Saga", cls: "c-car", name: "Car", sub: "hat heute keine Autos", rules: [
-        "Du sagst immer „nein“.",
-        "Runde 3: Du bist auch der Korb, außer am Tisch sitzen 9 oder mehr, dann spielt das eine eigene Person. Eine Buchungsfrage von Booking geht vor, danach liest du weiter.",
-        "Für Runde 3 bekommst du die Karte „Korb“ dazu."
-    ] },
-    s7_korb: { story: "Story 7 · Runde 3", cls: "c-dark", name: "Korb", sub: "Broker mit Redelivery", rules: [
-        "Lies die Zettel der Reihe nach vor: „E4: Flight, storniere Reise 2!“",
-        "Fehlt nach dem Gummibärchen das „quittiert“, zählst du laut bis fünf und liest denselben Zettel noch einmal. Reagiert niemand, zählst du direkt nach dem Vorlesen.",
-        "Der nächste Zettel kommt erst nach „quittiert“. Sind Hotel und Flight fertig und ist der Korb leer: Signalkarte aufstellen."
-    ] },
-    s7_customers: { story: "Story 7 · Choreography-Saga", cls: "c-dark", name: "Kund:innen", long: true, sub: "je eine Reise, je ein Becher", rules: [
-        "Dein Becher trägt die Nummer deiner Reise und bleibt die ganze Runde in der Reihe auf dem Tisch.",
-        "Angestellt wird nach Reisenummer. Du bist dran, wenn die vorige Reise „storniert“ gehört hat.",
-        "Kassensturz: Zähl laut deinen Becher. Soll sind zwei Gummibärchen."
-    ] }
-};
-
-// Geheimes Briefing (Wortlaut: story-07 Tabelle „Geheimes Briefing“)
-const BRIEFINGS = {
-    s7: { story: "Story 7", title: "Briefing Flight", rows: [
-        ["Runde 1", "Spiel ganz normal."],
-        ["Runde 2", "Bei Reise 2 reagierst du auf „storniere“ nicht: kein „gehört“, kein Gummibärchen. Buchen geht normal."],
-        ["Runde 3", "Bei Reise 2 legst du das Gummibärchen hin, sagst aber nicht „quittiert“. Liest der Korb noch einmal vor, machst du weiter wie immer."]
-    ], foot: "Hotel spielt alle Runden normal. Die Zettelnummer merkst du dir nicht." }
-};
-
 /* =====================================================================
  * Mengen aus der Teilnehmerzahl (Regeln der Story-Docs)
  * ===================================================================== */
@@ -830,11 +732,8 @@ function config(n) {
     const s4Queue = n - 1;
     // Story 5: eine Gruppe bis 13, ab 14 zwei Gruppen mit je eigenem Satz (Karten, Schilder, 2 Stühle, Wand)
     const s5 = split(n, n >= 14 ? 2 : 1).map((t, i) => ({ name: tableNames[i], size: t }));
-    // Story 7: ab 12 zwei Tische; ab 9 am Tisch eigene Korb-Person
-    const s7 = split(n, n >= 12 ? 2 : 1).map((t, i) => {
-        const korb = t >= 9;
-        return { name: tableNames[i], size: t, korb, trips: t - 4 - (korb ? 1 : 0) };
-    });
+    // Story 7: Tische zu 4 bis 7, je ein Würfel und 13 Chips, nichts zu drucken
+    const s7 = split(n, n <= 7 ? 1 : Math.ceil(n / 6));
     return { n, s4Queue, s5, s7 };
 }
 
@@ -855,32 +754,6 @@ function face(k, opts = {}) {
     return `<div class="face ${k.cls}${opts.rot ? " rot" : ""}">${band}${main}${foot}</div>`;
 }
 
-function slip(nr, backend, trip, table) {
-    return `<div class="face slip ${backend === "Hotel" ? "c-hotel" : "c-flight"}"><span class="slip-tbl">Tisch ${table}</span>` +
-        `<div class="main"><span class="slip-id">E${nr}</span><span>${backend} · Reise ${trip}</span></div></div>`;
-}
-
-function cupLabel(trip, table) {
-    return `<div class="face cup dark"><div class="main"><span>Reise ${trip}</span><small>Tisch ${table} · Soll: 2</small></div></div>`;
-}
-
-function roleFront(r) {
-    return `<div class="face ${r.cls}"><div class="band">${fmt(r.story)}</div>` +
-        `<div class="role-main"><div class="role-name${r.long ? " long" : ""}">${fmt(r.name)}</div><div class="role-sub">${fmt(r.sub)}</div></div></div>`;
-}
-function roleBack(r) {
-    return `<div class="face role-back ${r.cls}"><div class="band">${fmt(r.name)}<small>${fmt(r.story)}</small></div>` +
-        `<ol>${r.rules.map(x => `<li>${fmt(x)}</li>`).join("")}</ol>${r.foot ? `<div class="foot">${fmt(r.foot)}</div>` : ""}</div>`;
-}
-function briefFront(b) {
-    return `<div class="face briefing-front c-dark"><div class="band" style="background:var(--highlight);color:var(--primary-dark)">Geheim<small>${esc(b.story)}</small></div>` +
-        `<div class="role-main"><div class="role-name long">${esc(b.title)}</div><div class="role-sub">Nur für Flight. Nicht zeigen.</div></div></div>`;
-}
-function briefBack(b) {
-    return `<div class="face role-back c-flight"><div class="band">${esc(b.title)}<small>${esc(b.story)} · geheim</small></div>` +
-        `<table class="brief-table">${b.rows.map(([r, t]) => `<tr><th>${esc(r)}</th><td>${fmt(t)}</td></tr>`).join("")}</table>` +
-        `<div class="foot" style="margin-top:auto">${fmt(b.foot)}</div></div>`;
-}
 // Symbole für Zustandskarten, Board und Story-5-Schilder (viewBox 0 0 40 40), einmal als <symbol> in die Seite
 const S4_SYM = {
     plane: "<path fill=\"currentColor\" d=\"M20 3c1.7 0 2.6 1.7 2.6 3.6V15l12.4 7.4v3.6l-12.4-3.8v7.6l4.2 3.2V36l-6.8-1.9-6.8 1.9v-3l4.2-3.2v-7.6L5 26v-3.6L17.4 15V6.6C17.4 4.7 18.3 3 20 3z\"/>",
@@ -1085,24 +958,6 @@ function buildPlan(cfg, opts) {
         chunk(list, per).forEach(page => add(game, title, "a4l", "karton", grid("a4l", 4, 2, 70, 99, padTo(page, per))));
     };
 
-    // ---------- Rollenkarten (Faltkarte 140 × 198 oder Einzelkarte 140 × 99) ----------
-    const roleCards = (game, title, items) => {
-        if (opts.roles === "fold") {
-            chunk(items, 2).forEach(page => {
-                const cells = page.map(it => it.back(true) + it.front());
-                add(game, title, "a4l", "karton", grid("a4l", 2, 1, 140, 198, padTo(cells, 2), { fold: true, cellClass: "half" }));
-            });
-        } else {
-            chunk(items, 4).forEach(page => {
-                add(game, title + " (Vorderseiten)", "a4l", "duplex", grid("a4l", 2, 2, 140, 99, padTo(page.map(it => it.front()), 4)));
-                add(game, title + " (Rückseiten)", "a4l", "duplex", grid("a4l", 2, 2, 140, 99, padTo(page.map(it => it.back(false)), 4), { mirror: true }));
-            });
-        }
-    };
-    const rot = (html, on) => on ? html.replace('class="face ', 'class="face rot ') : html;
-    const roleItem = id => ({ front: () => roleFront(ROLES[id]), back: r => rot(roleBack(ROLES[id]), r) });
-    const briefItem = id => ({ front: () => briefFront(BRIEFINGS[id]), back: r => rot(briefBack(BRIEFINGS[id]), r) });
-
     // ================= Story 4 =================
     add("Story 4", "Trainer-Skript", "a4p", "pduplex", document.getElementById("tpl-script-s4").innerHTML);
     add("Story 4", "Trainer-Skript", "a4p", "pduplex", scriptS4Table());
@@ -1138,76 +993,10 @@ function buildPlan(cfg, opts) {
     }
 
     // ================= Story 7 =================
+    // Würfelspiel ohne Druckmaterial, nur der Spickzettel
     add("Story 7", "Spickzettel Trainer", "a4p", "papier", document.getElementById("tpl-cheat-s7").innerHTML);
-    {
-        const halves = [];
-        cfg.s7.forEach(t => {
-            for (let trip = 1; trip <= t.trips; trip++) {
-                halves.push(slip(2 * trip - 1, "Hotel", trip, t.name), slip(2 * trip, "Flight", trip, t.name));
-            }
-        });
-        const cups = [];
-        cfg.s7.forEach(t => { for (let trip = 1; trip <= t.trips; trip++) cups.push(cupLabel(trip, t.name)); });
-        const blankHalf = `<div class="face cup" style="border-color:transparent"></div>`;
-        const pairCells = list => chunk(list, 2).map(p => p.join("") + (p.length < 2 ? blankHalf : ""));
-        const cells = pairCells(halves).concat(pairCells(cups));
-        cfg.s7.forEach(() => cells.push(face(S7_SIGNAL)));
-        chunk(cells, 8).forEach(page => {
-            const html = page.map(c => c);
-            add("Story 7", "Zettel E1…, Becher-Etiketten, Signalkarte", "a4l", "karton", gridMixed(padTo(html, 8)));
-        });
-    }
-    cfg.s7.forEach(t => {
-        add("Story 7", "Buchungsliste Hotel · Tisch " + t.name, "a4l", "papier", bookingList("Hotel", "c-hotel", t));
-        add("Story 7", "Buchungsliste Flight · Tisch " + t.name, "a4l", "papier", bookingList("Flight", "c-flight", t));
-        add("Story 7", "Strichliste dispatch-failed · Tisch " + t.name, "a4l", "papier", tallyS7(t.name));
-    });
-    cfg.s7.forEach(t => {
-        const ids = ["s7_booking", "s7_hotel", "s7_flight", "s7_car", "s7_korb", "s7_customers"];
-        const items = ids.map(roleItem);
-        items.push(briefItem("s7"));
-        roleCards("Story 7", "Rollenkarten und Briefing Flight · Tisch " + t.name, items);
-    });
 
     return sheets;
-}
-
-// Story-7-Raster: Zellen 70 × 99, Zettel und Etiketten als zwei Hälften pro Zelle
-function gridMixed(cells) {
-    const wrapped = cells.map(c => {
-        if (!c) return null;
-        const halves = (c.match(/class="face (slip|cup)/g) || []).length;
-        return halves ? `<div style="display:flex;flex-direction:column;gap:6mm;height:100%">${c.replace(/<div class="face (slip|cup)/g, '<div style="flex:1 1 0;height:auto;min-height:0" class="face $1')}</div>` : c;
-    });
-    let out = grid("a4l", 4, 2, 70, 99, wrapped);
-    // Schnittlinie zwischen den beiden Hälften
-    const x0 = (297 - 280) / 2, y0 = (210 - 198) / 2;
-    cells.forEach((c, i) => {
-        if (c && /class="face (slip|cup)/.test(c)) {
-            const r = Math.floor(i / 4), col = i % 4;
-            out += `<div class="cut h" style="left:${x0 + col * 70}mm;right:auto;width:70mm;top:${y0 + r * 99 + 49.5}mm"></div>`;
-        }
-    });
-    return out;
-}
-
-function tallyS7(table) {
-    return `<div class="tally"><h2>Booking · <code>dispatch-failed</code></h2>` +
-        `<p class="lead">Runde 2: Bleibt „gehört!“ aus, laut bis drei zählen, einen Strich machen und trotzdem „storniert“ melden.</p>` +
-        `<div class="bigbox"><span>Striche Runde 2</span></div>` +
-        `<div class="small"><span>Im Log der Referenz: <code>dispatch-failed</code>, der Step steht trotzdem auf <code>COMPENSATED</code>.</span><span>Tisch ${esc(table)} · in eine Prospekthülle stecken</span></div></div>`;
-}
-
-function bookingList(backend, cls, t) {
-    const rounds = [["Runde 1", "Anruf"], ["Runde 2", "Zuruf"], ["Runde 3", "Korb"]];
-    const rows = Math.max(t.trips, 2);
-    const col = ([r, s]) => `<div class="blist-col"><h4>${r} <small>· ${s}</small></h4>` +
-        Array.from({ length: rows }, (_, i) => `<div class="blist-row"><span class="tick"></span>Reise ${i + 1}</div>`).join("") +
-        `<div class="how">Buchen: Haken. Storno: Zeile durchstreichen.</div></div>`;
-    return `<div class="blist ${cls}" style="--c:var(--${backend.toLowerCase()})"><div class="blist-head"><b>Buchungsliste ${backend}</b><span>Tisch ${esc(t.name)} · verdeckt halten · nur die Spalte der laufenden Runde ist offen, die anderen nach hinten knicken</span></div>` +
-        `<div class="blist-cols">${rounds.map(col).join("")}</div></div>` +
-        `<div class="fold v" style="left:${8.5 + 280 / 3}mm;top:22mm;bottom:9mm"><span>knicken</span></div>` +
-        `<div class="fold v" style="left:${8.5 + 2 * 280 / 3}mm;top:22mm;bottom:9mm"><span>knicken</span></div>`;
 }
 
 /* =====================================================================
@@ -1215,7 +1004,7 @@ function bookingList(backend, cls, t) {
  * ===================================================================== */
 function render() {
     const n = Math.min(20, Math.max(7, parseInt(document.getElementById("ctl-n").value, 10) || 12));
-    const opts = { roles: document.getElementById("ctl-roles").value, board: document.getElementById("ctl-clock").value };
+    const opts = { board: document.getElementById("ctl-clock").value };
     const batch = document.getElementById("ctl-batch").value;
     document.body.dataset.batch = batch;
     const cfg = config(n);
@@ -1258,7 +1047,7 @@ function render() {
         return `<tr class="${hidden ? "hidden-batch" : ""}"><td>${esc(r.game)}</td><td>${esc(r.title)}</td><td>${FORMAT[r.size]}</td>` +
             `<td><span class="pill ${r.paper}">${esc(p.label)}${p.hint ? " · " + esc(p.hint) : ""}</span></td><td class="n">${r.count}</td></tr>`;
     }).join("");
-    const tables = `Story 4: ein Booking, ${cfg.s4Queue} in der Schlange, ein Stapel 01–27, Board und Zustandskarten 1 Satz · Story 5: ${cfg.s5.length > 1 ? cfg.s5.map(t => t.size).join(" + ") + " in zwei Gruppen, je ein Satz Karten und Schilder" : cfg.s5[0].size + " in einer Gruppe, ein Satz Karten und Schilder"} · Story 7: ${cfg.s7.map(t => t.size + " am Tisch, " + t.trips + " Reisen" + (t.korb ? ", eigener Korb" : "")).join(" / ")}`;
+    const tables = `Story 4: ein Booking, ${cfg.s4Queue} in der Schlange, ein Stapel 01–27, Board und Zustandskarten 1 Satz · Story 5: ${cfg.s5.length > 1 ? cfg.s5.map(t => t.size).join(" + ") + " in zwei Gruppen, je ein Satz Karten und Schilder" : cfg.s5[0].size + " in einer Gruppe, ein Satz Karten und Schilder"} · Story 7: ${cfg.s7.join(" + ")} an ${cfg.s7.length} Tischen, je ein Würfel und 13 Chips`;
     const scope = game === "all" ? "Bogen gesamt" : "Bogen für " + GAMES.find(g => g.id === game).name;
     document.getElementById("toc-sum").innerHTML = `<strong>${scope}:</strong> ` +
         Object.keys(PAPER).filter(k => byPaper[k]).map(k => `${byPaper[k]} × ${PAPER[k].label}${PAPER[k].hint ? " (" + PAPER[k].hint + ")" : ""}`).join(", ") +
@@ -1326,7 +1115,7 @@ function checkOverflow() {
     bad.forEach(el => console.warn("Inhalt passt nicht:", el.closest(".sheet").querySelector(".sheet-label").textContent, el));
 }
 
-["ctl-n", "ctl-roles", "ctl-clock", "ctl-batch"].forEach(id => document.getElementById(id).addEventListener("input", render));
+["ctl-n", "ctl-clock", "ctl-batch"].forEach(id => document.getElementById(id).addEventListener("input", render));
 render();
 if (document.fonts) document.fonts.ready.then(checkOverflow);
 </script>
