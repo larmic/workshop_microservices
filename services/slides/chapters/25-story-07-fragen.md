@@ -51,10 +51,21 @@
 </div>
 
 Note:
-- Erst diskutieren, dann per Klick die Merks&auml;tze. Die Fragen 01 bis 03 steigen auf: vom Zuruf bis zur Antwort zur&uuml;ck.
-- <strong>Nie angekommen:</strong> Das haben wir gespielt, so arbeitet die Referenz. Ein Versuch, kein Retry: <code>dispatch-failed</code> im Log, trotzdem <code>COMPENSATED</code>, das Event ist weg. Booking meldet &bdquo;storniert&ldquo;, bevor jemand gew&uuml;rfelt hat. In Story 6 hat Booking den Schmerz gesp&uuml;rt, jetzt liegt er als Chip beim Service. <strong>Spicy:</strong> Eventing macht das Problem nicht kleiner. Es macht es leiser.
-- <strong>Zweimal:</strong> Nicht gespielt, ein Gedankenexperiment an den liegen gebliebenen Chips. Der Broker bringt Persistenz und Redelivery (at-least-once): Kein Storno fehlt, aber manches kommt doppelt, und Flight zahlt zweimal. Standard: <code>eventId</code> merken, in derselben Transaktion wie die Fachlogik. Unsere Backends loggen nur und deduplizieren nicht. Fan-out, Replay, Dead-Letter liefert nur ein Broker, der Webhook spart nur Infrastruktur (Bonus-Folie). <strong>Spicy:</strong> Wer Events publiziert, muss mit Duplikaten rechnen.
-- <strong>Antwort zur&uuml;ck:</strong> Auch ein Gedankenexperiment. Jeder Service schickt ein Reply-Event zur&uuml;ck, zum Beispiel <code>BookingCancelled</code>. Booking wartet mit Timeout, kommt nichts, setzt es den Saga-Status <code>STUCK</code> statt <code>COMPENSATED</code>. Ehrlich, aber Booking wartet wieder, nur asynchron, also ein St&uuml;ck Orchestrierung. Das f&uuml;hrt zu 04. <strong>Spicy:</strong> Wer &bdquo;storniert&ldquo; sagt, ohne es zu wissen, l&uuml;gt h&ouml;flich.
-- <strong>Dirigent:</strong> Niemand, es passiert einfach nichts. Ein Prozess mit fester Reihenfolge und Kompensation geh&ouml;rt an eine Stelle. Choreografie nur f&uuml;r einfache F&auml;lle ohne Reihenfolge (Benachrichtigung, Read-Model). Unsere Referenz ist der Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf. <strong>Spicy:</strong> Bei Choreografie kennt jeder jeden, nur steht es nirgends. Br&uuml;cke zu Story 8: Wer merkt es, wenn ein Event verloren geht?
+- Erst diskutieren, dann per Klick die Merks&auml;tze. 01 bis 03 steigen auf: vom Zuruf bis zur Antwort zur&uuml;ck.
+- <strong>01 Chip bleibt liegen:</strong> Das haben wir gespielt, so arbeitet die Referenz.
+  - Ein Versuch, kein Retry: <code>dispatch-failed</code> im Log, trotzdem <code>COMPENSATED</code>.
+  - <strong>Spicy:</strong> Eventing macht das Problem nicht kleiner. Es macht es leiser.
+- <strong>02 Storno kommt zweimal:</strong> Gedankenexperiment an den liegen gebliebenen Chips.
+  - Ein Broker liefert, bis quittiert ist (at-least-once): Nichts fehlt, manches kommt doppelt.
+  - Abhilfe: <code>eventId</code> merken, in derselben Transaktion wie die Fachlogik. Unsere Backends tun das nicht.
+  - Was ein Broker sonst kann: Bonus-Folie.
+- <strong>03 Antwort zur&uuml;ck:</strong> Auch ein Gedankenexperiment.
+  - Reply-Event (<code>BookingCancelled</code>) plus Timeout, sonst <code>STUCK</code> statt <code>COMPENSATED</code>.
+  - Booking wartet wieder, nur asynchron. Das f&uuml;hrt zu 04.
+- <strong>04 Dirigent:</strong> Niemand merkt es, es passiert einfach nichts.
+  - Ein fester Ablauf mit Kompensation geh&ouml;rt an eine Stelle. Choreografie nur ohne Reihenfolge (Benachrichtigung, Read-Model).
+  - Unsere Referenz ist der Mittelweg: Booking dirigiert den Hinweg, storniert wird per Zuruf.
+  - <strong>Spicy:</strong> Bei Choreografie kennt jeder jeden, nur steht es nirgends.
 - <strong>Preis:</strong> Fehler werden still, und mit einem Broker kommen Duplikate dazu.
+- Br&uuml;cke zu Story 8: Wer merkt es, wenn ein Event verloren geht?
 - Lang: <code>docs/questions/story7.md</code>.
