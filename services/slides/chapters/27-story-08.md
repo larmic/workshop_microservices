@@ -38,8 +38,8 @@
 </ul>
 <h4>Sichtbarkeit</h4>
 <ul>
-<li>OpenAPI dokumentiert den <code>traceparent</code>-Header</li>
 <li><code>docker compose logs | grep &lt;trace-id&gt;</code> zeigt den ganzen Vorgang</li>
+<li>Wenn Zeit bleibt: OpenAPI dokumentiert den <code>traceparent</code>-Header</li>
 </ul>
 </div>
 </div>

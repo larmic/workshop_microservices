@@ -72,8 +72,8 @@ Events, Circuit Breaker oder Bulkhead braucht ihr nicht.
   Beide Befehle laufen im Ordner `services/`. Meldet Compose
   `invalid compose project`, fehlt in eurer `.env` die Zeile `COMPOSE_FILE`
   aus `.env.example`.
-- [ ] Die OpenAPI-Dokumentation des Booking-Services beschreibt den
-  `traceparent`-Header (Request und Response)
+- [ ] Wenn Zeit bleibt: Die OpenAPI-Dokumentation des Booking-Services
+  beschreibt den `traceparent`-Header (Request und Response)
 
 Tipp: Eine Kompensation löst ihr im Dashboard mit „Buchung mit kaputtem
 Mietwagen" aus. Die `carId` `C9` ist im Car-Service reserviert, Car
