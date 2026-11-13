@@ -6,7 +6,7 @@
 
 ## Erst lauff&auml;hig, dann smart
 
-<span class="badge">&asymp; 60 min</span>
+<span class="badge">&asymp; 45 min <small>Code</small></span>
 </div>
 
 <p class="subtitle">Laptop, Cloud, Raspberry Pi. Ein Build, <span class="hl">&uuml;berall gleich</span>.</p>

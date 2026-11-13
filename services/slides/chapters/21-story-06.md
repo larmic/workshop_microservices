@@ -6,7 +6,7 @@
 
 ## Alles oder nichts
 
-<span class="badge">&asymp; 60 min</span>
+<span class="badge">&asymp; 40 min <small>Code</small></span>
 </div>
 
 <p class="subtitle">Drei Buchungen, am Ende ein Ergebnis: alles da oder nichts mehr <span class="hl">gebucht</span>.</p>

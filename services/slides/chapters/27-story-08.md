@@ -6,7 +6,7 @@
 
 ## Den roten Faden im Log
 
-<span class="badge">&asymp; 60 min</span>
+<span class="badge">&asymp; 40 min <small>Code</small></span>
 </div>
 
 <p class="subtitle">Euer Service aus Story 6, eine Buchung, vier Logs. Danach reicht ein <span class="hl">grep</span>.</p>

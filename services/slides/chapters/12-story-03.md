@@ -6,7 +6,7 @@
 
 ## Services finden sich selbst
 
-<span class="badge">&asymp; 60 min</span>
+<span class="badge">&asymp; 40 min <small>Code</small></span>
 </div>
 
 <p class="subtitle">Consul kennt die Adressen. Der Code kennt nur <span class="hl">Namen</span>.</p>
