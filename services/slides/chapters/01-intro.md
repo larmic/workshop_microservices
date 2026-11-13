@@ -19,16 +19,17 @@
 <li><a href="https://www.youtube.com/@LarsMichaelis" target="_blank" rel="noopener">youtube.com/@LarsMichaelis</a></li>
 </ul>
 </div>
-<div class="intro-trace" role="img" aria-label="Trace einer Buchung: car lehnt ab, flight wird kompensiert">
+<div class="intro-trace" role="img" aria-label="Trace einer Buchung: car lehnt ab, hotel und flight werden kompensiert">
 <div class="trace-meta">trace_id 4bf92f3577b34da6 &middot; POST /booking/bookings</div>
 <div class="trace-rows">
 <span>booking</span><div class="trace-bar booking"></div>
 <span>flight</span><div class="trace-bar flight"></div>
 <span>hotel</span><div class="trace-bar hotel"></div>
 <span>car</span><div class="trace-fail"><div class="trace-bar"></div><span>409</span></div>
-<span>flight</span><div class="trace-bar compensate"></div>
+<span>hotel</span><div class="trace-bar compensate"></div>
+<span>flight</span><div class="trace-bar compensate later"></div>
 </div>
-<div class="trace-meta">car lehnt ab &rarr; flight wird kompensiert</div>
+<div class="trace-meta">car lehnt ab &rarr; hotel und flight werden kompensiert</div>
 </div>
 </div>
 

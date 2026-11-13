@@ -2337,6 +2337,9 @@
     box-sizing: border-box;
 }
 
+/* Rückwärts kompensiert: erst hotel, danach flight */
+.reveal .intro .trace-bar.compensate.later { margin-left: 86%; }
+
 .reveal .intro .trace-fail {
     display: flex;
     align-items: center;
