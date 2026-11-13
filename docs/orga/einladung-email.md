@@ -23,6 +23,7 @@ schön, dass ihr dabei seid! Hier die wichtigsten Infos zum Workshop "Microservi
 **Wann:** {{DATUM}}, {{UHRZEIT}}
 **Wo:** {{ORT}} (kein Remote)
 **Mitbringen:** Entwickler-Notebook (installiert: Git, Docker inkl. Docker Compose, IDE, Programmiersprache eurer Wahl)
+**Was euch erwartet:** Service Discovery, Circuit Breaker, Bulkhead, Saga und Tracing. Ihr arbeitet in kleinen Teams an einem eigenen Service, dazu kommen eine Design-Session am Flipchart und drei Spiele.
 
 **Vorbereitung (Pflicht, ca. 1 bis 2 Stunden, bis spätestens vor dem Workshop-Beginn):**
 
