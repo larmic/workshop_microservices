@@ -194,7 +194,7 @@ Vorgehen:
 4. **Projekt im WSL2-Dateisystem.** Liegt das Repo unter `/mnt/c/...`, ist nicht
    nur der Build langsam, es gibt auch mehr Networking-Reibung. Empfohlen ist
    `~/projects/...` innerhalb der WSL-Distribution (siehe
-   [vorbereitung.md](vorbereitung.md), Windows-Hinweise).
+   [vorbereitung.md](vorbereitung.md), Schritt 2, Kasten „Windows“).
 5. **Docker-Desktop-Integration.** Settings, Resources, WSL Integration: die
    genutzte Distribution muss aktiviert sein. Hintergrund:
    [Docker Desktop WSL2 Backend](https://docs.docker.com/desktop/wsl/).
@@ -235,8 +235,9 @@ Weiterführend:
 
 **Geltung:** nur Windows/WSL2 · **Status:** verifiziert (in [vorbereitung.md](vorbereitung.md) und [custom-setup.md](custom-setup.md) dokumentiert)
 
-Pfade mit Forward-Slashes, `.env` mit LF statt CRLF, Projekt im WSL2-Dateisystem:
-siehe die Windows-Hinweise in [vorbereitung.md](vorbereitung.md) und [custom-setup.md](custom-setup.md).
+Projekt im WSL2-Dateisystem und `.env` mit LF statt CRLF: Kasten „Windows“ in
+[vorbereitung.md](vorbereitung.md), Schritt 2. Pfade mit Forward-Slashes:
+„Hinweise für Windows-Teilnehmer“ in [custom-setup.md](custom-setup.md).
 
 ## Stack komplett zurücksetzen
 

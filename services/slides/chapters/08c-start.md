@@ -40,4 +40,4 @@
 </div>
 
 Note:
-- Gemeinsam durchgehen, jeder klinkt jetzt seinen Service ein. Wer h&auml;ngt, setzt sich zu jemandem, bei dem es l&auml;uft.
+- Gemeinsam durchgehen. Erst einigt sich jedes Team auf einen der mitgebrachten Services, die anderen klonen ihn, dann klinkt das Team ihn ein. Wer h&auml;ngt, setzt sich zu jemandem, bei dem es l&auml;uft.
