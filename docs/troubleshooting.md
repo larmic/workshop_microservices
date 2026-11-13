@@ -22,8 +22,10 @@ Jeder Eintrag ist mit zwei Markern versehen:
 ## Erste Diagnose (immer zuerst)
 
 Alle Befehle aus dem Verzeichnis `services/`. Damit `docker compose` ohne die
-vielen `-f`-Flags funktioniert, einmal pro Terminal die Compose-Dateien als Env
-setzen:
+vielen `-f`-Flags funktioniert, stehen die Compose-Dateien als `COMPOSE_FILE`
+in der `.env` (aus `.env.example`). Meldet `docker compose` trotzdem
+`invalid compose project`, ist die `.env` älter: die beiden `COMPOSE_`-Zeilen
+aus `.env.example` nachtragen oder einmal pro Terminal setzen:
 
 ```bash
 export COMPOSE_FILE=docker-compose.yml:docker-compose.infra.yml:docker-compose.reference.yml:docker-compose.custom.yml

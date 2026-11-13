@@ -2393,7 +2393,7 @@ on receiveCompensationEvent(event):
             <div class="panel-header">
                 <h2>Distributed Tracing (Story 8)</h2>
             </div>
-            <p class="story8-hint">Nach jedem Call zeigt die Anzeige unten die <code>trace_id</code> aus dem <code>traceparent</code>-Response-Header und liefert einen kopierbaren Filter-Befehl. Damit l&auml;sst sich der komplette Vorgang &uuml;ber alle vier Services hinweg in den Compose-Logs rekonstruieren.</p>
+            <p class="story8-hint">Nach jedem Call zeigt die Anzeige unten die <code>trace_id</code> aus dem <code>traceparent</code>-Response-Header und liefert einen kopierbaren Filter-Befehl. Damit l&auml;sst sich der komplette Vorgang &uuml;ber alle vier Services hinweg in den Compose-Logs rekonstruieren. Den Befehl im Ordner <code>services/</code> ausf&uuml;hren.</p>
             <div class="rest-actions">
                 <div class="rest-row">
                     <button class="rest-btn" onclick="callTracing8(this, 'GET', '/booking/offers', 's8-offers')">

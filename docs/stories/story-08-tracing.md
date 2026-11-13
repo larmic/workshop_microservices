@@ -69,6 +69,9 @@ Events, Circuit Breaker oder Bulkhead braucht ihr nicht.
   Buchung **und** Kompensation:
   `docker compose logs --no-log-prefix booking-custom flight hotel car | jq -cR 'fromjson? | select(.trace_id=="<trace-id>")'`
   (ohne jq: `docker compose logs | grep <trace-id>`)
+  Beide Befehle laufen im Ordner `services/`. Meldet Compose
+  `invalid compose project`, fehlt in eurer `.env` die Zeile `COMPOSE_FILE`
+  aus `.env.example`.
 - [ ] Die OpenAPI-Dokumentation des Booking-Services beschreibt den
   `traceparent`-Header (Request und Response)
 
