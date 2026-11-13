@@ -60,5 +60,5 @@ Note:
 - <strong>Hop:</strong> Pro Hop eine frische Span-ID als parent-id in den Header. Der Empf&auml;nger sieht sie als Parent.
 - <strong>traceparent:</strong> parent-id ist die Span-ID dieses Aufrufs. Nur-Nullen ung&uuml;ltig, <code>crypto/rand</code>: IDs sollen unvorhersagbar sein.
 - <strong>Sampling-Flag:</strong> Der Entry-Point entscheidet, alle anderen folgen dem Bit.
-- Am Markt: OpenTelemetry ist Standard, dazu Jaeger, Tempo, SaaS. Wir bauen die Propagation selbst, etwa 100 Zeilen.
+- Am Markt: OpenTelemetry ist Standard, dazu Jaeger, Tempo, SaaS. Wir bauen die Propagation selbst, gut 120 Zeilen.
 - &Uuml;berleitung: &bdquo;Vier Stellen im Code, mehr ist es nicht.&ldquo;
