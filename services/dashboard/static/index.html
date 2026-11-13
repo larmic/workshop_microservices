@@ -1619,7 +1619,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="code" data-story-node="1" onclick="showStory(1)">1</button>
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="1" onclick="showStory(1)" title="Hands-on: der erste Service">1</button>
                     <small class="stepper-kind">Code</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -1629,7 +1629,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="code" data-story-node="3" onclick="showStory(3)">3</button>
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="3" onclick="showStory(3)" title="Hands-on: Service Discovery">3</button>
                     <small class="stepper-kind">Code</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -1644,7 +1644,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="code" data-story-node="6" onclick="showStory(6)">6</button>
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="6" onclick="showStory(6)" title="Hands-on: Saga">6</button>
                     <small class="stepper-kind">Code</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -1654,7 +1654,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="code" data-story-node="8" onclick="showStory(8)">8</button>
+                    <button type="button" class="stepper-node" data-kind="code" data-story-node="8" onclick="showStory(8)" title="Hands-on: Distributed Tracing">8</button>
                     <small class="stepper-kind">Code</small>
                 </span>
             </div>
@@ -1985,7 +1985,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
             <button class="source-btn" data-mode="custom" onclick="setBookingMode(4,'custom')">Mein Service</button>
         </div>
         <div class="cb-section">
-            <h2>Circuit Breaker (Booking Story 4)</h2>
+            <h2>Circuit Breaker (Story 4)</h2>
             <div class="rest-actions">
                 <div class="rest-row">
                     <button class="rest-btn" onclick="callRest(this, 'GET', '/dashboard/api/booking-ref-story4/offers', 's4-offers')">
@@ -2067,7 +2067,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
         </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Bulkhead (Booking Story 5)</h2>
+                <h2>Bulkhead (Story 5)</h2>
                 <button class="panel-reset-btn" id="bh-reset-btn" onclick="resetBulkheadStats()" title="Bulkhead-Counters zurücksetzen">Reset</button>
             </div>
             <div class="rest-actions">
@@ -2175,7 +2175,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
         </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Saga (Booking Story 6)</h2>
+                <h2>Saga (Story 6)</h2>
                 <button class="panel-reset-btn" id="saga-reset-btn" onclick="resetSagas()" title="Saga-Store leeren">Reset</button>
             </div>
             <div class="rest-actions">
@@ -2264,7 +2264,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
         </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Choreography (Booking Story 7)</h2>
+                <h2>Choreography (Story 7)</h2>
                 <button class="panel-reset-btn" id="saga7-reset-btn" onclick="resetSagas7()" title="Saga-Store leeren">Reset</button>
             </div>
             <div class="rest-actions">
@@ -2415,7 +2415,7 @@ on receiveCompensationEvent(event):
         </div>
         <div class="cb-section">
             <div class="panel-header">
-                <h2>Distributed Tracing (Booking Story 8)</h2>
+                <h2>Distributed Tracing (Story 8)</h2>
             </div>
             <p class="story8-hint">Nach jedem Call zeigt die Anzeige unten die <code>trace_id</code> aus dem <code>traceparent</code>-Response-Header und liefert einen kopierbaren Filter-Befehl. Damit l&auml;sst sich der komplette Vorgang &uuml;ber alle vier Services hinweg in den Compose-Logs rekonstruieren.</p>
             <div class="rest-actions">
