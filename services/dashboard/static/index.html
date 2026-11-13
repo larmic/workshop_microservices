@@ -2109,6 +2109,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                             <li>Status pro Saga abfragbar: <code>PENDING</code>, <code>COMPLETED</code>, <code>COMPENSATING</code>, <code>FAILED</code></li>
                             <li>Optional: Retry-Logik für Kompensation; Timeout-Handling; Persistenz für Recovery</li>
                         </ul>
+                        <p><strong>Story 3 nicht fertig?</strong> Die Saga ersetzt den <code>POST /booking/bookings</code> aus Story 3. Fehlt die Service Discovery, ruft Flight, Hotel und Car &uuml;ber die Env-URLs aus Story 1 auf.</p>
                     </div>
                 </details>
                 <details class="story-cheatsheet">
@@ -2217,9 +2218,9 @@ POST /admin/sagas-reset   &rarr; 204, leert die Liste</pre>
                             <ol>
                                 <li>Der Kunde gibt Booking 3 Chips. Damit startet die Reise.</li>
                                 <li>Booking fragt der Reihe nach <strong>Flight, Hotel, Car</strong> und w&uuml;rfelt einmal: Bei 4&ndash;6 buchen alle drei. Bei 1 sagt Flight nein, bei 2 Hotel, bei 3 Car. Nur wer vor dem Nein gebucht hat, bekommt einen Chip.</li>
-                                <li>Wer nein sagt, w&uuml;rfelt den Grund: Bei 1&ndash;3 ist er nicht erreichbar (<code>503</code>). Booking zahlt ihm einen Chip aus dem Retry-Budget, er bucht doch, und die Reise klappt.</li>
+                                <li>Wer nein sagt, w&uuml;rfelt den Grund: Bei 1&ndash;3 ist er nicht erreichbar (<code>503</code>). Booking zahlt ihm einen Chip aus dem Retry-Budget, er bucht doch. Wer nach ihm kommt, bucht ohne neuen Wurf, die Reise klappt.</li>
                                 <li>Bei 4&ndash;6 ist er ausgebucht, oder das Budget ist leer: Die Reise scheitert. Booking ruft den schon Gebuchten r&uuml;ckw&auml;rts &bdquo;Storno!&ldquo; zu und sagt sofort &bdquo;Storniert&ldquo;.</li>
-                                <li>Erst dann w&uuml;rfelt jeder Gerufene: Bei 1&ndash;4 hat er es geh&ouml;rt und gibt den Chip an den Kunden zur&uuml;ck. Bei 5&ndash;6 hat er es &uuml;berh&ouml;rt und beh&auml;lt ihn. Booking gibt dem Kunden zur&uuml;ck, was vom Reisegeld &uuml;brig ist.</li>
+                                <li>Erst dann w&uuml;rfelt jeder Gerufene: Bei 1&ndash;4 hat er es geh&ouml;rt und gibt den Chip an den Kunden zur&uuml;ck. Bei 5&ndash;6 hat er es &uuml;berh&ouml;rt und beh&auml;lt ihn. Nach jeder Reise gibt Booking dem Kunden zur&uuml;ck, was vom Reisegeld &uuml;brig ist.</li>
                             </ol>
                             <p class="play-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts. Am Ende <strong>Kassensturz</strong>: Jeder Service sollte so viele Chips haben, wie Reisen geklappt haben. Jeder Chip mehr ist ein stilles Storno.</p>
                         </div>

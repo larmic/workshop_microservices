@@ -141,6 +141,9 @@ Schwere nach der Gegenprüfung. Aufwand ist meine Schätzung für die Behebung.
 > - **T3** behoben: Spickzettel (neuer Schritt 4) und Story 6 nennen `GET /admin/sagas`, `POST /admin/sagas-reset`, die Feldnamen, den Pfad der Statusabfrage, den Statuscode im Fehlerfall und wie man einen Fehler auslöst. Die Karte sagt bei „Mein Service“ jetzt, welcher Endpoint fehlt. Dass Flight, Hotel und Car `DELETE` schon anbieten, steht im Akzeptanzkriterium.
 > - **T6** und der Mittag aus **T4** entschärft: Story 1 hat jetzt 60 statt 90 Minuten (Plan, Story, Folie, Dashboard). Der Vormittag von Tag 1 hat 225 Minuten und endet bei Beginn 9:00 um 12:45, Tag 1 kommt auf rund 7 h 40 mit 20 Minuten für Kaffeepausen.
 > - **T2** bleibt bewusst: Story 3 behält 60 Minuten. Die Notes rechnen jetzt 20 + 20 Minuten Arbeit, damit Theorie, Demo und Recap in den Block passen. Eng bleibt es.
+> - **T7** behoben: Story 6 und Dashboard sagen, was gilt, wenn Story 3 nicht fertig ist.
+> - **T14** behoben: Folie, Dashboard und Story 7 sagen, dass nach dem Retry ohne neuen Wurf weitergebucht wird und dass Booking nach jeder Reise das übrige Reisegeld zurückgibt.
+> - **T17 bis T19** behoben: Die Vorbereitung verlangt ein Dockerfile, das aus einem frischen Klon baut, nennt WSL2 bei den Voraussetzungen und den lokalen Build der Beispiel-Lösung. Der Hilfe-Eintrag zu Zertifikatsfehlern gilt jetzt für alle Betriebssysteme. „Der Stack läuft“ ist an `http://localhost` prüfbar.
 
 ### Hoch
 

@@ -40,6 +40,10 @@ damit **ich nicht mit einer halben Reise dastehe**.
   - `POST /admin/sagas-reset` leert die Liste und antwortet mit `204`.
 - **Rückblick auf Story 2:** Die Storno-Diskussion vom Flipchart kommt hier als Kompensation zurück. `DELETE /bookings/{id}` muss idempotent sein, sobald der Orchestrator wiederholt (Bonus: Retry) oder jemand manuell nachstößt (siehe [questions/story2.md](../questions/story2.md), Frage 4)
 
+### Story 3 noch nicht fertig?
+
+Die Saga ersetzt den `POST /booking/bookings` aus Story 3, ihr braucht ihn also nicht als Vorlage. Fehlt die Service Discovery, ruft Flight, Hotel und Car über die Env-URLs aus Story 1 auf. Die Kriterien dieser Story gelten trotzdem.
+
 ## Bonus (optional)
 
 - Implementiere parallele Ausführung unabhängiger Schritte
