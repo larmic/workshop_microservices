@@ -149,11 +149,14 @@ Feinschliff ohne Risiko, wenn Zeit ist.
 >
 > - **N1:** Leerer Stapel aufgelöst, Story-4-Recap mit Badge. Fünf Fragen in Story 8, Titelfolien ohne Zitat und Story 7 ohne Code-Folie bleiben bewusst.
 > - **N2:** Nur die Notes zum Story-7-Recap sind gekürzt und nummeriert. Die Spielskripte zu Story 4 und 5 bleiben lang.
-> - **N5:** Zuordnung der Karten vom Anfang, Feedback-Folie am Schluss (63 Folien) und Note zu Timeouts und Retry sind drin. Die Transferfrage pro Recap bleibt bewusst weg. Offen: eine Folie, die die Domäne einführt.
+> - **N5:** Zuordnung der Karten vom Anfang, Feedback-Folie am Schluss und Note zu Timeouts und Retry sind drin. Die Domäne führt die neue Folie „Unsere Reiseplattform“ ein, direkt vor „Einklinken, dann los“ (damit 64 Folien). Die Transferfrage pro Recap bleibt bewusst weg.
 > - **N9:** Überschriften in Poppins, Fließtext bleibt Systemschrift.
 > - **N16:** Der eine Link auf `larmic.de` nutzt jetzt wie alle anderen `larmic.github.io`. Welche Adresse die kanonische sein soll, ist nicht entschieden.
 >
-> **Offen, braucht eine Entscheidung:** N5 (Domänen-Folie), N11 (Emojis) und N18 (Anrede und Gendern in Docs und Pages).
+> - **N11:** Entschieden: Die Emojis bleiben, wo sie sind.
+> - **N18:** Regel: „ihr“ für alles, was im Workshop gelesen wird, „du“ für die Vorbereitung allein zu Hause, durchgehend „Teilnehmende“. Umgesetzt in Docs und READMEs. Nicht angefasst: das verallgemeinernde „du“ in den Hintergrundtexten (`docs/questions/`, `docs/instructions/`), das Feedback-Formular, die Intranet-Vorlage sowie `.claude/` und `docs/feedback/`.
+>
+> Damit ist aus der Nice-to-have-Liste nichts mehr offen.
 
 | Nr. | Bereich | Befund | Wo | Aufwand |
 |---|---|---|---|---|
