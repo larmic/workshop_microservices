@@ -3,7 +3,7 @@
 Packliste für „Microservices richtig gemacht“ mit 8, 12 und 16 Teilnehmenden. Sie umfasst die Rollenspiele aus Story 4 (Circuit Breaker) und Story 5 (Bulkhead), das Würfelspiel aus Story 7 (Choreography-Saga) sowie die Design-Session aus Story 2.
 
 - **Druckvorlagen:** <https://larmic.github.io/workshop_microservices/material/> (Quelle: [`pages/material/index.html`](../../pages/material/index.html)). Die Seite rechnet die Mengen aus der Teilnehmerzahl aus und zeigt pro Papiersorte einen eigenen Druckstapel.
-- **3D-Modelle:** werden nicht mehr gebraucht. [`docs/orga/3d/`](3d/) enthält noch `card_stand.scad` für die Rollenkarten des früheren Story-7-Spiels.
+- **3D-Modelle:** werden nicht mehr gebraucht. [`docs/orga/3d/`](3d/) enthält nur noch das optionale PROBE-Token aus Story 4.
 - **Regeln:** [Story 4](../stories/story-04-circuit-breaker.md), [Story 5](../stories/story-05-bulkhead.md), [Story 7](../stories/story-07-choreography-saga.md), [Story 2](../stories/story-02-api-design-session.md).
 
 **Art:** *kaufen* heißt Büro oder Laden, *drucken* heißt über die Druckseite, *3D* heißt aus `docs/orga/3d/`, *Raum* heißt, was im Seminarraum ohnehin steht.
