@@ -10,7 +10,7 @@
 # Datei mit committen; das Guard-Gate js schlägt sonst fehl.
 set -euo pipefail
 
-MARKED_VERSION=12.0.2
+MARKED_VERSION=18.2.0
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET="$ROOT/pages/vorbereitung/vendor/marked.min.js"
