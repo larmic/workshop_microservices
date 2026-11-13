@@ -89,7 +89,7 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
   ist heute das Default-Wire-Format. Der `traceparent`-Header trägt
   Version + Trace-ID + Span-ID + Flags und ist nur 55 Zeichen lang.
 - **Selbst bauen für den Workshop:** Parsing, Generierung und Propagation
-  sind in ca. 100 Zeilen Code abgehandelt — analog zu Story 4/5 lernt
+  sind in gut 120 Zeilen Code abgehandelt — analog zu Story 4/5 lernt
   man den Mechanismus dadurch wirklich. Eine fertige Library (z.B.
   OpenTelemetry) würde den Lerneffekt verstecken und ist außerdem stark
   Sprach- und Tool-abhängig.

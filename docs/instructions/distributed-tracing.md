@@ -156,7 +156,7 @@ fun log(ctx, msg, vararg fields) {
 
 **`parse()` strikt halten:** Feste Längen prüfen, Nur-Nullen verwerfen. Ein vergifteter Header führt zu `generateNew()` (Entry-Point) bzw. zu keinem Trace (Downstream), nie zu einem fortgeführten Unsinn.
 
-Reference-Implementierung: `services/shared/tracing/tracing.go` (~100 Zeilen).
+Reference-Implementierung: `services/shared/tracing/tracing.go` (gut 120 Zeilen).
 
 ### Demo-Hinweise (Story 8)
 

@@ -34,5 +34,5 @@ Note:
 - <strong>3 jede Zeile:</strong> <code>trace_id</code> und <code>span_id</code> als eigene Felder, einmal an den Request-Logger h&auml;ngen.
 - <strong>4 Async-Grenze:</strong> <code>traceparent</code> wandert als Event-Property mit. Bei echten Brokern in die Message-Header.
 - <code>parse()</code> strikt: feste L&auml;ngen, nicht nur Nullen, sonst <code>generateNew()</code>.
-- Referenz: <code>services/shared/tracing/tracing.go</code>, ~100 Zeilen.
+- Referenz: <code>services/shared/tracing/tracing.go</code>, gut 120 Zeilen.
 - &Uuml;berleitung: &bdquo;Jetzt zieht ihr den Faden selbst.&ldquo;
