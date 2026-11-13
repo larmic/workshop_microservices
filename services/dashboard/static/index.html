@@ -2054,7 +2054,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
                     <summary>Demo und Nachbauen <span class="badge">Referenz oder Mein Service</span></summary>
                     <div class="story-info-body">
                         <h4>Demo</h4>
-                        <p>Unten alle Downstream-Services auf &bdquo;Normal&ldquo;, dann Hotel auf &bdquo;Langsam&ldquo; (2&nbsp;s) und den Burst-Knopf dr&uuml;cken. Alle 20 Antworten sind 200, &bdquo;failed&ldquo; bleibt 0. Ma&szlig;geblich ist &bdquo;hotel rej&ldquo;: etwa zehn. Flight und Car laufen weiter, der Hotel-Breaker bleibt CLOSED. Danach Hotel zur&uuml;ck auf &bdquo;Normal&ldquo;.</p>
+                        <p>Unten alle Downstream-Services auf &bdquo;Normal&ldquo;, dann Hotel auf &bdquo;Langsam&ldquo; (2&nbsp;s) und den Burst-Knopf dr&uuml;cken. Alle 20 Antworten sind 200, &bdquo;failed&ldquo; bleibt 0. Ma&szlig;geblich ist &bdquo;hotel rej&ldquo;: etwa zehn. Flight und Car laufen weiter. Der Hotel-Breaker merkt nichts, 2&nbsp;s liegen unter dem Timeout von 3&nbsp;s (das Panel zeigt ihn hier nicht). Danach Hotel zur&uuml;ck auf &bdquo;Normal&ldquo;.</p>
         <div class="source-toggle" data-source-toggle="5">
             <span class="source-toggle-label">Service-Quelle</span>
             <button class="source-btn active" data-mode="reference" onclick="setBookingMode(5,'reference')">Referenz</button>
@@ -3123,6 +3123,8 @@ on receiveCompensationEvent(event):
             try {
                 const res = await fetch(bookingUrl(5, "/dashboard/api/bulkhead-reset"), { method: "POST" });
                 if (!res.ok) throw new Error(await res.text());
+                bulkheadBursts = [];
+                renderBulkheadBursts();
                 showBurstResult("Counters zurückgesetzt");
             } catch (e) {
                 showBurstResult("Reset: Fehler — " + e.message);

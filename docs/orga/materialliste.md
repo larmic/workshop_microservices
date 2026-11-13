@@ -35,7 +35,7 @@ Board und Zustandskarte liegen flach auf dem Booking-Tisch, Booking legt das Boa
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
 | Kartenstapel 01–27 | drucken | 1 | 1 | 2 | A7 hoch, 8 pro Bogen, 4 Bogen Karton (5 Felder frei). Nur Nummer und „Steh auf bei XX“, STOPP 04, 15, 27 dunkel. Pro Gruppe ein Stapel |
-| Service-Schilder Hotel, Flight, Car | drucken | 3 | 3 | 6 | A4 hoch, Karton, 3 Bogen pro Gruppe. Hotel doppelseitig („schnell“, hinten „langsam“): Rückseite bedrucken oder zwei Blätter zusammenkleben |
+| Service-Schilder Hotel, Flight, Car | drucken | 3 | 3 | 6 | A4 hoch, Karton, 4 Bogen pro Gruppe (3 mit Karton-Duplex). Hotel doppelseitig („schnell“, hinten „langsam“): Rückseite bedrucken oder zwei Blätter zusammenkleben |
 | Trainer-Skript | drucken | 1 | 1 | 1 | 1 Bogen Papier 80 g, beidseitig: Ablauf, Regeln und STOPP-Fragen vorn, Kartentabelle und Durchlauf mit 10 Personen hinten |
 | Stühle | Raum | 2 | 2 | 4 | zwei pro Gruppe, Sitzfläche zu Booking |
 | Wand | Raum | 1 | 1 | 2 | Pinnwand, Flipchart oder ein hochkant gestellter Tisch |
@@ -71,7 +71,7 @@ Nichts zu drucken, die Teams schreiben die Tabelle direkt aufs Flipchart.
 
 | Was | Art | 8 | 12 | 16 | Hinweis |
 |---|---|---|---|---|---|
-| Karton 200–250 g, A4, laser-geeignet | kaufen | 11 Bogen | 11 Bogen | 18 Bogen | plus Reserve; Story 4: 4 / 4 / 4 Bogen (Stapel mit Zustandskarten), Story 5: 7 / 7 / 14 (Karten und Schilder) |
+| Karton 200–250 g, A4, laser-geeignet | kaufen | 12 Bogen | 12 Bogen | 20 Bogen | plus Reserve; Story 4: 4 / 4 / 4 Bogen (Stapel mit Zustandskarten), Story 5: 8 / 8 / 16 (Karten und Schilder, das Hotel-Schild als zwei einseitige Bogen). Mit Karton-Duplex einer weniger pro Gruppe: 11 / 11 / 18 |
 | Papier 80 g, A4 | Büro | 2 Bogen | 2 Bogen | 2 Bogen | Trainer-Skripte Story 4 und 5 (je ein Blatt beidseitig) |
 | A3-Papier (optional) | Büro | 1 | 1 | 1 | nur mit A3-Drucker, sonst das Circuit-Breaker-Board aus Story 4 als 2× A4 |
 | Schere oder Schneidemaschine, Lineal | Büro | 1 | 1 | 1 | Karten nur schneiden, nichts falzen |

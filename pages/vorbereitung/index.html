@@ -143,6 +143,10 @@
             padding: 0.25rem 0.25rem 1rem 0;
         }
         .prep-side:empty { display: none; }
+        @media (max-width: 900px) {
+            .layout { grid-template-columns: minmax(0, 1fr); }
+            .prep-side { position: static; max-height: none; }
+        }
         .side-title { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #5B4E93; margin: 0.5rem 0 0.4rem; }
         .side-progress { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 0.3rem; }
         .side-progress span { font-weight: 400; color: #5B4E93; }

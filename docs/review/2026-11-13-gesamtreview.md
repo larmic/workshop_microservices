@@ -39,6 +39,8 @@ Geprüft wurden Folien, Dashboard, Story- und Fragen-Docs, Materialliste und Dru
 
 Fehler, die im Workshop auffallen oder etwas Falsches lehren.
 
+> **Stand 13.11.:** U1 bis U7 sind erledigt. U3 als Textänderung: Dashboard und Story-Doc sagen jetzt, dass das Story-5-Panel den Breaker nicht zeigt. Ein eigenes Breaker-Raster bleibt offen.
+
 | Nr. | Bereich | Befund | Wo | Vorschlag | Aufwand |
 |---|---|---|---|---|---|
 | U1 | Vorbereitung | **Seite auf dem Handy kaputt.** Die Inhaltsspalte hat bei 390 und 320 px Breite 0 px, der Text läuft buchstabenweise am Rand. Die Datei hat keine einzige `@media`-Regel. Teilnehmer öffnen die Seite vorab oft am Handy. | `pages/vorbereitung/index.html:136` | Breakpoint aus `pages/material/index.html:291-294` übernehmen (unter 900 px einspaltig, Seitenleiste statisch). | klein |

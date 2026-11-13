@@ -52,7 +52,7 @@ Note:
   - &bdquo;Ihr hinten, worauf wartet ihr?&ldquo; Auf einen Stuhl. Dabei wollt ihr zuerst nur zu Flight, und Flight ist gesund.
   - &bdquo;Flight, Car, wie viele kamen an?&ldquo; 6 und 4.
   - &bdquo;Hat der Breaker etwas gemerkt?&ldquo; Nein: 2 s liegen unter 3 s Timeout, CLOSED.
-  - &bdquo;Karte 14, wann stehst du auf?&ldquo; Bei 26, also 6 s nach dem Ankommen. Genau der Timeout.
+  - &bdquo;Karte 14, wann stehst du auf?&ldquo; Bei 26, also 6 s nach dem Ankommen. Das Doppelte des Timeouts, der Client w&auml;re l&auml;ngst weg.
 - <strong>Die Wand:</strong> Z&auml;hler merken, dann auf 0. Alle Karten auf den Tisch, alle neu anstellen.
   - Wand zwischen die St&uuml;hle schieben: &bdquo;Dieselben zwei St&uuml;hle, nur mit einer Wand.&ldquo; Hotel auf die eine Seite, Flight und Car auf die andere.
   - Zusatzregel erkl&auml;ren, dann Vorhersage: Wie viele der elf bekommen Hotels?
