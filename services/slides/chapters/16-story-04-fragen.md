@@ -2,7 +2,12 @@
 
 <p class="kicker">Story 4 &middot; Recap</p>
 
+<div class="page-head">
+
 ## Vier Fragen an euch
+
+<span class="badge">Und jetzt schreiben &darr;</span>
+</div>
 
 <div class="page-body">
 
