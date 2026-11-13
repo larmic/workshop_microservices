@@ -28,5 +28,9 @@ tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 (cd "$tmp" && npm pack --silent "marked@$MARKED_VERSION" >/dev/null && tar -xzf marked-*.tgz)
 mkdir -p "$(dirname "$TARGET")"
-cp "$tmp/package/marked.min.js" "$TARGET"
+# Bis Version 15 liegt der Browser-Build als marked.min.js im Paket, danach
+# als lib/marked.umd.js. Beide stellen das globale `marked` bereit.
+src="$tmp/package/marked.min.js"
+[ -f "$src" ] || src="$tmp/package/lib/marked.umd.js"
+cp "$src" "$TARGET"
 "$0" --check
