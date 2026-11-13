@@ -99,7 +99,7 @@ body.voxel .workshop-footer .footer-author .accent {
     white-space: nowrap;
     box-shadow: none;
 }
-body.voxel .feedback-link, body.voxel .rest-btn, body.voxel .bh-btn, body.voxel .source-btn,
+body.voxel .feedback-link, body.voxel .rest-btn, body.voxel .source-btn,
 body.voxel .stepper-nav-btn, body.voxel .panel-reset-btn, body.voxel .start-go-btn, body.voxel .btn,
 body.voxel .startup-actions button, body.voxel .trace-detective-solve button, body.voxel .hw-btn {
     display: inline-flex;
@@ -120,7 +120,7 @@ body.voxel .startup-actions button, body.voxel .trace-detective-solve button, bo
     box-shadow: var(--px4), var(--bevel);
     transition: none;
 }
-body.voxel .rest-btn:hover:not(:disabled), body.voxel .bh-btn:hover:not(:disabled),
+body.voxel .rest-btn:hover:not(:disabled),
 body.voxel .stepper-nav-btn:hover:not(:disabled), body.voxel .panel-reset-btn:hover:not(:disabled),
 body.voxel .btn:hover:not(:disabled), body.voxel .startup-actions button:hover,
 body.voxel .start-go-btn:hover, body.voxel .feedback-link:hover, body.voxel .source-btn:hover:not(.active):not(:disabled),
@@ -511,7 +511,6 @@ body.voxel .bh-bar::after {
         linear-gradient(var(--f) 3px, transparent 3px calc(100% - 3px), var(--f) 0);
 }
 body.voxel .bh-bar:has(.full)::after { --f: var(--error); }
-body.voxel .bh-btn.burst { background: var(--lava-bg); }
 
 /* Saga: Blockzustände */
 body.voxel .saga-stats { gap: 22px; font-size: 14px; }
@@ -771,3 +770,6 @@ body.voxel.vx-spawn .stepper-node.active::before { animation: vx-spawn 0.24s ste
 /* Spiel-Stories: Regelkasten und Leitsatz im Holz-Look */
 body.voxel .play-rule { background: #fff; color: var(--ink); border-radius: 0; box-shadow: inset 0 0 0 3px var(--wood-frame); }
 body.voxel .play-lead { color: var(--ink); font-weight: 800; }
+
+/* Größere Zeilen im Voxel-Look: Platz für vier Sagas wie in der Basis */
+body.voxel .saga-list { max-height: 560px; }

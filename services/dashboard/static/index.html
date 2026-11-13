@@ -147,37 +147,6 @@
         }
 
         /* Bulkhead Section */
-        .bh-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-        .bh-btn {
-            padding: 0.5rem 1rem;
-            border: 1.5px solid #7348E1;
-            border-radius: 6px;
-            background: #fff;
-            color: #7348E1;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-        .bh-btn:hover:not(:disabled) {
-            background: #7348E1;
-            color: #fff;
-        }
-        .bh-btn.burst {
-            border-color: #b3261e;
-            color: #b3261e;
-        }
-        .bh-btn.burst:hover:not(:disabled) {
-            background: #b3261e;
-            color: #fff;
-        }
-        .bh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .bh-result {
             font-size: 0.8rem;
             color: #555;
@@ -3840,7 +3809,7 @@ on receiveCompensationEvent(event):
             el.style.top = Math.max(4, r.top - nav.top - el.offsetHeight + 4) + "px";
             el.classList.add("show");
             clearTimeout(voxelBubbleTimer);
-            voxelBubbleTimer = setTimeout(() => { el.classList.remove("show"); el.textContent = ""; }, 4000);
+            voxelBubbleTimer = setTimeout(() => { el.classList.remove("show"); el.textContent = ""; el.style.left = el.style.top = ""; }, 4000);
         }
 
         // Merkt sich pro Schlüssel den letzten Zustand und lässt die Figur bei
