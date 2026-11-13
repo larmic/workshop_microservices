@@ -18,7 +18,7 @@
 <code>ACID nur lokal</code>
 </div>
 <div class="card">
-<h3>Forward + Kompensation</h3>
+<h3>Buchen + Kompensation</h3>
 <p>Pro Schritt zwei Operationen: buchen, und das fachliche Gegenst&uuml;ck dazu.</p>
 <code>POST &harr; DELETE</code>
 </div>
@@ -59,7 +59,8 @@ Note:
   - Geteilte DB hei&szlig;t geteiltes Schema und gemeinsames Deployment, also verteilter Monolith.
   - Im Workshop in-memory, bewusst reduziert.
 - <strong>Kompensation:</strong> fachliche Gegenbuchung (Storno, Gutschein), kein technisches Rollback.
-  - Forward darf scheitern, die Kompensation <em>muss</em> gelingen.
+  - Buchen darf scheitern, die Kompensation <em>muss</em> gelingen.
+  - Scheitert ein Schritt: r&uuml;ckw&auml;rts kompensieren (Backward Recovery) oder bei technischem Fehler wie <code>503</code> wiederholen (Forward Recovery). Unsere Referenz kann nur r&uuml;ckw&auml;rts, Story 7 spielt beides.
 - <strong>Orchestrator:</strong> eine von zwei Arten, die Saga zu koordinieren (Chris Richardson). Die Saga-Logik an einer Stelle, die Downstreams bleiben dumm. Choreografie, ohne Dirigent, kommt in Story 7.
 - <strong>Status:</strong> bei Fehler <code>COMPENSATING</code>, dann <code>FAILED</code>. Produktiv persistent (Recap 04).
 - <strong>Eventual Consistency:</strong> Flug gebucht, Hotel noch nicht. UI und E-Mail m&uuml;ssen das aushalten.
