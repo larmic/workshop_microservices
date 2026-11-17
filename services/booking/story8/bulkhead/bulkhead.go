@@ -3,8 +3,11 @@ package bulkhead
 import (
 	"context"
 	"errors"
-	"log"
+	"fmt"
+	"log/slog"
 	"sync/atomic"
+
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 var ErrBulkheadFull = errors.New("bulkhead is full")
@@ -59,8 +62,8 @@ func (b *Bulkhead) Execute(ctx context.Context, fn func(context.Context) error) 
 	case b.sem <- struct{}{}:
 	default:
 		b.totalRejected.Add(1)
-		log.Printf("BH[%s] FULL — Call REJECTED (inProgress=%d/%d)",
-			b.cfg.Name, b.inProgress.Load(), b.cfg.MaxConcurrent)
+		tracing.Logger(ctx).Info(fmt.Sprintf("BH[%s] FULL — Call REJECTED (inProgress=%d/%d)",
+			b.cfg.Name, b.inProgress.Load(), b.cfg.MaxConcurrent))
 		return ErrBulkheadFull
 	}
 
@@ -79,7 +82,7 @@ func (b *Bulkhead) Execute(ctx context.Context, fn func(context.Context) error) 
 func (b *Bulkhead) Reset() {
 	b.totalCalls.Store(0)
 	b.totalRejected.Store(0)
-	log.Printf("BH[%s] counters reset", b.cfg.Name)
+	slog.Info(fmt.Sprintf("BH[%s] counters reset", b.cfg.Name))
 }
 
 func (b *Bulkhead) Snapshot() Snapshot {

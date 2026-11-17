@@ -1,13 +1,18 @@
 package handler
 
 import (
-	"log"
 	"net/http"
+
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 func OpenapiHandler(spec []byte) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+		tracing.Logger(r.Context()).Info("request",
+			"method", r.Method,
+			"path", r.URL.Path,
+			"remote", r.RemoteAddr,
+		)
 		w.Header().Set("Content-Type", "text/yaml; charset=utf-8")
 		w.Write(spec)
 	}

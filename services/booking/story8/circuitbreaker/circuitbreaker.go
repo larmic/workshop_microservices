@@ -3,10 +3,13 @@ package circuitbreaker
 import (
 	"context"
 	"errors"
-	"log"
+	"fmt"
+	"log/slog"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/team-neusta-skills/workshop_microservices/shared/tracing"
 )
 
 type State int
@@ -91,36 +94,38 @@ func New(cfg Config) *CircuitBreaker {
 
 // Execute prüft den aktuellen State, lässt den Call passieren oder kürzt ab,
 // und protokolliert jede Entscheidung im Log — damit man im Workshop nachvollziehen
-// kann, warum der Breaker aktuell so handelt wie er handelt.
+// kann, warum der Breaker aktuell so handelt wie er handelt. Die Logzeilen tragen
+// trace_id und span_id des Requests, damit der Trace-Filter sie mit anzeigt.
 func (cb *CircuitBreaker) Execute(ctx context.Context, fn func(context.Context) error) error {
-	if !cb.allowRequest() {
+	logger := tracing.Logger(ctx)
+	if !cb.allowRequest(logger) {
 		cb.totalShortCircuits.Add(1)
 		return ErrCircuitOpen
 	}
 	cb.totalCalls.Add(1)
 	err := fn(ctx)
-	cb.recordResult(err)
+	cb.recordResult(logger, err)
 	return err
 }
 
-func (cb *CircuitBreaker) allowRequest() bool {
+func (cb *CircuitBreaker) allowRequest(logger *slog.Logger) bool {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
 
-	cb.maybePromoteFromOpenLocked()
+	cb.maybePromoteFromOpenLocked(logger)
 
 	if cb.state == Open {
 		remaining := time.Until(cb.openUntil).Round(time.Second)
-		log.Printf("CB[%s] state=OPEN — Call SHORT-CIRCUIT (noch %s bis HALF_OPEN)", cb.cfg.Name, remaining)
+		logger.Info(fmt.Sprintf("CB[%s] state=OPEN — Call SHORT-CIRCUIT (noch %s bis HALF_OPEN)", cb.cfg.Name, remaining))
 		return false
 	}
 
 	if cb.state == HalfOpen {
 		if cb.probeInFlight.CompareAndSwap(false, true) {
-			log.Printf("CB[%s] state=HALF_OPEN — Probe-Slot belegt, Call wird durchgelassen (Test ob Backend wieder gesund)", cb.cfg.Name)
+			logger.Info(fmt.Sprintf("CB[%s] state=HALF_OPEN — Probe-Slot belegt, Call wird durchgelassen (Test ob Backend wieder gesund)", cb.cfg.Name))
 			return true
 		}
-		log.Printf("CB[%s] state=HALF_OPEN — Probe-Call läuft bereits, weiterer Call SHORT-CIRCUIT", cb.cfg.Name)
+		logger.Info(fmt.Sprintf("CB[%s] state=HALF_OPEN — Probe-Call läuft bereits, weiterer Call SHORT-CIRCUIT", cb.cfg.Name))
 		return false
 	}
 
@@ -131,15 +136,15 @@ func (cb *CircuitBreaker) allowRequest() bool {
 // maybePromoteFromOpenLocked übernimmt die lazy Transition OPEN → HALF_OPEN, wenn
 // das Timeout abgelaufen ist. Wird sowohl von allowRequest als auch von Snapshot
 // aufgerufen, damit das Dashboard den State-Wechsel sieht, auch wenn keine Calls
-// reinkommen.
-func (cb *CircuitBreaker) maybePromoteFromOpenLocked() {
+// reinkommen. Aus Snapshot kommt kein Request, dann loggt sie ohne Trace.
+func (cb *CircuitBreaker) maybePromoteFromOpenLocked(logger *slog.Logger) {
 	if cb.state == Open && time.Now().After(cb.openUntil) {
-		log.Printf("CB[%s] OPEN-Timeout abgelaufen → Übergang zu HALF_OPEN", cb.cfg.Name)
-		cb.transitionLocked(HalfOpen, "open timeout elapsed")
+		logger.Info(fmt.Sprintf("CB[%s] OPEN-Timeout abgelaufen → Übergang zu HALF_OPEN", cb.cfg.Name))
+		cb.transitionLocked(logger, HalfOpen, "open timeout elapsed")
 	}
 }
 
-func (cb *CircuitBreaker) recordResult(err error) {
+func (cb *CircuitBreaker) recordResult(logger *slog.Logger, err error) {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
 
@@ -151,18 +156,18 @@ func (cb *CircuitBreaker) recordResult(err error) {
 		case HalfOpen:
 			cb.probeInFlight.Store(false)
 			cb.openUntil = time.Now().Add(cb.cfg.OpenTimeout)
-			log.Printf("CB[%s] Probe-Call FEHLGESCHLAGEN (err=%v) → zurück nach OPEN für %s",
-				cb.cfg.Name, err, cb.cfg.OpenTimeout)
-			cb.transitionLocked(Open, "probe failed in half-open")
+			logger.Info(fmt.Sprintf("CB[%s] Probe-Call FEHLGESCHLAGEN (err=%v) → zurück nach OPEN für %s",
+				cb.cfg.Name, err, cb.cfg.OpenTimeout))
+			cb.transitionLocked(logger, Open, "probe failed in half-open")
 		case Closed:
 			if cb.failures >= cb.cfg.FailureThreshold {
 				cb.openUntil = time.Now().Add(cb.cfg.OpenTimeout)
-				log.Printf("CB[%s] Fehler %d/%d (err=%v) — Schwellenwert erreicht → OPEN für %s",
-					cb.cfg.Name, cb.failures, cb.cfg.FailureThreshold, err, cb.cfg.OpenTimeout)
-				cb.transitionLocked(Open, "failure threshold reached")
+				logger.Info(fmt.Sprintf("CB[%s] Fehler %d/%d (err=%v) — Schwellenwert erreicht → OPEN für %s",
+					cb.cfg.Name, cb.failures, cb.cfg.FailureThreshold, err, cb.cfg.OpenTimeout))
+				cb.transitionLocked(logger, Open, "failure threshold reached")
 			} else {
-				log.Printf("CB[%s] Fehler %d/%d gezählt (state=CLOSED, err=%v)",
-					cb.cfg.Name, cb.failures, cb.cfg.FailureThreshold, err)
+				logger.Info(fmt.Sprintf("CB[%s] Fehler %d/%d gezählt (state=CLOSED, err=%v)",
+					cb.cfg.Name, cb.failures, cb.cfg.FailureThreshold, err))
 			}
 		}
 		return
@@ -171,20 +176,20 @@ func (cb *CircuitBreaker) recordResult(err error) {
 	switch cb.state {
 	case HalfOpen:
 		cb.probeInFlight.Store(false)
-		log.Printf("CB[%s] Probe-Call ERFOLGREICH → CLOSED (Backend gilt wieder als gesund, Fehlerzähler zurückgesetzt)",
-			cb.cfg.Name)
+		logger.Info(fmt.Sprintf("CB[%s] Probe-Call ERFOLGREICH → CLOSED (Backend gilt wieder als gesund, Fehlerzähler zurückgesetzt)",
+			cb.cfg.Name))
 		cb.failures = 0
-		cb.transitionLocked(Closed, "probe succeeded")
+		cb.transitionLocked(logger, Closed, "probe succeeded")
 	case Closed:
 		if cb.failures > 0 {
-			log.Printf("CB[%s] Erfolgreicher Call (state=CLOSED) — Fehlerzähler von %d auf 0 zurückgesetzt",
-				cb.cfg.Name, cb.failures)
+			logger.Info(fmt.Sprintf("CB[%s] Erfolgreicher Call (state=CLOSED) — Fehlerzähler von %d auf 0 zurückgesetzt",
+				cb.cfg.Name, cb.failures))
 		}
 		cb.failures = 0
 	}
 }
 
-func (cb *CircuitBreaker) transitionLocked(to State, reason string) {
+func (cb *CircuitBreaker) transitionLocked(logger *slog.Logger, to State, reason string) {
 	if cb.state == to {
 		return
 	}
@@ -192,7 +197,7 @@ func (cb *CircuitBreaker) transitionLocked(to State, reason string) {
 	cb.state = to
 	cb.lastStateChangeAt = time.Now()
 
-	log.Printf("CB[%s] STATE-CHANGE %s → %s (reason=%s)", cb.cfg.Name, from, to, reason)
+	logger.Info(fmt.Sprintf("CB[%s] STATE-CHANGE %s → %s (reason=%s)", cb.cfg.Name, from, to, reason))
 
 	cb.events = append(cb.events, Event{
 		Timestamp: cb.lastStateChangeAt,
@@ -209,7 +214,7 @@ func (cb *CircuitBreaker) Snapshot() Snapshot {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
 
-	cb.maybePromoteFromOpenLocked()
+	cb.maybePromoteFromOpenLocked(slog.Default())
 
 	s := Snapshot{
 		Name:               cb.cfg.Name,
