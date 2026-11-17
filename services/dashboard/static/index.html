@@ -970,6 +970,29 @@
         /* Hervorhebung dunkel und fett: Violett ist den Links vorbehalten */
         .story-info-body em { color: #0A0349; font-style: normal; font-weight: 700; }
         .story-info-body code { background: #EEE7FB; padding: 0.1em 0.35em; border-radius: 4px; }
+        /* Stempel „Rohbau“ (Story 1), wie auf der Folie: was bewusst fehlt */
+        .story-info-body .stamp {
+            float: right;
+            margin: 0.6rem 0.4rem 0.6rem 1.25rem;
+            transform: rotate(-4deg);
+            border: 3px solid #7348E1;
+            border-radius: 8px;
+            box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 4px #7348E1;
+            padding: 0.25rem 0.9rem 0.35rem;
+            color: #7348E1;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .story-info-body .stamp strong {
+            display: block;
+            font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            padding-left: 6px;
+            text-transform: uppercase;
+        }
+        .story-info-body .stamp span { display: block; font-size: 0.75rem; font-weight: 600; }
         .story-info-body a, .start-card a, .hw-help a, .story-start-hint a { color: #7348E1; }
         .story-info-body a:hover, .start-card a:hover, .hw-help a:hover, .story-start-hint a:hover { color: #0A0349; }
         :focus-visible { outline: 3px solid #7348E1; outline-offset: 2px; }
@@ -1708,6 +1731,7 @@ docker logs booking-custom                          # kein BEISPIEL-L&Ouml;SUNG-
                 <details class="story-info" open>
                     <summary>Aufgabe <span class="badge">User Story + Akzeptanzkriterien</span></summary>
                     <div class="story-info-body">
+                        <p class="stamp" role="img" aria-label="Rohbau: ohne Error-Handling, ohne Tests"><strong>Rohbau</strong><span>ohne Error-Handling &middot; ohne Tests</span></p>
                         <h4>Kontext</h4>
                         <p>Der erste Booking-Service: läuft auf dem Entwicklerrechner, in der Cloud, auf einem Raspberry Pi &mdash; überall gleich. Mit Health-Check (damit Probleme früh auffallen) und externer Konfiguration (damit ein Build in jeder Umgebung läuft).</p>
                         <h4>User Story</h4>

@@ -37,6 +37,7 @@
 <li>Backend-URLs aus Umgebungsvariablen: <code>FLIGHT_SERVICE_URL</code>, <code>HOTEL_SERVICE_URL</code>, <code>CAR_SERVICE_URL</code></li>
 </ul>
 </div>
+<p class="stamp" role="img" aria-label="Rohbau: ohne Error-Handling, ohne Tests"><strong>Rohbau</strong><span>ohne Error-Handling &middot; ohne Tests</span></p>
 </div>
 
 <ol class="story-path" aria-label="Ablauf">

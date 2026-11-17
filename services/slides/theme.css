@@ -639,6 +639,41 @@
 
 .reveal .story-path li.now code { background: rgba(255, 255, 255, 0.55); }
 
+/* Stempel „Rohbau“ (Story 1): was bewusst fehlt, sichtbar statt nur gesagt.
+   Sitzt unter den beiden Listen, die Story-Karte links reicht über beide
+   Zeilen. Violett statt Rot: Absicht, kein Fehler. */
+.reveal .story-grid .stamp {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    justify-self: center;
+    margin: 6px 0 0;
+    transform: rotate(-6deg);
+    border: 4px solid var(--box-border);
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 5px var(--box-border);
+    padding: 6px 22px 8px;
+    color: var(--box-border);
+    text-align: center;
+    line-height: 1.15;
+}
+
+.reveal .story-grid:has(> .stamp) > .story-user { grid-row: 1 / span 2; }
+
+.reveal .stamp strong {
+    display: block;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 9px;
+    padding-left: 9px;
+    text-transform: uppercase;
+}
+
+.reveal .stamp span {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+}
+
 .reveal .story-list a {
     color: var(--box-border);
     border-bottom: 1px solid var(--box-border);
