@@ -148,6 +148,9 @@
     Reveal.initialize({
         hash: true,
         slideNumber: 'c/t',
+        // Presenter-Sticks schicken oft Pfeil rechts/links statt Bild ab/auf.
+        // Linear läuft damit der Reihe nach auch durch die Unterfolien.
+        navigationMode: 'linear',
         transition: 'slide',
         controls: true,
         progress: true,
