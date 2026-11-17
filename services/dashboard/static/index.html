@@ -2385,7 +2385,7 @@ on incomingRequest(req):
   ctx = ctx.with(tc)
   next(req.withContext(ctx))
 
-// z. B. ohne eingehenden Header erzeugt Booking:
+// z. B. ohne eingehenden Header erzeugt Booking diesen traceparent:
 // 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
 //    trace-id (bleibt)                span-id (Booking) sampled</pre>
                             </li>
@@ -2397,7 +2397,7 @@ on incomingRequest(req):
   hop = tc.copy(spanId = randomSpanId())
   req.setHeader("traceparent", hop.toHeader())
 
-// an Flight, gleiche trace-id, neue span-id:
+// traceparent an Flight, gleiche trace-id, neue span-id:
 // 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01</pre>
                             </li>
                             <li>

@@ -13,11 +13,11 @@
 <div>  tc  = parse(req.header("traceparent")) ?: <span class="hi">generateNew()</span></div>
 <div>  res.setHeader("traceparent", tc.toHeader())  <span class="dim">// zur&uuml;ck zum Client</span></div>
 <div>  ctx = ctx.with(tc)</div>
-<div class="dim">  // z. B. 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01</div>
+<div class="dim">  // traceparent: 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01</div>
 <div class="gap k">on outgoingRequest(ctx, req):                  <span class="dim">// 2 pro Hop</span></div>
 <div>  hop = ctx.tc.copy(spanId = <span class="hi">randomSpanId()</span>)  <span class="dim">// neue Span, gleiche Trace</span></div>
 <div>  req.setHeader("traceparent", hop.toHeader())</div>
-<div class="dim">  // an Flight: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01</div>
+<div class="dim">  // traceparent an Flight: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01</div>
 <div class="gap k">log.info("flight booked", <span class="hi">trace_id</span>: ctx.tc.traceId)   <span class="dim">// 3 jede Zeile</span></div>
 <div class="dim">  // {"msg":"flight booked","trace_id":"0af7651916cd43dd8448eb211c80319c"}</div>
 <div class="gap k">event = { eventId, sagaId, <span class="hi">traceparent</span>: ctx.tc.toHeader() }   <span class="dim">// 4 Async-Grenze (Bonus)</span></div>
