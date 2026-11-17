@@ -2383,7 +2383,11 @@ on incomingRequest(req):
   tc = parse(req.header("traceparent")) ?: generateNew()
   res.header("traceparent") = tc.toHeader()    // zurück zum Client
   ctx = ctx.with(tc)
-  next(req.withContext(ctx))</pre>
+  next(req.withContext(ctx))
+
+// z. B. ohne eingehenden Header erzeugt Booking:
+// 00-0af7651916cd43dd8448eb211c80319c-00f067aa0ba902b7-01
+//    trace-id (bleibt)                span-id (Booking) sampled</pre>
                             </li>
                             <li>
                                 <h4>Header weitergeben</h4>
@@ -2391,7 +2395,10 @@ on incomingRequest(req):
 <pre>on outgoingRequest(ctx, req):
   tc = ctx.get(TraceContext)
   hop = tc.copy(spanId = randomSpanId())
-  req.setHeader("traceparent", hop.toHeader())</pre>
+  req.setHeader("traceparent", hop.toHeader())
+
+// an Flight, gleiche trace-id, neue span-id:
+// 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01</pre>
                             </li>
                             <li>
                                 <h4>Auch bei der Kompensation</h4>
@@ -2403,7 +2410,10 @@ on incomingRequest(req):
                                 <h4>trace_id in jede Logzeile</h4>
                                 <p>Strukturiert loggen, damit der Filter die Zeilen findet.</p>
 <pre>log.info("forward step done",
-  trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")</pre>
+  trace_id: ctx.tc.traceId, span_id: ctx.tc.spanId, step: "flight")
+
+// {"msg":"forward step done","trace_id":"0af7651916cd43dd8448eb211c80319c",
+//  "span_id":"00f067aa0ba902b7","step":"flight"}</pre>
                             </li>
                             <li>
                                 <h4>Bonus: Trace im Event</h4>
