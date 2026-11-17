@@ -149,8 +149,9 @@
         hash: true,
         slideNumber: 'c/t',
         // Presenter-Sticks schicken oft Pfeil rechts/links statt Bild ab/auf.
-        // Linear läuft damit der Reihe nach auch durch die Unterfolien.
-        navigationMode: 'linear',
+        // Beide Pfeiltasten laufen der Reihe nach, auch durch die Unterfolien.
+        // Nicht navigationMode 'linear': Das blendet die Pfeile hoch/runter aus.
+        keyboard: { 37: 'prev', 39: 'next' },
         transition: 'slide',
         controls: true,
         progress: true,
