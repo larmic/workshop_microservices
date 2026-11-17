@@ -33,8 +33,8 @@
 <div class="story-list">
 <h4>Die Logs</h4>
 <ul>
-<li>Jede Logzeile eures Booking-Service tr&auml;gt die <code>trace_id</code>, Flight, Hotel und Car k&ouml;nnen das schon</li>
-<li>Strukturiert als JSON, <code>trace_id</code> ist ein eigenes Feld</li>
+<li>Jede Logzeile eures Booking-Service tr&auml;gt <code>trace_id</code> und <code>span_id</code>, Flight, Hotel und Car k&ouml;nnen das schon</li>
+<li>Strukturiert als JSON, <code>trace_id</code> und <code>span_id</code> sind eigene Felder</li>
 </ul>
 <h4>Sichtbarkeit</h4>
 <ul>

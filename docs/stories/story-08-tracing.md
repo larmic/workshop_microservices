@@ -160,7 +160,7 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
 - **Story 1 (Logs):** Logs werden mit Trace-IDs angereichert — die
   „eine Logzeile pro Aktion"-Praxis bekommt damit ihren roten Faden.
 - **Story 4/5 (CB, Bulkhead):** In der Referenz tragen CB- und
-  Bulkhead-Rejects die `trace_id`. Bei euch wäre das die Stelle, an der
+  Bulkhead-Rejects `trace_id` und `span_id`. Bei euch wäre das die Stelle, an der
   das Board aus Story 4 und die Stühle aus Story 5 geloggt würden.
 - **Story 6 (Saga):** Erst mit Tracing sieht man die Saga als
   zusammenhängende Operation, nicht als Fragmente in mehreren
