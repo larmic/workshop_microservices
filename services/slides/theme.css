@@ -2867,3 +2867,12 @@
 .reveal table.knobs code {
     white-space: nowrap;
 }
+
+/* Zwischenzeile je Pattern (Breaker, Bulkhead) */
+.reveal table.knobs tr.knob-group td {
+    background: var(--wave);
+    color: var(--box-border);
+    font-size: 15px;
+    font-weight: 700;
+    padding: 0.25em 0.75em;
+}
