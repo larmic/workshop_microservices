@@ -60,11 +60,11 @@ Events, Circuit Breaker oder Bulkhead braucht ihr nicht.
   weitergereicht: Buchung (`POST /bookings` an Flight, Hotel, Car) und
   Kompensation (`DELETE /bookings/{id}`). Pro Aufruf eine neue Span-ID, die
   Trace-ID bleibt
-- [ ] Jede Logzeile eures Booking-Service enthält die Trace-ID. Flight,
+- [ ] Jede Logzeile eures Booking-Service enthält Trace-ID und Span-ID. Flight,
   Hotel und Car übernehmen einen eintreffenden `traceparent` schon und
   loggen ihn
-- [ ] Logs sind strukturiert (JSON), damit `trace_id` ein eigenes Feld
-  ist und nicht in einem freien Textstring versteckt liegt
+- [ ] Logs sind strukturiert (JSON), damit `trace_id` und `span_id` eigene
+  Felder sind und nicht in einem freien Textstring versteckt liegt
 - [ ] Ein Filter zeigt den vollständigen Ablauf einer Buchung,
   Buchung **und** Kompensation:
   `docker compose logs --no-log-prefix booking-custom flight hotel car | jq -cR 'fromjson? | select(.trace_id=="<trace-id>")'`
@@ -100,10 +100,10 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
   (gleiche Trace-ID). Einen vollwertigen Span-Baum mit Parent-Child-
   Verknüpfung zu bauen ist für die Zeit zu viel — bewusst weglassen.
   Den Baum liefert später ein SDK wie OpenTelemetry, das kommt im Recap.
-- **Strukturiertes Logging:** `trace_id` gehört als eigenes Feld in eine
+- **Strukturiertes Logging:** `trace_id` und `span_id` gehören als eigene Felder in eine
   JSON-Logzeile, nicht in einen freien Textstring. Dann filtert `jq` sie
   heraus. Wie das geht, hängt vom Stack ab: in Go `slog` mit
-  `slog.String("trace_id", ...)`, in Java Logback oder Log4j mit
+  `slog.String("trace_id", ...)` und `slog.String("span_id", ...)`, in Java Logback oder Log4j mit
   JSON-Encoder und der ID im MDC, in Node ein JSON-Logger wie `pino`
   oder schlicht `console.log(JSON.stringify(...))`.
 - **Kontext durchreichen:** Die ID muss vom eingehenden Request bis zum
