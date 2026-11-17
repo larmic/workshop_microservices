@@ -22,12 +22,12 @@
 <p>API-Vertr&auml;ge, Breaking Changes, zwei Versionen parallel betreiben.</p>
 </div>
 <div class="card">
-<h3>Polyglot Persistence</h3>
-<p>Eine Datenbank pro Service, und wie die Daten zwischen ihnen wandern.</p>
+<h3>Synchron vs. Asynchron</h3>
+<p>Wann Request/Response, wann Event? Zeitliche Kopplung, Queues, Backpressure. Story 7 hat es nur gestreift.</p>
 </div>
 <div class="card">
-<h3>CQRS / Event Sourcing</h3>
-<p>Lese- und Schreibmodell trennen. Events als Quelle der Wahrheit.</p>
+<h3>Daten &uuml;ber Service-Grenzen</h3>
+<p>Eine Datenbank pro Service, CQRS, Event Sourcing.</p>
 </div>
 <div class="card">
 <h3>Observability als Disziplin</h3>
@@ -41,6 +41,7 @@
 
 Note:
 - Das ist der Eisberg vom ersten Vormittag (Folie &bdquo;Zwei Fragen&ldquo;), hier die gr&ouml;&szlig;ten Brocken unter Wasser.
+- <strong>Synchron vs. Asynchron:</strong> Timeout, Breaker und Bulkhead sind die Rechnung f&uuml;r synchrone Aufrufe. Wer asynchron entkoppelt, zahlt mit Eventual Consistency und einem Broker, siehe Story 7.
 - Jeder Punkt verdient seinen eigenen Tag. Wir hatten zwei. Br&uuml;cke zu Folgeterminen und weiterf&uuml;hrenden Workshops.
 - Service-Schnitt kam im Feedback als Wunsch nach Aufgaben ohne Coding. Kandidat f&uuml;r eine 30-Minuten-&Uuml;bung am ersten Tag beim n&auml;chsten Durchlauf.
 - Auch nicht als eigenes Thema: Timeouts und Retry mit Backoff. Timeout kam in Story 4 vor, Retry als Forward Recovery in Story 7.
