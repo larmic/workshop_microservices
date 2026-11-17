@@ -18,8 +18,9 @@
 <div>  out = ctx.tc.copy(spanId = <span class="hi">randomSpanId()</span>)  <span class="dim">// neue Span, gleiche Trace</span></div>
 <div>  req.setHeader("traceparent", out.toHeader())</div>
 <div class="dim">  // traceparent an Flight: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01</div>
-<div class="gap k">log.info("flight booked", <span class="hi">trace_id</span>: ctx.tc.traceId)   <span class="dim">// 3 jede Zeile</span></div>
-<div class="dim">  // {"msg":"flight booked","trace_id":"0af7651916cd43dd8448eb211c80319c"}</div>
+<div class="gap k">log.info("flight booked",                       <span class="dim">// 3 jede Zeile</span></div>
+<div>  <span class="hi">trace_id</span>: ctx.tc.traceId, <span class="hi">span_id</span>: ctx.tc.spanId)</div>
+<div class="dim">  // trace_id=0af7651916cd43dd8448eb211c80319c span_id=00f067aa0ba902b7</div>
 <div class="gap k">event = { eventId, sagaId, <span class="hi">traceparent</span>: ctx.tc.toHeader() }   <span class="dim">// 4 Async-Grenze (Bonus)</span></div>
 <div>on receiveEvent(event):</div>
 <div>  ctx = bgCtx.with(parse(event.traceparent) ?: generateNew())</div>
