@@ -17,13 +17,13 @@
 <div class="steps-col">
 <h4>Rollen</h4>
 <ol>
-<li><strong>Booking</strong> ruft Nummern, gibt Karten aus, f&uuml;hrt das Board.</li>
+<li><strong>Booking</strong> zieht die oberste Karte, sagt ihre Nummer, gibt sie weiter, f&uuml;hrt das Board.</li>
 <li><strong>Alle anderen</strong> sind Requests in der Schlange.</li>
 </ol>
 </div>
 <div class="steps-col">
 <h4>So l&auml;uft jede Karte</h4>
-<p class="step-rule big">Nummer rufen, warten, Antwort vorlesen, ablegen, hinten anstellen.</p>
+<p class="step-rule big">Karte bekommen, warten, Antwort vorlesen, ablegen, hinten anstellen.</p>
 <p class="step-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
 </div>
 </div>
@@ -36,7 +36,7 @@ Note:
 - <strong>Hook:</strong> &bdquo;Story 3 hat uns Services finden lassen. Jetzt haben wir einen gefunden, und er antwortet nicht.&ldquo;
 - <strong>Setup:</strong> Ab 4 Personen, derselbe Stapel f&uuml;r jede Gruppengr&ouml;&szlig;e. Booking bekommt Stapel 01&ndash;27 (01 oben) und die drei Zustandskarten, keine Legende. Das Board kommt erst mit STOPP 1. Ein Tisch, ein Haufen. Der Trainer spielt nicht mit, er sagt die Regeln an und leitet die STOPPs. Kartentabelle: Trainer-Skript auf der Materialseite.
 - <strong>Regeln ansagen</strong>, bei jeder Karte in dieser Reihenfolge:
-  - Booking ruft die Nummer und gibt die Karte dem N&auml;chsten in der Schlange. Die n&auml;chste erst, wenn die vorige liegt.
+  - Booking zieht die oberste Karte, sagt ihre Nummer und gibt sie dem N&auml;chsten in der Schlange. Die n&auml;chste erst, wenn die vorige liegt.
   - Warten, was auf der Karte steht. Bei &bdquo;5 s&ldquo; oder &bdquo;3 s&ldquo; laut z&auml;hlen: &bdquo;einundzwanzig, zweiundzwanzig, dreiundzwanzig&ldquo;. Bei &bdquo;sofort&ldquo; nicht.
   - Die Antwort laut vorlesen.
   - Karte ablegen, hinten anstellen. Wei&szlig;e Karten kommen auf den Haufen.

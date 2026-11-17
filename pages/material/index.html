@@ -448,7 +448,7 @@
     <div class="two">
         <div>
             <ol class="box">
-                <li><strong>Booking ruft die Nummer</strong> und gibt die Karte dem N&auml;chsten in der Schlange. Die n&auml;chste erst, wenn die vorige liegt.</li>
+                <li><strong>Booking zieht die oberste Karte</strong>, sagt ihre Nummer und gibt sie dem N&auml;chsten in der Schlange. Die n&auml;chste erst, wenn die vorige liegt.</li>
                 <li><strong>Warten, was auf der Karte steht.</strong> Bei &bdquo;5&nbsp;s&ldquo; oder &bdquo;3&nbsp;s&ldquo; laut z&auml;hlen: &bdquo;einundzwanzig, zweiundzwanzig, dreiundzwanzig&ldquo;. Bei &bdquo;sofort&ldquo; nicht.</li>
                 <li><strong>Die Antwort laut vorlesen.</strong></li>
                 <li><strong>Karte ablegen, hinten anstellen.</strong> Wei&szlig;e Karten kommen auf den Haufen.</li>
@@ -640,7 +640,7 @@ const FORMAT = { a4p: "A4 hoch", a4l: "A4 quer", a3l: "A3 quer" };
 // Antworten wie services/booking/story3 (Timeout 5 s, Abbruch) und story4 (Timeout 3 s, Fallback, Breaker); 200 und X-Fallback zeigt die Demo.
 // after: wohin die Karte geht und Board/Zustand danach (Trainer-Skript Seite 2)
 const S4_TXT = {
-    fail: ["500", "keine Hotels, keine Autos"],
+    fail: ["500", "Flight hängt, Hotel + Car weg"],
     fb:   ["flights: []", "Hotel + Car da"],
     co:   ["flights: []", "+ X-Circuit-Open"],
     ok:   ["alles da", "Flight, Hotel, Car"]
@@ -678,7 +678,7 @@ const S4_DECK = [
 ];
 // Durchlauf mit 10 Personen (Booking, Requests P1–P9): Karte, an, was passiert, Board, Zustand danach
 const S4_WALK = [
-    ["01–03", "P1, P2, P3", "5 s zählen, „500, keine Hotels, keine Autos“, Haufen", "–", "kein Breaker"],
+    ["01–03", "P1, P2, P3", "5 s zählen, „500, Flight hängt, Hotel + Car weg“, Haufen", "–", "kein Breaker"],
     ["04", "Trainer", "STOPP 1. Booking legt das Board hin, CLOSED", "0/5", "CLOSED"],
     ["05", "P4", "3 s, „flights: [], Hotel + Car da“, rot: Platz 1", "1/5", "CLOSED"],
     ["06–08", "P5, P6, P7", "wie 05, Plätze 2–4", "4/5", "CLOSED"],

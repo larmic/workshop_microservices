@@ -36,14 +36,14 @@ Spielbar ab vier Personen (Booking und drei Requests, damit während der Probe z
 ### Rollen
 
 1. **Der Trainer** spielt keine Rolle. Er erklärt die Regeln, nimmt die STOPP-Karten, leitet das Gespräch und sagt „30 Sekunden sind um".
-2. **Booking** ist eine Person. Sie hält den Stapel 01–27 und die drei Zustandskarten, ruft die Nummer und gibt die Karte dem Nächsten. Booking schaut aufs Board, ruft „OPEN!", tauscht die Zustandskarte und räumt ab. Sonst liest Booking nichts vor.
+2. **Booking** ist eine Person. Sie hält den Stapel 01–27 und die drei Zustandskarten, zieht die oberste Karte, sagt ihre Nummer und gibt sie dem Nächsten. Booking schaut aufs Board, ruft „OPEN!", tauscht die Zustandskarte und räumt ab. Sonst liest Booking nichts vor.
 3. **Alle anderen** sind Requests auf `GET /booking/offers` und stehen in einer Schlange vor Booking. Flight, Hotel und Car spielt niemand, ihr Verhalten steht auf den Karten.
 
 ### Die Regeln
 
 Der Trainer sagt sie am Anfang einmal (stehen auch auf Folie 15 und im Dashboard). Bei jeder Karte, immer in dieser Reihenfolge:
 
-1. **Booking ruft die Nummer** und gibt die Karte dem Nächsten in der Schlange. Die nächste erst, wenn die vorige liegt.
+1. **Booking zieht die oberste Karte**, sagt ihre Nummer und gibt sie dem Nächsten in der Schlange. Die nächste erst, wenn die vorige liegt.
 2. **Warten, was auf der Karte steht.** Bei „5 s" oder „3 s" laut zählen: „einundzwanzig, zweiundzwanzig, dreiundzwanzig". Bei „sofort" nicht.
 3. **Die Antwort laut vorlesen.**
 4. **Karte ablegen, hinten anstellen.** Weiße Karten kommen auf den Haufen.
@@ -60,7 +60,7 @@ Weil die gelbe Karte zuerst aufs Probe-Feld kommt, liegt sie schon: Booking gibt
 
 | Karte | Farbe | Wartezeit | Vorlesen | Danach |
 |---|---|---|---|---|
-| 01–03 | weiß | 5 s | „500, keine Hotels, keine Autos" | Haufen. Noch kein Breaker, das Board liegt noch nicht |
+| 01–03 | weiß | 5 s | „500, Flight hängt, Hotel + Car weg" | Haufen. Noch kein Breaker, das Board liegt noch nicht |
 | 04 | dunkel | – | STOPP 1 | Trainer. Booking legt das Board hin, CLOSED |
 | 05–09 | rot | 3 s | „`flights: []`, Hotel + Car da" | Board, Platz 1–5. Bei 09 ruft Booking „OPEN!" |
 | 10–12 | weiß | sofort | „`flights: []` + `X-Circuit-Open`" | Haufen |
@@ -81,7 +81,7 @@ Booking und die Requests P1 bis P9.
 
 | Karte | an | Was passiert | Board | Zustand danach |
 |---|---|---|---|---|
-| 01–03 | P1, P2, P3 | 5 s zählen, „500, keine Hotels, keine Autos", Haufen | – | kein Breaker |
+| 01–03 | P1, P2, P3 | 5 s zählen, „500, Flight hängt, Hotel + Car weg", Haufen | – | kein Breaker |
 | 04 | Trainer | STOPP 1. Booking legt das Board hin, CLOSED | 0/5 | CLOSED |
 | 05 | P4 | 3 s, „`flights: []`, Hotel + Car da", rot: Platz 1 | 1/5 | CLOSED |
 | 06–08 | P5, P6, P7 | wie 05, Plätze 2–4 | 4/5 | CLOSED |
