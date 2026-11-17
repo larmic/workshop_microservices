@@ -60,7 +60,7 @@ Events, Circuit Breaker oder Bulkhead braucht ihr nicht.
   weitergereicht: Buchung (`POST /bookings` an Flight, Hotel, Car) und
   Kompensation (`DELETE /bookings/{id}`). Pro Aufruf eine neue Span-ID, die
   Trace-ID bleibt
-- [ ] Jede Logzeile eures Booking-Service enthält Trace-ID und Span-ID. Flight,
+- [ ] Jede Logzeile eures Booking-Service, die zu einer Anfrage gehört, enthält Trace-ID und Span-ID. Flight,
   Hotel und Car übernehmen einen eintreffenden `traceparent` schon und
   loggen ihn
 - [ ] Logs sind strukturiert (JSON), damit `trace_id` und `span_id` eigene

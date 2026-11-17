@@ -2356,7 +2356,7 @@ POST /admin/sagas-reset   &rarr; 204, leert die Liste</pre>
                                 Trace-ID daraus.</li>
                             <li>Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call weitergereicht: Buchung
                                 (<code>POST /bookings</code>) und Kompensation (<code>DELETE /bookings/{id}</code>).</li>
-                            <li>Jede Logzeile eures Booking-Service enthält Trace-ID und Span-ID. Flight, Hotel und Car übernehmen
+                            <li>Jede Logzeile eures Booking-Service, die zu einer Anfrage gehört, enthält Trace-ID und Span-ID. Flight, Hotel und Car übernehmen
                                 einen eintreffenden <code>traceparent</code> schon und loggen ihn.</li>
                             <li>Logs sind strukturiert (JSON), damit <code>trace_id</code> und <code>span_id</code> eigene Felder sind.</li>
                             <li>Der Filter aus dem Panel zeigt den vollständigen Ablauf einer Buchung, Hinweg
