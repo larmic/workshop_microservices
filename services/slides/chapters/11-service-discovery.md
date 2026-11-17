@@ -37,7 +37,6 @@
 <h3>Am Markt</h3>
 <div class="pills">
 <span class="pill brand">HashiCorp Consul</span>
-<span class="pill">Kubernetes / CoreDNS</span>
 <span class="pill">Netflix Eureka</span>
 <span class="pill">AWS Cloud Map</span>
 <span class="pill">Apache Zookeeper</span>
