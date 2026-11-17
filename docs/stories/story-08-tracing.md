@@ -58,7 +58,7 @@ Events, Circuit Breaker oder Bulkhead braucht ihr nicht.
   Client, Dashboard und Support die Trace-ID kennen
 - [ ] Der Trace-Kontext wird auf jedem ausgehenden HTTP-Call
   weitergereicht: Buchung (`POST /bookings` an Flight, Hotel, Car) und
-  Kompensation (`DELETE /bookings/{id}`). Pro Hop eine neue Span-ID, die
+  Kompensation (`DELETE /bookings/{id}`). Pro Aufruf eine neue Span-ID, die
   Trace-ID bleibt
 - [ ] Jede Logzeile eures Booking-Service enthält die Trace-ID. Flight,
   Hotel und Car übernehmen einen eintreffenden `traceparent` schon und
@@ -96,7 +96,7 @@ Service ganz, reicht ein Stub mit einem Endpoint, der Flight aufruft.
   man den Mechanismus dadurch wirklich. Eine fertige Library (z.B.
   OpenTelemetry) würde den Lerneffekt verstecken und ist außerdem stark
   Sprach- und Tool-abhängig.
-- **Span-Konzept:** Pro Outbound-Hop eine neue Span-ID generieren
+- **Span-Konzept:** Pro ausgehendem Aufruf eine neue Span-ID generieren
   (gleiche Trace-ID). Einen vollwertigen Span-Baum mit Parent-Child-
   Verknüpfung zu bauen ist für die Zeit zu viel — bewusst weglassen.
   Den Baum liefert später ein SDK wie OpenTelemetry, das kommt im Recap.

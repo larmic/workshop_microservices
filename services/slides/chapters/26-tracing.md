@@ -23,9 +23,9 @@
 <code>Span-ID: 8 Byte, 16 hex</code>
 </div>
 <div class="card">
-<h3>Hop</h3>
+<h3>Weitergabe</h3>
 <p>Der &Uuml;bergang von Service zu Service. Neue Span-ID, gleiche Trace-ID.</p>
-<code>Booking &rarr; Flight = 1 Hop</code>
+<code>Booking &rarr; Flight = neue Span-ID</code>
 </div>
 <div class="card">
 <h3>traceparent</h3>
@@ -57,7 +57,7 @@
 Note:
 - <strong>Trace:</strong> Sendungsverfolgung &uuml;ber mehrere Lieferdienste. Die Trace-ID bleibt &uuml;berall gleich.
 - <strong>Span:</strong> Eigene ID plus Parent ergibt im SDK den Wasserfall. Wir bauen keinen Span-Baum.
-- <strong>Hop:</strong> Pro Hop eine frische Span-ID als parent-id in den Header. Der Empf&auml;nger sieht sie als Parent.
+- <strong>Weitergabe:</strong> Pro ausgehendem Aufruf eine frische Span-ID als parent-id in den Header. Der Empf&auml;nger sieht sie als Parent. Im Netzwerk-Jargon hei&szlig;t das oft &bdquo;Hop&ldquo;, ist aber kein Feld und kein Z&auml;hler.
 - <strong>traceparent:</strong> parent-id ist die Span-ID dieses Aufrufs. Nur-Nullen ung&uuml;ltig, <code>crypto/rand</code>: IDs sollen unvorhersagbar sein.
 - <strong>Sampling-Flag:</strong> Der Entry-Point entscheidet, alle anderen folgen, damit ein Trace ganz oder gar nicht aufgezeichnet wird. Gesampelt hei&szlig;t in der Stichprobe. Bei <code>00</code> misst niemand, der Header wird nur weitergereicht. Die Referenz setzt immer <code>01</code>.
 - Am Markt: OpenTelemetry ist Standard, dazu Jaeger, Tempo, SaaS. Wir bauen die Propagation selbst, gut 120 Zeilen.

@@ -2394,8 +2394,8 @@ on incomingRequest(req):
                                 <p>Pro ausgehendem Aufruf eine neue Span-ID, die Trace-ID bleibt gleich.</p>
 <pre>on outgoingRequest(ctx, req):
   tc = ctx.get(TraceContext)
-  hop = tc.copy(spanId = randomSpanId())
-  req.setHeader("traceparent", hop.toHeader())
+  out = tc.copy(spanId = randomSpanId())
+  req.setHeader("traceparent", out.toHeader())
 
 // traceparent an Flight, gleiche trace-id, neue span-id:
 // 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01</pre>

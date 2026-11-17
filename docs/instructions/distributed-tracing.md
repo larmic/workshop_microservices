@@ -16,11 +16,11 @@
 
 | Begriff | Bedeutung |
 |---|---|
-| **Trace** | Ein kompletter Geschäftsvorgang über alle Services hinweg. Eine **Trace-ID** (16 Byte / 32 hex), die für alle Hops identisch bleibt. |
+| **Trace** | Ein kompletter Geschäftsvorgang über alle Services hinweg. Eine **Trace-ID** (16 Byte / 32 hex), die für alle Aufrufe identisch bleibt. |
 | **Span** | Ein einzelner Arbeitsabschnitt im Trace — HTTP-Call, DB-Query, Funktionsausführung. Eigene **Span-ID** (8 Byte / 16 hex). Mit der Parent-Span-ID entsteht ein Baum, den Jaeger, Tempo oder Datadog als Wasserfall mit Dauer pro Span zeigen. Im Workshop bauen wir bewusst nur die Trace-Korrelation, keinen Span-Baum. |
-| **Hop** | Service-zu-Service-Übergang. Pro Hop **neue Span-ID**, **gleiche Trace-ID**. |
+| **Weitergabe** | Ein ausgehender Aufruf von Service zu Service (Netzwerk-Jargon: „Hop“). Pro Aufruf **neue Span-ID**, **gleiche Trace-ID**. Kein eigenes Feld im Header, kein Zähler. |
 | **`traceparent`** | Der W3C-Header. Vier Felder mit festen Längen, sprach- und vendor-neutral. |
-| **Sampling-Flag** | Bit 0 in `flags`. „Soll dieser Trace exportiert werden?" — Cost-Control. Propagiert über alle Hops. |
+| **Sampling-Flag** | Letztes Feld im Header (Bit 0 in `flags`). `01`: Vorgang ans Tracing-Tool schicken, `00`: nur weiterreichen. Cost-Control per Stichprobe, propagiert über alle Aufrufe. Für die Logs egal. |
 
 ### Der `traceparent`-Header
 
