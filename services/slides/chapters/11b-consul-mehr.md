@@ -44,7 +44,6 @@
 
 Note:
 - Nur &Uuml;berblick, nicht jede Karte erkl&auml;ren. F&uuml;r Story 3 z&auml;hlen Registry und Health-Check.
-- <strong>Optional f&uuml;r Schnelle:</strong> Key-Value Store, steht in Story 3.
 - <strong>Nur bei Nachfrage:</strong>
   - Mesh und Intentions: operativ teuer.
   - DNS: bequem, aber TTL-Caching verz&ouml;gert den Failover.

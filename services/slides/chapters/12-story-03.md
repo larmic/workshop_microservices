@@ -26,6 +26,7 @@
 <h4>Der Service kann</h4>
 <ul>
 <li>Ein Resolver fragt <code>GET /v1/health/service/{name}?passing=true</code> bei Consul</li>
+<li>Bei mehreren Instanzen w&auml;hlt der Resolver zuf&auml;llig eine (Client-Side Load Balancing)</li>
 <li><code>GET /booking/offers</code> l&ouml;st Flight, Hotel und Car &uuml;ber den Resolver auf, keine statischen URLs mehr</li>
 <li><code>POST /booking/bookings</code> orchestriert die drei Backends und antwortet mit <code>201 Created</code></li>
 </ul>
@@ -35,11 +36,6 @@
 <ul>
 <li><code>flight-service</code>, <code>hotel-service</code>, <code>car-service</code></li>
 <li>Die Backends registrieren sich beim Start selbst bei Consul</li>
-</ul>
-<h4>Optional</h4>
-<ul>
-<li>Client-Side Load Balancing: bei mehreren Instanzen zuf&auml;llig eine w&auml;hlen</li>
-<li>Consul Key-Value Store f&uuml;r zus&auml;tzliche Konfiguration</li>
 </ul>
 </div>
 </div>
@@ -58,7 +54,6 @@ Note:
 - <strong>Reihenfolge:</strong>
   - Resolver plus <code>GET /booking/offers</code> (ca. 20 min)
   - dann <code>POST /booking/bookings</code> (ca. 20 min)
-  - Optionales nur, wer fertig ist.
 - <strong>Neu:</strong> erster schreibender Endpoint, <code>201 Created</code>, Fehler als Status-Code. Error-Handling noch keins.
 - <strong>Demo</strong> (vorher pr&uuml;fen): Hotel im Dashboard auf drei Instanzen, Consul &uuml;ber den Link oben daneben, eine Instanz stoppen.
 - <strong>Weiter:</strong> &bdquo;L&auml;uft. Und wenn Consul kippt?&ldquo;

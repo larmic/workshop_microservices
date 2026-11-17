@@ -28,6 +28,7 @@ Ein Booking-Service, der:
 ### 1. Consul Resolver implementieren
 - Consul HTTP API (`/v1/health/service/{name}?passing=true`) abfragen. Die Adresse von Consul kommt aus der Umgebungsvariable `CONSUL_URL` (setzt `docker-compose.custom.yml`, im Stack `http://consul:8500`)
 - Service-URL aus der Antwort (Address + Port) zusammenbauen
+- Client-Side Load Balancing: bei mehreren Instanzen zufällig eine wählen
 
 ### 2. Service Discovery statt statischer URLs
 - Statische URLs aus [Story 1](story-01-cloud-native-booking-service.md) durch Service-Namen ersetzen
@@ -50,5 +51,3 @@ Ein Booking-Service, der:
 
 ### 4. Ausfallsicherheit (optional)
 - Selbst ausprobieren: im Dashboard Hotel auf zwei Instanzen skalieren, eine stoppen, `GET /booking/offers` muss weiter antworten
-- Client-Side Load Balancing bei mehreren Instanzen (zufällige Auswahl)
-- Consul Key-Value Store für zusätzliche Konfiguration
