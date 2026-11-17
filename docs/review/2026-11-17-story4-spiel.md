@@ -1,6 +1,6 @@
 # Review vom 17.11.2026: Story 4, Rollenspiel „Wenn der Flug ausfällt“
 
-Zwei offene Punkte aus dem Durchgehen des Spiels. Es wurde noch nichts geändert, dieses Dokument hält nur die Aufgaben fest.
+Drei offene Punkte aus dem Durchgehen des Spiels. Es wurde noch nichts geändert, dieses Dokument hält nur die Aufgaben fest.
 
 > **Pfad-Konvention:** Folien ohne Pfad liegen in `services/slides/chapters/`. „Dashboard“ meint `services/dashboard/static/index.html`, „Druckseite“ meint `pages/material/index.html`, „Story-Doc“ meint `docs/stories/story-04-circuit-breaker.md`.
 
@@ -29,9 +29,10 @@ Zwei offene Punkte aus dem Durchgehen des Spiels. Es wurde noch nichts geändert
 | 21–25 (31.02.) | sofort | Flight: 400 | Hotel + Car da, `flights: []` | `flights: []` · Hotel + Car da |
 | 26 (14.03.) | sofort | Flight: nicht gefragt | Hotel + Car da, `X-Circuit-Open` | `flights: []` · + X-Circuit-Open |
 
+**Geklärt:** „Flight: 400“ auf 21–25 verrät die Vorhersage bei STOPP 4 nicht, denn die Gruppe tippt, bevor Karte 21 gezogen wird. Bei ENDE hilft es, weil alle sehen, dass Flight gesund war.
+
 **Zu entscheiden:**
 
-- **21–25:** Verrät „Flight: 400“ die Antwort auf STOPP 4 („Kommen die aufs Board?“)? Die Frage zielt darauf, ob ein 4xx ein Ausfall ist. Steht 400 auf der Karte, wird das bei ENDE leichter zu besprechen, die Vorhersage bei STOPP 4 aber auch. Alternative: „Flight: Fehler“.
 - **Welche Zeile ist groß?** Heute ist die Antwort an die Kundin groß. Mit dem Vorschlag wäre Flight groß, die Kundin klein. Für die Pointe von STOPP 1 („Hotel und Car waren gesund, was hattet ihr davon?“) muss Zeile 2 trotzdem gut lesbar bleiben.
 
 **Betroffene Stellen:**
@@ -69,6 +70,37 @@ Zwei offene Punkte aus dem Durchgehen des Spiels. Es wurde noch nichts geändert
 
 ---
 
+## 3. Status-Codes der Downstream-Services auf den Karten
+
+**Befund:** Die Karten nennen keine Status-Codes von Flight, Hotel und Car. Gerade die Pointen hängen aber daran: Bei 01–03 bricht Booking nach dem Flight-Timeout ab und fragt Hotel und Car gar nicht erst. Bei 21–25 antwortet Flight mit 400, ist also gesund, und der Breaker zählt es trotzdem. Ohne Status-Code auf der Karte muss der Trainer das erzählen.
+
+**Ziel:** Auf jeder Karte steht irgendwo, was Flight, Hotel und Car geantwortet haben. Ob als eigene Zeile, kleine Leiste oder Teil von Zeile 1 aus Punkt 1, ist offen.
+
+**Vorschlag** (eine kleine Leiste pro Karte, ergänzt Punkt 1):
+
+| Karte | Flight | Hotel | Car | Booking an die Kundin |
+|---|---|---|---|---|
+| 01–03 | Timeout | nicht gefragt | nicht gefragt | 500 |
+| 05–09 | Timeout | 200 | 200 | 200, `flights: []` |
+| 10–12, 15, 16 | nicht gefragt | 200 | 200 | 200, `X-Circuit-Open` |
+| 14 (PROBE) | Timeout | 200 | 200 | 200, `flights: []` |
+| 18 (PROBE), 19 | 200 | 200 | 200 | 200, alles da |
+| 21–25 (31.02.) | 400 | 200 | 200 | 200, `flights: []` |
+| 26 (14.03.) | nicht gefragt | 200 | 200 | 200, `X-Circuit-Open` |
+
+Damit wird auch „Das war immer HTTP 200 mit `X-Fallback`“ (Ansage bei STOPP 2) sichtbar, statt nur gesagt. Die Vereinfachung „HTTP 200 und `X-Fallback` stehen nicht auf den Karten“ im Story-Doc und im Trainer-Skript entfällt dann.
+
+**Vor dem Umsetzen prüfen:**
+
+- Fragt die Referenz von Story 3 Hotel und Car wirklich nicht mehr, wenn Flight hängt (Reihenfolge der Aufrufe in `services/booking/story3/handler/booking.go`)? Davon hängt „nicht gefragt“ bei 01–03 ab.
+- Passt die Leiste auf eine A7-Karte, ohne dass Nummer, Wartezeit und Vorlesezeile kleiner werden?
+
+**Betroffene Stellen:** wie Punkt 1, dazu die Vereinfachungen im Story-Doc und im Trainer-Skript (Druckseite) und die STOPP-2-Ansage in den Notes zu Folie 15.
+
+**Aufwand:** mittel, am besten zusammen mit Punkt 1.
+
+---
+
 ## Reihenfolge
 
-Punkt 2 zuerst, weil er die Wartezeiten auf den Karten festlegt. Danach Punkt 1, dann den Stapel einmal neu drucken.
+Punkt 2 zuerst, weil er die Wartezeiten auf den Karten festlegt. Danach Punkt 1 und 3 zusammen, weil beide das Kartenlayout ändern, dann den Stapel einmal neu drucken.
