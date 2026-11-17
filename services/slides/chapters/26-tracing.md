@@ -34,8 +34,8 @@
 </div>
 <div class="card">
 <h3>Sampling-Flag</h3>
-<p>Bit 0 in den Flags: Soll dieser Trace exportiert werden? Alles ist zu teuer.</p>
-<code>flags = 01 &harr; sampled</code>
+<p>Letztes Feld im Header: Wird dieser Vorgang ans Tracing-Tool geschickt? Alle aufzuzeichnen w&auml;re zu teuer, also nur eine Stichprobe. F&uuml;r die Logs egal.</p>
+<code>01 = aufzeichnen &middot; 00 = nur weiterreichen</code>
 </div>
 <div class="card market-card">
 <h3>Am Markt</h3>
@@ -59,6 +59,6 @@ Note:
 - <strong>Span:</strong> Eigene ID plus Parent ergibt im SDK den Wasserfall. Wir bauen keinen Span-Baum.
 - <strong>Hop:</strong> Pro Hop eine frische Span-ID als parent-id in den Header. Der Empf&auml;nger sieht sie als Parent.
 - <strong>traceparent:</strong> parent-id ist die Span-ID dieses Aufrufs. Nur-Nullen ung&uuml;ltig, <code>crypto/rand</code>: IDs sollen unvorhersagbar sein.
-- <strong>Sampling-Flag:</strong> Der Entry-Point entscheidet, alle anderen folgen dem Bit.
+- <strong>Sampling-Flag:</strong> Der Entry-Point entscheidet, alle anderen folgen, damit ein Trace ganz oder gar nicht aufgezeichnet wird. Gesampelt hei&szlig;t in der Stichprobe. Bei <code>00</code> misst niemand, der Header wird nur weitergereicht. Die Referenz setzt immer <code>01</code>.
 - Am Markt: OpenTelemetry ist Standard, dazu Jaeger, Tempo, SaaS. Wir bauen die Propagation selbst, gut 120 Zeilen.
 - &Uuml;berleitung: &bdquo;Vier Stellen im Code, mehr ist es nicht.&ldquo;
