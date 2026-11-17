@@ -27,7 +27,7 @@
 <div class="numlist-num">03</div>
 <div>
 <p class="numlist-label">Stop oder Kill?</p>
-<h3><code>docker stop</code> oder <code>docker kill</code>: <span class="hl">Wann</span> verschwindet der Eintrag?</h3>
+<h3><code>docker stop</code> <span class="hl">oder</span> <code>docker kill</code>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">stop: sofort &middot; kill: &le; 10 s</code>
 </div>
