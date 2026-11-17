@@ -19,7 +19,7 @@
 <div class="numlist-num">02</div>
 <div>
 <p class="numlist-label">Consul im Kubernetes-Cluster?</p>
-<h3>Kubernetes hat eigene Discovery. Braucht es Consul <span class="hl">daneben</span>?</h3>
+<h3>Euer Service l&auml;uft in Kubernetes. Ergibt Consul dort <span class="hl">Sinn</span>?</h3>
 </div>
 <code class="numlist-pill fragment" data-fragment-index="1">CoreDNS vs. Consul</code>
 </div>
