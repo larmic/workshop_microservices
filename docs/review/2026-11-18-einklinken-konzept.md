@@ -424,6 +424,43 @@ Scaling, nicht wegen `environment:`.
 
 **Aufwand:** klein (Ansage und Doku-Zeile), mittel mit `env_file`-Variante.
 
+## Nachtrag: Muss der POST in Story 3 prüfen, ob Flug, Hotel und Auto existieren?
+
+**Frage aus dem Workshop:** Ist es für die folgenden Stories wichtig, dass
+`POST /booking/bookings` vor dem Buchen prüft, ob Flug, Hotel und Auto
+vorhanden sind?
+
+**Antwort: Nein, und eine solche Prüfung ist sogar kontraproduktiv.**
+
+- **Die Backends prüfen selbst kaum:** `POST /bookings` bei Flight nimmt jede
+  `flightId` an und antwortet mit `201` (`services/flight/handler/flight.go:45-70`),
+  Hotel genauso. Einzige fachliche Ablehnung ist `carId` `C9` mit `409`
+  (`services/car/handler`, `unavailableCarID`), gedacht für Story 6.
+- **Story 3** verlangt ausdrücklich „Kein Error-Handling (darf fehlschlagen)“.
+- **Story 4:** Der Pre-Check im POST prüft nur, ob ein Breaker OPEN ist
+  (dann sofort `503`), nicht die Existenz.
+- **Story 5** arbeitet mit `GET /booking/offers`, nicht mit dem POST.
+- **Story 6** ersetzt den POST aus Story 3 ganz. Fehler kommen per Chaos-Modus
+  oder `C9`, Booking reagiert auf den Status des Backends und kompensiert.
+- **Story 7 und 8:** keine Rolle.
+
+**Warum eine Vorab-Prüfung den Lernzielen schadet:**
+
+- Ob gebucht werden kann, entscheidet der Service, dem die Daten gehören.
+  Prüft Booking vorher, wird diese Logik verdoppelt.
+- Prüfen und Buchen sind zwei Calls, dazwischen kann das Auto weg sein. Dieses
+  Check-then-act-Problem löst nur „buchen und auf `409` reagieren“, am Ende
+  mit Kompensation (Story 6).
+- Jeder zusätzliche Call kann ausfallen, mehr Fläche für Story 4 und 5.
+
+**Sinnvoll ist dagegen:** den Request-Body validieren (fehlende Pflichtfelder
+`400`) und Backend-Fehler als Status-Code durchreichen, nicht als `200` mit
+Fehler-Body (Story 2). Das zahlt sich ab Story 6 aus.
+
+**Umgesetzt (18.11.):** Hinweis in `docs/stories/story-03-service-discovery.md`
+(Aufgabe 3) und im Dashboard unter Story 3, „Buchung orchestrieren“.
+Folie 12 „Story 3“ ist unverändert, dort genügt die Ansage.
+
 ## Betroffene Stellen
 
 Sofortmaßnahme:

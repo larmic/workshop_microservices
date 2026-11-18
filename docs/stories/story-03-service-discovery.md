@@ -47,6 +47,7 @@ Ein Booking-Service, der:
     - `POST /bookings` am Car-Service mit `{ carId, customerName }`
   - Antwortet mit aggregierter Buchung: `{ bookingId, customerName, flight, hotel, car }`
   - Kein Error-Handling (darf fehlschlagen)
+  - Nicht vorab prüfen, ob Flug, Hotel und Auto existieren. Ob gebucht werden kann, entscheidet das jeweilige Backend und meldet es per Status-Code (Car antwortet zum Beispiel für `C9` mit `409`). Darauf reagiert ihr ab Story 6.
 - Die Backend-Services bestätigen die Buchung mit eigener Booking-ID und loggen sie auf stdout (keine Persistenz). Das können sie schon, daran baut ihr nichts
 
 ### 4. Ausfallsicherheit (optional)

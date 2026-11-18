@@ -1889,6 +1889,7 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
     url = resolve(svc)
     POST url/bookings { flightId | hotelId | carId, customerName }
   → { bookingId, customerName, flight, hotel, car }</pre>
+                                <p>Keine Vorab-Pr&uuml;fung, ob Flug, Hotel und Auto existieren: Das entscheidet das Backend und meldet es per Status-Code.</p>
                             </li>
                         </ol>
                     </div>
