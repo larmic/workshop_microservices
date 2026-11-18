@@ -517,6 +517,36 @@ Bonus bzw. Diskussionsimpuls in Story 3 aufnehmen: „Consul kann auch selbst
 wählen. Was verliert ihr, wenn die Registry entscheidet?“ Passt zu Frage 3 in
 `docs/questions/story3.md`.
 
+> **Antwort für den Trainer:** Ihr verliert die Entscheidung im Moment des
+> Aufrufs, und Consul wird Teil jedes Requests.
+>
+> 1. **Consul im heißen Pfad:** Eine Liste kann Booking kurz cachen und
+>    weiterarbeiten, auch wenn Consul hängt. Mit `limit=1` braucht jeder
+>    Request Consul: ein Hop mehr und ein neuer Single Point of Failure (Story
+>    4). Wer das `limit=1`-Ergebnis cacht, schickt für die Cache-Dauer alles an
+>    eine Instanz, dann ist die Verteilung weg.
+> 2. **Kein Retry auf eine andere Instanz:** Mit der Liste nimmt man bei einem
+>    Fehler einfach die nächste. Mit `limit=1` muss man Consul erneut fragen
+>    und bekommt vielleicht dieselbe.
+> 3. **Keine eigene Strategie:** Consul würfelt nur. Round-Robin, Gewichtung
+>    nach Last oder dieselbe Instanz pro Kunde gehen nicht.
+> 4. **Eigenes Wissen bleibt ungenutzt:** Consul sieht nur den Health-Check
+>    alle paar Sekunden. Booking merkt sofort, dass eine Instanz bei ihm langsam
+>    ist oder Fehler liefert, und könnte sie aussortieren (Outlier Detection,
+>    die Idee des Circuit Breakers pro Instanz).
+> 5. **Kopplung an ein Consul-Feature:** Prepared Queries gibt es nur bei
+>    Consul. „Liste gesunder Instanzen“ liefert jede Registry, auch
+>    Kubernetes.
+>
+> **Gewinn:** weniger Code pro Service und eine zentrale Regel, die man ändern
+> kann, ohne Clients neu auszurollen. Bei vielen Sprachen und Teams ein echtes
+> Argument.
+>
+> **Überleitung zu Frage 3:** Ein Service Mesh nimmt euch genau diese Punkte
+> ab, ohne sie zu verlieren. Der Sidecar läuft neben dem Client, hält die
+> Liste, macht Retry und sortiert schlechte Instanzen aus. Die Entscheidung
+> bleibt beim Aufrufer, steht aber nicht mehr in eurem Code.
+
 **Aufwand:** klein als Bonus-Hinweis, mittel als Umstellung (Init-Schritt,
 Referenz, Folie 11a, Story-Doc, Dashboard).
 
