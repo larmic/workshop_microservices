@@ -31,7 +31,7 @@ Summe Tag 1: 225 Min Vormittag (Blöcke 1 bis 5 plus Story 1), 60 Min Pause, 175
 
 | Block | Thema | Zeit |
 |-------|-------|------|
-| 6e | Rollenspiel: Story 5 (Bulkhead, zwei Stühle und eine Wand statt Code) | 45 Min |
+| 6e | Rollenspiel: Story 5 (Bulkhead, Chips statt Code) | 45 Min |
 | 6f | Hands-on: Story 6 (Saga, Orchestration) | 60 Min |
 | 6g | Würfelspiel: Story 7 (Choreography-Saga, Würfelspiel statt Code) | 60 Min |
 | 🍽 | Mittagspause | 60 Min |
@@ -151,7 +151,7 @@ Detail-Anleitungen in den Story-Dateien. Pro Story: kurze Einleitung, Teilnehmen
 - Letzter Block von Tag 1, bewusst ohne Coding
 
 ### 6e. Story 5 — [Der geteilte Pool](stories/story-05-bulkhead.md) (45 Min)
-- Rollenspiel statt Code: 25 Minuten Spiel (zwei Stühle sind die Threads von Booking, Hotel wird langsam und die Requests stehen auch für das gesunde Flight an; dann schiebt der Trainer eine Wand zwischen die Stühle, Hotel bekommt nur noch einen, wer keinen Platz bekommt, ist sofort ohne Hotels fertig; Hotel, Flight und Car zählen mit, Gespräch an drei STOPP-Karten), 10 Minuten Demo mit der Referenz, Recap mit vier Fragen plus Bonus zu non-blocking
+- Rollenspiel statt Code: 25 Minuten Spiel (Booking schafft neun Requests gleichzeitig, jeder holt sich bei Flight, Hotel und Car einen Chip; Hotel wird langsam, alle Plätze hängen bei Hotel, und auch das gesunde Flight ist nicht mehr erreichbar; mit Bulkhead bekommt jeder Service drei Plätze, wer bei Hotel keinen mehr bekommt, erhält von Booking sofort einen Default-Chip; Gespräch an zwei STOPPs), 10 Minuten Demo mit der Referenz, Recap mit vier Fragen plus Bonus zu non-blocking
 - Lernpointe: Ressourcen-Isolation pro Downstream; die Größe des Pools ist die eigentliche Arbeit
 - Abschluss von Kapitel 2 (5 Minuten): Folie „Breaker und Bulkhead in eurer Library“ übersetzt beide Spiele in die Stellschrauben einer Library (Beispiel Resilience4j), mit der Frage, wie sie in der eigenen Library heißen
 - Recap-Frage: Wo macht Bulkhead in eurer Architektur sonst noch Sinn?

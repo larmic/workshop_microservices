@@ -2,7 +2,7 @@
 
 Ein parametrisches OpenSCAD-Modell: das PROBE-Token aus Story 4, das seit dem
 Kartenstapel optional ist. Story 5 und Story 7 brauchen keinen 3D-Druck,
-gespielt wird mit Stühlen und einer Wand aus dem Raum bzw. mit Würfeln und
+gespielt wird mit Pokerchips bzw. mit Würfeln und
 Pokerchips.
 Im Repo liegen nur die `.scad`-Quellen; die STL-Dateien entstehen per Export
 (siehe unten) und werden nicht eingecheckt.
