@@ -365,6 +365,65 @@ Laptop). Die Tabelle würde also alle Backends abdecken.
 
 **Aufwand:** klein.
 
+## Nachtrag: Env-Variablen in `docker-compose.custom.yml` anpassen
+
+**Feedback aus dem Workshop:** Man kann ja auch die Env-Variablen in
+`docker-compose.custom.yml` anpassen. Ist das eine gute Idee?
+
+**Geht das?** Ja. Der Block `environment:` (`docker-compose.custom.yml:9-13`)
+gilt nur für `booking-custom`. Nach einer Änderung reicht
+`make docker-rebuild-custom`, denn `up -d` erzeugt den Container neu, sobald
+sich seine Konfiguration geändert hat. Der Rest des Stacks läuft weiter. Das
+Dashboard liest custom.yml nur wegen `image:` (Hausaufgaben-Filter) und beim
+Scaling, nicht wegen `environment:`.
+
+**Bewertung: für eigene Variablen gut, die vier vorgegebenen nicht anfassen.**
+
+- **Dafür:**
+  - Das passt zu Faktor III der 12-Faktor-App (Konfiguration in der Umgebung)
+    und zu Story 1.
+  - Teams können eigene Werte von außen setzen, ohne neu zu bauen, etwa
+    Timeout, Breaker-Schwelle, Bulkhead-Größe oder Log-Level. Damit lässt sich
+    im Spiel Gesehenes live nachstellen, zum Beispiel ein kürzerer Timeout in
+    Story 4.
+- **Dagegen bzw. Grenzen:**
+  - `FLIGHT_SERVICE_URL`, `HOTEL_SERVICE_URL`, `CAR_SERVICE_URL` und
+    `CONSUL_URL` sind der Vertrag mit dem Stack. Werden sie auf `localhost`
+    umgebogen, bricht der Service (siehe Nachtrag Consul). Ab Story 3 bleiben
+    die drei Backend-URLs einfach gesetzt, der Service nutzt sie nur nicht
+    mehr. Löschen ist nicht nötig.
+  - Die Datei ist versioniert. Lokale Änderungen machen die Arbeitskopie dirty
+    und können beim `git pull` kollidieren, genau wie beim Pfad (siehe
+    Hypothese 3). Wer nach jeder Story `git pull` macht, stolpert hier
+    zuerst.
+  - Im Team hat nur der Laptop, auf dem getippt wird, die Änderung. Beim
+    Wechsel pro Story fehlt sie auf dem nächsten Rechner, wenn sie nicht im
+    Team-Repo steht.
+  - Secrets oder Webhooks gehören nicht in eine versionierte Datei.
+- **Hinweis zur Referenz:** Die Referenz-Stories fallen ohne `CONSUL_URL`
+  auf `http://localhost:8500` zurück (`services/booking/story4/main.go:23`,
+  ebenso Story 8). Im Container ist dieser Default falsch, wer die Variable
+  löscht, merkt es also erst zur Laufzeit.
+
+**Vorschlag:**
+
+1. **Ansage im Workshop:** „Eigene Variablen dürft ihr in
+   `docker-compose.custom.yml` ergänzen. Die vier vorgegebenen bleiben, wie sie
+   sind.“ Gern als Zeile in `docs/custom-setup.md` unter „Interne URLs“.
+2. **Wenn der Pfad nach dem Umbau ohnehin in custom.yml steht,** gehört die
+   Datei dem Team. Env-Anpassungen passen dann ohne Zusatzaufwand dazu, die
+   Git-Kosten sind dieselben.
+3. **Alternative ohne dirty Arbeitskopie:** In custom.yml
+   `env_file: { path: booking-custom.env, required: false }` eintragen und
+   `services/booking-custom.env` in `.gitignore` aufnehmen. Teams schreiben
+   eigene Werte dorthin, die versionierte Datei bleibt unberührt. Kosten: eine
+   weitere Datei im mentalen Modell. Die Syntax braucht außerdem Compose
+   2.24 oder neuer, das wäre in `docs/vorbereitung.md` und mit
+   `scripts/gates.sh compose` zu prüfen. Eignet sich eher für den Umbau, nicht
+   für heute.
+
+**Aufwand:** klein (Ansage und Doku-Zeile), mittel mit `env_file`-Variante.
+
 ## Betroffene Stellen
 
 Sofortmaßnahme:
@@ -419,3 +478,6 @@ Umbau danach:
 9. **Consul-Adresse (Nachtrag Story 3):** Merksatz „Laptop `localhost`,
    Container `consul`“ zentral in `docs/custom-setup.md` und von Story 3,
    Dashboard und Folie 11a verlinken, oder an jeder Stelle einzeln erklären?
+10. **Env-Variablen (Nachtrag):** Eigene Variablen direkt in custom.yml
+    erlauben (einfach, aber die Arbeitskopie wird dirty), oder eine
+    ungetrackte `booking-custom.env` per `env_file` einführen?
