@@ -1238,6 +1238,45 @@
 }
 
 /* ---------------------------------------------------------------------- */
+/* Spielfolie (Story 5): Ablauf-Grafik in voller Breite, darunter Rollen   */
+/* als eine Zeile und die zwei Regeln als Lavendel-Kacheln                 */
+/* ---------------------------------------------------------------------- */
+
+.reveal .game-flow svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.reveal .page .game-roles {
+    font-size: 20px;
+    line-height: 1.4;
+    margin: 14px 0 16px;
+    text-align: left;
+}
+
+.reveal .game-rules {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.reveal .game-rules p {
+    background: var(--wave);
+    border-radius: 10px;
+    padding: 14px 22px;
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.35;
+    text-align: left;
+}
+
+.reveal .game-rules strong {
+    color: var(--slide-text);
+}
+
+/* ---------------------------------------------------------------------- */
 /* Little's Law (.littles): Formel-Chip, Erklärung, Vierspalten-Tabelle    */
 /* mit Fragezeichen, die per Klick den Ergebnissen weichen                 */
 /* ---------------------------------------------------------------------- */
