@@ -552,6 +552,9 @@ wählen. Was verliert ihr, wenn die Registry entscheidet?“ Passt zu Frage 3 in
 > Liste, macht Retry und sortiert schlechte Instanzen aus. Die Entscheidung
 > bleibt beim Aufrufer, steht aber nicht mehr in eurem Code.
 
+**Aufwand:** klein als Bonus-Hinweis, mittel als Umstellung (Init-Schritt,
+Referenz, Folie 11a, Story-Doc, Dashboard).
+
 ## Feedback des zweiten Durchlaufs, konsolidiert
 
 Der Workshop lief am 18.11. zum zweiten Mal, das Feedback war durchweg
@@ -728,12 +731,56 @@ Dokument)
      feste Nachricht weitergibt. Nur hier liegt die echte URL nicht beim
      Teilnehmer.
 
+### D. Spiel-Stories auch als Code-Variante anbieten (neu, Trainer)
+
+- **Wunsch:** Story 4, 5 und 7 werden im Workshop gespielt statt
+  programmiert. Im Dashboard soll es zusätzlich die Option geben, die Story
+  selbst umzusetzen, also die Code-Variante statt der Spiel-Variante. Teams
+  wollen das vielleicht nachträglich durchführen.
+- **Bestand:**
+  - Im Dashboard steht bei allen drei Spiel-Stories im eingeklappten Panel
+    „Demo und Nachbauen“ ein Abschnitt „Zum Nachbauen“ mit Kontext, User
+    Story und Link aufs Story-Doc (`services/dashboard/static/index.html`,
+    Story 4 ab Zeile 2027, Story 5 ab 2157, Story 7 ab 2438). Der Umschalter
+    *Referenz* ↔ *Mein Service* ist dort schon vorhanden.
+  - Nur Story 4 hat eine echte Coding-Aufgabe mit Akzeptanzkriterien
+    (`docs/stories/story-04-circuit-breaker.md`, „Zum Nachbauen zu Hause“).
+  - Story 5 nennt nur Bausteine (Abschnitt „Referenz-Implementierung“, „Wer
+    das Pattern selbst bauen möchte …“), ohne Akzeptanzkriterien.
+  - Story 7 hat „Technische Hinweise“, „Diskussions-Anker“ und „Bonus“, aber
+    keine Aufgabenliste mit Akzeptanzkriterien.
+  - Die Code-Stories (1, 3, 6, 8) zeigen im Dashboard Aufgabe und
+    Akzeptanzkriterien direkt; die Spiel-Stories zeigen nur das Spiel.
+- **Vorschlag:**
+  - Für Story 5 und 7 je einen Abschnitt „Zum Nachbauen zu Hause“ mit
+    Akzeptanzkriterien im Story-Doc ergänzen, analog zu Story 4. Grundlage
+    ist die jeweilige Referenz (`services/booking/story5/`,
+    `services/booking/story7/`) und deren `api/openapi.yaml`, damit das
+    Dashboard mit *Mein Service* funktioniert (Story 5: Header
+    `X-Fallback`/`X-Bulkhead-Full`, Bulkhead-Panel; Story 7: `GET
+    /admin/sagas`, `POST /admin/sagas-reset`, `POST /events/compensation`
+    bei den Backends).
+  - Im Dashboard bei den Spiel-Stories einen zweiten Reiter oder
+    Umschalter: *Spiel* ↔ *Selbst bauen*. *Selbst bauen* zeigt Aufgabe und
+    Akzeptanzkriterien wie bei den Code-Stories, die Spiel-Karte bleibt
+    Standard. Alternativ, kleiner: den Abschnitt „Zum Nachbauen“ aus dem
+    Demo-Panel herausziehen und als eigenes eingeklapptes Panel „Selbst
+    bauen (optional)“ mit den Akzeptanzkriterien direkt unter die
+    Spiel-Karte stellen.
+  - Im Stepper bleibt die Story als *Spiel* markiert. Ein kleiner Hinweis
+    im Tooltip („auch als Code möglich“) reicht.
+  - Auf der Startseite oder im Abschluss erwähnen, dass die drei Stories
+    nachträglich als Code machbar sind, und auf die Referenzen verweisen.
+- **Offen:** Reihenfolge und Voraussetzungen. Story 5 setzt Story 4 voraus
+  (Bulkhead vor dem Breaker), Story 7 setzt Story 6 voraus. Wer nachträglich
+  baut, sollte das wissen.
+- **Aufwand:** mittel (Akzeptanzkriterien für 5 und 7 aus der Referenz
+  ableiten, Dashboard-Umschalter oder Panel, Texte). Folien sind nicht
+  betroffen.
+
 ### Entscheidungen vor der Umsetzung
 
-Siehe offene Fragen 12 bis 17 unten.
-
-**Aufwand:** klein als Bonus-Hinweis, mittel als Umstellung (Init-Schritt,
-Referenz, Folie 11a, Story-Doc, Dashboard).
+Siehe offene Fragen 12 bis 18 unten.
 
 ## Betroffene Stellen
 
@@ -805,3 +852,7 @@ Umbau danach:
     Rückfallebene immer an?
 17. **C Webhook:** Rotation nach jedem Workshop, Backend-Proxy oder externes
     Relay?
+18. **D Code-Variante der Spiel-Stories:** Umschalter *Spiel* ↔ *Selbst
+    bauen* in der Story-Karte, oder nur ein eigenes eingeklapptes Panel
+    „Selbst bauen (optional)“? Akzeptanzkriterien für Story 5 und 7 neu
+    schreiben?
