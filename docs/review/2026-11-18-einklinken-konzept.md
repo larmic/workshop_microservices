@@ -461,6 +461,65 @@ Fehler-Body (Story 2). Das zahlt sich ab Story 6 aus.
 (Aufgabe 3) und im Dashboard unter Story 3, „Buchung orchestrieren“.
 Folie 12 „Story 3“ ist unverändert, dort genügt die Ansage.
 
+## Nachtrag: Kann Consul direkt eine zufällige Instanz liefern?
+
+**Frage aus dem Workshop:** Gibt es eine Consul-URL, die statt einer Liste
+gleich eine zufällige Instanz zurückgibt? Heute muss jeder selbst einen
+Randomizer einbauen.
+
+**Befund** (geprüft mit `hashicorp/consul:2.1` im Dev-Mode und drei
+registrierten `flight-service`-Instanzen in einem Wegwerf-Container):
+
+- **Health-API:** `/v1/health/service/{name}?passing=true` liefert immer die
+  Liste und kennt kein `limit`.
+- **Prepared Query:** `GET /v1/query/flight-service/execute?limit=1` liefert
+  pro Aufruf zufällig eine gesunde Instanz (sechs Aufrufe: f2, f2, f3, f1,
+  f2, f1). Die Antwort ist trotzdem ein Array (`Nodes`) mit einem Element.
+  Ohne Vorbereitung antwortet Consul `404 Query not found`. Die Query muss
+  einmal angelegt werden, mit einem Template für alle Namen:
+  `POST /v1/query {"Name":"","Template":{"Type":"name_prefix_match"},"Service":{"Service":"${name.full}","OnlyPassing":true}}`.
+- **DNS:** `flight-service.service.consul` auf Port 8600 liefert nur gesunde
+  Instanzen in zufälliger Reihenfolge. Im Docker-Netz antwortet aber Dockers
+  eingebauter DNS, die Teilnehmer-Container lösen `.consul` ohne zusätzliche
+  DNS-Konfiguration nicht auf. Clients mit DNS-Cache (z. B. JVM) bleiben
+  außerdem an einer Instanz hängen.
+
+**Ist die Prepared Query besser als der heutige Weg? Empfehlung: nein, als
+Bonus ja.**
+
+- **Der Randomizer ist nicht die Hürde.** Er ist eine Zeile
+  (`list.random()`, `rand.Intn(len(list))`). Die eigentliche Arbeit bleibt in
+  beiden Wegen gleich: Consul abfragen, Antwort parsen, URL aus `Address` +
+  `Port` bauen, leere Antwort behandeln. Bei der Prepared Query ist das JSON
+  sogar tiefer verschachtelt (`Nodes[0].Service.Address`).
+- **Das Lernziel ist Client-Side Load Balancing.** Folie 11 „Service
+  Discovery“ (Notes: „Der Booking-Service fragt Consul selbst und wählt eine
+  Instanz“), Folie 12 „Story 3“, Story-Doc Aufgabe 1 und
+  `docs/questions/story3.md` Frage 3 bauen darauf auf. Mit der Prepared Query
+  wählt die Registry, nicht der Aufrufer. Das verschiebt die Topologie, über
+  die Frage 3 diskutiert.
+- **Mehr Infrastruktur im Stack:** Die Query muss beim Start angelegt werden
+  (Init-Schritt in Compose). Consul läuft mit `tmpfs`
+  (`docker-compose.infra.yml:19-20`), nach jedem Neustart ist sie weg. Startet
+  ein Service vor dem Init, bekommt er `404`. Die Referenz-Implementierung
+  (`shared/consul/resolver.go`) und die Folie 11a „Consul“ mit
+  `GET consul:8500/v1/health/service/{name}?passing=true` müssten ebenfalls
+  umgestellt werden.
+- **Die Liste ist später nützlich:** Mit der Liste kann der Client selbst
+  entscheiden, etwa Round-Robin, bei Fehler eine andere Instanz versuchen
+  oder die Liste kurz cachen, statt bei jedem Request Consul zu fragen. Das
+  sind gute Anknüpfungen an Story 4 und 5.
+- **Dafür spricht:** weniger Code bei den Teilnehmern, Health-Filter und
+  Zufall an einer Stelle, Consul-Feature sichtbar gemacht.
+
+**Vorschlag:** Den heutigen Weg behalten. Die Prepared Query (und DNS) als
+Bonus bzw. Diskussionsimpuls in Story 3 aufnehmen: „Consul kann auch selbst
+wählen. Was verliert ihr, wenn die Registry entscheidet?“ Passt zu Frage 3 in
+`docs/questions/story3.md`.
+
+**Aufwand:** klein als Bonus-Hinweis, mittel als Umstellung (Init-Schritt,
+Referenz, Folie 11a, Story-Doc, Dashboard).
+
 ## Betroffene Stellen
 
 Sofortmaßnahme:
@@ -518,3 +577,5 @@ Umbau danach:
 10. **Env-Variablen (Nachtrag):** Eigene Variablen direkt in custom.yml
     erlauben (einfach, aber die Arbeitskopie wird dirty), oder eine
     ungetrackte `booking-custom.env` per `env_file` einführen?
+11. **Consul wählt selbst (Nachtrag):** Prepared Query mit `limit=1` nur als
+    Bonus in Story 3 erwähnen, oder den Standardweg darauf umstellen?
