@@ -313,6 +313,58 @@ Variante R ist nicht empfohlen. `make einklinken` löst vor allem das
 Schreiben einer Datei, die nach dem Umbau ohnehin niemand mehr schreibt. Die
 Ampel hilft nur dem Teilnehmer selbst, nicht dem Trainer.
 
+## Nachtrag: Consul-Adresse in Story 3 (Browser vs. Container)
+
+**Beobachtung im Workshop:** Im Browser liefert
+`http://localhost:8500/v1/health/service/flight-service?passing=true` die
+gesunden Flight-Instanzen. Im eigenen Service funktioniert dieselbe URL nicht,
+dort muss es `http://consul:8500/...` heißen. Das steht nirgends so erklärt,
+dass man es vor dem ersten Fehlschlag findet.
+
+**Stimmt das?** Ja.
+
+- `services/docker-compose.infra.yml:17-18` veröffentlicht Consul mit
+  `8500:8500` auf dem Host. Deshalb klappt `localhost:8500` im Browser und per
+  `curl` vom Laptop.
+- Im Container zeigt `localhost` auf den Container selbst. Consul ist dort nur
+  über den Compose-Servicenamen `consul` erreichbar.
+  `docker-compose.custom.yml` setzt dafür `CONSUL_URL=http://consul:8500`.
+- Dasselbe gilt für die Antwort: Die Referenz-Services registrieren als
+  `Address` ihren Container-Hostnamen (`shared/consul/register.go:37-47`, eine
+  Container-ID). Die URL aus `Address` + `Port` funktioniert also nur im
+  Docker-Netz, im Browser nicht. Wer im Browser die JSON-Antwort ansieht und
+  die Adresse ausprobiert, läuft in denselben Fehler, nur umgekehrt.
+- Wer seinen Service aus der IDE statt im Stack startet (siehe Hypothese 2),
+  bräuchte `localhost:8500`. Die Adressen aus Consul kann er trotzdem nicht
+  auflösen. Das ist ein weiterer Grund für „nur als `booking-custom` im Stack“.
+
+**Was heute dazu im Material steht:**
+
+- `docs/stories/story-03-service-discovery.md:29`: „im Stack
+  `http://consul:8500`“, ohne den Unterschied zu `localhost`
+- `docs/custom-setup.md:47-53` (Tabelle interne URLs) und `:61` (Consul UI
+  über `localhost/consul`): beide Sichten, aber getrennt und ohne Hinweis
+- Folie 11a `11a-consul.md:13-21`: `consul:8500` ohne Erklärung
+- Dashboard Story 3 (`index.html:1871`): „im Stack http://consul:8500“
+- `docs/instructions/service-discovery-consul.md:19`: Consul-UI unter
+  `http://localhost:8500`
+
+**Vorschlag:** Den Unterschied an einer Stelle als Merksatz erklären und von
+den anderen dorthin verlinken, zum Beispiel:
+
+> Vom Laptop (Browser, `curl`): `localhost:8500`. Aus eurem Container: `consul:8500`,
+> also `CONSUL_URL`. Im Container ist `localhost` euer eigener Container. Die
+> Adressen in der Consul-Antwort sind Container-Namen und gelten nur im
+> Docker-Netz.
+
+Passende Orte: die Tabelle „Interne URLs“ in `docs/custom-setup.md` (zweite
+Spalte „vom Laptop“) und Aufgabe 1 in Story 3 inklusive Dashboard-Text. Auf
+Folie 11a reicht eine Zeile in den Notes. Dasselbe Muster gilt für Flight,
+Hotel und Car (`flight:8080` im Container, `localhost/api/flight` vom
+Laptop). Die Tabelle würde also alle Backends abdecken.
+
+**Aufwand:** klein.
+
 ## Betroffene Stellen
 
 Sofortmaßnahme:
@@ -364,3 +416,6 @@ Umbau danach:
 8. **Story 8:** `COMPOSE_FILE` weiter über die `.env`, oder die gedruckten
    Befehle auf `make`-Targets bzw. `-f`-Flags umstellen, damit die `.env`
    ganz entfallen kann?
+9. **Consul-Adresse (Nachtrag Story 3):** Merksatz „Laptop `localhost`,
+   Container `consul`“ zentral in `docs/custom-setup.md` und von Story 3,
+   Dashboard und Folie 11a verlinken, oder an jeder Stelle einzeln erklären?
