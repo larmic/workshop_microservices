@@ -20,7 +20,7 @@
 <li><strong>Kunde und Booking</strong> spielen zusammen. <strong>Flight, Hotel, Car</strong> w&uuml;rfeln nur und behalten, was bei ihnen liegt.</li>
 <li>Der Kunde hat 13 Chips. <strong>Eine Reise kostet 3</strong>, je einen f&uuml;r Flight, Hotel und Car.</li>
 <li>Kunde und Booking machen aus, wie viele Chips der Kunde Booking als <strong>Retry-Budget</strong> gibt. Booking legt sie als eigenen Stapel zur Seite. Sie kommen nie zur&uuml;ck.</li>
-<li><strong>Gewonnen</strong> bei 4 geklappten Reisen. <strong>Verloren</strong> nach 6 Reisen mit weniger Erfolgen oder wenn der Kunde Booking keine 3 Chips mehr geben kann.</li>
+<li><strong>Gewonnen</strong> bei 4 geklappten Reisen. <strong>Verloren</strong>, wenn nach 6 Reisen keine 4 geklappt haben oder der Kunde nicht mehr zahlen kann.</li>
 </ol>
 <p class="step-note"><strong><code>503</code> &rarr; Retry:</strong> vorw&auml;rts. <strong>Ausgebucht &rarr; Storno:</strong> r&uuml;ckw&auml;rts.</p>
 <p class="step-note"><strong>Nach jeder Reise:</strong> Booking gibt dem Kunden zur&uuml;ck, was vom Reisegeld &uuml;brig ist.</p>
