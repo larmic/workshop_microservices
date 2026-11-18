@@ -192,14 +192,6 @@
         .stname.long { font-size: 17pt; line-height: 1.3; }
         .stsub { color: var(--primary-dark); font-weight: 700; font-size: 10pt; line-height: 1.2; margin-top: 1.5mm; }
         .stfoot { color: #5B4E93; font-size: 7pt; line-height: 1.25; text-align: center; }
-        /* Story 5: Stapel 01–27 (A7 hoch, wie Story 4): nur Nummer und „Steh auf bei“, STOPP-Karten dunkel */
-        .s5k { width: 100%; height: 100%; border: 2.5mm solid var(--primary-violet); border-radius: 3mm; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9mm; overflow: hidden; }
-        .s5num { font-family: var(--mono); font-weight: 800; font-size: 80pt; line-height: 1.2; color: var(--primary-dark); letter-spacing: -0.02em; }
-        .s5up { font-size: 15pt; font-weight: 700; color: var(--primary-dark); white-space: nowrap; display: flex; align-items: baseline; gap: 2mm; }
-        .s5up b { font-family: var(--mono); font-size: 24pt; font-weight: 800; color: var(--primary-violet); }
-        .s5k.stop { background: var(--primary-dark); border-color: var(--primary-dark); }
-        .s5k.stop .s5num { color: var(--highlight); }
-        .s5k.stop .s5up { color: #fff; font-size: 26pt; font-weight: 800; letter-spacing: 0.06em; }
         /* Story 5: Service-Schilder A4 hoch, aus 4 m lesbar */
         .sign { --c: var(--primary-dark); position: absolute; inset: 12mm; border: 3mm solid var(--c); border-radius: 8mm; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
         .sign.hotel { --c: var(--hotel); }
@@ -338,15 +330,15 @@
         <ul class="hints">
             <li><strong>Browser:</strong> Chrome oder Edge. Firefox und Safari halten die gemischten Formate (A4 hoch, A4 quer, A3) nicht zuverl&auml;ssig ein. Im Druckdialog: R&auml;nder <em>Keine</em>, Skalierung <em>100&nbsp;%</em> bzw. <em>Tats&auml;chliche Gr&ouml;&szlig;e</em>, <em>Hintergrundgrafiken</em> an.</li>
             <li><strong>Pro Papiersorte einen Stapel:</strong> oben den Druckstapel w&auml;hlen, dann drucken. Die Seite zeigt und druckt nur dessen Bogen. Die Anzahl in der Tabelle unten ist schon die Zahl der Bogen, also immer <strong>1 Exemplar</strong> drucken. Bei den beidseitigen Stapeln z&auml;hlt sie Seiten: Zwei Seiten sind ein Blatt.</li>
-            <li><strong>Karton 200&ndash;250 g</strong> (A4) f&uuml;r alle Karten: Stapel 01&ndash;27 und Zustandskarten aus Story 4, Stapel 01&ndash;27 und die Schilder Flight und Car aus Story 5 (das Hotel-Schild steht unten bei beidseitig). Viele B&uuml;rodrucker schaffen nur bis 200 g, das reicht. Karton als Papiersorte im Druckertreiber einstellen. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
-            <li><strong>Stapel aus Story 4 und 5</strong> (A7 hoch) f&uuml;llen das A4-Blatt quer ganz aus: acht pro Bogen, jede mit 4&nbsp;mm wei&szlig;em Rand, randloser Druck ist nicht n&ouml;tig. Mit der Schneidemaschine alle Bogen stapeln, dann dreimal halbieren.</li>
+            <li><strong>Karton 200&ndash;250 g</strong> (A4) f&uuml;r alle Karten: Stapel 01&ndash;27 und Zustandskarten aus Story 4, die Schilder Flight und Car aus Story 5 (das Hotel-Schild steht unten bei beidseitig). Viele B&uuml;rodrucker schaffen nur bis 200 g, das reicht. Karton als Papiersorte im Druckertreiber einstellen. <strong>Ein Laminierger&auml;t braucht es nicht.</strong></li>
+            <li><strong>Stapel aus Story 4</strong> (A7 hoch) f&uuml;llen das A4-Blatt quer ganz aus: acht pro Bogen, jede mit 4&nbsp;mm wei&szlig;em Rand, randloser Druck ist nicht n&ouml;tig. Mit der Schneidemaschine alle Bogen stapeln, dann dreimal halbieren.</li>
             <li><strong>Papier 80 g</strong> f&uuml;r den Spickzettel aus Story 7. Das W&uuml;rfelspiel selbst braucht nur W&uuml;rfel und Pokerchips.</li>
             <li><strong>Papier 80 g, beidseitig</strong> f&uuml;r die Trainer-Skripte Story 4 und 5: zwei Seiten auf ein Blatt, <strong>an der langen Kante wenden</strong>.</li>
             <li><strong>Karton 200&ndash;250 g, beidseitig, lange Kante</strong> nur f&uuml;r das Hotel-Schild aus Story 5: vorne &bdquo;schnell&ldquo;, hinten &bdquo;langsam&ldquo;. Ohne Duplex beide Seiten einseitig drucken und R&uuml;cken an R&uuml;cken zusammenkleben.</li>
             <li><strong>A3</strong> f&uuml;r das Circuit-Breaker-Board (Story 4), 80 bis 160 g. Ohne A3-Drucker oben &bdquo;2&times; A4&ldquo; w&auml;hlen und die beiden H&auml;lften an der markierten Kante zusammenkleben.</li>
             <li><strong>Schneiden:</strong> grau gestrichelt ist Schnitt, gefalzt wird nichts. Jede Karte hat 4&nbsp;mm wei&szlig;en Rand, ein paar Millimeter daneben schneiden st&ouml;rt nicht.</li>
             <li><strong>Zustandskarten</strong> (A7 hoch) liegen im Zustandsfeld des Circuit-Breaker-Boards.</li>
-            <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 braucht f&uuml;r jede Gruppengr&ouml;&szlig;e denselben Stapel, Story 5 bis 13 mit einer Gruppe, ab 14 mit zwei Gruppen und je einem Satz Karten und Schilder (ein Trainer-Skript reicht), Story 7 mit einem Tisch pro 4 bis 7 Personen (nur der Spickzettel wird gedruckt). Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
+            <li><strong>Mengen</strong> h&auml;ngen an der Teilnehmerzahl: Story 4 braucht f&uuml;r jede Gruppengr&ouml;&szlig;e denselben Stapel, Story 5 bis 17 mit einer Gruppe, ab 18 mit zwei Gruppen und je einem Satz Schilder (ein Trainer-Skript reicht, die Chips werden geteilt), Story 7 mit einem Tisch pro 4 bis 7 Personen (nur der Spickzettel wird gedruckt). Kommen am Tag mehr Leute, Zahl &auml;ndern und die fehlenden Karten nachdrucken.</li>
         </ul>
         </details>
 
@@ -480,91 +472,86 @@
 
 <template id="tpl-script-s5">
 <div class="cheat s5">
-    <div class="ckline"><div><div class="ck">Trainer-Skript &middot; Story 5 &middot; Seite 1/2</div><h1>Der geteilte Pool &middot; Kurzanleitung</h1></div><div>ca. 25 min inkl. Gespr&auml;ch &middot; 7 bis 13 Personen &middot; ab 14 zwei Gruppen</div></div>
+    <div class="ckline"><div><div class="ck">Trainer-Skript &middot; Story 5 &middot; Seite 1/2</div><h1>Der geteilte Pool &middot; Kurzanleitung</h1></div><div>ca. 25 min inkl. Gespr&auml;ch &middot; 8 bis 17 Personen &middot; ab 18 zwei Gruppen</div></div>
     <div class="two">
         <div>
             <h2>Aufbau</h2>
-            <svg class="room" viewBox="0 0 240 112" role="img" aria-label="Aufbau im Raum: Booking mit Stapel, davor die Schlange, gegenüber zwei Stühle mit Sitzfläche zu Booking, daneben Hotel, Flight und Car mit Schildern, ein Tisch für die Karten, ab STOPP 2 eine Wand zwischen den Stühlen">
+            <svg class="room" viewBox="0 0 240 112" role="img" aria-label="Aufbau im Raum: Booking mit den Default-Chips, davor die Schlange der Requests, daneben Flight, Hotel und Car nebeneinander mit Schildern und Chips, vor Hotel das Feld für Wartende, der Trainer am Rand">
                 <defs><marker id="room5-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7348E1"/></marker></defs>
                 <circle cx="40" cy="34" r="8" fill="#7348E1"/><text x="40" y="37" text-anchor="middle" font-size="8" font-weight="800" fill="#fff">B</text>
                 <text x="40" y="51" text-anchor="middle" font-size="6.5" font-weight="700" fill="#0A0349">Booking</text>
-                <rect x="18" y="26" width="11" height="15" rx="1.8" fill="#EEE7FB" stroke="#7348E1"/><text x="23.5" y="36" text-anchor="middle" font-size="5.5" font-weight="800" fill="#0A0349">01</text>
+                <g fill="#5B4E93"><circle cx="22" cy="30" r="3"/><circle cx="22" cy="37" r="3"/></g>
+                <text x="22" y="46" text-anchor="middle" font-size="5" fill="#5B4E93">Default</text>
                 <g fill="#EEE7FB" stroke="#5B4E93"><circle cx="40" cy="62" r="4.5"/><circle cx="40" cy="73" r="4.5"/><circle cx="40" cy="84" r="4.5"/><circle cx="51" cy="91" r="4.5"/><circle cx="62" cy="94" r="4.5"/></g>
                 <text x="32" y="76" text-anchor="end" font-size="6.5" font-weight="700" fill="#0A0349">Requests</text>
                 <text x="32" y="83" text-anchor="end" font-size="5.5" fill="#5B4E93">Schlange</text>
-                <g fill="#fff" stroke="#0A0349" stroke-width="1.2"><rect x="96" y="12" width="18" height="18" rx="2"/><rect x="96" y="42" width="18" height="18" rx="2"/></g>
-                <g stroke="#0A0349" stroke-width="2.4" stroke-linecap="round"><path d="M114 13v16M114 43v16"/></g>
-                <text x="105" y="23.5" text-anchor="middle" font-size="5.5" fill="#5B4E93">Stuhl</text>
-                <text x="105" y="53.5" text-anchor="middle" font-size="5.5" fill="#5B4E93">Stuhl</text>
-                <path d="M90 36H124" stroke="#7348E1" stroke-width="2.2" stroke-dasharray="4 2.5"/>
-                <text x="86" y="36" text-anchor="end" font-size="5.5" font-weight="700" fill="#7348E1">Wand</text><text x="86" y="42.5" text-anchor="end" font-size="5.5" font-weight="700" fill="#7348E1">ab STOPP 2</text>
-                <circle cx="136" cy="20" r="6.5" fill="#8a4a00"/><text x="136" y="22.6" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">H</text>
-                <text x="146" y="22" font-size="6" fill="#8a4a00" font-weight="700">Hotel</text>
-                <circle cx="136" cy="46" r="6.5" fill="#1456b3"/><text x="136" y="48.6" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">F</text>
-                <text x="146" y="48" font-size="6" fill="#1456b3" font-weight="700">Flight</text>
-                <circle cx="136" cy="62" r="6.5" fill="#1d7a3a"/><text x="136" y="64.6" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">C</text>
-                <text x="146" y="64" font-size="6" fill="#1d7a3a" font-weight="700">Car</text>
-                <rect x="180" y="40" width="56" height="30" rx="4" fill="#fff" stroke="#0A0349" stroke-width="1.2"/>
-                <text x="208" y="51" text-anchor="middle" font-size="6.5" font-weight="800" fill="#0A0349" letter-spacing=".4">TISCH</text>
-                <text x="208" y="60" text-anchor="middle" font-size="5.5" fill="#5B4E93">alle Karten auf</text>
-                <text x="208" y="66" text-anchor="middle" font-size="5.5" fill="#5B4E93">einen Haufen</text>
-                <circle cx="208" cy="14" r="7" fill="#0A0349"/><text x="208" y="16.8" text-anchor="middle" font-size="7.5" font-weight="800" fill="#D3F871">T</text>
-                <text x="208" y="29" text-anchor="middle" font-size="5.5" fill="#5B4E93">Trainer: STOPPs, Wand</text>
-                <path d="M50 30 C 66 22, 78 22, 92 24" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room5-ar)"/>
-                <text x="70" y="17" text-anchor="middle" font-size="5.5" fill="#7348E1">Karte, hinsetzen</text>
-                <path d="M110 62 C 120 84, 160 82, 177 64" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room5-ar)"/>
-                <path d="M206 73 C 180 100, 110 102, 70 96" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room5-ar)"/>
-                <text x="140" y="109" text-anchor="middle" font-size="5.5" fill="#7348E1">aufstehen, Karte ablegen, hinten anstellen</text>
+                <path d="M60 22V46" stroke="#0A0349" stroke-width="2.2" stroke-linecap="round"/>
+                <text x="60" y="17" text-anchor="middle" font-size="5.5" font-weight="700" fill="#0A0349">T&uuml;r: max. 9</text>
+                <circle cx="100" cy="34" r="6.5" fill="#1456b3"/><text x="100" y="36.6" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">F</text>
+                <text x="100" y="49" text-anchor="middle" font-size="6" fill="#1456b3" font-weight="700">Flight</text>
+                <circle cx="140" cy="34" r="6.5" fill="#8a4a00"/><text x="140" y="36.6" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">H</text>
+                <text x="140" y="49" text-anchor="middle" font-size="6" fill="#8a4a00" font-weight="700">Hotel</text>
+                <circle cx="180" cy="34" r="6.5" fill="#1d7a3a"/><text x="180" y="36.6" text-anchor="middle" font-size="7" font-weight="800" fill="#fff">C</text>
+                <text x="180" y="49" text-anchor="middle" font-size="6" fill="#1d7a3a" font-weight="700">Car</text>
+                <rect x="120" y="56" width="40" height="26" rx="3" fill="none" stroke="#8a4a00" stroke-width="1" stroke-dasharray="3 2"/>
+                <text x="140" y="67" text-anchor="middle" font-size="5.5" font-weight="700" fill="#8a4a00">wartet bei Hotel</text>
+                <text x="140" y="75" text-anchor="middle" font-size="5" fill="#5B4E93">ab Stufe 3: max. 3</text>
+                <circle cx="222" cy="14" r="7" fill="#0A0349"/><text x="222" y="16.8" text-anchor="middle" font-size="7.5" font-weight="800" fill="#D3F871">T</text>
+                <text x="222" y="29" text-anchor="middle" font-size="5.5" fill="#5B4E93">Trainer</text>
+                <path d="M50 30 C 66 24, 78 24, 90 30" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room5-ar)"/>
+                <path d="M109 30 C 118 26, 122 26, 130 30" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room5-ar)"/>
+                <path d="M149 30 C 158 26, 162 26, 170 30" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room5-ar)"/>
+                <path d="M184 44 C 196 90, 120 104, 70 96" fill="none" stroke="#7348E1" stroke-width="1.1" stroke-dasharray="3 2" marker-end="url(#room5-ar)"/>
+                <text x="150" y="109" text-anchor="middle" font-size="5.5" fill="#7348E1">mit drei Chips fertig, hinten anstellen</text>
             </svg>
             <ul>
-                <li>Zwei St&uuml;hle nebeneinander, Sitzfl&auml;che zu Booking. Hotel steht mit Schild bei den St&uuml;hlen, Flight und Car daneben. Alle Schilder auf &bdquo;schnell&ldquo;.</li>
-                <li>Ein Tisch f&uuml;r alle abgelegten Karten. Wand bereit: Pinnwand, Flipchart oder Tisch hochkant.</li>
-                <li>Stapel 01&ndash;27 mit Seite 2 abhaken, 01 oben, zu Booking.</li>
+                <li>Booking vor der Schlange, Flight, Hotel, Car nebeneinander in dieser Reihenfolge. Alle Schilder auf &bdquo;schnell&ldquo;.</li>
+                <li>Auf jedes Schild einen Chip seiner Farbe legen. Die Default-Chips h&auml;lt Booking.</li>
+                <li>Optional: Kreppband-Felder &bdquo;bei Booking&ldquo; und &bdquo;wartet bei Hotel&ldquo;.</li>
             </ul>
         </div>
         <div>
             <h2>Rollen</h2>
             <ul>
-                <li><strong>Booking</strong> (1): ruft die Nummer der obersten Karte und gibt die Karte dem N&auml;chsten in der Schlange. STOPP-Karte: &bdquo;STOPP&ldquo; rufen, Karte zum Trainer. Sonst liest Booking nichts vor.</li>
-                <li><strong>Hotel, Flight, Car</strong> (je 1): halten ihr Schild und z&auml;hlen mit. Hotel: wer sich setzt. Flight und Car: wer abklatscht.</li>
-                <li><strong>Requests</strong> (alle anderen, bei 10 Personen sechs): stehen in einer Schlange vor Booking.</li>
+                <li><strong>Booking</strong> (1): l&auml;sst die Requests einzeln herein, h&ouml;chstens so viele gleichzeitig wie Pl&auml;tze, achtet darauf, dass alle richtig stehen, gibt den Default-Chip.</li>
+                <li><strong>Flight, Hotel, Car</strong> (je 1): halten ihr Schild und geben ihre Chips, einen pro Request. Hotel langsam: bis zur Ansage nichts.</li>
+                <li><strong>Requests</strong> (alle anderen): stehen in einer Schlange vor Booking. Es braucht einen mehr als Pl&auml;tze.</li>
+                <li><strong>Trainer:</strong> sagt die Stufen an, gibt Hotel die Anweisung, stoppt.</li>
             </ul>
             <table class="grp walk">
-                <tr><th>Pers.</th><th>Besetzung (unter 7 nicht spielbar)</th></tr>
-                <tr><td>7</td><td>Booking + 6 Requests, Schilder lehnen, Trainer z&auml;hlt</td></tr>
-                <tr><td>8</td><td>+ Hotel als Person, Trainer z&auml;hlt Flight und Car</td></tr>
-                <tr><td>9</td><td>eine Person h&auml;lt Flight und Car</td></tr>
-                <tr><td>10</td><td>Normalfall, Durchlauf auf Seite 2</td></tr>
-                <tr><td>11&ndash;13</td><td>mehr Requests, sonst alles gleich</td></tr>
-                <tr><td>ab 14</td><td>zwei Gruppen, je ein Satz und eine Wand</td></tr>
+                <tr><th>Pers.</th><th>parallel</th><th>pro Service</th><th>Requests</th></tr>
+                <tr><td>8&ndash;10</td><td>3</td><td>1</td><td>4&ndash;6</td></tr>
+                <tr><td>11&ndash;13</td><td>6</td><td>2</td><td>7&ndash;9</td></tr>
+                <tr><td>14&ndash;17</td><td>9</td><td>3</td><td>10&ndash;13</td></tr>
+                <tr><td>ab 18</td><td colspan="3">zwei Gruppen, Chips teilen (je 10 pro Farbe)</td></tr>
             </table>
+            <p class="fn" style="margin:1mm 0 0">Bei 13 geht auch 9 parallel, wenn der Trainer den zehnten Request spielt. Unter 8 nicht spielbar.</p>
         </div>
     </div>
-    <h2>Die Regeln (Ansage, 3 min): bei jeder Nummer, immer in dieser Reihenfolge</h2>
+    <h2>Die Regeln (Ansage, 3 min): f&uuml;r jeden Request</h2>
     <div class="two">
         <ol class="box">
-            <li><strong>Booking ruft die Nummer.</strong></li>
-            <li><strong>Wer sitzt</strong> und diese Nummer auf seiner Karte hat, steht auf, klatscht Car ab, legt die Karte auf den Tisch und stellt sich hinten an.</li>
-            <li><strong>Wer hinter den St&uuml;hlen wartet</strong>, setzt sich auf den frei gewordenen Stuhl (wer zuerst kam, zuerst) und klatscht dabei Flight ab.</li>
-            <li><strong>Booking gibt die Karte dem N&auml;chsten.</strong> Stuhl frei: Flight abklatschen, hinsetzen. Sonst hinter die St&uuml;hle, warten.</li>
+            <li><strong>Booking l&auml;sst den N&auml;chsten herein</strong>, sobald der Vorige fertig ist oder wartet. Alle Pl&auml;tze belegt: an der T&uuml;r warten, kein einziger Chip.</li>
+            <li><strong>Chips abholen: Flight, dann Hotel, dann Car.</strong> Gibt Hotel nichts, bei Hotel stehen bleiben, nicht weiter zu Car.</li>
+            <li><strong>Mit drei Chips fertig:</strong> Chips behalten, hinten anstellen.</li>
         </ol>
-        <div class="box"><strong>Zusatzregel ab Runde 2 (Wand steht):</strong> Der Request klatscht sofort Flight ab. Hotel-Stuhl frei: hinsetzen. Besetzt: <strong>nicht warten</strong>, sofort Car abklatschen, Karte auf den Tisch, hinten anstellen. Das ist <code>hotels: []</code> mit <code>X-Fallback</code> und <code>X-Bulkhead-Full</code>. Der Stuhl auf der Flight-/Car-Seite bleibt frei. Links/rechts ist egal, Hotel z&auml;hlt jeden, der sich setzt.</div>
+        <div class="box"><strong>Zusatzregel ab Stufe 3 (Bulkhead):</strong> Dieselben Pl&auml;tze, aber jeder Service bekommt ein Drittel davon. Bei Hotel warten h&ouml;chstens drei. Der Vierte <strong>wartet nicht</strong>: Booking gibt sofort einen Default-Chip, er holt Car und ist fertig. Das ist <code>hotels: []</code> mit <code>X-Fallback</code> und <code>X-Bulkhead-Full</code>. Flight und Car laufen nie voll, sie antworten sofort.</div>
     </div>
-    <h2>Ablauf: fragen, Antworten sammeln, dann aufl&ouml;sen</h2>
+    <h2>Ablauf: fragen, Antworten sammeln, dann aufl&ouml;sen (Zahlen f&uuml;r 9 parallel)</h2>
     <table class="stops">
         <tr><th>Phase</th><th>Sagen / fragen</th><th>Erwartet</th></tr>
-        <tr><td>Probe 01&ndash;03<small>2 min</small></td><td>Alle Schilder &bdquo;schnell&ldquo;.</td><td class="ans">Es sitzt immer nur einer, der zweite Stuhl bleibt leer.</td></tr>
-        <tr><td>STOPP 1<small>Karte 04 &middot; 2 min</small></td><td>&bdquo;Wie viele St&uuml;hle waren gleichzeitig besetzt?&ldquo; Dann dreht Hotel sein Schild auf <strong>langsam</strong>: &bdquo;Ab jetzt sitzt man 4 Nummern.&ldquo; Vorhersage per Handzeichen: Was passiert?</td><td class="ans">Einer: Ank&uuml;nfte &times; Dauer = 1 &times; 1 = 1.</td></tr>
-        <tr><td>Runde 1<small>05&ndash;14 &middot; 4 min</small></td><td>Laufen lassen.</td><td class="ans">Nach 06 beide St&uuml;hle voll, ab 07 stehen Requests dahinter. Flight und Car stehen herum.</td></tr>
-        <tr><td>STOPP 2<small>Karte 15 &middot; 5 min</small></td><td>Standbild: zwei sitzen (09, 10), vier stehen dahinter (11&ndash;14). &bdquo;Ihr hinten, worauf wartet ihr?&ldquo; &bdquo;Flight, Car, wie viele kamen an?&ldquo; &bdquo;Hat der Circuit Breaker etwas gemerkt?&ldquo; &bdquo;Karte 14, wann stehst du auf?&ldquo;</td><td class="ans">Auf einen Stuhl, dabei wollt ihr zuerst nur Flight, und Flight ist gesund. Flight 6, Car 4. Nein: 2&nbsp;s &lt; 3&nbsp;s Timeout, langsam ist kein Fehler, CLOSED. Bei 26: so sp&auml;t k&auml;me die Antwort.</td></tr>
-        <tr><td>Umbau<small>nach STOPP 2</small></td><td colspan="2">Alle Karten auf den Tisch, alle neu anstellen. <strong>Wand zwischen die St&uuml;hle</strong>, Hotel auf die eine Seite, Flight und Car auf die andere: &bdquo;Dieselben zwei St&uuml;hle, nur mit einer Wand.&ldquo; Zusatzregel erkl&auml;ren. Vorhersage: Wie viele der n&auml;chsten elf bekommen Hotels? Z&auml;hler auf 0, Runde-1-Werte merken.</td></tr>
-        <tr><td>Runde 2<small>16&ndash;26 &middot; 3 min</small></td><td>Laufen lassen.</td><td class="ans">Auf dem Hotel-Stuhl sitzen 16, 20, 24. Alle anderen sofort fertig, niemand steht an.</td></tr>
-        <tr><td>STOPP 3<small>Karte 27 &middot; 6 min</small></td><td>Z&auml;hler abfragen, mit Runde 1 vergleichen (Seite 2). &bdquo;Welche Runde war besser?&ldquo; &bdquo;Wie viele St&uuml;hle h&auml;tte Hotel gebraucht?&ldquo; &bdquo;Steht der Breaker noch auf CLOSED?&ldquo; &bdquo;Wem geh&ouml;ren die St&uuml;hle?&ldquo; Danach Demo und Recap (Folie 19).</td><td class="ans">Ehrlich: Runde 1 mehr Hotels, in Runde 2 wartet niemand, mehr beantwortet. 4 St&uuml;hle: jede Nummer einer dazu, jeder bleibt 4; Hotel hat 1, also jeder vierte. Ja, ein besetzter Stuhl ist kein Fehler. Booking: Die Wand sch&uuml;tzt Booking, nicht Hotel. F&uuml;nf Instanzen h&auml;tten f&uuml;nf Hotel-St&uuml;hle.</td></tr>
+        <tr><td>Stufe 1<small>ohne Bulkhead &middot; 2 min</small></td><td>Alle Schilder &bdquo;schnell&ldquo;. Zwei Requests laufen durch.</td><td class="ans">Jeder geht mit drei Chips. Alle kennen den Ablauf.</td></tr>
+        <tr><td>Stufe 2<small>Hotel langsam &middot; 4 min</small></td><td>Hotel dreht sein Schild auf <strong>langsam</strong>: &bdquo;Hotel antwortet noch, etwa 2&nbsp;s. In 2&nbsp;s kommen Hunderte Requests. Im Spiel gibt Hotel bis zum STOPP nichts mehr.&ldquo; Laufen lassen.</td><td class="ans">R1&ndash;R9 holen Flight und bleiben bei Hotel stehen. R10 steht an der T&uuml;r. Nichts bewegt sich mehr.</td></tr>
+        <tr><td>STOPP 1<small>5 min</small></td><td>&bdquo;Ihr bei Hotel, was habt ihr in der Hand?&ldquo; &bdquo;R10, was hast du?&ldquo; &bdquo;Car, wie viele Chips hast du ausgegeben?&ldquo; &bdquo;Was ist kaputt?&ldquo;</td><td class="ans">Nur Flight. Nichts, nicht einmal Flight, und Flight ist gesund. Keinen, obwohl Car gesund ist. Nichts: Hotel ist nur langsam, kein Fehler.</td></tr>
+        <tr><td>Umbau<small>nach STOPP 1</small></td><td colspan="2">Alle Chips zur&uuml;ck an die Services, alle neu anstellen. <strong>Bulkhead ansagen:</strong> &bdquo;Dieselben neun Pl&auml;tze, aber jeder Service bekommt drei davon.&ldquo; Zusatzregel erkl&auml;ren, Hotel auf &bdquo;schnell&ldquo;.</td></tr>
+        <tr><td>Stufe 3<small>mit Bulkhead &middot; 2 min</small></td><td>Zwei Requests laufen durch. &bdquo;Was hat sich ge&auml;ndert?&ldquo;</td><td class="ans">Nichts. Solange alles l&auml;uft, kostet der Bulkhead nichts.</td></tr>
+        <tr><td>Stufe 4<small>Hotel langsam &middot; 3 min</small></td><td>Hotel wieder auf <strong>langsam</strong>. Vorhersage per Handzeichen: Wie viele bekommen eine Antwort? Laufen lassen, bis jeder einmal durch ist.</td><td class="ans">R1&ndash;R3 bleiben bei Hotel. Ab R4: Flight, Default von Booking, Car, fertig, wieder anstellen.</td></tr>
+        <tr><td>STOPP 2<small>6 min</small></td><td>Mit Stufe 2 vergleichen (Seite 2). &bdquo;Wie viele stehen fest, wie viele sind frei?&ldquo; &bdquo;Was hat die Grenze gekostet?&ldquo; &bdquo;Hilft es, Hotel alle neun Pl&auml;tze zu geben?&ldquo; &bdquo;Wem geh&ouml;rt die Grenze?&ldquo; Zum Schluss: &bdquo;2 Sekunden sind um.&ldquo; Hotel gibt den drei Wartenden ihre Chips. Danach Demo und Recap (Folie 19).</td><td class="ans">Stufe 2 alle fest, Stufe 4 drei fest, sieben frei. Weniger Hotels, Verf&uuml;gbarkeit vor Vollst&auml;ndigkeit. Nein, das ist Stufe 2. Booking, Hotel wei&szlig; nichts davon. F&uuml;nf Instanzen: Hotel sieht f&uuml;nfzehn. Hotel war nie kaputt.</td></tr>
     </table>
     <h2>Lerneffekt</h2>
     <ul>
         <li><strong>Langsam ist schlimmer als kaputt:</strong> Der geteilte Pool legt auch gesunde Backends lahm, der Circuit Breaker merkt nichts.</li>
-        <li><strong>Ein Abteil pro Backend:</strong> Voll hei&szlig;t sofort ablehnen, nicht warten (<code>bulkhead.go</code>: non-blocking <code>select</code>).</li>
+        <li><strong>Ein Kontingent pro Backend:</strong> Voll hei&szlig;t sofort ablehnen, nicht warten (<code>bulkhead.go</code>: non-blocking <code>select</code>).</li>
         <li><strong>Ehrlicher Tausch:</strong> weniger Hotels, aber alle bekommen sofort eine Antwort.</li>
         <li><strong>Die Gr&ouml;&szlig;e ist die Arbeit:</strong> Pl&auml;tze = Aufrufe pro Zeit &times; Dauer (Little). <strong>Wen es sch&uuml;tzt:</strong> Booking, nicht Hotel.</li>
     </ul>
@@ -697,22 +684,11 @@ const S4_WALK = [
     ["27", "Trainer", "ENDE. Board bleibt liegen (21–25, OPEN)", "5/5", "OPEN"]
 ];
 
-// Story 5: Stapel 01–27 (A7 hoch). Auf der Karte nur die Nummer und wann man aufsteht; STOPP-Karten gehen zum Trainer.
-// Maßstab: 1 Nummer = 0,5 s. Probe: Hotel schnell, 1 Nummer sitzen. Runde 1 und 2: Hotel langsam, 4 Nummern ab dem Hinsetzen.
-const S5_STOPS = { 4: 1, 15: 2, 27: 3 };
-const S5_R1_UP = { 5: 9, 6: 10, 7: 13, 8: 14, 9: 17, 10: 18, 11: 21, 12: 22, 13: 25, 14: 26 };
-const S5_DECK = Array.from({ length: 27 }, (_, i) => {
-    const nr = i + 1, two = x => String(x).padStart(2, "0");
-    if (S5_STOPS[nr]) return { nr: two(nr), phase: "–", stop: S5_STOPS[nr] };
-    if (nr <= 3) return { nr: two(nr), phase: "Probe", up: two(nr + 1) };
-    if (nr <= 14) return { nr: two(nr), phase: "Runde 1", up: two(S5_R1_UP[nr]) };
-    return { nr: two(nr), phase: "Runde 2", up: two(nr + 4) };
-});
 // Service-Schilder A4 hoch; Hotel doppelseitig (schnell / langsam)
 const S5_SVC = {
-    hotel:  { name: "Hotel",  icon: "bed",   col: "var(--hotel)",  sub: "zählt, wer sich setzt" },
-    flight: { name: "Flight", icon: "plane", col: "var(--flight)", sub: "zählt, wer abklatscht" },
-    car:    { name: "Car",    icon: "car",   col: "var(--car)",    sub: "zählt, wer abklatscht" }
+    hotel:  { name: "Hotel",  icon: "bed",   col: "var(--hotel)",  sub: "gibt einen Hotel-Chip pro Request" },
+    flight: { name: "Flight", icon: "plane", col: "var(--flight)", sub: "gibt einen Flight-Chip pro Request" },
+    car:    { name: "Car",    icon: "car",   col: "var(--car)",    sub: "gibt einen Car-Chip pro Request" }
 };
 
 // Story 4: Zustandskarten (A7 hoch) für das Zustandsfeld des Circuit-Breaker-Boards
@@ -733,8 +709,8 @@ function config(n) {
     const tableNames = ["A", "B", "C"];
     // Story 4: ein Booking, alle anderen sind Requests, ein Stapel für jede Gruppengröße
     const s4Queue = n - 1;
-    // Story 5: eine Gruppe bis 13, ab 14 zwei Gruppen mit je eigenem Satz (Karten, Schilder, 2 Stühle, Wand)
-    const s5 = split(n, n >= 14 ? 2 : 1).map((t, i) => ({ name: tableNames[i], size: t }));
+    // Story 5: eine Gruppe bis 17, ab 18 zwei Gruppen mit je eigenem Satz Schilder, die Chips werden geteilt
+    const s5 = split(n, n >= 18 ? 2 : 1).map((t, i) => ({ name: tableNames[i], size: t }));
     // Story 7: Tische zu 4 bis 7, je ein Würfel und 13 Chips, nichts zu drucken
     const s7 = split(n, n <= 7 ? 1 : Math.ceil(n / 6));
     return { n, s4Queue, s5, s7 };
@@ -845,75 +821,53 @@ function scriptS4Table() {
         `<p style="margin:1.2mm 0 0"><strong>Danach: Demo im Dashboard Story 4.</strong> Flight auf „Timeout“ (antwortet nach 10 s, Booking-Timeout 3 s), <code>GET /booking/offers</code>: Die ersten fünf warten je 3 s, immer 200 mit <code>flights: []</code> und <code>X-Fallback: flight</code>, ab dem 6. sofort mit <code>X-Circuit-Open: flight</code>. Schneller mit „Fehler“. Flight zurück auf „Normal“: nach 30 s HALF_OPEN, eine erfolgreiche Probe schließt.</p></div>`;
 }
 
-// ---------- Story 5: Karten, Schilder, Trainer-Skript Seite 2 ----------
-function s5Card(d) {
-    if (d.stop) return `<div class="s5k stop"><div class="s5num">${esc(d.nr)}</div><div class="s5up">STOPP ${d.stop}</div></div>`;
-    return `<div class="s5k"><div class="s5num">${esc(d.nr)}</div><div class="s5up">Steh auf bei <b>${esc(d.up)}</b></div></div>`;
-}
+// ---------- Story 5: Schilder, Trainer-Skript Seite 2 ----------
 function s5Sign(id, mode) {
     const v = S5_SVC[id];
     return `<div class="sign ${id}">${ic(v.icon, 62, v.col)}<div class="sign-name">${esc(v.name)}</div>` +
         `<div class="sign-mode${mode === "langsam" ? " slow" : ""}">${esc(mode)}</div><div class="sign-sub">${esc(v.sub)}</div>` +
         `<div class="sign-foot">Story 5 · Der geteilte Pool${id === "hotel" ? (mode === "schnell" ? " · Rückseite: langsam" : " · Vorderseite: schnell") : ""}</div></div>`;
 }
-// Durchlauf mit 10 Personen (Booking, Hotel, Flight, Car, Requests P1–P6): Nr, Karte an, was passiert, Stuhl, Stuhl, dahinter
-const S5_WALK_R1 = [
-    ["05", "P4", "setzt sich", "P4 (05)", "–", "–"],
-    ["06", "P5", "setzt sich, beide voll", "P4", "P5 (06)", "–"],
-    ["07", "P6", "kein Stuhl frei: dahinter", "P4", "P5", "P6 (07)"],
-    ["08", "P1", "dahinter", "P4", "P5", "P6, P1 (08)"],
-    ["09", "P2", "P4 (05) steht auf, P6 (07) setzt sich, P2 dahinter", "P6", "P5", "P1, P2 (09)"],
-    ["10", "P3", "P5 (06) steht auf, P1 (08) setzt sich, P3 dahinter", "P6", "P1", "P2, P3 (10)"],
-    ["11", "P4", "niemand steht auf, P4 dahinter", "P6", "P1", "P2, P3, P4 (11)"],
-    ["12", "P5", "dahinter", "P6", "P1", "P2 … P5 (12)"],
-    ["13", "P6", "P6 (07) steht auf, stellt sich an (Schlange leer) und bekommt 13: dahinter. P2 (09) setzt sich", "P2", "P1", "P3, P4, P5, P6 (13)"],
-    ["14", "P1", "P1 (08) steht auf, P3 (10) setzt sich, P1 bekommt 14: dahinter", "P2", "P3", "P4, P5, P6, P1 (14)"],
-    ["15", "STOPP 2", "Booking gibt die Karte dem Trainer", "P2 (09)", "P3 (10)", "P4 (11), P5 (12), P6 (13), P1 (14)"]
-];
-const S5_WALK_R2 = [
-    ["16", "P1", "Flight, setzt sich auf den Hotel-Stuhl", "P1 (16)"],
-    ["17", "P2", "Flight, Hotel besetzt: sofort Car, Tisch, anstellen", "P1"],
-    ["18", "P3", "sofort fertig", "P1"],
-    ["19", "P4", "sofort fertig", "P1"],
-    ["20", "P5", "P1 (16) steht auf (Car), P5 setzt sich", "P5 (20)"],
-    ["21", "P6", "sofort fertig", "P5"],
-    ["22", "P2", "sofort fertig", "P5"],
-    ["23", "P3", "sofort fertig", "P5"],
-    ["24", "P4", "P5 (20) steht auf, P4 setzt sich", "P4 (24)"],
-    ["25", "P1", "sofort fertig", "P4"],
-    ["26", "P6", "sofort fertig", "P4"],
-    ["27", "STOPP 3", "Booking gibt die Karte dem Trainer", "P4 (24)"]
+// Durchlauf mit 14 Personen (Booking, Flight, Hotel, Car, Requests R1–R10), 9 parallel, mit Bulkhead 3 pro Service:
+// Request, Flight, Hotel, Car, Ergebnis, belegt
+const S5_WALK = [
+    { title: "Stufe 1: ohne Bulkhead, alles schnell", col: "belegt (von 9)", rows: [
+        ["R1", "✓", "✓", "✓", "fertig, drei Chips", "1, dann 0"],
+        ["R2", "✓", "✓", "✓", "fertig, drei Chips", "1, dann 0"]] },
+    { title: "Stufe 2: ohne Bulkhead, Hotel langsam", col: "belegt (von 9)", rows: [
+        ["R1", "✓", "wartet", "–", "steht bei Hotel", "1"],
+        ["R2–R9", "✓", "wartet", "–", "stehen bei Hotel", "2 … 9"],
+        ["R10", "–", "–", "–", "kommt nicht herein, nicht einmal Flight", "9, voll"]] },
+    { title: "Stufe 3: mit Bulkhead, alles schnell", col: "bei Hotel (von 3)", rows: [
+        ["R1", "✓", "✓", "✓", "fertig, drei Chips", "1, dann 0"],
+        ["R2", "✓", "✓", "✓", "fertig, drei Chips", "1, dann 0"]] },
+    { title: "Stufe 4: mit Bulkhead, Hotel langsam", col: "bei Hotel (von 3)", rows: [
+        ["R1–R3", "✓", "wartet", "–", "stehen bei Hotel", "1 … 3, voll"],
+        ["R4", "✓", "Default", "✓", "fertig ohne Hotel, wieder anstellen", "3"],
+        ["R5–R10", "✓", "Default", "✓", "fertig ohne Hotel", "3"]] }
 ];
 const S5_RESULT = [
-    ["Hotel: bei mir gesessen", "6", "3", "Runde 1: mehr Hotels"],
-    ["Flight: abgeklatscht", "6", "11", "gesund und trotzdem ausgehungert"],
-    ["Car: abgeklatscht = beantwortet", "4", "10", "verfügbar vor vollständig"],
-    ["davon komplett mit Hotels", "4", "2", "ehrlicher Tausch"],
-    ["davon sofort ohne Hotels", "0", "8", "`hotels: []`"],
-    ["stehen hinter den Stühlen", "4", "0", "die Queue ist weg"],
-    ["Breaker", "CLOSED", "CLOSED", "langsam ≠ Fehler"],
-    ["Stühle bei Booking", "2", "2", "gleich viele, nur mit Wand"]
+    ["warten bei Hotel", "9", "3", "das Kontingent begrenzt den Schaden"],
+    ["an der Tür", "1", "0", "Booking nimmt wieder an"],
+    ["fertig mit Default", "0", "7", "`hotels: []`"],
+    ["Car-Chips ausgegeben", "0", "7", "gesund und trotzdem ausgehungert"],
+    ["frei für den nächsten Request", "0", "7", "verfügbar vor vollständig"],
+    ["Plätze bei Booking", "9", "9", "gleich viele, nur aufgeteilt"]
 ];
 function scriptS5Back() {
     const row = (cells, cls, nw = []) => `<tr${cls ? ` class="${cls}"` : ""}>${cells.map((c, i) => `<td${nw.includes(i) ? ' class="nw"' : ""}>${fmt(c)}</td>`).join("")}</tr>`;
-    const deck = chunk(S5_DECK, 9).map(part => `<table class="decktab walk"><tr><th>Nr</th><th>Phase</th><th>Text</th><th>☐</th></tr>` +
-        part.map(d => `<tr${d.stop ? ' class="stopp"' : ""}><td>${esc(d.nr)}</td><td>${esc(d.phase)}</td><td class="nw">${d.stop ? "STOPP " + d.stop : "Steh auf bei " + esc(d.up)}</td><td><span class="chk"></span></td></tr>`).join("") +
-        `</table>`).join("");
-    const r1 = `<table class="walk"><tr><th>Nr</th><th>Karte an</th><th>Was passiert</th><th>Stuhl</th><th>Stuhl</th><th>dahinter</th></tr>` +
-        S5_WALK_R1.map(r => row(r, r[1].startsWith("STOPP") ? "stopp" : "", [1, 3, 4])).join("") + `</table>`;
-    const r2 = `<table class="walk"><tr><th>Nr</th><th>Karte an</th><th>Was passiert</th><th>Hotel-Stuhl</th></tr>` +
-        S5_WALK_R2.map(r => row(r, r[1].startsWith("STOPP") ? "stopp" : "", [1, 3])).join("") + `</table>`;
-    const res = `<table class="walk res"><tr><th></th><th>Runde 1</th><th>Runde 2</th><th>was es heißt</th></tr>` + S5_RESULT.map(r => row(r)).join("") + `</table>`;
-    return `<div class="cheat s5"><div class="ckline"><div><div class="ck">Trainer-Skript · Story 5 · Seite 2/2</div><h1>Stapel und Durchlauf</h1></div><div>1 Nummer = 0,5 s · ☐ beim Sortieren abhaken, 01 liegt oben</div></div>` +
-        `<h2>Der Stapel 01–27</h2><div class="three">${deck}</div>` +
-        `<p class="fn" style="margin:1.2mm 0 0">Karten 09–14 nennen Zahlen hinter STOPP 2: egal, der STOPP räumt auf. 25 und 26 nennen 29 und 30: egal, sie sitzen nie.</p>` +
-        `<h2>Durchlauf mit 10 Personen: Booking, Hotel, Flight, Car, Requests P1–P6</h2>` +
-        `<p style="margin:0"><strong>Probe:</strong> 01 → P1 setzt sich (Flight 1, Hotel 1). 02: P1 steht auf (Car), P2 bekommt 02 und setzt sich. 03: P2 auf, P3 setzt sich. 04: P3 auf, Booking ruft STOPP. Schlange danach: P4, P5, P6, P1, P2, P3. Zähler vor Runde 1 auf 0.</p>` +
-        `<h2>Runde 1 (Hotel langsam, ohne Wand)</h2>${r1}` +
-        `<p style="margin:1mm 0 0"><strong>Zähler Runde 1:</strong> Hotel 6 (05–10 gesetzt), Flight 6, Car 4 (05–08 fertig). Merken, dann alle neu anstellen: P1 … P6, Zähler auf 0.</p>` +
-        `<div class="two"><div><h2>Runde 2 (mit Wand)</h2>${r2}</div><div><h2>Ergebnis bei STOPP 3</h2>${res}` +
-        `<p class="fn" style="margin:1.5mm 0 0">Zähler Runde 2: Hotel 3 (16, 20, 24), Flight 11, Car 10 (24 sitzt noch). Wer genau welche Karte bekommt, hängt am Anstellen, die Kartenzahlen nicht.</p></div></div>` +
-        `<p class="fn" style="margin:2mm 0 0"><strong>Maßstab (services/booking/story5):</strong> 1 Nummer = 0,5 s, pro Nummer 1 Request (20/s). Hotel normal 1 Nummer (0,5 s), langsam 4 (2 s), Timeout 6 (3 s). 1 Stuhl = 10 Slots (<code>MaxConcurrent</code> 10): Runde 1 ein Pool aus 2 Stühlen, Runde 2 hat Hotel 1 Stuhl.</p></div>`;
+    const walk = st => `<h2>${esc(st.title)}</h2><table class="walk"><tr><th>Request</th><th>Flight</th><th>Hotel</th><th>Car</th><th>Ergebnis</th><th>${esc(st.col)}</th></tr>` +
+        st.rows.map(r => row(r, "", [0, 5])).join("") + `</table>`;
+    const res = `<table class="walk res"><tr><th></th><th>Stufe 2</th><th>Stufe 4</th><th>was es heißt</th></tr>` + S5_RESULT.map(r => row(r)).join("") + `</table>`;
+    return `<div class="cheat s5"><div class="ckline"><div><div class="ck">Trainer-Skript · Story 5 · Seite 2/2</div><h1>Durchlauf und Ergebnis</h1></div><div>9 parallel · mit Bulkhead 3 pro Service · nach jeder Stufe alle Chips zurück</div></div>` +
+        `<p style="margin:0">Durchlauf mit 14 Personen: Booking, Flight, Hotel, Car, Requests R1–R10. Booking lässt den Nächsten herein, sobald der Vorige fertig ist oder wartet.</p>` +
+        `<div class="two"><div>${walk(S5_WALK[0])}${walk(S5_WALK[1])}</div><div>${walk(S5_WALK[2])}${walk(S5_WALK[3])}</div></div>` +
+        `<p style="margin:1mm 0 0">In Stufe 4 sind sieben Personen gebunden (drei Requests bei Hotel, die drei Services, Booking), die übrigen sieben Requests sind frei. Für Stufe 4 allein würden vier Requests reichen, die zehn braucht Stufe 2.</p>` +
+        `<div class="two"><div><h2>Ergebnis bei STOPP 2</h2>${res}</div><div><h2>Chips pro Stufe</h2>` +
+        `<table class="walk"><tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th></tr>` +
+        [["Flight", "2", "9", "2", "10"], ["Hotel", "2", "0", "2", "0"], ["Car", "2", "0", "2", "7"], ["Default", "0", "0", "0", "7"]].map(r => row(r)).join("") + `</table>` +
+        `<p class="fn" style="margin:1.5mm 0 0">20 pro Farbe reichen nur, wenn nach jeder Stufe alle Chips an die Services zurückgehen. Bei 6 oder 3 parallel bleibt der Ablauf gleich, nur kürzer.</p></div></div>` +
+        `<p class="fn" style="margin:2mm 0 0"><strong>Maßstab (services/booking/story5):</strong> Ein Platz bei Booking = ein Thread oder Slot. Die neun gemeinsamen Plätze in Stufe 2 sind der Pool eines klassischen Servers, die Go-Referenz hat keinen. Das Kontingent pro Service = <code>max[service]</code>, im Spiel 3, in der Referenz 10 (<code>MaxConcurrent</code>). Default-Chip = <code>fallback()</code> mit <code>hotels: []</code>, HTTP 200. „langsam“ = Modus „Langsam“ (2 s), unter dem Timeout von 3 s: Der Breaker bleibt CLOSED. In echt kommen Hunderte Requests pro Sekunde, deshalb wirkt Hotel im Spiel wie stehen geblieben.</p></div>`;
 }
 
 // Raster mit Schnittlinien. cells: HTML oder null.
@@ -966,15 +920,11 @@ function buildPlan(cfg, opts) {
     }
 
     // ================= Story 5 =================
-    // Ein Trainer-Skript; ab 14 zwei Gruppen mit je einem Satz Karten und Schilder (die Sätze sind gleich)
+    // Ein Trainer-Skript; ab 18 zwei Gruppen mit je einem Satz Schilder, die Chips werden geteilt
     add("Story 5", "Trainer-Skript", "a4p", "pduplex", document.getElementById("tpl-script-s5").innerHTML);
     add("Story 5", "Trainer-Skript", "a4p", "pduplex", scriptS5Back());
     const s5Sets = cfg.s5.length;
     const setTag = s5Sets > 1 ? ` · ${s5Sets} Sätze` : "";
-    for (let i = 0; i < s5Sets; i++) {
-        chunk(S5_DECK.map(s5Card), 8).forEach(page => add("Story 5", "Stapel 01–27" + setTag, "a4l", "karton",
-            grid("a4l", 4, 2, 74.25, 105, padTo(page, 8), { cellClass: "a7" }), { labelMid: 105 }));
-    }
     for (let i = 0; i < s5Sets; i++) {
         add("Story 5", "Schild Hotel" + setTag + " (Vorderseite)", "a4p", "sduplex", s5Sign("hotel", "schnell"));
         add("Story 5", "Schild Hotel" + setTag + " (Rückseite)", "a4p", "sduplex", s5Sign("hotel", "langsam"));
@@ -1039,7 +989,7 @@ function render() {
         return `<tr class="${hidden ? "hidden-batch" : ""}"><td>${esc(r.game)}</td><td>${esc(r.title)}</td><td>${FORMAT[r.size]}</td>` +
             `<td><span class="pill ${r.paper}">${esc(p.label)}${p.hint ? " · " + esc(p.hint) : ""}</span></td><td class="n">${r.count}</td></tr>`;
     }).join("");
-    const tables = `Story 4: ein Booking, ${cfg.s4Queue} in der Schlange, ein Stapel 01–27, Board und Zustandskarten 1 Satz · Story 5: ${cfg.s5.length > 1 ? cfg.s5.map(t => t.size).join(" + ") + " in zwei Gruppen, je ein Satz Karten und Schilder" : cfg.s5[0].size + " in einer Gruppe, ein Satz Karten und Schilder"} · Story 7: ${cfg.s7.join(" + ")} an ${cfg.s7.length} Tischen, je ein Würfel und 13 Chips`;
+    const tables = `Story 4: ein Booking, ${cfg.s4Queue} in der Schlange, ein Stapel 01–27, Board und Zustandskarten 1 Satz · Story 5: ${cfg.s5.length > 1 ? cfg.s5.map(t => t.size).join(" + ") + " in zwei Gruppen, je ein Satz Schilder, Chips geteilt" : cfg.s5[0].size + " in einer Gruppe, ein Satz Schilder und Chips"} · Story 7: ${cfg.s7.join(" + ")} an ${cfg.s7.length} Tischen, je ein Würfel und 13 Chips`;
     const scope = game === "all" ? "Bogen gesamt" : "Bogen für " + GAMES.find(g => g.id === game).name;
     document.getElementById("toc-sum").innerHTML = `<strong>${scope}:</strong> ` +
         Object.keys(PAPER).filter(k => byPaper[k]).map(k => `${byPaper[k]} × ${PAPER[k].label}${PAPER[k].hint ? " (" + PAPER[k].hint + ")" : ""}`).join(", ") +
