@@ -49,7 +49,7 @@ Vor dem Spiel:
 1. **Kunde und Booking** spielen zusammen. **Flight, Hotel, Car** würfeln nur und behalten, was bei ihnen liegt.
 2. Der Kunde hat 13 Chips. **Eine Reise kostet 3**, je einen für Flight, Hotel und Car.
 3. Kunde und Booking machen aus, wie viele Chips der Kunde Booking als **Retry-Budget** gibt. Booking legt sie als eigenen Stapel zur Seite. Sie kommen nie zurück.
-4. Kann der Kunde Booking keine 3 Chips mehr geben, ist das Spiel vorbei.
+4. **Gewonnen** bei 4 geklappten Reisen. **Verloren** nach 6 Reisen mit weniger Erfolgen oder wenn der Kunde Booking keine 3 Chips mehr geben kann.
 
 Jede Reise:
 
