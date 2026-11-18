@@ -7,6 +7,11 @@ im Workshop holprig. Dieses Dokument wertet die Beobachtungen des Trainers aus,
 vergleicht drei Lösungswege und empfiehlt eine Sofortmaßnahme für den laufenden
 Workshop sowie einen Umbau danach.
 
+**Ergänzt im Lauf des Tages:** Nachträge aus Fragen im Workshop (Consul,
+Env-Variablen, Story 3) und die konsolidierte Feedback-Liste des zweiten
+Durchlaufs (Abschnitt „Feedback des zweiten Durchlaufs, konsolidiert“), die
+auch das Story-4-Review vom 17.11. einbezieht.
+
 **Was nicht passiert ist:** Es wurde nichts umgesetzt. Alle Aussagen sind gegen
 die Dateien und mit `docker compose --dry-run` bzw. `config` (Docker 29.7.2,
 Compose 5.7.1) geprüft. Windows und ältere Compose-Versionen wurden nicht
@@ -547,6 +552,186 @@ wählen. Was verliert ihr, wenn die Registry entscheidet?“ Passt zu Frage 3 in
 > Liste, macht Retry und sortiert schlechte Instanzen aus. Die Entscheidung
 > bleibt beim Aufrufer, steht aber nicht mehr in eurem Code.
 
+## Feedback des zweiten Durchlaufs, konsolidiert
+
+Der Workshop lief am 18.11. zum zweiten Mal, das Feedback war durchweg
+positiv. Die Verbesserungspunkte (vom Trainer nach dem Workshop
+zusammengefasst) sind hier mit diesem Dokument und dem Story-4-Review vom
+17.11. (`2026-11-17-story4-spiel.md`) abgeglichen. Nichts davon ist
+umgesetzt.
+
+Kennzeichnung: **neu** = bisher nirgends notiert, **zusammengeführt** =
+deckt sich mit einem bestehenden Punkt, **⚠** = Widerspruch, den der Trainer
+entscheiden muss.
+
+### A. Circuit-Breaker-Rollenspiel (Folie 15 „Wenn der Flug ausfällt“)
+
+**A1 Visueller Einstieg** (neu)
+
+- **Feedback:** Die Story steht nur als Text an der Wand, die Regeln sind
+  nicht trivial. Gewünscht ist ein Bild oder eine kurze Bildfolge (etwa drei
+  Schritte). Booking steht in der Mitte, drumherum die Requests mit Karten,
+  dazu Flight, Hotel und Car. Pfeile zeigen, wer wann vorliest und wie
+  Booking reagiert.
+- **Bestand:** Eine Aufstellungsskizze gibt es schon, aber nur auf der
+  Druckseite (`pages/material/index.html:380`, „Aufbau im Raum“), nicht auf
+  der Folie. Sie kann die Basis sein.
+- **⚠** Heute stehen die Requests in einer Schlange vor dem Booking-Tisch. Die
+  Backends sind keine Personen, ihre Antwort steht auf der Karte. Sollen
+  Flight, Hotel und Car nur im Bild erscheinen oder als Personen mitspielen?
+  Letzteres ändert den Ablauf.
+- **Dazu aus dieser Session:** Wer die rote Karte aufs Board legt, steht
+  nirgends ausdrücklich (Story-Doc und Druckseite: „Rote Karten kommen aufs
+  Board“, Passiv). Gemeint ist der Request, Folie 15 sagt aber „Booking …
+  führt das Board“. Die Pfeile im Bild sollten das klären.
+
+**A2 Teil 1 (ohne Breaker) spürbar machen** (neu)
+
+- **Feedback:** Die drei Karten vor STOPP 1 zeigen nicht, warum das Verhalten
+  ein Problem ist. Idee: Booking hat begrenzte Kapazität (etwa drei „Hände“),
+  jeder hängende Request blockiert eine, weitere müssen warten. Der Stau wird
+  sichtbar, der Breaker wirkt danach wie eine Erlösung.
+- **⚠** Begrenzte Kapazität ist der Kern des Story-5-Spiels (Bulkhead, Stühle
+  als Slots). In Story 4 nimmt sie Story 5 die Pointe vorweg und vermischt
+  Timeout mit Erschöpfung des Thread-Pools. Heute trägt Teil 1: Hotel und Car
+  sind gesund und trotzdem weg, und jeder wartet die volle Zeit.
+- **Alternative ohne Überschneidung:** Die Wartezeit laut und sichtbar
+  aufaddieren („15 Sekunden Kundenzeit für nichts“).
+- **Zusammenhang:** Story-4-Review Punkt 2 (3 s Timeout in beiden Phasen,
+  damit bei STOPP 1 nur der Breaker neu ist).
+
+**A3 Probe / HALF_OPEN vereinfachen** (zusammengeführt)
+
+- **Feedback:** Der Probe-Durchlauf geht aus den Karten nicht hervor.
+  Gewünscht ist eine farblich abgesetzte Probe-Karte: Eine Person geht vor,
+  nur wenn sie durchkommt, dürfen alle anderen wieder.
+- **Bestand:** Das gibt es schon, die gelben Karten 14 und 18 und das
+  Probe-Feld auf dem Board. Das Feedback zeigt, dass sie nicht als solche
+  erkannt werden.
+- **Vorschlag:** Die Probe-Karte deutlicher machen statt neu erfinden, etwa
+  mit dem Wort PROBE groß und dem Ablauf als Satz auf der Karte. Zusammen mit
+  Story-4-Review Punkt 1 („Flight: Timeout!“ bzw. „Flight antwortet!“).
+
+**A4 Kartenlayout** (zusammengeführt mit Story-4-Review Punkte 1 und 3)
+
+- **Feedback:** Warten und Vorlesen wirken wie eine Aktion, und der
+  betroffene Downstream-Service ist nicht erkennbar. Vorschlag: zwei Felder
+  „1. Warten“ (Uhr, Sekunden groß) und „2. Vorlesen“ (Sprechblase), dazu
+  festes Icon und feste Farbe pro Service, Flight etwa immer rot. Ziel: Wer
+  die Karte zum ersten Mal sieht, weiß sofort, was zu tun ist.
+- **Neu:** die Teilung in „Warten“ und „Vorlesen“.
+- **Schon notiert (17.11.):** Zeile „was ist mit Flight“ zuerst, Leiste mit
+  den Status-Codes von Flight, Hotel und Car.
+- **⚠** „Flight immer rot“ kollidiert doppelt. In der Palette ist Flight blau
+  (`#1456b3`, `services/CLAUDE.md`, Gate `palette`), und Rot heißt auf den
+  Karten schon „Fehler, aufs Board“. Vorschlag: Flight-Icon in Blau, den
+  Ausfall per Symbol zeigen statt per Farbe.
+- **Offen (17.11.):** Passt das alles auf A7?
+- **Folge:** Alle vier Karton-Bogen neu drucken.
+
+### B. Hausaufgabe und Einklinken
+
+**B1 Einklinken in die Hausaufgabe** (zusammengeführt mit Hypothese 4 und
+offener Frage 4)
+
+- **Feedback:** Das Grundgerüst als Hausaufgabe hat gut funktioniert. Die
+  Integration ins Dashboard hat im Workshop fast 45 Minuten gekostet. Sie
+  gehört in die Hausaufgabe, mit klarem Erfolgskriterium („eigener Service
+  im Dashboard grün“).
+- **Neu:** die Zahl, rund 45 Minuten.
+- **Voraussetzung:** Die Entscheidung D5 („Einklinken erst im Workshop“) fällt.
+- **⚠** Heute einigen sich die Teams erst im Workshop auf einen Service (Notes
+  zu Folie 08c). Wer zu Hause seinen eigenen einklinkt, stellt im Workshop
+  trotzdem einmal auf den Team-Service um. Lösung: Zu Hause wird der Ablauf
+  geübt, im Workshop nur der Pfad getauscht.
+- **Erfolgskriterium:** Dafür passt der vorgeschlagene Container-Check in
+  Schritt 0 mit drei Stufen (nicht erreichbar, Beispiel-Lösung, euer
+  Service), siehe „Umbau danach“.
+
+**B2 Doku korrigieren und einmal komplett durchspielen** (teils
+zusammengeführt)
+
+- **Feedback:** Die Integrationsdoku ist nicht gut genug und enthält Fehler.
+  Überarbeiten und einmal mit frischem Checkout exakt nach Doku durchspielen.
+- **Schon notiert:** `docs/vorbereitung.md:53` verspricht 8099, der
+  Smoke-Test nutzt 8099 (siehe Hypothese 2 und Sofortmaßnahme).
+- **Neu:** der vollständige Durchlauf mit frischem Checkout. Unter Linux mit
+  Docker kann ihn Claude Code im Container machen. Windows und macOS braucht
+  einen eigenen Durchlauf.
+
+**B3 Portkonflikt mit dem Beispiel-Service** (zusammengeführt mit Hypothese 2
+und offener Frage 5)
+
+- **Feedback:** Die fest integrierte Beispiel-Lösung belegt den Port, den die
+  Gruppen nutzen sollen. Ideen: eigener reservierter Port für das Beispiel,
+  ein Compose-Profil, das standardmäßig aus ist, und/oder feste Ports pro
+  Gruppe.
+- **Fehlt im Feedback:** Die Hauptursache ist die `image:`-Zeile (Hypothese
+  5), nicht der Port.
+- **Eigener Port fürs Beispiel:** deckt sich mit „Port 8099 behalten oder
+  streichen“.
+- **Compose-Profil, standardmäßig aus:** neu und gut. Ohne eingeklinkten
+  Service ist „Mein Service“ grau, statt dass still das Beispiel läuft. Der
+  BEISPIEL-LÖSUNG-Kasten als Prüfmerkmal würde überflüssig. **⚠** Das
+  widerspricht der Rückfallebene „Beispiel-Lösung läuft immer mit“ in diesem
+  Konzept. Es braucht eine Entscheidung.
+- **⚠ Feste Ports pro Gruppe:** lösen das Problem nicht. Jede Gruppe hat
+  ihren Stack auf dem eigenen Laptop, Ports kollidieren nur innerhalb eines
+  Laptops. Das eigentliche Problem ist der Service außerhalb des Stacks
+  (`docker run`, IDE), den das Dashboard nie erreicht.
+
+**B4 Bestehende Punkte, die im Feedback fehlen** (alle oben in diesem
+Dokument)
+
+- `image:`-Zeile löschen (Sofortmaßnahme), Hub-Image `:custom` samt CI-Job
+  streichen
+- Pfad in `custom.yml` statt `.env`, `COMPOSE_FILE` für Story 8 (offene
+  Fragen 2 und 8)
+- Consul: `localhost:8500` vom Laptop, `consul:8500` aus dem Container
+  (offene Frage 9)
+- Eigene Env-Variablen in `custom.yml` (offene Frage 10)
+- Story 3: keine Existenzprüfung im POST (erledigt, `073fcb6`), Prepared
+  Query als Bonus (offene Frage 11)
+
+### C. Easter-Egg-Webhook (neu, geprüft)
+
+- **Feedback:** Der Discord-Webhook liegt als Secret in GitHub und wird beim
+  CI-Build eingebaut. Lokal fehlt er. Prüfen: Wofür ist er da, was passiert
+  lokal ohne ihn, funktioniert dort etwas falsch? Er soll den Teilnehmern
+  nicht offengelegt werden.
+- **Wofür:** Wer im Dashboard den Konami-Code eingibt, schaltet das Theme
+  „Inselwelt“ frei. Einmal pro Browser geht eine anonyme Nachricht an
+  Discord (`services/dashboard/static/index.html:3814-3845`). Ein zweiter
+  Webhook (`DISCORD_WEBHOOK_URL`) gehört zum Feedback-Formular auf GitHub
+  Pages (`pages/feedback/index.html:286`, eingesetzt in
+  `.github/workflows/deploy-pages.yml:67-85`).
+- **Lokal ohne Secret:** Der Platzhalter `__DISCORD_EASTEREGG_WEBHOOK_URL__`
+  bleibt stehen, die Funktion bricht vorher ab
+  (`index.html:3832`). Kein Fehler, keine Konsolenmeldung, sonst nichts
+  betroffen. Das gilt für `make docker-up` (Compose übergibt kein Build-Arg)
+  und `make docker-build-dashboard` ohne Variable. Es funktioniert also
+  nichts falsch.
+- **⚠ Offenlegung lässt sich so nicht verhindern.** `docker.yml:211` schreibt
+  die URL ins Docker-Hub-Image des Dashboards, das alle Teilnehmer per
+  `docker-up-hub` ziehen. Dort steht sie im Klartext im ausgelieferten
+  JavaScript, sichtbar im Seitenquelltext von `localhost`. Gleiches gilt für
+  den Feedback-Webhook auf der öffentlichen Pages-Seite. Wer die URL hat,
+  kann beliebige Nachrichten in den Kanal schicken oder den Webhook
+  entfernen. Eine URL in Code, der im Browser der Teilnehmer läuft, ist
+  grundsätzlich nicht geheim zu halten.
+- **Optionen:**
+  1. Risiko akzeptieren und die Webhooks nach jedem Workshop neu erzeugen
+     (Secret in GitHub tauschen, Image neu bauen).
+  2. Den Aufruf über das Go-Backend des Dashboards leiten, mit fester
+     Nachricht. Das ist schwerer auszulesen, steckt aber weiterhin im Image.
+  3. Ein kleines Relay außerhalb (etwa ein Worker mit Rate-Limit), das nur die
+     feste Nachricht weitergibt. Nur hier liegt die echte URL nicht beim
+     Teilnehmer.
+
+### Entscheidungen vor der Umsetzung
+
+Siehe offene Fragen 12 bis 17 unten.
+
 **Aufwand:** klein als Bonus-Hinweis, mittel als Umstellung (Init-Schritt,
 Referenz, Folie 11a, Story-Doc, Dashboard).
 
@@ -609,3 +794,14 @@ Umbau danach:
     ungetrackte `booking-custom.env` per `env_file` einführen?
 11. **Consul wählt selbst (Nachtrag):** Prepared Query mit `limit=1` nur als
     Bonus in Story 3 erwähnen, oder den Standardweg darauf umstellen?
+12. **A1 Bildfolge Story 4:** Flight, Hotel und Car nur im Bild, oder als
+    Personen im Spiel?
+13. **A2 Teil 1:** Kapazitätsidee („drei Hände“) trotz Überschneidung mit
+    dem Bulkhead-Spiel aus Story 5, oder Wartezeit sichtbar aufaddieren?
+14. **A4 Farbe für Flight:** Blau laut Palette mit Ausfall-Symbol, oder Rot
+    (dann Palette und Kartenfarben anpassen)?
+15. **B1 Einklinken als Hausaufgabe:** D5 aufheben?
+16. **B3 Beispiel-Lösung:** per Compose-Profil standardmäßig aus, oder als
+    Rückfallebene immer an?
+17. **C Webhook:** Rotation nach jedem Workshop, Backend-Proxy oder externes
+    Relay?
