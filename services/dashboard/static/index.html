@@ -1639,7 +1639,7 @@
                 </span>
                 <span class="stepper-connector"></span>
                 <span class="stepper-step">
-                    <button type="button" class="stepper-node" data-kind="play" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit zwei Stühlen und einer Wand, kein Code">5</button>
+                    <button type="button" class="stepper-node" data-kind="play" data-story-node="5" onclick="showStory(5)" title="Rollenspiel mit Chips, kein Code">5</button>
                     <small class="stepper-kind">Spiel</small>
                 </span>
                 <span class="stepper-connector"></span>
@@ -2020,39 +2020,39 @@ GET /openapi → OpenAPI-Spec (text/yaml), Vorlage anpassen</pre>
             </div>
         </section>
 
-        <!-- Story 5: Rollenspiel mit zwei Stühlen und einer Wand statt Code. Story-Karte zeigt
+        <!-- Story 5: Rollenspiel mit Chips statt Code. Story-Karte zeigt
              die Spielregeln; das Bulkhead-Panel darunter bleibt als Demo der Referenz. -->
         <section class="story-section" data-story="5" data-kind="play" data-backend="inline" hidden>
             <div class="story-helpers" data-story-helpers="5">
                 <details class="story-info" open>
                     <summary>Aufgabe <span class="badge">Rollenspiel</span></summary>
                     <div class="story-info-body">
-                    <p class="play-lead">Zwei St&uuml;hle sind die Threads von Booking. Und Hotel wird langsam.</p>
+                    <p class="play-lead">Booking schafft neun Requests gleichzeitig. Und Hotel wird langsam.</p>
                     <div class="play-grid">
                         <div>
                             <h4>Rollen</h4>
                             <ol>
-                                <li><strong>Booking</strong> ruft die Nummern und gibt die Karten aus.</li>
-                                <li><strong>Hotel, Flight, Car</strong> halten ihr Schild und z&auml;hlen mit.</li>
+                                <li><strong>Booking</strong> l&auml;sst herein, h&ouml;chstens neun gleichzeitig, und gibt den Default-Chip.</li>
+                                <li><strong>Flight, Hotel, Car</strong> halten ihr Schild und geben ihre Chips.</li>
                                 <li><strong>Alle anderen</strong> sind Requests in der Schlange.</li>
                             </ol>
                         </div>
                         <div>
-                            <h4>So l&auml;uft jede Nummer</h4>
-                            <p class="play-rule">Wer sie auf der Karte hat, steht auf. Wer wartet, r&uuml;ckt nach. Dann die n&auml;chste Karte.</p>
-                            <p class="play-note"><strong>Hinsetzen:</strong> Flight abklatschen. <strong>Aufstehen:</strong> Car abklatschen.</p>
-                            <p class="play-note"><strong>Dunkle Karte:</strong> STOPP, wir reden.</p>
-                            <p class="play-note"><strong>Ma&szlig;stab:</strong> 1 Nummer = 0,5 s, 1 Stuhl = 10 Slots.</p>
+                            <h4>So l&auml;uft jeder Request</h4>
+                            <p class="play-rule">Chips abholen: Flight, Hotel, Car. Mit allen drei bist du fertig, hinten anstellen.</p>
+                            <p class="play-note"><strong>Kein Hotel-Chip:</strong> bei Hotel stehen bleiben.</p>
+                            <p class="play-note"><strong>Alle Pl&auml;tze voll:</strong> an der T&uuml;r warten.</p>
+                            <p class="play-note"><strong>Mit Bulkhead:</strong> Hotel h&ouml;chstens drei, der Vierte bekommt sofort Default.</p>
                         </div>
                     </div>
                     <details class="story-solution">
                             <summary>Was passieren sollte <span class="badge">erst nach dem Spiel</span></summary>
                             <div class="story-solution-body">
                                 <ul>
-                                    <li><strong>Runde 1:</strong> Zwei sitzen, <strong>vier stehen dahinter</strong> und warten auf einen Stuhl, obwohl sie zuerst nur Flight wollen, und Flight ist gesund.</li>
-                                    <li><strong>Runde 2:</strong> Drei von elf bekommen Hotels (beim letzten STOPP sitzt der dritte noch, gez&auml;hlt sind deshalb zwei), alle anderen sofort eine Antwort ohne Hotels. Niemand wartet.</li>
+                                    <li><strong>Ohne Bulkhead:</strong> Alle neun Pl&auml;tze h&auml;ngen bei Hotel, der Zehnte steht an der T&uuml;r und bekommt <strong>nicht einmal Flight</strong>, obwohl Flight gesund ist. Car gibt keinen einzigen Chip aus.</li>
+                                    <li><strong>Mit Bulkhead:</strong> Drei h&auml;ngen bei Hotel, alle anderen bekommen sofort Flight, Default und Car und sind frei. Weniger Hotels, aber Booking antwortet.</li>
                                     <li><strong>Circuit Breaker:</strong> beide Male CLOSED. 2&nbsp;s liegen unter dem 3-Sekunden-Timeout, langsam ist kein Fehler.</li>
-                                    <li><strong>Wem gehören die Stühle?</strong> Booking. Die Wand schützt Booking, nicht Hotel.</li>
+                                    <li><strong>Wem geh&ouml;rt die Grenze?</strong> Booking. Der Bulkhead sch&uuml;tzt Booking, nicht Hotel.</li>
                                 </ul>
                             </div>
                         </details>
@@ -3728,7 +3728,7 @@ on receiveCompensationEvent(event):
             4: { title: "Story 4: Wenn der Flug ausf&auml;llt", kind: "play", pill: "&asymp; 20 min <small>Spiel</small>",
                  subtitle: "Circuit Breaker als Rollenspiel: Ein Booking, ein Kartenstapel, alle anderen sind die Requests. Danach die Demo mit der Referenz." },
             5: { title: "Story 5: Der geteilte Pool", kind: "play", pill: "&asymp; 25 min <small>Spiel</small>",
-                 subtitle: "Bulkhead als Rollenspiel: zwei Stühle, eine Wand, Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz." },
+                 subtitle: "Bulkhead als Rollenspiel mit Chips: Hotel ist langsam, nicht kaputt. Danach die Demo mit der Referenz." },
             6: { title: "Story 6: Alles oder nichts", kind: "code", pill: "&asymp; 40 min <small>Code</small>",
                  subtitle: "Saga: orchestrierte Mehr-Service-Buchung mit Kompensation bei Fehler." },
             7: { title: "Story 7: Die Saga wird leise", kind: "play", pill: "&asymp; 25 min <small>Spiel</small>",
