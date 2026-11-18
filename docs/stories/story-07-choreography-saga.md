@@ -54,9 +54,9 @@ Vor dem Spiel:
 Jede Reise:
 
 1. Der Kunde gibt Booking 3 Chips. Damit startet die Reise.
-2. Booking fragt der Reihe nach **Flight, Hotel, Car** und würfelt einmal: Bei 4–6 buchen alle drei. Bei 1 sagt Flight nein, bei 2 Hotel, bei 3 Car. Nur wer vor dem Nein gebucht hat, bekommt einen Chip.
+2. Booking fragt der Reihe nach **Flight, Hotel, Car** und würfelt einmal: Bei 4–6 buchen alle drei. Bei 1 sagt Flight nein, bei 2 Hotel, bei 3 Car. Wer davor dran war, hat schon gebucht und bekommt seinen Chip. Wer danach käme, wird nicht mehr gefragt.
 3. Wer nein sagt, würfelt den Grund: Bei 1–3 ist er nicht erreichbar (`503`). Booking zahlt ihm einen Chip aus dem Retry-Budget, er bucht doch. Wer nach ihm kommt, bucht ohne neuen Wurf, die Reise klappt.
-4. Bei 4–6 ist er ausgebucht, oder das Budget ist leer: Die Reise scheitert. Booking ruft den schon Gebuchten rückwärts „Storno!“ zu und sagt sofort „Storniert“.
+4. Bei 4–6 ist er ausgebucht, oder das Budget ist leer: Die Reise scheitert. Booking ruft jedem, der schon gebucht hat, „Storno!“ zu, rückwärts: den zuletzt Gebuchten zuerst. Dem Kunden sagt Booking sofort „Storniert“, ohne auf die Services zu warten.
 5. Erst dann würfelt jeder Gerufene: Bei 1–4 hat er es gehört und gibt den Chip an den Kunden zurück. Bei 5–6 hat er es überhört und behält ihn. Nach jeder Reise gibt Booking dem Kunden zurück, was vom Reisegeld übrig ist.
 
 Gewonnen ist, sobald 4 Reisen geklappt haben. Verloren ist nach 6 Reisen mit weniger Erfolgen oder wenn der Kunde Booking keine 3 Chips mehr geben kann.
