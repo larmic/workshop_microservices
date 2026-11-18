@@ -53,7 +53,7 @@
 Note:
 - <strong>Erst diskutieren</strong>, dann Klick f&uuml;r die Merks&auml;tze.
 - <strong>01 Circuit Breaker:</strong> Der CB reagiert auf Fehler, der Bulkhead auf Ressourcen-Druck.
-  - Runde 1: Hotel war fehlerfrei, der Breaker blieb CLOSED, trotzdem standen vier hinter den St&uuml;hlen.
+  - Stufe 2: Hotel war fehlerfrei, der Breaker blieb CLOSED, trotzdem hingen alle neun Pl&auml;tze bei Hotel.
   - Spicy: Der CB sieht Fehler, nicht Latenz.
 - <strong>02 Non-blocking:</strong> Threads werden billig, Connection-Pool, Speicher und Sockets nicht. Der Engpass wandert, siehe Bonus-Folie.
 - <strong>03 Warteschlange:</strong> Ist Hotel langsam, kommen mehr Aufrufe an, als Hotel abarbeitet. Die Schlange w&auml;chst und baut sich nicht mehr ab.
