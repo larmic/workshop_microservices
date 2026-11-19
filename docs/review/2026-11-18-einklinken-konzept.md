@@ -936,9 +936,110 @@ Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
     und 390 px).
 - **Aufwand:** klein (Attribut, Satz, CSS), plus ein Durchgang zum Prüfen.
 
+### H. KI bewusst einsetzen statt „wenig KI“ (neu, Trainer)
+
+- **Idee:** Bisher sagt der Trainer mündlich „wenig KI nutzen“. Stattdessen
+  einen Prompt vorschlagen: KI ist erlaubt, aber keine gesonderten
+  Frameworks für die Patterns. So diskutieren die Teams mit der KI über die
+  Lösung, statt eine Library einzubinden, und schaffen vielleicht mehr
+  Stories.
+- **Bestand:** Schriftlich steht „wenig KI“ nirgends. Die Materialien
+  setzen schon auf „selbst bauen, Mechanismus verstehen“
+  (`docs/instructions/service-discovery-consul.md:222`,
+  `docs/instructions/distributed-tracing.md:202-214`,
+  `docs/stories/story-08-tracing.md:94`). Folie 05a „Und dann kam KI“
+  sagt im Kern: „Mit KI wird Code billig, Architekturentscheidungen nicht.“
+  Das passt genau zu dieser Idee.
+- **Vorschlag:**
+  - Einen Workshop-Prompt bereitstellen, werkzeugneutral (Copilot, Claude,
+    ChatGPT, JetBrains AI), am besten zusätzlich als `AGENTS.md`-Vorlage für
+    das Team-Repo, weil viele Werkzeuge die Datei automatisch lesen. Inhalt
+    etwa:
+    - Rolle: Sparringspartner für Architektur, nicht Code-Generator auf
+      Zuruf.
+    - Erlaubt: Sprache, Web-Framework, HTTP-Client, JSON, Standardbibliothek.
+      Nicht erlaubt: Frameworks für die Patterns der Story (zum Beispiel
+      Resilience4j, Spring Cloud LoadBalancer, Consul-Client-Libraries,
+      OpenTelemetry-SDK, Saga-Engines).
+    - Vor größerem Code erst den Ansatz mit Trade-offs vorschlagen und
+      nachfragen. Jede Entscheidung kurz begründen.
+    - An Akzeptanzkriterien und OpenAPI der Story halten, die
+      Environment-Variablen und Ports aus dem Custom-Setup verwenden.
+  - Platz: in `docs/vorbereitung.md` (Werkzeug einrichten), im Dashboard
+    unter Start (0) mit Kopier-Knopf, kurz auf Folie 05a oder 08c ansagen.
+  - Pro Story im Dashboard ein Satz „Mit der KI besprechen:“ mit einer
+    Leitfrage, etwa Story 4 „Ab wann zählt ein 4xx als Fehler?“.
+- **Risiko:** Mehr Tempo kann weniger Verständnis bedeuten. Gegenmittel:
+  der Prompt verlangt Begründungen, die Recap-Fragen bleiben, und Punkt I.
+- **Aufwand:** klein (Prompt, Vorlage, Text), mittel mit Leitfragen pro
+  Story.
+
+### I. Mit KI arbeitet jeder für sich (neu, Workshop)
+
+- **Beobachtung:** Mit KI arbeiten die meisten an ihrer eigenen Lösung.
+  Nur eine Gruppe hat zusammengearbeitet.
+- **Bestand:** Folie 08c „Einklinken, dann los“ legt Teams zu 3 bis 4 fest:
+  „einer tippt, pro Story wechseln“; die Notes sagen „Erst einigt sich jedes
+  Team auf einen der mitgebrachten Services …“. Das ist eine Ansage, keine
+  Struktur. Jeder bringt aus der Hausaufgabe seinen eigenen Service mit, und
+  KI macht Einzelarbeit schnell.
+- **Vorschlag:**
+  - Ein Laptop pro Team am Beamer- oder Großbildschirm, die KI-Sitzung
+    läuft dort. Rollen pro Story wechseln: **Prompter** (spricht mit der
+    KI), **Reviewer** (liest jeden Diff, darf ablehnen), **Tester** (Dashboard,
+    `curl`, Logs).
+  - Bei jeder Story eine Minute Team-Abgleich am Ende: „Was hat die KI
+    vorgeschlagen, was habt ihr verworfen und warum?“ Im Recap pro Team
+    eine Antwort darauf einsammeln.
+  - Den eigenen Service aus der Hausaufgabe nur zum Üben verwenden, im
+    Workshop zählt der Team-Service (Zusammenhang mit B1, Einklinken als
+    Hausaufgabe).
+  - Auf Folie 08c und im Dashboard Start (0) die Rollen statt „einer
+    tippt“ nennen.
+- **Zusammenhang:** H und I gehören zusammen. Ohne I verstärkt H die
+  Einzelarbeit.
+- **Aufwand:** klein (Folie, Dashboard-Text, Moderation).
+
+### J. Test-Knopf pro Story (neu, Trainer)
+
+- **Idee:** Ein Knopf pro Story, der die Umsetzung des eigenen Service
+  prüft.
+- **Bestand:** Es gibt schon den Hausaufgaben-Check (`POST
+  /api/homework/check`, `services/dashboard/main.go:98-101`: startet das
+  Image, prüft `/health`), den Live-Status „Mein Service erreichbar“ in
+  Schritt 0 und pro Story den Umschalter *Referenz* ↔ *Mein Service*. Ein
+  Abgleich gegen die Akzeptanzkriterien fehlt.
+- **Vorschlag:**
+  - In jeder Code-Story (1, 3, 6, 8; optional 4, 5, 7 mit Punkt D) einen
+    Knopf „Meinen Service prüfen“. Das Go-Backend des Dashboards ruft
+    `booking-custom` von außen auf und zeigt pro Akzeptanzkriterium grün oder
+    rot mit einem Satz, warum.
+  - Nur prüfen, was von außen sichtbar ist (Black Box), weil der Tech-Stack
+    frei ist. Beispiele:
+    - Story 1: `/health`, `/info`, `/openapi`, `GET /booking/offers` mit
+      allen drei Teilen.
+    - Story 3: `POST /booking/bookings` antwortet `201`, Hotel auf zwei
+      Instanzen skaliert, eine gestoppt, Angebote kommen weiter.
+    - Story 4: Flight auf „Fehler“, sechs Aufrufe, ab dem sechsten
+      `X-Circuit-Open`.
+    - Story 6: `carId` `C9` buchen, Saga `FAILED`, Flight und Hotel
+      `COMPENSATED` in `GET /admin/sagas`.
+    - Story 8: `traceparent` in der Antwort, `trace_id` und `span_id` in den
+      Logs von `booking-custom` (braucht Zugriff auf `docker logs`, den das
+      Dashboard für den Hausaufgaben-Check schon hat).
+  - Der Knopf stellt Chaos-Modi selbst und setzt sie danach zurück.
+- **Vorteil:** schnelle Rückmeldung für Team und KI-Schleife (Punkt H), und
+  der Trainer sieht, wo Teams stehen.
+- **Risiken:** Teams optimieren auf Grün statt auf Verständnis. Die Checks
+  müssen mit Story-Doc, OpenAPI und Referenz synchron bleiben, sonst
+  widersprechen sie sich. Ein neues Gate, das die Checks gegen die Referenz
+  laufen lässt, würde das absichern.
+- **Aufwand:** groß (Backend-Checks pro Story, UI, Tests). Klein anfangen
+  mit Story 1 und 3.
+
 ### Entscheidungen vor der Umsetzung
 
-Siehe offene Fragen 12 bis 21 unten.
+Siehe offene Fragen 12 bis 24 unten.
 
 ## Umgesetzt seit dem 18.11.
 
@@ -960,7 +1061,8 @@ Grafik-Varianten dazu liegen im Design-Canvas „Microservices richtig gemacht
 (Chip-Spiel)“ und „Story 7 · Spiel · Grafiken für die Spielfolie“.
 
 Noch nicht umgesetzt: alles aus Abschnitt „Empfehlung“ (Einklinken), die
-Punkte A bis E und G aus dem Feedback, die neue Frage 9 zu Story 6 (Punkt F).
+Punkte A bis E und G bis J aus dem Feedback, die neue Frage 9 zu Story 6
+(Punkt F).
 
 ## Betroffene Stellen
 
@@ -1045,3 +1147,10 @@ Umbau danach:
     in die Akzeptanzkriterien (Bonus) aufnehmen?
 21. **G Downstream-Panel:** Story 6 (und 8?) auf „offen“ stellen? Panel
     generell auffälliger machen und aus der Story-Karte verlinken?
+22. **H KI-Prompt:** „Wenig KI“ durch einen Workshop-Prompt ersetzen? Als
+    `AGENTS.md`-Vorlage, als Text im Dashboard oder beides? Welche
+    Frameworks stehen auf der Verbotsliste?
+23. **I Teamarbeit:** ein Laptop pro Team mit Rollen Prompter, Reviewer,
+    Tester verbindlich machen? Eigener Service nur zum Üben?
+24. **J Test-Knopf:** bauen? Wenn ja, mit Story 1 und 3 anfangen und ein
+    Gate gegen die Referenz einführen?
