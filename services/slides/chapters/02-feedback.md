@@ -8,11 +8,11 @@
 <div class="fb-questions">
 <div class="fb-sticky">Ist der <span class="thread">rote Faden</span> erkennbar?</div>
 <div class="fb-pills">
-<span>Fehlen Patterns?</span>
-<span>Passt der Zeitrahmen?</span>
-<span>Passen die Beispiele?</span>
-<span>Dashboard: gute Idee?</span>
-<span>Was f&auml;llt euch sonst auf?</span>
+<span>Was fehlt euch?</span>
+<span>Zeitrahmen und Tempo?</span>
+<span>Dashboard: was hat geholfen, was gest&ouml;rt?</span>
+<span>Gruppe oder jeder allein?</span>
+<span>KI: mehr zulassen, mit Prompt?</span>
 </div>
 </div>
 <div class="fb-scan">
