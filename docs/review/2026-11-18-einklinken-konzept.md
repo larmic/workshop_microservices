@@ -940,6 +940,28 @@ Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
 
 Siehe offene Fragen 12 bis 21 unten.
 
+## Umgesetzt seit dem 18.11.
+
+Was aus diesem Review und den Gesprächen dazu schon im Repo ist. Nichts davon
+ist gepusht. Das Dashboard zeigt Änderungen erst nach einem Neubau des
+Images.
+
+| Thema | Was | Commits |
+|---|---|---|
+| Story 3 | Hinweis: der `POST` prüft nicht vorab, ob Flug, Hotel und Auto existieren (Story-Doc, Dashboard) | `073fcb6` |
+| Story 5 | Spiel von Stühlen und Wand auf Chips umgestellt: Story-Doc, Folien 17, 17a, 18, 19, 19c, 29a, Dashboard, Druckseite mit Trainer-Skript, Materialliste, Nebenstellen | `fa84e8e` `1e3dc51` `dd1df12` `7723470` `4951d6e` `4d54985` |
+| Story 5 | Ablauf-Grafik „So läuft ein Request“ auf Folie 18 und im Dashboard, ohne sichtbare Bulkhead-Regel (die sagt der Trainer an) | `417b64a` |
+| Story 7 | Klarere Regeln: wer vor dem Nein dran war, bekommt seinen Chip; „Storno!“ an die Services, „Storniert“ an den Kunden; Gewonnen und Verloren ausdrücklich | `add9969` `9f1f750` `cdcbc9f` |
+| Story 7 | Spielfolie „Die Saga wird leise“ zeigt Rollen und drei Würfel-Schritte (Variante C); die Details stehen in den Notes, im Dashboard eingeklappt unter „Alle Regeln zum Nachlesen“ | `b231a02` `df271e2` |
+| Story 6 | Folie „Vorwärts, und notfalls zurück“: „Jede Buchung startet eine eigene Saga …“ (Punkt F) | `e8bbc55` |
+
+Grafik-Varianten dazu liegen im Design-Canvas „Microservices richtig gemacht
+– Varianten“ auf den Seiten „Story 5 · Spiel · Grafiken für Folie 18
+(Chip-Spiel)“ und „Story 7 · Spiel · Grafiken für die Spielfolie“.
+
+Noch nicht umgesetzt: alles aus Abschnitt „Empfehlung“ (Einklinken), die
+Punkte A bis E und G aus dem Feedback, die neue Frage 9 zu Story 6 (Punkt F).
+
 ## Betroffene Stellen
 
 Sofortmaßnahme:
