@@ -778,9 +778,77 @@ Dokument)
   ableiten, Dashboard-Umschalter oder Panel, Texte). Folien sind nicht
   betroffen.
 
+### E. Bulkhead-Spiel (Story 5) mit Chips: Feedback aus dem Durchlauf am 19.11. (neu)
+
+Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
+
+**E1 Weniger Leute als geplant**
+
+- **Beobachtung:** Es waren weniger Teilnehmer da.
+- **Bestand:** Story-Doc und Trainer-Skript skalieren über die Zahl der
+  parallelen Plätze (8–10 Personen: 3 parallel, 1 pro Service; 11–13: 6
+  parallel; ab 14: 9 parallel), Mindestgröße 8. Es braucht immer einen
+  Request mehr als Plätze.
+- **Offen:** Ob die Tabelle beim Spielen gegriffen hat oder ob vor Ort
+  improvisiert wurde, und wie. Bei unter 8 Personen gibt es heute keine
+  Regel. Mögliche Verdichtungen: Der Trainer spielt Booking, oder eine Person
+  hält Flight und Car zusammen (Car gibt in Stufe 2 ohnehin nichts aus).
+
+**E2 Default-Chip von Hotel statt von Booking**
+
+- **Feedback:** Die Fallback-Chips könnte auch Hotel direkt ausgeben statt
+  Booking.
+- **Dafür:** Ein Weg weniger. Der Request steht ohnehin bei Hotel, Booking
+  muss nicht hinlaufen oder rufen, und bei kleinen Gruppen ist Booking
+  entlastet.
+- **⚠ Dagegen (Pattern-Treue):** Der Bulkhead sitzt im Aufrufer. Booking
+  entscheidet „Hotel ist voll“, Hotel weiß nichts davon. Gibt Hotel den
+  Default-Chip, sieht es aus, als drossle sich Hotel selbst. Das ist Rate
+  Limiting oder Load Shedding auf der Server-Seite, nicht Bulkhead. Die
+  Pointe in STOPP 2 „Wem gehört die Grenze? Booking“ (Folie 18, Notes; Folie
+  29a „Drei Dinge“, Notes) verliert ihren Halt.
+- **Kompromiss:** Die Default-Chips liegen vor Hotel, aber in einem Becher
+  oder auf einem Zettel „Booking“. Wer als Vierter kommt, nimmt sich selbst
+  einen Chip aus Bookings Becher. Damit ist der Weg kurz, und die Grenze
+  gehört sichtbar Booking. Alternativ gibt Hotel den Chip aus und der
+  Trainer benennt den Unterschied bei STOPP 2 ausdrücklich („Im Spiel hat
+  Hotel ihn ausgeteilt, in echt entscheidet Booking, Hotel wird gar nicht
+  gefragt“).
+- **Betroffene Stellen bei Änderung:** Story-Doc Teil 1 (Rollen, Regeln,
+  Zusatzregel), Folie 18 (Notes), Dashboard Story 5 („Was passieren
+  sollte“), Trainer-Skript auf der Druckseite (Rollen, Zusatzregel,
+  Raumskizze), Materialliste (Default-Chips „hält Booking“).
+
+**E3 Wann gehen die Requests an der Tür wieder rein?**
+
+- **Frage im Spiel:** Wann geht ein Request, der vor Booking wartet, wieder
+  hinein?
+- **Bestand:** Die Regel sagt nur „Sind alle Plätze belegt, wartet der
+  Request an der Tür und bekommt nichts“ (Story-Doc, Regel 1; Folie 18;
+  Dashboard; Trainer-Skript). Wann er hineindarf, steht nirgends. Ebenso
+  offen: wann die bei Hotel Wartenden gehen.
+- **Antwort, die ergänzt werden sollte:**
+  - Wer an der Tür wartet, kommt herein, sobald ein Platz frei wird, also
+    sobald ein Request fertig ist und geht. Wer zuerst kam, zuerst.
+  - In Stufe 2 wird kein Platz frei, weil alle bei Hotel hängen. Der
+    Request an der Tür wartet deshalb bis zum STOPP. Genau das ist die
+    Pointe.
+  - Wer bei Hotel wartet, geht erst, wenn Hotel seinen Chip gibt, also bei
+    der Ansage des Trainers („2 Sekunden sind um“). Bis dahin belegt er
+    seinen Platz.
+  - In Stufe 4 wartet niemand an der Tür, weil fertige Requests ihren Platz
+    sofort freigeben.
+- **Vorschlag Formulierung, Regel 1:** „Booking lässt den Nächsten herein,
+  sobald ein Platz frei ist. Sind alle belegt, wartet er an der Tür, bis
+  einer geht, und bekommt bis dahin nichts, nicht einmal Flight.“
+- **Betroffene Stellen:** Story-Doc Teil 1 (Regeln, Ablauf Stufe 2), Folie
+  18 (Regelkachel „Alle 9 Plätze belegt? An der Tür warten.“ und Notes),
+  Dashboard Story 5 (dieselbe Regelkachel), Trainer-Skript (Regeln).
+- **Aufwand:** klein.
+
 ### Entscheidungen vor der Umsetzung
 
-Siehe offene Fragen 12 bis 18 unten.
+Siehe offene Fragen 12 bis 19 unten.
 
 ## Betroffene Stellen
 
@@ -856,3 +924,7 @@ Umbau danach:
     bauen* in der Story-Karte, oder nur ein eigenes eingeklapptes Panel
     „Selbst bauen (optional)“? Akzeptanzkriterien für Story 5 und 7 neu
     schreiben?
+19. **E Bulkhead-Spiel:** Default-Chip weiter von Booking, aus Bookings
+    Becher bei Hotel, oder von Hotel mit ausdrücklicher Einordnung bei
+    STOPP 2? Regel „an der Tür warten, bis einer geht“ ergänzen? Regel für
+    Gruppen unter 8?
