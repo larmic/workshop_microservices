@@ -882,8 +882,10 @@ Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
     Klasse vs. Objekt, Zustand pro Instanz, Idempotency-Key am Eingang
     (`Idempotency-Key`-Header oder fachlicher Schlüssel), `sagaId` als
     Korrelation.
-  - Auf Folie 20 „Saga“ den Satz schärfen, etwa: „Jede Buchung startet eine
-    eigene Saga mit eigenem Zustand, abfragbar über ihre ID.“
+  - Auf Folie 20 „Saga“ den Satz schärfen. **Erledigt (`e8bbc55`):** Die
+    Karte „Saga-Status“ auf „Vorwärts, und notfalls zurück“ (47/65) sagt
+    jetzt „Jede Buchung startet eine eigene Saga mit eigenem Zustand,
+    abfragbar über ihre ID.“
   - Optional als Recap-Punkt auf Folie 22 oder als Hinweis in den Notes.
   - In den Notes der Story-7-Spielfolie „Die Saga wird leise“: „Jede Reise
     ist eine Saga.“
@@ -892,9 +894,51 @@ Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
   (`docs/stories/story-06-saga.md`, Akzeptanzkriterium „Der aktuelle Status
   einer Buchung kann abgefragt werden“).
 
+### G. Dashboard: eingeklappte Downstream-Services (neu, Workshop)
+
+- **Beobachtung:** In Story 6 (Saga) war das Panel „Downstream-Services —
+  Chaos & Scaling“ unten eingeklappt. Die Teilnehmer haben nicht gesehen,
+  dass man es aufklappen muss. Gebraucht wird es dort aber während der
+  Hands-on-Zeit: Story 6 sagt „Fehler auslösen: Im Dashboard einen Service
+  auf „Fehler“ stellen“ (`docs/stories/story-06-saga.md:36`).
+- **Ursache:** `showStory()` in `services/dashboard/static/index.html`
+  (ab Zeile 3883) steuert das Panel über `data-backend` an der
+  Story-Section: `show` offen, `demo` eingeklappt mit Überschrift „… für die
+  Demo“, `inline` offen, aber im Bereich „Demo und Nachbauen“ der Spiele,
+  `hide` gar nicht.
+- **Ist pro Story (alle prüfen):**
+
+  | Story | `data-backend` | Panel | Braucht man es in der Hands-on-Zeit? |
+  |---|---|---|---|
+  | 0 Start | `hide` | weg | nein |
+  | 1 | `show` | offen, unten | kaum (Demo der Backends) |
+  | 2 Design | `hide` | weg | nein |
+  | 3 | `show` | offen, unten | ja, Skalieren und Stoppen (Story-Doc Abschnitt 4) |
+  | 4 Spiel | `inline` | offen, aber im eingeklappten Bereich „Demo und Nachbauen“ | nur für die Demo |
+  | 5 Spiel | `inline` | wie 4 | nur für die Demo |
+  | 6 | `demo` | **eingeklappt**, unten | **ja**, Fehler auslösen für die Kompensation |
+  | 7 Spiel | `inline` | wie 4 | nur für die Demo |
+  | 8 | `hide` | weg | prüfen: Wer im eigenen Service die Kompensation im Log sehen will, braucht einen Fehler |
+
+- **Vorschlag:**
+  - Story 6 auf `show` stellen (offen). Die Überschrift „für die Demo“
+    passt dort nicht, weil die Teilnehmer es selbst brauchen.
+  - Story 8 prüfen: Für das Akzeptanzkriterium mit Kompensation im Log
+    braucht es einen Fehler. Entweder `show`, oder in der Story-Karte auf
+    `carId` `C9` verweisen (Car antwortet 409), dann geht es ohne Panel.
+  - Unabhängig davon das eingeklappte Panel sichtbarer machen: Die
+    Zusammenfassung als deutlich klickbare Leiste mit Pfeil und Hinweis
+    („aufklappen“), wie die anderen `details` im Dashboard.
+  - In der Story-Karte dort, wo das Panel gebraucht wird, einen Satz mit
+    Link setzen: „Fehler auslösen: unten bei Downstream-Services“ (springt
+    hin und klappt auf).
+  - Danach alle neun Story-Ansichten einmal durchklicken und rendern (1440
+    und 390 px).
+- **Aufwand:** klein (Attribut, Satz, CSS), plus ein Durchgang zum Prüfen.
+
 ### Entscheidungen vor der Umsetzung
 
-Siehe offene Fragen 12 bis 20 unten.
+Siehe offene Fragen 12 bis 21 unten.
 
 ## Betroffene Stellen
 
@@ -974,6 +1018,8 @@ Umbau danach:
     Becher bei Hotel, oder von Hotel mit ausdrücklicher Einordnung bei
     STOPP 2? Regel „an der Tür warten, bis einer geht“ ergänzen? Regel für
     Gruppen unter 8?
-20. **F Saga pro Request:** als neue Frage 9 in Story 6, als Satz auf Folie
-    20, oder beides? Idempotency-Key am Eingang nur ansprechen oder auch in
-    die Akzeptanzkriterien (Bonus) aufnehmen?
+20. **F Saga pro Request:** Folie 20 ist geschärft. Zusätzlich die neue
+    Frage 9 in Story 6? Idempotency-Key am Eingang nur ansprechen oder auch
+    in die Akzeptanzkriterien (Bonus) aufnehmen?
+21. **G Downstream-Panel:** Story 6 (und 8?) auf „offen“ stellen? Panel
+    generell auffälliger machen und aus der Story-Karte verlinken?
