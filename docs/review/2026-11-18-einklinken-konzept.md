@@ -1043,9 +1043,76 @@ Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
 - **Aufwand:** groß (Backend-Checks pro Story, UI, Tests). Klein anfangen
   mit Story 1 und 3.
 
+### K. Am Ende: „Wann setze ich das denn nun ein?“ (neu, Workshop)
+
+- **Beobachtung:** Am Ende blieb die Frage offen, wann man welches Pattern
+  im eigenen Projekt einsetzt. Die Folie „Acht Stories, acht Sätze“
+  (`services/slides/chapters/29-zusammenfassung.md`) fasst zusammen, was
+  jedes Pattern tut, aber nicht, wann man es braucht. Die Frage „Welche
+  würdet ihr sofort einführen, welche nicht?“ steht nur als Provokation in
+  den Notes.
+- **Vorschlag:** eine geführte Diskussionsrunde nach der Zusammenfassung,
+  etwa 30 Minuten.
+  - Pro Pattern dieselben drei Fragen: Welches Problem habt ihr, wenn ihr
+    es braucht? Woran merkt ihr, dass ihr es nicht braucht? Was kostet es?
+  - Jeder nimmt ein System aus dem eigenen Projekt und ordnet jedes
+    Pattern ein: „haben wir“, „brauchen wir“,
+    „brauchen wir nicht“.
+  - Der Trainer hält die Antworten fest und schließt mit dem Satz der
+    Folie: „Jedes Pattern ist eine Antwort auf ein konkretes Problem. Nicht
+    auf Mode.“
+- **Umsetzung:** eine Folie mit den drei Fragen nach „Acht Stories, acht
+  Sätze“, Moderationsleitfaden in `docs/themen.md` Block 11. Eine kleine
+  Entscheidungstabelle als Merkzettel wäre möglich (Pattern, Auslöser,
+  Kosten), aber erst nach dem nächsten Durchlauf aus den Antworten bauen.
+- **Aufwand:** klein (eine Folie, Notes, Leitfaden).
+
+### L. Am Flipchart: synchron vs. asynchron (neu, Trainer)
+
+- **Idee:** Zum Schluss am Flipchart synchron und asynchron
+  gegenüberstellen. Bisher steht das Thema nur als Ausblick auf der Folie
+  „Was wir nicht angeschaut haben“ (`services/slides/chapters/30-was-fehlt.md`:
+  „Story 7 hat es nur gestreift“).
+- **Warum es passt:** Die Stories liefern das Material schon. Timeout,
+  Breaker und Bulkhead (Story 4, 5) sind die Rechnung für synchrone
+  Aufrufe, Story 7 zeigt den Preis von asynchron (Eventual Consistency,
+  Broker, stilles Storno, Tracing über Events in Story 8).
+- **Vorschlag:** zwei Spalten am Flipchart, die Gruppe füllt sie:
+  - Zeilen: Kopplung in der Zeit, Rückmeldung an den Nutzer, Fehler und
+    Kompensation, Konsistenz, Betrieb und Debugging, Infrastruktur.
+  - Zu jeder Zeile die passende Story nennen lassen.
+  - Abschlussfrage: „Was wäre in eurem System synchron, was asynchron?“
+    Das verbindet L mit K.
+- **Umsetzung:** keine Folie nötig, nur Notes und Leitfaden. Vorlage für
+  das Flipchart auf der Materialseite oder in `docs/themen.md`, damit die
+  Zeilen beim nächsten Mal gleich sind. Die Karte auf „Was wir nicht
+  angeschaut haben“ dann anpassen („am Flipchart gesammelt“).
+- **Aufwand:** klein.
+
+### M. Zeit: am zweiten Tag um 14:00 durch (neu, Workshop)
+
+- **Beobachtung:** Am 19.11. war der Ablauf am zweiten Tag um 14:00
+  durch. Geplant sind laut `docs/themen.md` rund 5,5 Stunden inklusive
+  Mittag, „der Rest ist Puffer“. Bis 17:00 blieben also etwa drei Stunden.
+- **Einordnung:** Der Plan stimmt, der Puffer ist aber zu groß, um ihn
+  ungeplant zu lassen. Mit weniger Teilnehmern (Punkt E) und ohne eigene
+  Code-Varianten der Spiele (Punkt D) geht es schneller.
+- **Vorschlag:** den Nachmittag fest planen, in dieser Reihenfolge:
+  1. Geführte Diskussion „Wann setze ich das ein?“ (K), 30 Minuten.
+  2. Flipchart synchron vs. asynchron (L), 30 Minuten.
+  3. Danach Zeit für Teams, die eine Story nachholen oder ein Spiel selbst
+     umsetzen wollen (D), mit dem Test-Knopf (J), falls er kommt.
+  4. Reserve-Blöcke aus `docs/themen.md` (CQRS, BFF, Downtimeless
+     Deployment) nur auf Wunsch der Gruppe.
+  - Ablauftabelle Tag 2 in `docs/themen.md` und die Agenda-Folie
+    (`services/slides/chapters/03-agenda.md`) anpassen, damit die
+    Einladung kein Ende um 14:00 verspricht oder ein Ende um 17:00 ohne
+    Inhalt.
+- **Aufwand:** klein (Tabelle, Agenda), hängt an K und L.
+
 ### Entscheidungen vor der Umsetzung
 
-Siehe offene Fragen 12 bis 24 unten.
+Siehe offene Fragen 12 bis 27 unten.
 
 ## Umgesetzt seit dem 18.11.
 
@@ -1160,3 +1227,10 @@ Umbau danach:
     Tester verbindlich machen? Eigener Service nur zum Üben?
 24. **J Test-Knopf:** bauen? Wenn ja, mit Story 1 und 3 anfangen und ein
     Gate gegen die Referenz einführen?
+25. **K Diskussionsrunde:** eigene Folie mit den drei Fragen, oder nur
+    Notes und Leitfaden? Eigenes System der Teilnehmer als Beispiel?
+26. **L Flipchart synchron vs. asynchron:** Zeilen fest vorgeben (Vorlage)
+    oder frei sammeln? Karte auf „Was wir nicht angeschaut haben“ dann
+    ändern?
+27. **M Tag 2:** Nachmittag fest mit K, L und Nachhol-Zeit planen, oder den
+    Tag offiziell um 15:00 enden lassen?
