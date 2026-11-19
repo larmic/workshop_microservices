@@ -846,9 +846,55 @@ Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
   Dashboard Story 5 (dieselbe Regelkachel), Trainer-Skript (Regeln).
 - **Aufwand:** klein.
 
+### F. Story 6: eine Saga pro Request (neu, Trainer)
+
+- **Beobachtung des Trainers:** In den Fragen zur Saga gehen wir nicht
+  darauf ein, dass es eigentlich pro Request eine Saga gibt.
+- **Stimmt das?** Ja. In der Referenz erzeugt jeder `POST /booking/bookings`
+  eine eigene Saga mit eigener `sagaId` und eigenem Zustand
+  (`services/booking/story6/handler/booking.go:125`, `sagaID :=
+  newBookingID()`). `GET /admin/sagas` listet entsprechend viele Sagas.
+  Gesagt wird es aber nirgends ausdrücklich:
+  - Folie 20 „Saga“ sagt nur „Jede Saga hat einen Zustand, und der ist
+    abfragbar.“
+  - Die acht Fragen in `docs/questions/story6.md` und die Recap-Folie 22
+    behandeln Kompensation, Retry, Eventing, 204, hängende Sagas, Owner,
+    Datenbank und Timeout. Keine davon trennt Saga als Ablauf (das Muster,
+    das Booking einmal implementiert) von der Saga-Instanz (eine pro
+    Buchung, viele gleichzeitig).
+- **Warum das wichtig ist:**
+  - Viele Sagas laufen parallel, jede mit eigenem Fortschritt. Zustand und
+    Kompensation gehören zur Instanz, nicht zum Service. Das ist die
+    Grundlage von Frage 5 (hängt eine Saga?) und Frage 7 (Persistenz).
+  - Ein Client-Retry desselben Buchungswunsches startet eine **zweite**
+    Saga und bucht doppelt, wenn es keinen Idempotency-Key gibt. Frage 8
+    streift das nur für den Forward-Aufruf an ein Backend, nicht für den
+    eingehenden Request.
+  - Die `sagaId` ist der Korrelationsschlüssel: im Status-Endpoint, im
+    Event von Story 7 (`sagaId` im Body von `POST /events/compensation`) und
+    neben der `trace_id` in Story 8.
+  - Im Würfelspiel aus Story 7 ist jede Reise eine eigene Saga. Das lässt
+    sich dort einmal aussprechen.
+- **Vorschlag:**
+  - Neue Frage 9 in `docs/questions/story6.md`: „Wie viele Sagas laufen
+    gleichzeitig, und was passiert, wenn der Client dieselbe Buchung zweimal
+    schickt?“ Antwort: eine Instanz pro Request, Ablauf vs. Instanz wie
+    Klasse vs. Objekt, Zustand pro Instanz, Idempotency-Key am Eingang
+    (`Idempotency-Key`-Header oder fachlicher Schlüssel), `sagaId` als
+    Korrelation.
+  - Auf Folie 20 „Saga“ den Satz schärfen, etwa: „Jede Buchung startet eine
+    eigene Saga mit eigenem Zustand, abfragbar über ihre ID.“
+  - Optional als Recap-Punkt auf Folie 22 oder als Hinweis in den Notes.
+  - In den Notes der Story-7-Spielfolie „Die Saga wird leise“: „Jede Reise
+    ist eine Saga.“
+- **Aufwand:** klein bis mittel (eine Frage mit Antwort, ein Satz auf Folie
+  20, Notes). Gegen Dashboard und Story-Doc abgleichen
+  (`docs/stories/story-06-saga.md`, Akzeptanzkriterium „Der aktuelle Status
+  einer Buchung kann abgefragt werden“).
+
 ### Entscheidungen vor der Umsetzung
 
-Siehe offene Fragen 12 bis 19 unten.
+Siehe offene Fragen 12 bis 20 unten.
 
 ## Betroffene Stellen
 
@@ -928,3 +974,6 @@ Umbau danach:
     Becher bei Hotel, oder von Hotel mit ausdrücklicher Einordnung bei
     STOPP 2? Regel „an der Tür warten, bis einer geht“ ergänzen? Regel für
     Gruppen unter 8?
+20. **F Saga pro Request:** als neue Frage 9 in Story 6, als Satz auf Folie
+    20, oder beides? Idempotency-Key am Eingang nur ansprechen oder auch in
+    die Akzeptanzkriterien (Bonus) aufnehmen?
