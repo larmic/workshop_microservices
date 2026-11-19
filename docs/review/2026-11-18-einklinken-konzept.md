@@ -918,14 +918,20 @@ Das Chip-Spiel (Stand `fa84e8e` bis `417b64a`) wurde zum ersten Mal gespielt.
   | 5 Spiel | `inline` | wie 4 | nur für die Demo |
   | 6 | `demo` | **eingeklappt**, unten | **ja**, Fehler auslösen für die Kompensation |
   | 7 Spiel | `inline` | wie 4 | nur für die Demo |
-  | 8 | `hide` | weg | prüfen: Wer im eigenen Service die Kompensation im Log sehen will, braucht einen Fehler |
+  | 8 | `hide` | weg | nein, gewollt (Commit `cca8fd4`): Die Kompensation löst „Buchung mit kaputtem Mietwagen“ aus (`carId` `C9`, Car antwortet 409), steht in Story-Doc, Story-Karte und Notes |
 
 - **Vorschlag:**
   - Story 6 auf `show` stellen (offen). Die Überschrift „für die Demo“
     passt dort nicht, weil die Teilnehmer es selbst brauchen.
-  - Story 8 prüfen: Für das Akzeptanzkriterium mit Kompensation im Log
-    braucht es einen Fehler. Entweder `show`, oder in der Story-Karte auf
-    `carId` `C9` verweisen (Car antwortet 409), dann geht es ohne Panel.
+  - Story 8 bleibt bei `hide`, das ist gewollt: Für das
+    Akzeptanzkriterium mit Kompensation im Log reicht der Button „Buchung
+    mit kaputtem Mietwagen“ (`C9`, 409), ein Fehler im Panel ist nicht
+    nötig. Dokumentiert ist nur der Button
+    (`docs/stories/story-08-tracing.md:78`, Story-Karte, Notes Folie
+    „Story 8“), nicht, dass das Panel fehlt. Offen: Die User Story nennt
+    auch Latenzen. Wer Hotel auf „Langsam“ stellen und die Zeit im Log
+    suchen will, braucht das Panel doch, dann `demo` (eingeklappt) statt
+    `hide`.
   - Unabhängig davon das eingeklappte Panel sichtbarer machen: Die
     Zusammenfassung als deutlich klickbare Leiste mit Pfeil und Hinweis
     („aufklappen“), wie die anderen `details` im Dashboard.
@@ -1145,7 +1151,7 @@ Umbau danach:
 20. **F Saga pro Request:** Folie 20 ist geschärft. Zusätzlich die neue
     Frage 9 in Story 6? Idempotency-Key am Eingang nur ansprechen oder auch
     in die Akzeptanzkriterien (Bonus) aufnehmen?
-21. **G Downstream-Panel:** Story 6 (und 8?) auf „offen“ stellen? Panel
+21. **G Downstream-Panel:** Story 6 auf „offen“ stellen? Story 8 bei `hide` lassen oder für Latenzen `demo`? Panel
     generell auffälliger machen und aus der Story-Karte verlinken?
 22. **H KI-Prompt:** „Wenig KI“ durch einen Workshop-Prompt ersetzen? Als
     `AGENTS.md`-Vorlage, als Text im Dashboard oder beides? Welche
