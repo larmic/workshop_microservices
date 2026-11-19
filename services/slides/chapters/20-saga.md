@@ -29,7 +29,7 @@
 </div>
 <div class="card">
 <h3>Saga-Status</h3>
-<p>Jede Saga hat einen Zustand, und der ist abfragbar.</p>
+<p>Jede Buchung startet eine eigene Saga mit eigenem Zustand, abfragbar &uuml;ber ihre ID.</p>
 <code>PENDING &rarr; COMPLETED | FAILED</code>
 </div>
 <div class="card">
