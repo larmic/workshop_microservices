@@ -12,6 +12,7 @@ on:
       - 'services/dashboard/static/icon.png'
       - 'services/dashboard/static/team-neusta-logo.svg'
       - '.github/workflows/deploy-pages.yml'
+      - 'scripts/vendor-marked.sh'
   workflow_dispatch:
 
 concurrency:
@@ -45,6 +46,8 @@ jobs:
       - name: Build site layout
         run: |
           set -euo pipefail
+          # marked liegt nicht im Repo, das Skript holt die Version aus MARKED_VERSION.
+          scripts/vendor-marked.sh
           mkdir -p _site/feedback _site/slides/dashboard _site/vorbereitung/assets _site/assets
           cp -r pages/feedback/. _site/feedback/
           cp -r pages/material _site/material

@@ -72,7 +72,9 @@ gate_test() {
 gate_js() {
   need node js || return 0
   (cd "$ROOT" && node scripts/check-inline-js.mjs)
-  "$ROOT/scripts/vendor-marked.sh" --check
+  # In der Pipeline marked einmal holen wie beim Pages-Deploy, damit ein
+  # Renovate-Update schon im PR scheitert, nicht erst beim Deploy.
+  if [ -n "${CI:-}" ]; then "$ROOT/scripts/vendor-marked.sh"; fi
 }
 
 gate_unicode() {

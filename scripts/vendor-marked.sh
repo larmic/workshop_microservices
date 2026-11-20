@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Holt marked (Markdown-Renderer der Vorbereitungsseite) in der unten
-# festgelegten Version von npm und legt die Datei ins Repo. So hängt die Seite
-# an keinem CDN, das im Firmennetz gesperrt sein kann.
+# festgelegten Version von npm nach pages/vorbereitung/vendor/. So hängt die
+# Seite an keinem CDN, das im Firmennetz gesperrt sein kann.
 #
-#   scripts/vendor-marked.sh           lädt die Datei neu
+#   scripts/vendor-marked.sh           lädt die Datei
 #   scripts/vendor-marked.sh --check   prüft, ob Datei und Version zusammenpassen
 #
-# Renovate hebt nur MARKED_VERSION an. Danach dieses Skript ausführen und die
-# Datei mit committen; das Guard-Gate js schlägt sonst fehl.
+# Die Datei liegt nicht im Repo (.gitignore). Der Pages-Deploy und das
+# Guard-Gate js in der Pipeline rufen das Skript auf. Lokal einmal ausführen,
+# wer die Vorbereitungsseite ansehen will. Renovate hebt MARKED_VERSION an.
 set -euo pipefail
 
 MARKED_VERSION=18.2.0
@@ -20,7 +21,7 @@ if [ "${1:-}" = "--check" ]; then
     echo "pages/vorbereitung/vendor/marked.min.js ist nicht marked v$MARKED_VERSION: scripts/vendor-marked.sh ausführen" >&2
     exit 1
   fi
-  echo "marked v$MARKED_VERSION liegt im Repo"
+  echo "marked v$MARKED_VERSION liegt in pages/vorbereitung/vendor/"
   exit 0
 fi
 

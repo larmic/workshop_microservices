@@ -3,3 +3,4 @@
 /services/.env
 /internal
 .DS_Store
+/pages/vorbereitung/vendor/
