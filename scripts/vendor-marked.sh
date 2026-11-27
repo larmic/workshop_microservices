@@ -11,7 +11,7 @@
 # wer die Vorbereitungsseite ansehen will. Renovate hebt MARKED_VERSION an.
 set -euo pipefail
 
-MARKED_VERSION=18.2.1
+MARKED_VERSION=18.3.0
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET="$ROOT/pages/vorbereitung/vendor/marked.min.js"
